@@ -9,15 +9,8 @@ import {
   Typography,
   Grid,
 } from '@mui/material';
-import {
-  MicOffIcon,
-  MicOnIcon,
-  RaiseHandOnIcon,
-  ShareScreenOnIcon,
-  MoreIcon,
-  MediaSessionType,
-  ParticipationKind,
-} from '@opentalk/common';
+import { MediaSessionType, ParticipationKind } from '@opentalk/common';
+import { ProtocolIcon, MicOffIcon, MicOnIcon, RaiseHandOnIcon, ShareScreenOnIcon, MoreIcon } from '@opentalk/common';
 import i18next from 'i18next';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +25,7 @@ import SortOption from '../../../enums/SortOption';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
 import { Participant } from '../../../store/slices/participantsSlice';
+import { selectProtocolState } from '../../../store/slices/protocolSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid } from '../../../store/slices/userSlice';
 import notifications from '../../../utils/snackBarUtils';
@@ -93,6 +87,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   const dispatch = useAppDispatch();
   const open = Boolean(anchorEl);
   const ownId = useAppSelector(selectOurUuid);
+  const protocolState = useAppSelector(selectProtocolState);
 
   const subscriberVideo = useAppSelector(
     selectSubscriberById({
@@ -247,6 +242,16 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
     }
   };
 
+  const isProtocolEditor = (participant: Participant) => {
+    if (participant.id === ownId && protocolState.readonly === false) {
+      return true;
+    }
+    if (participant.protocol && participant.protocol.readonly === false) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <ListItem>
       <Grid container spacing={2} direction={'row'} wrap={'nowrap'}>
@@ -268,6 +273,11 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
           />
         </Grid>
         {participant.id !== ownId && <Grid item>{renderMenu()}</Grid>}
+        {isProtocolEditor(participant) && (
+          <Grid item alignContent={'flex-end'}>
+            <ProtocolIcon />
+          </Grid>
+        )}
         <IconsContainer item>{renderIcon()}</IconsContainer>
       </Grid>
     </ListItem>

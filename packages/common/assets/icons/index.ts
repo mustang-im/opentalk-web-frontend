@@ -50,6 +50,7 @@ import PhoneIcon from './PhoneIcon';
 import PictureIcon from './PictureIcon';
 import PinIcon from './PinIcon';
 import PollIcon from './PollIcon';
+import ProtocolIcon from './ProtocolIcon';
 import RaiseHandOffIcon from './RaiseHandOffIcon';
 import RaiseHandOnIcon from './RaiseHandOnIcon';
 import RecordingsIcon from './RecordingsIcon';
@@ -124,6 +125,7 @@ export {
   PictureIcon,
   PinIcon,
   PollIcon,
+  ProtocolIcon,
   RaiseHandOffIcon,
   RaiseHandOnIcon,
   RecordingsIcon,

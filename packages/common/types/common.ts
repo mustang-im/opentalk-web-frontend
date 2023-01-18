@@ -62,6 +62,10 @@ export interface PresenterRoleState {
   isPresenter: boolean;
 }
 
+export interface ProtocolState {
+  readonly: boolean;
+}
+
 export interface TrickleCandidate {
   sdpMid: string;
   sdpMLineIndex: number;
@@ -129,8 +133,8 @@ export interface IParticipantControl {
 export interface BackendParticipant {
   id: ParticipantId;
   // Core fields are present in any case
-  eeChat?: { groups: GroupId[] };
   control: IParticipantControl;
+  protocol?: ProtocolState;
   media: PresenterRoleState & {
     screen?: MediaSessionState;
     video?: MediaSessionState;
