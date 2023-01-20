@@ -35,6 +35,13 @@ const Container = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+const ActiveStep = styled(Step)(({ theme }) => ({
+  //Safari icon, Other browsers icon
+  '& .MuiSvgIcon-root.MuiStepIcon-root.Mui-active, & .MuiSvgIcon-root circle': {
+    color: theme.palette.secondary.dark,
+  },
+}));
+
 const EditEventsPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -60,7 +67,7 @@ const EditEventsPage = () => {
   const StepperHeader = () => (
     <Stepper activeStep={activeStep}>
       {steps.map(({ label }, index) => (
-        <Step key={label}>
+        <ActiveStep key={label}>
           <StepButton
             icon={activeStep !== index && <EditIcon />}
             onClick={() => setActiveStep(index)}
@@ -68,7 +75,7 @@ const EditEventsPage = () => {
           >
             {t(label)}
           </StepButton>
-        </Step>
+        </ActiveStep>
       ))}
     </Stepper>
   );

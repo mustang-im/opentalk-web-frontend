@@ -22,6 +22,7 @@ SPDX-License-Identifier: EUPL-1.2
 - Fix "Unable to close recording and whiteboard notifications after joining active session" (!779)
 - Fix invited users not showing in ad-hoc meeting creation (!793)
 - Fix start and end date validation is running on unscheduled meeting. (!796)
+- Fix create/update meeting step icon styling (!810)
 
 ### Stability Improvements
 
