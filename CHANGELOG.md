@@ -18,6 +18,7 @@
 - Fix start and end date validation is running on unscheduled meeting. (!796)
 - Fix create/update meeting step icon styling (!810)
 - Fix visuals on the legal vote and poll preview popover. (!812)
+- Fix DateTimePicker not opening on mobile (!777)
 
 ### Stability Improvements
 

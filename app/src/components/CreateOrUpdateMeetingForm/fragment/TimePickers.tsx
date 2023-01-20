@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { DateTimePicker } from '@mui/lab';
-import { Stack, styled, TextFieldProps, ThemeProvider } from '@mui/material';
+import { Stack, styled, TextFieldProps, ThemeProvider, InputAdornment } from '@mui/material';
+import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { isSameDay } from 'date-fns';
 import { isEmpty, merge } from 'lodash';
 import React, { useState } from 'react';
@@ -59,6 +60,7 @@ const timePickerTheme = merge({}, globalTheme, {
 
 const TimePickers = ({ value, error, helperText, onChange, minTimeDate = new Date() }: TimePickerProps) => {
   const valueAsDate = isEmpty(value) ? new Date() : new Date(value);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { i18n } = useTranslation();
@@ -68,12 +70,17 @@ const TimePickers = ({ value, error, helperText, onChange, minTimeDate = new Dat
     onChange(date);
   };
 
-  const renderTextField = ({ inputProps, InputProps, disabled }: TextFieldProps) => {
+  const renderTextField = ({ inputRef, inputProps, disabled }: TextFieldProps) => {
     const { value, onChange, onBlur, onFocus } = inputProps || {};
-    const { endAdornment } = InputProps || {};
+    const endAdornment = (
+      <InputAdornment position="end" onClick={() => setPopoverOpen(true)} sx={{ cursor: 'pointer' }}>
+        <Calendar />
+      </InputAdornment>
+    );
 
     return (
       <CustomTextField
+        ref={inputRef}
         endAdornment={endAdornment}
         disabled={disabled}
         value={value}
@@ -92,12 +99,15 @@ const TimePickers = ({ value, error, helperText, onChange, minTimeDate = new Dat
     <Stack spacing={2}>
       <ThemeProvider theme={timePickerTheme}>
         <DateTimePicker
+          label={'DateTimePicker'}
           value={valueAsDate}
           onChange={onDateTimePickerChange}
           renderInput={renderTextField}
           minDate={new Date()}
           mask={masks[locale] || masks.en}
           ampm={false}
+          open={popoverOpen}
+          onClose={() => setPopoverOpen(false)}
           minTime={isSameDay(valueAsDate, minTimeDate) ? minTimeDate : undefined}
           PopperProps={{
             sx: { '& .MuiClockPicker-root': { pt: 4 }, '& :focus': { outline: 'none' } },
