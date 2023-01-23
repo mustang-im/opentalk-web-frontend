@@ -21,9 +21,9 @@ This includes:
 
 ## Installing
 
-> yarn - `yarn add __ `
+> yarn - `yarn add @opentalk/common`
 
-> npm - `npm install __ `
+> npm - `npm i @opentalk/common`
 
 ## Usage
 
@@ -55,12 +55,25 @@ An ambient declaration file is a file that describes the module’s type but doe
 
 For now we have SVG, DateTimeFormat, StatelessComponent and mui themes ambient modules implementation.
 
-# Assets
+## Assets
 
-`yarn build-svg `
+# 1. Create components
 
-For including icons in the library the only thing that needs to be done is for the source to be added in the /assets/source folder. Source must be in .svg format.
-This library uses @svgr/cli for automatic creating a react components from svg source files by running `yarn build-svg ` command.
+`createIconComponents.sh` generates `.tsx` components from your SVGs in `assets/icons/source`.
+
+**Run `cd ${projectPath}/src/assets/icons/source`**.
+
+From there **run `../helpers/createIconComponents.sh`.**
+
+This will create a bunch of components in `assets/icons`.
+
+# 2. Create index
+
+`createIconIndex.sh` updates your `assets/icons/index.ts`. That means, in order to execute the script, an empty `index.ts` has to exist. The script adds _imports_ for all `IconComponents.tsx` in `assets/icons` and the exports them as modules. If the `index.ts` was not empty for some reason, you might end with duplicate entries.
+
+**Run `cd ${projectPath}/src/assets/icons`** to go to where the `index.ts` lives.
+
+From there **run `./helpers/createIconComponents.sh`.**
 
 ## Deployment
 
@@ -72,3 +85,20 @@ This library uses rollup.js and all configuration can be found in /rollup.config
 For building a production version you can use `yarn build`.
 
 (In case of need for a types build there are also `yarn build-ts` (for esm and cjs types build), or `yarn build:esm` and `yarn build:cjs` for building types accordingly).
+
+## Deploying new npm version
+
+- old package.json:
+```{
+  "name": "@opentalk/common",
+  "author": "John Doe",
+  "version": "1.0.0" }
+  ```
+- new package.json:
+```{
+  "name": "@opentalk/common",
+  "author": "John Doe",
+  "version": "1.0.1" }
+  ```
+
+When deploying new npm version it's important to update package.json version number. If the package version remains the same, new npm package wouldn't be created.
