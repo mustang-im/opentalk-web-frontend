@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Paper, styled, Tooltip, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
+import { setHotkeysEnabled } from '@opentalk/common';
 import { LegalVoteProvider } from '@opentalk/components';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +13,6 @@ import { Tab, tabs } from '../../config/moderationTabs';
 import { useAppSelector } from '../../hooks';
 import { selectCombinedParticipantsAndUser } from '../../store/selectors';
 import { FeaturesKeys, selectFeatures, selectLibravatarDefaultImage } from '../../store/slices/configSlice';
-import { setHotkeysEnabled } from '../../store/slices/mediaSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import LocalVideo from '../LocalVideo/index';
 import MenuTabs from '../MenuTabs/MenuTabs';
@@ -70,7 +70,7 @@ const MeetingSidebar = () => {
                   stop: legalVote.actions.stop,
                   start: legalVote.actions.start,
                 }}
-                combinedParticipantsAndUser={combinedParticipantsAndUser}
+                votingUsers={combinedParticipantsAndUser}
                 setHotkeysEnabled={setHotkeysEnabled}
                 libravatarDefaultImage={libravatarDefaultImage}
               >

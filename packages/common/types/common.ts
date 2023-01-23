@@ -163,6 +163,7 @@ export interface Participant {
   role?: Role;
   waitingState: WaitingState;
   presenterRole?: PresenterRoleState;
+  isSelected?: boolean;
 }
 
 export interface Command {

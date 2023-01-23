@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { TextField, TextFieldProps } from '@mui/material';
+import { setHotkeysEnabled } from '@opentalk/common';
 import React from 'react';
 
 import { useAppDispatch } from '../hooks';
-import { setHotkeysEnabled } from '../store/slices/mediaSlice';
 
 export const CommonTextField = (props: TextFieldProps) => {
   const dispatch = useAppDispatch();

@@ -302,13 +302,18 @@ legal-vote-abstain-label = Abstention
 
 legal-vote-no-results = No votes placed
 
+legal-vote-form-kind = Voting Type
+legal-vote-roll_call = Roll Call
+legal-vote-live_roll_call = Roll Call - Live
+legal-vote-pseudonymous = Hidden Vote
+
 poll-participant-list-button-select = Select
 poll-participant-list-button-close = Close
 poll-participant-list-button-save = Save
 poll-participant-list-button-start = Start Vote
 poll-participant-list-button-select-all = Select all
 
-legal-vote-success = Your vote was counted successfully
+legal-vote-success = Your vote was counted successfully at {{atVoteTime}} on {{onVoteDate}}
 legal-vote-not-selected = You have not been selected to participate in this vote.
 legal-vote-save-form-success = Your vote form was saved successfully
 legal-vote-save-form-error = Saving failed, you need to specify a topic and a name

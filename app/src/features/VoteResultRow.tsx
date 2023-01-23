@@ -12,6 +12,7 @@ import { selectParticipantById } from '../store/slices/participantsSlice';
 interface VoteResultRowProps {
   participantId: string;
   selectedVote: VoteOption;
+  token: string;
 }
 
 function VoteResultRow(props: VoteResultRowProps) {
@@ -22,13 +23,11 @@ function VoteResultRow(props: VoteResultRowProps) {
     return null;
   }
 
-  const record = participant || user;
-
   return (
     <TableRow>
       <TableCell>
-        <Typography noWrap component="span" sx={{ maxWidth: '170px', display: 'block' }}>
-          {record?.displayName}
+        <Typography noWrap component="span" sx={{ maxWidth: '170px', display: 'block' }} title={props.token}>
+          {props.token.slice(0, 10)}
         </Typography>
       </TableCell>
       <TableCell>{props.selectedVote === 'yes' ? 'x' : null}</TableCell>

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../hooks';
 import VoteEmptyRow from './VoteEmptyRow';
+import VoteResultCountRow from './VoteResultCountRow';
 import VoteResultRow from './VoteResultRow';
 
 const CustomTable = styled(Table)(({ theme }) => ({
@@ -30,23 +31,38 @@ function VoteResultTable(props: VoteResultTableProps) {
     return null;
   }
 
-  const participants = Object.entries(vote.voters || {});
+  const participants = Object.entries(vote.votingRecord || {});
+  const total = vote.votes['yes'] + vote.votes['no'] + vote.votes['abstain'];
 
   return (
     <CustomTable stickyHeader={true}>
       <TableHead>
         <TableRow>
           <TableCell>{t('global-participants')}</TableCell>
-          <TableCell>{t('legal-vote-yes-label')}</TableCell>
-          <TableCell>{t('legal-vote-no-label')}</TableCell>
-          <TableCell>{t('legal-vote-abstain-label')}</TableCell>
+          <TableCell>
+            {t('legal-vote-yes-label')} ({vote.votes['yes'] || 0})
+          </TableCell>
+          <TableCell>
+            {t('legal-vote-no-label')} ({vote.votes['no'] || 0})
+          </TableCell>
+          <TableCell>
+            {t('legal-vote-abstain-label')} ({vote.votes['abstain'] || 0})
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {participants.length === 0 && <VoteEmptyRow />}
         {participants.map(([participantId, selectedVote]) => {
-          return <VoteResultRow key={participantId} participantId={participantId} selectedVote={selectedVote} />;
+          return (
+            <VoteResultRow
+              key={participantId}
+              participantId={participantId}
+              selectedVote={selectedVote}
+              token={participantId}
+            />
+          );
         })}
+        {participants.length !== 0 && <VoteResultCountRow total={total} />}
       </TableBody>
     </CustomTable>
   );

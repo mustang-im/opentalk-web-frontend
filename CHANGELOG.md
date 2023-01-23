@@ -23,15 +23,21 @@ SPDX-License-Identifier: EUPL-1.2
 - Fix invited users not showing in ad-hoc meeting creation (!793)
 - Fix start and end date validation is running on unscheduled meeting. (!796)
 - Fix create/update meeting step icon styling (!810)
+- Fix visuals on the legal vote and poll preview popover. (!812)
 
 ### Stability Improvements
 
 - List of participants include phone users (!783)
 - Forked notistack to local version in order to enable fullscreen notifications. (!779)
+- Topic and subtitle fields are no longer mandatory when creating legal vote. (!812)
+- Reworked legal vote to use voting tickets for more security. (!812)
 
 ### New Features
 
 - change the select participants behaviour (!783)
+- Placed legal votes are summarized in the table visible by moderator. (!812)
+- Active legal vote popover has a ticking timer indicating remaining time to place a vote (!812)
+
 
 ## 1.0.13
 
