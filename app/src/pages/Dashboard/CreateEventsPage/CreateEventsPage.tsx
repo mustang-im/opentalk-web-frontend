@@ -16,21 +16,22 @@ const Container = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+const ActiveStep = styled(Step)(({ theme }) => ({
+  //Safari icon, Other browsers icon
+  '& .MuiSvgIcon-root.MuiStepIcon-root.Mui-active, & .MuiSvgIcon-root circle': {
+    color: theme.palette.secondary.dark,
+  },
+}));
+
 const CreateEventsPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const { t } = useTranslation();
 
-  const ActiveLabel = styled(StepLabel)(({ theme }) => ({
-    '& .MuiStepLabel-label, & .MuiSvgIcon-root circle ': {
-      color: theme.palette.secondary.dark,
-    },
-  }));
-
   const StepperHeader = () => (
     <Stepper activeStep={0}>
-      <Step>
-        <ActiveLabel>{t('global-meeting')}</ActiveLabel>
-      </Step>
+      <ActiveStep>
+        <StepLabel>{t('global-meeting')}</StepLabel>
+      </ActiveStep>
       <Step>
         <StepLabel>{t('global-participants')}</StepLabel>
       </Step>
