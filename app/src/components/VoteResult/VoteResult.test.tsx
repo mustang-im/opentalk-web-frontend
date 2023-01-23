@@ -1,0 +1,43 @@
+import { LegalVoteId } from '@opentalk/common';
+
+import { createStore, render, screen, cleanup, fireEvent } from '../../utils/testUtils';
+import VoteResilt, { IVoteResult } from './VoteResult';
+
+describe('testing vote results', () => {
+  const { store } = createStore();
+  afterAll(() => cleanup());
+
+  const voteData = {
+    numberOfVotes: 0,
+    votePercentage: 50,
+    isVotable: true,
+    legalVoteId: '1234' as LegalVoteId,
+    currentVotes: 0,
+  };
+
+  const voteResultsProps: IVoteResult = {
+    title: 'Yes',
+    optionIndex: 1,
+    voteData: voteData,
+    showResult: true,
+    onVote: jest.fn(),
+  };
+
+  test('component should render wothout breaking', async () => {
+    await render(<VoteResilt {...voteResultsProps} />, store);
+    const yesCheckbox = screen.getByRole('checkbox', { name: voteResultsProps.title });
+
+    expect(yesCheckbox).toBeInTheDocument();
+    expect(yesCheckbox).not.toBeChecked();
+    expect(screen.getByText('50.0%')).toBeInTheDocument();
+  });
+
+  test('on click should fire onVote event', async () => {
+    await render(<VoteResilt {...voteResultsProps} />, store);
+    const yesCheckbox = screen.getByRole('checkbox', { name: voteResultsProps.title });
+    expect(yesCheckbox).toBeInTheDocument();
+    fireEvent.click(yesCheckbox);
+    expect(yesCheckbox).toBeChecked();
+    expect(voteResultsProps.onVote).toBeCalledTimes(1);
+  });
+});

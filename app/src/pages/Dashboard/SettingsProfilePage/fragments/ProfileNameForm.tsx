@@ -1,0 +1,62 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { Button, Grid, Typography } from '@mui/material';
+import { useFormik } from 'formik';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
+import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
+import TextField from '../../../../commonComponents/TextField';
+import { formikProps } from '../../../../utils/formikUtils';
+import notifications from '../../../../utils/snackBarUtils';
+
+const ProfileNameForm = () => {
+  const { t } = useTranslation();
+  const { data } = useGetMeQuery();
+  const [updateMe, { isLoading }] = useUpdateMeMutation();
+
+  const validationSchema = yup.object({
+    displayName: yup.string().trim().required(t('dashboard-settings-profile-input-required')),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      displayName: data?.displayName,
+    },
+    enableReinitialize: true,
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      await updateMe(values);
+      notifications.success(t('dashboard-settings-general-notification-save-success'));
+    },
+  });
+
+  return (
+    <form onSubmit={formik.handleSubmit}>
+      <Grid container spacing={3} direction={'column'}>
+        <Grid item>
+          <Typography variant={'h1'} component={'h2'}>
+            {t('dashboard-settings-profile-name')}
+          </Typography>
+        </Grid>
+        <Grid item container spacing={1} direction={'column'}>
+          <Grid item>
+            <TextField {...formikProps('displayName', formik)} fullWidth />
+          </Grid>
+          <Grid item>
+            <Typography variant={'caption'}>{t('dashboard-settings-profile-input-hint')}</Typography>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Button type={'submit'} disabled={isLoading}>
+            {t('dashboard-settings-profile-button-save')}
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
+  );
+};
+
+export default ProfileNameForm;

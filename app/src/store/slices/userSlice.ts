@@ -1,0 +1,134 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { GroupId, ParticipantId, ParticipationKind, Timestamp } from '@opentalk/common';
+import { logged_out } from '@opentalk/react-redux-appauth';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { RootState } from '../';
+import { Role } from '../../api/types/incoming/control';
+import { joinSuccess, login, startRoom } from '../commonActions';
+import { setFocusedSpeaker } from './mediaSlice';
+import { Participant, WaitingState } from './participantsSlice';
+import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
+
+interface UserState {
+  uuid: ParticipantId | null;
+  groups: GroupId[];
+  role: Role;
+  displayName: string;
+  avatarUrl?: string;
+  loggedIdToken?: string;
+  lastActive?: string;
+  joinedAt?: string;
+}
+
+const initialState: UserState = {
+  uuid: null,
+  groups: [],
+  displayName: '',
+  role: Role.User,
+};
+
+export const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    displayNameSet: (state, action: PayloadAction<string>) => {
+      state.displayName = action.payload;
+    },
+    updateRole: (state, { payload: role }: PayloadAction<Role>) => {
+      state.role = role;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchRoomByInviteId.fulfilled, (state) => {
+      state.role = Role.Guest;
+    });
+    builder.addCase(
+      startRoom.pending,
+      (
+        state,
+        {
+          meta: {
+            arg: { displayName },
+          },
+        }
+      ) => {
+        state.displayName = displayName;
+      }
+    );
+    builder.addCase(joinSuccess, (state, { payload: { avatarUrl, role, participantId, groups } }) => {
+      state.role = role;
+      state.avatarUrl = avatarUrl;
+      state.uuid = participantId;
+      state.groups = groups;
+      state.joinedAt = new Date().toISOString();
+      state.lastActive = state.joinedAt;
+    });
+    builder.addCase(connectionClosed, (state) => {
+      state.uuid = null;
+      state.joinedAt = undefined;
+    });
+    builder.addCase(login.fulfilled, (state, { meta }) => {
+      state.loggedIdToken = meta.arg;
+    });
+    builder.addCase(login.rejected, (state) => {
+      state.loggedIdToken = undefined;
+    });
+    builder.addCase(logged_out, () => initialState);
+
+    builder.addCase(
+      setFocusedSpeaker,
+      (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp?: Timestamp }>) => {
+        if (id === state.uuid) {
+          state.lastActive = timestamp;
+        }
+      }
+    );
+  },
+});
+
+export const actions = userSlice.actions;
+export const { updateRole } = actions;
+
+const userState = (state: RootState) => state.user;
+
+export const selectOurUuid = createSelector(userState, (state) => state.uuid);
+export const selectGroups = createSelector(userState, (state) => state.groups);
+export const selectDisplayName = createSelector(userState, (state) => state.displayName);
+export const selectAvatarUrl = createSelector(userState, (state) => state.avatarUrl);
+export const selectIsLoggedIn = createSelector(userState, (state) => state.loggedIdToken !== undefined);
+export const selectIsAuthenticated = createSelector(
+  userState,
+  (state) => state.loggedIdToken !== undefined || state.role === Role.Guest
+);
+export const selectIsModerator = createSelector(userState, (state) => state.role === Role.Moderator);
+
+export const selectUserAsPartialParticipant = createSelector(
+  userState,
+  (state): Omit<Participant, 'breakoutRoomId' | 'handIsUp' | 'handUpdatedAt'> | undefined => {
+    const { displayName, avatarUrl, groups, joinedAt, lastActive } = state;
+
+    if (state.uuid === null || joinedAt === undefined || lastActive === undefined) {
+      return undefined;
+    }
+
+    const participationKind =
+      state.role === Role.User || state.role === Role.Moderator ? ParticipationKind.User : ParticipationKind.Guest;
+
+    return {
+      id: state.uuid,
+      displayName,
+      avatarUrl,
+      groups,
+      joinedAt,
+      lastActive,
+      leftAt: null,
+      participationKind,
+      waitingState: WaitingState.Joined,
+    };
+  }
+);
+
+export default userSlice.reducer;

@@ -1,0 +1,59 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { Role } from '../../api/types/incoming/control';
+import { render, screen, createStore } from '../../utils/testUtils';
+import Toolbar from './Toolbar';
+
+jest.mock('../Toolbar/fragments/EndCallButton', () => {
+  return {
+    __esModule: true,
+    default: () => <div data-testid="toolbarEndCallButton"></div>,
+  };
+});
+
+describe('render <Toolbar />', () => {
+  test('render full-layout Toolbar component for modarator', () => {
+    const { store } = createStore({
+      initialState: {
+        user: { loggedIn: true, role: Role.Moderator },
+      },
+    });
+    render(<Toolbar />, store);
+
+    expect(screen.getByTestId('toolbarHandraiseButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarBlurScreenButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarAudioButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarVideoButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarMenuButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarEndCallButton')).toBeInTheDocument();
+  });
+
+  test('render full-layout Toolbar component for normal user', () => {
+    const { store } = createStore({
+      initialState: {
+        user: { loggedIn: true, role: Role.User },
+      },
+    });
+    render(<Toolbar />, store);
+
+    expect(screen.getByTestId('toolbarHandraiseButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarBlurScreenButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarAudioButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarVideoButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarMenuButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarEndCallButton')).toBeInTheDocument();
+  });
+
+  test('render lobby-layout Toolbar component', () => {
+    const { store } = createStore();
+    render(<Toolbar layout="lobby" />, store);
+
+    expect(screen.getByTestId('toolbarAudioButton')).toBeInTheDocument();
+    expect(screen.getByTestId('toolbarVideoButton')).toBeInTheDocument();
+    expect(screen.queryByTestId('toolbarBlurScreenButton')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbarHandraiseButton')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbarMenuButton')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toolbarEndCallButton')).not.toBeInTheDocument();
+  });
+});

@@ -1,0 +1,205 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { merge } from 'lodash';
+
+import { RootState } from '../';
+
+// Map is not recommended by redux/immer
+
+type VideoBackground = {
+  altText: string;
+  url: string;
+  thumb: string;
+};
+
+type Beta = {
+  isBeta?: boolean;
+  badgeUrl?: string;
+};
+
+export type DefaultAvatarImage = '404' | 'mm' | 'monsterid' | 'wavatar' | 'retro' | 'robohash' | 'pagan';
+
+export enum FeaturesKeys {
+  Home = 'home',
+  UserSearch = 'userSearch',
+  MuteUsers = 'muteUsers',
+  BreakoutRooms = 'breakoutRooms',
+  Poll = 'poll',
+  Vote = 'vote',
+  AutoModeration = 'autoModeration',
+  Protocol = 'protocol',
+  Timer = 'timer',
+  AddUser = 'addUser',
+  TalkingStick = 'talkingStick',
+  WheelOfNames = 'wheelOfNames',
+  JoinWithoutMedia = 'joinWithoutMedia',
+  Whiteboard = 'whiteboard',
+  ResetHandraises = 'resetHandraises',
+  Recording = 'recording',
+}
+
+type Features = {
+  [value in FeaturesKeys]?: boolean;
+};
+
+export interface Config {
+  controller?: string;
+  insecure?: boolean;
+  baseUrl?: string;
+  helpdeskUrl?: string;
+  userSurveyUrl?: string;
+  userSurveyApiKey?: string;
+  errorReportAddress: string;
+  beta: Beta;
+  oidcConfig?: {
+    clientId?: string;
+    authority?: string;
+    redirectUri?: string;
+    signOutRedirectUri?: string;
+    popupRedirectUri?: string;
+    scope?: string;
+  };
+  changePassword: {
+    active: boolean;
+    url?: string;
+  };
+  speedTest: {
+    ndtServer: string;
+    ndtDownloadWorkerJs: string;
+    ndtUploadWorkerJs: string;
+  };
+  features: Features;
+  videoBackgrounds: VideoBackground[];
+  maxVideoBandwidth: number;
+  libravatarDefaultImage?: DefaultAvatarImage;
+}
+
+export interface ConfigState {
+  controller: string;
+  insecure: boolean;
+  baseUrl: string;
+  helpdeskUrl: string;
+  userSurveyUrl?: string;
+  userSurveyApiKey?: string;
+  beta: Beta;
+  errorReportAddress: string;
+  oidcConfig: {
+    clientId: string;
+    redirectPath: string;
+    signOutRedirectUri: string;
+    popupRedirectPath: string;
+    scope: string;
+    authority: string;
+  };
+  changePassword: {
+    active: boolean;
+    url?: string;
+  };
+  speedTest: {
+    ndtServer: string;
+    ndtDownloadWorkerJs: string;
+    ndtUploadWorkerJs: string;
+  };
+  readonly videoBackgrounds: readonly VideoBackground[];
+  maxVideoBandwidth: number;
+  readonly features: Features;
+  libravatarDefaultImage: DefaultAvatarImage;
+}
+/**
+ * Initial Configuration.
+ *
+ * Some URLs are left empty, please populate the config.js in the public dir which should live at /config.js when deployed.
+ * This invalid URLs are valid, as we check for the loaded property before loading any app related component.
+ *
+ * These initial state is merged with the content from config.js, thus some defaults are reasonable.
+ * DEPLOYMENT should be set to your deployed app. When using yarn start, this is http://localhost:3000/
+ * CONTROLLER and WS_CONTROLLER MUST be set.
+ * OP is your OpenIDConnect Provider
+ */
+export const initialState: ConfigState = {
+  controller: 'CONTROLLER',
+  insecure: false,
+  baseUrl: 'http://localhost',
+  helpdeskUrl: 'HELPDESK',
+  userSurveyUrl: 'https://p01nc.heinlein-video.de:11443/api/v0/opentalk/store',
+  userSurveyApiKey: 'opentalk_TG5ePw5k_2YZjs6j5qPdjAVUTKf2ux4a',
+  errorReportAddress: 'report@opentalk.eu',
+  beta: {
+    isBeta: true,
+  },
+  oidcConfig: {
+    authority: 'OP',
+    clientId: 'Frontend',
+    redirectPath: '/auth/callback',
+    signOutRedirectUri: '/dashboard',
+    popupRedirectPath: '/auth/popup_callback',
+    scope: 'openid profile email',
+  },
+  changePassword: {
+    active: false,
+  },
+  speedTest: {
+    ndtServer: 'NDT_SERVER',
+    ndtDownloadWorkerJs: '/workers/ndt7-download-worker.js',
+    ndtUploadWorkerJs: '/workers/ndt7-upload-worker.js',
+  },
+  features: {
+    home: true,
+    userSearch: true,
+    muteUsers: true,
+    resetHandraises: true,
+    breakoutRooms: true,
+    poll: true,
+    vote: true,
+    autoModeration: false,
+    protocol: false,
+    timer: false,
+    addUser: false,
+    talkingStick: false,
+    wheelOfNames: false,
+    joinWithoutMedia: false,
+    whiteboard: true,
+    recording: true,
+  },
+  videoBackgrounds: [],
+  maxVideoBandwidth: 600000,
+  libravatarDefaultImage: 'robohash',
+};
+
+export const configSlice = createSlice({
+  name: 'config',
+  initialState,
+  reducers: {
+    update: (state, { payload }: PayloadAction<Config>) => {
+      merge(state, payload);
+      console.debug('config updated to:', state, payload);
+    },
+  },
+});
+
+export const { update } = configSlice.actions;
+export const actions = configSlice.actions;
+
+export const selectController = (state: RootState) => state.config.controller;
+export const selectBaseUrl = (state: RootState) => state.config.baseUrl;
+export const selectControllerUrl = (state: RootState) => {
+  const prefix = state.config.insecure ? 'http' : 'https';
+  return `${prefix}://${state.config.controller}/`;
+};
+export const selectHelpdeskUrl = (state: RootState) => state.config.helpdeskUrl;
+export const selectWsController = (state: RootState) => state.config.insecure;
+export const selectOidcConfig = (state: RootState) => state.config.oidcConfig;
+export const selectSpeedTestConfig = (state: RootState) => state.config.speedTest;
+export const selectFeatures = (state: RootState) => state.config.features;
+export const selectVideoBackgrounds = (state: RootState) => state.config.videoBackgrounds;
+export const selectMaxVideoBandwidth = (state: RootState) => state.config.maxVideoBandwidth;
+export const selectLibravatarDefaultImage = (state: RootState) => state.config.libravatarDefaultImage;
+export const selectUserSurveyUrl = (state: RootState) => state.config.userSurveyUrl;
+export const selectIsBetaRelease = (state: RootState) => state.config.beta.isBeta;
+export const selectBetaBadgeUrl = (state: RootState) => state.config.beta.badgeUrl;
+export const selectErrorReportEmail = (state: RootState) => state.config.errorReportAddress;
+export const selectChangePassword = (state: RootState) => state.config.changePassword;
+
+export default configSlice.reducer;

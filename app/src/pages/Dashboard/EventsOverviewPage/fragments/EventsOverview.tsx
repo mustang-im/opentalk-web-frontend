@@ -1,0 +1,102 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { styled, Typography, Stack } from '@mui/material';
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
+import { ArrowDownIcon } from '@opentalk/common';
+import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
+import React, { useEffect, useState } from 'react';
+
+import MeetingCard from '../../../../components/MeetingCard';
+import { MeetingsProp } from '../EventsOverviewPage';
+
+interface MeetingsOverviewProp {
+  entries: MeetingsProp[];
+  expandAll: boolean;
+}
+
+const Accordion = styled(({ children, ...props }: AccordionProps) => (
+  <MuiAccordion disableGutters elevation={0} square {...props}>
+    {children}
+  </MuiAccordion>
+))({
+  backgroundColor: 'transparent',
+  width: '100%',
+  ':before': {
+    display: 'none',
+  },
+});
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary expandIcon={<ArrowDownIcon sx={{ fontSize: '0.9rem' }} />} {...props} />
+))(({ theme }) => ({
+  backgroundColor: 'transparent',
+  borderBottom: `3px solid ${theme.palette.secondary.dark}`,
+  justifyContent: 'flex-start',
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(-2),
+    flexGrow: 'unset',
+    paddingRight: theme.spacing(1),
+  },
+  '&:before': {
+    backgroundColor: 'none',
+  },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+  marginLeft: theme.spacing(-2),
+}));
+
+const EventsOverview = ({ entries, expandAll }: MeetingsOverviewProp) => {
+  const [expanded, setExpanded] = useState<string[]>([]);
+
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+    setExpanded(newExpanded ? [...expanded, panel] : expanded.filter((e) => e !== panel));
+  };
+
+  useEffect(() => {
+    if (expandAll) {
+      setExpanded(entries.map((event) => event.title));
+    }
+  }, [expandAll, entries]);
+
+  // close all accordion only if expandAll change
+  useEffect(() => {
+    if (!expandAll) {
+      setExpanded([]);
+    }
+  }, [expandAll]);
+
+  return (
+    <Stack spacing={1} overflow={'auto'} flex={'1 1 auto'} height={0}>
+      {entries.map((entry) => (
+        <Accordion
+          data-testid="EventAccordion"
+          expanded={expanded.includes(entry.title)}
+          onChange={handleChange(entry.title)}
+          key={entry.title}
+          TransitionProps={{ unmountOnExit: true }}
+        >
+          <AccordionSummary aria-controls={`${entry.title}-control`} id={`${entry.title}-panel`}>
+            <Typography>{entry.title}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {entry.events.map((event) => (
+              <MeetingCard
+                key={`${isTimelessEvent(event) ? '' : event.startsAt?.datetime}.${event.id}`}
+                event={event}
+                overview
+              />
+            ))}
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Stack>
+  );
+};
+
+export default EventsOverview;

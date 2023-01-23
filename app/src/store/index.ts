@@ -1,0 +1,110 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { legalVoteStore } from '@opentalk/components';
+import { authReducer } from '@opentalk/react-redux-appauth';
+import { configureStore, Middleware, MiddlewareAPI, Dispatch, AnyAction } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
+import { merge } from 'lodash';
+
+import { apiMiddleware } from '../api';
+import { restApi } from '../api/rest';
+import breakoutReducer from './slices/breakoutSlice';
+import chatReducer from './slices/chatSlice';
+import { initialState as initialConfig } from './slices/configSlice';
+import configReducer from './slices/configSlice';
+import connectionStatsReducer from './slices/connectionStatsSlice';
+import eventReducer from './slices/eventSlice';
+import mediaReducer from './slices/mediaSlice';
+import subscribersReducer from './slices/mediaSubscriberSlice';
+import moderationReducer from './slices/moderationSlice';
+import participantsReducer from './slices/participantsSlice';
+import pollReducer from './slices/pollSlice';
+import protocolReducer from './slices/protocolSlice';
+import recordingReducer from './slices/recordingSlice';
+import roomReducer from './slices/roomSlice';
+import slotReducer from './slices/slotSlice';
+import speedMeterReducer from './slices/speedMeterSlice';
+import timerReducer from './slices/timerSlice';
+import uiReducer from './slices/uiSlice';
+import userReducer from './slices/userSlice';
+import whiteboardReducer from './slices/whiteboardSlice';
+
+const middleware: Array<Middleware> = [apiMiddleware, restApi.middleware];
+
+const logger = (store: MiddlewareAPI) => (next: Dispatch) => (action: AnyAction) => {
+  if (action.type.startsWith('signaling/media') || action.type.startsWith('stats/statsUpdated')) {
+    return next(action);
+  }
+
+  console.log('dispatching', action);
+  const result = next(action);
+  console.log('next state', store.getState());
+  return result;
+};
+
+const crashReporter = (store: MiddlewareAPI) => (next: Dispatch) => (action: AnyAction) => {
+  try {
+    return next(action);
+  } catch (err) {
+    console.error('Caught an exception!', err, {
+      action,
+      state: store.getState(),
+    });
+    throw err;
+  }
+};
+
+if (process.env.NODE_ENV === 'development') {
+  middleware.push(logger);
+  middleware.push(crashReporter);
+}
+
+export const appReducers = {
+  auth: authReducer,
+  breakout: breakoutReducer,
+  chat: chatReducer,
+  config: configReducer,
+  participants: participantsReducer,
+  legalVote: legalVoteStore.legalVoteReducer,
+  media: mediaReducer,
+  moderation: moderationReducer,
+  room: roomReducer,
+  ui: uiReducer,
+  user: userReducer,
+  slot: slotReducer,
+  speed: speedMeterReducer,
+  poll: pollReducer,
+  subscribers: subscribersReducer,
+  stats: connectionStatsReducer,
+  [restApi.reducerPath]: restApi.reducer,
+  events: eventReducer,
+  protocol: protocolReducer,
+  timer: timerReducer,
+  whiteboard: whiteboardReducer,
+  recording: recordingReducer,
+};
+
+const store = configureStore({
+  reducer: {
+    ...appReducers,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActionPaths: ['meta.arg', 'meta.baseQueryMeta', 'meta.history', 'payload.conferenceContext'],
+      },
+    }).concat(middleware),
+  preloadedState: {
+    config: merge({}, initialConfig, window.config),
+  },
+});
+
+setupListeners(store.dispatch);
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch;
+
+export default store;

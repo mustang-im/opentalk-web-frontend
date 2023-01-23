@@ -1,0 +1,133 @@
+# SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+#
+# SPDX-License-Identifier: EUPL-1.2
+
+---
+default:
+  image: node:18-alpine
+
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+lint:prettier+eslint:
+  stage: lint
+  before_script:
+    - apk add git
+    - yarn install
+  script:
+    - yarn lint --no-inline-config --max-warnings 0
+    - yarn workspaces foreach -pA run fmt:ci
+
+lint:yaml:
+  stage: lint
+  image: archlinux:latest
+  before_script:
+    - pacman -Syy --noconfirm yamllint
+  script: yamllint .
+
+lint:compliance:
+  stage: lint
+  before_script:
+    - apk add git
+    - yarn install
+  script:
+    - yarn dlx licensee --production --errors-only
+
+lint:audit:
+  stage: lint
+  script:
+    - yarn npm audit --environment production -RA
+
+test:build:
+  stage: test
+  before_script:
+    - apk add git
+    - yarn install
+  script:
+    - yarn test
+    - yarn build
+
+
+test:container:
+  stage: test
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  script:
+    - mkdir -p /kaniko/.docker
+    - >
+      echo
+      "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" >
+      /kaniko/.docker/config.json
+    - >
+      /kaniko/executor
+      --registry-mirror=mirror.gcr.io
+      --context $CI_PROJECT_DIR
+      --dockerfile $CI_PROJECT_DIR/ci/Dockerfile
+      --no-push
+      --force
+
+build:container:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG != null
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  script:
+    - mkdir -p /kaniko/.docker
+    - >
+      echo
+      "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" >
+      /kaniko/.docker/config.json
+    - >
+      /kaniko/executor
+      --registry-mirror=mirror.gcr.io
+      --context $CI_PROJECT_DIR
+      --dockerfile $CI_PROJECT_DIR/ci/Dockerfile
+      --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+      --destination $CI_REGISTRY_IMAGE:latest
+      --force
+
+build:container-profiling:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG != null
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  script:
+    - mkdir -p /kaniko/.docker
+    - >
+      echo
+      "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" >
+      /kaniko/.docker/config.json
+    - >
+      /kaniko/executor
+      --registry-mirror=mirror.gcr.io
+      --context $CI_PROJECT_DIR
+      --dockerfile $CI_PROJECT_DIR/ci/Dockerfile
+      --destination $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG:+$CI_COMMIT_TAG-}profiling
+      --destination $CI_REGISTRY_IMAGE:profiling
+      --build-arg BUILD_TYPE="build:profiler"
+      --force
+
+publish:common:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG != null
+      changes:
+        - packages/common/**/*
+  before_script:
+    - apk add git
+    - yarn install
+  script:
+    - yarn build
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
+    - yarn publish:npm

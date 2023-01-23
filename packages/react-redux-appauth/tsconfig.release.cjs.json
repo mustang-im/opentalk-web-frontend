@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "outDir": "build/cjs/",
+      "module": "CommonJS",
+      "removeComments": true
+    },
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "**/__tests__/*",
+      "**/__fixtures__/*"
+    ]
+  }

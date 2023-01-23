@@ -1,0 +1,278 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { MediaSessionType, ParticipantId, Timestamp, VideoSetting } from '@opentalk/common';
+import { isEmpty } from 'lodash';
+import convertToSnakeCase from 'snakecase-keys';
+
+import { setCurrentConferenceRoom } from '.';
+import { ApiErrorWithBody, StartRoomError } from '../../api/rest';
+import { Message as IncomingMessage } from '../../api/types/incoming';
+import {
+  MediaStatus,
+  SdpAnswer,
+  SdpCandidate,
+  SdpEndOfCandidates,
+  SdpOffer,
+  WebRtcDown,
+  WebRtcSlow,
+  WebRtcUp,
+} from '../../api/types/incoming/media';
+import { Message as OutgoingMessage } from '../../api/types/outgoing';
+import { RoomCredentials } from '../../store/commonActions';
+import { ConfigState } from '../../store/slices/configSlice';
+import { fetchWithAuth, getControllerBaseUrl, getSignalingUrl } from '../../utils/apiUtils';
+import { BaseEventEmitter } from '../EventListener';
+import { MediaSignaling } from './MediaSignaling';
+import { SignalingSocket, SignalingState } from './SignalingSocket';
+import { TurnProvider } from './TurnProvider';
+import { WebRtc } from './WebRTC';
+
+export type ConferenceEvent = {
+  connected: void;
+  // A 'shutdown' event is sent after the whole WebRTC context has been terminated and all connections are closed.
+  shutdown: { error?: number };
+  message: IncomingMessage;
+};
+
+export const startRoom = async (credentials: RoomCredentials, config: ConfigState, resumptionToken?: string) => {
+  const roomPath = `v1/rooms/${credentials.roomId}`;
+
+  let authUrl: URL;
+  if (credentials.inviteCode !== undefined) {
+    authUrl = new URL(`${roomPath}/start_invited`, getControllerBaseUrl(config));
+  } else {
+    authUrl = new URL(`${roomPath}/start`, getControllerBaseUrl(config));
+  }
+
+  const { breakoutRoomId, inviteCode, password } = credentials;
+  const body = JSON.stringify(
+    convertToSnakeCase({
+      breakoutRoom: breakoutRoomId,
+      inviteCode,
+      password: !isEmpty(password) ? password : undefined,
+      resumption: resumptionToken,
+    })
+  );
+
+  const response = await fetchWithAuth(authUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body,
+  });
+
+  if (!response.ok) {
+    if (response.status === 403) {
+      const error = { status: response.status, code: StartRoomError.Forbidden };
+      throw error;
+    }
+    if (response.status === 404) {
+      const error = { status: response.status, code: StartRoomError.NotFound };
+      throw error;
+    }
+    const { code, message }: ApiErrorWithBody<StartRoomError> = await response.json();
+    const error = { status: response.status, code, message };
+    throw error;
+  }
+  const { ticket, resumption }: { ticket: string; resumption: string } = await response.json();
+
+  return { ticket, resumption };
+};
+
+type WebRtcMessage =
+  | SdpAnswer
+  | SdpOffer
+  | SdpCandidate
+  | SdpEndOfCandidates
+  | WebRtcUp
+  | WebRtcDown
+  | WebRtcSlow
+  | MediaStatus;
+
+export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
+  private readonly signaling: SignalingSocket;
+  public readonly webRtc: WebRtc;
+  public readonly roomCredentials: RoomCredentials;
+  private participantId?: ParticipantId;
+
+  public static async create(
+    roomCredentials: RoomCredentials,
+    config: ConfigState,
+    resumptionToken?: string
+  ): Promise<{ conferenceContext: ConferenceRoom; resumption: string }> {
+    const { ticket, resumption } = await startRoom(roomCredentials, config, resumptionToken);
+    const signaling = new SignalingSocket(getSignalingUrl(config), ticket);
+    const conferenceContext = new ConferenceRoom(roomCredentials, signaling, config);
+    setCurrentConferenceRoom(conferenceContext);
+    return { conferenceContext, resumption };
+  }
+
+  private constructor(roomCredentials: RoomCredentials, signaling: SignalingSocket, config: ConfigState) {
+    super();
+
+    this.roomCredentials = roomCredentials;
+    this.signaling = signaling;
+    this.signaling.addEventListener('connectionstatechange', this.signalingStateHandler);
+    this.signaling.addEventListener('message', this.signalingMessageHandler);
+    this.webRtc = new WebRtc(
+      new MediaSignaling(signaling),
+      new TurnProvider(config, roomCredentials.inviteCode),
+      config.maxVideoBandwidth
+    );
+  }
+
+  public join(displayName: string) {
+    if (!this.signaling.isOpen()) {
+      throw new Error('can not join room when not connected');
+    }
+    if (isEmpty(displayName)) {
+      throw new Error('displayName must be not empty');
+    }
+    this.signaling.sendMessage({
+      namespace: 'control',
+      payload: { action: 'join', displayName },
+    });
+  }
+
+  public createPublisher(mediaType: MediaSessionType, stream: MediaStream, quality: VideoSetting) {
+    if (this.participantId === undefined) {
+      throw new Error('conference not joined at publish');
+    }
+    return this.webRtc.createPublisher({ mediaType, participantId: this.participantId }, stream, quality);
+  }
+
+  private async handleWebRtcSignaling(message: WebRtcMessage, timestamp: Timestamp) {
+    const descriptor = {
+      participantId: message.source,
+      mediaType: message.mediaSessionType,
+    };
+
+    switch (message.message) {
+      case 'sdp_answer':
+        await this.webRtc.handleSdpAnswer(descriptor, message.sdp);
+        break;
+      case 'sdp_offer':
+        await this.webRtc.handleSdpOffer(descriptor, message.sdp);
+        break;
+      case 'webrtc_up':
+        await this.webRtc.setConnectionState(descriptor, true);
+        break;
+      case 'webrtc_down':
+        await this.webRtc.setConnectionState(descriptor, false);
+        break;
+      case 'webrtc_slow':
+        await this.webRtc.handleSlowNotification(descriptor, message.direction, timestamp);
+        break;
+      case 'sdp_candidate':
+        await this.webRtc.handleSdpCandidate(descriptor, message.candidate);
+        break;
+      case 'sdp_end_of_candidates':
+        await this.webRtc.handleEndOfSdpCandidates(descriptor);
+        break;
+      case 'media_status':
+        await this.webRtc.handleMediaStatus(descriptor, message);
+        break;
+      default: {
+        const dataString = JSON.stringify(message, null, 2);
+        console.error(`Unknown media message type: ${dataString}`);
+        throw new Error(`Unknown message type: ${dataString}`);
+      }
+    }
+  }
+
+  private signalingMessageHandler = (message: IncomingMessage) => {
+    // TODO consume media messages
+    // inspect join_success for participantId
+
+    const { namespace, payload, timestamp } = message;
+
+    switch (namespace) {
+      case 'media': {
+        const subType = payload.message;
+        // TODO: Theses are actually a control messages -- talk to the backend
+        if (
+          subType === 'error' ||
+          subType === 'request_mute' ||
+          subType === 'focus_update' ||
+          subType === 'presenter_granted' ||
+          subType === 'presenter_revoked'
+        ) {
+          break;
+        } else {
+          this.handleWebRtcSignaling(payload, timestamp).catch((e) =>
+            console.error('failed to handle signaling message for WebRTC', e, payload)
+          );
+          // do not propagate WebRTC messages
+          return;
+        }
+      }
+      case 'control':
+        if (payload.message === 'join_success') {
+          this.participantId = payload.id;
+          // TODO start webRTC Subscriptions
+        }
+        break;
+      default:
+        //let the react app take care
+        break;
+    }
+    this.eventEmitter.emit('message', message);
+  };
+
+  /*
+const RECONNECTION_DELAY_IN_SECONDS = 5;
+private async reconnect() {
+const delay = (interval: number) => new Promise<void>((resolve) => setTimeout(resolve, interval));
+if (this.roomCredentials === undefined) {
+  throw new Error('No room credentials available');
+}
+const roomCredentials = this.roomCredentials;
+try {
+  const ticket = await dispatch(startRoom(roomCredentials));
+  await this.connect(ticket);
+} catch (e: any) {
+  await delay(RECONNECTION_DELAY_IN_SECONDS * 1000);
+  if (this.roomCredentials === undefined) {
+    throw new Error('No room credentials available');
+  }
+  const ticket = await fetchSignalingTicket(roomCredentials);
+  await this.connect(ticket);
+}
+console.debug('signaling reconnect finished');
+}
+
+*/
+  private signalingStateHandler = async (state: SignalingState) => {
+    switch (state) {
+      case 'connected':
+        console.debug('signaling connected');
+        this.eventEmitter.emit('connected');
+        break;
+      case 'disconnected':
+        console.error('signaling disconnected abnormally');
+
+        // TODO reconnect
+        this.eventEmitter.emit('shutdown', { error: 9999 });
+        return this.webRtc.close();
+      case 'closed':
+        // TODO: clearResumptionToken(credentials)
+        this.eventEmitter.emit('shutdown', {});
+        return this.webRtc.close();
+    }
+  };
+
+  public sendMessage(message: OutgoingMessage) {
+    this.signaling.sendMessage(message);
+  }
+
+  public shutdown() {
+    console.info('shutdown conference context');
+    this.webRtc.close();
+    this.signaling.removeEventListener('message', this.signalingMessageHandler);
+    this.signaling.removeEventListener('connectionstatechange', this.signalingStateHandler);
+
+    this.signaling.disconnect();
+    this.eventEmitter.emit('shutdown', {});
+    this.eventEmitter.all.clear();
+  }
+}

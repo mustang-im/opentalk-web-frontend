@@ -1,0 +1,76 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import {
+  ListItemButton,
+  ListItemAvatar as MuiListItemAvatar,
+  ListItemText,
+  Typography,
+  Grid,
+  styled,
+} from '@mui/material';
+import { isEmpty } from 'lodash';
+import React from 'react';
+
+import { useAppSelector } from '../../../hooks';
+import { ChatProps } from '../../../store/slices/chatSlice';
+import { selectParticipantById } from '../../../store/slices/participantsSlice';
+import { formatTime } from '../../../utils/timeUtils';
+import ParticipantAvatar from '../../ParticipantAvatar';
+
+const ListItemContainer = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  '&:hover': {
+    background: theme.palette.secondary.light,
+  },
+}));
+
+const ListItemAvatar = styled(MuiListItemAvatar)(({ theme }) => ({
+  minWidth: 'initial',
+  marginRight: theme.spacing(1),
+}));
+
+const TimeTypography = styled(Typography)({
+  color: '#7b9ca9',
+});
+
+interface IScopedChatItemProps {
+  chat: ChatProps;
+  onClick: (arg: string) => void;
+}
+
+const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
+  const participant = useAppSelector(selectParticipantById(chat.id));
+  const getDisplayName = () => (isEmpty(participant) ? chat.id : participant?.displayName);
+  const renderPrimaryText = () => (
+    <Grid container direction={'row'} spacing={1}>
+      <Grid item zeroMinWidth xs>
+        <Typography variant={'body1'} color={'textPrimary'} noWrap>
+          {getDisplayName()}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <TimeTypography variant={'caption'}>{formatTime(chat.lastMessage?.timestamp)}</TimeTypography>
+      </Grid>
+    </Grid>
+  );
+
+  const renderSecondaryText = () => (
+    <Typography variant={'body1'} noWrap>
+      {chat.lastMessage?.content || ''}
+    </Typography>
+  );
+
+  return (
+    <ListItemContainer>
+      <ListItemButton onClick={() => onClick(chat.id)} disableGutters>
+        <ListItemAvatar>
+          <ParticipantAvatar src={participant?.avatarUrl}>{getDisplayName()}</ParticipantAvatar>
+        </ListItemAvatar>
+        <ListItemText primary={renderPrimaryText()} secondary={renderSecondaryText()} />
+      </ListItemButton>
+    </ListItemContainer>
+  );
+};
+
+export default ChatOverviewItem;

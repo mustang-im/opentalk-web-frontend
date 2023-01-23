@@ -1,0 +1,322 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { Button, Grid, IconButton, InputAdornment, Tooltip } from '@mui/material';
+import { BackIcon, CopyIcon } from '@opentalk/common';
+import { Event, isEvent, FindUserResponse } from '@opentalk/rest-api-rtk-query';
+import { QueryStatus } from '@reduxjs/toolkit/dist/query';
+import { merge } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useCreateEventInviteMutation, useDeleteEventMutation, useLazyGetRoomInvitesQuery } from '../../api/rest';
+import TextField from '../../commonComponents/TextField';
+import SelectParticipants from '../../components/SelectParticipants';
+import { useAppSelector } from '../../hooks';
+import { selectBaseUrl, selectFeatures } from '../../store/slices/configSlice';
+import notifications from '../../utils/snackBarUtils';
+import { EmailUser } from '../SelectParticipants/SelectParticipants';
+
+interface InviteToMeetingProps {
+  existingEvent: Event;
+  directMeeting?: boolean;
+  invitationsSent?: () => void;
+  onBackButtonClick?: () => void;
+  showOnlyLinkFields?: boolean;
+}
+
+const InviteToMeeting = ({
+  existingEvent,
+  onBackButtonClick,
+  directMeeting,
+  invitationsSent,
+  showOnlyLinkFields,
+}: InviteToMeetingProps) => {
+  const [
+    getRoomInvites,
+    {
+      data: invites,
+      isSuccess: isGetInvitesSuccess,
+      isLoading: isGetInvitesLoading,
+      isUninitialized: isGetInvitesUninitialized,
+    },
+  ] = useLazyGetRoomInvitesQuery();
+  const [creatEventInvitation, { isLoading: sendingInvitation, isSuccess, status, isError }] =
+    useCreateEventInviteMutation();
+
+  const [deleteEvent] = useDeleteEventMutation();
+  const features = useAppSelector(selectFeatures);
+  const baseUrl = useAppSelector(selectBaseUrl);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const [selectedUsers, setSelectedUser] = useState<Array<FindUserResponse | EmailUser>>([]);
+  const [isRoomLinkCopied, setRoomLinkCopied] = useState(false);
+  const [isSipLinkCopied, setSipLinkCopied] = useState(false);
+  const [isGuestLinkCopied, setGuestLinkCopied] = useState(false);
+  const [isRoomPasswordCopied, setIsRoomPasswordCopied] = useState(false);
+
+  const roomUrl = useMemo(() => new URL(`/room/${existingEvent?.room.id}`, baseUrl), [baseUrl, existingEvent]);
+  const createGuestLink = useCallback((inviteCode: string) => new URL(`/invite/${inviteCode}`, baseUrl), [baseUrl]);
+
+  useEffect(() => {
+    if (existingEvent) {
+      getRoomInvites({ roomId: existingEvent.room.id });
+    }
+  }, [existingEvent, getRoomInvites]);
+
+  const sendInvitations = useCallback(async () => {
+    const allInvites = selectedUsers.map((selectedUser) => {
+      const invite = 'id' in selectedUser ? { invitee: selectedUser.id } : { email: selectedUser.email };
+      return creatEventInvitation(merge({ eventId: existingEvent.id }, invite));
+    });
+
+    await Promise.all(allInvites)
+      .then(() => {
+        invitationsSent && invitationsSent();
+        if (!isError) {
+          notifications.success(t('dashboard-direct-meeting-invitations-successful'));
+        } else {
+          notifications.error(t('dashboard-direct-meeting-invitations-error'));
+        }
+      })
+      .catch(() => {
+        notifications.error(t('dashboard-direct-meeting-invitations-error'));
+      });
+  }, [t, selectedUsers, existingEvent, creatEventInvitation, invitationsSent, isError]);
+
+  const sipLink = existingEvent?.room?.sipTel
+    ? `${existingEvent.room.sipTel},,${existingEvent.room.sipId},,${existingEvent.room.sipPassword}`
+    : undefined;
+
+  //TODO: Add a way to generate a new permanent link if none are present (button inside the input)
+  const inviteUrl = useMemo(() => {
+    if (isGetInvitesUninitialized || isGetInvitesLoading) return undefined;
+
+    if (!isGetInvitesSuccess || invites === undefined || invites.length === 0) {
+      console.error('No invite found for room ', existingEvent.room.id);
+      return undefined;
+    }
+    const permanentInvite = invites.find((invite) => invite.expiration === null && invite.active);
+    if (permanentInvite === undefined) {
+      console.error('No permanent invite found for room ', existingEvent.room.id);
+      return undefined;
+    }
+    return createGuestLink(permanentInvite.inviteCode);
+  }, [
+    isGetInvitesUninitialized,
+    isGetInvitesLoading,
+    isGetInvitesSuccess,
+    invites,
+    createGuestLink,
+    existingEvent.room.id,
+  ]);
+
+  const roomPassword = existingEvent?.room?.password?.trim() || undefined;
+
+  const copyRoomLinkToClipboard = useCallback(() => {
+    navigator.clipboard.writeText(roomUrl.toString()).then(() => {
+      setRoomLinkCopied(true);
+      setSipLinkCopied(false);
+      setGuestLinkCopied(false);
+      setIsRoomPasswordCopied(false);
+      notifications.success(t('global-copy-link-success'));
+    });
+  }, [t, roomUrl]);
+
+  const copySipLinkToClipboard = useCallback(() => {
+    if (sipLink !== undefined) {
+      navigator.clipboard.writeText(sipLink).then(() => {
+        setSipLinkCopied(true);
+        setRoomLinkCopied(false);
+        setGuestLinkCopied(false);
+        setIsRoomPasswordCopied(false);
+        notifications.success(t('global-dial-in-link-success'));
+      });
+    }
+  }, [t, sipLink]);
+
+  const copyGuestLinkToClipboard = useCallback(() => {
+    if (inviteUrl !== undefined) {
+      navigator.clipboard.writeText(inviteUrl.toString()).then(() => {
+        setGuestLinkCopied(true);
+        setRoomLinkCopied(false);
+        setSipLinkCopied(false);
+        setIsRoomPasswordCopied(false);
+        notifications.success(t('global-copy-link-success'));
+      });
+    }
+  }, [t, inviteUrl]);
+
+  const copyRoomPasswordToClipboard = useCallback(() => {
+    if (roomPassword !== undefined) {
+      navigator.clipboard.writeText(roomPassword.toString()).then(() => {
+        setIsRoomPasswordCopied(true);
+        setGuestLinkCopied(false);
+        setRoomLinkCopied(false);
+        setSipLinkCopied(false);
+        notifications.success(t('global-password-link-success'));
+      });
+    }
+  }, [t, roomPassword]);
+
+  const handleCancelMeetingPress = () => {
+    if (directMeeting && isEvent(existingEvent)) {
+      deleteEvent(existingEvent.id);
+    }
+    navigate('/dashboard/');
+  };
+
+  return (
+    <Grid container justifyContent={'space-between'} flexDirection={'column'} spacing={2}>
+      <Grid container item spacing={3} direction={'row'}>
+        <Grid item xs={12} sm={6}>
+          <Tooltip title={t('dashboard-direct-meeting-invitation-link-tooltip') || ''}>
+            <TextField
+              label={t('dashboard-direct-meeting-invitation-link-field-label')}
+              disabled
+              checked={isRoomLinkCopied || undefined}
+              value={roomUrl.toString()}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={t('dashboard-direct-meeting-copy-link-aria-label')}
+                    onClick={copyRoomLinkToClipboard}
+                    onMouseDown={copyRoomLinkToClipboard}
+                    edge="end"
+                  >
+                    <CopyIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+              fullWidth
+            />
+          </Tooltip>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label={t('dashboard-direct-meeting-invitation-sip-field-label')}
+            disabled
+            checked={isSipLinkCopied || undefined}
+            value={sipLink || '-'}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label={t('dashboard-direct-meeting-copy-sip-aria-label')}
+                  onClick={copySipLinkToClipboard}
+                  onMouseDown={copySipLinkToClipboard}
+                  edge="end"
+                  href={`tel:${sipLink}`}
+                  disabled={sipLink === undefined}
+                >
+                  <CopyIcon />
+                </IconButton>
+              </InputAdornment>
+            }
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Tooltip title={t('dashboard-direct-meeting-invitation-guest-link-tooltip') || ''}>
+            <TextField
+              label={t('dashboard-direct-meeting-invitation-guest-link-field-label')}
+              disabled
+              checked={isGuestLinkCopied || undefined}
+              value={inviteUrl || '-'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={'dashboard-direct-meeting-copy-guest-link-aria-label'}
+                    onClick={copyGuestLinkToClipboard}
+                    onMouseDown={copyGuestLinkToClipboard}
+                    edge="end"
+                    disabled={inviteUrl === undefined}
+                  >
+                    <CopyIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+              fullWidth
+            />
+          </Tooltip>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Tooltip title={t('dashboard-direct-meeting-invitation-password-tooltip') || ''}>
+            <TextField
+              label={t('global-password')}
+              disabled
+              checked={isRoomPasswordCopied || undefined}
+              value={roomPassword}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={'dashboard-direct-meeting-copy-password-aria-label'}
+                    onClick={copyRoomPasswordToClipboard}
+                    onMouseDown={copyRoomPasswordToClipboard}
+                    edge="end"
+                    disabled={roomPassword === undefined}
+                  >
+                    <CopyIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+              fullWidth
+            />
+          </Tooltip>
+        </Grid>
+        {!showOnlyLinkFields && (
+          <Grid item xs={12}>
+            {features.userSearch && (
+              <SelectParticipants
+                label={t('dashboard-direct-meeting-label-select-participants')}
+                placeholder={t('dashboard-select-participants-textfield-placeholder')}
+                onChange={(selected) => setSelectedUser(selected)}
+                invitees={existingEvent?.invitees}
+                resetSelected={isSuccess && status === QueryStatus.fulfilled}
+              />
+            )}
+          </Grid>
+        )}
+      </Grid>
+      {!showOnlyLinkFields && (
+        <Grid container item spacing={2} justifyContent={{ xs: 'center', sm: 'space-between' }}>
+          <Grid item xs={12} sm={'auto'}>
+            {onBackButtonClick && (
+              <Button variant={'text'} color={'secondary'} startIcon={<BackIcon />} onClick={onBackButtonClick}>
+                {t('dashboard-meeting-to-step', { step: 1 })}
+              </Button>
+            )}
+          </Grid>
+          <Grid container item xs={12} sm={'auto'} spacing={3} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
+            <Grid item>
+              <Button fullWidth color="secondary" variant="outlined" onClick={handleCancelMeetingPress}>
+                {t('global-cancel')}
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                component={Link}
+                to={`/room/${existingEvent?.room.id}`}
+                color={'secondary'}
+                fullWidth
+                target="_blank"
+              >
+                {t('dashboard-direct-meeting-button-open-room')}
+              </Button>
+            </Grid>
+            {features.userSearch && (
+              <Grid item>
+                <Button onClick={sendInvitations} disabled={!selectedUsers.length || sendingInvitation} fullWidth>
+                  {t('dashboard-direct-meeting-button-send-invitations')}
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
+      )}
+    </Grid>
+  );
+};
+
+export default InviteToMeeting;

@@ -1,0 +1,29 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: OpenTalk Frontend
+Upstream-Contact: OpenTalk GmbH <mail@opentalk.eu>
+Source: https://git.opentalk.dev/opentalk/k3k-web-frontend/
+
+Files: packages/i18next-fluent/*
+Copyright:
+ 2018 i18next
+ 2020 Jan Mühlemann <jan.muehlemann@gmail.com>
+ 2022 OpenTalk GmbH <mail@opentalk.eu>
+License: LicenseRef-MIT-i18next-fluent
+
+Files: packages/react-redux-appauth/*
+Copyright:
+ 2020 The OpenID Foundation
+ 2022 OpenTalk GmbH <mail@opentalk.eu>
+License: Apache-2.0
+
+Files: packages/fluent_conv/*
+Copyright:
+ 2020 Jan Mühlemann <jan.muehlemann@gmail.com>
+ 2022 OpenTalk GmbH <mail@opentalk.eu>
+License: LicenseRef-MIT-fluent_conv
+
+Files: packages/notistack/*
+Copyright:
+ 2018-2020 Hossein Dehnokhalaji
+ 2022 OpenTalk GmbH <mail@opentalk.eu>
+License: LicenseRef-MIT-notistack
