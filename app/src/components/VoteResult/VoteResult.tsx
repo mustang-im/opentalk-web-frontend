@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
 import { styled, Checkbox, LinearProgress, FormControlLabel as MuiFormControlLabel } from '@mui/material';
 import { PollId, LegalVoteId } from '@opentalk/common';
 import { legalVoteStore } from '@opentalk/components';
