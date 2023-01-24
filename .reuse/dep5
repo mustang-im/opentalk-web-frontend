@@ -18,6 +18,20 @@ Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: EUPL-1.2
 
 Files:
+ app/public/assets/fonts/opentalk*
+ app/public/assets/videoBackgrounds/*
+ app/public/favicon.png
+ app/public/icon-*.png
+ app/src/assets/backgrounds/elevate_background.svg
+ app/src/assets/images/*.svg
+ app/src/assets/images/*.png
+ app/public/assets/background.svg
+ packages/common/assets/icons/*.svg
+Copyright: OpenTalk GmbH <mail@opentalk.eu>
+License: LicenseRef-AllRightsReserved-OpenTalk
+
+
+Files:
  packages/common/babel.config.cjs
  packages/common/.eslintrc.cjs
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
