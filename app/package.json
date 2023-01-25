@@ -35,7 +35,6 @@
     "@opentalk/components": "^1.0.1",
     "@opentalk/fluent_conv": "workspace:*",
     "@opentalk/i18next-fluent": "workspace:*",
-    "@opentalk/notistack": "workspace:*",
     "@opentalk/react-redux-appauth": "workspace:*",
     "@opentalk/rest-api-rtk-query": "workspace:*",
     "@reduxjs/toolkit": "^1.8.5",

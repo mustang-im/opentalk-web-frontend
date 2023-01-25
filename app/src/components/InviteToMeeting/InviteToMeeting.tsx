@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, IconButton, InputAdornment, Tooltip } from '@mui/material';
 import { BackIcon, CopyIcon } from '@opentalk/common';
+import { notifications } from '@opentalk/common';
 import { Event, isEvent, FindUserResponse } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
 import { merge } from 'lodash';
@@ -15,7 +16,6 @@ import TextField from '../../commonComponents/TextField';
 import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
 import { selectBaseUrl, selectFeatures } from '../../store/slices/configSlice';
-import notifications from '../../utils/snackBarUtils';
 import { EmailUser } from '../SelectParticipants/SelectParticipants';
 
 interface InviteToMeetingProps {

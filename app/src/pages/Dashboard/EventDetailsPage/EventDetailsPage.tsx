@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box, Button, Stack, Typography } from '@mui/material';
+import { notifications } from '@opentalk/common';
 import { EventId, InviteStatus, User } from '@opentalk/rest-api-rtk-query';
 import { isSameDay } from 'date-fns';
 import React from 'react';
@@ -19,7 +20,6 @@ import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting
 import ParticipantAvatar from '../../../components/ParticipantAvatar';
 import useLocale from '../../../hooks/useLocale';
 import { formatDate } from '../../../utils/formatDate';
-import notifications from '../../../utils/snackBarUtils';
 import AssetTable from './fragments/AssetTable';
 import ButtonBack from './fragments/ButtonBack';
 

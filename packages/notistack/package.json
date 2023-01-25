@@ -5,6 +5,10 @@
   "main": "dist/index.js",
   "module": "dist/notistack.esm.js",
   "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsdx build --transpileOnly --entry ./src/index.js && npm run copy-types",
     "copy-types": "shx cp ./src/index.d.ts ./dist/index.d.ts",

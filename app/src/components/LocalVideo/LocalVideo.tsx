@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Grid } from '@mui/material';
 import { PinIcon } from '@opentalk/common';
+import { notifications } from '@opentalk/common';
 import React, { RefObject, useCallback, useEffect, useRef } from 'react';
 import { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +13,6 @@ import { useAppSelector } from '../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled, selectVideoEnabled } from '../../store/slices/mediaSlice';
 import { selectMirroredVideoEnabled } from '../../store/slices/uiSlice';
 import { selectDisplayName } from '../../store/slices/userSlice';
-import notifications from '../../utils/snackBarUtils';
 import { useMediaContext } from '../MediaProvider';
 import { OverlayIconButton } from '../ParticipantWindow/fragments/VideoOverlay';
 

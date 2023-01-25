@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, Typography } from '@mui/material';
+import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +11,6 @@ import * as yup from 'yup';
 import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
 import TextField from '../../../../commonComponents/TextField';
 import { formikProps } from '../../../../utils/formikUtils';
-import notifications from '../../../../utils/snackBarUtils';
 
 const ProfileNameForm = () => {
   const { t } = useTranslation();

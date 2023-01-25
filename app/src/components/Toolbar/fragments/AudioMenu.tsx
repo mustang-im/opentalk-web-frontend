@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ThemeProvider, Typography, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
-import { MicOnIcon } from '@opentalk/common';
+import { MicOnIcon, notifications } from '@opentalk/common';
 import { ErrorIcon, WarningIcon } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,6 @@ import { useAppSelector } from '../../../hooks';
 import { DeviceId } from '../../../modules/Media/MediaUtils';
 import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectAudioDeviceId } from '../../../store/slices/mediaSlice';
-import notifications from '../../../utils/snackBarUtils';
 import { useMediaContext } from '../../MediaProvider';
 import DeviceList from './DeviceList';
 import { MenuTitle, ToolbarMenu, ToolbarMenuProps } from './ToolbarMenuUtils';

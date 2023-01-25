@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
 import React from 'react';
 
-import IconButton from '../../commonComponents/IconButton';
+import { CloseIcon } from '../../assets/icons';
+import IconButton from '../../components/IconButton';
 import { ISnackbarActionButtonProps } from '../../utils/snackBarUtils';
 
 const SnackbarActionButtons = ({

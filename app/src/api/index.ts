@@ -14,6 +14,7 @@ import {
   VideoSetting,
   matchBuilder,
 } from '@opentalk/common';
+import { notificationAction, notificationPersistent, notifications } from '@opentalk/common';
 import { AutomodMessageType, LegalVoteMessageType, legalVoteStore } from '@opentalk/components';
 import { token_updated } from '@opentalk/react-redux-appauth';
 import { AnyAction, freeze } from '@reduxjs/toolkit';
@@ -80,7 +81,6 @@ import { participantsLayoutSet } from '../store/slices/uiSlice';
 import { updateRole } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import showConsentNotification from '../utils/showConsentNotification';
-import notifications, { notificationAction, notificationPersistent } from '../utils/snackBarUtils';
 import { restApi } from './rest';
 import {
   breakout,

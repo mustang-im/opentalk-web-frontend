@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { VideoSetting } from '@opentalk/common';
+import { VideoSetting, notifications } from '@opentalk/common';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from '.';
 import { getMediaStream, MediaDescriptor, requestVideoQuality } from '../modules/WebRTC';
 import { selectQualityCap } from '../store/slices/mediaSlice';
 import { selectSubscriberById } from '../store/slices/mediaSubscriberSlice';
-import notifications from '../utils/snackBarUtils';
 
 export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' | 'audio') => {
   const [media, setMediaStream] = useState<{ stream?: MediaStream; descriptor: MediaDescriptor }>({ descriptor });

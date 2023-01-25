@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, styled, Typography, Collapse, Stack } from '@mui/material';
-import { FavoriteIcon, InviteIcon } from '@opentalk/common';
+import { FavoriteIcon, InviteIcon, notifications } from '@opentalk/common';
 import { Event, EventId, isTimelessEvent, isEventException } from '@opentalk/rest-api-rtk-query';
 import { isSameDay } from 'date-fns';
 import React, { useRef } from 'react';
@@ -13,7 +13,6 @@ import { useAcceptEventInviteMutation, useDeclineEventInviteMutation } from '../
 import useLocale from '../../../hooks/useLocale';
 import { formatDate } from '../../../utils/formatDate';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
-import notifications from '../../../utils/snackBarUtils';
 import { MeetingCardFragmentProps } from '../MeetingCard';
 import MeetingPopover from './MeetingPopover';
 

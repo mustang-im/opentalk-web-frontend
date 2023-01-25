@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { notifications } from '@opentalk/common';
 import { cleanup } from '@testing-library/react';
 import React from 'react';
 
 import { ReactComponent as BreakoutRoomIcon } from '../../../assets/images/subroom-illustration.svg';
-import notifications from '../../../utils/snackBarUtils';
 import { fireEvent, render, screen, createStore, waitFor } from '../../../utils/testUtils';
 import BreakoutRoomNotification, { Action } from './BreakoutRoomNotification';
 

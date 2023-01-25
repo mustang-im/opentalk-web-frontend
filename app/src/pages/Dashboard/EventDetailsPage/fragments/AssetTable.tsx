@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, styled } from '@mui/material';
+import { notifications } from '@opentalk/common';
 import { AssetId, RoomId } from '@opentalk/rest-api-rtk-query';
 import { format } from 'date-fns';
 import React, { useCallback, useState } from 'react';
@@ -10,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { useGetRoomAssetsQuery, useDeleteRoomAssetMutation } from '../../../../api/rest';
 import SuspenseLoading from '../../../../commonComponents/SuspenseLoading';
 import { useDownloadAction } from '../../../../hooks/download';
-import notifications from '../../../../utils/snackBarUtils';
 
 interface EventAssetTableProps {
   roomId: RoomId;

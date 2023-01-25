@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, styled, Switch, Typography, Tooltip } from '@mui/material';
-import { Seconds } from '@opentalk/common';
-import { BackIcon } from '@opentalk/common';
+import { Seconds, BackIcon, notifications } from '@opentalk/common';
 import { FormikValues, Formik } from 'formik';
 import i18next from 'i18next';
 import { isEmpty } from 'lodash';
@@ -19,7 +18,6 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
 import { PollFormValues, savePollFormValues } from '../../../store/slices/pollSlice';
 import { formikCustomFieldProps, formikProps, formikSwitchProps } from '../../../utils/formikUtils';
-import notifications from '../../../utils/snackBarUtils';
 import AnswersFormElement from './AnswersFormElement';
 
 interface ICreatePollForm {

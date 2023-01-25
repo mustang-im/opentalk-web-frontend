@@ -9,6 +9,7 @@ import { ThemeProvider } from '@mui/material';
 import '@mui/material';
 import '@mui/styles';
 import { MediaSessionType, ParticipantId, ParticipationKind, VideoSetting } from '@opentalk/common';
+import { SnackbarUtilsConfigurator } from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
 import { SnackbarProvider } from '@opentalk/notistack';
 import { AuthProvider } from '@opentalk/react-redux-appauth';
@@ -40,7 +41,6 @@ import { idFromDescriptor, MediaId, MediaStreamState, SubscriberState } from '..
 import FullscreenProvider from '../provider/FullscreenProvider';
 import { appReducers } from '../store';
 import { Participant, WaitingState } from '../store/slices/participantsSlice';
-import { SnackbarUtilsConfigurator } from './snackBarUtils';
 
 export const loadLanguage = async (lng: string) => {
   const filename = 'public/locales/' + lng + '/k3k.ftl';

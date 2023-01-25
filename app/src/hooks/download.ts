@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { notifications } from '@opentalk/common';
 import { AssetId, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '.';
 import { selectControllerUrl } from '../store/slices/configSlice';
 import { fetchWithAuth } from '../utils/apiUtils';
-import notifications from '../utils/snackBarUtils';
 
 const downloadRoomAsset = async (baseURL: string, roomId: RoomId, assetId: AssetId, filename: string) => {
   const downloadURL = new URL(`v1/rooms/${roomId}/assets/${assetId}`, baseURL);

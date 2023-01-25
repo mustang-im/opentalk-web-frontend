@@ -16,8 +16,15 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import { VideoSetting } from '@opentalk/common';
-import { CameraOnIcon, ErrorIcon, SettingsIcon, WarningIcon, CloseIcon } from '@opentalk/common';
+import {
+  CameraOnIcon,
+  ErrorIcon,
+  SettingsIcon,
+  WarningIcon,
+  CloseIcon,
+  VideoSetting,
+  notifications,
+} from '@opentalk/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -29,7 +36,6 @@ import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectVideoBackgrounds } from '../../../store/slices/configSlice';
 import { selectQualityCap, selectVideoDeviceId, selectVideoBackgroundEffects } from '../../../store/slices/mediaSlice';
 import { mirroredVideoSet, selectMirroredVideoEnabled } from '../../../store/slices/uiSlice';
-import notifications from '../../../utils/snackBarUtils';
 import { useMediaContext } from '../../MediaProvider';
 import DeviceList from './DeviceList';
 import { MenuTitle, ToolbarMenu, ToolbarMenuProps } from './ToolbarMenuUtils';

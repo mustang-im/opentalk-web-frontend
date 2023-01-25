@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container as MuiContainer } from '@mui/material';
+import { useSnackbarFacade } from '@opentalk/common';
 import React from 'react';
 import { FullScreen as ReactFullScreen } from 'react-full-screen';
 
 import LayoutOptions from '../../enums/LayoutOptions';
 import { useAppSelector } from '../../hooks';
-import useSnackbarFacade from '../../hooks/snackbarFacade';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
 import { selectParticipantsLayout } from '../../store/slices/uiSlice';
 import FullscreenView from '../FullscreenView/index';

@@ -11,6 +11,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
 import i18n from 'i18next';
 import React, { useMemo } from 'react';
@@ -22,7 +23,6 @@ import { Rating, TextField } from '../../commonComponents';
 import { useAppDispatch } from '../../hooks';
 import browser from '../../modules/BrowserSupport';
 import { formikProps, formikRatingProps } from '../../utils/formikUtils';
-import notifications from '../../utils/snackBarUtils';
 
 interface FeedbackDialogProps extends DialogProps {
   onClose?: () => void;

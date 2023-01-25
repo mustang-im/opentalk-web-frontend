@@ -3,11 +3,11 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { CloseIcon, DoneIcon, ErrorIcon, WarningIcon } from '@opentalk/common';
 import { SnackbarKey, SnackbarProvider } from '@opentalk/notistack';
 import React from 'react';
 
-import IconButton from '../../commonComponents/IconButton';
+import { CloseIcon, DoneIcon, ErrorIcon, WarningIcon } from '../../assets/icons';
+import IconButton from '../../components/IconButton';
 import notifications, { SnackbarUtilsConfigurator } from '../../utils/snackBarUtils';
 import { SnackbarUIContextProvider } from '../SnackbarUIProvider/SnackbarUIProvider';
 

@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { ForwardIcon } from '@opentalk/common';
+import { notifications } from '@opentalk/common';
 import { CreateEventPayload, Event, isTimelessEvent, UpdateEventPayload, DateTime } from '@opentalk/rest-api-rtk-query';
 import { addDays, addMinutes, format, formatRFC3339, isBefore, isEqual } from 'date-fns';
 import { useFormik } from 'formik';
@@ -35,7 +36,6 @@ import { formikCustomFieldProps, formikMinimalProps, formikProps } from '../../u
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToNearest30 from '../../utils/roundToNearest30';
 import roundToUpper30 from '../../utils/roundToUpper30';
-import notifications from '../../utils/snackBarUtils';
 import { isInvalidDate } from '../../utils/typeGardUtils';
 import ConfirmDialog from '../ConfirmDialog/ConfirmDialog';
 import TimePickers from './fragment/TimePickers';

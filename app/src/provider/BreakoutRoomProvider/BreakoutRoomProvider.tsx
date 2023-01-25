@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { notifications } from '@opentalk/common';
 import { SnackbarKey } from '@opentalk/notistack';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,6 @@ import {
 } from '../../store/slices/breakoutSlice';
 import { selectInviteId, selectRoomId, selectRoomPassword } from '../../store/slices/roomSlice';
 import { selectDisplayName, selectIsLoggedIn } from '../../store/slices/userSlice';
-import notifications from '../../utils/snackBarUtils';
 import BreakoutRoomNotification, { Action } from './fragments/BreakoutRoomNotification';
 
 const BreakoutRoomProvider = ({ children }: { children: React.ReactNode }) => {

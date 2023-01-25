@@ -10,6 +10,7 @@ import {
   Stack,
   Button,
 } from '@mui/material';
+import { notifications } from '@opentalk/common';
 import i18next from 'i18next';
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,6 @@ import { useTranslation } from 'react-i18next';
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
 import { useAppDispatch } from '../../../hooks';
 import { approveToEnter, Participant, WaitingState } from '../../../store/slices/participantsSlice';
-import notifications from '../../../utils/snackBarUtils';
 import ParticipantAvatar from '../../ParticipantAvatar';
 
 const Avatar = styled(ParticipantAvatar)({
