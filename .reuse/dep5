@@ -28,7 +28,7 @@ Files:
  app/public/assets/background.svg
  packages/common/assets/icons/*.svg
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
-License: LicenseRef-AllRightsReserved-OpenTalk
+License: CC-BY-NC-ND-4.0
 
 
 Files:
