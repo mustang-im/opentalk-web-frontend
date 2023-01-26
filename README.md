@@ -1,9 +1,3 @@
-<!--
-SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
-
-SPDX-License-Identifier: EUPL-1.2
--->
-
 # OpenTalk-Web Monorepo
 
 This includes:
@@ -51,7 +45,7 @@ The frontend will then be available via http://localhost:8090
 | USER_SURVEY_URL          | no       |                                                   | To enable user feedback collection configure a collection URL. (optional) & API KEY                                                                                                                   |
 | USER_SURVEY_API_KEY      | no       |                                                   | To enable user feedback collection configure a collection URL. (optional) & API KEY                                                                                                                   |
 | NDT_SERVER               | yes      |                                                   | NDT Server to use for the test                                                                                                                                                                        |
-| ACTIVE_FEATURES          | no       | { userSearch: true... }     | An object with boolean values to activate specific features, possible values are: 
+| ACTIVE_FEATURES          | no       | { userSearch: true... }     | An object with boolean values to activate specific features, possible values are:
 | FEATURE_USER_SEARCH      | no       | { userSearch: true}                               | to enable dashboard feature of geting list of user for inviting them to the event |
 | FEATURE_MUTE_USER        | no       | { muteUsers: true}                                | to enable moderator option to mute user / users |
 | FEATURE_RESET_HANDRAISES | no       | { resetHandraises: true}                          | to enable moderator option to reset users' raised hands |
@@ -66,7 +60,7 @@ The frontend will then be available via http://localhost:8090
 | FEATURE_WHEEL_OF_NAMES   | no       | { wheelOfNames: false}                            | under development |
 | JOIN_WITHOUT_MEDIA       | no       | { joinWithoutMedia: false}                        | if is set to true, it will prevent user to join conference with audio/video on |
 | VIDEO_BACKGROUNDS        | no       | []                                                | An array with a configuration of the background (Example: `[{ altText: 'OpenTalk', url: '/assets/videoBackgrounds/elevate-bg.png', thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',}]`) |
-| SIGN_OUT_REDIRECT_URI    | no       | /dashboard                             | Uri to redirect the client after signing out 
+| SIGN_OUT_REDIRECT_URI    | no       | /dashboard                             | Uri to redirect the client after signing out
 frontend                                                                                                                                                                        |
 | FEATURE_WHITEBOARD               | no       | { whiteboard: false}                              | to enable moderator option to create whiteboard |
 | CHANGE_PASSWORD_ACTIVE           | no       | false                              | enable the reset password button in the dashboard profile settings |
@@ -134,7 +128,7 @@ window.config = {
       thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',
     },
   ],
-  // Configure the maximum video bandwidth. 
+  // Configure the maximum video bandwidth.
   "maxVideoBandwidth":600000,
   "errorReportAddress": 'report@opentalk.eu',
   // Available moderator's features, can be enabled by setting feature to true

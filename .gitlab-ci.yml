@@ -36,6 +36,14 @@ lint:compliance:
   script:
     - yarn dlx licensee --production --errors-only
 
+lint:licensing:
+  stage: lint
+  image:
+    name: fsfe/reuse:latest
+    entrypoint: ['']
+  script:
+    - reuse lint
+
 lint:audit:
   stage: lint
   script:
