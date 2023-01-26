@@ -18,16 +18,15 @@ interface VoteResultRowProps {
 function VoteResultRow(props: VoteResultRowProps) {
   const participant = useAppSelector(selectParticipantById(props.participantId.toLowerCase()));
   const user = useAppSelector(selectUserAsParticipant);
+  const { token } = props;
 
-  if (!user?.id && !participant?.id) {
-    return null;
-  }
+  const participantLabel = token !== '' ? token.slice(0, 10) : (participant || user)?.displayName || '';
 
   return (
     <TableRow>
       <TableCell>
         <Typography noWrap component="span" sx={{ maxWidth: '170px', display: 'block' }} title={props.token}>
-          {props.token.slice(0, 10)}
+          {participantLabel}
         </Typography>
       </TableCell>
       <TableCell>{props.selectedVote === 'yes' ? 'x' : null}</TableCell>

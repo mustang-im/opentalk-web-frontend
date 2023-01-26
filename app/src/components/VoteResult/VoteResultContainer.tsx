@@ -37,12 +37,12 @@ const TooltipIcon = styled('div')(({ color }) => ({
   background: color,
 }));
 
-const MainContainer = styled(Container)(({ theme }) => ({
+const MainContainer = styled(Container)(({ theme, lang }) => ({
   background: theme.palette.background.voteResult,
   position: 'fixed',
   top: '10rem',
   left: '25rem',
-  width: '33rem',
+  width: lang !== 'de-DE' ? '33rem' : '35rem',
   borderRadius: '1rem',
   display: 'flex',
   gap: '1rem',
@@ -93,7 +93,7 @@ export interface Vote {
 const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const dispatch = useAppDispatch();
   const ourUuid = useAppSelector(selectOurUuid);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentLegalVote = useAppSelector(legalVoteStore.selectVoteById(legalVoteId));
   const currentPoll = useAppSelector(selectPollVoteById(legalVoteId));
   const isModerator = useAppSelector(selectIsModerator);
@@ -254,7 +254,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   };
 
   return (
-    <MainContainer>
+    <MainContainer lang={i18n.language}>
       <Grid container spacing={2}>
         <Stack width={'100%'} direction="row" alignItems="center" justifyContent="space-between">
           <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1} pl={1.5}>

@@ -47,7 +47,7 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
       const message: IncomingMessage = convertToCamelCase(JSON.parse(ev.data), {
         // We exclude votingRecord because they contain id that must not be converted to the camel case
         // as we can no longer map them to the participants.
-        stopPaths: ['payload.votingRecord'],
+        stopPaths: ['payload.voting_record'],
         deep: true,
       });
       this.eventEmitter.emit('message', message);
