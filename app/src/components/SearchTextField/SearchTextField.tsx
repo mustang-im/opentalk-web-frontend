@@ -2,13 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, InputAdornment } from '@mui/material';
-import { SearchIcon, SortIcon } from '@opentalk/common';
+import { SearchIcon, SortIcon, setHotkeysEnabled } from '@opentalk/common';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import TextField from '../../commonComponents/TextField';
 import { useAppDispatch } from '../../hooks';
-import { setHotkeysEnabled } from '../../store/slices/mediaSlice';
 import SortPopover from './fragments/SortPopover';
 
 interface SearchFieldProps {

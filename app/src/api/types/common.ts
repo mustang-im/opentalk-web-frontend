@@ -41,7 +41,6 @@ export interface VoteParameters {
   autoStop: boolean;
   duration: number | null;
   subtitle: string;
-  hidden: boolean;
   createPdf: boolean;
 }
 export type VoteOption = 'yes' | 'no' | 'abstain';

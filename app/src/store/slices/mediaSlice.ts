@@ -32,7 +32,6 @@ interface MediaState {
   upstreamLimit: VideoSetting;
   requestMuteNotification?: MuteNotification;
   inProgress: boolean;
-  hotkeysEnabled: boolean;
   presenterRole: boolean;
 }
 
@@ -47,7 +46,6 @@ const initialState: MediaState = {
   qualityCap: VideoSetting.High,
   upstreamLimit: VideoSetting.High,
   inProgress: false,
-  hotkeysEnabled: true,
   presenterRole: false,
 };
 
@@ -81,9 +79,6 @@ export const mediaSlice = createSlice({
     },
     setUpstreamLimit: (state, { payload }: PayloadAction<VideoSetting>) => {
       state.upstreamLimit = payload;
-    },
-    setHotkeysEnabled: (state, { payload: enabled }: PayloadAction<boolean>) => {
-      state.hotkeysEnabled = enabled;
     },
     setMediaChangeInProgress: (state, { payload }: PayloadAction<boolean>) => {
       state.inProgress = payload;
@@ -126,7 +121,6 @@ export const {
   setUpstreamLimit,
   requestMute,
   notificationShown,
-  setHotkeysEnabled,
   setMediaChangeInProgress,
   setPresenterRole,
   revokePresenterRole,
@@ -142,7 +136,6 @@ export const selectFocusedSpeaker = (state: RootState) => state.media.focusedSpe
 export const selectQualityCap = (state: RootState) => state.media.qualityCap;
 export const selectUpstreamLimit = (state: RootState) => state.media.upstreamLimit;
 export const selectNotification = (state: RootState) => state.media.requestMuteNotification;
-export const selectHotkeysEnabled = (state: RootState) => state.media.hotkeysEnabled;
 export const selectMediaChangeInProgress = (state: RootState) => state.media.inProgress;
 export const selectPresenterRole = (state: RootState) => state.media.presenterRole;
 

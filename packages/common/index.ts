@@ -7,3 +7,4 @@ export * from './assets/icons';
 export * from './types';
 export { ErrorStruct } from './utils';
 export * from './utils';
+export * from "./store";

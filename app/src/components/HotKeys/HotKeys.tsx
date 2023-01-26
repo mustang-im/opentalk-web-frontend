@@ -1,17 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { selectHotkeysEnabled } from '@opentalk/common';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
-import {
-  selectAudioEnabled,
-  selectMediaChangeInProgress,
-  selectHotkeysEnabled,
-  selectVideoEnabled,
-} from '../../store/slices/mediaSlice';
+import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../../store/slices/mediaSlice';
 import { useMediaContext } from '../MediaProvider';
 
 export const HOTKEYS = ['v', 'm', 'f'];

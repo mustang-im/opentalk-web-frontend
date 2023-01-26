@@ -3,14 +3,19 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBase, InputBaseProps, TextFieldProps } from '@mui/material';
 import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { setHotkeysEnabled } from '../../store';
 
 import FormWrapper, { FormProps } from '../FormWrapper/FormWrapper';
 
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 
 export const ObservedInput = ({ error, onFocus, onBlur, ...props }: InputBaseProps) => {
+  const dispatch = useDispatch();
+
   const handleOnFocus = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
+      dispatch(setHotkeysEnabled(false));
       onFocus && onFocus(event);
     },
     [onFocus]
@@ -18,6 +23,7 @@ export const ObservedInput = ({ error, onFocus, onBlur, ...props }: InputBasePro
 
   const handleOnBlur = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
+      dispatch(setHotkeysEnabled(true));
       onBlur && onBlur(event);
     },
     [onBlur]

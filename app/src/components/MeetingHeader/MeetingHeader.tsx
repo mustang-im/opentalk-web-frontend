@@ -16,6 +16,7 @@ import {
   Menu,
   MenuList,
   Badge,
+  Chip as MuiChip,
 } from '@mui/material';
 import { keyframes } from '@mui/system';
 import {
@@ -31,7 +32,7 @@ import {
   RecordingsIcon,
   SecureIcon,
 } from '@opentalk/common';
-import { legalVoteStore } from '@opentalk/components';
+import { legalVoteStore, LegalVoteType } from '@opentalk/components';
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -173,6 +174,25 @@ const RecordingIconContainer = styled('div')(({ theme }) => ({
   marginLeft: theme.spacing(1),
   '& > svg': {
     fill: theme.palette.error.light,
+  },
+}));
+
+const Chip = styled(MuiChip)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  marginRight: 0,
+  borderRadius: 0,
+  borderColor: 'transparent',
+  '& .MuiChip-label': {
+    paddingRight: 0,
+    '&:first-letter': {
+      textTransform: 'capitalize',
+    },
+  },
+}));
+
+const CustomMenuItem = styled(MenuItem)(() => ({
+  '&:hover': {
+    cursor: 'pointer',
   },
 }));
 
@@ -435,7 +455,7 @@ const MeetingHeader = () => {
   );
 
   const openVotePoll = useCallback(
-    (item: Vote | Poll) => {
+    (item: LegalVoteType | Poll) => {
       dispatch(setVotePollIdToShow(item.id));
     },
     [dispatch]
@@ -444,7 +464,7 @@ const MeetingHeader = () => {
   const renderLiveLabel = useCallback(
     (item: Vote | Poll) => {
       if ('live' in item) {
-        return `, ${item.live ? t('votes-poll-overview-live-label') : t('votes-poll-overview-not-live-label')}`;
+        return `${item.live ? t('votes-poll-overview-live-label') : t('votes-poll-overview-not-live-label')}`;
       }
       return '';
     },
@@ -452,15 +472,23 @@ const MeetingHeader = () => {
   );
 
   const getMenuItem = useCallback(
-    (item: Vote | Poll) => (
-      <MenuItem key={item.id} onClick={() => openVotePoll(item)}>
-        <ListItemIcon>{item.choices ? <PollIcon /> : <LegalBallotIcon />}</ListItemIcon>
-        <ListItemText>{`${item.topic}, ${t(`global-state-${item.state}`)}${renderLiveLabel(item)}`}</ListItemText>
-        <Typography variant="body2" color="text.secondary">
-          {item.topic}
-        </Typography>
-      </MenuItem>
-    ),
+    (item: LegalVoteType | Poll) => {
+      const label = Object.hasOwn(item, 'name') ? (item as LegalVoteType).name : (item as Poll).topic;
+
+      return (
+        <CustomMenuItem key={item.id} onClick={() => openVotePoll(item)}>
+          <ListItemIcon>{Object.hasOwn(item, 'choices') ? <PollIcon /> : <LegalBallotIcon />}</ListItemIcon>
+          <ListItemText>{`${label}`}</ListItemText>
+          <Chip
+            size="medium"
+            label={t(`global-state-${item.state}`)}
+            color={item?.state === 'active' ? 'success' : 'error'}
+            variant="filled"
+            clickable={false}
+          />
+        </CustomMenuItem>
+      );
+    },
     [openVotePoll, renderLiveLabel]
   );
 
@@ -490,7 +518,7 @@ const MeetingHeader = () => {
               {t('votes-poll-overview-title')}
             </Typography>
           </Stack>
-          {votes.map((vote: Vote) => {
+          {votes.map((vote: LegalVoteType) => {
             return getMenuItem(vote);
           })}
           {polls.map((poll: Poll) => {

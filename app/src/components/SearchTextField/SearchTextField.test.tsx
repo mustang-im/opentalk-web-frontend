@@ -45,7 +45,7 @@ describe('SearchTextField', () => {
 
     fireEvent.focus(searchInput);
     await waitFor(() => {
-      expect(dispatch.mock.calls).toContainEqual([{ payload: false, type: 'media/setHotkeysEnabled' }]);
+      expect(dispatch.mock.calls).toContainEqual([{ payload: false, type: 'hotkeys/setHotkeysEnabled' }]);
     });
   });
 
@@ -56,7 +56,7 @@ describe('SearchTextField', () => {
 
     fireEvent.blur(searchInput);
     await waitFor(() => {
-      expect(dispatch.mock.calls).toContainEqual([{ payload: true, type: 'media/setHotkeysEnabled' }]);
+      expect(dispatch.mock.calls).toContainEqual([{ payload: true, type: 'hotkeys/setHotkeysEnabled' }]);
     });
   });
 

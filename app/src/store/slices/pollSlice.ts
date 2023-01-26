@@ -17,8 +17,9 @@ export interface Poll {
   startTime: string;
   stopTime?: string;
   state: 'active' | 'finished';
-
+  live: boolean;
   voted: boolean;
+  selectedChoiceId?: Choice['id'];
 }
 
 export interface InitialPoll {
@@ -109,10 +110,10 @@ export const pollSlice = createSlice({
     closeResultWindow: (state) => {
       state.showResultWindow = false;
     },
-    voted: (state, { payload }: PayloadAction<{ id: PollId }>) => {
+    voted: (state, { payload }: PayloadAction<{ id: PollId; selectedChoiceId: Choice['id'] }>) => {
       pollAdapter.updateOne(state.votes, {
         id: payload.id,
-        changes: { voted: true },
+        changes: { voted: true, selectedChoiceId: payload.selectedChoiceId },
       });
     },
   },

@@ -38,7 +38,7 @@ describe('TextField', () => {
     const inputElement = screen.getByRole('textbox');
     fireEvent.focus(inputElement);
 
-    expect(dispatch.mock.calls).toContainEqual([{ payload: false, type: 'media/setHotkeysEnabled' }]);
+    expect(dispatch.mock.calls).toContainEqual([{ payload: false, type: 'hotkeys/setHotkeysEnabled' }]);
   });
 
   test('push2talk is activated when TextField is unfocused', async () => {
@@ -49,7 +49,7 @@ describe('TextField', () => {
     fireEvent.focus(inputElement);
     fireEvent.blur(inputElement);
 
-    expect(dispatch.mock.calls).toContainEqual([{ payload: true, type: 'media/setHotkeysEnabled' }]);
+    expect(dispatch.mock.calls).toContainEqual([{ payload: true, type: 'hotkeys/setHotkeysEnabled' }]);
   });
 
   test('onFocus and onBlur are called', async () => {

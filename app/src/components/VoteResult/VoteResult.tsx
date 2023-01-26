@@ -1,7 +1,7 @@
 import { styled, Checkbox, LinearProgress, FormControlLabel as MuiFormControlLabel } from '@mui/material';
 import { PollId, LegalVoteId } from '@opentalk/common';
 import { legalVoteStore } from '@opentalk/components';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useAppSelector } from '../../hooks';
 
@@ -19,6 +19,7 @@ export interface IVoteResult {
   voteData: IVoteData;
   onVote: () => void;
   showResult?: boolean;
+  isChecked?: boolean;
 }
 
 const ProgressContainer = styled('div')({
@@ -60,13 +61,10 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   },
 }));
 
-const VoteResult = ({ title, voteData, onVote, showResult = true }: IVoteResult) => {
-  const didVote = useAppSelector(legalVoteStore.selectCurrentShownVote)?.voted;
+const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked }: IVoteResult) => {
+  const didVote = Boolean(useAppSelector(legalVoteStore.selectCurrentShownVote)?.votedAt);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
-  const [voteState, setVoteState] = useState(false);
-  useEffect(() => {
-    setVoteState(false);
-  }, [voteData.legalVoteId]);
+
   return (
     <ProgressContainer
       onMouseEnter={() => setShowAdditionalInfo(true)}
@@ -76,9 +74,8 @@ const VoteResult = ({ title, voteData, onVote, showResult = true }: IVoteResult)
         disabled={didVote || !voteData.isVotable}
         control={
           <Checkbox
-            checked={voteState}
+            checked={isChecked}
             onChange={() => {
-              setVoteState(!voteState);
               onVote();
             }}
           />

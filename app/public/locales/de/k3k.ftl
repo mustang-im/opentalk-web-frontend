@@ -302,13 +302,18 @@ legal-vote-abstain-label = Enthaltung
 
 legal-vote-no-results = Keine Stimmen abgegeben
 
+legal-vote-form-kind = Abstimmungstyp
+legal-vote-roll_call = Namentliche Abstimmung
+legal-vote-live_roll_call = namentliche Abstimmung - Live
+legal-vote-pseudonymous = Geheime Wahl
+
 poll-participant-list-button-select = Auswählen
 poll-participant-list-button-close = Schließen
 poll-participant-list-button-save = Speichern
 poll-participant-list-button-start = Abstimmung starten
 poll-participant-list-button-select-all = Alle auswählen
 
-legal-vote-success = Ihre Stimme wurde erfolgreich gezählt
+legal-vote-success = Ihre Stimme wurde um {{atVoteTime}} Uhr am {{onVoteDate}} erfolgreich gezählt.
 legal-vote-not-selected = Sie wurden nicht ausgewählt um an dieser Abstimmung teilzunehmen.
 legal-vote-save-form-success = Ihre Abstimmung wurde erfolgreich gespeichert
 legal-vote-save-form-error = Fehler beim Speichern, es müssen Thema und Name gesetzt werden
