@@ -8,6 +8,7 @@ import {
   ParticipantId,
   ParticipationKind,
   PresenterRoleState,
+  ProtocolState,
   Timestamp,
 } from '@opentalk/common';
 import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadAction } from '@reduxjs/toolkit';
@@ -39,6 +40,7 @@ export interface Participant {
   lastActive: string;
   role?: Role;
   waitingState: WaitingState;
+  protocol?: ProtocolState;
   presenterRole?: PresenterRoleState;
 }
 
@@ -66,6 +68,7 @@ export const participantsSlice = createSlice({
             breakoutRoomId,
             participationKind,
             role,
+            protocol,
             presenterRole,
           },
         },
@@ -85,6 +88,7 @@ export const participantsSlice = createSlice({
         lastActive: joinedAt,
         role,
         waitingState: WaitingState.Joined,
+        protocol,
         presenterRole,
       });
     },
@@ -156,12 +160,12 @@ export const participantsSlice = createSlice({
     update: (
       state,
       {
-        payload: { id, displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, presenterRole },
+        payload: { id, displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, presenterRole, protocol },
       }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups'>>
     ) => {
       participantAdapter.updateOne(state, {
         id,
-        changes: { displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, presenterRole },
+        changes: { displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, protocol, presenterRole },
       });
     },
   },

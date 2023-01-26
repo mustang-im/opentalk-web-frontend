@@ -34,6 +34,7 @@ SPDX-License-Identifier: EUPL-1.2
 
 ### New Features
 
+- add an image next to the participant in the participants list if the participant is protocol editor (!803)
 - change the select participants behaviour (!783)
 - Placed legal votes are summarized in the table visible by moderator. (!812)
 - Active legal vote popover has a ticking timer indicating remaining time to place a vote (!812)

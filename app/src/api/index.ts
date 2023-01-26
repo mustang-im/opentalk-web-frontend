@@ -65,7 +65,7 @@ import {
   WaitingState,
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
-import { setProtocolUrl } from '../store/slices/protocolSlice';
+import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
 import { recordingStopped, recordingStarted } from '../store/slices/recordingSlice';
 import {
   enteredWaitingRoom,
@@ -157,7 +157,7 @@ const transformChatHistory = (
 };
 
 const mapToUiParticipant = (
-  { id, control, media }: BackendParticipant,
+  { id, control, media, protocol }: BackendParticipant,
   breakoutRoomId: BreakoutRoomId | null,
   waitingState: WaitingState
 ): Participant => ({
@@ -174,6 +174,7 @@ const mapToUiParticipant = (
   lastActive: control.joinedAt,
   role: control.role,
   waitingState,
+  protocol: protocol,
   presenterRole: media,
 });
 
@@ -373,6 +374,7 @@ const handleControlMessage = (
             lastActive: data.control.joinedAt,
             waitingState: WaitingState.Joined,
             presenterRole: data.media,
+            protocol: data.protocol,
             ...data.control,
           })
         );
@@ -675,10 +677,10 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
       notifications.info(i18next.t('protocol-upload-pdf-message'));
       break;
     case 'write_url':
-      dispatch(setProtocolUrl(data.url));
+      dispatch(setProtocolWriteUrl(data.url));
       break;
     case 'read_url':
-      dispatch(setProtocolUrl(data.url));
+      dispatch(setProtocolReadUrl(data.url));
       break;
     case 'error':
       dispatchError(data.error.replace('_', '-'));
