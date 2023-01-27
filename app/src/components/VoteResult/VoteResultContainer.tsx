@@ -42,7 +42,6 @@ const MainContainer = styled(Container)(({ theme }) => ({
   position: 'fixed',
   top: '10rem',
   left: '25rem',
-  width: '33rem',
   borderRadius: '1rem',
   display: 'flex',
   gap: '1rem',
@@ -52,8 +51,8 @@ const MainContainer = styled(Container)(({ theme }) => ({
   zIndex: 1000,
 }));
 
-const StyledStack = styled(Stack)(({ theme }) => ({
-  padding: theme.spacing(2, 0, 2, 2),
+const StyledStack = styled(Stack)(() => ({
+  padding: 0,
   width: '100%',
 }));
 
@@ -61,8 +60,8 @@ const TopicTypography = styled(Typography)({
   wordBreak: 'break-word',
 });
 
-const Chip = styled(MuiChip)(({ theme }) => ({
-  marginLeft: theme.spacing(1),
+const Chip = styled(MuiChip)(() => ({
+  marginLeft: 0,
   borderRadius: 0,
   borderColor: 'transparent',
   '& .MuiChip-label': {
@@ -153,7 +152,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const renderVoteResult = () => {
     if (currentLegalVote?.votes !== undefined) {
       return (
-        <Grid container spacing={2} direction={'column'}>
+        <Grid item xs={12} container direction={'column'} rowSpacing={1}>
           {Object.keys(currentLegalVote.votes).map(
             (voteKey, index) =>
               (voteKey !== 'abstain' || (voteKey === 'abstain' && currentLegalVote?.enableAbstain)) && (
@@ -185,7 +184,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
     }
 
     return (
-      <Grid container spacing={2} direction={'column'}>
+      <Grid item xs={12} container rowSpacing={1} direction={'column'}>
         {currentPoll &&
           currentPoll?.choices &&
           currentPoll?.choices.map((choice, index) => {
@@ -226,9 +225,11 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
       const notLiveTooltip = t('votes-result-not-live-tooltip');
       return (
         <Grid item container alignItems={'flex-start'} justifyContent={'space-between'} spacing={0}>
-          <Grid item>
-            <TopicTypography>{vote?.topic}</TopicTypography>
-          </Grid>
+          {vote?.topic && (
+            <Grid item>
+              <TopicTypography>{vote?.topic}</TopicTypography>
+            </Grid>
+          )}
           <Grid item>
             {vote?.live ? (
               <Tooltip title={liveTooltip}>
@@ -243,21 +244,22 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
         </Grid>
       );
     }
-    return <TopicTypography>{vote?.topic}</TopicTypography>;
+
+    return vote?.topic && <TopicTypography>{vote?.topic}</TopicTypography>;
   };
 
   const getSubtitle = (vote: LegalVoteType | undefined) => {
     if (vote && 'subtitle' in vote) {
-      return vote?.subtitle;
+      return vote?.subtitle === '' ? null : vote.subtitle;
     }
-    return undefined;
+    return null;
   };
 
   return (
-    <MainContainer>
-      <Grid container spacing={2}>
-        <Stack width={'100%'} direction="row" alignItems="center" justifyContent="space-between">
-          <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1} pl={1.5}>
+    <MainContainer maxWidth="sm">
+      <Grid container rowSpacing={1.4}>
+        <Grid item xs={12}>
+          <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1}>
             <Box display="flex" alignItems="center" flex={1} gap={1}>
               <Chip
                 size="medium"
@@ -282,26 +284,24 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
               <CloseIcon />
             </IconButton>
           </Stack>
-        </Stack>
-        <StyledStack sx={{ width: '100%' }} spacing={1}>
-          {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
-            <Typography color={'primary'} textAlign={'center'}>
-              {t('legal-vote-not-selected')}
-            </Typography>
-          )}
-          <Typography variant={'h2'}>{vote?.name}</Typography>
-          {getSubtitle(vote as LegalVoteType) && (
-            <TopicTypography>{getSubtitle(vote as LegalVoteType)}</TopicTypography>
-          )}
-          {renderLiveIndicator(vote as Vote)}
-        </StyledStack>
-        <Grid item container spacing={1}>
-          <Grid item xs={12}>
-            {renderVoteResult()}
-          </Grid>
         </Grid>
+        <Grid item xs={12}>
+          <StyledStack>
+            {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
+              <Typography color={'primary'} textAlign={'center'}>
+                {t('legal-vote-not-selected')}
+              </Typography>
+            )}
+            <Typography variant={'h2'}>{vote?.name}</Typography>
+            {getSubtitle(vote as LegalVoteType) && (
+              <TopicTypography>{getSubtitle(vote as LegalVoteType)}</TopicTypography>
+            )}
+            {renderLiveIndicator(vote as Vote)}
+          </StyledStack>
+        </Grid>
+        {renderVoteResult()}
         {currentLegalVote && (
-          <Grid item>
+          <Grid item xs={12} pb={1}>
             <Button
               data-testid="legal-vote-save-button"
               type="button"
@@ -313,19 +313,19 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
           </Grid>
         )}
         {currentLegalVote?.votedAt && (
-          <StyledStack>
+          <Grid item xs={12}>
             <Typography color={'primary'}>
               {t('legal-vote-success', {
                 atVoteTime: format(new Date(currentLegalVote?.votedAt), 'pp'),
                 onVoteDate: format(new Date(currentLegalVote?.votedAt), 'PP'),
               })}
             </Typography>
-          </StyledStack>
+          </Grid>
         )}
         {currentLegalVote && isModerator && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
-          <StyledStack>
+          <Grid item xs={12}>
             <VoteResultTable voteId={currentLegalVote.id} />
-          </StyledStack>
+          </Grid>
         )}
       </Grid>
     </MainContainer>
