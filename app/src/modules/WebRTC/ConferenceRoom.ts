@@ -100,6 +100,7 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
     config: ConfigState,
     resumptionToken?: string
   ): Promise<{ conferenceContext: ConferenceRoom; resumption: string }> {
+    console.debug('create room', roomCredentials, resumptionToken);
     const { ticket, resumption } = await startRoom(roomCredentials, config, resumptionToken);
     const signaling = new SignalingSocket(getSignalingUrl(config), ticket);
     const conferenceContext = new ConferenceRoom(roomCredentials, signaling, config);

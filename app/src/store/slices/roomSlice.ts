@@ -22,6 +22,7 @@ export enum ConnectionState {
   Starting = 'starting',
   Waiting = 'waiting',
   Online = 'online',
+  Reconnecting = 'reconnecting',
   Leaving = 'leaving',
   Left = 'left',
   Failed = 'failed',
@@ -35,7 +36,6 @@ interface RoomState {
   connectionState: ConnectionState;
   resumptionToken?: string;
   waitingRoomEnabled: boolean;
-  inRoom: boolean;
   error?: string;
 }
 
@@ -57,7 +57,6 @@ const initialState: RoomState = {
   invite: initialInviteState,
   connectionState: ConnectionState.Initial,
   waitingRoomEnabled: false,
-  inRoom: false,
 };
 
 export const fetchRoomByInviteId = createAsyncThunk<
@@ -97,18 +96,11 @@ export const roomSlice = createSlice({
   initialState,
   reducers: {
     connectionClosed: (state, { payload: { errorCode } }: PayloadAction<{ errorCode?: number }>) => {
-      state.inRoom = false;
-      state.connectionState = errorCode ? ConnectionState.Failed : ConnectionState.Leaving;
+      state.connectionState = errorCode ? ConnectionState.Reconnecting : ConnectionState.Leaving;
       state.error = `websocket_error_${errorCode}`;
-    },
-    enterLobbyRoom: (state) => {
-      state.connectionState = ConnectionState.Initial;
-      state.inRoom = false;
-      state.error = undefined;
     },
     enteredWaitingRoom: (state) => {
       state.connectionState = ConnectionState.Waiting;
-      state.inRoom = false;
     },
     readyToEnter: (state) => {
       state.connectionState = ConnectionState.ReadyToEnter;
@@ -118,10 +110,6 @@ export const roomSlice = createSlice({
     },
     disableWaitingRoom: (state) => {
       state.waitingRoomEnabled = false;
-    },
-    setRoomError: (state, { payload: { error } }: PayloadAction<{ error?: string }>) => {
-      state.error = error;
-      state.connectionState = ConnectionState.Failed;
     },
   },
   extraReducers: (builder) => {
@@ -167,19 +155,16 @@ export const roomSlice = createSlice({
         state.error = payload.error.code;
       }
       state.connectionState = ConnectionState.Failed;
-      state.inRoom = false;
     });
     builder.addCase(joinSuccess, (state, { payload }) => {
       state.connectionState = ConnectionState.Online;
       state.waitingRoomEnabled = Boolean(payload.moderation?.waitingRoomEnabled);
-      state.inRoom = true;
     });
     builder.addCase(hangUp.pending, (state) => {
       state.connectionState = ConnectionState.Leaving;
     });
     builder.addCase(hangUp.fulfilled, (state) => {
       state.connectionState = ConnectionState.Left;
-      state.inRoom = false;
     });
     builder.addCase(hangUp.rejected, (state) => {
       state.connectionState = ConnectionState.Failed;
@@ -188,21 +173,11 @@ export const roomSlice = createSlice({
 });
 
 export const actions = roomSlice.actions;
-export const {
-  connectionClosed,
-  enteredWaitingRoom,
-  readyToEnter,
-  enableWaitingRoom,
-  disableWaitingRoom,
-  enterLobbyRoom,
-  setRoomError,
-} = actions;
+export const { connectionClosed, enteredWaitingRoom, readyToEnter, enableWaitingRoom, disableWaitingRoom } = actions;
 
 export const selectRoomPassword = (state: RootState) => state.room.password;
 export const selectRoomId = (state: RootState) => state.room.roomId;
 export const selectInviteId = (state: RootState) => state.room.invite.inviteCode;
 export const selectRoomConnectionState = (state: RootState) => state.room.connectionState;
 export const selectWaitingRoomState = (state: RootState) => state.room.waitingRoomEnabled;
-export const selectInRoomState = (state: RootState) => state.room.inRoom;
-
 export default roomSlice.reducer;
