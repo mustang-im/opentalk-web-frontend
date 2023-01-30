@@ -109,7 +109,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
       {(snackbars = []) => (
         <>
           <SnackbarUtilsConfigurator />
-          <SnackbarUIContextProvider value={{ snackbars: [] }}>{children}</SnackbarUIContextProvider>
+          <SnackbarUIContextProvider value={{ snackbars }}>{children}</SnackbarUIContextProvider>
           {snackbars}
         </>
       )}

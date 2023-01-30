@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Release candidate fixes (!824)
 - Enable share screen button on join success (!834)
 - Fix wrong placed waiting room list (!825)
 - Use correct protocol icon in moderation sidebar (!829)
