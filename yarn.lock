@@ -4906,9 +4906,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@opentalk/components@npm:^1.0.1":
-  version: 1.0.3
-  resolution: "@opentalk/components@npm:1.0.3::__archiveUrl=https%3A%2F%2Fgit.opentalk.dev%2Fapi%2Fv4%2Fprojects%2F264%2Fpackages%2Fnpm%2F%40opentalk%2Fcomponents%2F-%2F%40opentalk%2Fcomponents-1.0.3.tgz"
+"@opentalk/components@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@opentalk/components@npm:1.0.4::__archiveUrl=https%3A%2F%2Fgit.opentalk.dev%2Fapi%2Fv4%2Fprojects%2F264%2Fpackages%2Fnpm%2F%40opentalk%2Fcomponents%2F-%2F%40opentalk%2Fcomponents-1.0.4.tgz"
   peerDependencies:
     "@emotion/react": ^11.10.4
     "@emotion/styled": ^11.8.1
@@ -4924,7 +4924,7 @@ __metadata:
     react-redux: ^7.2.8
     typescript: ^4.9.4
     yup: ^0.32.11
-  checksum: e47cb4935b26ee81713526cfcb2ff202558892a9f1460280c7a337b8e6901278eaad56aa2dd7a1702cc73f8d9437268c891e0ac7336e072fbe72055efb716f21
+  checksum: dbe1ee00acdaf7c4efc86753d35f490c6594e3853606c52755f51b61bddfb7e89127ba92b17eae5284aa678fd10972854fa40a286381ff06efd22fc85f817851
   languageName: node
   linkType: hard
 
@@ -5078,7 +5078,7 @@ __metadata:
     "@mui/material": ^5.10.5
     "@mui/styles": ^5.10.3
     "@opentalk/common": "workspace:*"
-    "@opentalk/components": ^1.0.1
+    "@opentalk/components": ^1.0.4
     "@opentalk/fluent_conv": "workspace:*"
     "@opentalk/i18next-fluent": "workspace:*"
     "@opentalk/react-redux-appauth": "workspace:*"
