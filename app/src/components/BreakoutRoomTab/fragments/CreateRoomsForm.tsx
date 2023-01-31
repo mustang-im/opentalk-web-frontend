@@ -4,6 +4,7 @@
 import { Typography, styled, FormHelperText, Button, Grid } from '@mui/material';
 import { Seconds } from '@opentalk/common';
 import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon } from '@opentalk/common';
+import { notifications } from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { Step, FormikWizard } from 'formik-wizard-form';
 import { FormikValues } from 'formik/dist/types';
@@ -19,7 +20,6 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectCombinedParticipantsAndUser, selectCombinedParticipantsAndUserCount } from '../../../store/selectors';
 import { Participant } from '../../../store/slices/participantsSlice';
 import { spliceIntoChunks } from '../../../utils/arrayUtils';
-import notifications from '../../../utils/snackBarUtils';
 import CreateByParticipantsForm from './CreateByParticipantsForm';
 import CreateByRoomsForm from './CreateByRoomsForm';
 import ParticipantsSelector, { BreakoutRoomWithFullParticipants } from './ParticipantsSelector';

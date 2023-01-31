@@ -15,7 +15,7 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { CloseIcon, MeetingsIcon } from '@opentalk/common';
+import { CloseIcon, MeetingsIcon, notifications } from '@opentalk/common';
 import { DateTime, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -28,7 +28,6 @@ import { FormWrapper } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
 import { selectRoomId } from '../../../store/slices/roomSlice';
-import notifications from '../../../utils/snackBarUtils';
 import CustomDateTimePicker from './CustomDateTimePicker';
 
 const theme = createOpenTalkTheme();

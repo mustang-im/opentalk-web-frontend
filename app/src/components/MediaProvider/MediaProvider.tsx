@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { VideoSetting } from '@opentalk/common';
+import { VideoSetting, notifications } from '@opentalk/common';
 import i18next from 'i18next';
 import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
@@ -22,7 +22,6 @@ import {
   setScreenShare,
   setVideoEnable,
 } from '../../store/slices/mediaSlice';
-import notifications from '../../utils/snackBarUtils';
 
 export interface MediaContextValue {
   getDeviceDetails: (constraints: { audio?: boolean; video?: boolean }) => Promise<void>;

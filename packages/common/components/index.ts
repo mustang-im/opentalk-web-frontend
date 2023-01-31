@@ -5,6 +5,7 @@ import AccordionItem from './AccordionItem';
 import CommonFormItem from './CommonFormItem';
 import DurationField from './DurationField';
 import FormWrapper from './FormWrapper';
+import IconButton from './IconButton';
 import ParticipantAvatar from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
 import TextField from './TextField';
@@ -19,4 +20,5 @@ export {
   ParticipantAvatar,
   TextField,
   ToolbarMenuUtils,
+  IconButton,
 };

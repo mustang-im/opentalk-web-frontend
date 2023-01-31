@@ -4851,6 +4851,7 @@ __metadata:
     "@emotion/styled": ^11.8.1
     "@mui/material": ^5.10.5
     "@mui/styles": ^5.10.3
+    "@opentalk/notistack": ^2.0.8
     "@reduxjs/toolkit": ^1.8.5
     "@rollup/plugin-commonjs": ^24.0.0
     "@rollup/plugin-node-resolve": ^15.0.1
@@ -4892,6 +4893,7 @@ __metadata:
     "@emotion/styled": ^11.8.1
     "@mui/material": ^5.10.5
     "@mui/styles": ^5.10.3
+    "@opentalk/notistack": ^2.0.8
     formik: ^2.2.9
     formik-wizard-form: ^2.1.0
     i18next: ^21.9.1
@@ -5016,7 +5018,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@opentalk/notistack@workspace:*, @opentalk/notistack@workspace:packages/notistack":
+"@opentalk/notistack@^2.0.8, @opentalk/notistack@workspace:packages/notistack":
   version: 0.0.0-use.local
   resolution: "@opentalk/notistack@workspace:packages/notistack"
   dependencies:
@@ -5079,7 +5081,6 @@ __metadata:
     "@opentalk/components": ^1.0.1
     "@opentalk/fluent_conv": "workspace:*"
     "@opentalk/i18next-fluent": "workspace:*"
-    "@opentalk/notistack": "workspace:*"
     "@opentalk/react-redux-appauth": "workspace:*"
     "@opentalk/rest-api-rtk-query": "workspace:*"
     "@reduxjs/toolkit": ^1.8.5

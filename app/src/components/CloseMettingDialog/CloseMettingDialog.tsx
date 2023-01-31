@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
+import { notifications } from '@opentalk/common';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +24,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
 import { hangUp } from '../../store/commonActions';
 import { deleteRoomMetaData } from '../../store/slices/internalSlice';
-import notifications from '../../utils/snackBarUtils';
 
 export interface CloseMettingDialogProps {
   open: boolean;

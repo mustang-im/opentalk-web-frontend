@@ -1,6 +1,6 @@
 {
    "name": "@opentalk/common",
-   "version": "1.0.4-rc1",
+   "version": "1.0.4-rc2",
    "author": "OpenTalk GmbH <mail@opentalk.eu>",
    "license": "EUPL-1.2",
    "main": "dist/cjs/index.js",
@@ -37,6 +37,7 @@
       "@emotion/styled": "^11.8.1",
       "@mui/material": "^5.10.5",
       "@mui/styles": "^5.10.3",
+      "@opentalk/notistack": "^2.0.8",
       "@reduxjs/toolkit": "^1.8.5",
       "@rollup/plugin-commonjs": "^24.0.0",
       "@rollup/plugin-node-resolve": "^15.0.1",
@@ -79,6 +80,7 @@
       "@emotion/styled": "^11.8.1",
       "@mui/material": "^5.10.5",
       "@mui/styles": "^5.10.3",
+      "@opentalk/notistack": "^2.0.8",
       "formik": "^2.2.9",
       "formik-wizard-form": "^2.1.0",
       "i18next": "^21.9.1",

@@ -9,8 +9,17 @@ import {
   Typography,
   Grid,
 } from '@mui/material';
-import { MediaSessionType, ParticipationKind } from '@opentalk/common';
-import { ProtocolIcon, MicOffIcon, MicOnIcon, RaiseHandOnIcon, ShareScreenOnIcon, MoreIcon } from '@opentalk/common';
+import {
+  MicOffIcon,
+  MicOnIcon,
+  RaiseHandOnIcon,
+  ShareScreenOnIcon,
+  MoreIcon,
+  ProtocolIcon,
+  MediaSessionType,
+  ParticipationKind,
+} from '@opentalk/common';
+import { notifications } from '@opentalk/common';
 import i18next from 'i18next';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +37,6 @@ import { Participant } from '../../../store/slices/participantsSlice';
 import { selectProtocolState } from '../../../store/slices/protocolSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid } from '../../../store/slices/userSlice';
-import notifications from '../../../utils/snackBarUtils';
 import ParticipantAvatar from '../../ParticipantAvatar';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
 

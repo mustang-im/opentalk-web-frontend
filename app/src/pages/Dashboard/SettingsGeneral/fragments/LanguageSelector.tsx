@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, Typography, MenuItem, Button } from '@mui/material';
+import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +12,6 @@ import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
 import Select from '../../../../commonComponents/Select/Select';
 import { dashboardLanguages } from '../../../../config/dashboardSettings';
 import { formikProps } from '../../../../utils/formikUtils';
-import notifications from '../../../../utils/snackBarUtils';
 
 const LanguageSelector = () => {
   const { t, i18n } = useTranslation();

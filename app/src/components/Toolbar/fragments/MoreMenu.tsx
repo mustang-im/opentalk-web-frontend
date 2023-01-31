@@ -13,6 +13,9 @@ import {
   HelpIcon,
   TrashIcon,
   RecordingsIcon,
+  notifications,
+  notificationAction,
+  notificationPersistent,
 } from '@opentalk/common';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +36,6 @@ import { selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
 import { selectRecordingId, selectRecordingState } from '../../../store/slices/recordingSlice';
 import { selectWaitingRoomState } from '../../../store/slices/roomSlice';
 import { selectIsModerator, selectDisplayName, selectAvatarUrl } from '../../../store/slices/userSlice';
-import notifications, { notificationAction, notificationPersistent } from '../../../utils/snackBarUtils';
 import ParticipantAvatar from '../../ParticipantAvatar';
 import InviteGuestDialog from './InviteGuestDialog';
 import ShortcutListDialog from './ShortcutListDialog';

@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { notificationAction } from '@opentalk/common';
 import i18next from 'i18next';
 
 import { sendRecordingConsentSignal } from '../api/types/outgoing/recording';
 import { AppDispatch } from '../store';
-import { notificationAction } from './snackBarUtils';
 
 export default function showConsentNotification(dispatch: AppDispatch) {
   notificationAction({

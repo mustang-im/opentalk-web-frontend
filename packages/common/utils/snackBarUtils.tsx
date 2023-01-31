@@ -46,7 +46,7 @@ export function notificationAction({
   snackbarRef.enqueueSnackbar(msg, {
     variant,
     ...options,
-    action: (key) => (
+    action: (key: SnackbarKey) => (
       <SnackbarActionButtons
         actionBtnText={actionBtnText}
         cancelBtnText={cancelBtnText}

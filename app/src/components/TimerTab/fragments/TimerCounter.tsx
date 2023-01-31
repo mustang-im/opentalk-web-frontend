@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Typography } from '@mui/material';
+import { notifications } from '@opentalk/common';
 import { parseISO } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectTimerStartedAt, selectTimerEndsAt, selectTimerRunning } from '../../../store/slices/timerSlice';
-import notifications from '../../../utils/snackBarUtils';
 import { getIntervalToDurationString } from '../../../utils/timeUtils';
 
 const TimerCounter = () => {

@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { notifications } from '@opentalk/common';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { EchoTest, EchoTestState } from '../../../modules/WebRTC/EchoTest';
 import { selectAudioEnabled } from '../../../store/slices/mediaSlice';
-import notifications from '../../../utils/snackBarUtils';
 import { useMediaContext } from '../../MediaProvider';
 
 export const EchoPlayBack = () => {

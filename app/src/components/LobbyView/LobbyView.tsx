@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, IconButton, InputAdornment, Stack, Box } from '@mui/material';
 import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon, setHotkeysEnabled } from '@opentalk/common';
+import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
 import React, { FC, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,6 @@ import { selectFeatures } from '../../store/slices/configSlice';
 import { ConnectionState, selectInviteId, selectRoomConnectionState } from '../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../store/slices/userSlice';
 import { formikProps } from '../../utils/formikUtils';
-import notifications from '../../utils/snackBarUtils';
 import { useMediaContext } from '../MediaProvider';
 import SelfTest from '../SelfTest';
 
