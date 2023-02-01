@@ -5,7 +5,7 @@ import { BreakoutRoomId, RoomId } from '@opentalk/common';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import SuspenseLoading from '../../commonComponents/SuspenseLoading';
+import RoomLoadingView from '../../commonComponents/RoomLoadingView';
 import LobbyView from '../../components/LobbyView';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { startRoom } from '../../store/commonActions';
@@ -46,9 +46,9 @@ const RoomPage = () => {
           console.error('meeting page - connecting - auth error', e);
           //TODO error notification
         });
-        return <SuspenseLoading />;
+        return <RoomLoadingView />;
       case ConnectionState.Starting:
-        return <SuspenseLoading />;
+        return <RoomLoadingView />;
       case ConnectionState.Online:
       case ConnectionState.Leaving:
         return <MeetingView />;
@@ -69,7 +69,7 @@ const RoomPage = () => {
         ).catch((e) => {
           console.error('meeting page - reconnecting error', e);
         });
-        return <SuspenseLoading />;
+        return <RoomLoadingView />;
       case ConnectionState.Failed:
         return <LobbyView />;
       default:
