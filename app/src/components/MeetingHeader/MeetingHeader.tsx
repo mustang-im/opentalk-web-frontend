@@ -478,7 +478,7 @@ const MeetingHeader = () => {
       return (
         <CustomMenuItem key={item.id} onClick={() => openVotePoll(item)}>
           <ListItemIcon>{Object.hasOwn(item, 'choices') ? <PollIcon /> : <LegalBallotIcon />}</ListItemIcon>
-          <ListItemText>{`${label}`}</ListItemText>
+          <ListItemText sx={{ whiteSpace: 'normal' }}>{`${label}`}</ListItemText>
           <Chip
             size="medium"
             label={t(`global-state-${item.state}`)}
@@ -512,7 +512,7 @@ const MeetingHeader = () => {
           horizontal: 'left',
         }}
       >
-        <MenuList>
+        <MenuList sx={{ maxWidth: 300 }}>
           <Stack p={2}>
             <Typography variant={'h2'} align={'center'}>
               {t('votes-poll-overview-title')}

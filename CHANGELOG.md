@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Fix list of votes/polls overlapping modals (!821)
 - Add an error message for the case that when you start a voting, anoter voting is alerady aktive (!910)
 - merge eeChat into chat (!786)
 - fix dark mode in lobby page (!794)
