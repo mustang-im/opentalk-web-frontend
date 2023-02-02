@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { FormControl, FormHelperText, InputLabel as MuiInputLabel, Stack, styled } from '@mui/material';
-import type { AllSystemCSSProperties } from '@mui/system';
+import type { CSSObject } from '@mui/material';
 import React, { useMemo } from 'react';
 
 export type FormProps = {
@@ -44,7 +44,7 @@ function FormWrapper({
   );
 
   const sx = useMemo(() => {
-    const output: AllSystemCSSProperties = {};
+    const output: CSSObject = {};
     if (inline) {
       output.width = 'max-content';
     }

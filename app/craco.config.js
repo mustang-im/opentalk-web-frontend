@@ -25,5 +25,12 @@ module.exports = ({ env }) => {
                 add: isProductionBuild ? [new BundleAnalyzerPlugin({ analyzerMode })] : []
             },
         },
+		jest: {
+			configure: (jestConfig) => {
+				jestConfig.moduleNameMapper = { "@mui/styled-engine": "<rootDir>/node_modules/@mui/styled-engine"};
+				return jestConfig;
+			}
+		}
     };
+
 };
