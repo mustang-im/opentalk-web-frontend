@@ -2,37 +2,45 @@
 
 ### UI/UX Fixes
 
-- Fix list of votes/polls overlapping modals (!821)
-- Add an error message for the case that when you start a voting, anoter voting is alerady aktive (!910)
-- merge eeChat into chat (!786)
-- fix dark mode in lobby page (!794)
-- reword the legal vote label from auto stop to auto close (!791)
-- fix incorrect spelling of succesfully (!795)
-- fix filtering of upcoming events (!782)
-- legal voting users are unchecked when a new user comming into the room or when token is updated (!783)
-- Fix "active speaker remains on screen after leaving the room" (!787)
-- Wrong german translation "Medienstrom unterbrochenen" (!792)
-- Fix "Legal vote not starting" (!797)
-- Fix "Moderator triggered notifications cannot be seen in full screen mode" (!779)
-- Fix "Unable to close recording and whiteboard notifications after joining active session" (!779)
-- Fix invited users not showing in ad-hoc meeting creation (!793)
-- Fix start and end date validation is running on unscheduled meeting. (!796)
+### Stability Improvements
+
+### New Features
+
+
+## 1.1.0
+
+### UI/UX Fixes
+
+- Add an error message for the case that when you start a voting, another voting is already active (!799)
+- Merge eeChat into chat (!786)
+- Fix dark mode in lobby page (!794)
+- Reword the legal vote label from auto stop to auto close (!791)
+- Fix incorrect spelling of successfully (!795)
+- Fix filtering of upcoming events (!782)
+- Legal voting users are unchecked when a new user join into the room or when token is updated (!783)
+- Fix active speaker remains on screen after leaving the room (!787)
+- Fix wrong German translation "Medienstrom unterbrochenen" (!792)
+- Fix legal vote not starting (!797)
+- Fix Moderator triggered notifications cannot be seen in full screen mode (!779)
+- Fix closing recording and whiteboard notifications after joining active session (!779)
+- Fix invited users showing in ad-hoc meeting creation (!793)
+- Fix start and end date validation is running on unscheduled meeting (!796)
 - Fix create/update meeting step icon styling (!810)
-- Fix visuals on the legal vote and poll preview popover. (!812)
+- Fix visuals on the legal vote and poll preview popover (!812)
 - Fix DateTimePicker not opening on mobile (!777)
 
 ### Stability Improvements
 
 - List of participants include phone users (!783)
-- Forked notistack to local version in order to enable fullscreen notifications. (!779)
-- Topic and subtitle fields are no longer mandatory when creating legal vote. (!812)
-- Reworked legal vote to use voting tickets for more security. (!812)
+- Forked notistack to local version in order to enable fullscreen notifications (!779)
+- Topic and subtitle fields are no longer mandatory when creating legal vote (!812)
+- Reworked legal vote to use voting tickets for more security (!812)
 
 ### New Features
 
-- add an image next to the participant in the participants list if the participant is protocol editor (!803)
-- change the select participants behaviour (!783)
-- Placed legal votes are summarized in the table visible by moderator. (!812)
+- Add an image next to the participant in the participants list if the participant is protocol editor (!803)
+- Change the select participants behaviour (!783)
+- Placed legal votes are summarized in the table visible by moderator (!812)
 - Active legal vote popover has a ticking timer indicating remaining time to place a vote (!812)
 
 

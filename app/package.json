@@ -1,6 +1,6 @@
 {
   "name": "@opentalk/opentalk",
-  "version": "1.0.12",
+  "version": "999.0.0-unreleased",
   "description": "Frontend for the k3k video chat solution",
   "private": true,
   "scripts": {
