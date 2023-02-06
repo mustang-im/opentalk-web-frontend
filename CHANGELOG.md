@@ -11,6 +11,7 @@
 
 ### UI/UX Fixes
 
+- Fix too small waiting room list (!826)
 - Add an error message for the case that when you start a voting, another voting is already active (!799)
 - Merge eeChat into chat (!786)
 - Fix dark mode in lobby page (!794)

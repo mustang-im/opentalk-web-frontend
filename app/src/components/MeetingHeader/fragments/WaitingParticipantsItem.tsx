@@ -102,7 +102,7 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
               </Typography>
             }
             secondary={
-              <JoinedText variant={'caption'}>
+              <JoinedText sx={{ whiteSpace: 'nowrap' }} variant={'caption'}>
                 {t('participant-joined-text', { joinedTime: getTimestamp(participant.joinedAt) })}
               </JoinedText>
             }
@@ -110,7 +110,7 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
         </Stack>
         <Stack>
           {participant.waitingState === WaitingState.Waiting && (
-            <Button variant="text" onClick={handleAccept}>
+            <Button sx={{ whiteSpace: 'nowrap' }} variant="text" onClick={handleAccept}>
               {t('participant-menu-accept-participant')}
             </Button>
           )}
