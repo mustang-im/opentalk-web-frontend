@@ -26,6 +26,7 @@
 - Fix closing recording and whiteboard notifications after joining active session (!779)
 - Fix invited users showing in ad-hoc meeting creation (!793)
 - Fix start and end date validation is running on unscheduled meeting (!796)
+- Fix error on switching audio device in the lobby page (816)
 - Fix create/update meeting step icon styling (!810)
 - Fix visuals on the legal vote and poll preview popover (!812)
 - Fix DateTimePicker not opening on mobile (!777)

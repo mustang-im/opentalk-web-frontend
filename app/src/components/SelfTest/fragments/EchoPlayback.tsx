@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { EchoTest, EchoTestState } from '../../../modules/WebRTC/EchoTest';
-import { selectAudioEnabled } from '../../../store/slices/mediaSlice';
+import { selectAudioDeviceId, selectAudioEnabled } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';
 
 export const EchoPlayBack = () => {
@@ -17,6 +17,7 @@ export const EchoPlayBack = () => {
   const stream = mediaContext.outgoingMediaStream;
   const isAudioOn = useAppSelector(selectAudioEnabled) && !!mediaContext.hasMicrophone;
   const isAudioLive = isAudioOn && stream?.getAudioTracks().length > 0;
+  const audioId = useAppSelector(selectAudioDeviceId);
 
   const changeHandler = useCallback(
     (instance: EchoTest) => (echoTestState: EchoTestState) => {
@@ -76,7 +77,7 @@ export const EchoPlayBack = () => {
       echoTest.close();
       echoTest.removeEventListener('stateChanged', echoChangeHandler);
     };
-  }, [stream, isAudioLive, changeHandler]);
+  }, [audioId, stream, isAudioLive, changeHandler]);
 
   return (
     <audio ref={audioRef} autoPlay>
