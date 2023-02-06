@@ -2,6 +2,8 @@
 
 ### UI/UX Fixes
 
+- Fix wrong placed waiting room list (!825)
+
 ### Stability Improvements
 
 ### New Features

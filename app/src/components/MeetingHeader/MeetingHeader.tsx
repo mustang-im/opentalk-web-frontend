@@ -244,6 +244,12 @@ const MeetingHeader = () => {
     }
   }, [dispatch, clickCount]);
 
+  useEffect(() => {
+    if (participantsInWaitingRoomCount === 0) {
+      setWaitingEl(null);
+    }
+  }, [participantsNotApproved, participantsInWaitingRoomCount]);
+
   const LogoImage = () => {
     return <Logo width={'12.8997em'} height={'2.072em'} onClick={showDebugDialog} fill={'white'} />;
   };
