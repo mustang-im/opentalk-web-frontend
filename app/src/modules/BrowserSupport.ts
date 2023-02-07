@@ -29,6 +29,10 @@ class BrowserSupport {
     this._version = this._bowser.getBrowserVersion();
   }
 
+  getBrowserSignature() {
+    return this._name.toLowerCase() + this._version.toLowerCase();
+  }
+
   isSupported() {
     return (
       (this.isChromiumBased() && this._getChromiumBasedVersion() >= MIN_REQUIRED_CHROME_VERSION) ||

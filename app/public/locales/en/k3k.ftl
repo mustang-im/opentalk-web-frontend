@@ -449,9 +449,9 @@ indicator-fullscreen-open = open fullscreen
 indicator-fullscreen-close = close fullscreen
 indicator-change-position = change position
 
-wrong-browser-title = Your browser is not supported.
-wrong-browser-message = Please use the latest version of Firefox, or Chrome. If you have further difficulties, check if your browser is running in compatibility or incognito mode. Disable them and try again here.
-wrong-browser-greeting = Your Opentalk team
+wrong-browser-dialog-title = Your browser is only partially supported.
+wrong-browser-dialog-message = Please use the latest version of Chrome, Firefox or Safari. If you have further difficulties, check whether your browser is running in compatibility or incognito mode. Disable them and try again here.
+wrong-browser-dialog-ok = Ok
 
 error-config-title = Incorrect Configuration
 error-config-message = Failed to load an correct configuration. Please, contact your administrator.
