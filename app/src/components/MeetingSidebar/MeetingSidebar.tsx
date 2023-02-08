@@ -5,7 +5,7 @@ import { Paper, styled, Tooltip, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
 import { setHotkeysEnabled } from '@opentalk/common';
 import { LegalVoteProvider } from '@opentalk/components';
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { legalVote } from '../../api/types/outgoing';
