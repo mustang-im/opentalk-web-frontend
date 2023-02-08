@@ -19,7 +19,7 @@ import BreakoutRoomProvider from './provider/BreakoutRoomProvider';
 import FullscreenProvider from './provider/FullscreenProvider';
 import store from './store';
 import { selectBaseUrl, selectOidcConfig } from './store/slices/configSlice';
-import { selectInRoomState } from './store/slices/roomSlice';
+import { ConnectionState, selectRoomConnectionState } from './store/slices/roomSlice';
 
 const localeMap = new Map([
   ['en', enLocale],
@@ -33,7 +33,8 @@ interface IProviderProps {
 const Provider = ({ children }: IProviderProps) => {
   const oidcConfig = useAppSelector(selectOidcConfig);
   const baseUrl = useAppSelector(selectBaseUrl);
-  const inRoom = useAppSelector(selectInRoomState);
+  const roomState = useAppSelector(selectRoomConnectionState);
+  const inRoom = roomState === ConnectionState.Online || roomState === ConnectionState.Leaving;
   const { i18n } = useTranslation();
   // Language can be in the format of en-US or de-DE
   const language = i18n.language.split('-')[0];

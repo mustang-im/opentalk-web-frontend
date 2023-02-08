@@ -46,6 +46,7 @@
 - Change the select participants behaviour (!783)
 - Placed legal votes are summarized in the table visible by moderator (!812)
 - Active legal vote popover has a ticking timer indicating remaining time to place a vote (!812)
+- activate session reconnect (!203)
 
 
 ## 1.0.13

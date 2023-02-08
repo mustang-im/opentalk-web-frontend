@@ -70,19 +70,11 @@ export const startRoom = createAsyncThunk<
   { state: RootState }
 >('room/start', async (credentials, { getState }) => {
   const config = getState().config;
-  /* TODO enable resumptionToken when fixed in backend
   const { resumptionToken, roomId } = getState().room;
-  */
   if (credentials.displayName.length === 0) {
     throw new Error('displayName must ne non empty');
   }
-  return ConferenceRoom.create(
-    credentials,
-    config
-    /* TODO enable resumptionToken when fixed in backend
-    , credentials.roomId === roomId ? resumptionToken : undefined
-    */
-  );
+  return ConferenceRoom.create(credentials, config, credentials.roomId === roomId ? resumptionToken : undefined);
 });
 
 export const hangUp = createAsyncThunk<void, void, { state: RootState }>('room/hangup', async (_, { getState }) => {
