@@ -12,7 +12,6 @@ import { TextEncoder } from 'util';
 
 global.console = {
   ...console,
-  log: jest.fn(),
 };
 
 global.TextEncoder = TextEncoder;
