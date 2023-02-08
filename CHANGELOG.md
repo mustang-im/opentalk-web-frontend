@@ -3,6 +3,7 @@
 ### UI/UX Fixes
 
 - Fix wrong placed waiting room list (!825)
+- Use correct protocol icon in moderation sidebar (!829)
 
 ### Stability Improvements
 

@@ -15,6 +15,7 @@ import {
   WoolBallIcon,
   WhiteboardIcon,
   RaiseHandOffIcon,
+  ProtocolIcon,
 } from '@opentalk/common';
 import React, { Suspense } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -143,7 +144,7 @@ export const tabs: Array<Tab> = [
     key: FeaturesKeys.Timer,
   },
   {
-    icon: <SpeakerQueueIcon />,
+    icon: <ProtocolIcon />,
     divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
