@@ -32,7 +32,6 @@ interface MediaState {
   upstreamLimit: VideoSetting;
   requestMuteNotification?: MuteNotification;
   inProgress: boolean;
-  presenterRole: boolean;
 }
 
 const initialState: MediaState = {
@@ -46,7 +45,6 @@ const initialState: MediaState = {
   qualityCap: VideoSetting.High,
   upstreamLimit: VideoSetting.High,
   inProgress: false,
-  presenterRole: false,
 };
 
 export const mediaSlice = createSlice({
@@ -90,12 +88,6 @@ export const mediaSlice = createSlice({
         state.requestMuteNotification = { kind: NotificationKind.RequestMute, origin: payload.issuer };
       }
     },
-    setPresenterRole: (state) => {
-      state.presenterRole = true;
-    },
-    revokePresenterRole: (state) => {
-      state.presenterRole = false;
-    },
     notificationShown: (state) => {
       state.requestMuteNotification = undefined;
     },
@@ -122,8 +114,6 @@ export const {
   requestMute,
   notificationShown,
   setMediaChangeInProgress,
-  setPresenterRole,
-  revokePresenterRole,
 } = mediaSlice.actions;
 export const selectAudioEnabled = (state: RootState) => state.media.audioEnabled;
 
@@ -137,7 +127,6 @@ export const selectQualityCap = (state: RootState) => state.media.qualityCap;
 export const selectUpstreamLimit = (state: RootState) => state.media.upstreamLimit;
 export const selectNotification = (state: RootState) => state.media.requestMuteNotification;
 export const selectMediaChangeInProgress = (state: RootState) => state.media.inProgress;
-export const selectPresenterRole = (state: RootState) => state.media.presenterRole;
 
 export const actions = mediaSlice.actions;
 

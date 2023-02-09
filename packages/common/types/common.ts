@@ -130,15 +130,17 @@ export interface IParticipantControl {
   role?: Role;
 }
 
+export type ParticipantMediaState = PresenterRoleState & {
+  screen?: MediaSessionState;
+  video?: MediaSessionState;
+};
+
 export interface BackendParticipant {
   id: ParticipantId;
   // Core fields are present in any case
   control: IParticipantControl;
   protocol?: ProtocolState;
-  media: PresenterRoleState & {
-    screen?: MediaSessionState;
-    video?: MediaSessionState;
-  };
+  media: ParticipantMediaState;
 }
 
 export interface CommonPoll {
@@ -150,24 +152,6 @@ export interface CommonPoll {
 export interface ErrorStruct<E extends string> {
   message: 'error';
   error: E;
-}
-
-export interface Participant {
-  id: ParticipantId;
-  breakoutRoomId: BreakoutRoomId | null;
-  displayName: string;
-  avatarUrl?: string;
-  handIsUp: boolean;
-  joinedAt: string;
-  leftAt: string | null;
-  handUpdatedAt?: string;
-  groups: GroupId[];
-  participationKind: ParticipationKind;
-  lastActive: string;
-  role?: Role;
-  waitingState: WaitingState;
-  presenterRole?: PresenterRoleState;
-  isSelected?: boolean;
 }
 
 export interface Command {

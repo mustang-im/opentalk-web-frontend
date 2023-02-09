@@ -7,7 +7,6 @@ import {
   GroupId,
   ParticipantId,
   ParticipationKind,
-  PresenterRoleState,
   ProtocolState,
   Timestamp,
 } from '@opentalk/common';
@@ -26,6 +25,7 @@ export enum WaitingState {
   Waiting = 'waiting',
   Approved = 'approved',
 }
+
 export interface Participant {
   id: ParticipantId;
   breakoutRoomId: BreakoutRoomId | null;
@@ -41,7 +41,7 @@ export interface Participant {
   role?: Role;
   waitingState: WaitingState;
   protocol?: ProtocolState;
-  presenterRole?: PresenterRoleState;
+  isPresenter?: boolean;
 }
 
 export const participantAdapter = createEntityAdapter<Participant>({
@@ -69,7 +69,7 @@ export const participantsSlice = createSlice({
             participationKind,
             role,
             protocol,
-            presenterRole,
+            isPresenter,
           },
         },
       }: PayloadAction<{ participant: Participant }>
@@ -89,7 +89,7 @@ export const participantsSlice = createSlice({
         role,
         waitingState: WaitingState.Joined,
         protocol,
-        presenterRole,
+        isPresenter,
       });
     },
     leave: (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp: string }>) => {
@@ -160,12 +160,12 @@ export const participantsSlice = createSlice({
     update: (
       state,
       {
-        payload: { id, displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, presenterRole, protocol },
+        payload: { id, displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, isPresenter, protocol },
       }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups'>>
     ) => {
       participantAdapter.updateOne(state, {
         id,
-        changes: { displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, protocol, presenterRole },
+        changes: { displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, isPresenter, role, protocol },
       });
     },
   },
