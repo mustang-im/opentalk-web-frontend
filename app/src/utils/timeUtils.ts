@@ -3,15 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { formatDuration, intervalToDuration } from 'date-fns';
 
-export const formatTime = (timestamp: string | undefined) => {
-  if (timestamp === undefined) return '';
-
-  return new Date(timestamp).toLocaleTimeString([], {
-    hour: 'numeric',
-    minute: 'numeric',
-  });
-};
-
 export const getIntervalToDurationString = (interval: Interval) => {
   const duration = intervalToDuration(interval);
 

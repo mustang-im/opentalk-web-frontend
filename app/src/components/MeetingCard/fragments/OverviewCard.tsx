@@ -4,15 +4,13 @@
 import { Button, Grid, styled, Typography, Collapse, Stack } from '@mui/material';
 import { FavoriteIcon, InviteIcon, notifications } from '@opentalk/common';
 import { Event, EventId, isTimelessEvent, isEventException } from '@opentalk/rest-api-rtk-query';
-import { isSameDay } from 'date-fns';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useAcceptEventInviteMutation, useDeclineEventInviteMutation } from '../../../api/rest';
-import useLocale from '../../../hooks/useLocale';
-import { formatDate } from '../../../utils/formatDate';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
+import EventTimePreview from '../../EventTimePreview/EventTimePreview';
 import { MeetingCardFragmentProps } from '../MeetingCard';
 import MeetingPopover from './MeetingPopover';
 
@@ -70,7 +68,6 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const locale = useLocale();
 
   const acceptInvite = async () => {
     try {
@@ -110,22 +107,8 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
     if (!isTimelessEvent(event) && !isEventException(event)) {
       const startDate = new Date(event.startsAt.datetime);
       const endDate = new Date(event.endsAt.datetime);
-      const meetingStartTime = formatDate(startDate, locale, event.startsAt?.timezone);
-      const meetingEndTime = formatDate(endDate, locale, event.endsAt?.timezone);
-      const isInTheSameDay = isSameDay(startDate, endDate);
-      let content = '';
 
-      if (isInTheSameDay) {
-        content = `${meetingStartTime.getDateString()} ${meetingStartTime.getTimeString()} - ${meetingEndTime.getTimeString()}`;
-      } else {
-        content = `${meetingStartTime} - ${meetingEndTime}`;
-      }
-
-      return (
-        <Typography variant={'body1'} fontWeight={400}>
-          {content}
-        </Typography>
-      );
+      return <EventTimePreview startDate={startDate} endDate={endDate} />;
     }
 
     return (

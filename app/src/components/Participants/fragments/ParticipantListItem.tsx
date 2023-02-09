@@ -18,9 +18,9 @@ import {
   ProtocolIcon,
   MediaSessionType,
   ParticipationKind,
+  useDateFormat,
 } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
-import i18next from 'i18next';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -96,6 +96,13 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   const open = Boolean(anchorEl);
   const ownId = useAppSelector(selectOurUuid);
   const protocolState = useAppSelector(selectProtocolState);
+
+  const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
+  const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
+  const lastActiveTimestamp = new Date(participant?.lastActive ?? new Date());
+  const formattedLastActiveTime = useDateFormat(lastActiveTimestamp, 'time');
+  const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
+  const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
 
   const subscriberVideo = useAppSelector(
     selectSubscriberById({
@@ -226,27 +233,14 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
     </>
   );
 
-  const getTimestamp = (time: string) =>
-    new Date(time).toLocaleTimeString(i18next.language, {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
   const getContextText = () => {
     switch (sortType) {
       case SortOption.RaisedHandFirst:
-        if (participant.handIsUp) {
-          return t('participant-hand-raise-text', {
-            handUpdated: participant?.handUpdatedAt ? getTimestamp(participant?.handUpdatedAt) : '',
-          });
-        }
-        return '';
+        return t('participant-hand-raise-text', { handUpdated: formattedHandUpTime });
       case SortOption.LastActive:
-        return t('participant-last-active-text', {
-          lastActive: participant?.lastActive ? getTimestamp(participant?.lastActive) : '',
-        });
+        return t('participant-last-active-text', { lastActive: formattedLastActiveTime });
       default:
-        return t('participant-joined-text', { joinedTime: getTimestamp(participant?.joinedAt) });
+        return t('participant-joined-text', { joinedTime: formattedJoinedTime });
     }
   };
 

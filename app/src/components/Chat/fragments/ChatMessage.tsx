@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Stack, styled, Typography, useTheme } from '@mui/material';
-import { ModeratorIcon } from '@opentalk/common';
+import { ModeratorIcon, useDateFormat } from '@opentalk/common';
 import Linkify from 'linkify-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,6 @@ import { ChatMessage as IChatMessage } from '../../../store/slices/chatSlice';
 import { RoomEvent } from '../../../store/slices/eventSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 import { selectAvatarUrl, selectDisplayName, selectOurUuid } from '../../../store/slices/userSlice';
-import { formatTime } from '../../../utils/timeUtils';
 import { isEventMessage } from '../../../utils/typeGardUtils';
 import ParticipantAvatar from '../../ParticipantAvatar';
 import TextWithDivider from '../../TextWithDivider';
@@ -76,6 +75,8 @@ const ChatMessage = ({ message }: IChatMessageProps) => {
   const ownAvatarUrl = useAppSelector(selectAvatarUrl);
   const theme = useTheme();
   const { t } = useTranslation();
+  const date = new Date(message?.timestamp) ?? Date.now;
+  const formattedTime = useDateFormat(date, 'time');
 
   const isItSingleEmojiMessage = useCallback(() => {
     if (isEventMessage(message)) {
@@ -162,7 +163,7 @@ const ChatMessage = ({ message }: IChatMessageProps) => {
         {displayName}
       </NameTypography>
       {isModerator && <ModeratorIcon color="primary" />}
-      <TimeTypography variant={'caption'}>{formatTime(message?.timestamp)}</TimeTypography>
+      <TimeTypography variant={'caption'}>{formattedTime}</TimeTypography>
     </Box>
   );
 

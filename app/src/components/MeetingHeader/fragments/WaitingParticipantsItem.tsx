@@ -10,8 +10,7 @@ import {
   Stack,
   Button,
 } from '@mui/material';
-import { notifications } from '@opentalk/common';
-import i18next from 'i18next';
+import { notifications, useDateFormat } from '@opentalk/common';
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -63,11 +62,8 @@ type ParticipantRowProps = {
 const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveAll }: ParticipantRowProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const getTimestamp = (time: string) =>
-    new Date(time).toLocaleTimeString(i18next.language, {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  const timestamp = new Date(participant?.joinedAt) ?? Date.now;
+  const formattedTime = useDateFormat(timestamp, 'time');
 
   const handleAccept = useCallback(() => {
     if (participant.waitingState === WaitingState.Waiting) {
@@ -103,7 +99,7 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
             }
             secondary={
               <JoinedText sx={{ whiteSpace: 'nowrap' }} variant={'caption'}>
-                {t('participant-joined-text', { joinedTime: getTimestamp(participant.joinedAt) })}
+                {t('participant-joined-text', { joinedTime: formattedTime })}
               </JoinedText>
             }
           />

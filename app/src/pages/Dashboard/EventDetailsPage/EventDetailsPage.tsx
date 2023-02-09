@@ -4,8 +4,6 @@
 import { styled, Box, Button, Stack, Typography } from '@mui/material';
 import { notifications } from '@opentalk/common';
 import { EventId, InviteStatus, User } from '@opentalk/rest-api-rtk-query';
-import { isSameDay } from 'date-fns';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -16,10 +14,9 @@ import {
   useGetMeQuery,
 } from '../../../api/rest';
 import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
+import EventTimePreview from '../../../components/EventTimePreview';
 import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting';
 import ParticipantAvatar from '../../../components/ParticipantAvatar';
-import useLocale from '../../../hooks/useLocale';
-import { formatDate } from '../../../utils/formatDate';
 import AssetTable from './fragments/AssetTable';
 import ButtonBack from './fragments/ButtonBack';
 
@@ -40,7 +37,6 @@ const EventDetailsPage = () => {
   const [acceptEventInvitation] = useAcceptEventInviteMutation();
   const [declineEventInvitation] = useDeclineEventInviteMutation();
   const { t } = useTranslation();
-  const locale = useLocale();
   const { eventId } = useParams<'eventId'>() as { eventId: EventId };
   const { data: event, isLoading } = useGetEventQuery({ eventId, inviteesMax: 20 });
   const { data: me } = useGetMeQuery();
@@ -88,21 +84,12 @@ const EventDetailsPage = () => {
       return t('dashboard-meeting-details-page-time-independent');
     }
     const startDate = new Date(event.startsAt.datetime);
-
-    const meetingStartTime = formatDate(startDate, locale, event.startsAt.timezone);
     if (event.isAllDay) {
-      return t('dashboard-meeting-details-page-all-day', { date: meetingStartTime.getDateString() });
+      return t('dashboard-meeting-details-page-all-day');
     }
 
     const endDate = new Date(event.endsAt.datetime);
-    const meetingEndTime = formatDate(endDate, locale, event.endsAt.timezone);
-    const isInTheSameDay = isSameDay(startDate, endDate);
-
-    if (isInTheSameDay) {
-      return `${meetingStartTime.getDateString()} ${meetingStartTime.getTimeString()} - ${meetingEndTime.getTimeString()}`;
-    }
-
-    return `${meetingStartTime} - ${meetingEndTime}`;
+    return <EventTimePreview startDate={startDate} endDate={endDate} />;
   };
 
   const acceptInvite = () => {

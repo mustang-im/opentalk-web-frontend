@@ -2,9 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container, Typography, Button, Grid } from '@mui/material';
-import { DurationIcon, LegalBallotIcon } from '@opentalk/common';
+import { DurationIcon, LegalBallotIcon, useDateFormat } from '@opentalk/common';
 import { truncate } from 'lodash';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { finish } from '../../../api/types/outgoing/poll';
@@ -47,7 +46,9 @@ interface IPollOverviewPanelProps {
 
 const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
   const dispatch = useAppDispatch();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const startTime = new Date(poll.startTime);
+  const formattedTime = useDateFormat(new Date(poll.startTime), 'time');
 
   const handleEnd = () => {
     dispatch(
@@ -65,11 +66,6 @@ const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
     return `${minuteTimestamp}:${secondTimestamp}`;
   };
 
-  const formatter = new Intl.DateTimeFormat(i18n.language, {
-    timeStyle: 'short',
-  });
-  const startTime = new Date(poll.startTime);
-  const timestamp = formatter.format(startTime);
   const getVotedNumber = () => poll.results.reduce((acc, result) => acc + result.count, 0);
 
   return (
@@ -81,7 +77,7 @@ const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
               <VoteState state={poll.state}>{t(`poll-overview-panel-status-${poll.state}`)}</VoteState>
             </Grid>
             <Grid item>
-              <Typography>{`${timestamp}`}</Typography>
+              <Typography>{formattedTime}</Typography>
             </Grid>
           </Grid>
         </Grid>

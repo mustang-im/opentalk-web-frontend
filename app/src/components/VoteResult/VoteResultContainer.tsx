@@ -13,10 +13,9 @@ import {
   Chip as MuiChip,
   Button,
 } from '@mui/material';
-import { ParticipantId, PollId, LegalVoteId, CloseIcon, ClockIcon } from '@opentalk/common';
+import { ParticipantId, PollId, LegalVoteId, CloseIcon, ClockIcon, useDateFormat } from '@opentalk/common';
 import { LegalVoteType, VoteOption, legalVoteStore, LegalVoteCountdown } from '@opentalk/components';
-import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Choice, ChoiceResult } from '../../api/types/incoming/poll';
@@ -28,6 +27,7 @@ import { selectPollVoteById, closeResultWindow as closePollResultWindow, voted }
 import { setVotePollIdToShow } from '../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid } from '../../store/slices/userSlice';
 import VoteResult from './VoteResult';
+import VoteResultDate from './fragments/VoteResultDate';
 
 const TooltipIcon = styled('div')(({ color }) => ({
   width: '1rem',
@@ -96,6 +96,8 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const currentLegalVote = useAppSelector(legalVoteStore.selectVoteById(legalVoteId));
   const currentPoll = useAppSelector(selectPollVoteById(legalVoteId));
   const isModerator = useAppSelector(selectIsModerator);
+  const startTime = new Date(currentLegalVote?.startTime ?? new Date());
+  const formattedTime = useDateFormat(startTime, 'time');
 
   const closeResultWindow = () => {
     dispatch(closePollResultWindow());
@@ -273,7 +275,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
                 variant="filled"
                 clickable={false}
               />
-              {currentLegalVote && <Box>{format(new Date(currentLegalVote?.startTime || Date.now()), 'p')}</Box>}
+              {currentLegalVote && <Box>{formattedTime}</Box>}
               {currentLegalVote && currentLegalVote.duration && currentLegalVote.startTime && (
                 <Box display="flex" alignItems="center" gap={1}>
                   <ClockIcon sx={{ width: '1rem', verticalAlign: 'middle' }} />
@@ -319,12 +321,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
         )}
         {currentLegalVote?.votedAt && (
           <Grid item xs={12}>
-            <Typography color={'primary'}>
-              {t('legal-vote-success', {
-                atVoteTime: format(new Date(currentLegalVote?.votedAt), 'pp'),
-                onVoteDate: format(new Date(currentLegalVote?.votedAt), 'PP'),
-              })}
-            </Typography>
+            <VoteResultDate date={new Date(currentLegalVote?.votedAt)} />
           </Grid>
         )}
         {currentLegalVote && isModerator && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
