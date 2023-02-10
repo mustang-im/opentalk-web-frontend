@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import WrongBrowserPage from './WrongBrowserPage';
+import ConfirmBrowserDialog from './ConfirmBrowserDialog';
 
-export default WrongBrowserPage;
+export default ConfirmBrowserDialog;

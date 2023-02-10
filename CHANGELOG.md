@@ -4,6 +4,7 @@
 
 - Fix wrong placed waiting room list (!825)
 - Use correct protocol icon in moderation sidebar (!829)
+- Display only a popup instead of the wrong browser page (!830)
 
 ### Stability Improvements
 

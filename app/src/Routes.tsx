@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { selectAuthError } from '@opentalk/react-redux-appauth';
-import React, { Suspense, useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { useRoutes } from 'react-router-dom';
 
 import SuspenseLoading from './commonComponents/SuspenseLoading';
