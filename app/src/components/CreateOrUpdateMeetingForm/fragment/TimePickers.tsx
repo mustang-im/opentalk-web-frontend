@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { DateTimePicker } from '@mui/lab';
-import { Stack, styled, TextFieldProps, ThemeProvider, InputAdornment } from '@mui/material';
+import { Stack, styled, TextFieldProps, ThemeProvider, InputAdornment, useMediaQuery, useTheme } from '@mui/material';
 import { Calendar } from '@mui/x-date-pickers/internals/components/icons';
 import { isSameDay } from 'date-fns';
 import { isEmpty, merge } from 'lodash';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
@@ -21,8 +21,11 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
       color: theme.palette.secondary.contrastText,
       ' -webkit-text-fill-color': theme.palette.secondary.contrastText,
     },
+    svg: {
+      color: theme.palette.secondary.contrastText,
+    },
   },
-  '.MuiInputBase-input:focus': {
+  '.MuiInputBase-input:focus, &.Mui-focused .MuiSvgIcon-root': {
     // TODO: We rely on the contrast text color due to the calendar hacky solution which conflicts input text color.
     color: theme.palette.secondary.contrastText,
   },
@@ -66,9 +69,8 @@ const TimePickers = ({ value, error, helperText, onChange, minTimeDate = new Dat
   const { i18n } = useTranslation();
   const locale = i18n.language.split('-')[0];
 
-  const onDateTimePickerChange = (date: Date | null) => {
-    onChange(date);
-  };
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const renderTextField = ({ inputRef, inputProps, disabled }: TextFieldProps) => {
     const { value, onChange, onBlur, onFocus } = inputProps || {};
@@ -76,6 +78,18 @@ const TimePickers = ({ value, error, helperText, onChange, minTimeDate = new Dat
       <InputAdornment position="end" onClick={() => setPopoverOpen(true)} sx={{ cursor: 'pointer' }}>
         <Calendar />
       </InputAdornment>
+    );
+
+    const handleMouseDown = useCallback(
+      (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (isDesktop) {
+          setAnchorEl(event.currentTarget);
+        } else {
+          event.preventDefault();
+          setPopoverOpen(true);
+        }
+      },
+      [isDesktop, setAnchorEl, setPopoverOpen]
     );
 
     return (
@@ -88,7 +102,7 @@ const TimePickers = ({ value, error, helperText, onChange, minTimeDate = new Dat
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        onClick={(event) => setAnchorEl(event.currentTarget)}
+        onMouseDown={handleMouseDown}
         fullWidth
         helperText={helperText}
       />
@@ -101,7 +115,7 @@ const TimePickers = ({ value, error, helperText, onChange, minTimeDate = new Dat
         <DateTimePicker
           label={'DateTimePicker'}
           value={valueAsDate}
-          onChange={onDateTimePickerChange}
+          onChange={onChange}
           renderInput={renderTextField}
           minDate={new Date()}
           mask={masks[locale] || masks.en}
