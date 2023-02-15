@@ -111,9 +111,9 @@ const ScreenPresenterVideo = React.forwardRef<HTMLDivElement, ScreenPresenterVid
     }, [videoPosition]);
 
     const connectionLossPercent = useMemo(() => {
-      if (stats?.packetLoss === undefined) return 0;
-      return Math.round(stats.packetLoss * 100);
-    }, [stats?.packetLoss]);
+      if (stats?.connection.packetLoss === undefined) return 0;
+      return Math.round(stats.connection.packetLoss * 100);
+    }, [stats?.connection.packetLoss]);
 
     const PresenterOverlay = () => (
       <OverlayContainer data-testid="screenShareVideoOverlay">

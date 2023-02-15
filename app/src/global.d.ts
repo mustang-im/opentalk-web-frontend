@@ -107,6 +107,10 @@ declare global {
     packetsSent?: number;
   }
 
+  interface RTCIceCandidate {
+    networkType?: string;
+  }
+
   type RTCStatsCollection =
     | RTCTransportStats
     | RTCOutboundRtpStreamStats

@@ -56,9 +56,9 @@ export const connectionStatsSelectors = connectionStatsAdapter.getSelectors<Root
 export const selectStatsById = (descriptor: MediaDescriptor) => (state: RootState) => {
   const reports = connectionStatsSelectors.selectById(state, idFromDescriptor(descriptor))?.reports;
   if (reports !== undefined && reports.length > 0) {
-    const report = reports[reports.length - 1];
-    if (report.inbound) {
-      return report.inbound;
+    const { inbound, connection } = reports[reports.length - 1];
+    if (inbound && connection) {
+      return { mediaStream: inbound, connection };
     }
   }
   return undefined;

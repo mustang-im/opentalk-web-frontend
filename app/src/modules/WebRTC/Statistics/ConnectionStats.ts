@@ -35,8 +35,8 @@ export default class ConnectionStats {
     this.update(reports);
   }
 
-  public update(reports: RTCStatsReport): StatsEvent {
-    const activeCandidates: CandidatePairStats[] = [];
+  public update(reports: RTCStatsReport): StatsEvent | undefined {
+    let connection: CandidatePairStats | undefined;
     const streams: StreamStats[] = [];
 
     for (const [id, report] of reports) {
@@ -57,14 +57,14 @@ export default class ConnectionStats {
             // TODO: remove when Safari and Edge are done
             /*
               console.debug(
-                `RTP ${report.type} ${report.kind} bitrate:${formatBitRate(rates.bitRate)} ssrc:${report.ssrc} loss: ${(rates.packetLoss || 0) * 100}% jitter:${
-                  rates.jitter
-                })`,
+                `RTP ${report.type} ${report.kind} bitrate:${formatBitRate(rates.bitRate)} ssrc:${report.ssrc} loss: ${
+                  (rates.packetLoss || 0) * 100
+                }% jitter:${rates.jitter})`,
                 rates,
                 report,
                 remoteReport
               );
-              */
+            */
             streams.push(rates);
           }
           break;
@@ -85,36 +85,54 @@ export default class ConnectionStats {
             // TODO: remove when Safari and Edge are done
             /*
               console.debug(
-                `RTPstats ${report.type} ${report.kind} ssrc:${report.ssrc} bitrate:${formatBitRate(
-                  rates.bitRate
-                )} RTT:${(rates?.roundTripTime || 0) * 1000}ms loss: ${((rates.packetLoss || 0) * 100).toFixed(
+                `RTPstats ${report.type} ${report.kind} ssrc:${report.ssrc} bitrate:${formatBitRate(rates.bitRate)} RTT:${
+                  (rates?.roundTripTime || 0) * 1000
+                }ms loss: ${((rates.packetLoss || 0) * 100).toFixed(1)}% jitter:${((rates?.jitter || 0) * 1000).toFixed(
                   1
-                )}% jitter:${((rates?.jitter || 0) * 1000).toFixed(1)}ms)`,
+                )}ms)`,
                 rates,
                 report,
                 remoteReport
               );
-              */
+            */
             streams.push(rates);
           }
           break;
         }
         case 'candidate-pair': {
-          const candidates = this.candidates[id];
-          if (candidates === undefined) {
-            this.candidates[id] = new CandidatePairState(report);
-          } else {
-            const rates = candidates.update(report);
-            // report.selected is deprecated but still in use in Firefox v97
-            if (report.nominated && report.state === 'succeeded' && report.selected !== false) {
-              /* TODO: remove when Safari and Edge are done
-              let localCandidate = reports.get(report.localCandidateId);
-              let remoteCandidate = reports.get(report.remoteCandidateId);
-              let transport = reports.get(report.transportId);
-              console.debug(`RTP ${report.type}`, rates, report, { localCandidate, remoteCandidate, transport });
-              */
-              activeCandidates.push(rates);
+          // we don't care for unsuccessful or inactive candidates
+          if (!report.nominated || report.state !== 'succeeded') {
+            break;
+          }
+
+          const candidate = this.candidates[id];
+
+          const localCandidate = reports.get(report.localCandidateId);
+          const remoteCandidate = reports.get(report.remoteCandidateId);
+
+          if (candidate === undefined) {
+            this.candidates[id] = new CandidatePairState(report, localCandidate, remoteCandidate);
+            break;
+          }
+          // update rates on connected candidates even if not selected
+          const rates = candidate.update(report);
+
+          const transport = reports.get(report.transportId);
+          // report.selected is deprecated but still in use in Firefox v97
+          // whereas Chrome uses transport.selectedCandidatePairId
+          const isSelected = !!report.selected || transport?.selectedCandidatePairId === id;
+          if (isSelected) {
+            if (connection !== undefined) {
+              console.warn('reassign selected candidatePair:', connection, report);
             }
+
+            /* TODO: remove when Safari and Edge are done
+              const tLastReceived = report.timestamp - report.lastPacketReceivedTimestamp;
+              const tLastSend = report.timestamp - report.lastPacketSentTimestamp;
+              console.debug(`tRX: ${tLastReceived.toFixed(1)}ms tTX: ${tLastSend.toFixed(1)}ms}`);
+              console.debug(`RTP ${report.type}`, { rates, report, localCandidate, remoteCandidate, transport });
+            */
+            connection = rates;
           }
           break;
         }
@@ -123,17 +141,10 @@ export default class ConnectionStats {
       }
     }
 
-    const connection: CandidatePairStats = activeCandidates.reduce(
-      (acc, rates) => {
-        const timestamp = Math.max(acc.timestamp, rates.timestamp || 0);
-        const bitRateDown = (acc.bitRateDown || 0) + (rates.bitRateDown || 0);
-        const bitRateUp = (acc.bitRateUp || 0) + (rates.bitRateUp || 0);
-        const dataLoss = Math.max(acc.dataLoss || 0, rates.dataLoss || 0);
-        const avgRTT = Math.max(acc.avgRTT || 0, rates.avgRTT || 0);
-        return { bitRateUp, bitRateDown, dataLoss, avgRTT, timestamp };
-      },
-      { timestamp: 0 }
-    );
+    if (connection === undefined) {
+      console.error('no selected candidatePair found', reports);
+      return undefined;
+    }
 
     const aggregateStreams = (streams: StreamStats[], type: 'inbound' | 'outbound'): StreamStats | undefined => {
       const currentDirection = streams.filter((rates) => rates.type === type);

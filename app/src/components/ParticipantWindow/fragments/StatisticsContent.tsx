@@ -8,14 +8,32 @@ import { useTranslation } from 'react-i18next';
 import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
 import { useAppSelector } from '../../../hooks';
 import { MediaDescriptor } from '../../../modules/WebRTC';
+import { NetworkEndpoint } from '../../../modules/WebRTC/Statistics/CandidatePairState';
 import { selectStatsById } from '../../../store/slices/connectionStatsSlice';
 import { formatBitRate } from '../../../utils/numberUtils';
 
 const ContentContainer = styled('div')(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: '3fr 2fr',
+  gridTemplateColumns: 'auto auto',
   padding: theme.spacing(1),
 }));
+
+export const EndpointInfo = ({ endpoint }: { endpoint?: NetworkEndpoint }) => {
+  const { t } = useTranslation();
+
+  if (endpoint === undefined) {
+    return <span>'-'</span>;
+  }
+  const address = endpoint.address || t('statistics-value-redacted');
+  return (
+    <>
+      {`${address}:${endpoint.port} (${endpoint.protocol})`}
+      {endpoint.networkType && ` ${endpoint.networkType}`}
+    </>
+  );
+};
+
+const MILLISECONDS_PER_SECOND = 1000;
 
 export const StatisticsContent = ({ descriptor }: { descriptor: MediaDescriptor }) => {
   const stats = useAppSelector(selectStatsById(descriptor));
@@ -24,10 +42,20 @@ export const StatisticsContent = ({ descriptor }: { descriptor: MediaDescriptor 
     return <SuspenseLoading />;
   }
 
-  const { bitRate, frameRate, packetLoss, frameHeight, frameWidth, jitter, codingTime, roundTripTime } = stats;
+  const { mediaStream, connection } = stats;
+  const { bitRate, frameRate, packetLoss, frameHeight, frameWidth, jitter, codingTime } = mediaStream;
 
-  const validJitter = jitter !== undefined && jitter > 0.0005 && Math.round(jitter * 1000);
-  const validLatency = roundTripTime !== undefined && roundTripTime > 0.0005 && Math.round((roundTripTime / 2) * 1000);
+  // The latency and jitter value may default to 0, which is invalid.
+  // We use 0.5ms as threshold for validity.
+  // We expect both to be a couple of milliseconds under good conditions.
+  const validJitter =
+    jitter !== undefined && jitter > 0.5 * MILLISECONDS_PER_SECOND && Math.round(jitter * MILLISECONDS_PER_SECOND);
+
+  const validLatency =
+    connection.avgRTT !== undefined &&
+    connection.avgRTT > 0.5 * MILLISECONDS_PER_SECOND &&
+    Math.round((connection.avgRTT / 2) * MILLISECONDS_PER_SECOND);
+
   const validPacketLoss = packetLoss !== undefined && Math.round(packetLoss * 100);
 
   return (
@@ -68,6 +96,14 @@ export const StatisticsContent = ({ descriptor }: { descriptor: MediaDescriptor 
           </Typography>
         </>
       )}
+      <Typography variant={'body2'}>{`${t('statistics-local-network-endpoint')}: `}</Typography>
+      <Typography variant={'body2'} align={'left'}>
+        <EndpointInfo endpoint={connection.localEndpoint} />
+      </Typography>
+      <Typography variant={'body2'}>{`${t('statistics-remote-network-endpoint')}: `}</Typography>
+      <Typography variant={'body2'} align={'left'}>
+        <EndpointInfo endpoint={connection.remoteEndpoint} />
+      </Typography>
     </ContentContainer>
   );
 };
