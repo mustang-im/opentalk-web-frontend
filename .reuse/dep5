@@ -34,6 +34,7 @@ License: CC-BY-NC-ND-4.0
 Files:
  packages/common/babel.config.cjs
  packages/common/.eslintrc.cjs
+ packages/common/CHANGELOG.md
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: EUPL-1.2
 

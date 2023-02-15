@@ -25,6 +25,16 @@ This includes:
 
 > npm - `npm i @opentalk/common`
 
+- In order to install the package you need to add the `npmRegistryServer` property in the `yarnrc.yml` file:
+
+```
+npmScopes:
+  @scope:
+    npmRegistryServer: https://your_domain_name/api/v4/projects/<project_id>/packages/npm/
+```
+
+Read more: https://docs.gitlab.com/ee/user/packages/npm_registry/
+
 ## Usage
 
 - Importing AccordionItem as React component and Add icon as an asset
@@ -86,7 +96,22 @@ For building a production version you can use `yarn build`.
 
 (In case of need for a types build there are also `yarn build-ts` (for esm and cjs types build), or `yarn build:esm` and `yarn build:cjs` for building types accordingly).
 
+## Publihing to the gitlab npm
+
+In order for the package to be published, `package.json` needs to contain following publishing congif:
+
+```
+"publishConfig": {
+      "access": "restricted",
+      "@scope:registry": "https://your_domain_url/api/v4/projects/<project_id>/packages/npm/"
+   }
+```
+
+Read more about publishing a package in gitlab: https://docs.gitlab.com/ee/user/packages/npm_registry/
+
 ## Deploying new npm version
+
+When deploying new npm version it's important to update package.json version number. If the package version remains the same, new npm package wouldn't be created.
 
 - old package.json:
 ```{
@@ -100,5 +125,3 @@ For building a production version you can use `yarn build`.
   "author": "John Doe",
   "version": "1.0.1" }
   ```
-
-When deploying new npm version it's important to update package.json version number. If the package version remains the same, new npm package wouldn't be created.
