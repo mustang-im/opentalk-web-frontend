@@ -139,7 +139,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   };
 
   const handlePresenterRoleRight = () => {
-    participant.presenterRole?.isPresenter
+    participant.isPresenter
       ? dispatch(revokePresenterRole.action({ participantIds: [participant.id] }))
       : dispatch(grantPresenterRole.action({ participantIds: [participant.id] }));
   };
@@ -160,14 +160,14 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
             action: handleModerationRight,
           },
           {
-            i18nKey: participant.presenterRole?.isPresenter ? 'revoke-presenter-role' : 'grant-presenter-role',
+            i18nKey: participant.isPresenter ? 'revoke-presenter-role' : 'grant-presenter-role',
             action: handlePresenterRoleRight,
           },
         ];
       case Role.Guest:
         return [
           {
-            i18nKey: participant.presenterRole?.isPresenter ? 'revoke-presenter-role' : 'grant-presenter-role',
+            i18nKey: participant.isPresenter ? 'revoke-presenter-role' : 'grant-presenter-role',
             action: handlePresenterRoleRight,
           },
         ];

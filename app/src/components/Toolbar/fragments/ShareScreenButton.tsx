@@ -6,26 +6,22 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
-import {
-  selectMediaChangeInProgress,
-  selectPresenterRole,
-  selectShareScreenEnabled,
-} from '../../../store/slices/mediaSlice';
-import { selectIsModerator } from '../../../store/slices/userSlice';
+import { selectMediaChangeInProgress, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
+import { selectIsModerator, selectIsPresenter } from '../../../store/slices/userSlice';
 import { useMediaContext } from '../../MediaProvider';
 import ToolbarButton from './ToolbarButton';
 
 const BlurScreenButton = () => {
   const { t } = useTranslation();
   const mediaContext = useMediaContext();
-  const presenterRole = useAppSelector(selectPresenterRole);
+  const isPresenter = useAppSelector(selectIsPresenter);
   const isModerator = useAppSelector(selectIsModerator);
   const screenSharing = useAppSelector(selectShareScreenEnabled);
   const isLoadingMedia = useAppSelector(selectMediaChangeInProgress);
 
-  const grantedPresenterRole = isModerator ? true : presenterRole;
+  const isModeratorOrPresenter = isModerator || isPresenter;
 
-  const tooltipText = !grantedPresenterRole
+  const tooltipText = !isModeratorOrPresenter
     ? t('toolbar-button-screen-share-tooltip-request-moderator-presenter-role')
     : mediaContext.permissionDenied
     ? t('device-permission-denied')
@@ -36,13 +32,13 @@ const BlurScreenButton = () => {
   return (
     <ToolbarButton
       onClick={() => {
-        if (!isLoadingMedia && grantedPresenterRole) {
+        if (!isLoadingMedia && isModeratorOrPresenter) {
           mediaContext.trySetScreenShare(!screenSharing);
         }
       }}
       tooltipTitle={tooltipText}
-      active={screenSharing && grantedPresenterRole}
-      disabled={isLoadingMedia || !grantedPresenterRole}
+      active={screenSharing && isModeratorOrPresenter}
+      disabled={isLoadingMedia || !isModeratorOrPresenter}
       data-testid="toolbarBlurScreenButton"
     >
       {screenSharing ? <ShareScreenOnIcon /> : <ShareScreenOffIcon />}

@@ -227,9 +227,7 @@ export const mockedParticipant = (index: number): Participant => ({
   participationKind: ParticipationKind.User,
   lastActive: '2022-03-23T12:32:30Z',
   waitingState: WaitingState.Joined,
-  presenterRole: {
-    isPresenter: false,
-  },
+  isPresenter: false,
 });
 
 export const mockedVideoMediaDescriptor = (index: number) => ({

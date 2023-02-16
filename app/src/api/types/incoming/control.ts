@@ -7,7 +7,7 @@ import {
   isErrorStruct,
   NamespacedIncoming,
   ParticipantId,
-  PresenterRoleState,
+  ParticipantMediaState,
 } from '@opentalk/common';
 import { InitialAutomod } from '@opentalk/components';
 
@@ -51,7 +51,7 @@ export interface JoinSuccess {
     waitingRoom: Array<BackendParticipant>;
     waitingRoomEnabled: boolean;
   };
-  presenterRole?: PresenterRoleState;
+  media?: ParticipantMediaState;
   recording: null | RecordingState;
 }
 

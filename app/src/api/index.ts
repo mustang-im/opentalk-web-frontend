@@ -44,7 +44,7 @@ import * as breakoutStore from '../store/slices/breakoutSlice';
 import { ChatMessage, clearGlobalChat, received as chatReceived, setChatSettings } from '../store/slices/chatSlice';
 import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectionStatsSlice';
 import * as mediaStore from '../store/slices/mediaSlice';
-import { revokePresenterRole, setFocusedSpeaker, setPresenterRole, setUpstreamLimit } from '../store/slices/mediaSlice';
+import { setFocusedSpeaker, setUpstreamLimit } from '../store/slices/mediaSlice';
 import {
   added as subscriberAdded,
   closed as subscriberClose,
@@ -78,7 +78,7 @@ import {
 import * as slotStore from '../store/slices/slotSlice';
 import { startedTimer, stoppedTimer, updateParticpantsReady } from '../store/slices/timerSlice';
 import { participantsLayoutSet } from '../store/slices/uiSlice';
-import { updateRole } from '../store/slices/userSlice';
+import { revokePresenterRole, setPresenterRole, updateRole } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import showConsentNotification from '../utils/showConsentNotification';
 import { restApi } from './rest';
@@ -175,7 +175,7 @@ const mapToUiParticipant = (
   role: control.role,
   waitingState,
   protocol: protocol,
-  presenterRole: media,
+  isPresenter: media.isPresenter,
 });
 
 const mapBreakoutToUiParticipant = (
@@ -302,7 +302,7 @@ const handleControlMessage = (
           polls: data.polls,
           participants,
           moderation: data.moderation,
-          presenterRole: data.presenterRole,
+          isPresenter: data.media?.isPresenter,
           recording: data.recording,
         })
       );
@@ -373,7 +373,7 @@ const handleControlMessage = (
             id: data.id,
             lastActive: data.control.joinedAt,
             waitingState: WaitingState.Joined,
-            presenterRole: data.media,
+            isPresenter: data.media.isPresenter,
             protocol: data.protocol,
             ...data.control,
           })

@@ -21,6 +21,7 @@ interface UserState {
   loggedIdToken?: string;
   lastActive?: string;
   joinedAt?: string;
+  isPresenter: boolean;
 }
 
 const initialState: UserState = {
@@ -28,6 +29,7 @@ const initialState: UserState = {
   groups: [],
   displayName: '',
   role: Role.User,
+  isPresenter: false,
 };
 
 export const userSlice = createSlice({
@@ -39,6 +41,12 @@ export const userSlice = createSlice({
     },
     updateRole: (state, { payload: role }: PayloadAction<Role>) => {
       state.role = role;
+    },
+    setPresenterRole: (state) => {
+      state.isPresenter = true;
+    },
+    revokePresenterRole: (state) => {
+      state.isPresenter = false;
     },
   },
   extraReducers: (builder) => {
@@ -58,13 +66,14 @@ export const userSlice = createSlice({
         state.displayName = displayName;
       }
     );
-    builder.addCase(joinSuccess, (state, { payload: { avatarUrl, role, participantId, groups } }) => {
+    builder.addCase(joinSuccess, (state, { payload: { isPresenter, avatarUrl, role, participantId, groups } }) => {
       state.role = role;
       state.avatarUrl = avatarUrl;
       state.uuid = participantId;
       state.groups = groups;
       state.joinedAt = new Date().toISOString();
       state.lastActive = state.joinedAt;
+      state.isPresenter = isPresenter || false;
     });
     builder.addCase(connectionClosed, (state) => {
       state.uuid = null;
@@ -90,7 +99,7 @@ export const userSlice = createSlice({
 });
 
 export const actions = userSlice.actions;
-export const { updateRole } = actions;
+export const { updateRole, setPresenterRole, revokePresenterRole } = actions;
 
 const userState = (state: RootState) => state.user;
 
@@ -98,6 +107,7 @@ export const selectOurUuid = createSelector(userState, (state) => state.uuid);
 export const selectGroups = createSelector(userState, (state) => state.groups);
 export const selectDisplayName = createSelector(userState, (state) => state.displayName);
 export const selectAvatarUrl = createSelector(userState, (state) => state.avatarUrl);
+export const selectIsPresenter = createSelector(userState, (state) => state.isPresenter);
 export const selectIsLoggedIn = createSelector(userState, (state) => state.loggedIdToken !== undefined);
 export const selectIsAuthenticated = createSelector(
   userState,

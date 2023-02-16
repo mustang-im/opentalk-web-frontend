@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Enable share screen button on join success (!834)
 - Fix wrong placed waiting room list (!825)
 - Use correct protocol icon in moderation sidebar (!829)
 - Display only a popup instead of the wrong browser page (!830)
