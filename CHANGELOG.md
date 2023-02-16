@@ -10,6 +10,8 @@
 
 ### Stability Improvements
 
+- Fix Firefox sender quality scaling (!839)
+
 ### New Features
 
 

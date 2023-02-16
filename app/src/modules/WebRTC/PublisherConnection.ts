@@ -6,7 +6,6 @@ import { isEqual } from 'lodash';
 
 import { MediaStatusChange } from '../../api/types/incoming/media';
 import { MediaSessionInfo } from '../../api/types/outgoing/media';
-import browser from '../BrowserSupport';
 import { blackTrack, getDimensions } from '../Media';
 import { BaseWebRtcConnection } from './BaseWebRtcConnection';
 import { MediaSignaling } from './MediaSignaling';
@@ -24,6 +23,11 @@ const bitrateFromSetting = (quality: VideoSetting, maxVideoBandwidth: number) =>
   }
 };
 
+/* Note that `active` is only supported in Firefox v110
+ * see https://bugzilla.mozilla.org/show_bug.cgi?id=1676855#c0
+ * the workaround results in 3x5px videos.
+ * We need to live with higher bandwidth usage on Firefox until v110
+ */
 const configFromSetting = (
   qualitySetting: VideoSetting,
   mediaType: MediaSessionType,
@@ -52,24 +56,11 @@ const simulcastEncodings = (
   quality: VideoSetting,
   maxVideoBandwidth: number
 ): RTCRtpEncodingParameters[] => {
-  const encodings = [
+  return [
     configFromSetting(VideoSetting.High, mediaType, quality >= VideoSetting.High, maxVideoBandwidth),
     configFromSetting(VideoSetting.Medium, mediaType, quality >= VideoSetting.Medium, maxVideoBandwidth),
     configFromSetting(VideoSetting.Low, mediaType, true, maxVideoBandwidth),
   ];
-
-  // TODO: Firefox hack because it does not support the 'active' flag, (up to v96 at least)
-  // see https://bugzilla.mozilla.org/show_bug.cgi?id=1676855#c0
-  if (browser.isFirefox() && quality < VideoSetting.High) {
-    encodings.forEach((setting) => {
-      if (!setting.active) {
-        setting.maxBitrate = 1;
-        setting.scaleResolutionDownBy = 240;
-      }
-    });
-  }
-  console.debug('publisher encodings', encodings);
-  return encodings;
 };
 
 export class PublisherConnection extends BaseWebRtcConnection {

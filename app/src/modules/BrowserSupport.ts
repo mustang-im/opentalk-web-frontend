@@ -92,11 +92,7 @@ class BrowserSupport {
   }
 
   _getFirefoxBasedVersion() {
-    if (this.isFirefox() || this.isChromiumBased()) {
-      // Here we process all browsers which use the Chrome engine but
-      // don't necessarily identify as Chrome. We cannot use the version
-      // comparing functions because the Opera versions are inconsequential here, as we need to know the actual
-      // Chrome engine version.
+    if (this.isFirefox()) {
       const ua = navigator.userAgent;
       const match = ua.match(/(Firefox)\/([\d.]+)/);
       if (match && match[1]) {
