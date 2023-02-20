@@ -2,6 +2,8 @@
 
 ### UI/UX Fixes
 
+- Change UX for whiteboard access (!841)
+
 ### Stability Improvements
 
 ### New Features
