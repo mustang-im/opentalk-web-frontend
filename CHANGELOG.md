@@ -1,17 +1,10 @@
-## Upcoming Release
+## 1.2.0
 
 ### UI/UX Fixes
 
-- Release candidate fixes (!824)
-- Enable share screen button on join success (!834)
-- Fix wrong placed waiting room list (!825)
-- Use correct protocol icon in moderation sidebar (!829)
 - Display only a popup instead of the wrong browser page (!830)
-- Fix datetimepicker issues on mobile (!832)
 
 ### Stability Improvements
-
-- Fix Firefox sender quality scaling (!839)
 
 ### New Features
 
@@ -21,6 +14,11 @@
 
 ### UI/UX Fixes
 
+- Enable share screen button on join success (!834)
+- Fix LegalVote user selection (!824)
+- Fix DateTimePicker issues on mobile (!832)
+- Use correct protocol icon in moderation sidebar (!829)
+- Fix wrong placed waiting room list (!825)
 - Fix too small waiting room list (!826)
 - Add an error message for the case that when you start a voting, another voting is already active (!799)
 - Merge eeChat into chat (!786)
@@ -43,6 +41,7 @@
 
 ### Stability Improvements
 
+- Fix Firefox sender quality scaling (!839)
 - List of participants include phone users (!783)
 - Forked notistack to local version in order to enable fullscreen notifications (!779)
 - Topic and subtitle fields are no longer mandatory when creating legal vote (!812)
