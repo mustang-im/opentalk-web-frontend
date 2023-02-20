@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, CircularProgress, styled } from '@mui/material';
-import React from 'react';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',

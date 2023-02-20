@@ -37,6 +37,7 @@ interface RoomState {
   resumptionToken?: string;
   waitingRoomEnabled: boolean;
   error?: string;
+  serverTimeOffset: number;
 }
 
 export interface InviteRoomVerifyResponse {
@@ -57,6 +58,7 @@ const initialState: RoomState = {
   invite: initialInviteState,
   connectionState: ConnectionState.Initial,
   waitingRoomEnabled: false,
+  serverTimeOffset: 0,
 };
 
 export const fetchRoomByInviteId = createAsyncThunk<
@@ -157,6 +159,7 @@ export const roomSlice = createSlice({
       state.connectionState = ConnectionState.Failed;
     });
     builder.addCase(joinSuccess, (state, { payload }) => {
+      state.serverTimeOffset = payload.serverTimeOffset;
       state.connectionState = ConnectionState.Online;
       state.waitingRoomEnabled = Boolean(payload.moderation?.waitingRoomEnabled);
     });
@@ -180,4 +183,5 @@ export const selectRoomId = (state: RootState) => state.room.roomId;
 export const selectInviteId = (state: RootState) => state.room.invite.inviteCode;
 export const selectRoomConnectionState = (state: RootState) => state.room.connectionState;
 export const selectWaitingRoomState = (state: RootState) => state.room.waitingRoomEnabled;
+export const selectServerTimeOffset = (state: RootState) => state.room.serverTimeOffset;
 export default roomSlice.reducer;

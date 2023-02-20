@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack, styled } from '@mui/material';
-import React from 'react';
 
+import { TimerStyle } from '../../api/types/outgoing/timer';
 import { useAppSelector } from '../../hooks';
 import { selectTimerRunning } from '../../store/slices/timerSlice';
 import CreateTimerForm from './fragments/CreateTimerForm';
@@ -15,10 +15,14 @@ const Container = styled(Stack)({
   overflow: 'hidden',
 });
 
-const TimerTab = () => {
+const TimerTab = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   const timerDidStart = useAppSelector(selectTimerRunning);
 
-  return <Container>{timerDidStart ? <TimerOverview /> : <CreateTimerForm />}</Container>;
+  return (
+    <Container>
+      {!timerDidStart ? <CreateTimerForm {...{ timerStyle }} /> : <TimerOverview {...{ timerStyle }} />}
+    </Container>
+  );
 };
 
 export default TimerTab;

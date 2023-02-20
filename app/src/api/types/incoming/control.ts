@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { Timestamp } from '@opentalk/common';
 import {
   BackendParticipant,
   ErrorStruct,
@@ -12,6 +13,7 @@ import {
 import { InitialAutomod } from '@opentalk/components';
 
 import { InitialPoll } from '../../../store/slices/pollSlice';
+import { TimerKind, TimerStyle } from '../outgoing/timer';
 import { InitialBreakout } from './breakout';
 import { InitialChat } from './chat';
 
@@ -35,6 +37,15 @@ export interface RecordingState {
   recordingId?: string;
 }
 
+export interface TimerState {
+  endsAt: Timestamp;
+  kind: TimerKind;
+  readyCheckEnabled: boolean;
+  startedAt: Timestamp;
+  style: TimerStyle;
+  timerId: string;
+}
+
 export interface JoinSuccess {
   message: 'join_success';
   id: ParticipantId;
@@ -53,6 +64,7 @@ export interface JoinSuccess {
   };
   media?: ParticipantMediaState;
   recording: null | RecordingState;
+  timer?: TimerState;
 }
 
 export interface Joined extends BackendParticipant {

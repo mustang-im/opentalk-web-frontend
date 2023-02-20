@@ -55,6 +55,7 @@ The frontend will then be available via http://localhost:8090
 | FEATURE_AUTO_MODERATION  | no       | { autoModeration: false}                          | under development |
 | FEATURE_PROTOCOL         | no       | { protocol: false}                                | to enable moderator option to start a protocol session. So users can generate a protocol of the running conference |
 | FEATURE_TIMER            | no       | { timer: false}                                   | to enable moderator option for creating Timer |
+| FEATURE_COFFEE_BREAK      | no       | { coffeeBreak: false}                              | to enable moderator option for creating timer coffee break |
 | FEATURE_ADD_USER         | no       | { addUser: false}                                 | under construction |
 | FEATURE_TALKING_STICK    | no       | { talkingStick: false}                            | under development |
 | FEATURE_WHEEL_OF_NAMES   | no       | { wheelOfNames: false}                            | under development |

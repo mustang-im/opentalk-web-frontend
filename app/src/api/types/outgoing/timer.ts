@@ -7,11 +7,23 @@ import { RootState } from '../../../store';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
 import { sendMessage } from '../../index';
 
+export enum TimerKind {
+  Stopwatch = 'stopwatch',
+  Countdown = 'countdown',
+}
+
+export enum TimerStyle {
+  CoffeeBreak = 'coffee-break',
+  Normal = 'normal',
+}
+
 export interface StartTimer {
   action: 'start';
   enableReadyCheck: boolean;
   duration?: number;
   title?: string;
+  kind?: TimerKind;
+  style?: TimerStyle;
 }
 export interface StopTimer {
   action: 'stop';

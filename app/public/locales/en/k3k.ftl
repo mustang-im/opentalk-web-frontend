@@ -226,6 +226,7 @@ moderationbar-button-poll-tooltip = Poll
 moderationbar-button-ballot-tooltip = Voting
 moderationbar-button-wollknaul-tooltip = Wollknaul feature is under development
 moderationbar-button-timer-tooltip = Timer
+moderationbar-button-coffee-break-tooltip = Coffee break
 moderationbar-button-speaker-queue-tooltip = This feature is under development - OpenTalk can keep track of speaking times, even if there are many participants in a session, and automatically call everyone in turn to contribute. While one participant is still speaking, the next speaker will receive a visual indication that they are up next. Helping you to conduct meetings efficiently without confusion - that's OpenTalk.
 moderationbar-button-wheel-tooltip = This feature is under development - Who is up next? With our "Wheel of names", you can leave it to chance to decide. A fun feature that can introduce excitement and entertainment in the classroom. But the wheel of names can do more: If the objective is that no one is to be left out of the conversation, the wheel can ensure that those who have already spoken will not be called up again.
 moderationbar-button-protocol-tooltip = Protocol
@@ -426,6 +427,15 @@ timer-notification-error = There was an issue with the start time
 timer-popover-title = A timer was started
 timer-popover-button-done = Mark me as done
 timer-popover-button-not-done = Unmark me as done
+
+coffee-break-title-counter = Duration
+coffee-break-header-title = Coffee break
+coffee-break-form-button-submit = Start coffee break
+coffee-break-layer-not-running = Coffee break is over
+coffee-break-layer-button = Back to the conference
+coffee-break-layer-title =  Coffee break
+coffee-break-notification = The coffee break is over.
+coffee-break-stopped-title = The coffee break is over.
 
 speed-meter-init-message = Initialising ...
 speed-meter-started-message = Please wait.\nThe test will take up to 20 seconds.

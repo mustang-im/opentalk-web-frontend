@@ -41,6 +41,7 @@ window.config = {
     autoModeration: false,
     protocol: false,
     timer: false,
+    coffeeBreak: true,
     addUser: false,
     talkingStick: false,
     wheelOfNames: false,

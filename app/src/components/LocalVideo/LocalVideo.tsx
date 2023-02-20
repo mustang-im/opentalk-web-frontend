@@ -3,8 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Grid } from '@mui/material';
 import { PinIcon } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
-import React, { RefObject, useCallback, useEffect, useRef } from 'react';
+import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -114,7 +113,7 @@ const LocalVideo = ({
 
   useEffect(() => {
     if (videoEnabled && !isVideoRunning) {
-      notifications.error(t('localvideo-no-device'));
+      console.warn('Video is enabled but video tracks are closed');
     }
   }, [isVideoRunning, t, videoEnabled]);
 

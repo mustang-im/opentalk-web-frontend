@@ -14,6 +14,7 @@
 
 ### New Features
 
+- coffee break (!827)
 
 ## 1.1.0
 

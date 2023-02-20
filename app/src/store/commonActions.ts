@@ -45,6 +45,7 @@ export const joinSuccess = createAction<{
   };
   isPresenter?: boolean;
   recording?: null | RecordingState;
+  serverTimeOffset: number;
 }>('signaling/control/join_success');
 
 export const login = createAsyncThunk<{ permission: Array<string> }, string, { state: RootState; rejectValue: Error }>(
