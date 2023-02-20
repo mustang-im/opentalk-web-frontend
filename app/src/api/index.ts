@@ -76,7 +76,7 @@ import {
   connectionClosed,
 } from '../store/slices/roomSlice';
 import * as slotStore from '../store/slices/slotSlice';
-import { startedTimer, stoppedTimer, updateParticpantsReady } from '../store/slices/timerSlice';
+import { joinedTimer, startedTimer, stoppedTimer, updateParticpantsReady } from '../store/slices/timerSlice';
 import { participantsLayoutSet } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
@@ -287,6 +287,8 @@ const handleControlMessage = (
           .concat(participants);
       }
 
+      const serverTimeOffset = new Date(timestamp).getTime() - new Date().getTime();
+
       dispatch(
         joinSuccess({
           participantId: data.id,
@@ -304,6 +306,7 @@ const handleControlMessage = (
           moderation: data.moderation,
           isPresenter: data.media?.isPresenter,
           recording: data.recording,
+          serverTimeOffset,
         })
       );
 
@@ -315,6 +318,10 @@ const handleControlMessage = (
           actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
           onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Whiteboard)),
         });
+      }
+
+      if (data.timer) {
+        dispatch(joinedTimer(data.timer));
       }
 
       const mediaSubscribers: Array<SubscriberState> = data.participants.flatMap(subscriberListFromParticipant);
@@ -706,12 +713,7 @@ const handleTimerMessage = (dispatch: AppDispatch, data: timer.Message, timestam
       dispatch(startedTimer({ payload: data, timestamp: timestamp }));
       break;
     case 'stopped':
-      if (data.kind === 'expired') {
-        notifications.info(i18next.t('timer-notification-ran-out'));
-      } else {
-        notifications.info(i18next.t('timer-notification-stopped'));
-      }
-      dispatch(stoppedTimer());
+      dispatch(stoppedTimer({ message: data.message, kindStopTimer: data.kind }));
       break;
     case 'updated_ready_status':
       dispatch(updateParticpantsReady(data));

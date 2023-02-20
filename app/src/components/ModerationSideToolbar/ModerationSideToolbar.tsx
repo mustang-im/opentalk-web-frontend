@@ -48,6 +48,9 @@ const Tab = styled(MuiTab)<{ component?: React.ElementType }>(({ theme }) => ({
     width: '1.25rem',
     fill: 'currentcolor',
   },
+  '&.MuiButtonBase-root.Mui-disabled': {
+    backgroundColor: 'transparent',
+  },
   '&:hover:not(&.Mui-disabled)': {
     background: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
@@ -94,7 +97,7 @@ const ModerationSideToolbar = ({ onSelect, selectedTabs }: ModerationSideToolbar
         <Tab key={tab.key} label="" icon={<ToolbarDivider />} disabled />
       ) : (
         <Tooltip key={tab.key} placement="right" title={renderTooltipTitle(tab)}>
-          <Tab icon={tab.icon} component={Button} />
+          <Tab icon={tab.icon} component={Button} disabled={tab.disabled} />
         </Tooltip>
       )
     );

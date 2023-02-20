@@ -16,10 +16,12 @@ import {
   WhiteboardIcon,
   RaiseHandOffIcon,
   ProtocolIcon,
+  CoffeeBreakIcon,
 } from '@opentalk/common';
 import React, { Suspense } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+import { TimerStyle } from '../api/types/outgoing/timer';
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
 import { FeaturesKeys } from '../store/slices/configSlice';
 
@@ -40,6 +42,7 @@ export interface Tab {
   tooltipTranslationKey?: string;
   featureKey?: FeaturesKeys;
   key: string;
+  disabled?: boolean;
 }
 
 export const tabs: Array<Tab> = [
@@ -136,12 +139,24 @@ export const tabs: Array<Tab> = [
     divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
-        <TimerTab />
+        <TimerTab timerStyle={TimerStyle.Normal} />
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-timer-tooltip',
     featureKey: FeaturesKeys.Timer,
     key: FeaturesKeys.Timer,
+  },
+  {
+    icon: <CoffeeBreakIcon />,
+    divider: false,
+    component: (
+      <Suspense fallback={<SuspenseLoading />}>
+        <TimerTab timerStyle={TimerStyle.CoffeeBreak} />
+      </Suspense>
+    ),
+    tooltipTranslationKey: 'moderationbar-button-coffee-break-tooltip',
+    featureKey: FeaturesKeys.CoffeeBreak,
+    key: FeaturesKeys.CoffeeBreak,
   },
   {
     icon: <ProtocolIcon />,

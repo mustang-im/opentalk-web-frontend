@@ -226,6 +226,7 @@ moderationbar-button-poll-tooltip = Umfragen
 moderationbar-button-ballot-tooltip = Abstimmungen
 moderationbar-button-wollknaul-tooltip = Wollknäuel ist in Entwicklung
 moderationbar-button-timer-tooltip = Stoppuhr
+moderationbar-button-coffee-break-tooltip = Kaffeepause
 moderationbar-button-speaker-queue-tooltip = Diese Funktion befindet sich noch in der Entwicklung - Große Gruppen und jeder soll systematisch einmal zu Wort kommen, OpenTalk behält auch bei vielen Teilnehmern den Überblick und ruft automatisch alle der Reihe nach auf. Noch während ein Teilnehmer spricht, wird dem nächsten Teilnehmer sein bevorstehender Aufruf angezeigt. Effiziente Meetings ohne Verwirrung, mit OpenTalk kein Problem.
 moderationbar-button-wheel-tooltip = Diese Funktion befindet sich noch in der Entwicklung - Wer beginnt oder ist als Nächstes dran? Unser "Wheel of Names", das gute klassische Glücksrad, lässt den Zufall entscheiden. Abwechslung, Spaß, Spannung -- eine Gamification, die nicht nur im Schulunterricht für Abwechslung und Kurzweiligkeit sorgt.
 moderationbar-button-protocol-tooltip = Protokoll
@@ -426,6 +427,15 @@ timer-notification-error = Es gab ein Problem mit der Startzeit
 timer-popover-title = Eine Stoppuhr läuft
 timer-popover-button-done = Als fertig markieren
 timer-popover-button-not-done = Als nicht fertig markieren
+
+coffee-break-title-counter = Duration
+coffee-break-header-title = Kaffeepause
+coffee-break-form-button-submit = Pause starten
+coffee-break-layer-not-running = Kaffeepause beendet
+coffee-break-layer-title = Kaffepause! Noch ...
+coffee-break-layer-button = Zurück in die Konferenz
+coffee-break-notification = Die Kaffeepause ist beendet.
+coffee-break-stopped-title = Die Kaffeepause ist beendet.
 
 speed-meter-init-message = Initalisiere...
 speed-meter-started-message = Bitte warten.\nDer Test dauert ungefähr 20 Sekunden.

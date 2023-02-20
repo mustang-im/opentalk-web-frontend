@@ -14,6 +14,7 @@ ACTIVE_FEATURES="{
     autoModeration: ${FEATURE_AUTO_MODERATION:-false},
     protocol: ${FEATURE_PROTOCOL:-false},
     timer: ${FEATURE_TIMER:-false},
+    coffeeBreak: ${FEATURE_COFFEE_BREAK:-false},
     addUser: ${FEATURE_ADD_USER:-false},
     talkingStick: ${FEATURE_TALKING_STICK:-false},
     wheelOfNames: ${FEATURE_WHEEL_OF_NAMES:-false},

@@ -3,19 +3,25 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { BackendParticipant, NamespacedIncoming, ParticipantId, Timestamp } from '@opentalk/common';
 
+import { TimerKind, TimerStyle } from '../outgoing/timer';
+
 export interface StartTimer {
   message: 'started';
   timerId: string;
   readyCheckEnabled: boolean;
   endsAt: Timestamp;
-  kind: 'count_down' | 'count_up';
   title?: string;
   startedAt: Timestamp;
+  kind?: TimerKind;
+  style?: TimerStyle;
 }
+
+export type TimerStopKind = 'by_moderator' | 'expired' | 'creator_left';
+
 export interface StopTimer {
   message: 'stopped';
   participantId: ParticipantId;
-  kind: 'by_moderator' | 'expired' | 'creator_left';
+  kind: TimerStopKind;
 }
 
 /* MODERATOR ONLY */

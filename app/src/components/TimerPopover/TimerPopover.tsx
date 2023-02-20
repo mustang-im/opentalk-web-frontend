@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Typography, Popover as MuiPopover } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
-import React from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { readyToContinue } from '../../api/types/outgoing/timer';
@@ -17,7 +17,7 @@ import {
   selectTimerRunning,
 } from '../../store/slices/timerSlice';
 import { selectOurUuid } from '../../store/slices/userSlice';
-import TimerCounter from '../TimerTab/fragments/TimerCounter';
+import TimerNormalCounter from '../TimerTab/fragments/TimerNormalCounter';
 
 const Popover = styled(MuiPopover)(({ theme }) => ({
   pointerEvents: 'none',
@@ -29,22 +29,22 @@ const Popover = styled(MuiPopover)(({ theme }) => ({
 }));
 
 const TimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
-  const timerStartTime = useAppSelector(selectTimerStartedAt);
-  const timerTitle = useAppSelector(selectTimerTitle);
-  const hasReadyCheckEnabled = useAppSelector(selectReadyCheckEnabled);
-  const timerId = useAppSelector(selectTimerId);
-  const dispatch = useAppDispatch();
-  const timerRunning = useAppSelector(selectTimerRunning);
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const userId = useAppSelector(selectOurUuid);
+  const timerId = useAppSelector(selectTimerId);
+  const timerTitle = useAppSelector(selectTimerTitle);
+  const timerRunning = useAppSelector(selectTimerRunning);
+  const timerStartTime = useAppSelector(selectTimerStartedAt);
+  const hasReadyCheckEnabled = useAppSelector(selectReadyCheckEnabled);
   const participantsAreReady = useAppSelector(selectParticipantsReady);
   const isUserReady = participantsAreReady.includes(userId as ParticipantId);
 
-  const handleDone = () => {
+  const handleDone = useCallback(() => {
     if (timerStartTime && timerId) {
       dispatch(readyToContinue.action({ timerId, status: !isUserReady }));
     }
-  };
+  }, [timerStartTime, timerId]);
 
   return (
     <Popover
@@ -60,9 +60,9 @@ const TimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
       <Stack spacing={2}>
         <Typography variant="h1">{t('timer-popover-title')}</Typography>
         {timerTitle && <Typography variant="h2">{timerTitle}</Typography>}
-        <TimerCounter />
+        <TimerNormalCounter />
         {hasReadyCheckEnabled && (
-          <Button color={isUserReady ? 'secondary' : 'primary'} onClick={handleDone}>
+          <Button onClick={handleDone} color={isUserReady ? 'secondary' : 'primary'}>
             {t(`timer-popover-button-${isUserReady ? 'not-' : ''}done`)}
           </Button>
         )}

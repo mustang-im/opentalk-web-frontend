@@ -5,14 +5,13 @@ import { Paper, styled, Tooltip, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
 import { setHotkeysEnabled } from '@opentalk/common';
 import { LegalVoteProvider } from '@opentalk/components';
-import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { legalVote } from '../../api/types/outgoing';
-import { Tab, tabs } from '../../config/moderationTabs';
-import { useAppSelector } from '../../hooks';
+import { Tab } from '../../config/moderationTabs';
+import { useAppSelector, useTabs } from '../../hooks';
 import { selectCombinedParticipantsAndUser } from '../../store/selectors';
-import { FeaturesKeys, selectFeatures, selectLibravatarDefaultImage } from '../../store/slices/configSlice';
+import { FeaturesKeys, selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import LocalVideo from '../LocalVideo/index';
 import MenuTabs from '../MenuTabs/MenuTabs';
@@ -41,56 +40,55 @@ const ProfileWindow = styled('div', {
 }));
 
 const MeetingSidebar = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isSmartphone = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallDeviceInLandscape = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
-  const [value, setValue] = useState<number>(0);
-  const isModerator = useAppSelector(selectIsModerator);
-  const { t } = useTranslation();
-  const features = useAppSelector(selectFeatures);
-  const [filteredTabs, setFilteredTabs] = useState<Tab[]>([]);
   const combinedParticipantsAndUser = useAppSelector(selectCombinedParticipantsAndUser);
-  const handleTabSelect = useCallback((tabIndex: number) => setValue(tabIndex), [setValue]);
   const libravatarDefaultImage = useAppSelector(selectLibravatarDefaultImage);
-
-  useEffect(() => {
-    setValue(0);
-    setFilteredTabs(tabs.filter((tab) => tab.divider || (tab.featureKey && features[tab.featureKey])));
-  }, [isModerator, features]);
-
-  const renderTabs = () =>
-    filteredTabs?.map((tab: Tab, index) =>
-      !tab.divider ? (
-        <Tooltip key={tab.key} placement="right" title={tab.tooltipTranslationKey ? t(tab.tooltipTranslationKey) : ''}>
-          <SideTabPanel value={value} index={index}>
-            {tab.key === FeaturesKeys.Vote ? (
-              <LegalVoteProvider
-                apiMessages={{
-                  cancel: legalVote.actions.cancel,
-                  stop: legalVote.actions.stop,
-                  start: legalVote.actions.start,
-                }}
-                votingUsers={combinedParticipantsAndUser}
-                setHotkeysEnabled={setHotkeysEnabled}
-                libravatarDefaultImage={libravatarDefaultImage}
-              >
-                {tab.component}
-              </LegalVoteProvider>
-            ) : (
-              tab.component
-            )}
-          </SideTabPanel>
-        </Tooltip>
-      ) : null
-    );
+  const isModerator = useAppSelector(selectIsModerator);
+  const { tabs, value, handleTabSelect } = useTabs();
 
   if (isSmartphone || isSmallDeviceInLandscape) {
     return null;
   }
 
+  const renderTabs = () => {
+    return tabs?.map((tab: Tab, index) => {
+      if (!tab.divider) {
+        return (
+          <Tooltip
+            key={tab.key}
+            placement="right"
+            title={tab.tooltipTranslationKey ? t(tab.tooltipTranslationKey) : ''}
+          >
+            <SideTabPanel value={value} index={index}>
+              {tab.key === FeaturesKeys.Vote ? (
+                <LegalVoteProvider
+                  apiMessages={{
+                    cancel: legalVote.actions.cancel,
+                    stop: legalVote.actions.stop,
+                    start: legalVote.actions.start,
+                  }}
+                  votingUsers={combinedParticipantsAndUser}
+                  setHotkeysEnabled={setHotkeysEnabled}
+                  libravatarDefaultImage={libravatarDefaultImage}
+                >
+                  {tab.component}
+                </LegalVoteProvider>
+              ) : (
+                tab.component
+              )}
+            </SideTabPanel>
+          </Tooltip>
+        );
+      }
+    });
+  };
+
   return isModerator ? (
     <SideBar>
-      <ModerationSideToolbar selectedTabs={filteredTabs} onSelect={handleTabSelect} />
+      <ModerationSideToolbar selectedTabs={tabs} onSelect={handleTabSelect} />
       <ProfileWindow isModerator={isModerator}>
         <LocalVideo />
         <Toolbar />

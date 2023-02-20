@@ -15,6 +15,7 @@ import CameraOffIcon from './CameraOffIcon';
 import CameraOnIcon from './CameraOnIcon';
 import ClockIcon from './ClockIcon';
 import CloseIcon from './CloseIcon';
+import CoffeeBreakIcon from './CoffeeBreakIcon';
 import ConnectionBadIcon from './ConnectionBadIcon';
 import ConnectionGoodIcon from './ConnectionGoodIcon';
 import ConnectionMediumIcon from './ConnectionMediumIcon';
@@ -90,6 +91,7 @@ export {
   CameraOnIcon,
   ClockIcon,
   CloseIcon,
+  CoffeeBreakIcon,
   ConnectionBadIcon,
   ConnectionGoodIcon,
   ConnectionMediumIcon,

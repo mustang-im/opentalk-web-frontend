@@ -26,3 +26,8 @@ export const getIntervalToDurationString = (interval: Interval) => {
     },
   });
 };
+
+export const getDuration = (interval: Interval) => ({
+  format: getIntervalToDurationString(interval),
+  duration: intervalToDuration(interval),
+});
