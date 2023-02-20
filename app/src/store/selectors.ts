@@ -195,3 +195,9 @@ export const selectUnmutedParticipants = createSelector(
     return participants.filter(({ id }) => unmutedSubscribers.find(({ participantId }) => id === participantId));
   }
 );
+
+export const selectVotingUsers = createSelector(selectCombinedParticipantsAndUser, (records) => {
+  return records.filter((record) => {
+    return record.role === 'user' || record.participationKind === 'user';
+  });
+});

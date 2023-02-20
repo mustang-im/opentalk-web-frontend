@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { legalVote } from '../../api/types/outgoing';
 import { Tab } from '../../config/moderationTabs';
 import { useAppSelector, useTabs } from '../../hooks';
-import { selectCombinedParticipantsAndUser } from '../../store/selectors';
+import { selectVotingUsers } from '../../store/selectors';
 import { FeaturesKeys, selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import LocalVideo from '../LocalVideo/index';
@@ -44,7 +44,7 @@ const MeetingSidebar = () => {
   const theme = useTheme();
   const isSmartphone = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallDeviceInLandscape = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
-  const combinedParticipantsAndUser = useAppSelector(selectCombinedParticipantsAndUser);
+  const votingUsers = useAppSelector(selectVotingUsers);
   const libravatarDefaultImage = useAppSelector(selectLibravatarDefaultImage);
   const isModerator = useAppSelector(selectIsModerator);
   const { tabs, value, handleTabSelect } = useTabs();
@@ -70,7 +70,7 @@ const MeetingSidebar = () => {
                     stop: legalVote.actions.stop,
                     start: legalVote.actions.start,
                   }}
-                  votingUsers={combinedParticipantsAndUser}
+                  votingUsers={votingUsers}
                   setHotkeysEnabled={setHotkeysEnabled}
                   libravatarDefaultImage={libravatarDefaultImage}
                 >
