@@ -6,6 +6,7 @@ import { InitialAutomod } from '@opentalk/components';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
+import { string } from 'yup';
 
 import { InitialBreakout } from '../api/types/incoming/breakout';
 import { RecordingState, Role } from '../api/types/incoming/control';
@@ -33,6 +34,9 @@ export const joinSuccess = createAction<{
   chat: {
     enabled: boolean;
     roomHistory: ChatMessage[];
+    lastSeenTimestampGlobal?: string;
+    lastSeenTimestampsGroup?: Map<string, string>;
+    lastSeenTimestampsPrivate?: Map<string, string>;
   };
   groups: GroupId[];
   automod?: InitialAutomod;

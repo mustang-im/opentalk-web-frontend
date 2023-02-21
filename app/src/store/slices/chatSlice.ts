@@ -58,11 +58,19 @@ const messagesAdapter = createEntityAdapter<ChatMessage>({
   sortComparer: (a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp),
 });
 
+interface TimestampState {
+  target: string,
+  timestamp: string
+}
+
 export interface ChatState {
   enabled: boolean;
   settingsChangedAt?: string;
   settingsChangedBy?: ParticipantId;
   messages: EntityState<ChatMessage>;
+  lastSeenTimestampGlobal?: string,
+  lastSeenTimestampsGroup?: [TimestampState],
+  lastSeenTimestampsPrivate?: [TimestampState]
 }
 
 const initialState: ChatState = {
@@ -76,6 +84,17 @@ export const chatSlice = createSlice({
   reducers: {
     received: (state, { payload }: PayloadAction<ChatMessage>) => {
       messagesAdapter.addOne(state.messages, payload);
+    },
+    addLastSeenTimestamp: (state, { payload: { scope, target, timestamp } }: PayloadAction<{ scope: string, target?: ParticipantId | GroupId, timestamp: string }>) => {
+      if (scope === ChatScope.Global) {
+        state.lastSeenTimestampGlobal = timestamp;
+      }
+      if (scope === ChatScope.Private && target) {
+        if (!state.lastSeenTimestampsPrivate) {
+
+          state.lastSeenTimestampsPrivate = [{ target: target, timestamp: timestamp }]
+        }
+      }
     },
     setChatSettings: (
       state,
@@ -100,14 +119,22 @@ export const chatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(joinSuccess, (state, { payload: { chat } }) => {
+      //console.log('### chat slice %s', JSON.stringify(chat, null, "\t"))
       messagesAdapter.setAll(state.messages, chat.roomHistory);
       state.enabled = chat.enabled;
+      state.lastSeenTimestampGlobal = chat.lastSeenTimestampGlobal;
+      //state.lastSeenTimestampsPrivate = chat.lastSeenTimestampsPrivate ? chat.lastSeenTimestampsPrivate : state.lastSeenTimestampsPrivate;
     });
   },
 });
 
-export const { received, setChatSettings, clearGlobalChat } = chatSlice.actions;
+
+export const { addLastSeenTimestamp, received, setChatSettings, clearGlobalChat } = chatSlice.actions;
 export const actions = chatSlice.actions;
+
+export const selectLastSeenTimestampGlobal = (state: RootState) => state.chat.lastSeenTimestampGlobal;
+export const selectLastSeenTimestampGroup = (state: RootState) => state.chat.lastSeenTimestampsGroup;
+export const selectLastSeenTimestampPrivate = (state: RootState) => state.chat.lastSeenTimestampsPrivate;
 
 export const selectChatEnabledState = (state: RootState) => state.chat.enabled;
 const chatMessagesSelectors = messagesAdapter.getSelectors<RootState>((state) => state.chat.messages);
@@ -120,7 +147,7 @@ export const selectChatMessages = (scope: ChatScope, targetId?: TargetId) => (st
     scope === ChatScope.Global
       ? chatMessage.scope === scope
       : chatMessage.scope === scope &&
-        (chatMessage.group === targetId || chatMessage.target === targetId || chatMessage.source === targetId)
+      (chatMessage.group === targetId || chatMessage.target === targetId || chatMessage.source === targetId)
   );
 export const selectLastMessageOfGroup = (scope: ChatScope, targetId: TargetId) => (state: RootState) =>
   last(selectChatMessages(scope, targetId)(state));

@@ -1,17 +1,34 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Box, Typography } from '@mui/material';
+import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Box, Typography, Badge } from '@mui/material';
+import { ParticipantId, GroupId } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 
+import { setLastSeenTimestamp } from '../../api/types/outgoing/chat';
+import ChatScope from '../../enums/ChatScope';
 import { useAppSelector } from '../../hooks';
+import {
+  addLastSeenTimestamp,
+  selectAllChatMessages,
+  selectLastSeenTimestampGlobal,
+  selectLastSeenTimestampGroup,
+  selectLastSeenTimestampPrivate,
+} from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
 import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';
 import TabPanel from './fragments/TabPanel';
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    background: theme.palette.primary.main,
+  },
+}));
 
 const Container = styled('div')({
   flex: 1,
@@ -60,7 +77,14 @@ const MenuTabs = () => {
   const [value, setValue] = useState(0);
   const { t } = useTranslation();
   const chatConversationState = useAppSelector(selectChatConversationState);
+  const allChatMessages = useAppSelector(selectAllChatMessages);
+  const lastSeenTimestampGlobal = useAppSelector(selectLastSeenTimestampGlobal);
+  const lastSeenTimestampGroup = useAppSelector(selectLastSeenTimestampGroup);
+  const lastSeenTimestampPrivate = useAppSelector(selectLastSeenTimestampPrivate);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
+  const dispatch = useDispatch();
+  const [showGlobalBadge, setShowGlobalBatch] = useState(true);
+  const [showPrivateBadge, setShowPrivateBatch] = useState(true);
 
   useEffect(() => {
     if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
@@ -68,8 +92,112 @@ const MenuTabs = () => {
     }
   }, [chatConversationState]);
 
+  useEffect(() => {
+    //console.log('### send seen timestamp, %s, %s, %s', chatConversationState.scope, chatConversationState.targetId, value);
+    const timestamp = new Date().toISOString();
+    if (value === 2 && chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
+      if (chatConversationState.scope === ChatScope.Group) {
+        dispatch(
+          addLastSeenTimestamp({
+            scope: chatConversationState.scope,
+            target: chatConversationState.targetId as GroupId,
+            timestamp: timestamp,
+          })
+        );
+        dispatch(
+          setLastSeenTimestamp.action({
+            timestamp: timestamp,
+            scope: chatConversationState.scope,
+            target: chatConversationState.targetId as GroupId,
+          })
+        );
+      }
+      if (chatConversationState.scope === ChatScope.Private) {
+        dispatch(
+          addLastSeenTimestamp({
+            scope: chatConversationState.scope,
+            target: chatConversationState.targetId as ParticipantId,
+            timestamp: timestamp,
+          })
+        );
+        dispatch(
+          setLastSeenTimestamp.action({
+            timestamp: timestamp,
+            scope: chatConversationState.scope,
+            target: chatConversationState.targetId as ParticipantId,
+          })
+        );
+      }
+    }
+
+    if (value === 0) {
+      //console.log('### send seen timestamp, global');
+      dispatch(addLastSeenTimestamp({ scope: ChatScope.Global, timestamp: timestamp }));
+      dispatch(setLastSeenTimestamp.action({ timestamp: timestamp, scope: ChatScope.Global }));
+    }
+  }, [value, chatConversationState]);
+
+  useEffect(() => {
+    if (lastSeenTimestampGlobal) {
+      const messages = allChatMessages.filter((m) => {
+        return (
+          m.scope === ChatScope.Global && new Date(m.timestamp).getTime() > new Date(lastSeenTimestampGlobal).getTime()
+        );
+      });
+      if (messages.length > 0) {
+        setShowGlobalBatch(true);
+      } else {
+        setShowGlobalBatch(false);
+      }
+    }
+
+    console.log('### last seen private %s', JSON.stringify(lastSeenTimestampPrivate));
+    if (lastSeenTimestampPrivate && chatConversationState.targetId) {
+      console.log('### last seen private %s', JSON.stringify(lastSeenTimestampPrivate));
+      const messages = allChatMessages.filter((m) => {
+        if (chatConversationState.targetId) {
+          // dummy
+        }
+      });
+      console.log('### private %s, %s', chatConversationState.targetId, messages.length);
+    }
+  }, [allChatMessages, lastSeenTimestampGlobal, lastSeenTimestampGroup, lastSeenTimestampPrivate]);
+
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
     setValue(newValue);
+  };
+
+  const getBadge = (tab: number) => {
+    if (tab === value) {
+      return;
+    }
+
+    const top = -3;
+    if (showPrivateBadge && tab === 2) {
+      const left = 74;
+      return (
+        <StyledBadge
+          variant={'dot'}
+          sx={{
+            left: left,
+            top: top,
+          }}
+        />
+      );
+    }
+
+    if (showGlobalBadge && tab === 0) {
+      const left = 42;
+      return (
+        <StyledBadge
+          variant={'dot'}
+          sx={{
+            left: left,
+            top: top,
+          }}
+        />
+      );
+    }
   };
 
   return (
@@ -77,13 +205,13 @@ const MenuTabs = () => {
       <Box>
         <AppBar position={'static'} color={'secondary'} elevation={0}>
           <Tabs value={value} onChange={handleChange} variant={'fullWidth'}>
-            <Tab label={t('menutabs-chat')} />
+            <Tab label={t('menutabs-chat')} icon={getBadge(0)} iconPosition="start" />
             <Tab
               label={t('menutabs-people')}
               icon={<Typography variant="caption">({totalParticipants})</Typography>}
               iconPosition="end"
             />
-            <Tab label={t('menutabs-messages')} />
+            <Tab label={t('menutabs-messages')} icon={getBadge(2)} iconPosition="start" />
           </Tabs>
         </AppBar>
       </Box>
