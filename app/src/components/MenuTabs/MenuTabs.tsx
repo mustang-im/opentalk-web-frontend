@@ -93,10 +93,10 @@ const MenuTabs = () => {
   }, [chatConversationState]);
 
   useEffect(() => {
-    //console.log('### send seen timestamp, %s, %s, %s', chatConversationState.scope, chatConversationState.targetId, value);
     const timestamp = new Date().toISOString();
     if (value === 2 && chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
       if (chatConversationState.scope === ChatScope.Group) {
+        console.log('### set group timetamp');
         dispatch(
           addLastSeenTimestamp({
             scope: chatConversationState.scope,
@@ -113,13 +113,13 @@ const MenuTabs = () => {
         );
       }
       if (chatConversationState.scope === ChatScope.Private) {
-        dispatch(
-          addLastSeenTimestamp({
-            scope: chatConversationState.scope,
-            target: chatConversationState.targetId as ParticipantId,
-            timestamp: timestamp,
-          })
-        );
+        const data = {
+          scope: chatConversationState.scope,
+          target: chatConversationState.targetId as ParticipantId,
+          timestamp: timestamp,
+        };
+        console.log('### set private %s', JSON.stringify(data));
+        dispatch(addLastSeenTimestamp(data));
         dispatch(
           setLastSeenTimestamp.action({
             timestamp: timestamp,
@@ -131,7 +131,8 @@ const MenuTabs = () => {
     }
 
     if (value === 0) {
-      //console.log('### send seen timestamp, global');
+      console.log('### set global timetamp');
+      setShowGlobalBatch(false);
       dispatch(addLastSeenTimestamp({ scope: ChatScope.Global, timestamp: timestamp }));
       dispatch(setLastSeenTimestamp.action({ timestamp: timestamp, scope: ChatScope.Global }));
     }

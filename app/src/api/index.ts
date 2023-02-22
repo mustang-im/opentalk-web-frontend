@@ -261,7 +261,7 @@ const handleControlMessage = (
 ) => {
   switch (data.message) {
     case 'join_success': {
-      //console.log('### join success %s', JSON.stringify(data.chat, null, "\t"))
+      console.log('### join success %s', JSON.stringify(data, null, '\t'));
       const { groupIds, messages: groupMessages } = transformChatHistory(data.chat.groupsHistory);
       const groups = groupIds;
       let messages: ChatMessage[] = groupMessages;

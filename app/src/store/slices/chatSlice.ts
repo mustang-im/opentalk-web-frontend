@@ -59,8 +59,8 @@ const messagesAdapter = createEntityAdapter<ChatMessage>({
 });
 
 interface TimestampState {
-  target: string,
-  timestamp: string
+  target: string;
+  timestamp: string;
 }
 
 export interface ChatState {
@@ -68,14 +68,22 @@ export interface ChatState {
   settingsChangedAt?: string;
   settingsChangedBy?: ParticipantId;
   messages: EntityState<ChatMessage>;
-  lastSeenTimestampGlobal?: string,
-  lastSeenTimestampsGroup?: [TimestampState],
-  lastSeenTimestampsPrivate?: [TimestampState]
+  lastSeenTimestampGlobal?: string;
+  lastSeenTimestampsGroup: TimestampState[];
+  lastSeenTimestampsPrivate: TimestampState[];
 }
 
 const initialState: ChatState = {
   enabled: true,
   messages: messagesAdapter.getInitialState(),
+  lastSeenTimestampsPrivate: [],
+  lastSeenTimestampsGroup: []
+};
+
+const addOrReplaceTimestamp = (target: string, timestamp: string, timestamps: TimestampState[]): TimestampState[] => {
+  const result = timestamps.filter((ts) => ts.target !== target);
+  result.push({ target: target, timestamp: timestamp } as TimestampState);
+  return result;
 };
 
 export const chatSlice = createSlice({
@@ -85,15 +93,19 @@ export const chatSlice = createSlice({
     received: (state, { payload }: PayloadAction<ChatMessage>) => {
       messagesAdapter.addOne(state.messages, payload);
     },
-    addLastSeenTimestamp: (state, { payload: { scope, target, timestamp } }: PayloadAction<{ scope: string, target?: ParticipantId | GroupId, timestamp: string }>) => {
+    addLastSeenTimestamp: (
+      state,
+      {
+        payload: { scope, target, timestamp },
+      }: PayloadAction<{ scope: string; target?: ParticipantId | GroupId; timestamp: string }>
+    ) => {
       if (scope === ChatScope.Global) {
         state.lastSeenTimestampGlobal = timestamp;
       }
       if (scope === ChatScope.Private && target) {
-        if (!state.lastSeenTimestampsPrivate) {
-
-          state.lastSeenTimestampsPrivate = [{ target: target, timestamp: timestamp }]
-        }
+        const newTimestamps = addOrReplaceTimestamp(target, timestamp, state.lastSeenTimestampsPrivate);
+        console.log('### slice add private %s', JSON.stringify(newTimestamps, null, '\t'));
+        state.lastSeenTimestampsPrivate = newTimestamps;
       }
     },
     setChatSettings: (
@@ -119,15 +131,20 @@ export const chatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(joinSuccess, (state, { payload: { chat } }) => {
-      //console.log('### chat slice %s', JSON.stringify(chat, null, "\t"))
       messagesAdapter.setAll(state.messages, chat.roomHistory);
       state.enabled = chat.enabled;
       state.lastSeenTimestampGlobal = chat.lastSeenTimestampGlobal;
-      //state.lastSeenTimestampsPrivate = chat.lastSeenTimestampsPrivate ? chat.lastSeenTimestampsPrivate : state.lastSeenTimestampsPrivate;
+      if (chat.lastSeenTimestampsPrivate) {
+        const values = Object.values(chat.lastSeenTimestampsPrivate);
+        const result: TimestampState[] = Object.keys(chat.lastSeenTimestampsPrivate).map((key, index) => {
+          return { target: key, timestamp: values[index] } as TimestampState;
+        });
+        state.lastSeenTimestampsPrivate = result;
+        console.log('### slice state private %s', JSON.stringify(state.lastSeenTimestampsPrivate));
+      }
     });
   },
 });
-
 
 export const { addLastSeenTimestamp, received, setChatSettings, clearGlobalChat } = chatSlice.actions;
 export const actions = chatSlice.actions;
