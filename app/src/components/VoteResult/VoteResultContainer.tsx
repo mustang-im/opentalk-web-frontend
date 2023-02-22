@@ -16,7 +16,7 @@ import {
 import { ParticipantId, PollId, LegalVoteId, CloseIcon, ClockIcon } from '@opentalk/common';
 import { LegalVoteType, VoteOption, legalVoteStore, LegalVoteCountdown } from '@opentalk/components';
 import { format } from 'date-fns';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Choice, ChoiceResult } from '../../api/types/incoming/poll';
@@ -107,6 +107,11 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const [selectedLegalVoteOption, setSelectedLegalVoteOption] = useState<VoteOption | undefined>(
     currentLegalVote?.selectedOption
   );
+
+  // to uncheck all checkboxes on every new voting
+  useEffect(() => {
+    setSelectedLegalVoteOption(undefined);
+  }, [legalVoteId]);
 
   let numberOfVotes = 0;
 
