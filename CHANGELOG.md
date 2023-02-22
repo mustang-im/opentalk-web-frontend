@@ -3,6 +3,7 @@
 ### UI/UX Fixes
 
 - Display only a popup instead of the wrong browser page (!830)
+- Fix display of new voting, while viewing results of the previous ones (!846)
 
 ### Stability Improvements
 
