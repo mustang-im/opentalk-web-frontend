@@ -4,12 +4,9 @@
 import { Collapse as MuiCollapse, Grid, styled, Typography } from '@mui/material';
 import { FavoriteIcon } from '@opentalk/common';
 import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
-import { isSameDay } from 'date-fns';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import useLocale from '../../../hooks/useLocale';
-import { formatDate } from '../../../utils/formatDate';
+import EventTimePreview from '../../EventTimePreview';
 import { MeetingCardFragmentProps } from '../MeetingCard';
 import MeetingPopover from './MeetingPopover';
 
@@ -50,7 +47,6 @@ const InnerContainer = styled(Grid)(() => ({
 const StandardCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragmentProps) => {
   const { t } = useTranslation();
   const { title, isFavorite } = event;
-  const locale = useLocale();
   const author = `${event.createdBy.firstname} ${event.createdBy.lastname}`;
   const isAllDay = !isTimelessEvent(event) ? !!event.isAllDay : false;
   const startDate = !isTimelessEvent(event) && event.startsAt ? new Date(event.startsAt.datetime) : undefined;
@@ -66,15 +62,7 @@ const StandardCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
     } else if (isTimeIndependent) {
       timeString = t('dashboard-meeting-card-timeindependent');
     } else if (endDate && startDate) {
-      const meetingStartTime = formatDate(startDate, locale, event.startsAt?.timezone);
-      const meetingEndTime = formatDate(endDate, locale, event.endsAt?.timezone);
-      const isInTheSameDay = isSameDay(startDate, endDate);
-
-      if (isInTheSameDay) {
-        return `${meetingStartTime.getDateString()} ${meetingStartTime.getTimeString()} - ${meetingEndTime.getTimeString()}`;
-      }
-
-      return `${meetingStartTime} - ${meetingEndTime}`;
+      return <EventTimePreview startDate={startDate} endDate={endDate} />;
     }
 
     return (

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, Skeleton, Stack, styled, Typography } from '@mui/material';
-import { ArrowDownIcon } from '@opentalk/common';
+import { ArrowDownIcon, formatDate } from '@opentalk/common';
 import {
   CursorPaginated,
   DateTime,
@@ -22,7 +22,6 @@ import { useTranslation } from 'react-i18next';
 import { useGetEventsQuery } from '../../../api/rest';
 import { useHeader } from '../../../templates/DashboardTemplate';
 import { getExpandedEvents } from '../../../utils/eventUtils';
-import { formatDate } from '../../../utils/formatDate';
 import EventsOverview from './fragments/EventsOverview';
 import EventsPageHeader, { TimeFilter } from './fragments/EventsPageHeader';
 

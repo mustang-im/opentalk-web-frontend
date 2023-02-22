@@ -9,4 +9,5 @@ export * from './formikUtils';
 export * from './stringUtils';
 export * from './tsUtils';
 export * from './snackBarUtils';
+export * from './timeFormatUtils';
 export { notifications };
