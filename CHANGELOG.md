@@ -6,6 +6,7 @@
 - Fix display of new voting, while viewing results of the previous ones (!846)
 - Uncheck all checkboxes in the voting popover on every new voting (!842)
 - Centralize date and time format (!831)
+- Fix styling issues in duration field (!843)
 
 ### Stability Improvements
 

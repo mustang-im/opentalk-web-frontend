@@ -7,7 +7,6 @@ import {
   ButtonProps,
   Chip as MuiChip,
   FormHelperText,
-  InputLabel,
   Popover,
   Stack,
   styled,
@@ -51,7 +50,7 @@ const StyledClockIcon = styled(ClockIcon)({
   marginRight: '1ex',
 });
 
-const Container = styled('div')(({ theme }) => ({
+const Container = styled(Stack)(({ theme }) => ({
   padding: theme.spacing(2),
   maxWidth: '17.875rem',
 }));
@@ -150,26 +149,22 @@ const DurationField = ({
           horizontal: 'left',
         }}
       >
-        <Container>
-          <Stack spacing={2}>
-            <MenuTitle>{t('field-duration-button-text')}</MenuTitle>
-            {renderDurationOptions()}
-            {showCustomDurationField && (
-              <InputLabel>
-                <Stack spacing={1}>
-                  <NumberInput
-                    type={'number'}
-                    inputProps={{ min: 1 }}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setCustomDurationFieldValue(parseInt(e.target.value))
-                    }
-                    value={customDurationFieldValue}
-                  />
-                </Stack>
-                <Typography variant="caption">{t('field-duration-input-label')}</Typography>
-              </InputLabel>
-            )}
-          </Stack>
+        <Container spacing={2}>
+          <MenuTitle>{t('field-duration-button-text')}</MenuTitle>
+          {renderDurationOptions()}
+          {showCustomDurationField && (
+            <Stack spacing={1}>
+              <NumberInput
+                type={'number'}
+                inputProps={{ min: 1 }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setCustomDurationFieldValue(parseInt(e.target.value))
+                }
+                value={customDurationFieldValue}
+              />
+              <Typography variant="caption">{t('field-duration-input-label')}</Typography>
+            </Stack>
+          )}
           <Stack flexDirection={'row'} justifyContent={'space-between'}>
             <Button variant={'text'} size={'small'} onClick={handleClose}>
               {t('field-duration-button-close')}
