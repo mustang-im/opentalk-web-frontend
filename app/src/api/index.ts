@@ -261,14 +261,11 @@ const handleControlMessage = (
 ) => {
   switch (data.message) {
     case 'join_success': {
-      console.log('### join success %s', JSON.stringify(data, null, '\t'));
       const { groupIds, messages: groupMessages } = transformChatHistory(data.chat.groupsHistory);
       const groups = groupIds;
       let messages: ChatMessage[] = groupMessages;
       const roomHistory: ChatMessage[] = data.chat.roomHistory;
       messages = roomHistory.concat(messages);
-
-      //console.log('### messages %s', JSON.stringify(messages, null, "\t"))
 
       let participants: Participant[];
       participants = data.participants.map((participant) =>
@@ -780,7 +777,6 @@ const handleChatMessage = (dispatch: AppDispatch, data: chat.ChatMessage, timest
       break;
     }
     case 'message_sent': {
-      //console.log('### global message %s', JSON.stringify(data, null, "\t"))
       const chatMessage = data;
       if (chatMessage.scope === ChatScope.Private && chatMessage.target === state.user.uuid) {
         data.target = data.source;

@@ -14,8 +14,9 @@ import {
   addLastSeenTimestamp,
   selectAllChatMessages,
   selectLastSeenTimestampGlobal,
-  selectLastSeenTimestampGroup,
-  selectLastSeenTimestampPrivate,
+  selectLastSeenTimestampsGroup,
+  selectLastSeenTimestampsPrivate,
+  TimestampState,
 } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
@@ -79,12 +80,63 @@ const MenuTabs = () => {
   const chatConversationState = useAppSelector(selectChatConversationState);
   const allChatMessages = useAppSelector(selectAllChatMessages);
   const lastSeenTimestampGlobal = useAppSelector(selectLastSeenTimestampGlobal);
-  const lastSeenTimestampGroup = useAppSelector(selectLastSeenTimestampGroup);
-  const lastSeenTimestampPrivate = useAppSelector(selectLastSeenTimestampPrivate);
+  const lastSeenTimestampsGroup = useAppSelector(selectLastSeenTimestampsGroup);
+  const lastSeenTimestampsPrivate = useAppSelector(selectLastSeenTimestampsPrivate);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
   const dispatch = useDispatch();
-  const [showGlobalBadge, setShowGlobalBatch] = useState(true);
-  const [showPrivateBadge, setShowPrivateBatch] = useState(true);
+
+  const filterUnreadMessages = (scope: ChatScope, lastSeenTimestamps: TimestampState[]) => {
+    const scopeMessages = allChatMessages.filter((message) => message.scope === scope);
+    let messageCount = scopeMessages.length;
+    if (scopeMessages.length > 0 && lastSeenTimestamps.length > 0) {
+      const messagesIds = scopeMessages
+        .filter(
+          (message, index, array) =>
+            message.scope === scope && array.findIndex((t) => t.target === message.target) === index
+        )
+        .map((message) => message.target);
+      messagesIds.forEach((id) => {
+        const lastSeen = lastSeenTimestamps.filter((ts) => ts.target === id);
+        const idsMessages = scopeMessages.filter((msg) => msg.target === id);
+        if (lastSeen.length === 1) {
+          const filteredMessages = idsMessages.filter(
+            (msg) => new Date(msg.timestamp).getTime() > new Date(lastSeen[0].timestamp).getTime()
+          );
+          messageCount = filteredMessages.length;
+          return;
+        } else {
+          if (idsMessages.length > 0) {
+            messageCount = idsMessages.length;
+            return;
+          }
+        }
+      });
+    }
+
+    return messageCount;
+  };
+
+  const getUnreadMessagesCount = (scope: ChatScope) => {
+    if (scope === ChatScope.Global) {
+      if (lastSeenTimestampGlobal) {
+        const messages = allChatMessages.filter(
+          (m) =>
+            m.scope === ChatScope.Global &&
+            new Date(m.timestamp).getTime() > new Date(lastSeenTimestampGlobal).getTime()
+        );
+        return messages.length;
+      }
+      return 0;
+    }
+
+    const privateCount = filterUnreadMessages(ChatScope.Private, lastSeenTimestampsPrivate);
+    if (privateCount > 0) {
+      return privateCount;
+    }
+
+    const groupCount = filterUnreadMessages(ChatScope.Group, lastSeenTimestampsGroup);
+    return groupCount;
+  };
 
   useEffect(() => {
     if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
@@ -96,7 +148,6 @@ const MenuTabs = () => {
     const timestamp = new Date().toISOString();
     if (value === 2 && chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
       if (chatConversationState.scope === ChatScope.Group) {
-        console.log('### set group timetamp');
         dispatch(
           addLastSeenTimestamp({
             scope: chatConversationState.scope,
@@ -118,7 +169,6 @@ const MenuTabs = () => {
           target: chatConversationState.targetId as ParticipantId,
           timestamp: timestamp,
         };
-        console.log('### set private %s', JSON.stringify(data));
         dispatch(addLastSeenTimestamp(data));
         dispatch(
           setLastSeenTimestamp.action({
@@ -131,38 +181,10 @@ const MenuTabs = () => {
     }
 
     if (value === 0) {
-      console.log('### set global timetamp');
-      setShowGlobalBatch(false);
       dispatch(addLastSeenTimestamp({ scope: ChatScope.Global, timestamp: timestamp }));
       dispatch(setLastSeenTimestamp.action({ timestamp: timestamp, scope: ChatScope.Global }));
     }
   }, [value, chatConversationState]);
-
-  useEffect(() => {
-    if (lastSeenTimestampGlobal) {
-      const messages = allChatMessages.filter((m) => {
-        return (
-          m.scope === ChatScope.Global && new Date(m.timestamp).getTime() > new Date(lastSeenTimestampGlobal).getTime()
-        );
-      });
-      if (messages.length > 0) {
-        setShowGlobalBatch(true);
-      } else {
-        setShowGlobalBatch(false);
-      }
-    }
-
-    console.log('### last seen private %s', JSON.stringify(lastSeenTimestampPrivate));
-    if (lastSeenTimestampPrivate && chatConversationState.targetId) {
-      console.log('### last seen private %s', JSON.stringify(lastSeenTimestampPrivate));
-      const messages = allChatMessages.filter((m) => {
-        if (chatConversationState.targetId) {
-          // dummy
-        }
-      });
-      console.log('### private %s, %s', chatConversationState.targetId, messages.length);
-    }
-  }, [allChatMessages, lastSeenTimestampGlobal, lastSeenTimestampGroup, lastSeenTimestampPrivate]);
 
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
     setValue(newValue);
@@ -174,7 +196,8 @@ const MenuTabs = () => {
     }
 
     const top = -3;
-    if (showPrivateBadge && tab === 2) {
+    const count = getUnreadMessagesCount(ChatScope.Group);
+    if (count > 0 && tab === 2) {
       const left = 74;
       return (
         <StyledBadge
@@ -187,7 +210,7 @@ const MenuTabs = () => {
       );
     }
 
-    if (showGlobalBadge && tab === 0) {
+    if (getUnreadMessagesCount(ChatScope.Global) > 0 && tab === 0) {
       const left = 42;
       return (
         <StyledBadge
