@@ -149,6 +149,13 @@ export const chatSlice = createSlice({
         });
         state.lastSeenTimestampsGroup = result;
       }
+      if (chat.lastSeenTimestampsPrivate) {
+        const values = Object.values(chat.lastSeenTimestampsPrivate);
+        const result: TimestampState[] = Object.keys(chat.lastSeenTimestampsPrivate).map((key, index) => {
+          return { target: key, timestamp: values[index] } as TimestampState;
+        });
+        state.lastSeenTimestampsPrivate = result;
+      }
     });
   },
 });

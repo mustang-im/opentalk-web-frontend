@@ -20,6 +20,7 @@ import {
 } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
+import { selectOurUuid } from '../../store/slices/userSlice';
 import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';
@@ -83,10 +84,11 @@ const MenuTabs = () => {
   const lastSeenTimestampsGroup = useAppSelector(selectLastSeenTimestampsGroup);
   const lastSeenTimestampsPrivate = useAppSelector(selectLastSeenTimestampsPrivate);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
+  const ownId = useAppSelector(selectOurUuid);
   const dispatch = useDispatch();
 
   const filterUnreadMessages = (scope: ChatScope, lastSeenTimestamps: TimestampState[]) => {
-    const scopeMessages = allChatMessages.filter((message) => message.scope === scope);
+    const scopeMessages = allChatMessages.filter((message) => message.source != ownId && message.scope === scope);
     let messageCount = scopeMessages.length;
     if (scopeMessages.length > 0 && lastSeenTimestamps.length > 0) {
       const messagesIds = scopeMessages
