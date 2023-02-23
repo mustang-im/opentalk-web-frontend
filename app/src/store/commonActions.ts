@@ -34,8 +34,8 @@ export const joinSuccess = createAction<{
     enabled: boolean;
     roomHistory: ChatMessage[];
     lastSeenTimestampGlobal?: string;
-    lastSeenTimestampsGroup?: Map<string, string>;
-    lastSeenTimestampsPrivate?: Map<string, string>;
+    lastSeenTimestampsGroup?: Record<string, string>;
+    lastSeenTimestampsPrivate?: Record<string, string>;
   };
   groups: GroupId[];
   automod?: InitialAutomod;

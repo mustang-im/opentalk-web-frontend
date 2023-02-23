@@ -186,7 +186,7 @@ const MenuTabs = () => {
       dispatch(addLastSeenTimestamp({ scope: ChatScope.Global, timestamp: timestamp }));
       dispatch(setLastSeenTimestamp.action({ timestamp: timestamp, scope: ChatScope.Global }));
     }
-  }, [value, chatConversationState]);
+  }, [value, chatConversationState, allChatMessages]);
 
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
     setValue(newValue);

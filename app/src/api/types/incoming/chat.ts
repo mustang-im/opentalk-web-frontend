@@ -39,8 +39,8 @@ interface ChatDisabled {
 export interface InitialChat {
   enabled: boolean;
   lastSeenTimestampGlobal?: string;
-  lastSeenTimestampsGroup?: Map<string, string>;
-  lastSeenTimestampsPrivate?: Map<string, string>;
+  lastSeenTimestampsGroup?: Record<string, string>;
+  lastSeenTimestampsPrivate?: Record<string, string>;
   roomHistory: Array<ChatMessageWithTimestamp>;
   groups: Array<GroupId>;
   groupsHistory: InitialChatHistory;
