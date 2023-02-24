@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Fix voting status label between different languages (!850)
 - Display only a popup instead of the wrong browser page (!830)
 - Fix display of new voting, while viewing results of the previous ones (!846)
 - Uncheck all checkboxes in the voting popover on every new voting (!842)

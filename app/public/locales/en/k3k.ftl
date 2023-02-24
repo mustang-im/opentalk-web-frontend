@@ -290,7 +290,7 @@ legal-vote-form-button-continue = Continue
 
 legal-vote-overview-panel-button-cancel = Abort
 legal-vote-overview-panel-button-end = Close
-legal-vote-overview-panel-status-active = Live
+legal-vote-overview-panel-status-active = Active
 legal-vote-overview-panel-status-finished = Finished
 legal-vote-overview-panel-status-canceled = Canceled
 legal-vote-select-participants-title = Select participants
