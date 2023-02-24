@@ -18,6 +18,7 @@
 
 ### UI/UX Fixes
 
+- Fix layout for vote kind selector (!851)
 - Enable share screen button on join success (!834)
 - Fix LegalVote user selection (!824)
 - Fix DateTimePicker issues on mobile (!832)
