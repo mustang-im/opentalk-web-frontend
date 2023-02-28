@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Box, Typography, Badge } from '@mui/material';
 import { ParticipantId, GroupId } from '@opentalk/common';
+import { noTargetArgs } from '@storybook/store';
+import { filter } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -16,7 +18,6 @@ import {
   selectLastSeenTimestampGlobal,
   selectLastSeenTimestampsGroup,
   selectLastSeenTimestampsPrivate,
-  TimestampState,
 } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
@@ -27,6 +28,22 @@ import Participants from '../Participants';
 import TabPanel from './fragments/TabPanel';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    background: theme.palette.primary.main,
+  },
+}));
+
+const MessagesBadge = styled(Badge)(({ theme }) => ({
+  left: 74,
+  top: -3,
+  '& .MuiBadge-badge': {
+    background: theme.palette.primary.main,
+  },
+}));
+
+const ChatBadge = styled(Badge)(({ theme }) => ({
+  left: 42,
+  top: -3,
   '& .MuiBadge-badge': {
     background: theme.palette.primary.main,
   },
@@ -62,6 +79,12 @@ const Tab = styled(MuiTab)(({ theme }) => ({
   },
 }));
 
+enum SidebarTab {
+  Chat = 0,
+  People = 1,
+  Messages = 2,
+}
+
 const Tabs = styled(MuiTabs)(({ theme }) => ({
   minHeight: 0,
   borderRadius: theme.borderRadius.large,
@@ -76,7 +99,7 @@ const Tabs = styled(MuiTabs)(({ theme }) => ({
 }));
 
 const MenuTabs = () => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(SidebarTab.Chat);
   const { t } = useTranslation();
   const chatConversationState = useAppSelector(selectChatConversationState);
   const allChatMessages = useAppSelector(selectAllChatMessages);
@@ -87,68 +110,13 @@ const MenuTabs = () => {
   const ownId = useAppSelector(selectOurUuid);
   const dispatch = useDispatch();
 
-  const filterUnreadMessages = (scope: ChatScope, lastSeenTimestamps: TimestampState[]) => {
-    const scopeMessages = allChatMessages.filter((message) => message.source != ownId && message.scope === scope);
-    let messageCount = scopeMessages.length;
-    if (scopeMessages.length > 0 && lastSeenTimestamps.length > 0) {
-      const messagesIds = scopeMessages
-        .filter(
-          (message, index, array) =>
-            message.scope === scope && array.findIndex((t) => t.target === message.target) === index
-        )
-        .map((message) => message.target);
-      messagesIds.forEach((id) => {
-        const lastSeen = lastSeenTimestamps.filter((ts) => ts.target === id);
-        const idsMessages = scopeMessages.filter((msg) => msg.target === id);
-        if (lastSeen.length === 1) {
-          const filteredMessages = idsMessages.filter(
-            (msg) => new Date(msg.timestamp).getTime() > new Date(lastSeen[0].timestamp).getTime()
-          );
-          messageCount = filteredMessages.length;
-          return;
-        } else {
-          if (idsMessages.length > 0) {
-            messageCount = idsMessages.length;
-            return;
-          }
-        }
-      });
-    }
-
-    return messageCount;
-  };
-
-  const getUnreadMessagesCount = (scope: ChatScope) => {
-    if (scope === ChatScope.Global) {
-      if (lastSeenTimestampGlobal) {
-        const messages = allChatMessages.filter(
-          (m) =>
-            m.scope === ChatScope.Global &&
-            new Date(m.timestamp).getTime() > new Date(lastSeenTimestampGlobal).getTime()
-        );
-        return messages.length;
-      }
-      return 0;
-    }
-
-    const privateCount = filterUnreadMessages(ChatScope.Private, lastSeenTimestampsPrivate);
-    if (privateCount > 0) {
-      return privateCount;
-    }
-
-    const groupCount = filterUnreadMessages(ChatScope.Group, lastSeenTimestampsGroup);
-    return groupCount;
-  };
-
-  useEffect(() => {
-    if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
-      setValue(2);
-    }
-  }, [chatConversationState]);
-
   useEffect(() => {
     const timestamp = new Date().toISOString();
-    if (value === 2 && chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
+    if (
+      value === SidebarTab.Messages &&
+      chatConversationState.scope !== undefined &&
+      chatConversationState.targetId !== undefined
+    ) {
       if (chatConversationState.scope === ChatScope.Group) {
         dispatch(
           addLastSeenTimestamp({
@@ -182,47 +150,108 @@ const MenuTabs = () => {
       }
     }
 
-    if (value === 0) {
+    if (value === SidebarTab.Chat) {
       dispatch(addLastSeenTimestamp({ scope: ChatScope.Global, timestamp: timestamp }));
       dispatch(setLastSeenTimestamp.action({ timestamp: timestamp, scope: ChatScope.Global }));
     }
   }, [value, chatConversationState, allChatMessages]);
 
+  useEffect(() => {
+    if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
+      setValue(SidebarTab.Messages);
+    }
+  }, [chatConversationState]);
+
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
     setValue(newValue);
+  };
+
+  const getGroupUnread = () => {
+    const messages = allChatMessages.filter((message) => message.scope === ChatScope.Group);
+    if (messages.length > 0) {
+      if (lastSeenTimestampsGroup.length > 0) {
+        const targetIds = [...new Set(lastSeenTimestampsGroup.map((seen) => seen.target as GroupId))];
+        const filteredMessages = messages.filter((message) => {
+          if (targetIds.includes(message.target as GroupId)) {
+            const lastSeen = lastSeenTimestampsGroup
+              .filter((seen) => seen.target === message.target)
+              .map((entry) => entry.timestamp);
+            if (lastSeen.length === 1) {
+              if (new Date(message.timestamp).getTime() > new Date(lastSeen[0]).getTime()) {
+                return message;
+              }
+            }
+            return;
+          }
+          return message;
+        });
+        return filteredMessages.length;
+      }
+    }
+    return messages.length;
+  };
+
+  const getPrivateUread = () => {
+    const messages = allChatMessages.filter((message) => message.scope === ChatScope.Private);
+    if (messages.length > 0) {
+      if (lastSeenTimestampsPrivate.length > 0) {
+        const targetIds = [...new Set(lastSeenTimestampsPrivate.map((seen) => seen.target as ParticipantId))];
+        const filteredMessages = messages.filter((message) => {
+          if (targetIds.includes(message.target as ParticipantId)) {
+            const lastSeen = lastSeenTimestampsPrivate
+              .filter((seen) => seen.target === message.target)
+              .map((entry) => entry.timestamp);
+            if (lastSeen.length === 1) {
+              if (new Date(message.timestamp).getTime() > new Date(lastSeen[0]).getTime()) {
+                return message;
+              }
+            }
+            return;
+          }
+          return message;
+        });
+        return filteredMessages.length;
+      }
+    }
+    return messages.length;
+  };
+
+  const getUnreadMessagesCount = (scope: ChatScope) => {
+    if (scope === ChatScope.Global) {
+      const messages = allChatMessages.filter((message) => message.scope === ChatScope.Global);
+      if (lastSeenTimestampGlobal) {
+        const unreadMessages = messages.filter(
+          (message) => new Date(message.timestamp).getTime() > new Date(lastSeenTimestampGlobal).getTime()
+        );
+        return unreadMessages.length;
+      }
+      return messages.length;
+    }
+
+    if (lastSeenTimestampsPrivate) {
+      const messages = allChatMessages.filter((message) => message.scope === ChatScope.Private);
+      if (messages.length > 0) {
+        const targets = [...new Set(messages.map((message) => message.target))];
+      }
+    }
+
+    const privateUnread = getPrivateUread();
+    if (privateUnread > 0) {
+      return privateUnread;
+    }
+    return getGroupUnread();
   };
 
   const getBadge = (tab: number) => {
     if (tab === value) {
       return;
     }
-
-    const top = -3;
-    const count = getUnreadMessagesCount(ChatScope.Group);
-    if (count > 0 && tab === 2) {
-      const left = 74;
-      return (
-        <StyledBadge
-          variant={'dot'}
-          sx={{
-            left: left,
-            top: top,
-          }}
-        />
-      );
+    if (getUnreadMessagesCount(ChatScope.Group) > 0 && tab === SidebarTab.Messages) {
+      return <MessagesBadge variant={'dot'} />;
     }
 
-    if (getUnreadMessagesCount(ChatScope.Global) > 0 && tab === 0) {
-      const left = 42;
-      return (
-        <StyledBadge
-          variant={'dot'}
-          sx={{
-            left: left,
-            top: top,
-          }}
-        />
-      );
+    if (getUnreadMessagesCount(ChatScope.Global) > 0 && tab === SidebarTab.Chat) {
+      return <ChatBadge variant={'dot'} />;
     }
   };
 
@@ -231,13 +260,13 @@ const MenuTabs = () => {
       <Box>
         <AppBar position={'static'} color={'secondary'} elevation={0}>
           <Tabs value={value} onChange={handleChange} variant={'fullWidth'}>
-            <Tab label={t('menutabs-chat')} icon={getBadge(0)} iconPosition="start" />
+            <Tab label={t('menutabs-chat')} icon={getBadge(SidebarTab.Chat)} iconPosition="start" />
             <Tab
               label={t('menutabs-people')}
               icon={<Typography variant="caption">({totalParticipants})</Typography>}
               iconPosition="end"
             />
-            <Tab label={t('menutabs-messages')} icon={getBadge(2)} iconPosition="start" />
+            <Tab label={t('menutabs-messages')} icon={getBadge(SidebarTab.Messages)} iconPosition="start" />
           </Tabs>
         </AppBar>
       </Box>

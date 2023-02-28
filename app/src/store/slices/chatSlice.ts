@@ -63,27 +63,31 @@ export interface TimestampState {
   timestamp: string;
 }
 
+const groupLastSeenTimestampAdapter = createEntityAdapter<TimestampState>({
+  selectId: (entity) => entity.target,
+  sortComparer: (a, b) => a.target.localeCompare(b.target),
+});
+
+const privateLastSeenTimestampAdapter = createEntityAdapter<TimestampState>({
+  selectId: (entity) => entity.target,
+  sortComparer: (a, b) => a.target.localeCompare(b.target),
+});
+
 export interface ChatState {
   enabled: boolean;
   settingsChangedAt?: string;
   settingsChangedBy?: ParticipantId;
   messages: EntityState<ChatMessage>;
   lastSeenTimestampGlobal?: string;
-  lastSeenTimestampsGroup: TimestampState[];
-  lastSeenTimestampsPrivate: TimestampState[];
+  lastSeenTimestampsGroup: EntityState<TimestampState>;
+  lastSeenTimestampsPrivate: EntityState<TimestampState>;
 }
 
 const initialState: ChatState = {
   enabled: true,
   messages: messagesAdapter.getInitialState(),
-  lastSeenTimestampsPrivate: [],
-  lastSeenTimestampsGroup: [],
-};
-
-const addOrReplaceTimestamp = (target: string, timestamp: string, timestamps: TimestampState[]): TimestampState[] => {
-  const result = timestamps.filter((ts) => ts.target !== target);
-  result.push({ target: target, timestamp: timestamp } as TimestampState);
-  return result;
+  lastSeenTimestampsPrivate: privateLastSeenTimestampAdapter.getInitialState(),
+  lastSeenTimestampsGroup: groupLastSeenTimestampAdapter.getInitialState(),
 };
 
 export const chatSlice = createSlice({
@@ -102,11 +106,17 @@ export const chatSlice = createSlice({
       if (scope === ChatScope.Global) {
         state.lastSeenTimestampGlobal = timestamp;
       }
-      if (scope === ChatScope.Private && target) {
-        state.lastSeenTimestampsPrivate = addOrReplaceTimestamp(target, timestamp, state.lastSeenTimestampsPrivate);
+      if (scope === ChatScope.Private) {
+        privateLastSeenTimestampAdapter.setOne(state.lastSeenTimestampsPrivate, {
+          target: target as ParticipantId,
+          timestamp: timestamp,
+        });
       }
-      if (scope === ChatScope.Group && target) {
-        state.lastSeenTimestampsGroup = addOrReplaceTimestamp(target, timestamp, state.lastSeenTimestampsGroup);
+      if (scope === ChatScope.Group) {
+        groupLastSeenTimestampAdapter.setOne(state.lastSeenTimestampsGroup, {
+          target: target as GroupId,
+          timestamp: timestamp,
+        });
       }
     },
     setChatSettings: (
@@ -135,26 +145,21 @@ export const chatSlice = createSlice({
       messagesAdapter.setAll(state.messages, chat.roomHistory);
       state.enabled = chat.enabled;
       state.lastSeenTimestampGlobal = chat.lastSeenTimestampGlobal;
-      if (chat.lastSeenTimestampsPrivate) {
-        const values = Object.values(chat.lastSeenTimestampsPrivate);
-        const result: TimestampState[] = Object.keys(chat.lastSeenTimestampsPrivate).map((key, index) => {
-          return { target: key, timestamp: values[index] } as TimestampState;
-        });
-        state.lastSeenTimestampsPrivate = result;
-      }
+
       if (chat.lastSeenTimestampsGroup) {
         const values = Object.values(chat.lastSeenTimestampsGroup);
         const result: TimestampState[] = Object.keys(chat.lastSeenTimestampsGroup).map((key, index) => {
           return { target: key, timestamp: values[index] } as TimestampState;
         });
-        state.lastSeenTimestampsGroup = result;
+        groupLastSeenTimestampAdapter.addMany(state.lastSeenTimestampsGroup, result);
       }
+
       if (chat.lastSeenTimestampsPrivate) {
         const values = Object.values(chat.lastSeenTimestampsPrivate);
         const result: TimestampState[] = Object.keys(chat.lastSeenTimestampsPrivate).map((key, index) => {
           return { target: key, timestamp: values[index] } as TimestampState;
         });
-        state.lastSeenTimestampsPrivate = result;
+        privateLastSeenTimestampAdapter.addMany(state.lastSeenTimestampsPrivate, result);
       }
     });
   },
@@ -164,8 +169,12 @@ export const { addLastSeenTimestamp, received, setChatSettings, clearGlobalChat 
 export const actions = chatSlice.actions;
 
 export const selectLastSeenTimestampGlobal = (state: RootState) => state.chat.lastSeenTimestampGlobal;
-export const selectLastSeenTimestampsGroup = (state: RootState) => state.chat.lastSeenTimestampsGroup;
-export const selectLastSeenTimestampsPrivate = (state: RootState) => state.chat.lastSeenTimestampsPrivate;
+export const selectLastSeenTimestampsGroup = (state: RootState) =>
+  groupLastSeenTimestampAdapter.getSelectors<RootState>((state) => state.chat.lastSeenTimestampsGroup).selectAll(state);
+export const selectLastSeenTimestampsPrivate = (state: RootState) =>
+  privateLastSeenTimestampAdapter
+    .getSelectors<RootState>((state) => state.chat.lastSeenTimestampsPrivate)
+    .selectAll(state);
 
 export const selectChatEnabledState = (state: RootState) => state.chat.enabled;
 const chatMessagesSelectors = messagesAdapter.getSelectors<RootState>((state) => state.chat.messages);
