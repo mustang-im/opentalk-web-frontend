@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { ForwardIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
+import { formikMinimalProps, formikProps, formikDateTimePickerProps } from '@opentalk/common';
 import { CreateEventPayload, Event, isTimelessEvent, UpdateEventPayload, DateTime } from '@opentalk/rest-api-rtk-query';
 import { addDays, addMinutes, format, formatRFC3339, isBefore, isEqual } from 'date-fns';
 import { useFormik } from 'formik';
@@ -32,7 +33,6 @@ import {
   useUpdateEventMutation,
 } from '../../api/rest';
 import { FormWrapper, LimitedTextField, Select } from '../../commonComponents';
-import { formikCustomFieldProps, formikMinimalProps, formikProps } from '../../utils/formikUtils';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToNearest30 from '../../utils/roundToNearest30';
 import roundToUpper30 from '../../utils/roundToUpper30';
@@ -383,14 +383,14 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               <Grid item xs={12} sm={6}>
                 <FormWrapper label={t('dashboard-meeting-date-from')} fullWidth>
                   <TimePickers
-                    {...formikCustomFieldProps('startDate', { ...formik, handleChange: onChangeStartDate as never })}
+                    {...formikDateTimePickerProps('startDate', { ...formik, handleChange: onChangeStartDate as never })}
                   />
                 </FormWrapper>
               </Grid>
               <Grid item xs={12} sm={6} mt={{ xs: 2, sm: 0 }}>
                 <FormWrapper label={t('dashboard-meeting-date-to')} fullWidth>
                   <TimePickers
-                    {...formikCustomFieldProps('endDate', { ...formik, handleChange: onChangeEndDate as never })}
+                    {...formikDateTimePickerProps('endDate', { ...formik, handleChange: onChangeEndDate as never })}
                   />
                 </FormWrapper>
               </Grid>

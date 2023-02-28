@@ -6,6 +6,8 @@
 
 ### Stability Improvements
 
+- Rework duration field and related types (!855)
+
 ### New Features
 
 - Lobby / Waiting room move button / password (!852)

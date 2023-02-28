@@ -2,19 +2,18 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Switch, Typography } from '@mui/material';
-import { Seconds } from '@opentalk/common';
+import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
+import { DurationValueOptions } from '@opentalk/common/components/DurationField';
 import { FormikValues, useFormik } from 'formik';
-import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCallback, useEffect, useMemo } from 'react';
+import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { TimerKind, startTimer, TimerStyle } from '../../../api/types/outgoing/timer';
 import { TextField } from '../../../commonComponents';
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
-import DurationField from '../../../commonComponents/DurationField';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectTimerRunning } from '../../../store/slices/timerSlice';
-import { formikCustomFieldProps, formikProps, formikSwitchProps } from '../../../utils/formikUtils';
 
 const Form = styled('form')({
   display: 'flex',
@@ -30,45 +29,40 @@ interface Texts {
   button: string;
 }
 
-type DurationOption = number | string;
-
-interface CoffeBreakState {
+interface TimerState {
   texts: Texts;
-  durationOptions: DurationOption[];
+  durationOptions: Array<DurationValueOptions>;
   defaultValue: number;
 }
 
-const useCreateCoffeeBreakForm = (timerStyle: TimerStyle) => {
+const getTimerState = (timerStyle: TimerStyle, t: TFunction<'translation', undefined>): TimerState => {
+  if (timerStyle === TimerStyle.CoffeeBreak) {
+    return {
+      texts: {
+        header: t('coffee-break-header-title'),
+        button: t('coffee-break-form-button-submit'),
+      },
+      durationOptions: [5, 10, 15, 30, 'custom'],
+      defaultValue: 5,
+    };
+  } else {
+    return {
+      texts: {
+        header: t('timer-header-title'),
+        button: t('timer-form-button-submit'),
+      },
+      durationOptions: [null, 1, 2, 5, 'custom'],
+      defaultValue: 1,
+    };
+  }
+};
+
+const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   const { t } = useTranslation();
-  const [state, setState] = useState<CoffeBreakState>();
+  const dispatch = useAppDispatch();
+  const isTimerRunning = useAppSelector(selectTimerRunning);
 
-  useEffect(() => {
-    switch (timerStyle) {
-      case TimerStyle.CoffeeBreak: {
-        setState({
-          texts: {
-            header: t('coffee-break-header-title'),
-            button: t('coffee-break-form-button-submit'),
-          },
-          durationOptions: [5, 10, 15, 30, 'custom'],
-          defaultValue: 5,
-        });
-        break;
-      }
-
-      case TimerStyle.Normal: {
-        setState({
-          texts: {
-            header: t('timer-header-title'),
-            button: t('timer-form-button-submit'),
-          },
-          durationOptions: [0, 1, 2, 5, 'custom'],
-          defaultValue: 1,
-        });
-        break;
-      }
-    }
-  }, [timerStyle]);
+  const { texts, durationOptions, defaultValue } = useMemo(() => getTimerState(timerStyle, t), [timerStyle, t]);
 
   const getTimerForStart = useCallback(
     (values: FormikValues) => {
@@ -80,21 +74,12 @@ const useCreateCoffeeBreakForm = (timerStyle: TimerStyle) => {
     [timerStyle]
   );
 
-  return { ...state, getTimerForStart };
-};
-
-const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const isTimerRunning = useAppSelector(selectTimerRunning);
-  const { texts, getTimerForStart, durationOptions, defaultValue } = useCreateCoffeeBreakForm(timerStyle);
-
   const validationSchema = yup.object({
     duration: yup.number().nullable(true),
   });
 
   const formik = useFormik({
-    initialValues: { duration: 1, title: undefined, enableReadyCheck: true },
+    initialValues: { duration: defaultValue, title: undefined, enableReadyCheck: true },
     validationSchema,
     validateOnChange: false,
     validateOnBlur: false,
@@ -103,12 +88,18 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
         startTimer.action({
           title: values.title,
           enableReadyCheck: values.enableReadyCheck,
-          duration: values.duration <= 0 ? undefined : ((values.duration * 60) as Seconds),
+          duration: values.duration ? values.duration * 60 : values.duration,
           ...getTimerForStart(values),
         })
       );
     },
   });
+
+  useEffect(() => {
+    if (defaultValue) {
+      formik.setValues({ ...formik.values, duration: defaultValue });
+    }
+  }, [defaultValue]);
 
   const cleanForm = useCallback(() => {
     const { setErrors, setTouched, resetForm } = formik;
@@ -135,12 +126,11 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
           <Typography>{t('global-duration')}</Typography>
 
           <DurationField
-            {...formikCustomFieldProps('duration', formik)}
+            {...formikDurationFieldProps('duration', formik, defaultValue)}
             durationOptions={durationOptions}
             ButtonProps={{
               size: 'small',
             }}
-            value={defaultValue}
           />
 
           {timerStyle === TimerStyle.Normal && (
