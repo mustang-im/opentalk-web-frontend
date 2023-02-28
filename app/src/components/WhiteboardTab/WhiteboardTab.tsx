@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Button, Link as MUILink, Stack, styled, Typography } from '@mui/material';
+import { Box, Button, Link as MUILink, Grid, Stack, styled } from '@mui/material';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -14,20 +14,8 @@ import { useAppSelector } from '../../hooks';
 import { useDownloadAction } from '../../hooks/download';
 import { selectIsWhiteboardAvailable, selectWhiteboardAssets } from '../../store/slices/whiteboardSlice';
 
-const WhiteboardContainer = styled('div')({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  maxHeight: 'calc(100vh - 19em)',
-  overflow: 'auto',
-});
-
 const Link = styled(MUILink)(() => ({
   cursor: 'pointer',
-}));
-
-const TabTitle = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
 }));
 
 const WhiteboardTab = () => {
@@ -55,8 +43,7 @@ const WhiteboardTab = () => {
   );
 
   return (
-    <WhiteboardContainer>
-      <TabTitle>Whiteboard</TabTitle>
+    <>
       <Box mb={'0.5rem'} width={'100%'} height={'100%'} overflow={'auto'} alignSelf={'flex-start'}>
         <Stack>
           {whiteboardAssets.map((asset) => {
@@ -68,14 +55,16 @@ const WhiteboardTab = () => {
           })}
         </Stack>
       </Box>
-      <Box alignSelf={'center'}>
-        {showWhiteboard ? (
-          <Button onClick={createPdf}>{t('whiteboard-create-pdf-button')}</Button>
-        ) : (
-          <Button onClick={handleStartWhiteboard}>{t('whiteboard-start-whiteboard-button')}</Button>
-        )}
-      </Box>
-    </WhiteboardContainer>
+      <Grid container>
+        <Grid item xs={12}>
+          {showWhiteboard ? (
+            <Button onClick={createPdf}>{t('whiteboard-create-pdf-button')}</Button>
+          ) : (
+            <Button onClick={handleStartWhiteboard}>{t('whiteboard-start-whiteboard-button')}</Button>
+          )}
+        </Grid>
+      </Grid>
+    </>
   );
 };
 

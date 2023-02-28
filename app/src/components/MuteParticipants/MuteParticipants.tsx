@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Button, Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { MediaSessionType, ParticipantId } from '@opentalk/common';
-import React, { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { requestMute } from '../../api/types/outgoing/media';
@@ -14,11 +14,6 @@ import { selectAllSubscribers } from '../../store/slices/mediaSubscriberSlice';
 import { Participant } from '../../store/slices/participantsSlice';
 import SearchTextField from '../SearchTextField/index';
 import MuteParticipantsList from './fragments/MuteParticipantsList';
-
-const Container = styled('div')({
-  flex: 1,
-  maxWidth: '100%',
-});
 
 export interface MutedParticipant extends Participant {
   selected: boolean;
@@ -69,28 +64,26 @@ const MuteParticipants = () => {
   }, [allSubscribers, selectedParticipants, dispatch]);
 
   return (
-    <Container>
-      <Grid container spacing={2}>
-        <Grid item container spacing={1} xs={12}>
-          <Grid item xs={6}>
-            <Button onClick={muteAll} size={'small'}>
-              {t('mute-users-all')}
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button onClick={muteSelected} size={'small'}>
-              {t('mute-users-selected')}
-            </Button>
-          </Grid>
+    <Grid container spacing={2}>
+      <Grid item container spacing={1} xs={12}>
+        <Grid item xs={6}>
+          <Button onClick={muteAll} size={'small'}>
+            {t('mute-participants-button-all')}
+          </Button>
         </Grid>
-        <Grid item xs={12}>
-          <SearchTextField onSearch={(v) => handleSearchChange(v)} fullWidth />
-        </Grid>
-        <Grid item xs={12}>
-          <MuteParticipantsList participantsList={participantsList} onCheck={handleSelectParticipant} />
+        <Grid item xs={6}>
+          <Button onClick={muteSelected} size={'small'}>
+            {t('mute-participants-button-selected')}
+          </Button>
         </Grid>
       </Grid>
-    </Container>
+      <Grid item xs={12}>
+        <SearchTextField onSearch={(v) => handleSearchChange(v)} fullWidth />
+      </Grid>
+      <Grid item xs={12}>
+        <MuteParticipantsList participantsList={participantsList} onCheck={handleSelectParticipant} />
+      </Grid>
+    </Grid>
   );
 };
 

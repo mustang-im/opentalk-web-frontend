@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import {
   Box,
-  Container,
   List as MuiList,
   ListItem,
   ListItemButton as MuiListItemButton,
@@ -11,7 +10,7 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as NoPollsIcon } from '../../../assets/images/no-poll-illustration.svg';
@@ -28,13 +27,12 @@ const List = styled(MuiList)({
   width: '100%',
 });
 
-const TabTitle = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
-}));
-
-const ContentContainer = styled(Container)({
-  maxHeight: 'calc(100vh - 26rem)',
-  overflowY: 'auto',
+const EmptyPollContainer = styled(Box)({
+  paddingTop: '10.8rem',
+  width: '100%',
+  height: '100%',
+  overflow: 'auto',
+  alignSelf: 'flex-start',
 });
 
 const ListItemButton = styled(MuiListItemButton)(({ theme }) => ({
@@ -60,8 +58,7 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
 
   if (polls.length === 0 && savedPolls.length === 0) {
     return (
-      <Box display={'flex'} flexWrap={'wrap'}>
-        <TabTitle variant={'h2'}>{t('poll-header-title')}</TabTitle>
+      <EmptyPollContainer>
         <Box display={'flex'} flexWrap={'wrap'} justifyContent={'center'} alignSelf={'center'}>
           <Box marginBottom={2}>
             <NoPollsIcon />
@@ -70,7 +67,7 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
             {t('no-polls-in-conference')}
           </Typography>
         </Box>
-      </Box>
+      </EmptyPollContainer>
     );
   }
 
@@ -119,13 +116,10 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
   );
 
   return (
-    <Container disableGutters>
-      <TabTitle variant={'h2'}>{t('poll-header-title')}</TabTitle>
-      <ContentContainer disableGutters>
-        {savedPolls.length > 0 && renderSavedPolls()}
-        {polls.length > 0 && renderPolls()}
-      </ContentContainer>
-    </Container>
+    <>
+      {savedPolls.length > 0 && renderSavedPolls()}
+      {polls.length > 0 && renderPolls()}
+    </>
   );
 };
 

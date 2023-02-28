@@ -43,6 +43,7 @@ export interface Tab {
   featureKey?: FeaturesKeys;
   key: string;
   disabled?: boolean;
+  titleKey?: string;
 }
 
 export const tabs: Array<Tab> = [
@@ -69,6 +70,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-mute-tooltip',
     featureKey: FeaturesKeys.MuteUsers,
     key: FeaturesKeys.MuteUsers,
+    titleKey: 'mute-participants-tab-title',
   },
   {
     icon: <RaiseHandOffIcon />,
@@ -81,6 +83,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-reset-handraises-tooltip',
     featureKey: FeaturesKeys.ResetHandraises,
     key: FeaturesKeys.ResetHandraises,
+    titleKey: 'reset-handraises-tab-title',
   },
   {
     divider: true,
@@ -97,6 +100,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-breakout-tooltip',
     featureKey: FeaturesKeys.BreakoutRooms,
     key: FeaturesKeys.BreakoutRooms,
+    titleKey: 'breakout-room-tab-title',
   },
   {
     icon: <WhiteboardIcon />,
@@ -109,6 +113,7 @@ export const tabs: Array<Tab> = [
     ),
     featureKey: FeaturesKeys.Whiteboard,
     key: FeaturesKeys.Whiteboard,
+    titleKey: 'whiteboard-tab-title',
   },
   {
     icon: <PollIcon />,
@@ -121,6 +126,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-poll-tooltip',
     featureKey: FeaturesKeys.Poll,
     key: FeaturesKeys.Poll,
+    titleKey: 'poll-tab-title',
   },
   {
     icon: <LegalBallotIcon />,
@@ -145,6 +151,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-timer-tooltip',
     featureKey: FeaturesKeys.Timer,
     key: FeaturesKeys.Timer,
+    titleKey: 'timer-tab-title',
   },
   {
     icon: <CoffeeBreakIcon />,
@@ -157,6 +164,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-coffee-break-tooltip',
     featureKey: FeaturesKeys.CoffeeBreak,
     key: FeaturesKeys.CoffeeBreak,
+    titleKey: 'coffee-break-tab-title',
   },
   {
     icon: <ProtocolIcon />,
@@ -169,6 +177,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
     featureKey: FeaturesKeys.Protocol,
     key: FeaturesKeys.Protocol,
+    titleKey: 'protocol-tab-title',
   },
   {
     icon: <AddUserIcon />,

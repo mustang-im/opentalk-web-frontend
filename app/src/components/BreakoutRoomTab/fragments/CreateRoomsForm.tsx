@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Typography, styled, FormHelperText, Button, Grid } from '@mui/material';
+import { styled, FormHelperText, Button, Grid } from '@mui/material';
 import { Seconds } from '@opentalk/common';
 import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
@@ -32,10 +32,6 @@ export enum AccordionOptions {
 }
 
 type Expanded = string | false;
-
-const TabTitle = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
-}));
 
 const Form = styled('form')({
   flex: 1,
@@ -108,7 +104,6 @@ const CreateRoomsForm = () => {
       {
         component: (formik) => (
           <>
-            <TabTitle variant={'h2'}>{t('breakout-room-form-create-title')}</TabTitle>
             <AccordionItem
               onChange={handleChange(AccordionOptions.Rooms, formik)}
               option={AccordionOptions.Rooms}
