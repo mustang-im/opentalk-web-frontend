@@ -717,10 +717,11 @@ debug-panel-outbound-label = Outbound (current, avr, max):
 debug-panel-remote-count-label = Connection count:
 
 whiteboard-create-pdf-button = create pdf
-whiteboard-start-whiteboard-button = start whiteboard
-whiteboard-new-whiteboard-message = A whiteboard is available
+whiteboard-start-whiteboard-button = show whiteboard
+whiteboard-new-whiteboard-message = Whiteboard is created
 whiteboard-new-pdf-message = A new whiteboard pdf is available
 whiteboard-new-whiteboard-message-button = Open
+whiteboard-hide = hide whiteboard
 
 shortcut-hold-to-speak = Hold to speak
 

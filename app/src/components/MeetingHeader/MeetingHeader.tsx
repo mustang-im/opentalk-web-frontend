@@ -59,6 +59,11 @@ import {
   setVotePollIdToShow,
   toggleDebugMode,
 } from '../../store/slices/uiSlice';
+import {
+  selectIsCurrentWhiteboardHighlighted,
+  selectIsCurrentProtocolHighlighted,
+  setProtocolHighlight,
+} from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import { selectIsWhiteboardAvailable } from '../../store/slices/whiteboardSlice';
 import { MAX_GRID_TILES } from '../GridView/GridView';
@@ -92,7 +97,7 @@ const WaitingPopperContainer = styled('div')(({ theme }) => ({
   alignItems: 'space-between',
   padding: theme.spacing(1, 1),
   borderRadius: '0.1rem',
-  background: 'rgba(0, 0, 0, 0.5)',
+  background: theme.palette.background.video,
 }));
 
 const PopperContainer = styled('div')(({ theme }) => ({
@@ -102,7 +107,7 @@ const PopperContainer = styled('div')(({ theme }) => ({
   alignItems: 'space-between',
   padding: theme.spacing(0.5, 1),
   borderRadius: '0.1rem',
-  background: 'rgba(0, 0, 0, 0.5)',
+  background: theme.palette.background.video,
 }));
 
 const ViewPopperContainer = styled('div')({
@@ -110,14 +115,26 @@ const ViewPopperContainer = styled('div')({
   alignItems: 'center',
 });
 
-const HeaderItem = styled('div')({
-  background: 'rgba(0, 0, 0, 0.5)',
+const HeaderItem = styled('div')<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
+  background: highlighted ? theme.palette.primary.main : theme.palette.background.video,
   borderRadius: '0.25rem',
   display: 'inline-flex',
   height: '100%',
   justifyContent: 'center',
   alignItems: 'center',
-});
+  '& .MuiIconButton-root .MuiSvgIcon-root': {
+    fill: highlighted ? theme.palette.background.default : theme.palette.text.primary,
+  },
+}));
+
+const HeaderDivider = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignSelf: 'center',
+  height: '50%',
+  borderStyle: 'solid',
+  borderLeftWidth: theme.typography.pxToRem(2),
+  borderColor: theme.palette.background.voteResult,
+}));
 
 const HeaderPagination = styled(Pagination)(({ theme }) => ({
   '& .MuiPaginationItem-root:hover': {
@@ -217,8 +234,11 @@ const MeetingHeader = () => {
   const hasVotesOrPolls = votes.length + polls.length > 0;
   const menuRef = useRef<HTMLDivElement>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const showWhiteboard = useAppSelector(selectIsWhiteboardAvailable);
+  const isWhiteboardAvailable = useAppSelector(selectIsWhiteboardAvailable);
+  const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
+  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const recording = useAppSelector(selectRecordingState);
+  const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
 
   const fullscreenHandle = useFullscreenContext();
 
@@ -302,7 +322,7 @@ const MeetingHeader = () => {
       case LayoutOptions.Grid:
         return <GridViewIcon />;
       case LayoutOptions.Whiteboard:
-        return <WhiteboardIcon />;
+        return <Typography noWrap>{t('whiteboard-hide')}</Typography>;
       case LayoutOptions.Speaker:
       default:
         return <SpeakerViewIcon />;
@@ -323,7 +343,12 @@ const MeetingHeader = () => {
 
   const ViewPopper = () => (
     <ViewPopperContainer>
-      <IconButton aria-describedby={'view-select'} onClick={toggleViewPopper}>
+      <IconButton
+        aria-describedby={'view-select'}
+        onClick={(event) =>
+          selectedLayout === LayoutOptions.Whiteboard ? handleSelectedView(LayoutOptions.Grid) : toggleViewPopper(event)
+        }
+      >
         {renderViewIcon()}
       </IconButton>
       <Popover
@@ -347,11 +372,6 @@ const MeetingHeader = () => {
           <IconButton onClick={() => handleSelectedView(LayoutOptions.Speaker)}>
             <SpeakerViewIcon />
           </IconButton>
-          {showWhiteboard && (
-            <IconButton onClick={() => handleSelectedView(LayoutOptions.Whiteboard)}>
-              <WhiteboardIcon />
-            </IconButton>
-          )}
           <IconButton onClick={openFullscreenView}>
             <FullscreenViewIcon />
           </IconButton>
@@ -429,35 +449,52 @@ const MeetingHeader = () => {
 
   const navigateToProtocolUrl = () => {
     protocolUrl !== null && window.open(protocolUrl, '_blank');
+    dispatch(setProtocolHighlight(false));
     setInfoEl(null);
   };
 
   const renderProtocolInfo = () => (
-    <ViewPopperContainer>
-      <IconButton aria-describedby={'view-select'} onClick={toggleInfoPopper}>
-        <NewMessageIcon />
+    <HeaderItem highlighted={isCurrentProtocolHighlighted}>
+      <ViewPopperContainer>
+        <IconButton aria-describedby={'view-select'} onClick={toggleInfoPopper}>
+          <NewMessageIcon />
+        </IconButton>
+        <Popover
+          open={Boolean(infoEl)}
+          anchorEl={infoEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          onClose={resetHTMLElements}
+          disablePortal
+        >
+          <PopperContainer>
+            <Button variant={'text'} size="small" color={'secondary'} onClick={navigateToProtocolUrl}>
+              {t('protocol-join-session')}
+            </Button>
+          </PopperContainer>
+        </Popover>
+      </ViewPopperContainer>
+    </HeaderItem>
+  );
+
+  const handleWhiteboardClick = useCallback(() => {
+    if (selectedLayout !== LayoutOptions.Whiteboard) {
+      handleSelectedView(LayoutOptions.Whiteboard);
+    }
+  }, [selectedLayout, isCurrentWhiteboardHighlighted, handleSelectedView]);
+
+  const renderWhiteboardIcon = () => (
+    <HeaderItem highlighted={isCurrentWhiteboardHighlighted}>
+      <IconButton onClick={handleWhiteboardClick}>
+        <WhiteboardIcon />
       </IconButton>
-      <Popover
-        open={Boolean(infoEl)}
-        anchorEl={infoEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        onClose={resetHTMLElements}
-        disablePortal
-      >
-        <PopperContainer>
-          <Button variant={'text'} size="small" color={'secondary'} onClick={navigateToProtocolUrl}>
-            {t('protocol-join-session')}
-          </Button>
-        </PopperContainer>
-      </Popover>
-    </ViewPopperContainer>
+    </HeaderItem>
   );
 
   const openVotePoll = useCallback(
@@ -565,7 +602,13 @@ const MeetingHeader = () => {
               />
             </HeaderItem>
           )}
-          {protocolUrl && <HeaderItem>{renderProtocolInfo()}</HeaderItem>}
+          {(showWhiteboardIcon || protocolUrl) && (
+            <>
+              <HeaderDivider />
+              {showWhiteboardIcon && renderWhiteboardIcon()}
+              {protocolUrl && renderProtocolInfo()}
+            </>
+          )}
         </HeaderCenterContainer>
       </ContentItem>
       <ContentItem>

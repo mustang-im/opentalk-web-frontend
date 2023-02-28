@@ -9,7 +9,9 @@ import ChatScope from '../../enums/ChatScope';
 import LayoutOptions from '../../enums/LayoutOptions';
 import SortOption from '../../enums/SortOption';
 import { leave, breakoutLeft } from './participantsSlice';
+import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
+import { setWhiteboardAvailable } from './whiteboardSlice';
 
 export interface IChatConversationState {
   scope?: ChatScope;
@@ -29,6 +31,8 @@ interface UIState {
   votesPollIdToShow?: LegalVoteId | PollId;
   debugMode: boolean;
   chatSearchValue: string;
+  isCurrentWhiteboardHighlighted?: boolean;
+  isCurrentProtocolHighlighted?: boolean;
 }
 
 const initialState: UIState = {
@@ -47,6 +51,8 @@ const initialState: UIState = {
   votesPollIdToShow: undefined,
   debugMode: false,
   chatSearchValue: '',
+  isCurrentWhiteboardHighlighted: undefined,
+  isCurrentProtocolHighlighted: undefined,
 };
 
 export const uiSlice = createSlice({
@@ -67,6 +73,9 @@ export const uiSlice = createSlice({
     },
     participantsLayoutSet: (state, action: PayloadAction<LayoutOptions>) => {
       state.participantsLayout = action.payload;
+      if (action.payload === LayoutOptions.Whiteboard && state.isCurrentWhiteboardHighlighted) {
+        state.isCurrentWhiteboardHighlighted = false;
+      }
     },
     paginationPageSet: (state, action: PayloadAction<number>) => {
       state.paginationPage = action.payload;
@@ -89,6 +98,9 @@ export const uiSlice = createSlice({
     setChatSearchValue(state, { payload: nextSearchValue }: PayloadAction<string>) {
       state.chatSearchValue = nextSearchValue;
     },
+    setProtocolHighlight(state, { payload: highlight }: PayloadAction<boolean>) {
+      state.isCurrentProtocolHighlighted = highlight;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(leave, (state, { payload: { id } }: PayloadAction<{ id: ParticipantId }>) => {
@@ -109,6 +121,15 @@ export const uiSlice = createSlice({
       state.paginationPage = initialState.paginationPage;
       state.participantsSearchValue = initialState.participantsSearchValue;
     });
+    builder.addCase(setWhiteboardAvailable, (state) => {
+      state.isCurrentWhiteboardHighlighted = true;
+    });
+    builder.addCase(setProtocolReadUrl, (state) => {
+      state.isCurrentProtocolHighlighted = true;
+    });
+    builder.addCase(setProtocolWriteUrl, (state) => {
+      state.isCurrentProtocolHighlighted = true;
+    });
   },
 });
 
@@ -125,6 +146,7 @@ export const {
   setVotePollIdToShow,
   toggleDebugMode,
   setChatSearchValue,
+  setProtocolHighlight,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -141,5 +163,7 @@ export const selectShowPollVoteResultWindow = (state: RootState) => state.ui.sho
 export const selectVotePollIdToShow = (state: RootState) => state.ui.votesPollIdToShow;
 export const selectDebugMode = (state: RootState) => state.ui.debugMode;
 export const selectChatSearchValue = (state: RootState) => state.ui.chatSearchValue;
+export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.ui.isCurrentWhiteboardHighlighted;
+export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui.isCurrentProtocolHighlighted;
 
 export default uiSlice.reducer;
