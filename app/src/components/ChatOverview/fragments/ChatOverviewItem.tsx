@@ -11,10 +11,16 @@ import {
 } from '@mui/material';
 import { useDateFormat } from '@opentalk/common';
 import { isEmpty } from 'lodash';
-import React from 'react';
+import { useEffect, useState } from 'react';
 
+import ChatScope from '../../../enums/ChatScope';
 import { useAppSelector } from '../../../hooks';
-import { ChatProps } from '../../../store/slices/chatSlice';
+import {
+  ChatProps,
+  selectLastSeenTimestampsGroup,
+  selectLastSeenTimestampsPrivate,
+  TimestampState,
+} from '../../../store/slices/chatSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 import ParticipantAvatar from '../../ParticipantAvatar';
 
@@ -44,22 +50,58 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const date = new Date(chat.lastMessage?.timestamp) ?? Date.now;
   const formattedTime = useDateFormat(date, 'time');
   const getDisplayName = () => (isEmpty(participant) ? chat.id : participant?.displayName);
+  const lastSeenTimestampsGroup = useAppSelector(selectLastSeenTimestampsGroup);
+  const lastSeenTimestampsPrivate = useAppSelector(selectLastSeenTimestampsPrivate);
+  const [fontWeight, setFontWeigth] = useState('normal');
+
+  const getUnreadMessages = (timestamps: TimestampState[]) => {
+    const lastSeen = timestamps.filter((seen) => seen.target === chat.id);
+    if (lastSeen.length === 1) {
+      const filteredMessages = chat.messages.filter(
+        (message) => new Date(message.timestamp).getTime() > new Date(lastSeen[0].timestamp).getTime()
+      );
+      return filteredMessages.length;
+    }
+    return chat.messages.length;
+  };
+
+  useEffect(() => {
+    if (chat.scope === ChatScope.Private) {
+      if (getUnreadMessages(lastSeenTimestampsPrivate) > 0) {
+        setFontWeigth('bold');
+      } else {
+        setFontWeigth('normal');
+      }
+    }
+  }, [chat, lastSeenTimestampsPrivate]);
+
+  useEffect(() => {
+    if (chat.scope === ChatScope.Group) {
+      if (getUnreadMessages(lastSeenTimestampsGroup) > 0) {
+        setFontWeigth('bold');
+      } else {
+        setFontWeigth('normal');
+      }
+    }
+  }, [chat, lastSeenTimestampsGroup]);
 
   const renderPrimaryText = () => (
     <Grid container direction={'row'} spacing={1}>
       <Grid item zeroMinWidth xs>
-        <Typography variant={'body1'} color={'textPrimary'} noWrap>
+        <Typography fontWeight={fontWeight} variant={'body1'} color={'textPrimary'} noWrap>
           {getDisplayName()}
         </Typography>
       </Grid>
       <Grid item>
-        <TimeTypography variant={'caption'}>{formattedTime}</TimeTypography>
+        <TimeTypography variant={'caption'} fontWeight={fontWeight}>
+          {formattedTime}
+        </TimeTypography>
       </Grid>
     </Grid>
   );
 
   const renderSecondaryText = () => (
-    <Typography variant={'body1'} noWrap>
+    <Typography fontWeight={fontWeight} variant={'body1'} noWrap>
       {chat.lastMessage?.content || ''}
     </Typography>
   );
