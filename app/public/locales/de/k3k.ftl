@@ -29,9 +29,9 @@ room = Raum {$roomNumber}
 joinform-title = Konferenz beitreten
 joinform-enter-name = Bitte Namen eingeben
 joinform-enter-now = Jetzt beitreten
-joinform-enter-password = Raumpasswort (wenn vorhanden)
+joinform-enter-password = Passwort (wenn vorhanden)
 joinform-waiting-room-enter = Warteraum aktiv - bitte warten...
-joinform-wrong-room-password = Das eingegebene Raumpasswort ist falsch.
+joinform-wrong-room-password = Das eingegebene Passwort ist falsch.
 joinform-access-denied = Zugriff verweigert: Sie sind nicht berechtigt an diesem Meeting teilzunehmen.
 field-error-required = "{$fieldName}" ist ein Pflichtfeld
 joinform-banned-from-room = Sie wurden permanent vom diesen Meeting ausgeschlossen.
@@ -215,6 +215,7 @@ turn-handraises-on-notification = Der Moderator hat das Handheben aktiviert
 waiting-room-participant-label = Warteraum
 
 in-waiting-room = Sie befinden sich gerade im Warteraum
+in-waiting-room-ready = Sie sind freigeschaltet
 
 approve-all-participants-from-waiting = Alles genehmigen
 
