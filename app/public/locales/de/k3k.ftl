@@ -737,3 +737,12 @@ recording-active-label = Recording läuft
 recording-accept = Erlauben
 recording-decline = Verweigern
 recording-stopped-message = Die Aufnahme wurde beendet.
+
+emoji-category-smileys_people = Smileys & Personen
+emoji-category-animals_nature = Tiere & Natur
+emoji-category-food_drink = Essen und Trinken
+emoji-category-travel_places = Reisen & Orte
+emoji-category-activities = Aktivitäten
+emoji-category-objects = Objekte
+emoji-category-symbols = Symbole
+emoji-category-flags = Flaggen

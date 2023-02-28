@@ -2,11 +2,19 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton as MuiIconButton, InputAdornment, styled, Tooltip } from '@mui/material';
-import { GroupId, ParticipantId, TargetId } from '@opentalk/common';
+import { GroupId, ParticipantId, setHotkeysEnabled, TargetId } from '@opentalk/common';
 import { SendMessageIcon } from '@opentalk/common';
-import Picker, { IEmojiData, SKIN_TONE_MEDIUM_LIGHT } from 'emoji-picker-react';
+import Picker, {
+  EmojiClickData,
+  SkinTones,
+  EmojiStyle,
+  Theme,
+  SkinTonePickerLocation,
+  SuggestionMode,
+  Categories,
+} from 'emoji-picker-react';
 import { useFormik } from 'formik';
-import React, { useState, KeyboardEventHandler } from 'react';
+import React, { useState, KeyboardEventHandler, useMemo, FocusEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
@@ -29,38 +37,26 @@ const PickerContainer = styled('div')(({ theme }) => ({
   position: 'absolute',
   bottom: '4.375rem',
 
-  '& aside.emoji-picker-react': {
-    background: '#385865',
-    boxShadow: 'none',
-    border: 0,
-
-    '& .emoji-group:before': {
-      background: '#385865',
-      color: theme.palette.secondary.contrastText,
-      font: theme.typography.h4.font,
-    },
-
-    '& .emoji-categories': {
-      '& button': {
-        width: '1.25rem',
-        height: '2rem',
-        backgroundSize: 'inherit',
-        filter: 'invert(100%)',
-        '-webkit-filter': 'invert(100%)',
-        opacity: '0.5',
-        transition: '0.3s',
-      },
-
-      '& button.active, & button:hover': {
-        opacity: '1.0',
-      },
-    },
+  '.EmojiPickerReact.epr-dark-theme': {
+    '--epr-dark': theme.palette.background.voteResult,
+    '--epr-bg-color': theme.palette.background.voteResult,
+    '--epr-category-label-bg-color': theme.palette.background.voteResult,
+    '--epr-picker-border-color': theme.palette.background.voteResult,
+    '--epr-search-input-bg-color': theme.palette.secondary.main,
+    '--epr-hover-bg-color': theme.palette.secondary.main,
+    '--epr-category-icon-active-color': theme.palette.primary.main,
+    '--epr-highlight-color': theme.palette.secondary.main,
+    '--epr-search-border-color': theme.palette.primary.main,
+    '--epr-search-input-text-color': theme.palette.background.voteResult,
+    '--epr-focus-bg-color': theme.palette.background.paper,
   },
 
-  '& input.emoji-search': {
-    background: theme.palette.secondary.main,
-    borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
+  '.EmojiPickerReact .epr-search-container input.epr-search:focus': {
+    '--epr-search-input-text-color': theme.palette.secondary.main,
+  },
+
+  '.EmojiPickerReact .epr-category-nav': {
+    display: 'none',
   },
 }));
 
@@ -77,19 +73,46 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
   const [openPicker, setOpenPicker] = useState(false);
   const isChatEnabled = useAppSelector(selectChatEnabledState);
 
-  const handleEmojiClick = (event: React.MouseEvent<Element, MouseEvent>, emojiObject: IEmojiData) => {
-    formik.setFieldValue('message', formik.values.message + emojiObject.emoji);
+  const emojiPickerCategories = useMemo(() => {
+    return Object.values(Categories).map((category) => {
+      return { category, name: t(`emoji-category-${category}`) };
+    });
+  }, [t]);
+
+  const handleEmojiClick = (data: EmojiClickData) => {
+    formik.setFieldValue('message', formik.values.message + data.emoji);
+  };
+
+  const focusHandler = (event: FocusEvent<HTMLDivElement>) => {
+    if (event.target && event.target.tagName === 'INPUT') {
+      dispatch(setHotkeysEnabled(false));
+    }
+  };
+
+  const blurHandler = (event: FocusEvent<HTMLDivElement>) => {
+    if (event.target && event.target.tagName === 'INPUT') {
+      dispatch(setHotkeysEnabled(true));
+    }
   };
 
   const renderPicker = () =>
     openPicker && (
-      <PickerContainer>
+      <PickerContainer onFocus={focusHandler} onBlur={blurHandler}>
         <Picker
           onEmojiClick={handleEmojiClick}
-          disableAutoFocus={true}
-          skinTone={SKIN_TONE_MEDIUM_LIGHT}
-          groupNames={{ smileys_people: 'PEOPLE' }}
-          native
+          autoFocusSearch={false}
+          defaultSkinTone={SkinTones.MEDIUM_LIGHT}
+          lazyLoadEmojis={true}
+          emojiVersion="11"
+          theme={Theme.DARK}
+          previewConfig={{
+            showPreview: false,
+          }}
+          categories={emojiPickerCategories}
+          searchPlaceHolder=""
+          emojiStyle={EmojiStyle.NATIVE}
+          skinTonePickerLocation={SkinTonePickerLocation.SEARCH}
+          suggestedEmojisMode={SuggestionMode.RECENT}
         />
       </PickerContainer>
     );
