@@ -29,9 +29,9 @@ room = Room {$roomNumber}
 joinform-title = Enter Conference
 joinform-enter-name = Please enter your name
 joinform-enter-now = Enter now
-joinform-enter-password = Room password (if needed)
+joinform-enter-password = Password (if needed)
 joinform-waiting-room-enter = Waiting active - please wait...
-joinform-wrong-room-password = The entered room password is wrong.
+joinform-wrong-room-password = The entered password is wrong.
 joinform-access-denied = Access denied: You were not invited to this meeting.
 field-error-required ="{$fieldName}" is a required field
 joinform-banned-from-room = You were banned from this meeting.
@@ -215,6 +215,7 @@ turn-handraises-on-notification = Handraises were enabled by the moderator
 waiting-room-participant-label = Waiting room
 
 in-waiting-room = You are currently in the waiting room
+in-waiting-room-ready = You are enabled to join the room
 
 approve-all-participants-from-waiting = Approve all
 

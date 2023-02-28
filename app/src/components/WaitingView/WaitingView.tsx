@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Button, Container, Typography, useTheme } from '@mui/material';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -32,27 +32,24 @@ const WaitingView = () => {
 
   return (
     <Container>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <SelfTest>
-            <Typography
-              variant="body1"
-              textAlign={'center'}
-              fontSize={'1.37rem'}
-              color={theme.palette.text.secondary}
-              justifyContent="center"
-              width={'100%'}
-            >
-              {t('in-waiting-room')}
-            </Typography>
-          </SelfTest>
-        </Grid>
-        <Grid item container xs={12} spacing={1} justifyContent={'center'}>
+      <SelfTest
+        actionButton={
           <Button onClick={moveToRoom} disabled={!readyToEnter}>
             {readyToEnter ? t('joinform-enter-now') : t('joinform-waiting-room-enter')}
           </Button>
-        </Grid>
-      </Grid>
+        }
+      >
+        <Typography
+          variant="body1"
+          textAlign={'center'}
+          fontSize={'1.37rem'}
+          color={theme.palette.text.secondary}
+          justifyContent="center"
+          width={'100%'}
+        >
+          {readyToEnter ? t('in-waiting-room-ready') : t('in-waiting-room')}
+        </Typography>
+      </SelfTest>
     </Container>
   );
 };

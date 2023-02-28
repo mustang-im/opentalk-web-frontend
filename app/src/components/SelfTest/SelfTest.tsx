@@ -7,16 +7,18 @@ import { useTranslation } from 'react-i18next';
 
 import arrowImage from '../../assets/images/arrow-illustration.png';
 import LocalVideo from '../../components/LocalVideo';
-import Toolbar from '../../components/Toolbar';
 import { useAppSelector } from '../../hooks';
 import { selectFeatures } from '../../store/slices/configSlice';
 import { selectVideoEnabled } from '../../store/slices/mediaSlice';
 import SpeedTest from '../SpeedTest';
 import { EchoPlayBack } from './fragments/EchoPlayback';
+import { SelfTestToolbar } from './fragments/SelfTestToolbar';
 
 const SelfTestContainer = styled('div')(() => ({
   position: 'relative',
+  padding: 0,
   width: '100%',
+  maxWidth: '1200px',
 
   //The blur should be part of the theme and handled globally
   backdropFilter: 'blur(100px)',
@@ -55,16 +57,12 @@ const MonitorContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-const FormContainer = styled(Grid)(() => ({
-  flex: '0 0 auto',
-  alignItems: 'flex-start',
-}));
-
 interface SelftestProps {
   children: ReactNode;
+  actionButton?: ReactNode;
 }
 
-const SelfTest = ({ children }: SelftestProps) => {
+const SelfTest = ({ children, actionButton }: SelftestProps) => {
   const videoEnabled = useAppSelector(selectVideoEnabled);
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
   const { t } = useTranslation();
@@ -90,15 +88,15 @@ const SelfTest = ({ children }: SelftestProps) => {
         <EchoPlayBack />
       </MonitorContainer>
       <BottomContainer>
-        <FormContainer container spacing={2}>
-          <Grid item md={2} />
-          <Grid item xs={12} md={5}>
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
+          <Grid item md={1} />
+          <Grid item md={5}>
             {children}
           </Grid>
-          <Grid item xs={12} md={4} justifyContent="center">
-            <Toolbar layout="lobby" />
+          <Grid item md={5}>
+            <SelfTestToolbar actionButton={actionButton} />
           </Grid>
-        </FormContainer>
+        </Grid>
       </BottomContainer>
     </SelfTestContainer>
   );

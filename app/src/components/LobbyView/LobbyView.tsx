@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Container, IconButton, InputAdornment, Stack, Box } from '@mui/material';
+import { Button, Container, IconButton, InputAdornment, Stack } from '@mui/material';
 import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon, setHotkeysEnabled } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
@@ -124,44 +124,49 @@ const LobbyView: FC = () => {
     <form onSubmit={formik.handleSubmit}>
       <Container>
         <Stack direction={'column'} spacing={4} justifyContent={'center'} alignItems={'center'}>
-          <SelfTest>
-            <TextField
-              {...formikProps('name', formik)}
-              color={'secondary'}
-              placeholder={t('joinform-enter-name')}
-              autoComplete="user-name"
-              fullWidth
-            />
-          </SelfTest>
-          <Box maxWidth={'34rem'} width={'100%'}>
-            <TextField
-              {...formikProps('password', formik)}
-              color={'secondary'}
-              placeholder={t('joinform-enter-password')}
-              fullWidth
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton aria-label={t('toggle-password-visibility')} onClick={handleClickShowPassword} edge="end">
-                    {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              error={Boolean(joinError)}
-              helperText={joinError ? t(joinError) : ''}
-            />
-          </Box>
-          <Button
-            type={'submit'}
-            disabled={
-              !(isLoggedIn || inviteCode !== undefined) ||
-              connectionState === ConnectionState.Starting ||
-              !formik.isValid
+          <SelfTest
+            actionButton={
+              <Button
+                type={'submit'}
+                disabled={
+                  !(isLoggedIn || inviteCode !== undefined) ||
+                  connectionState === ConnectionState.Starting ||
+                  !formik.isValid
+                }
+              >
+                {t('joinform-enter-now')}
+              </Button>
             }
           >
-            {t('joinform-enter-now')}
-          </Button>
+            <Stack direction={'row'} spacing={1}>
+              <TextField
+                {...formikProps('name', formik)}
+                color={'secondary'}
+                placeholder={t('joinform-enter-name')}
+                autoComplete="user-name"
+              />
+              <TextField
+                {...formikProps('password', formik)}
+                color={'secondary'}
+                placeholder={t('joinform-enter-password')}
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={t('toggle-password-visibility')}
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                error={Boolean(joinError)}
+                helperText={joinError ? t(joinError) : ''}
+              />
+            </Stack>
+          </SelfTest>
         </Stack>
       </Container>
     </form>

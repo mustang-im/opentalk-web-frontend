@@ -44,16 +44,4 @@ describe('render <Toolbar />', () => {
     expect(screen.getByTestId('toolbarMenuButton')).toBeInTheDocument();
     expect(screen.getByTestId('toolbarEndCallButton')).toBeInTheDocument();
   });
-
-  test('render lobby-layout Toolbar component', () => {
-    const { store } = createStore();
-    render(<Toolbar layout="lobby" />, store);
-
-    expect(screen.getByTestId('toolbarAudioButton')).toBeInTheDocument();
-    expect(screen.getByTestId('toolbarVideoButton')).toBeInTheDocument();
-    expect(screen.queryByTestId('toolbarBlurScreenButton')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('toolbarHandraiseButton')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('toolbarMenuButton')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('toolbarEndCallButton')).not.toBeInTheDocument();
-  });
 });

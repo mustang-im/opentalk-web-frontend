@@ -1,3 +1,14 @@
+## Unreleased
+
+### UI/UX Fixes
+
+### Stability Improvements
+
+### New Features
+
+- Lobby / Waiting room move button / password (!852)
+
+
 ## 1.2.0
 
 ### UI/UX Fixes
