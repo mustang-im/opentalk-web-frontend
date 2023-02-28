@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Box, Typography, Badge } from '@mui/material';
 import { ParticipantId, GroupId } from '@opentalk/common';
-import { noTargetArgs } from '@storybook/store';
-import { filter } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -21,17 +19,10 @@ import {
 } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
-import { selectOurUuid } from '../../store/slices/userSlice';
 import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';
 import TabPanel from './fragments/TabPanel';
-
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    background: theme.palette.primary.main,
-  },
-}));
 
 const MessagesBadge = styled(Badge)(({ theme }) => ({
   left: 74,
@@ -99,7 +90,7 @@ const Tabs = styled(MuiTabs)(({ theme }) => ({
 }));
 
 const MenuTabs = () => {
-  const [value, setValue] = useState(SidebarTab.Chat);
+  const [currentTab, setCurrentTab] = useState(SidebarTab.Chat);
   const { t } = useTranslation();
   const chatConversationState = useAppSelector(selectChatConversationState);
   const allChatMessages = useAppSelector(selectAllChatMessages);
@@ -107,13 +98,12 @@ const MenuTabs = () => {
   const lastSeenTimestampsGroup = useAppSelector(selectLastSeenTimestampsGroup);
   const lastSeenTimestampsPrivate = useAppSelector(selectLastSeenTimestampsPrivate);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
-  const ownId = useAppSelector(selectOurUuid);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const timestamp = new Date().toISOString();
     if (
-      value === SidebarTab.Messages &&
+      currentTab === SidebarTab.Messages &&
       chatConversationState.scope !== undefined &&
       chatConversationState.targetId !== undefined
     ) {
@@ -150,20 +140,20 @@ const MenuTabs = () => {
       }
     }
 
-    if (value === SidebarTab.Chat) {
+    if (currentTab === SidebarTab.Chat) {
       dispatch(addLastSeenTimestamp({ scope: ChatScope.Global, timestamp: timestamp }));
       dispatch(setLastSeenTimestamp.action({ timestamp: timestamp, scope: ChatScope.Global }));
     }
-  }, [value, chatConversationState, allChatMessages]);
+  }, [currentTab, chatConversationState, allChatMessages]);
 
   useEffect(() => {
     if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
-      setValue(SidebarTab.Messages);
+      setCurrentTab(SidebarTab.Messages);
     }
   }, [chatConversationState]);
 
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
-    setValue(newValue);
+    setCurrentTab(newValue);
   };
 
   const getGroupUnread = () => {
@@ -228,13 +218,6 @@ const MenuTabs = () => {
       return messages.length;
     }
 
-    if (lastSeenTimestampsPrivate) {
-      const messages = allChatMessages.filter((message) => message.scope === ChatScope.Private);
-      if (messages.length > 0) {
-        const targets = [...new Set(messages.map((message) => message.target))];
-      }
-    }
-
     const privateUnread = getPrivateUread();
     if (privateUnread > 0) {
       return privateUnread;
@@ -243,7 +226,7 @@ const MenuTabs = () => {
   };
 
   const getBadge = (tab: number) => {
-    if (tab === value) {
+    if (tab === currentTab) {
       return;
     }
     if (getUnreadMessagesCount(ChatScope.Group) > 0 && tab === SidebarTab.Messages) {
@@ -259,7 +242,7 @@ const MenuTabs = () => {
     <Container>
       <Box>
         <AppBar position={'static'} color={'secondary'} elevation={0}>
-          <Tabs value={value} onChange={handleChange} variant={'fullWidth'}>
+          <Tabs value={currentTab} onChange={handleChange} variant={'fullWidth'}>
             <Tab label={t('menutabs-chat')} icon={getBadge(SidebarTab.Chat)} iconPosition="start" />
             <Tab
               label={t('menutabs-people')}
@@ -270,13 +253,13 @@ const MenuTabs = () => {
           </Tabs>
         </AppBar>
       </Box>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={currentTab} index={0}>
         <Chat />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={currentTab} index={1}>
         <Participants />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={currentTab} index={2}>
         <ChatOverview />
       </TabPanel>
     </Container>
