@@ -12,22 +12,32 @@ import {
   styled,
   Typography,
 } from '@mui/material';
+import { ClockIcon } from '@opentalk/common';
 import { isNumber } from 'lodash';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ClockIcon } from '../../assets/icons';
+import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils'; 
 import { IFormikCustomFieldPropsReturnDurationValue } from '../../utils';
 import TextField from '../TextField';
-import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils';
 
+export type DurationValueOptions = number | 'custom' | null;
 interface IDurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue {
   name: string;
-  durationOptions?: Array<number | string | null>;
+  /**
+   * Options:
+   * - null for unlimited time
+   * - number (in minutes)
+   * - 'custom'
+   *
+   * Default:
+   * - [null, 5, 10, 15, 30, 'custom']
+   */
+  durationOptions?: Array<DurationValueOptions>;
   ButtonProps?: ButtonProps;
 }
 
-const DURATION_OPTIONS: Array<number | string | null> = [null, 5, 10, 15, 30, 'custom'];
+const DURATION_OPTIONS: Array<DurationValueOptions> = [null, 5, 10, 15, 30, 'custom'];
 
 const NumberInput = styled(TextField)({
   maxWidth: '4rem',
@@ -65,14 +75,15 @@ const DurationField = ({
   helperText,
 }: IDurationFieldProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-  const [showCustomDurationField, setShowCustomDurationField] = React.useState<boolean>(
-    typeof value === 'number' && !durationOptions.includes(value)
-  );
+
   const [customDurationFieldValue, setCustomDurationFieldValue] = React.useState<number>(
-    value !== null && value && durationOptions.includes(value) ? (value as number) : 1
+    value && durationOptions.includes(value) ? value : 1
   );
-  const [selectedChip, setSelectedChip] = useState<number | string | null>(isNumber(value) ? value : null);
+
+  const [selectedChip, setSelectedChip] = useState<DurationValueOptions>(isNumber(value) ? value : null);
   const { t } = useTranslation();
+
+  const showCustomDurationField = selectedChip === 'custom';
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -83,49 +94,42 @@ const DurationField = ({
     event.stopPropagation();
     setAnchorEl(null);
   };
+
   const renderButtonText = () => (value ? `${value} min` : t('field-duration-unlimited-time'));
 
-  const onChipSelected = (duration: number) => {
-    setSelectedChip(duration);
-    setShowCustomDurationField(false);
-  };
+  const getChipLabel = (duration: DurationValueOptions) => {
+    switch (duration) {
+      case 'custom':
+        return t('field-duration-custom');
+      case null:
+        return t('field-duration-unlimited-time');
+      default:
+        return `${duration} min`;
+    }
+  }
 
   const renderDurationOptions = () => (
     <Stack spacing={1} flexDirection={'row'} flexWrap={'wrap'} justifyContent={'space-between'} alignItems={'baseline'}>
-      {durationOptions.map((duration, index) =>
-        duration === 'custom' ? (
+      {durationOptions.map((duration, index) => {
+        return (
           <Chip
-            label={t('field-duration-custom')}
-            onClick={() => setShowCustomDurationField(true)}
-            variant={showCustomDurationField ? 'filled' : 'outlined'}
+            label={getChipLabel(duration)}
+            onClick={() => setSelectedChip(duration)}
+            variant={selectedChip === duration ? 'filled' : 'outlined'}
             key={index}
           />
-        ) : (
-          <Chip
-            label={duration ? `${duration} min` : t('field-duration-unlimited-time')}
-            onClick={() => onChipSelected(duration as number)}
-            variant={selectedChip === duration && !showCustomDurationField ? 'filled' : 'outlined'}
-            key={index}
-          />
-        )
-      )}
+        );
+      })}
     </Stack>
   );
 
   const handleSave = (event: React.MouseEvent<HTMLElement>) => {
     handlePopoverClose(event);
-    if (showCustomDurationField) {
-      setFieldValue(name, customDurationFieldValue);
-    } else {
-      setFieldValue(name, selectedChip);
-    }
-  };
 
-  const handleClose = (event: React.MouseEvent<HTMLElement>) => {
-    handlePopoverClose(event);
-    setTimeout(() => {
-      setSelectedChip(isNumber(value) ? value : null);
-    }, 100);
+    const durationMinutes = showCustomDurationField ? customDurationFieldValue : selectedChip;
+    const duration = isNumber(durationMinutes) ? durationMinutes : null;
+
+    setFieldValue(name, duration);
   };
 
   const open = Boolean(anchorEl);
@@ -166,7 +170,7 @@ const DurationField = ({
             </Stack>
           )}
           <Stack flexDirection={'row'} justifyContent={'space-between'}>
-            <Button variant={'text'} size={'small'} onClick={handleClose}>
+            <Button variant={'text'} size={'small'} onClick={handlePopoverClose}>
               {t('field-duration-button-close')}
             </Button>
             <Button size={'small'} onClick={handleSave}>
