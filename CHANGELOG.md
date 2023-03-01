@@ -32,6 +32,7 @@
 
 ### UI/UX Fixes
 
+- Fix display of long vote participant names and avatars (!848)
 - Fix layout for vote kind selector (!851)
 - Enable share screen button on join success (!834)
 - Fix LegalVote user selection (!824)
