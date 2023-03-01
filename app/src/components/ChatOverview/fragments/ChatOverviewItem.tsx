@@ -54,20 +54,20 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const lastSeenTimestampsPrivate = useAppSelector(selectLastSeenTimestampsPrivate);
   const [fontWeight, setFontWeigth] = useState('normal');
 
-  const getUnreadMessages = (timestamps: TimestampState[]) => {
-    const lastSeen = timestamps.filter((seen) => seen.target === chat.id);
+  const getUnreadMessagesCount = (timestampStates: TimestampState[]) => {
+    const lastSeen = timestampStates.filter((seenState) => seenState.target === chat.id);
     if (lastSeen.length === 1) {
-      const filteredMessages = chat.messages.filter(
+      const lastSeenMessages = chat.messages.filter(
         (message) => new Date(message.timestamp).getTime() > new Date(lastSeen[0].timestamp).getTime()
       );
-      return filteredMessages.length;
+      return lastSeenMessages.length;
     }
     return chat.messages.length;
   };
 
   useEffect(() => {
     if (chat.scope === ChatScope.Private) {
-      if (getUnreadMessages(lastSeenTimestampsPrivate) > 0) {
+      if (getUnreadMessagesCount(lastSeenTimestampsPrivate) > 0) {
         setFontWeigth('bold');
       } else {
         setFontWeigth('normal');
@@ -77,7 +77,7 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
 
   useEffect(() => {
     if (chat.scope === ChatScope.Group) {
-      if (getUnreadMessages(lastSeenTimestampsGroup) > 0) {
+      if (getUnreadMessagesCount(lastSeenTimestampsGroup) > 0) {
         setFontWeigth('bold');
       } else {
         setFontWeigth('normal');

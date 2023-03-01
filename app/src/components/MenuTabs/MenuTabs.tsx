@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Box, Typography, Badge } from '@mui/material';
+import { TargetId } from '@opentalk/common';
 import { ParticipantId, GroupId } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +17,7 @@ import {
   selectLastSeenTimestampGlobal,
   selectLastSeenTimestampsGroup,
   selectLastSeenTimestampsPrivate,
+  TimestampState,
 } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
@@ -156,14 +158,14 @@ const MenuTabs = () => {
     setCurrentTab(newValue);
   };
 
-  const getGroupUnread = () => {
-    const messages = allChatMessages.filter((message) => message.scope === ChatScope.Group);
+  const getUreadMessagesCount = (timestampStates: TimestampState[], scope: ChatScope) => {
+    const messages = allChatMessages.filter((message) => message.scope === scope);
     if (messages.length > 0) {
-      if (lastSeenTimestampsGroup.length > 0) {
-        const targetIds = [...new Set(lastSeenTimestampsGroup.map((seen) => seen.target as GroupId))];
+      if (timestampStates.length > 0) {
+        const targetIds = [...new Set(timestampStates.map((seen) => seen.target as TargetId))];
         const filteredMessages = messages.filter((message) => {
-          if (targetIds.includes(message.target as GroupId)) {
-            const lastSeen = lastSeenTimestampsGroup
+          if (targetIds.includes(message.target as TargetId)) {
+            const lastSeen = timestampStates
               .filter((seen) => seen.target === message.target)
               .map((entry) => entry.timestamp);
             if (lastSeen.length === 1) {
@@ -181,32 +183,7 @@ const MenuTabs = () => {
     return messages.length;
   };
 
-  const getPrivateUread = () => {
-    const messages = allChatMessages.filter((message) => message.scope === ChatScope.Private);
-    if (messages.length > 0) {
-      if (lastSeenTimestampsPrivate.length > 0) {
-        const targetIds = [...new Set(lastSeenTimestampsPrivate.map((seen) => seen.target as ParticipantId))];
-        const filteredMessages = messages.filter((message) => {
-          if (targetIds.includes(message.target as ParticipantId)) {
-            const lastSeen = lastSeenTimestampsPrivate
-              .filter((seen) => seen.target === message.target)
-              .map((entry) => entry.timestamp);
-            if (lastSeen.length === 1) {
-              if (new Date(message.timestamp).getTime() > new Date(lastSeen[0]).getTime()) {
-                return message;
-              }
-            }
-            return;
-          }
-          return message;
-        });
-        return filteredMessages.length;
-      }
-    }
-    return messages.length;
-  };
-
-  const getUnreadMessagesCount = (scope: ChatScope) => {
+  const getUnreadCount = (scope: ChatScope) => {
     if (scope === ChatScope.Global) {
       const messages = allChatMessages.filter((message) => message.scope === ChatScope.Global);
       if (lastSeenTimestampGlobal) {
@@ -218,22 +195,22 @@ const MenuTabs = () => {
       return messages.length;
     }
 
-    const privateUnread = getPrivateUread();
+    const privateUnread = getUreadMessagesCount(lastSeenTimestampsPrivate, ChatScope.Private);
     if (privateUnread > 0) {
       return privateUnread;
     }
-    return getGroupUnread();
+    return getUreadMessagesCount(lastSeenTimestampsGroup, ChatScope.Group);
   };
 
   const getBadge = (tab: number) => {
     if (tab === currentTab) {
       return;
     }
-    if (getUnreadMessagesCount(ChatScope.Group) > 0 && tab === SidebarTab.Messages) {
+    if (getUnreadCount(ChatScope.Group) > 0 && tab === SidebarTab.Messages) {
       return <MessagesBadge variant={'dot'} />;
     }
 
-    if (getUnreadMessagesCount(ChatScope.Global) > 0 && tab === SidebarTab.Chat) {
+    if (getUnreadCount(ChatScope.Global) > 0 && tab === SidebarTab.Chat) {
       return <ChatBadge variant={'dot'} />;
     }
   };
