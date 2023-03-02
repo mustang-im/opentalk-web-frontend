@@ -21,6 +21,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   // use a random base interval to avoid control ringing
   private bandwidthController = new BandwidthController(4000 * (0.7 + Math.random()), 5 * 60_000, 1000);
   private lossCount = 0;
+  private expectRestart = false;
 
   private readonly updateQualityTarget: () => void;
 
@@ -32,19 +33,22 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       const state = this.peerConnection.iceConnectionState;
       switch (state) {
         case 'closed':
-          //TODO reconnect?
           this.close();
           break;
         case 'disconnected':
-          this.streamState = MediaStreamState.Disconnected;
+          this.streamState = MediaStreamState.Broken;
           this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
-          console.warn('Subscriber connection disconnected');
+          console.warn(`Subscriber connection ${state}`);
           break;
         case 'failed':
-          this.streamState = MediaStreamState.Failed;
+          this.streamState = MediaStreamState.Broken;
           this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
-          console.warn('Subscriber connection failed');
+          this.expectRestart = true;
+          this.signaling.resubscribe(this.descriptor);
+          console.warn(`Subscriber connection ${state}`);
           break;
+        case 'connected':
+          this.updateState();
       }
     });
     this.peerConnection.addEventListener('track', (event) => this.onTrackHandler(event));
@@ -102,7 +106,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
 
   private updateState() {
     let nextState = MediaStreamState.Offline;
-    if (this.stream?.active) {
+    if (this.peerConnection.iceConnectionState === 'connected' && this.stream?.active) {
       const liveTracks = this.stream.getTracks().filter((t) => t.readyState === 'live');
       // Allows us to recognize when a track has problems.
       // See https://w3c.github.io/mediacapture-main/#track-muted
@@ -213,9 +217,11 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       sdp: sdp,
       type: 'offer',
     });
+    console.debug('answerOffer', this.expectRestart);
     const answer = await this.peerConnection.createAnswer({
-      iceRestart: false,
+      iceRestart: this.expectRestart,
     });
+    this.expectRestart = false;
     await this.peerConnection.setLocalDescription(answer);
     return answer;
   }

@@ -24,6 +24,7 @@
 
 ### Stability Improvements
 
+- Reconnect media connections when they fail (!887)
 - Add connection information to participant stats panel (!849)
 - Fix: flickering local video element when start coffee break (!870)
 - Clean-up dispatch of legal vote started action (!864)

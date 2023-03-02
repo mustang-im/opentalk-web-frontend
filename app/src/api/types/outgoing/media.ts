@@ -57,6 +57,10 @@ export interface Subscribe extends Target {
   action: 'subscribe';
 }
 
+export interface Resubscribe extends Target {
+  action: 'resubscribe';
+}
+
 export interface Configure extends Target {
   action: 'configure';
   configuration: Configuration;
@@ -102,6 +106,7 @@ export type Action =
   | UpdateMediaSession
   | SdpAnswer
   | Subscribe
+  | Resubscribe
   | Configure
   | SdpCandidate
   | SdpEndOfCandidates

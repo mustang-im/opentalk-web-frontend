@@ -31,7 +31,10 @@ const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
     switch (subscriber?.streamState) {
       case MediaStreamState.Broken:
         if (subscriber?.audio || subscriber?.video) {
-          return renderFailedTooltip(t('participant-stream-broken-tooltip') || '');
+          return renderFailedTooltip(
+            t('participant-stream-broken-tooltip') || '',
+            <ConnectionGoodIcon color="error" fontSize="medium" />
+          );
         }
         break;
       case MediaStreamState.AudioBroken:
@@ -50,16 +53,6 @@ const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
           );
         }
         break;
-      case MediaStreamState.Disconnected:
-        return renderFailedTooltip(
-          t('participant-stream-disconnected') || '',
-          <ConnectionGoodIcon color="error" fontSize="medium" />
-        );
-      case MediaStreamState.Failed:
-        return renderFailedTooltip(
-          t('participant-stream-failed') || '',
-          <ConnectionGoodIcon color="error" fontSize="medium" />
-        );
     }
   };
 
