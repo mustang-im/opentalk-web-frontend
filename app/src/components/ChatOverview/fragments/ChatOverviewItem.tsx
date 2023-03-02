@@ -9,13 +9,15 @@ import {
   Grid,
   styled,
 } from '@mui/material';
+import { TargetId } from '@opentalk/common';
 import { useDateFormat } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import ChatScope from '../../../enums/ChatScope';
 import { useAppSelector } from '../../../hooks';
-import { ChatProps, selectLastSeenTimestamps, TimestampState } from '../../../store/slices/chatSlice';
+import { selectUnreadMessagesByTargetIdCount } from '../../../store/selectors';
+import { ChatProps } from '../../../store/slices/chatSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 import ParticipantAvatar from '../../ParticipantAvatar';
 
@@ -45,29 +47,18 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const date = new Date(chat.lastMessage?.timestamp) ?? Date.now;
   const formattedTime = useDateFormat(date, 'time');
   const getDisplayName = () => (isEmpty(participant) ? chat.id : participant?.displayName);
-  const lastSeenTimestamps = useAppSelector(selectLastSeenTimestamps);
+  const lastSeenTimestampCount = useAppSelector(selectUnreadMessagesByTargetIdCount(chat.id as TargetId));
   const [fontWeight, setFontWeigth] = useState('normal');
-
-  const getUnreadMessagesCount = (lastSeenTimestampStates: TimestampState[]) => {
-    const lastSeen = lastSeenTimestampStates.filter((seenState) => seenState.target === chat.id);
-    if (lastSeen.length === 1) {
-      const lastSeenMessages = chat.messages.filter(
-        (message) => new Date(message.timestamp).getTime() > new Date(lastSeen[0].timestamp).getTime()
-      );
-      return lastSeenMessages.length;
-    }
-    return chat.messages.length;
-  };
 
   useEffect(() => {
     if (chat.scope === ChatScope.Private || chat.scope === ChatScope.Group) {
-      if (getUnreadMessagesCount(lastSeenTimestamps) > 0) {
+      if (lastSeenTimestampCount > 0) {
         setFontWeigth('bold');
       } else {
         setFontWeigth('normal');
       }
     }
-  }, [chat, lastSeenTimestamps]);
+  }, [chat, lastSeenTimestampCount]);
 
   const renderPrimaryText = () => (
     <Grid container direction={'row'} spacing={1}>

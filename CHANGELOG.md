@@ -11,7 +11,7 @@
 ### New Features
 
 - Lobby / Waiting room move button / password (!852)
-
+- Add unread indicator for chat messages (!844)
 
 ## 1.2.0
 

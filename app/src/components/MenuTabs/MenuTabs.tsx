@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Box, Typography, Badge } from '@mui/material';
-import { TargetId } from '@opentalk/common';
 import { ParticipantId, GroupId } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,13 +11,7 @@ import { setLastSeenTimestamp } from '../../api/types/outgoing/chat';
 import ChatScope from '../../enums/ChatScope';
 import { useAppSelector } from '../../hooks';
 import { selectUnreadMessageCount } from '../../store/selectors';
-import {
-  addLastSeenTimestamp,
-  selectAllChatMessages,
-  selectLastSeenTimestampGlobal,
-  selectLastSeenTimestamps,
-  TimestampState,
-} from '../../store/slices/chatSlice';
+import { addLastSeenTimestamp, selectAllChatMessages } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
 import Chat from '../Chat';

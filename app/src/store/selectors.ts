@@ -186,11 +186,6 @@ export const selectCombinedMessageAndEvents = (scope: ChatScope, targetId: Targe
     return _.sortBy(merged, ['timestamp']);
   });
 
-export const selectAllChatMessagesForScope = (scope: ChatScope) =>
-  createSelector(selectAllChatMessages, (allChatMessages) => {
-    return;
-  });
-
 const filterMessagesByTimestampStates = (messages: ChatMessage[], lastSeenTimestamps: TimestampState[]) => {
   const targetIds = [...new Set(lastSeenTimestamps.map((seenState) => seenState.target as TargetId))];
   const filteredMessages = messages.filter((message) => {
@@ -241,15 +236,27 @@ export const selectUnreadMessageCount = createSelector(
   }
 );
 
-export const xselectUnreadMessageCount = createSelector(
-  selectAllChatMessages,
-  selectLastSeenTimestamps,
-  selectLastSeenTimestampGlobal,
-  (allChatMessages, lastSeenTimestamps, lastSeenTimestampGlobal) => {
-    console.log('### %s, %s, %s', allChatMessages.length, lastSeenTimestamps.length, lastSeenTimestampGlobal);
-    return 0;
-  }
-);
+export const selectUnreadMessagesByTargetIdCount = (targetId: TargetId) =>
+  createSelector(selectAllChatMessages, selectLastSeenTimestamps, (allChatMessages, lastSeenTimestamps) => {
+    const messagesForTargetId = allChatMessages.filter(
+      (message) =>
+        (message.scope === ChatScope.Group || message.scope === ChatScope.Private) && message.target === targetId
+    );
+
+    const lastSeenStates = lastSeenTimestamps.filter((lastSeenState) => lastSeenState.target === targetId);
+    if (lastSeenStates.length > 0) {
+      const maxLastSeenTimestamp = Math.max(
+        ...lastSeenStates.map((lastSeenState) => new Date(lastSeenState.timestamp).getTime())
+      );
+      const maxLastSeenChatMessageTimestamp = Math.max(
+        ...messagesForTargetId.map((message) => new Date(message.timestamp).getTime())
+      );
+      if (maxLastSeenChatMessageTimestamp < maxLastSeenTimestamp) {
+        return 0;
+      }
+    }
+    return messagesForTargetId.length;
+  });
 
 export const selectParticipantsReadyList = createSelector(
   selectAllParticipants,
