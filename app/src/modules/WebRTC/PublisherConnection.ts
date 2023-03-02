@@ -94,9 +94,23 @@ export class PublisherConnection extends BaseWebRtcConnection {
     this.stream = stream;
     this.peerConnection.addEventListener('negotiationneeded', async (ev) => {
       console.debug(`PublishingConnection ${this.descriptor.mediaType} negotiation needed -> re-offer/publish`, ev);
-      const initialSdp = await this.peerConnection.createOffer({ iceRestart: false });
+      const iceRestart = this.peerConnection.connectionState === 'failed';
+      const initialSdp = await this.peerConnection.createOffer({ iceRestart });
       await this.peerConnection.setLocalDescription(initialSdp);
       this.signaling.announcePublish(this.descriptor, initialSdp);
+    });
+
+    this.peerConnection.addEventListener('iceconnectionstatechange', () => {
+      const state = this.peerConnection.iceConnectionState;
+      if (state === 'failed') {
+        if (this.publishComplete) {
+          this.publishComplete = true;
+          console.warn('initiating ICE restart');
+          this.peerConnection.restartIce();
+        } else {
+          console.error('ICE restart failed');
+        }
+      }
     });
 
     this.peerConnection.addEventListener('track', (ev) => {
