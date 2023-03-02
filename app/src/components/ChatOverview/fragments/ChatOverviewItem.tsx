@@ -54,8 +54,8 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const lastSeenTimestampsPrivate = useAppSelector(selectLastSeenTimestampsPrivate);
   const [fontWeight, setFontWeigth] = useState('normal');
 
-  const getUnreadMessagesCount = (timestampStates: TimestampState[]) => {
-    const lastSeen = timestampStates.filter((seenState) => seenState.target === chat.id);
+  const getUnreadMessagesCount = (lastSeenTimestampStates: TimestampState[]) => {
+    const lastSeen = lastSeenTimestampStates.filter((seenState) => seenState.target === chat.id);
     if (lastSeen.length === 1) {
       const lastSeenMessages = chat.messages.filter(
         (message) => new Date(message.timestamp).getTime() > new Date(lastSeen[0].timestamp).getTime()

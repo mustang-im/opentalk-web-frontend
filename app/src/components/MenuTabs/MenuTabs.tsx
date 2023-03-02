@@ -158,14 +158,14 @@ const MenuTabs = () => {
     setCurrentTab(newValue);
   };
 
-  const getUreadMessagesCount = (timestampStates: TimestampState[], scope: ChatScope) => {
+  const getUnreadMessagesCount = (lastSeenTimestampStates: TimestampState[], scope: ChatScope) => {
     const messages = allChatMessages.filter((message) => message.scope === scope);
     if (messages.length > 0) {
-      if (timestampStates.length > 0) {
-        const targetIds = [...new Set(timestampStates.map((seen) => seen.target as TargetId))];
+      if (lastSeenTimestampStates.length > 0) {
+        const targetIds = [...new Set(lastSeenTimestampStates.map((seenState) => seenState.target as TargetId))];
         const filteredMessages = messages.filter((message) => {
           if (targetIds.includes(message.target as TargetId)) {
-            const lastSeen = timestampStates
+            const lastSeen = lastSeenTimestampStates
               .filter((seen) => seen.target === message.target)
               .map((entry) => entry.timestamp);
             if (lastSeen.length === 1) {
@@ -195,11 +195,11 @@ const MenuTabs = () => {
       return messages.length;
     }
 
-    const privateUnread = getUreadMessagesCount(lastSeenTimestampsPrivate, ChatScope.Private);
+    const privateUnread = getUnreadMessagesCount(lastSeenTimestampsPrivate, ChatScope.Private);
     if (privateUnread > 0) {
       return privateUnread;
     }
-    return getUreadMessagesCount(lastSeenTimestampsGroup, ChatScope.Group);
+    return getUnreadMessagesCount(lastSeenTimestampsGroup, ChatScope.Group);
   };
 
   const getBadge = (tab: number) => {
