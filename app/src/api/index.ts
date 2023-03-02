@@ -297,7 +297,7 @@ const handleControlMessage = (
           role: data.role,
           chat: {
             enabled: data.chat.enabled,
-            roomHistory: roomHistory,
+            roomHistory,
             lastSeenTimestampGlobal: data.chat.lastSeenTimestampGlobal,
             lastSeenTimestampsGroup: data.chat.lastSeenTimestampsGroup,
             lastSeenTimestampsPrivate: data.chat.lastSeenTimestampsPrivate,

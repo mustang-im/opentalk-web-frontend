@@ -114,12 +114,12 @@ const MenuTabs = () => {
           addLastSeenTimestamp({
             scope: chatConversationState.scope,
             target: chatConversationState.targetId as GroupId,
-            timestamp: timestamp,
+            timestamp,
           })
         );
         dispatch(
           setLastSeenTimestamp.action({
-            timestamp: timestamp,
+            timestamp,
             scope: chatConversationState.scope,
             target: chatConversationState.targetId as GroupId,
           })
@@ -129,12 +129,12 @@ const MenuTabs = () => {
         const data = {
           scope: chatConversationState.scope,
           target: chatConversationState.targetId as ParticipantId,
-          timestamp: timestamp,
+          timestamp,
         };
         dispatch(addLastSeenTimestamp(data));
         dispatch(
           setLastSeenTimestamp.action({
-            timestamp: timestamp,
+            timestamp,
             scope: chatConversationState.scope,
             target: chatConversationState.targetId as ParticipantId,
           })
