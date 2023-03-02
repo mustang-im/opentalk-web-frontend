@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { setLastSeenTimestamp } from '../../api/types/outgoing/chat';
 import ChatScope from '../../enums/ChatScope';
 import { useAppSelector } from '../../hooks';
+import { selectUnreadMessageCount } from '../../store/selectors';
 import {
   addLastSeenTimestamp,
   selectAllChatMessages,
@@ -94,10 +95,10 @@ const MenuTabs = () => {
   const [currentTab, setCurrentTab] = useState(SidebarTab.Chat);
   const { t } = useTranslation();
   const chatConversationState = useAppSelector(selectChatConversationState);
-  const allChatMessages = useAppSelector(selectAllChatMessages);
-  const lastSeenTimestampGlobal = useAppSelector(selectLastSeenTimestampGlobal);
-  const lastSeenTimestamps = useAppSelector(selectLastSeenTimestamps);
+  const unreadMessagesCount = useAppSelector(selectUnreadMessageCount);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
+  const allChatMessages = useAppSelector(selectAllChatMessages);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -156,59 +157,15 @@ const MenuTabs = () => {
     setCurrentTab(newValue);
   };
 
-  const getUnreadMessagesCount = (lastSeenTimestampStates: TimestampState[], scope: ChatScope) => {
-    const messages = allChatMessages.filter((message) => message.scope === scope);
-    if (messages.length > 0) {
-      if (lastSeenTimestampStates.length > 0) {
-        const targetIds = [...new Set(lastSeenTimestampStates.map((seenState) => seenState.target as TargetId))];
-        const filteredMessages = messages.filter((message) => {
-          if (targetIds.includes(message.target as TargetId)) {
-            const lastSeen = lastSeenTimestampStates
-              .filter((seen) => seen.target === message.target)
-              .map((entry) => entry.timestamp);
-            if (lastSeen.length === 1) {
-              if (new Date(message.timestamp).getTime() > new Date(lastSeen[0]).getTime()) {
-                return message;
-              }
-            }
-            return;
-          }
-          return message;
-        });
-        return filteredMessages.length;
-      }
-    }
-    return messages.length;
-  };
-
-  const getUnreadCount = (scope: ChatScope) => {
-    if (scope === ChatScope.Global) {
-      const messages = allChatMessages.filter((message) => message.scope === ChatScope.Global);
-      if (lastSeenTimestampGlobal) {
-        const unreadMessages = messages.filter(
-          (message) => new Date(message.timestamp).getTime() > new Date(lastSeenTimestampGlobal).getTime()
-        );
-        return unreadMessages.length;
-      }
-      return messages.length;
-    }
-
-    const privateUnread = getUnreadMessagesCount(lastSeenTimestamps, ChatScope.Private);
-    if (privateUnread > 0) {
-      return privateUnread;
-    }
-    return getUnreadMessagesCount(lastSeenTimestamps, ChatScope.Group);
-  };
-
   const getBadge = (tab: number) => {
     if (tab === currentTab) {
       return;
     }
-    if (getUnreadCount(ChatScope.Group) > 0 && tab === SidebarTab.Messages) {
+    if (unreadMessagesCount.private + unreadMessagesCount.group > 0 && tab === SidebarTab.Messages) {
       return <MessagesBadge variant={'dot'} />;
     }
 
-    if (getUnreadCount(ChatScope.Global) > 0 && tab === SidebarTab.Chat) {
+    if (unreadMessagesCount.global > 0 && tab === SidebarTab.Chat) {
       return <ChatBadge variant={'dot'} />;
     }
   };
