@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, styled, Switch, Typography, Tooltip } from '@mui/material';
 import { Seconds, BackIcon, notifications } from '@opentalk/common';
+import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { FormikValues, Formik } from 'formik';
 import i18next from 'i18next';
 import { isEmpty } from 'lodash';
@@ -12,12 +13,10 @@ import * as yup from 'yup';
 
 import { start } from '../../../api/types/outgoing/poll';
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
-import DurationField from '../../../commonComponents/DurationField';
 import TextField from '../../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
 import { PollFormValues, savePollFormValues } from '../../../store/slices/pollSlice';
-import { formikCustomFieldProps, formikProps, formikSwitchProps } from '../../../utils/formikUtils';
 import AnswersFormElement from './AnswersFormElement';
 
 interface ICreatePollForm {
@@ -115,7 +114,7 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                   <Grid container spacing={1}>
                     <Grid item xs={12}>
                       <DurationField
-                        {...formikCustomFieldProps('duration', formik)}
+                        {...formikDurationFieldProps('duration', formik)}
                         durationOptions={[1, 2, 5, 'custom']}
                         ButtonProps={{
                           size: 'small',

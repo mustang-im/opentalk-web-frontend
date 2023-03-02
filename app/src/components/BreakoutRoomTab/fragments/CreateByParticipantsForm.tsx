@@ -2,17 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Switch } from '@mui/material';
+import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
-import DurationField from '../../../commonComponents/DurationField';
 import TextField from '../../../commonComponents/TextField';
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
-import { formikCustomFieldProps, formikProps, formikSwitchProps } from '../../../utils/formikUtils';
 import TextWithDivider from '../../TextWithDivider';
 
 const CreateButton = styled(Button)({
@@ -49,7 +48,7 @@ const CreateByParticipantsForm = ({ handleNext, formName }: ICreateByParticipant
   return (
     <Stack spacing={2} direction="column" justifyContent="flex-start">
       <DurationFieldAligned
-        {...formikCustomFieldProps(getFormName('duration'), formik)}
+        {...formikDurationFieldProps(getFormName('duration'), formik, 0)}
         ButtonProps={{
           size: 'small',
         }}

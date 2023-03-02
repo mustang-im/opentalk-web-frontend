@@ -37,7 +37,7 @@ export interface IFormikCustomFieldPropsReturnValue extends IFormikCommonPropsRe
 }
 
 export interface IFormikCustomFieldPropsReturnDurationValue extends IFormikCommonPropsReturnValue {
-  value: string | undefined | number;
+  value: number | null;
   setFieldValue: (field: string, value: Primitive, shouldValidate?: boolean) => void;
 }
 
@@ -96,7 +96,7 @@ export function formikSwitchProps<Values>(
   };
 }
 
-export function formikCustomFieldProps<Values>(
+export function formikDateTimePickerProps<Values>(
   fieldName: string,
   formik: FormikProps<Values>
 ): IFormikCustomFieldPropsReturnValue {
@@ -151,6 +151,32 @@ export function formikRatingProps<Values>(
     onBlur: handleBlur,
     error: hasError,
     value: parseInt(get(values, fieldName, 0) as string),
+    helperText: (hasError && (errorMessage as string)) || undefined,
+  };
+}
+
+export function formikDurationFieldProps<Values>(
+  fieldName: string,
+  formik: FormikProps<Values>,
+  /**
+   * Duration value in minutes
+   *
+   * Default: 1
+   */
+  defaultValue?: number
+): IFormikCustomFieldPropsReturnDurationValue {
+  const { setFieldValue, values, handleBlur, handleChange, errors } = formik;
+
+  const errorMessage = get(errors, fieldName);
+  const hasError = Boolean(errorMessage);
+
+  return {
+    name: fieldName,
+    setFieldValue: setFieldValue,
+    onChange: handleChange,
+    onBlur: handleBlur,
+    error: hasError,
+    value: get(values, fieldName, defaultValue ?? 1) as number,
     helperText: (hasError && (errorMessage as string)) || undefined,
   };
 }
