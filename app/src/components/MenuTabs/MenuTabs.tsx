@@ -15,8 +15,7 @@ import {
   addLastSeenTimestamp,
   selectAllChatMessages,
   selectLastSeenTimestampGlobal,
-  selectLastSeenTimestampsGroup,
-  selectLastSeenTimestampsPrivate,
+  selectLastSeenTimestamps,
   TimestampState,
 } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
@@ -97,8 +96,7 @@ const MenuTabs = () => {
   const chatConversationState = useAppSelector(selectChatConversationState);
   const allChatMessages = useAppSelector(selectAllChatMessages);
   const lastSeenTimestampGlobal = useAppSelector(selectLastSeenTimestampGlobal);
-  const lastSeenTimestampsGroup = useAppSelector(selectLastSeenTimestampsGroup);
-  const lastSeenTimestampsPrivate = useAppSelector(selectLastSeenTimestampsPrivate);
+  const lastSeenTimestamps = useAppSelector(selectLastSeenTimestamps);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
   const dispatch = useDispatch();
 
@@ -195,11 +193,11 @@ const MenuTabs = () => {
       return messages.length;
     }
 
-    const privateUnread = getUnreadMessagesCount(lastSeenTimestampsPrivate, ChatScope.Private);
+    const privateUnread = getUnreadMessagesCount(lastSeenTimestamps, ChatScope.Private);
     if (privateUnread > 0) {
       return privateUnread;
     }
-    return getUnreadMessagesCount(lastSeenTimestampsGroup, ChatScope.Group);
+    return getUnreadMessagesCount(lastSeenTimestamps, ChatScope.Group);
   };
 
   const getBadge = (tab: number) => {
