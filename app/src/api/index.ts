@@ -263,7 +263,7 @@ const handleControlMessage = (
     case 'join_success': {
       const { groupIds, messages: groupMessages } = transformChatHistory(data.chat.groupsHistory);
       const groups = groupIds;
-      let roomHistory: ChatMessage[] = data.chat.roomHistory;
+      let roomHistory = data.chat.roomHistory as ChatMessage[];
       roomHistory = roomHistory.concat(groupMessages);
 
       let participants: Participant[];

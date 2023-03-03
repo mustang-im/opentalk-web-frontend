@@ -178,13 +178,13 @@ const MenuTabs = () => {
           </Tabs>
         </AppBar>
       </Box>
-      <TabPanel value={currentTab} index={0}>
+      <TabPanel value={currentTab} index={SidebarTab.Chat}>
         <Chat />
       </TabPanel>
-      <TabPanel value={currentTab} index={1}>
+      <TabPanel value={currentTab} index={SidebarTab.People}>
         <Participants />
       </TabPanel>
-      <TabPanel value={currentTab} index={2}>
+      <TabPanel value={currentTab} index={SidebarTab.Messages}>
         <ChatOverview />
       </TabPanel>
     </Container>
