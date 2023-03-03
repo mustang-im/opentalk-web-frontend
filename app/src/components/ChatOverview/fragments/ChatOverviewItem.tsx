@@ -9,8 +9,7 @@ import {
   Grid,
   styled,
 } from '@mui/material';
-import { TargetId } from '@opentalk/common';
-import { useDateFormat } from '@opentalk/common';
+import { TargetId, useDateFormat } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
