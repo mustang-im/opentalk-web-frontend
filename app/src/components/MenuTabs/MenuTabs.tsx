@@ -20,7 +20,7 @@ import Participants from '../Participants';
 import TabPanel from './fragments/TabPanel';
 
 const MessagesBadge = styled(Badge)(({ theme }) => ({
-  left: 74,
+  right: -4,
   top: -3,
   '& .MuiBadge-badge': {
     background: theme.palette.primary.main,
@@ -28,7 +28,7 @@ const MessagesBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const ChatBadge = styled(Badge)(({ theme }) => ({
-  left: 42,
+  right: -4,
   top: -3,
   '& .MuiBadge-badge': {
     background: theme.palette.primary.main,
@@ -168,13 +168,13 @@ const MenuTabs = () => {
       <Box>
         <AppBar position={'static'} color={'secondary'} elevation={0}>
           <Tabs value={currentTab} onChange={handleChange} variant={'fullWidth'}>
-            <Tab label={t('menutabs-chat')} icon={getBadge(SidebarTab.Chat)} iconPosition="start" />
+            <Tab label={t('menutabs-chat')} icon={getBadge(SidebarTab.Chat)} iconPosition="end" />
             <Tab
               label={t('menutabs-people')}
               icon={<Typography variant="caption">({totalParticipants})</Typography>}
               iconPosition="end"
             />
-            <Tab label={t('menutabs-messages')} icon={getBadge(SidebarTab.Messages)} iconPosition="start" />
+            <Tab label={t('menutabs-messages')} icon={getBadge(SidebarTab.Messages)} iconPosition="end" />
           </Tabs>
         </AppBar>
       </Box>
