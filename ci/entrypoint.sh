@@ -3,24 +3,12 @@
 # SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 #
 # SPDX-License-Identifier: EUPL-1.2
-
 ACTIVE_FEATURES="{
     userSearch: ${FEATURE_USER_SEARCH:-true},
     muteUsers: ${FEATURE_MUTE_USER:-true},
     resetHandraises: ${FEATURE_RESET_HANDRAISES:-true},
-    breakoutRooms: ${FEATURE_BREAKOUT_ROOMS:-true},
-    poll: ${FEATURE_POLL:-true},
-    vote: ${FEATURE_VOTE:-true},
-    autoModeration: ${FEATURE_AUTO_MODERATION:-false},
-    protocol: ${FEATURE_PROTOCOL:-false},
-    timer: ${FEATURE_TIMER:-false},
-    coffeeBreak: ${FEATURE_COFFEE_BREAK:-false},
     addUser: ${FEATURE_ADD_USER:-false},
-    talkingStick: ${FEATURE_TALKING_STICK:-false},
-    wheelOfNames: ${FEATURE_WHEEL_OF_NAMES:-false},
     joinWithoutMedia: ${FEATURE_JOIN_WITHOUT_MEDIA:-false},
-    whiteboard: ${FEATURE_WHITEBOARD:-false},
-    recording: ${FEATURE_RECORDING:-false},
 }"
 
 DEFAULT_VIDEO_BACKGROUNDS='[]'

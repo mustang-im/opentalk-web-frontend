@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Paper, styled, Tooltip, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
-import { setHotkeysEnabled } from '@opentalk/common';
+import { BackendModules, setHotkeysEnabled } from '@opentalk/common';
 import { LegalVoteProvider } from '@opentalk/components';
 import { useTranslation } from 'react-i18next';
 
@@ -11,7 +11,7 @@ import { legalVote } from '../../api/types/outgoing';
 import { Tab } from '../../config/moderationTabs';
 import { useAppSelector, useTabs } from '../../hooks';
 import { selectVotingUsers } from '../../store/selectors';
-import { FeaturesKeys, selectLibravatarDefaultImage } from '../../store/slices/configSlice';
+import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import LocalVideo from '../LocalVideo/index';
 import MenuTabs from '../MenuTabs/MenuTabs';
@@ -63,7 +63,7 @@ const MeetingSidebar = () => {
             title={tab.tooltipTranslationKey ? t(tab.tooltipTranslationKey) : ''}
           >
             <SideTabPanel value={value} index={index} tabTitle={tab.titleKey ? t(tab.titleKey) : ''}>
-              {tab.key === FeaturesKeys.Vote ? (
+              {tab.moduleKey === BackendModules.LegalVote ? (
                 <LegalVoteProvider
                   apiMessages={{
                     cancel: legalVote.actions.cancel,

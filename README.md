@@ -45,25 +45,15 @@ The frontend will then be available via http://localhost:8090
 | USER_SURVEY_URL          | no       |                                                   | To enable user feedback collection configure a collection URL. (optional) & API KEY                                                                                                                   |
 | USER_SURVEY_API_KEY      | no       |                                                   | To enable user feedback collection configure a collection URL. (optional) & API KEY                                                                                                                   |
 | NDT_SERVER               | yes      |                                                   | NDT Server to use for the test                                                                                                                                                                        |
-| ACTIVE_FEATURES          | no       | { userSearch: true... }     | An object with boolean values to activate specific features, possible values are:
+| ACTIVE_FEATURES          | no       | { userSearch: true... }     | An object with boolean values to activate specific features, possible values are: |
 | FEATURE_USER_SEARCH      | no       | { userSearch: true}                               | to enable dashboard feature of geting list of user for inviting them to the event |
 | FEATURE_MUTE_USER        | no       | { muteUsers: true}                                | to enable moderator option to mute user / users |
 | FEATURE_RESET_HANDRAISES | no       | { resetHandraises: true}                          | to enable moderator option to reset users' raised hands |
-| FEATURE_BREAKOUT_ROOMS   | no       | { breakoutRooms: true}                            | to enable moderator option to create breakout rooms |
-| FEATURE_POLL             | no       | { poll: true}                                     | to enable moderator option to create polls |
-| FEATURE_VOTE             | no       | { vote: true}                                     | to enable moderator option to create votes |
-| FEATURE_AUTO_MODERATION  | no       | { autoModeration: false}                          | under development |
-| FEATURE_PROTOCOL         | no       | { protocol: false}                                | to enable moderator option to start a protocol session. So users can generate a protocol of the running conference |
-| FEATURE_TIMER            | no       | { timer: false}                                   | to enable moderator option for creating Timer |
-| FEATURE_COFFEE_BREAK      | no       | { coffeeBreak: false}                              | to enable moderator option for creating timer coffee break |
 | FEATURE_ADD_USER         | no       | { addUser: false}                                 | under construction |
-| FEATURE_TALKING_STICK    | no       | { talkingStick: false}                            | under development |
-| FEATURE_WHEEL_OF_NAMES   | no       | { wheelOfNames: false}                            | under development |
 | JOIN_WITHOUT_MEDIA       | no       | { joinWithoutMedia: false}                        | if is set to true, it will prevent user to join conference with audio/video on |
 | VIDEO_BACKGROUNDS        | no       | []                                                | An array with a configuration of the background (Example: `[{ altText: 'OpenTalk', url: '/assets/videoBackgrounds/elevate-bg.png', thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',}]`) |
 | SIGN_OUT_REDIRECT_URI    | no       | /dashboard                             | Uri to redirect the client after signing out
 frontend                                                                                                                                                                        |
-| FEATURE_WHITEBOARD               | no       | { whiteboard: false}                              | to enable moderator option to create whiteboard |
 | CHANGE_PASSWORD_ACTIVE           | no       | false                              | enable the reset password button in the dashboard profile settings |
 | CHANGE_PASSWORD_URL       | no       | null                               | set the reset password url for password button in dashboard profile settings |
 
@@ -112,42 +102,34 @@ window.config = {
     },
     // Speed-Test configuration, see also https://github.com/m-lab/ndt7-js and https://www.measurementlab.net/blog/ndt7-introduction/
     "speedTest": {
-    // NDT Server to use for the test
-    "ntdServer": 'localhost:10443',
-    // js worker file to use for the download test
-    "ntdDownloadWorkerJs": '/workers/ndt7-download-worker.js',
-    // js worker file to use for the upload test
-    "ntdUploadWorkerJs": '/workers/ndt7-upload-worker.js',
-  },
-  // To enable user feedback collection configure a collection URL. (optional) & API KEY
-  "userSurveyUrl":"https://your-survey.collection/endpoint",
-  "userSurveyApiKey: 'api_key',
-  "videoBackgrounds": [
-    {
-      altText: 'OpenTalk',
-      url: '/assets/videoBackgrounds/elevate-bg.png',
-      thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',
+      // NDT Server to use for the test
+      "ntdServer": 'localhost:10443',
+      // js worker file to use for the download test
+      "ntdDownloadWorkerJs": '/workers/ndt7-download-worker.js',
+      // js worker file to use for the upload test
+      "ntdUploadWorkerJs": '/workers/ndt7-upload-worker.js',
     },
-  ],
-  // Configure the maximum video bandwidth.
-  "maxVideoBandwidth":600000,
-  "errorReportAddress": 'report@opentalk.eu',
-  // Available moderator's features, can be enabled by setting feature to true
-  "features": {
-    userSearch: true,
-    muteUsers: true,
-    breakoutRooms: true,
-    poll: true,
-    vote: true,
-    autoModeration: false,
-    protocol: false,
-    timer: false,
-    addUser: false,
-    talkingStick: false,
-    wheelOfNames: false,
-    joinWithoutMedia: false,
-    whiteboard: false,
-  },
+    // To enable user feedback collection configure a collection URL. (optional) & API KEY
+    "userSurveyUrl":"https://your-survey.collection/endpoint",
+    "userSurveyApiKey: 'api_key',
+    "videoBackgrounds": [
+      {
+        altText: 'OpenTalk',
+        url: '/assets/videoBackgrounds/elevate-bg.png',
+        thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',
+      },
+    ],
+    // Configure the maximum video bandwidth.
+    "maxVideoBandwidth":600000,
+    "errorReportAddress": 'report@opentalk.eu',
+    // Available moderator's features, can be enabled by setting feature to true
+    "features": { 
+      "userSearch": true,
+      "muteUsers": true,
+      "resetHandraises": true,
+      "addUser": true,
+      "joinWithoutMedia": false,
+    }
 }
 
 ```

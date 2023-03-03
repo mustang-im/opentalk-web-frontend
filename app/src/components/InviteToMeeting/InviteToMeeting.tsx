@@ -273,7 +273,7 @@ const InviteToMeeting = ({
             />
           </Tooltip>
         </Grid>
-        {!showOnlyLinkFields && (
+        {!showOnlyLinkFields && features.userSearch && (
           <Grid item xs={12}>
             {features.userSearch && (
               <SelectParticipants

@@ -17,6 +17,7 @@ import {
   RaiseHandOffIcon,
   ProtocolIcon,
   CoffeeBreakIcon,
+  BackendModules,
 } from '@opentalk/common';
 import React, { Suspense } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -41,6 +42,8 @@ export interface Tab {
   component?: React.ReactNode;
   tooltipTranslationKey?: string;
   featureKey?: FeaturesKeys;
+  moduleKey?: BackendModules;
+  static?: boolean;
   key: string;
   disabled?: boolean;
   titleKey?: string;
@@ -98,8 +101,8 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-breakout-tooltip',
-    featureKey: FeaturesKeys.BreakoutRooms,
-    key: FeaturesKeys.BreakoutRooms,
+    moduleKey: BackendModules.Breakout,
+    key: BackendModules.Breakout,
     titleKey: 'breakout-room-tab-title',
   },
   {
@@ -111,8 +114,8 @@ export const tabs: Array<Tab> = [
         <WhiteboardTab />
       </Suspense>
     ),
-    featureKey: FeaturesKeys.Whiteboard,
-    key: FeaturesKeys.Whiteboard,
+    moduleKey: BackendModules.Whiteboard,
+    key: BackendModules.Whiteboard,
     titleKey: 'whiteboard-tab-title',
   },
   {
@@ -124,8 +127,8 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-poll-tooltip',
-    featureKey: FeaturesKeys.Poll,
-    key: FeaturesKeys.Poll,
+    moduleKey: BackendModules.Polls,
+    key: BackendModules.Polls,
     titleKey: 'poll-tab-title',
   },
   {
@@ -137,8 +140,8 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-ballot-tooltip',
-    featureKey: FeaturesKeys.Vote,
-    key: FeaturesKeys.Vote,
+    moduleKey: BackendModules.LegalVote,
+    key: BackendModules.LegalVote,
     titleKey: 'legal-vote-tab-title',
   },
   {
@@ -150,8 +153,8 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-timer-tooltip',
-    featureKey: FeaturesKeys.Timer,
-    key: FeaturesKeys.Timer,
+    moduleKey: BackendModules.Timer,
+    key: BackendModules.Timer,
     titleKey: 'timer-tab-title',
   },
   {
@@ -163,8 +166,8 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-coffee-break-tooltip',
-    featureKey: FeaturesKeys.CoffeeBreak,
-    key: FeaturesKeys.CoffeeBreak,
+    moduleKey: BackendModules.Timer,
+    key: 'tab-coffee-break',
     titleKey: 'coffee-break-tab-title',
   },
   {
@@ -176,8 +179,8 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
-    featureKey: FeaturesKeys.Protocol,
-    key: FeaturesKeys.Protocol,
+    moduleKey: BackendModules.Protocol,
+    key: BackendModules.Protocol,
     titleKey: 'protocol-tab-title',
   },
   {
@@ -193,23 +196,20 @@ export const tabs: Array<Tab> = [
     divider: false,
     component: <Typography variant={'body2'}>Wollknaul</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wollknaul-tooltip',
-    featureKey: FeaturesKeys.TalkingStick,
-    key: FeaturesKeys.TalkingStick,
+    key: 'Wollknaul',
   },
   {
     icon: <SpeakerQueueIcon />,
     divider: false,
     component: <Typography variant={'body2'}>Speaker Queue</Typography>,
     tooltipTranslationKey: 'moderationbar-button-speaker-queue-tooltip',
-    featureKey: FeaturesKeys.AutoModeration,
-    key: FeaturesKeys.AutoModeration,
+    key: 'Speaker Queue',
   },
   {
     icon: <WheelOfNamesIcon />,
     divider: false,
     component: <Typography variant={'body2'}>Wheel Of Names</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wheel-tooltip',
-    featureKey: FeaturesKeys.WheelOfNames,
-    key: FeaturesKeys.WheelOfNames,
+    key: 'Wheel Of Names',
   },
 ];

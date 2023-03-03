@@ -5,6 +5,7 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
+import { TariffId } from '@opentalk/common';
 import '@testing-library/jest-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -43,22 +44,19 @@ window.config = {
     userSearch: true,
     muteUsers: true,
     resetHandraises: true,
-    breakoutRooms: true,
-    poll: true,
-    vote: true,
-    autoModeration: false,
-    protocol: false,
-    timer: false,
-    coffeeBreak: false,
     addUser: false,
-    talkingStick: false,
-    wheelOfNames: false,
     joinWithoutMedia: false,
   },
   videoBackgrounds: [],
   maxVideoBandwidth: 600000,
   libravatarDefaultImage: 'robohash',
   errorReportAddress: 'report@opentalk.eu',
+  tariff: {
+    id: '' as TariffId,
+    name: '',
+    quotas: {},
+    enabledModules: [],
+  },
 };
 
 const handlers = [
