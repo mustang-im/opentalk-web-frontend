@@ -36,6 +36,11 @@ export interface EventQueryParams {
    * When omitted, all event types are shown.
    */
   adhoc?: boolean;
+  /**
+   * filter for all time independent events
+   * @default false
+   */
+  timeIndependent?: boolean;
 }
 
 export interface TimeRangeQueryParams {

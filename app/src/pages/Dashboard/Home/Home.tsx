@@ -3,9 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Skeleton, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { AddIcon, CameraOnIcon } from '@opentalk/common';
-import { RoomId } from '@opentalk/rest-api-rtk-query';
+import { DateTime, Event, EventException, RoomId } from '@opentalk/rest-api-rtk-query';
+import { formatRFC3339 } from 'date-fns';
 import { isEmpty } from 'lodash';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ import { useGetEventsQuery } from '../../../api/rest';
 import FavoriteMeetingsCard, { FavoriteMeetingProps } from '../../../components/FavoriteMeetingsCard';
 import MeetingCard from '../../../components/MeetingCard';
 import StartMeetingImage from '../../../components/StartMeetingImage';
+import { getExpandedEvents } from '../../../utils/eventUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
 
 const Container = styled('div')(({ theme }) => ({
@@ -41,12 +43,26 @@ const HeaderContainer = styled(Stack)(({ theme }) => ({
 const Home = () => {
   const [animated, setAnimated] = useState<boolean>(false);
   const { t } = useTranslation();
+  const maxEventsPerPage = 4;
+  const maxConsideredMonths = 12;
+  const maxUsedEntries = 366;
+
   const { data: favoritesEvents, isLoading: favoritesEventsIsLoading } = useGetEventsQuery({
     favorites: true,
   });
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
   const { data: upcomingEvents, isLoading: upcomingEventsIsLoading } = useGetEventsQuery({
-    perPage: 4,
+    timeMin: formatRFC3339(currentDate) as DateTime,
+    perPage: maxEventsPerPage,
     adhoc: false,
+  });
+
+  const { data: timeIndependentEvents, isLoading: timeIndependentEventsIsLoading } = useGetEventsQuery({
+    perPage: maxEventsPerPage,
+    adhoc: false,
+    timeIndependent: true,
   });
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
@@ -109,7 +125,7 @@ const Home = () => {
     );
   };
 
-  const renderUpcomingEventsLoading = () => (
+  const renderCurrentEventsLoading = () => (
     <Stack spacing={2}>
       <Skeleton variant="rectangular" height={130} />
       <Skeleton variant="rectangular" height={130} />
@@ -118,22 +134,48 @@ const Home = () => {
     </Stack>
   );
 
-  const renderUpcomingEvents = () => {
-    if (upcomingEventsIsLoading) {
-      return renderUpcomingEventsLoading();
+  const renderCurrentEvents = () => {
+    if (upcomingEventsIsLoading || timeIndependentEventsIsLoading) {
+      return renderCurrentEventsLoading();
     }
 
-    if (upcomingEvents?.data === undefined) {
+    if (timeIndependentEvents?.data === undefined && upcomingEvents?.data === undefined) {
       return undefined;
+    }
+
+    if (timeIndependentEvents?.data) {
+      let tiEvents = Array.from(timeIndependentEvents.data);
+      if (upcomingEvents?.data) {
+        const ucEvents = Array.from(upcomingEvents.data);
+        const expandedEvents = getExpandedEvents(
+          ucEvents,
+          true,
+          maxUsedEntries,
+          currentDate.toISOString(),
+          maxConsideredMonths
+        );
+        tiEvents = tiEvents.concat(expandedEvents.slice(0, maxEventsPerPage - tiEvents.length));
+      }
+      return (
+        <Stack spacing={2} height={'100%'} overflow={'auto'}>
+          {tiEvents.map((upcomingEvent) => renderEvent(upcomingEvent))}
+        </Stack>
+      );
     }
 
     return (
       <Stack spacing={2} height={'100%'} overflow={'auto'}>
-        {upcomingEvents.data.map((upcomingEvent) => (
-          <MeetingCard key={upcomingEvent.id} event={upcomingEvent} />
-        ))}
+        {upcomingEvents?.data.map((upcomingEvent) => renderEvent(upcomingEvent))}
       </Stack>
     );
+  };
+
+  const renderEvent = (event: Event | EventException) => {
+    let startsAt = '';
+    if (!event.isTimeIndependent && event.startsAt) {
+      startsAt = event.startsAt.datetime;
+    }
+    return <MeetingCard key={`${event.id}${startsAt}`} event={event} />;
   };
 
   const renderLogoAndFavoriteBar = () => (
@@ -158,7 +200,7 @@ const Home = () => {
         {!isDesktop && renderStartDirectMeetingButton()}
       </HeaderContainer>
       {isDesktop && renderLogoAndFavoriteBar()}
-      {renderUpcomingEvents()}
+      {renderCurrentEvents()}
     </Container>
   );
 };

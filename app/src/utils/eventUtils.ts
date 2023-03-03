@@ -18,7 +18,8 @@ export const getExpandedEvents = (
   eventList: (EventException | Event)[],
   filterDeclined?: boolean,
   maxEntries?: number,
-  firstDateIsoString?: string
+  firstDateIsoString?: string,
+  maxMonths?: number
 ): Event[] => {
   const events = Array<Event>();
   eventList.forEach((event) => {
@@ -36,7 +37,8 @@ export const getExpandedEvents = (
               ${recurrencePattern}`
         );
 
-        const end = addMonths(startDate, 1);
+        const maxConsideredMonths = maxMonths ? maxMonths : 1;
+        const end = addMonths(startDate, maxConsideredMonths);
         const timeline = rule.between(startDate, end, true);
         const firstDateTime = firstDateIsoString ? new Date(firstDateIsoString) : undefined;
         timeline
@@ -48,7 +50,6 @@ export const getExpandedEvents = (
             startDateAdjusted.setMinutes(startMin);
             const recurringEvent = { ...event } as RecurringEvent;
             const endDate = new Date(startDateAdjusted.getTime() + duration);
-
             recurringEvent.startsAt = { datetime: startDateAdjusted.toISOString(), timezone: event.startsAt.timezone };
             recurringEvent.endsAt = { datetime: endDate.toISOString(), timezone: event.endsAt.timezone };
             events.push(recurringEvent);
@@ -69,5 +70,6 @@ export const getExpandedEvents = (
   if (maxEntries) {
     return sortedEvents.slice(0, maxEntries);
   }
+
   return sortedEvents;
 };
