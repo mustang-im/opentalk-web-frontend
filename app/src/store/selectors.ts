@@ -9,7 +9,15 @@ import _, { intersection } from 'lodash';
 import ChatScope from '../enums/ChatScope';
 import SortOption from '../enums/SortOption';
 import { selectCurrentBreakoutRoomId } from './slices/breakoutSlice';
-import { selectChatMessages, ChatMessage as ChatMessageType } from './slices/chatSlice';
+import {
+  selectChatMessages,
+  ChatMessage as ChatMessageType,
+  selectAllChatMessages,
+  selectLastSeenTimestamps,
+  selectLastSeenTimestampGlobal,
+  TimestampState,
+  ChatMessage,
+} from './slices/chatSlice';
 import { selectGlobalEvents, RoomEvent } from './slices/eventSlice';
 import { selectFocusedSpeaker } from './slices/mediaSlice';
 import { selectUnmutedSubscribers } from './slices/mediaSubscriberSlice';
@@ -176,6 +184,78 @@ export const selectCombinedMessageAndEvents = (scope: ChatScope, targetId: Targe
   createSelector(selectGlobalEvents(scope), selectChatMessages(scope, targetId), (events, messages) => {
     const merged: Array<ChatMessageType | RoomEvent> = (messages as Array<ChatMessageType | RoomEvent>).concat(events);
     return _.sortBy(merged, ['timestamp']);
+  });
+
+const filterMessagesByTimestampStates = (messages: ChatMessage[], lastSeenTimestamps: TimestampState[]) => {
+  const targetIds = [...new Set(lastSeenTimestamps.map((seenState) => seenState.target as TargetId))];
+  const filteredMessages = messages.filter((message) => {
+    if (targetIds.includes(message.target as TargetId)) {
+      const lastSeen = lastSeenTimestamps
+        .filter((seen) => seen.target === message.target)
+        .map((entry) => entry.timestamp);
+      if (lastSeen.length === 1) {
+        if (new Date(message.timestamp).getTime() > new Date(lastSeen[0]).getTime()) {
+          return message;
+        }
+      }
+      return;
+    }
+    return message;
+  });
+  return filteredMessages.length;
+};
+
+export const selectUnreadMessageCount = createSelector(
+  selectAllChatMessages,
+  selectLastSeenTimestamps,
+  selectLastSeenTimestampGlobal,
+  (allChatMessages, lastSeenTimestamps, lastSeenTimestampGlobal) => {
+    if (allChatMessages.length === 0) {
+      return { global: 0, private: 0, group: 0 };
+    }
+
+    let unreadGlobalMessages = 0;
+    if (lastSeenTimestampGlobal) {
+      unreadGlobalMessages = allChatMessages.filter(
+        (message) =>
+          message.scope === ChatScope.Global &&
+          new Date(message.timestamp).getTime() > new Date(lastSeenTimestampGlobal).getTime()
+      ).length;
+    } else {
+      unreadGlobalMessages = allChatMessages.filter((message) => message.scope === ChatScope.Global).length;
+    }
+
+    const privateMessages = allChatMessages.filter((message) => message.scope === ChatScope.Private);
+    const groupMessages = allChatMessages.filter((message) => message.scope === ChatScope.Group);
+    if (lastSeenTimestamps.length > 0) {
+      const unreadPrivateMessages = filterMessagesByTimestampStates(privateMessages, lastSeenTimestamps);
+      const unreadGroupMessages = filterMessagesByTimestampStates(groupMessages, lastSeenTimestamps);
+      return { global: unreadGlobalMessages, private: unreadPrivateMessages, group: unreadGroupMessages };
+    }
+    return { global: unreadGlobalMessages, private: privateMessages.length, group: groupMessages.length };
+  }
+);
+
+export const selectUnreadMessagesByTargetIdCount = (targetId: TargetId) =>
+  createSelector(selectAllChatMessages, selectLastSeenTimestamps, (allChatMessages, lastSeenTimestamps) => {
+    const messagesForTargetId = allChatMessages.filter(
+      (message) =>
+        (message.scope === ChatScope.Group || message.scope === ChatScope.Private) && message.target === targetId
+    );
+
+    const lastSeenStates = lastSeenTimestamps.filter((lastSeenState) => lastSeenState.target === targetId);
+    if (lastSeenStates.length > 0) {
+      const maxLastSeenTimestamp = Math.max(
+        ...lastSeenStates.map((lastSeenState) => new Date(lastSeenState.timestamp).getTime())
+      );
+      const maxLastSeenChatMessageTimestamp = Math.max(
+        ...messagesForTargetId.map((message) => new Date(message.timestamp).getTime())
+      );
+      if (maxLastSeenChatMessageTimestamp < maxLastSeenTimestamp) {
+        return 0;
+      }
+    }
+    return messagesForTargetId.length;
   });
 
 export const selectParticipantsReadyList = createSelector(

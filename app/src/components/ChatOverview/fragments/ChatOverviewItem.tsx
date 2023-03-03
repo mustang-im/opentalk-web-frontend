@@ -9,11 +9,13 @@ import {
   Grid,
   styled,
 } from '@mui/material';
-import { useDateFormat } from '@opentalk/common';
+import { TargetId, useDateFormat } from '@opentalk/common';
 import { isEmpty } from 'lodash';
-import React from 'react';
+import { useEffect, useState } from 'react';
 
+import ChatScope from '../../../enums/ChatScope';
 import { useAppSelector } from '../../../hooks';
+import { selectUnreadMessagesByTargetIdCount } from '../../../store/selectors';
 import { ChatProps } from '../../../store/slices/chatSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 import ParticipantAvatar from '../../ParticipantAvatar';
@@ -44,22 +46,36 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const date = new Date(chat.lastMessage?.timestamp) ?? Date.now;
   const formattedTime = useDateFormat(date, 'time');
   const getDisplayName = () => (isEmpty(participant) ? chat.id : participant?.displayName);
+  const lastSeenTimestampCount = useAppSelector(selectUnreadMessagesByTargetIdCount(chat.id as TargetId));
+  const [fontWeight, setFontWeigth] = useState('normal');
+
+  useEffect(() => {
+    if (chat.scope === ChatScope.Private || chat.scope === ChatScope.Group) {
+      if (lastSeenTimestampCount > 0) {
+        setFontWeigth('bold');
+      } else {
+        setFontWeigth('normal');
+      }
+    }
+  }, [chat, lastSeenTimestampCount]);
 
   const renderPrimaryText = () => (
     <Grid container direction={'row'} spacing={1}>
       <Grid item zeroMinWidth xs>
-        <Typography variant={'body1'} color={'textPrimary'} noWrap>
+        <Typography fontWeight={fontWeight} variant={'body1'} color={'textPrimary'} noWrap>
           {getDisplayName()}
         </Typography>
       </Grid>
       <Grid item>
-        <TimeTypography variant={'caption'}>{formattedTime}</TimeTypography>
+        <TimeTypography variant={'caption'} fontWeight={fontWeight}>
+          {formattedTime}
+        </TimeTypography>
       </Grid>
     </Grid>
   );
 
   const renderSecondaryText = () => (
-    <Typography variant={'body1'} noWrap>
+    <Typography fontWeight={fontWeight} variant={'body1'} noWrap>
       {chat.lastMessage?.content || ''}
     </Typography>
   );

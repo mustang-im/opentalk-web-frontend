@@ -263,7 +263,8 @@ const handleControlMessage = (
     case 'join_success': {
       const { groupIds, messages: groupMessages } = transformChatHistory(data.chat.groupsHistory);
       const groups = groupIds;
-      const messages: ChatMessage[] = groupMessages;
+      let roomHistory = data.chat.roomHistory as ChatMessage[];
+      roomHistory = roomHistory.concat(groupMessages);
 
       let participants: Participant[];
       participants = data.participants.map((participant) =>
@@ -296,7 +297,10 @@ const handleControlMessage = (
           role: data.role,
           chat: {
             enabled: data.chat.enabled,
-            roomHistory: messages,
+            roomHistory,
+            lastSeenTimestampGlobal: data.chat.lastSeenTimestampGlobal,
+            lastSeenTimestampsGroup: data.chat.lastSeenTimestampsGroup,
+            lastSeenTimestampsPrivate: data.chat.lastSeenTimestampsPrivate,
           },
           groups,
           automod: data.automod,
