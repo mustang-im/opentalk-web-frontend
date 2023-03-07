@@ -10,6 +10,7 @@
 
 ### Stability Improvements
 
+- Clean-up dispatch of legal vote started action (!864)
 - Rework duration field and related types (!855)
 - Translated emoji picker categories to german. (!854)
 
