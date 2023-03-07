@@ -588,8 +588,10 @@ dashboard-meeting-card-delete-dialog-ok = Delete
 dashboard-meeting-card-delete-dialog-cancel = Cancel
 
 dashboard-create-meeting-dialog-title = Please confirm
-dashboard-create-meeting-dialog-message = You already have a meeting scheduled for this time. Are you sure you want to create a new one?
+dashboard-create-meeting-dialog-message = You already have a meeting scheduled for this time: <eventTitle>{$eventTitle} <eventTime>{$eventTime}</eventTime></eventTitle> Are you sure you want to create a new one?
+dashboard-update-meeting-dialog-message = You already have a meeting scheduled for this time: <eventTitle>{$eventTitle} <eventTime>{$eventTime}</eventTime></eventTitle> Are you sure you want to update?
 dashboard-create-meeting-dialog-ok = Create
+dashboard-update-meeting-dialog-ok = Update
 dashboard-create-meeting-dialog-cancel = Cancel
 
 dashboard-direct-meeting-title = Who do you want to invite to your meeting?

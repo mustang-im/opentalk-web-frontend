@@ -8,6 +8,7 @@
 - Fix icons missing in chat field (!854)
 - Fix Keyboard shortcuts not disabled in smiley search (!854)
 - Fix UI for moderation tabs on the side panel for community features (!853)
+- Add details for overlapping event dialog (!868)
 
 ### Stability Improvements
 

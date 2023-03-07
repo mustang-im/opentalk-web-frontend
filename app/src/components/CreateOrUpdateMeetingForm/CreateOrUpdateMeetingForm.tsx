@@ -16,8 +16,24 @@ import {
 import { ForwardIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { formikMinimalProps, formikProps, formikDateTimePickerProps } from '@opentalk/common';
-import { CreateEventPayload, Event, isTimelessEvent, UpdateEventPayload, DateTime } from '@opentalk/rest-api-rtk-query';
-import { addDays, addMinutes, format, formatRFC3339, isBefore, isEqual } from 'date-fns';
+import {
+  CreateEventPayload,
+  Event,
+  isTimelessEvent,
+  UpdateEventPayload,
+  DateTime,
+  SingleEvent,
+} from '@opentalk/rest-api-rtk-query';
+import {
+  addDays,
+  addMinutes,
+  areIntervalsOverlapping,
+  format,
+  formatRFC3339,
+  Interval,
+  isBefore,
+  isEqual,
+} from 'date-fns';
 import { useFormik } from 'formik';
 import { FormikValues } from 'formik/dist/types';
 import { get, isEmpty } from 'lodash';
@@ -37,7 +53,7 @@ import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToNearest30 from '../../utils/roundToNearest30';
 import roundToUpper30 from '../../utils/roundToUpper30';
 import { isInvalidDate } from '../../utils/typeGardUtils';
-import ConfirmDialog from '../ConfirmDialog/ConfirmDialog';
+import EventConflictDialog from './fragment/EventConflictDialog';
 import TimePickers from './fragment/TimePickers';
 
 interface CreateOrUpdateMeetingFormProps {
@@ -74,10 +90,11 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const [createEvent, { isLoading: createEventIsLoading }] = useCreateEventMutation();
   const [updateEvent, { isLoading: updateEventIsLoading }] = useUpdateEventMutation();
   const [checkForEvents] = useLazyGetEventsQuery();
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const [createRoomInvite] = useCreateRoomInviteMutation();
   const navigate = useNavigate();
+
+  const [overlappingEvent, setOverlappingEvent] = useState<SingleEvent>();
 
   const validationSchema = yup.object({
     title: yup
@@ -315,24 +332,58 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   };
 
   const handleConfirmSameTimeEvents = () => {
-    setShowConfirmDialog(false);
+    setOverlappingEvent(undefined);
     formik.handleSubmit();
   };
 
-  const checkForExistingEvents = async () => {
-    if (formik.values.isScheduled) {
-      const existingMeetings = await checkForEvents({
-        perPage: 1,
-        timeMin: formik.values.startDate as DateTime,
-        timeMax: formik.values.endDate as DateTime,
+  const handleSubmit = async () => {
+    const isTimeIndependent = !formik.values.isScheduled;
+    if (isTimeIndependent) {
+      formik.handleSubmit();
+      return;
+    }
+
+    const overlappingEvent = await checkForOverlappingEvents();
+    if (overlappingEvent) {
+      setOverlappingEvent(overlappingEvent);
+    } else {
+      formik.handleSubmit();
+    }
+  };
+
+  const checkForOverlappingEvents = async (): Promise<SingleEvent | undefined> => {
+    const foundEvents = await checkForEvents({
+      perPage: 2,
+      timeMin: formik.values.startDate as DateTime,
+      timeMax: formik.values.endDate as DateTime,
+    });
+
+    if (foundEvents && foundEvents.data && !isEmpty(foundEvents.data.data)) {
+      const potentialOverlappingEvents = foundEvents.data.data as Array<SingleEvent>;
+
+      const currentEventInterval: Interval = {
+        start: new Date(formik.values.startDate),
+        end: new Date(formik.values.endDate),
+      };
+
+      const validOverlappingEventFound = potentialOverlappingEvents.find((event) => {
+        const overlappingEventInterval: Interval = {
+          start: new Date(event.startsAt.datetime),
+          end: new Date(event.endsAt.datetime),
+        };
+
+        return (
+          areIntervalsOverlapping(currentEventInterval, overlappingEventInterval) &&
+          (existingEvent ? event.id !== existingEvent.id : true)
+        );
       });
 
-      if (!isEmpty(existingMeetings?.data?.data)) {
-        return setShowConfirmDialog(true);
+      if (validOverlappingEventFound) {
+        return validOverlappingEventFound;
       }
     }
 
-    formik.handleSubmit();
+    return undefined;
   };
 
   return (
@@ -434,26 +485,21 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               </Grid>
             )}
             <Grid item>
-              <Button
-                onClick={checkForExistingEvents}
-                fullWidth
-                disabled={createEventIsLoading || updateEventIsLoading}
-              >
+              <Button onClick={handleSubmit} fullWidth disabled={createEventIsLoading || updateEventIsLoading}>
                 {t(`global-save${existingEvent ? '-changes' : ''}`)}
               </Button>
             </Grid>
           </Grid>
         </Grid>
       </Form>
-      <ConfirmDialog
-        open={showConfirmDialog}
-        onConfirm={handleConfirmSameTimeEvents}
-        onCancel={() => setShowConfirmDialog(false)}
-        title={t('dashboard-create-meeting-dialog-title')}
-        message={t('dashboard-create-meeting-dialog-message')}
-        submitButtonText={t('dashboard-create-meeting-dialog-ok')}
-        cancelButtonText={t('dashboard-create-meeting-dialog-cancel')}
-      />
+      {overlappingEvent && (
+        <EventConflictDialog
+          onConfirm={handleConfirmSameTimeEvents}
+          onCancel={() => setOverlappingEvent(undefined)}
+          event={overlappingEvent}
+          isUpdate={Boolean(existingEvent)}
+        />
+      )}
     </>
   );
 };
