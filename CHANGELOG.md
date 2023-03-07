@@ -17,7 +17,7 @@
 - Fix missing notification when timer stops (!883)
 - Fix create meeting default start/end time (!888)
 - Fix browser language detection. (!889)
-- Polished legal vote UI for unselected participant. (!893) 
+- Polished legal vote UI for unselected participant. (!893)
 - Remove offline participant from the timer list. (!901)
 
 ### Stability Improvements
@@ -32,6 +32,7 @@
 
 ### New Features
 
+- Feat: show quotas information in dashboard (!865)
 - Lobby / Waiting room move button / password (!852)
 - Add unread indicator for chat messages (!844)
 - Add legal vote token copy field. (!836)

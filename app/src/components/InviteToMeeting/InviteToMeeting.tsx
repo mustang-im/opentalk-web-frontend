@@ -11,7 +11,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useCreateEventInviteMutation, useDeleteEventMutation, useLazyGetRoomInvitesQuery } from '../../api/rest';
+import {
+  useCreateEventInviteMutation,
+  useDeleteEventMutation,
+  useGetMeTariffQuery,
+  useLazyGetRoomInvitesQuery,
+} from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
 import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
@@ -56,6 +61,9 @@ const InviteToMeeting = ({
   const [isSipLinkCopied, setSipLinkCopied] = useState(false);
   const [isGuestLinkCopied, setGuestLinkCopied] = useState(false);
   const [isRoomPasswordCopied, setIsRoomPasswordCopied] = useState(false);
+
+  const { data: tariff } = useGetMeTariffQuery();
+  const userTariffLimit = tariff?.quotas.roomParticipantLimit;
 
   const roomUrl = useMemo(() => new URL(`/room/${existingEvent?.room.id}`, baseUrl), [baseUrl, existingEvent]);
   const createGuestLink = useCallback((inviteCode: string) => new URL(`/invite/${inviteCode}`, baseUrl), [baseUrl]);
@@ -269,7 +277,11 @@ const InviteToMeeting = ({
           <Grid item xs={12}>
             {features.userSearch && (
               <SelectParticipants
-                label={t('dashboard-direct-meeting-label-select-participants')}
+                label={
+                  userTariffLimit
+                    ? t('dashboard-direct-meeting-label-select-participants', { maxParticipants: userTariffLimit })
+                    : undefined
+                }
                 placeholder={t('dashboard-select-participants-textfield-placeholder')}
                 onChange={(selected) => setSelectedUser(selected)}
                 invitees={existingEvent?.invitees}

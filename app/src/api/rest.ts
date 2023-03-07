@@ -111,6 +111,8 @@ export const {
   useMarkFavoriteEventMutation,
   useUnmarkFavoriteEventMutation,
   useGetMeQuery,
+  useGetMeTariffQuery,
+  useGetRoomTariffQuery,
   useLazyGetMeQuery,
   useGetEventsQuery,
   useLazyGetEventsQuery,
