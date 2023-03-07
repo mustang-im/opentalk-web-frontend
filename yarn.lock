@@ -5148,7 +5148,7 @@ __metadata:
     context-filter-polyfill: ^0.2.4
     craco-esbuild: ^0.5.0
     date-fns: ^2.29.3
-    emoji-picker-react: ^3.6.2
+    emoji-picker-react: ^4.4.7
     esbuild: ^0.15.7
     eslint: ^8.12.0
     eslint-config-react-app: ^7.0.1
@@ -14263,10 +14263,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"emoji-picker-react@npm:^3.6.2":
-  version: 3.6.2
-  resolution: "emoji-picker-react@npm:3.6.2"
-  checksum: 4db28cea4332f2d38ee3d0b3b37e28e949efc6673eabe9d5a1904ea3f2c4bb1b9c4327bddc8309dc3e319efeb2180c8a28be3b098de18a21e0d6cd75cfb4abca
+"emoji-picker-react@npm:^4.4.7":
+  version: 4.4.7
+  resolution: "emoji-picker-react@npm:4.4.7"
+  dependencies:
+    clsx: ^1.2.1
+  peerDependencies:
+    react: ">=16"
+  checksum: 76d3c56a1d4f3ae23e0544350b7eaee3a53cee660d78acbdff07330a8a659b99778ad04a9020ba586afe7b2d7294065540d9c3d4199d9ea93eeb8ff9091cc5d8
   languageName: node
   linkType: hard
 

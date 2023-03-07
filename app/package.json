@@ -42,7 +42,7 @@
     "camelcase-keys": "^7.0.2",
     "context-filter-polyfill": "^0.2.4",
     "date-fns": "^2.29.3",
-    "emoji-picker-react": "^3.6.2",
+    "emoji-picker-react": "^4.4.7",
     "formik": "^2.2.9",
     "formik-wizard-form": "^2.1.0",
     "i18next": "^21.9.1",

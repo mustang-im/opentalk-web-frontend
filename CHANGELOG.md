@@ -3,10 +3,13 @@
 ### UI/UX Fixes
 
 - Change UX for whiteboard access (!841)
+- Fix icons missing in chat field (!854)
+- Fix Keyboard shortcuts not disabled in smiley search (!854)
 
 ### Stability Improvements
 
 - Rework duration field and related types (!855)
+- Translated emoji picker categories to german. (!854)
 
 ### New Features
 
