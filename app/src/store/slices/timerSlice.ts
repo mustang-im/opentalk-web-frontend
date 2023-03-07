@@ -80,7 +80,7 @@ export const timerSlice = createSlice({
       state.message = payload.message;
       state.kindStopTimer = payload.kindStopTimer;
     },
-    updateParticpantsReady: (state, { payload }: PayloadAction<ReadyToContinue>) => {
+    updateParticipantsReady: (state, { payload }: PayloadAction<ReadyToContinue>) => {
       if (payload.status === true && !state.participantsReady.includes(payload.participantId)) {
         state.participantsReady.push(payload.participantId);
         return;
@@ -101,7 +101,7 @@ export const timerSlice = createSlice({
 export const {
   startedTimer,
   stoppedTimer,
-  updateParticpantsReady,
+  updateParticipantsReady,
   setRealTime,
   setInitialTime,
   setInitialStateTimer,

@@ -76,7 +76,7 @@ import {
   connectionClosed,
 } from '../store/slices/roomSlice';
 import * as slotStore from '../store/slices/slotSlice';
-import { joinedTimer, startedTimer, stoppedTimer, updateParticpantsReady } from '../store/slices/timerSlice';
+import { joinedTimer, startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
 import { participantsLayoutSet, setVotePollIdToShow } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
@@ -721,7 +721,7 @@ const handleTimerMessage = (dispatch: AppDispatch, data: timer.Message, timestam
       dispatch(stoppedTimer({ message: data.message, kindStopTimer: data.kind }));
       break;
     case 'updated_ready_status':
-      dispatch(updateParticpantsReady(data));
+      dispatch(updateParticipantsReady(data));
       break;
     default: {
       const dataString = JSON.stringify(data, null, 2);

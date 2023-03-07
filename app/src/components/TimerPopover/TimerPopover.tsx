@@ -44,7 +44,7 @@ const TimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
     if (timerStartTime && timerId) {
       dispatch(readyToContinue.action({ timerId, status: !isUserReady }));
     }
-  }, [timerStartTime, timerId]);
+  }, [timerStartTime, timerId, isUserReady]);
 
   return (
     <Popover
