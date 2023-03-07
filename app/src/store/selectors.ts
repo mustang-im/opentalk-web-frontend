@@ -5,7 +5,9 @@ import { GroupId, ParticipationKind, TargetId } from '@opentalk/common';
 import { createSelector } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
 import _, { intersection } from 'lodash';
+import { some } from 'lodash';
 
+import { ProtocolParticipant } from '../components/ProtocolTab/ProtocolTab';
 import ChatScope from '../enums/ChatScope';
 import SortOption from '../enums/SortOption';
 import { selectCurrentBreakoutRoomId } from './slices/breakoutSlice';
@@ -24,6 +26,7 @@ import { selectUnmutedSubscribers } from './slices/mediaSubscriberSlice';
 import { selectHandUp, selectHandUpdatedAt } from './slices/moderationSlice';
 import {
   Participant,
+  ProtocolAccess,
   selectAllOnlineParticipants,
   selectAllOnlineParticipantsInConference,
   selectAllParticipants,
@@ -89,6 +92,34 @@ export const selectJoinedFirstTimestamp = createSelector(
 export const selectCombinedParticipantsAndUserCount = createSelector(
   selectCombinedParticipantsAndUser,
   (users) => users.length
+);
+
+export const selectAllProtocolParticipants = createSelector(
+  selectCombinedParticipantsAndUser,
+  selectUserAsParticipant,
+  (participants, user) => {
+    if (user) {
+      const allProtocolParticipants = participants.filter(
+        (participant) =>
+          participant.participationKind !== ParticipationKind.Guest &&
+          participant.participationKind !== ParticipationKind.Sip
+      );
+      const hasSelectedParticipants = some(allProtocolParticipants, ['protocolAccess', ProtocolAccess.Write]);
+      const newParticipants = allProtocolParticipants.map((participant): ProtocolParticipant => {
+        const isSelected = hasSelectedParticipants
+          ? participant.protocolAccess === ProtocolAccess.Write
+          : participant.id === user.id;
+        return {
+          id: participant.id,
+          displayName: participant.displayName,
+          avatarUrl: participant.avatarUrl,
+          isSelected,
+        };
+      });
+      return newParticipants;
+    }
+    return [];
+  }
 );
 
 export const selectCombinedSpeakerId = createSelector(

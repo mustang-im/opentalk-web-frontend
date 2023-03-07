@@ -13,6 +13,7 @@ import {
   Timestamp,
   VideoSetting,
   matchBuilder,
+  ProtocolState,
 } from '@opentalk/common';
 import { notificationAction, notificationPersistent, notifications } from '@opentalk/common';
 import { AutomodMessageType, LegalVoteMessageType, legalVoteStore } from '@opentalk/components';
@@ -60,6 +61,7 @@ import {
   join as participantsJoin,
   leave as participantsLeft,
   Participant,
+  ProtocolAccess,
   update as participantsUpdate,
   waitingRoomJoined,
   waitingRoomLeft,
@@ -158,6 +160,16 @@ const transformChatHistory = (
   return { groupIds, messages };
 };
 
+const mapProtocolToProtocolAccess = (protocol?: ProtocolState) => {
+  if (!protocol) {
+    return ProtocolAccess.None;
+  }
+  if (protocol.readonly) {
+    return ProtocolAccess.Read;
+  }
+  return ProtocolAccess.Write;
+};
+
 const mapToUiParticipant = (
   { id, control, media, protocol }: BackendParticipant,
   breakoutRoomId: BreakoutRoomId | null,
@@ -176,8 +188,8 @@ const mapToUiParticipant = (
   lastActive: control.joinedAt,
   role: control.role,
   waitingState,
-  protocol: protocol,
-  isPresenter: media?.isPresenter,
+  protocolAccess: mapProtocolToProtocolAccess(protocol),
+  isPresenter: media.isPresenter,
 });
 
 const mapBreakoutToUiParticipant = (
@@ -196,6 +208,8 @@ const mapBreakoutToUiParticipant = (
   participationKind,
   lastActive: joinTime,
   waitingState: WaitingState.Joined,
+  protocolAccess: ProtocolAccess.None,
+  isPresenter: false,
 });
 
 // TODO refactor - move to conferenceRoom
@@ -419,7 +433,7 @@ const handleControlMessage = (
             lastActive: data.control.joinedAt,
             waitingState: WaitingState.Joined,
             isPresenter: data.media.isPresenter,
-            protocol: data.protocol,
+            protocolAccess: mapProtocolToProtocolAccess(data.protocol),
             ...data.control,
           })
         );
@@ -716,15 +730,35 @@ const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message
  * @param {AppDispatch} dispatch - this is the dispatch function from the redux store.
  * @param data - protocol.IncomingProtocol
  */
-const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingProtocol) => {
+const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingProtocol, state: RootState) => {
   switch (data.message) {
     case 'pdf_asset':
       notifications.info(i18next.t('protocol-upload-pdf-message'));
       break;
     case 'write_url':
+      if (state.user.protocolAccess === ProtocolAccess.None) {
+        notificationAction({
+          msg: i18next.t(
+            state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
+          ),
+          variant: 'info',
+          actionBtnText: i18next.t('protocol-new-protocol-message-button'),
+          onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Protocol)),
+        });
+      }
       dispatch(setProtocolWriteUrl(data.url));
       break;
     case 'read_url':
+      if (state.user.protocolAccess === ProtocolAccess.None) {
+        notificationAction({
+          msg: i18next.t(
+            state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
+          ),
+          variant: 'info',
+          actionBtnText: i18next.t('protocol-new-protocol-message-button'),
+          onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Protocol)),
+        });
+      }
       dispatch(setProtocolReadUrl(data.url));
       break;
     case 'error':
@@ -882,7 +916,7 @@ const onMessage =
         handleModerationMessage(dispatch, message.payload);
         break;
       case 'protocol':
-        handleProtocolMessage(dispatch, message.payload);
+        handleProtocolMessage(dispatch, message.payload, getState());
         break;
       case 'polls':
         handlePollVoteMessage(dispatch, message.payload);

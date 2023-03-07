@@ -40,7 +40,7 @@ import { MediaProvider } from '../components/MediaProvider';
 import { idFromDescriptor, MediaId, MediaStreamState, SubscriberState } from '../modules/WebRTC';
 import FullscreenProvider from '../provider/FullscreenProvider';
 import { appReducers } from '../store';
-import { Participant, WaitingState } from '../store/slices/participantsSlice';
+import { Participant, ProtocolAccess, WaitingState } from '../store/slices/participantsSlice';
 
 export const loadLanguage = async (lng: string) => {
   const filename = 'public/locales/' + lng + '/k3k.ftl';
@@ -227,6 +227,7 @@ export const mockedParticipant = (index: number): Participant => ({
   participationKind: ParticipationKind.User,
   lastActive: '2022-03-23T12:32:30Z',
   waitingState: WaitingState.Joined,
+  protocolAccess: ProtocolAccess.None,
   isPresenter: false,
 });
 

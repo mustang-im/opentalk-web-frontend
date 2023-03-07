@@ -690,13 +690,19 @@ feedback-dialog-form-validation = required
 help-button = Help
 protocol-join-session = Join protocol session
 
-protocol-tab-title = Create protocol
-protocol-invite-button = Invite users to protocol
+protocol-invite-button = Assign write permissions to participants
+protocol-edit-invite-button = Manage write permissions
 protocol-invite-reader-message = Protocol session has been started
 protocol-invite-writer-message = Your where chosen to write a protocol for this session
-protocol-invite-send-button = Send Invitations
+protocol-invite-send-button = Show protocol to all
+protocol-update-invite-send-button = Save changes
 protocol-upload-pdf-button = Create Protocol PDF
 protocol-upload-pdf-message = Protocol PDF created
+protocol-created-notification = Protocol is created.
+protocol-created-all-notification = Protocol was set up for all.
+protocol-new-protocol-message-button = Open
+protocol-hide = Hide protocol
+protocol-tab-title = Create protocol
 
 beta-flag-tooltip-text = You are using the <demoLink>beta version</demoLink> of OpenTalk. We are continuously developing new features and provide them as an early preview in our demo environment. Please note that there may be restrictions in using this version. Please feel free to send us any criticism, ideas or bugs to <reportEmailLink>{$reportEmail}</reportEmailLink>.<br /><br />Say Hello to OpenTalk!
 

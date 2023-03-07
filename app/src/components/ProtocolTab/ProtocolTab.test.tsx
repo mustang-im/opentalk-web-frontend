@@ -1,28 +1,20 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, ParticipationKind } from '@opentalk/common';
+import { ParticipantId } from '@opentalk/common';
 import * as React from 'react';
 
-import { Participant, WaitingState } from '../../store/slices/participantsSlice';
 import { render, createStore, screen, fireEvent, cleanup } from '../../utils/testUtils';
-import ProtocolTab from './ProtocolTab';
+import ProtocolTab, { ProtocolParticipant } from './ProtocolTab';
 
 describe('ProtocolTab component tests', () => {
   const { store } = createStore();
 
-  const initialUserValue: Participant[] = [
+  const initialUserValue: ProtocolParticipant[] = [
     {
       id: '12345' as ParticipantId,
       displayName: 'test name',
-      breakoutRoomId: null,
-      handIsUp: false,
-      joinedAt: '',
-      leftAt: null,
-      groups: [],
-      participationKind: ParticipationKind.User,
-      lastActive: '',
-      waitingState: WaitingState.Joined,
+      isSelected: true,
     },
   ];
 

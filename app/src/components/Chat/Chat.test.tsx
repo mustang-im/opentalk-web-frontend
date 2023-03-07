@@ -4,7 +4,7 @@
 import { ParticipantId, ParticipationKind } from '@opentalk/common';
 import { Store } from 'redux';
 
-import { join, leave, WaitingState } from '../../store/slices/participantsSlice';
+import { join, leave, ProtocolAccess, WaitingState } from '../../store/slices/participantsSlice';
 import { screen, render, createStore, waitFor, fireEvent } from '../../utils/testUtils';
 import Chat from './Chat';
 
@@ -61,6 +61,8 @@ describe('Chat component', () => {
           participationKind: ParticipationKind.User,
           lastActive: '',
           waitingState: WaitingState.Joined,
+          protocolAccess: ProtocolAccess.None,
+          isPresenter: false,
         },
       })
     );

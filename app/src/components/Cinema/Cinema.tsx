@@ -11,6 +11,7 @@ import { useFullscreenContext } from '../../provider/FullscreenProvider';
 import { selectParticipantsLayout } from '../../store/slices/uiSlice';
 import FullscreenView from '../FullscreenView/index';
 import GridView from '../GridView';
+import ProtocolView from '../ProtocolView';
 import SpeakerView from '../SpeakerView';
 import WhiteboardView from '../Whiteboard';
 
@@ -38,6 +39,8 @@ const Cinema = () => {
           return <SpeakerView />;
         case LayoutOptions.Whiteboard:
           return <WhiteboardView />;
+        case LayoutOptions.Protocol:
+          return <ProtocolView />;
         case LayoutOptions.Grid:
         default:
           return <GridView />;

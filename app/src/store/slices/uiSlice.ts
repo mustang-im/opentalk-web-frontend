@@ -77,6 +77,9 @@ export const uiSlice = createSlice({
       if (action.payload === LayoutOptions.Whiteboard && state.isCurrentWhiteboardHighlighted) {
         state.isCurrentWhiteboardHighlighted = false;
       }
+      if (action.payload === LayoutOptions.Protocol && state.isCurrentProtocolHighlighted) {
+        state.isCurrentProtocolHighlighted = false;
+      }
     },
     paginationPageSet: (state, action: PayloadAction<number>) => {
       state.paginationPage = action.payload;

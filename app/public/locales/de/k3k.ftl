@@ -689,13 +689,19 @@ feedback-dialog-form-validation = Pflichtfeld
 help-button = Hilfe
 protocol-join-session = Nehmen Sie an der Protokollsitzung teil
 
-protocol-tab-title = Protokoll erstellen
-protocol-invite-button = Zum Protokoll einladen
+protocol-invite-button = Schreibrechte für Teilnehmer vergeben
+protocol-edit-invite-button = Schreibrechte verwalten
 protocol-invite-reader-message = Es wurde eine Protokollierung gestartet
 protocol-invite-writer-message = Sie wurden ausgewählt diese Sitzung zu protokollieren
-protocol-invite-send-button = Einladung versenden
+protocol-invite-send-button = Protokoll für alle anzeigen
+protocol-update-invite-send-button = Änderungen übernehmen
 protocol-upload-pdf-button = Protokoll PDF erstellen
 protocol-upload-pdf-message = Protokoll PDF erstellt
+protocol-created-notification = Protokoll ist eingerichtet.
+protocol-created-all-notification = Protokoll für alle eingerichtet.
+protocol-new-protocol-message-button = Anzeigen
+protocol-hide = Protokol ausblenden
+protocol-tab-title = Protokoll erstellen
 
 beta-flag-tooltip-text = Sie nutzen die Beta-Version von OpenTalk. Wir entwickeln kontinuierlich neue Funktionen und stellen diese im Rahmen unserer <demoLink>Demo</demoLink> frühzeitig als Ausblick bereit. Bitte beachten Sie, dass es zu Einschränkungen bei der Nutzung kommen kann. Kritik, Ideen und Fehler können Sie uns gerne an <reportEmailLink>{$reportEmail}</reportEmailLink> senden.<br /><br />Viel Spaß beim ausprobieren von OpenTalk!
 
