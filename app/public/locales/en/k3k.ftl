@@ -314,16 +314,22 @@ legal-vote-roll_call = Roll Call
 legal-vote-live_roll_call = Roll Call - Live
 legal-vote-pseudonymous = Hidden Vote
 
+legal-vote-success-clipboard-message = You voted {{vote}}
+legal-vote-token-copy-success = The token was copied to your clipboard
+
 poll-participant-list-button-select = Select
 poll-participant-list-button-close = Close
 poll-participant-list-button-save = Save
 poll-participant-list-button-start = Start Vote
 poll-participant-list-button-select-all = Select all
 
-legal-vote-success = Your vote was counted successfully at {{atVoteTime}} on {{onVoteDate}}
+legal-vote-success = Your vote was counted successfully at {{newLine}}{{atVoteTime}} on {{onVoteDate}} {{newLine}}using the following confirmation token. 
+It can later be used to confirm the correctness of the voting result.
 legal-vote-not-selected = You have not been selected to participate in this vote.
 legal-vote-save-form-success = Your vote form was saved successfully
 legal-vote-save-form-error = Saving failed, you need to specify a topic and a name
+
+legal-vote-share-token = Do not share this token with others and keep it in a safe place!
 
 no-votes-in-conference = There are no votes for this conference.
 

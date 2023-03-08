@@ -14,8 +14,14 @@ import {
   Button,
 } from '@mui/material';
 import { ParticipantId, PollId, LegalVoteId, CloseIcon, ClockIcon, useDateFormat } from '@opentalk/common';
-import { LegalVoteType, VoteOption, legalVoteStore, LegalVoteCountdown } from '@opentalk/components';
-import { useEffect, useState } from 'react';
+import {
+  LegalVoteType,
+  VoteOption,
+  legalVoteStore,
+  LegalVoteCountdown,
+  LegalVoteTokenClipboard,
+} from '@opentalk/components';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Choice, ChoiceResult } from '../../api/types/incoming/poll';
@@ -40,15 +46,17 @@ const TooltipIcon = styled('div')(({ color }) => ({
 const MainContainer = styled(Container)(({ theme }) => ({
   background: theme.palette.background.voteResult,
   position: 'fixed',
-  top: '10rem',
+  top: '8rem',
   left: '25rem',
   borderRadius: '1rem',
-  display: 'flex',
+  display: 'block',
   gap: '1rem',
   padding: theme.spacing(2),
   justifyContent: 'space-evenly',
   flexDirection: 'column',
   zIndex: 1000,
+  maxHeight: '34rem',
+  overflowY: 'auto',
 }));
 
 const StyledStack = styled(Stack)(() => ({
@@ -322,6 +330,16 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
         {currentLegalVote?.votedAt && (
           <Grid item xs={12}>
             <VoteResultDate date={new Date(currentLegalVote?.votedAt)} />
+          </Grid>
+        )}
+        {currentLegalVote && currentLegalVote.state === 'finished' && (
+          <Grid item xs={12}>
+            <LegalVoteTokenClipboard
+              name={currentLegalVote.name}
+              timestamp={currentLegalVote.votedAt || ''}
+              token={currentLegalVote.token || ''}
+              vote={selectedLegalVoteOption as string}
+            />
           </Grid>
         )}
         {currentLegalVote && isModerator && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
