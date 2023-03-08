@@ -557,7 +557,7 @@ dashboard-meeting-card-all-day = All-day
 dashboard-meeting-card-timeindependent = Time-independent
 dashboard-meeting-card-button-start-direct = Start direct meeting
 dashboard-meeting-card-title-favorite-meetings = My favorite meetings
-dashboard-meeting-card-title-next-meetings = My next meetings
+dashboard-meeting-card-title-next-meetings = Current meetings
 dashboard-plan-new-meeting = Plan new meeting
 
 dashboard-settings-account-title = General Information
