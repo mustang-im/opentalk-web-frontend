@@ -4,6 +4,7 @@
 
 - Show no more outdated meetings in dashboard home (!859)
 - Change UX for whiteboard access (!841)
+- Wording coffee break (!862)
 - Fix icons missing in chat field (!854)
 - Fix Keyboard shortcuts not disabled in smiley search (!854)
 

@@ -64,7 +64,8 @@ const TimerOverview = ({ timerStyle }: { timerStyle: TimerStyle }) => {
 
       <Stack justifySelf={'center'}>
         <Button color="secondary" onClick={handleStop}>
-          {t('timer-overview-button-stop')}
+          {timerStyle === TimerStyle.Normal && t('timer-overview-button-stop')}
+          {timerStyle === TimerStyle.CoffeeBreak && t('coffee-break-overview-button-stop')}
         </Button>
       </Stack>
     </Container>
