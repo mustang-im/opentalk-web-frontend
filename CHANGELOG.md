@@ -31,6 +31,9 @@
 
 ### Stability Improvements
 
+- fix toggling mark as done in timer (!867) 
+- fix typo `updateParticpantsReady` (!867)
+
 ### New Features
 
 - coffee break (!827)
