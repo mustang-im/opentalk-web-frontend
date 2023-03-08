@@ -10,6 +10,7 @@
 - Fix Keyboard shortcuts not disabled in smiley search (!854)
 - Fix UI for moderation tabs on the side panel for community features (!853)
 - Add details for overlapping event dialog (!868)
+- Fix not showing participants in the waiting room when moderator is joining after them (!869)
 
 ### Stability Improvements
 

@@ -129,6 +129,7 @@ participant-menu-remove-participant = Remove participant
 participant-menu-grant-moderator = Grant moderator right
 participant-menu-revoke-moderator = Revoke moderator right
 participant-menu-accept-participant = Accept participant
+participant-menu-accepted-participant = Accepted participant
 button-new-message = New Message
 empty-messages = You have no messages at the moment. Create one to start a private conversation with a person or a group.
 encrypted-messages = This is the beginning of your chat history. Nobody has access the content of your chat except the people inside the chat.
