@@ -429,14 +429,15 @@ timer-popover-title = Eine Stoppuhr läuft
 timer-popover-button-done = Als fertig markieren
 timer-popover-button-not-done = Als nicht fertig markieren
 
-coffee-break-title-counter = Duration
+coffee-break-title-counter = Dauer
 coffee-break-header-title = Kaffeepause
 coffee-break-form-button-submit = Pause starten
 coffee-break-layer-not-running = Kaffeepause beendet
 coffee-break-layer-title = Kaffepause! Noch ...
 coffee-break-layer-button = Zurück in die Konferenz
 coffee-break-notification = Die Kaffeepause ist beendet.
-coffee-break-stopped-title = Die Kaffeepause ist beendet.
+coffee-break-stopped-title = Kaffeepause beendet.
+coffee-break-overview-button-stop = Kaffeepause beenden
 
 speed-meter-init-message = Initalisiere...
 speed-meter-started-message = Bitte warten.\nDer Test dauert ungefähr 20 Sekunden.

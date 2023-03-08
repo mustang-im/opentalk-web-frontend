@@ -436,7 +436,8 @@ coffee-break-layer-not-running = Coffee break is over
 coffee-break-layer-button = Back to the conference
 coffee-break-layer-title =  Coffee break
 coffee-break-notification = The coffee break is over.
-coffee-break-stopped-title = The coffee break is over.
+coffee-break-stopped-title = Coffee break is over.
+coffee-break-overview-button-stop = Finish coffee break
 
 speed-meter-init-message = Initialising ...
 speed-meter-started-message = Please wait.\nThe test will take up to 20 seconds.
