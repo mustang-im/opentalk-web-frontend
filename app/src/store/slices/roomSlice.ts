@@ -8,7 +8,7 @@ import convertToSnakeCase from 'snakecase-keys';
 
 import { RootState } from '../';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
-import { hangUp, joinSuccess, startRoom } from '../commonActions';
+import { hangUp, joinSuccess, joinBlocked, startRoom } from '../commonActions';
 
 interface InviteState extends FetchRequestState {
   active?: boolean;
@@ -26,6 +26,7 @@ export enum ConnectionState {
   Leaving = 'leaving',
   Left = 'left',
   Failed = 'failed',
+  Blocked = 'blocked',
   ReadyToEnter = 'ready-to-enter',
 }
 
@@ -179,6 +180,9 @@ export const roomSlice = createSlice({
     });
     builder.addCase(hangUp.rejected, (state) => {
       state.connectionState = ConnectionState.Failed;
+    });
+    builder.addCase(joinBlocked, (state) => {
+      state.connectionState = ConnectionState.Blocked;
     });
   },
 });

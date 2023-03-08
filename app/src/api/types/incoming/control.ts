@@ -69,6 +69,15 @@ export interface JoinSuccess {
   tariff: Tariff;
 }
 
+export enum ControlMessage {
+  JOIN_BLOCKED = 'join_blocked',
+}
+
+export interface JoinBlocked {
+  message: ControlMessage.JOIN_BLOCKED;
+  reason: 'participant-limit-reached';
+}
+
 export interface Joined extends BackendParticipant {
   message: 'joined';
 }
@@ -91,7 +100,7 @@ export type ControlError = string;
 
 export const isError = isErrorStruct;
 
-export type Message = JoinSuccess | Update | Joined | Left | RoleUpdated | ErrorStruct<ControlError>;
+export type Message = JoinSuccess | JoinBlocked | Update | Joined | Left | RoleUpdated | ErrorStruct<ControlError>;
 export type Control = NamespacedIncoming<Message, 'control'>;
 
 export default Control;

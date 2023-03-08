@@ -72,6 +72,8 @@ const RoomPage = () => {
         return <RoomLoadingView />;
       case ConnectionState.Failed:
         return <LobbyView />;
+      case ConnectionState.Blocked:
+        return <RoomLoadingView />;
       default:
         console.error('room state unknown', connectionState);
         return <LobbyView />;

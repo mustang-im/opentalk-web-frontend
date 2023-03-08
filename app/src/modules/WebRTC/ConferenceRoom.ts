@@ -8,6 +8,7 @@ import convertToSnakeCase from 'snakecase-keys';
 import { setCurrentConferenceRoom } from '.';
 import { ApiErrorWithBody, StartRoomError } from '../../api/rest';
 import { Message as IncomingMessage } from '../../api/types/incoming';
+import { ControlMessage } from '../../api/types/incoming/control';
 import {
   MediaStatus,
   SdpAnswer,
@@ -27,6 +28,8 @@ import { MediaSignaling } from './MediaSignaling';
 import { SignalingSocket, SignalingState } from './SignalingSocket';
 import { TurnProvider } from './TurnProvider';
 import { WebRtc } from './WebRTC';
+
+const REJOIN_ON_BLOCKED_CONNECTION_TIME = 10000;
 
 export type ConferenceEvent = {
   connected: void;
@@ -94,6 +97,8 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
   public readonly webRtc: WebRtc;
   public readonly roomCredentials: RoomCredentials;
   private participantId?: ParticipantId;
+  private participantName?: string;
+  private rejoinTimer?: ReturnType<typeof window.setTimeout>;
 
   public static async create(
     roomCredentials: RoomCredentials,
@@ -133,6 +138,7 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
       namespace: 'control',
       payload: { action: 'join', displayName },
     });
+    this.participantName = displayName;
   }
 
   public createPublisher(mediaType: MediaSessionType, stream: MediaStream, quality: VideoSetting) {
@@ -208,9 +214,20 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
         }
       }
       case 'control':
-        if (payload.message === 'join_success') {
-          this.participantId = payload.id;
-          // TODO start webRTC Subscriptions
+        switch (payload.message) {
+          case 'join_success':
+            this.participantId = payload.id;
+            // TODO start webRTC Subscriptions
+            break;
+          case ControlMessage.JOIN_BLOCKED:
+            // try to automatically rejoin a blocked room
+            this.rejoinTimer = setTimeout(() => {
+              this.join(this.participantName ?? '');
+            }, REJOIN_ON_BLOCKED_CONNECTION_TIME);
+            break;
+          default:
+            console.error('Unknown type of control message');
+            break;
         }
         break;
       default:
@@ -275,5 +292,6 @@ console.debug('signaling reconnect finished');
     this.signaling.disconnect();
     this.eventEmitter.emit('shutdown', {});
     this.eventEmitter.all.clear();
+    this.rejoinTimer && clearTimeout(this.rejoinTimer);
   }
 }
