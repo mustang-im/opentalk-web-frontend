@@ -12,7 +12,7 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { ClockIcon } from '@opentalk/common';
+import { ClockIcon } from '../../assets/icons';
 import { isNumber } from 'lodash';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
