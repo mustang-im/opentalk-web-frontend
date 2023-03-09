@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { LegalVoteId, ParticipantId, PollId, TargetId } from '@opentalk/common';
+import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
@@ -129,6 +130,9 @@ export const uiSlice = createSlice({
     });
     builder.addCase(setProtocolWriteUrl, (state) => {
       state.isCurrentProtocolHighlighted = true;
+    });
+    builder.addCase(legalVoteStore.started, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
+      state.votesPollIdToShow = vote.legalVoteId;
     });
   },
 });

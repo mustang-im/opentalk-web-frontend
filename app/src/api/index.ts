@@ -77,7 +77,7 @@ import {
 } from '../store/slices/roomSlice';
 import * as slotStore from '../store/slices/slotSlice';
 import { joinedTimer, startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
-import { participantsLayoutSet, setVotePollIdToShow } from '../store/slices/uiSlice';
+import { participantsLayoutSet } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import showConsentNotification from '../utils/showConsentNotification';
@@ -562,7 +562,6 @@ const handleLegalVoteMessage = (dispatch: AppDispatch, data: LegalVoteMessageTyp
   switch (data.message) {
     case 'started':
       dispatch(legalVoteStore.started(data));
-      dispatch(setVotePollIdToShow(data.legalVoteId));
       break;
     case 'stopped':
       dispatch(legalVoteStore.stopped(data));
