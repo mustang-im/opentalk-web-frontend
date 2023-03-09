@@ -89,11 +89,8 @@ const SelfTest = ({ children, actionButton }: SelftestProps) => {
       </MonitorContainer>
       <BottomContainer>
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-          <Grid item md={1} />
-          <Grid item md={5}>
-            {children}
-          </Grid>
-          <Grid item md={5}>
+          <Grid item>{children}</Grid>
+          <Grid item>
             <SelfTestToolbar actionButton={actionButton} />
           </Grid>
         </Grid>

@@ -38,10 +38,12 @@ interface RoomState {
   waitingRoomEnabled: boolean;
   error?: string;
   serverTimeOffset: number;
+  passwordRequired: boolean;
 }
 
 export interface InviteRoomVerifyResponse {
   roomId: RoomId;
+  passwordRequired: boolean;
 }
 
 const initialInviteState: InviteState = {
@@ -59,6 +61,7 @@ const initialState: RoomState = {
   connectionState: ConnectionState.Initial,
   waitingRoomEnabled: false,
   serverTimeOffset: 0,
+  passwordRequired: false,
 };
 
 export const fetchRoomByInviteId = createAsyncThunk<
@@ -84,6 +87,7 @@ export const fetchRoomByInviteId = createAsyncThunk<
         statusText: await response.text(),
       });
     }
+
     return convertToCamelCase(await response.json(), { deep: true }) as InviteRoomVerifyResponse;
   } catch (error) {
     return rejectWithValue({
@@ -124,6 +128,7 @@ export const roomSlice = createSlice({
       state.invite.inviteCode = meta.arg;
       state.connectionState = ConnectionState.Setup;
       state.resumptionToken = undefined;
+      state.passwordRequired = payload.passwordRequired;
     });
     builder.addCase(fetchRoomByInviteId.rejected, (state, { payload }) => {
       state.invite = {
@@ -184,4 +189,5 @@ export const selectInviteId = (state: RootState) => state.room.invite.inviteCode
 export const selectRoomConnectionState = (state: RootState) => state.room.connectionState;
 export const selectWaitingRoomState = (state: RootState) => state.room.waitingRoomEnabled;
 export const selectServerTimeOffset = (state: RootState) => state.room.serverTimeOffset;
+export const selectPasswordRequired = (state: RootState) => state.room.passwordRequired;
 export default roomSlice.reducer;

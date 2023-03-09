@@ -22,6 +22,7 @@ describe('LobbyForm', () => {
     initialState: {
       auth: { isAuthed: true },
       user: { loggedIdToken: 'DUMMY', role: Role.User },
+      room: { passwordRequired: true, invite: { inviteCode: 'inviteCode' } },
     },
   });
   afterEach(() => cleanup());
