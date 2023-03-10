@@ -10,6 +10,7 @@
 
 ### Stability Improvements
 
+- Fix: flickering local video element when start coffee break (!870)
 - Clean-up dispatch of legal vote started action (!864)
 - Rework duration field and related types (!855)
 - Translated emoji picker categories to german. (!854)
@@ -33,7 +34,7 @@
 
 ### Stability Improvements
 
-- fix toggling mark as done in timer (!867) 
+- fix toggling mark as done in timer (!867)
 - fix typo `updateParticpantsReady` (!867)
 
 ### New Features

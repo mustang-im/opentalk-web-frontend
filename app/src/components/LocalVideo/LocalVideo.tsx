@@ -9,7 +9,12 @@ import { useTranslation } from 'react-i18next';
 
 import NameTile from '../../commonComponents/NameTile/NameTile';
 import { useAppSelector } from '../../hooks';
-import { selectAudioEnabled, selectShareScreenEnabled, selectVideoEnabled } from '../../store/slices/mediaSlice';
+import {
+  selectAudioEnabled,
+  selectMediaChangeInProgress,
+  selectShareScreenEnabled,
+  selectVideoEnabled,
+} from '../../store/slices/mediaSlice';
 import { selectMirroredVideoEnabled } from '../../store/slices/uiSlice';
 import { selectDisplayName } from '../../store/slices/userSlice';
 import { useMediaContext } from '../MediaProvider';
@@ -93,6 +98,7 @@ const LocalVideo = ({
   const displayName = useAppSelector(selectDisplayName);
   const isAudioOn = useAppSelector(selectAudioEnabled) && !!mediaContext.hasMicrophone;
   const mirroredVideoEnabled = useAppSelector(selectMirroredVideoEnabled);
+  const isLoadingMedia = useAppSelector(selectMediaChangeInProgress);
 
   const isVideoRunning =
     outgoingVideoStream?.getVideoTracks().find((t) => t.enabled && t.readyState === 'live') !== undefined;
@@ -173,7 +179,7 @@ const LocalVideo = ({
           {!hideUserName && <NameTile audioOn={isAudioOn} displayName={displayName || ''} className="positionBottom" />}
         </>
       )}
-      {videoEnabled && !isVideoRunning && <NoVideoText>{t('localvideo-no-device')}</NoVideoText>}
+      {videoEnabled && !isVideoRunning && !isLoadingMedia && <NoVideoText>{t('localvideo-no-device')}</NoVideoText>}
     </Container>
   );
 };
