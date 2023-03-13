@@ -62,7 +62,7 @@ const MeetingSidebar = () => {
             placement="right"
             title={tab.tooltipTranslationKey ? t(tab.tooltipTranslationKey) : ''}
           >
-            <SideTabPanel value={value} index={index}>
+            <SideTabPanel value={value} index={index} tabTitle={tab.titleKey ? t(tab.titleKey) : ''}>
               {tab.key === FeaturesKeys.Vote ? (
                 <LegalVoteProvider
                   apiMessages={{

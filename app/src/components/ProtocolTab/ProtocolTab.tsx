@@ -18,7 +18,7 @@ import {
   Grid,
 } from '@mui/material';
 import { ParticipantId, ParticipationKind } from '@opentalk/common';
-import { AddIcon, SearchIcon } from '@opentalk/common';
+import { SearchIcon } from '@opentalk/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,10 +33,6 @@ const ParticipantSelectContainer = styled(Container)(({ theme }) => ({
   width: '19rem',
   backgroundColor: theme.palette.background.paper,
   padding: theme.spacing(2),
-}));
-
-const Title = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
 }));
 
 const ParticipantsListGrid = styled(Grid)({
@@ -172,10 +168,11 @@ const ProtocolTab = () => {
         sx={{ width: '100%' }}
         flex={0}
       >
-        <Title variant={'h2'}>{t('protocol-invite-writing-access')}</Title>
-        <Button sx={{ width: 'auto' }} endIcon={<AddIcon />} onClick={openParticipantsListPanel} size={'small'}>
-          {t('protocol-invite-button')}
-        </Button>
+        <Grid container>
+          <Grid item xs={12}>
+            <Button onClick={openParticipantsListPanel}>{t('protocol-invite-button')}</Button>
+          </Grid>
+        </Grid>
         <SelectedParticipantsList>
           {selectedParticipants.map((participant, index) => (
             <ListItem key={index} sx={{ px: 0 }}>
@@ -187,21 +184,26 @@ const ProtocolTab = () => {
           ))}
         </SelectedParticipantsList>
       </Stack>
-      <Stack direction={'column'} spacing={1}>
-        {protocolUrl && (
-          <Button sx={{ width: 'auto' }} onClick={uploadPdfAction} aria-label={t('protocol-upload-pdf-button')}>
-            {t('protocol-upload-pdf-button')}
+      <Grid container>
+        <Grid item xs={12}>
+          {protocolUrl && (
+            <Button sx={{ width: 'auto' }} onClick={uploadPdfAction} aria-label={t('protocol-upload-pdf-button')}>
+              {t('protocol-upload-pdf-button')}
+            </Button>
+          )}
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={12}>
+          <Button
+            aria-label={t('protocol-invite-send-button')}
+            disabled={!selectedParticipants.length}
+            onClick={sendInvitations}
+          >
+            {t('protocol-invite-send-button')}
           </Button>
-        )}
-        <Button
-          sx={{ width: 'auto' }}
-          aria-label={t('protocol-invite-send-button')}
-          disabled={!selectedParticipants.length}
-          onClick={sendInvitations}
-        >
-          {t('protocol-invite-send-button')}
-        </Button>
-      </Stack>
+        </Grid>
+      </Grid>
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{

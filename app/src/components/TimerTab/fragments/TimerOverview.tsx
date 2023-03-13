@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Stack, styled, Typography } from '@mui/material';
+import { Button, Grid, Box, styled } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { stopTimer, TimerStyle } from '../../../api/types/outgoing/timer';
@@ -11,26 +11,16 @@ import TimerCoffeeBreakCounter from './TimerCoffeeBreakCounter';
 import TimerNormalCounter from './TimerNormalCounter';
 import UserList from './UserList';
 
-const Container = styled('div')(({ theme }) => ({
-  height: '100%',
+const TimerBoxContainer = styled(Box)({
   width: '100%',
-  display: 'grid',
-  gap: theme.spacing(2),
+  height: '100%',
   overflow: 'auto',
-  gridTemplateColumns: '1fr',
-  gridTemplateRows: 'auto 1fr auto',
-  justifyContent: 'center',
-}));
+  alignSelf: 'flex-start',
+});
 
-const BoxNormal = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(2),
-}));
-
-const TabTitle = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
-}));
+const TimerBoxItem = styled(Box)({
+  paddingTop: '1rem',
+});
 
 const TimerOverview = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   const { t } = useTranslation();
@@ -44,31 +34,35 @@ const TimerOverview = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   };
 
   return (
-    <Container>
+    <>
       {timerStyle === TimerStyle.CoffeeBreak && (
-        <>
-          <Typography variant={'h2'}>{t('coffee-break-header-title')}</Typography>
-          <TimerCoffeeBreakCounter />
-        </>
+        <TimerBoxContainer>
+          <TimerBoxItem>
+            <TimerCoffeeBreakCounter />
+          </TimerBoxItem>
+        </TimerBoxContainer>
       )}
 
       {timerStyle === TimerStyle.Normal && (
-        <>
-          <TabTitle variant={'h2'}>{t('timer-header-title')}</TabTitle>
-          <BoxNormal>
+        <TimerBoxContainer>
+          <TimerBoxItem>
             <TimerNormalCounter />
+          </TimerBoxItem>
+          <TimerBoxItem>
             <UserList />
-          </BoxNormal>
-        </>
+          </TimerBoxItem>
+        </TimerBoxContainer>
       )}
 
-      <Stack justifySelf={'center'}>
-        <Button color="secondary" onClick={handleStop}>
-          {timerStyle === TimerStyle.Normal && t('timer-overview-button-stop')}
-          {timerStyle === TimerStyle.CoffeeBreak && t('coffee-break-overview-button-stop')}
-        </Button>
-      </Stack>
-    </Container>
+      <Grid container>
+        <Grid item xs={12}>
+          <Button color="secondary" onClick={handleStop}>
+            {timerStyle === TimerStyle.Normal && t('timer-overview-button-stop')}
+            {timerStyle === TimerStyle.CoffeeBreak && t('coffee-break-overview-button-stop')}
+          </Button>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 

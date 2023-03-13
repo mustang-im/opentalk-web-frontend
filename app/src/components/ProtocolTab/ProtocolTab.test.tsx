@@ -30,7 +30,6 @@ describe('ProtocolTab component tests', () => {
 
   test('ProtocolTab component should be rendered without breaking', async () => {
     await render(<ProtocolTab />, store);
-    expect(screen.getByText('protocol-invite-writing-access')).toBeInTheDocument();
     const nextButton = screen.getByRole('button', { name: /protocol-invite-send-button/i });
     expect(nextButton).toBeInTheDocument();
     expect(nextButton).toBeDisabled();

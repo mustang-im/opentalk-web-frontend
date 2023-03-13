@@ -220,7 +220,7 @@ in-waiting-room-ready = You are enabled to join the room
 approve-all-participants-from-waiting = Approve all
 
 moderationbar-button-home-tooltip = Home
-moderationbar-button-mute-tooltip = Mute All
+moderationbar-button-mute-tooltip = Mute participants
 moderationbar-button-add-user-tooltip = Add User feature is under development
 moderationbar-button-breakout-tooltip = Create Breakout Rooms
 moderationbar-button-poll-tooltip = Poll
@@ -234,10 +234,12 @@ moderationbar-button-protocol-tooltip = Protocol
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Reset raised hands
 
-mute-users-all = Mute all participants
-mute-users-selected = Mute selected participants
+mute-participants-tab-title = Mute participants
+mute-participants-button-all = All
+mute-participants-button-selected = Selected
 
-reset-handraises = Reset raised hands
+reset-handraises-tab-title = Reset raised hands
+reset-handraises-button = All
 reset-handraises-notification = All raised hands were reset by the moderator
 
 media-received-request-mute-ok = Mute
@@ -333,7 +335,7 @@ legal-vote-share-token = Do not share this token with others and keep it in a sa
 
 no-votes-in-conference = There are no votes for this conference.
 
-breakout-room-form-create-title = Create Breakout Rooms
+breakout-room-tab-title = Create Breakout Rooms
 breakout-room-form-field-rooms = number of rooms
 breakout-room-form-field-participants-per-room = participants per room
 breakout-room-form-field-random-distribution = random distribution
@@ -395,11 +397,11 @@ participant-last-active-text = Last Active {$lastActive}
 participant-joined-event = joined the call
 participant-left-event = left the call
 
-poll-overview-button-create-poll = create new poll
-poll-header-title = Polls
-no-polls-in-conference = You have no polls at the moment. Create one to engage your audience.
+poll-overview-button-create-poll = Create new poll
+poll-tab-title = Polls
+no-polls-in-conference = There are no polls for this conference at the moment.
 poll-form-button-submit = Start poll
-poll-form-button-save = save
+poll-form-button-save = Save
 poll-header-title-update = Update poll
 poll-header-title-create = Create poll
 poll-save-form-success = Poll saved successfully
@@ -422,7 +424,7 @@ poll-overview-panel-button-end = End Poll
 poll-overview-panel-status-active = Active
 poll-overview-panel-status-finished = Finished
 
-timer-header-title = Timer
+timer-tab-title = Timer
 timer-form-button-submit = Create Timer
 timer-form-ready-to-continue = Ask participants if they are ready
 timer-counter-remaining-time = Remaining time
@@ -436,7 +438,7 @@ timer-popover-button-done = Mark me as done
 timer-popover-button-not-done = Unmark me as done
 
 coffee-break-title-counter = Duration
-coffee-break-header-title = Coffee break
+coffee-break-tab-title = Coffee break
 coffee-break-form-button-submit = Start coffee break
 coffee-break-layer-not-running = Coffee break is over
 coffee-break-layer-button = Back to the conference
@@ -684,8 +686,8 @@ feedback-dialog-form-validation = required
 help-button = Help
 protocol-join-session = Join protocol session
 
-protocol-invite-writing-access = Invite users with writing access
-protocol-invite-button = Select participants
+protocol-tab-title = Create protocol
+protocol-invite-button = Invite users to protocol
 protocol-invite-reader-message = Protocol session has been started
 protocol-invite-writer-message = Your where chosen to write a protocol for this session
 protocol-invite-send-button = Send Invitations
@@ -723,12 +725,13 @@ debug-panel-inbound-label = Inbound (current, avr, max):
 debug-panel-outbound-label = Outbound (current, avr, max):
 debug-panel-remote-count-label = Connection count:
 
-whiteboard-create-pdf-button = create pdf
-whiteboard-start-whiteboard-button = show whiteboard
+whiteboard-tab-title = Whiteboard
+whiteboard-create-pdf-button = Create pdf
+whiteboard-start-whiteboard-button = Show whiteboard
 whiteboard-new-whiteboard-message = Whiteboard is created
 whiteboard-new-pdf-message = A new whiteboard pdf is available
 whiteboard-new-whiteboard-message-button = Open
-whiteboard-hide = hide whiteboard
+whiteboard-hide = Hide whiteboard
 
 shortcut-hold-to-speak = Hold to speak
 

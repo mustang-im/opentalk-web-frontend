@@ -10,7 +10,7 @@ describe('Reset all raised hands', () => {
   test('MuteParticipants component will render properly', async () => {
     await render(<ResetHandraisesTab />, store);
 
-    const resetButton = screen.getByRole('button', { name: /reset-handraises/i });
+    const resetButton = screen.getByRole('button', { name: /reset-handraises-button/i });
 
     expect(resetButton).toBeInTheDocument();
   });
@@ -18,7 +18,7 @@ describe('Reset all raised hands', () => {
   test('ResetButton triggers api Call', async () => {
     await render(<ResetHandraisesTab />, store);
 
-    const resetButton = screen.getByRole('button', { name: /reset-handraises/i });
+    const resetButton = screen.getByRole('button', { name: /reset-handraises-button/i });
 
     fireEvent.click(resetButton);
 

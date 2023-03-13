@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Stack, styled, Switch, Typography } from '@mui/material';
+import { Button, Stack, styled, Switch, Typography, Grid } from '@mui/material';
 import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { DurationValueOptions } from '@opentalk/common/components/DurationField';
 import { FormikValues, useFormik } from 'formik';
@@ -20,10 +20,6 @@ const Form = styled('form')({
   flex: 1,
 });
 
-const Title = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
-}));
-
 interface Texts {
   header: string;
   button: string;
@@ -39,7 +35,7 @@ const getTimerState = (timerStyle: TimerStyle, t: TFunction<'translation', undef
   if (timerStyle === TimerStyle.CoffeeBreak) {
     return {
       texts: {
-        header: t('coffee-break-header-title'),
+        header: t('coffee-break-tab-title'),
         button: t('coffee-break-form-button-submit'),
       },
       durationOptions: [5, 10, 15, 30, 'custom'],
@@ -48,7 +44,7 @@ const getTimerState = (timerStyle: TimerStyle, t: TFunction<'translation', undef
   } else {
     return {
       texts: {
-        header: t('timer-header-title'),
+        header: t('timer-tab-title'),
         button: t('timer-form-button-submit'),
       },
       durationOptions: [null, 1, 2, 5, 'custom'],
@@ -121,8 +117,6 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
     <Form onSubmit={formik.handleSubmit}>
       <Stack justifyContent={'space-between'} sx={{ height: '100%', width: '100%' }}>
         <Stack alignItems={'flex-start'} sx={{ width: '100%' }} spacing={2}>
-          <Title variant={'h2'}>{texts?.header}</Title>
-
           <Typography>{t('global-duration')}</Typography>
 
           <DurationField
@@ -147,8 +141,11 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
             </>
           )}
         </Stack>
-
-        <Button type="submit">{texts?.button}</Button>
+        <Grid container>
+          <Grid item xs={12}>
+            <Button type="submit">{texts?.button}</Button>
+          </Grid>
+        </Grid>
       </Stack>
     </Form>
   );

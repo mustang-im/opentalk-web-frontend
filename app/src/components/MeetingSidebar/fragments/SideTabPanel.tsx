@@ -1,16 +1,36 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box } from '@mui/material';
+import { Box, Typography, styled } from '@mui/material';
 import React, { forwardRef } from 'react';
 
 interface SideTabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  tabTitle?: string;
 }
 
-const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, index }, ref) => {
+const TabTitle = styled(Typography)(({ theme }) => ({
+  padding: theme.spacing(1, 0),
+  fontSize: '1.25rem',
+}));
+
+const TabContainer = styled('div')({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  maxHeight: 'calc(100vh - 19em)',
+  overflow: 'auto',
+  '.MuiButton-root': {
+    flexGrow: 1,
+  },
+  '.MuiGrid-item': {
+    display: 'flex',
+  },
+});
+
+const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, index, tabTitle }, ref) => {
   if (value !== index) {
     return null;
   }
@@ -28,7 +48,8 @@ const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, 
       maxWidth={'100%'}
       maxHeight={'100%'}
     >
-      {children}
+      <TabTitle>{tabTitle}</TabTitle>
+      <TabContainer>{children}</TabContainer>
     </Box>
   );
 });

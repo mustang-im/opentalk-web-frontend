@@ -234,10 +234,12 @@ moderationbar-button-protocol-tooltip = Protokoll
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
 
-mute-users-all = Teilnehmer stummschalten
-mute-users-selected = Auswahl stummschalten
+mute-participants-tab-title = Teilnehmer stummschalten
+mute-participants-button-all = Alle
+mute-participants-button-selected = Nach Auswahl
 
-reset-handraises = Gehobene Hände zurücksetzen
+reset-handraises-tab-title = Gehobene Hände zurücksetzen
+reset-handraises-button = Alle
 reset-handraises-notification = Alle gehobene Hände wurden vom Moderator zurückgesetzt
 
 media-received-request-mute-ok = Stummschalten
@@ -332,7 +334,7 @@ legal-vote-save-form-error = Fehler beim Speichern, es müssen Thema und Name ge
 
 no-votes-in-conference = Es gibt keine Abstimmungen für diese Konferenz.
 
-breakout-room-form-create-title = Breakout-Räume erstellen
+breakout-room-tab-title = Breakout-Räume erstellen
 breakout-room-form-field-rooms = Anzahl der Räume
 breakout-room-form-field-participants-per-room = Anzahl der Teilnehmer
 breakout-room-form-field-random-distribution = zufällige Zuweisung
@@ -395,8 +397,8 @@ participant-joined-event = ist dem Meeting beigetreten
 participant-left-event = hat das Meeting verlassen
 
 poll-overview-button-create-poll = Umfrage erstellen
-poll-header-title = Umfragen
-no-polls-in-conference = Sie haben keine Umfragen im Moment.
+poll-tab-title = Umfragen
+no-polls-in-conference = Es gibt keine Umfragen in dieser Konferenz im Moment.
 poll-form-button-submit = Umfrage starten
 poll-form-button-save = Speichern
 poll-header-title-update = Umfrage bearbeiten
@@ -421,7 +423,7 @@ poll-overview-panel-button-end = Beenden
 poll-overview-panel-status-active = Aktiv
 poll-overview-panel-status-finished = Beendet
 
-timer-header-title = Stoppuhr
+timer-tab-title = Stoppuhr
 timer-form-button-submit = Stoppuhr erstellen
 timer-counter-remaining-time = Verbleibende Zeit
 timer-counter-elapsed-time = Verstrichene Zeit
@@ -435,7 +437,7 @@ timer-popover-button-done = Als fertig markieren
 timer-popover-button-not-done = Als nicht fertig markieren
 
 coffee-break-title-counter = Dauer
-coffee-break-header-title = Kaffeepause
+coffee-break-tab-title = Kaffeepause
 coffee-break-form-button-submit = Pause starten
 coffee-break-layer-not-running = Kaffeepause beendet
 coffee-break-layer-title = Kaffepause! Noch ...
@@ -683,8 +685,8 @@ feedback-dialog-form-validation = Pflichtfeld
 help-button = Hilfe
 protocol-join-session = Nehmen Sie an der Protokollsitzung teil
 
-protocol-invite-writing-access = Benutzer mit Schreibzugriff einladen
-protocol-invite-button = Teilnehmer auswählen
+protocol-tab-title = Protokoll erstellen
+protocol-invite-button = Zum Protokoll einladen
 protocol-invite-reader-message = Es wurde eine Protokollierung gestartet
 protocol-invite-writer-message = Sie wurden ausgewählt diese Sitzung zu protokollieren
 protocol-invite-send-button = Einladung versenden
@@ -722,6 +724,7 @@ debug-panel-inbound-label = Eingehende (aktuell, durchschn., max):
 debug-panel-outbound-label = Ausgehend (aktuell, durchschn., max):
 debug-panel-remote-count-label = Anzahl der Verbindungen:
 
+whiteboard-tab-title = Whiteboard
 whiteboard-create-pdf-button = PDF erstellen
 whiteboard-start-whiteboard-button = Whiteboard anzeigen
 whiteboard-new-whiteboard-message = Whiteboard ist eingerichtet

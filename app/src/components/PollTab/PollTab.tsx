@@ -1,22 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Button, styled } from '@mui/material';
-import React, { useState } from 'react';
+import { Grid, Button } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../hooks';
 import { selectSavedPollPerId } from '../../store/slices/pollSlice';
 import CreatePollForm from './fragments/CreatePollForm';
 import PollOverview from './fragments/PollOverview';
-
-const PollContainer = styled('div')({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  maxHeight: 'calc(100vh - 19em)',
-  overflow: 'auto',
-});
 
 const PollTab = () => {
   const [showPollForm, setShowPollForm] = useState(false);
@@ -34,20 +26,24 @@ const PollTab = () => {
     setShowPollForm(false);
   };
 
-  return (
-    <PollContainer>
-      {showPollForm ? (
-        <CreatePollForm initialValues={formValues} onClose={handleOnClose} />
-      ) : (
-        <Box flex={1} display={'flex'} flexWrap={'wrap'} justifyContent={'center'}>
-          <PollOverview onClickItem={handleOnClickSavedPollItem} />
-          <Box alignSelf={'flex-end'}>
+  const renderPollOverview = () => {
+    return (
+      <>
+        <PollOverview onClickItem={handleOnClickSavedPollItem} />
+        <Grid container>
+          <Grid item xs={12}>
             <Button onClick={() => setShowPollForm(true)}>{t('poll-overview-button-create-poll')}</Button>
-          </Box>
-        </Box>
-      )}
-    </PollContainer>
-  );
+          </Grid>
+        </Grid>
+      </>
+    );
+  };
+
+  const renderPollForm = () => {
+    return <CreatePollForm initialValues={formValues} onClose={handleOnClose} />;
+  };
+
+  return showPollForm ? renderPollForm() : renderPollOverview();
 };
 
 export default PollTab;

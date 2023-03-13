@@ -15,8 +15,8 @@ describe('MuteParticipants', () => {
   test(`MuteParticipants component will render properly with list of ${NUMBER_OF_PARTICIPANTS} participants`, async () => {
     await render(<MuteParticipants />, store);
 
-    const muteAllButton = screen.getByRole('button', { name: /mute-users-all/i });
-    const muteSelectedButton = screen.getByRole('button', { name: /mute-users-selected/i });
+    const muteAllButton = screen.getByRole('button', { name: /mute-participants-button-all/i });
+    const muteSelectedButton = screen.getByRole('button', { name: /mute-participants-button-selected/i });
 
     expect(muteAllButton).toBeInTheDocument();
     expect(muteSelectedButton).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('MuteParticipants', () => {
   test('click on muteAll button should dispatch moderator_mute action', async () => {
     await render(<MuteParticipants />, store);
 
-    const muteAllButton = screen.getByRole('button', { name: /mute-users-all/i });
+    const muteAllButton = screen.getByRole('button', { name: /mute-participants-button-all/i });
     expect(muteAllButton).toBeInTheDocument();
 
     fireEvent.click(muteAllButton);
@@ -47,7 +47,7 @@ describe('MuteParticipants', () => {
   test('click on muteSelected button should dispatch moderator_mute action only for selected participant', async () => {
     await render(<MuteParticipants />, store);
 
-    const muteSelectedButton = screen.getByRole('button', { name: /mute-users-selected/i });
+    const muteSelectedButton = screen.getByRole('button', { name: /mute-participants-button-selected/i });
     expect(muteSelectedButton).toBeInTheDocument();
 
     const checkbox1 = screen.getByRole('checkbox', { name: participant1.displayName });
