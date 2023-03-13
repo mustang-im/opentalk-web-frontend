@@ -22,6 +22,7 @@
 - Remove offline participant from the timer list. (!901)
 - Title texts Coffee break (!898)
 - Fix progress bar display for polls and votes (!894)
+- Fix UI consistency for legal vote with other tabs (!878)
 
 ### Stability Improvements
 
