@@ -64,6 +64,7 @@ import {
   waitingRoomJoined,
   waitingRoomLeft,
   WaitingState,
+  selectParticipantsTotal,
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
@@ -74,11 +75,12 @@ import {
   enableWaitingRoom,
   disableWaitingRoom,
   connectionClosed,
+  selectParticipantLimit,
 } from '../store/slices/roomSlice';
 import * as slotStore from '../store/slices/slotSlice';
 import { joinedTimer, startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
 import { participantsLayoutSet } from '../store/slices/uiSlice';
-import { revokePresenterRole, setPresenterRole, updateRole } from '../store/slices/userSlice';
+import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import showConsentNotification from '../utils/showConsentNotification';
 import { restApi } from './rest';
@@ -255,6 +257,7 @@ const dispatchError = (message: string) => {
  */
 const handleControlMessage = (
   dispatch: AppDispatch,
+  state: RootState,
   conference: ConferenceRoom, //TODO remove and handle stuff in the webrtc context directly
   data: control.Message,
   timestamp: Timestamp
@@ -311,6 +314,7 @@ const handleControlMessage = (
           isPresenter: data.media?.isPresenter,
           recording: data.recording,
           serverTimeOffset,
+          tariff: data.tariff,
         })
       );
 
@@ -335,6 +339,25 @@ const handleControlMessage = (
         console.error('start or restart WebRTC failed', e);
         notifications.error(i18next.t('signaling-subscription-failed'));
       });
+
+      // Notify moderator, in case he took the last position of the room and now it's full
+      if (data.role === Role.Moderator) {
+        const onlineParticipants = participants.filter((participant) => {
+          const hasNotLeft = participant.leftAt === null;
+          const isInRoom = participant.waitingState === WaitingState.Joined;
+          const isInTheSameBreakoutRoom = data.breakout?.current
+            ? participant.breakoutRoomId === data.breakout?.current
+            : true;
+          return hasNotLeft && isInRoom && isInTheSameBreakoutRoom;
+        });
+        // Redux store has not been updated yet, therefore we have to add us manually
+        const onlineParticipantsNumberPlusMe = onlineParticipants.length + 1;
+        const participantLimit = data.tariff.quotas?.roomParticipantLimit;
+        if (onlineParticipantsNumberPlusMe >= participantLimit) {
+          notifications.error(i18next.t('meeting-notification-participant-limit-reached', { participantLimit }));
+        }
+      }
+
       break;
     }
     case 'joined': {
@@ -347,6 +370,17 @@ const handleControlMessage = (
       if (subscribers.length > 0) {
         updateMedia(conference.webRtc, subscribers);
       }
+
+      // Notify moderator, in case a participant took the last position of the room and now it's full
+      if (selectIsModerator(state)) {
+        const participantLimit = selectParticipantLimit(state);
+        // Redux store has not been updated yet, therefore we have to add new guest manually
+        const onlineParticipantsPlusTheNewOne = selectParticipantsTotal(state) + 1;
+        if (onlineParticipantsPlusTheNewOne >= participantLimit) {
+          notifications.error(i18next.t('meeting-notification-participant-limit-reached', { participantLimit }));
+        }
+      }
+
       break;
     }
     case 'left':
@@ -828,7 +862,7 @@ const onMessage =
   (dispatch: AppDispatch, getState: () => RootState, conference: ConferenceRoom) => (message: IncomingMessage) => {
     switch (message.namespace) {
       case 'control':
-        handleControlMessage(dispatch, conference, message.payload, message.timestamp);
+        handleControlMessage(dispatch, getState(), conference, message.payload, message.timestamp);
         break;
       case 'breakout':
         handleBreakoutMessage(dispatch, message.payload, message.timestamp);

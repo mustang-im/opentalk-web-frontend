@@ -9,6 +9,7 @@ import {
   NamespacedIncoming,
   ParticipantId,
   ParticipantMediaState,
+  Tariff,
 } from '@opentalk/common';
 import { InitialAutomod } from '@opentalk/components';
 
@@ -65,6 +66,7 @@ export interface JoinSuccess {
   media?: ParticipantMediaState;
   recording: null | RecordingState;
   timer?: TimerState;
+  tariff: Tariff;
 }
 
 export interface Joined extends BackendParticipant {
