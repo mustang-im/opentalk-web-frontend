@@ -32,6 +32,7 @@
 - Uncheck all checkboxes in the voting popover on every new voting (!842)
 - Centralize date and time format (!831)
 - Fix styling issues in duration field (!843)
+- Fix own icon in people tab showing incorrectly (!879)
 
 ### Stability Improvements
 
