@@ -32,6 +32,7 @@ import IconButton from '../../../commonComponents/IconButton';
 import ChatScope from '../../../enums/ChatScope';
 import SortOption from '../../../enums/SortOption';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
 import { Participant } from '../../../store/slices/participantsSlice';
 import { selectProtocolState } from '../../../store/slices/protocolSlice';
@@ -96,6 +97,8 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   const open = Boolean(anchorEl);
   const ownId = useAppSelector(selectOurUuid);
   const protocolState = useAppSelector(selectProtocolState);
+  const ownAudioEnabled = useAppSelector(selectAudioEnabled);
+  const ownScreenShareEnabled = useAppSelector(selectShareScreenEnabled);
 
   const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
   const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
@@ -206,8 +209,12 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   ];
 
   const renderIcon = useCallback(() => {
-    const isScreenShareEnabled = subscriberScreen?.video || false;
-    const isAudioEnabled = subscriberVideo?.audio || false;
+    const isParticipantMe = participant.id === ownId;
+    const isParticipantScreenShareEnabled = subscriberScreen?.video || false;
+    const isParticipantAudioEnabled = subscriberVideo?.audio || false;
+
+    const isScreenShareEnabled = isParticipantMe ? ownScreenShareEnabled : isParticipantScreenShareEnabled;
+    const isAudioEnabled = isParticipantMe ? ownAudioEnabled : isParticipantAudioEnabled;
 
     if (participant.handIsUp) {
       return <RaiseHandOnIcon />;
@@ -217,7 +224,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
       return <MicOnIcon />;
     }
     return <MicOffIcon />;
-  }, [participant, subscriberVideo, subscriberScreen]);
+  }, [participant, subscriberVideo, subscriberScreen, ownAudioEnabled, ownScreenShareEnabled]);
 
   const renderMenu = () => (
     <>
