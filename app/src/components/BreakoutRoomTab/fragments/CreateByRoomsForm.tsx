@@ -52,6 +52,7 @@ const CreateByRoomsForm = ({ handleNext, formName }: ICreateByRoomsFormProps) =>
         ButtonProps={{
           size: 'small',
         }}
+        min={0}
       />
       <CommonFormItem
         {...formikProps(getFormName('rooms'), formik)}

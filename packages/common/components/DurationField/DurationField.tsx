@@ -35,6 +35,8 @@ interface IDurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue
    */
   durationOptions?: Array<DurationValueOptions>;
   ButtonProps?: ButtonProps;
+  min?: number;
+  allowEmpty?: boolean;
 }
 
 const DURATION_OPTIONS: Array<DurationValueOptions> = [null, 5, 10, 15, 30, 'custom'];
@@ -73,11 +75,13 @@ const DurationField = ({
   ButtonProps,
   error,
   helperText,
+  min = 1,
+  allowEmpty
 }: IDurationFieldProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  const [customDurationFieldValue, setCustomDurationFieldValue] = React.useState<number>(
-    value && durationOptions.includes(value) ? value : 1
+  const [customDurationFieldValue, setCustomDurationFieldValue] = React.useState<number | null>(
+    value && durationOptions.includes(value) ? value : min
   );
 
   const [selectedChip, setSelectedChip] = useState<DurationValueOptions>(isNumber(value) ? value : null);
@@ -132,6 +136,16 @@ const DurationField = ({
     setFieldValue(name, duration);
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = parseInt(event.target.value);
+    if (Number.isNaN(nextValue)) {
+      // If input is invalid, unless we allow empty field, we fallback to the minimum allowed value.
+      setCustomDurationFieldValue(allowEmpty ? null : min);
+      return;
+    }
+    setCustomDurationFieldValue(Math.max(min, nextValue));
+  }
+
   const open = Boolean(anchorEl);
 
   return (
@@ -160,10 +174,8 @@ const DurationField = ({
             <Stack spacing={1}>
               <NumberInput
                 type={'number'}
-                inputProps={{ min: 1 }}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setCustomDurationFieldValue(parseInt(e.target.value))
-                }
+                inputProps={{ min }}
+                onChange={handleInputChange}
                 value={customDurationFieldValue}
               />
               <Typography variant="caption">{t('field-duration-input-label')}</Typography>
