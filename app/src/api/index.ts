@@ -175,7 +175,7 @@ const mapToUiParticipant = (
   role: control.role,
   waitingState,
   protocol: protocol,
-  isPresenter: media.isPresenter,
+  isPresenter: media?.isPresenter,
 });
 
 const mapBreakoutToUiParticipant = (
@@ -271,8 +271,8 @@ const handleControlMessage = (
         mapToUiParticipant(participant, data.breakout?.current || null, WaitingState.Joined)
       );
 
-      if (data.moderation?.waitingRoom !== undefined) {
-        participants = data.moderation.waitingRoom
+      if (data.moderation?.waitingRoomEnabled) {
+        participants = data.moderation.waitingRoomParticipants
           //TODO the backend should provide a waitingState: 'waiting' | 'approved', change when implemented
           .map((participant) => mapToUiParticipant(participant, data.breakout?.current || null, WaitingState.Waiting))
           .concat(participants);

@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import {
-  styled,
+  Button,
   ListItem as MuiListItem,
   ListItemAvatar as MuiListItemAvatar,
   ListItemText as MuiListItemText,
-  Typography,
   Stack,
-  Button,
+  styled,
+  Typography,
 } from '@mui/material';
 import { notifications, useDateFormat } from '@opentalk/common';
 import React, { useCallback, useEffect } from 'react';
@@ -82,6 +82,22 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
     }
   }, [approveAllWaiting, handleAccept, handleApproveAll]);
 
+  const renderWaitingState = () => {
+    switch (participant.waitingState) {
+      case WaitingState.Waiting:
+        return (
+          <Button sx={{ whiteSpace: 'nowrap' }} variant="text" onClick={handleAccept}>
+            {t('participant-menu-accept-participant')}
+          </Button>
+        );
+      case WaitingState.Approved:
+        return (
+          <Button sx={{ whiteSpace: 'nowrap' }} variant="text" disabled>
+            {t('participant-menu-accepted-participant')}
+          </Button>
+        );
+    }
+  };
   return (
     <ListItem button={false}>
       <Stack spacing={2} direction={'row'} justifyContent={'center'} alignItems={'center'}>
@@ -104,13 +120,7 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
             }
           />
         </Stack>
-        <Stack>
-          {participant.waitingState === WaitingState.Waiting && (
-            <Button sx={{ whiteSpace: 'nowrap' }} variant="text" onClick={handleAccept}>
-              {t('participant-menu-accept-participant')}
-            </Button>
-          )}
-        </Stack>
+        <Stack>{renderWaitingState()}</Stack>
       </Stack>
     </ListItem>
   );

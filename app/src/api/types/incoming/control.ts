@@ -59,7 +59,7 @@ export interface JoinSuccess {
   whiteboard?: WhiteboardState;
   moderation?: {
     raiseHandsEnabled: boolean;
-    waitingRoom: Array<BackendParticipant>;
+    waitingRoomParticipants: Array<BackendParticipant>;
     waitingRoomEnabled: boolean;
   };
   media?: ParticipantMediaState;
