@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Change some legal vote wordings for german (!880)
 - Show no more outdated meetings in dashboard home (!859)
 - Change UX for whiteboard access (!841)
 - Wording coffee break (!862)
