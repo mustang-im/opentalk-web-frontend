@@ -11,6 +11,7 @@
 - Fix UI for moderation tabs on the side panel for community features (!853)
 - Add details for overlapping event dialog (!868)
 - Fix not showing participants in the waiting room when moderator is joining after them (!869)
+- Fix coffee break english labels (!881)
 
 ### Stability Improvements
 
