@@ -312,9 +312,9 @@ legal-vote-abstain-label = Enthaltung
 legal-vote-no-results = Keine Stimmen abgegeben
 
 legal-vote-form-kind = Abstimmungstyp
-legal-vote-roll_call = Namentliche Abstimmung
-legal-vote-live_roll_call = namentliche Abstimmung - Live
-legal-vote-pseudonymous = Geheime Wahl
+legal-vote-roll_call = Offene Abstimmung
+legal-vote-live_roll_call = Offene Abstimmung - live
+legal-vote-pseudonymous = Geheime Abstimmung
 
 legal-vote-success-clipboard-message = Du hast mit {{vote}} abgestimmt
 legal-vote-token-copy-success = Der Verifikation-Code wurde erfolgreich kopiert
