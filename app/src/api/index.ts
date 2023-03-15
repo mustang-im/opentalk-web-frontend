@@ -5,11 +5,8 @@ import {
   BackendParticipant,
   BreakoutRoomId,
   GroupId,
-  MediaSessionState,
-  MediaSessionType,
   Namespaced,
   Namespaces,
-  ParticipantId,
   Timestamp,
   VideoSetting,
   matchBuilder,
@@ -107,32 +104,6 @@ import { Action as OutgoingActionType } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
 
-const buildSubscriberState = (
-  participantId: ParticipantId,
-  mediaType: MediaSessionType,
-  mediaSessionState: MediaSessionState
-) => ({
-  participantId,
-  mediaType,
-  ...mediaSessionState,
-});
-
-/**
- * Transforms the participants Publishing object from Record<MediaSessionType, MediaSessionState> to and array SubscriberState descriptions.
- * @param {Participant} participant to get the media session state from
- * @returns {Array<SubscriberState>} for this participant as stored in redux
- */
-const subscriberListFromParticipant = (participant: BackendParticipant): SubscriberState[] => {
-  const list = new Array<SubscriberState>();
-  if (participant.media?.video) {
-    list.push(buildSubscriberState(participant.id, MediaSessionType.Video, participant.media.video));
-  }
-  if (participant.media?.screen) {
-    list.push(buildSubscriberState(participant.id, MediaSessionType.Screen, participant.media.screen));
-  }
-  return list;
-};
-
 /**
  * Transforms the dictionary of group chat histories into a list of groupIds and a flat list
  * chat messages with scope 'group'.
@@ -213,11 +184,6 @@ const mapBreakoutToUiParticipant = (
   isPresenter: false,
 });
 
-// TODO refactor - move to conferenceRoom
-const updateMedia = (webRtc: WebRtc, subscribers: Array<SubscriberState>) => {
-  subscribers.forEach((subscriber) => webRtc.updateMedia(subscriber));
-};
-
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
   const addHandler = (mediaState: SubscriberState) => dispatch(subscriberAdded(mediaState));
   const updateHandler = (mediaState: SubscriberState) => dispatch(subscriberUpdate(mediaState));
@@ -236,13 +202,6 @@ const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
   webRtc.addEventListener('streamstatechanged', mediaChangeHandler);
   webRtc.addEventListener('upstreamLimit', upstreamLimitHandler);
   webRtc.addEventListener('subscriberLimit', subscriberLimitHandler);
-};
-
-const startSubscriptions = async (conference: ConferenceRoom, subscribers: Array<SubscriberState>) => {
-  updateMedia(conference.webRtc, subscribers);
-  await localMediaContext.updateConferenceContext(conference);
-  await localScreenContext.updateConferenceContext(conference);
-  return;
 };
 
 export const sendMessage = (message: Namespaced<OutgoingActionType | ClearGlobalMessages, Namespaces>) => {
@@ -347,12 +306,11 @@ const handleControlMessage = (
         dispatch(joinedTimer(data.timer));
       }
 
-      const mediaSubscribers: Array<SubscriberState> = data.participants.flatMap(subscriberListFromParticipant);
-
-      //TODO move to ConferenceRoom
-      startSubscriptions(conference, mediaSubscribers).catch((e: Error) => {
-        console.error('start or restart WebRTC failed', e);
-        notifications.error(i18next.t('signaling-subscription-failed'));
+      localMediaContext.updateConferenceContext(conference).catch((e: Error) => {
+        console.error('failed to attach localMediaContext to WebRTC room', e);
+      });
+      localScreenContext.updateConferenceContext(conference).catch((e: Error) => {
+        console.error('failed to attach localScreenContext to WebRTC room', e);
       });
 
       // Notify moderator, in case he took the last position of the room and now it's full
@@ -381,10 +339,6 @@ const handleControlMessage = (
           participant: mapToUiParticipant(data, conference.roomCredentials.breakoutRoomId, WaitingState.Joined),
         })
       );
-      const subscribers = subscriberListFromParticipant(data);
-      if (subscribers.length > 0) {
-        updateMedia(conference.webRtc, subscribers);
-      }
 
       // Notify moderator, in case a participant took the last position of the room and now it's full
       if (selectIsModerator(state)) {
@@ -395,7 +349,6 @@ const handleControlMessage = (
           notifications.error(i18next.t('meeting-notification-participant-limit-reached', { participantLimit }));
         }
       }
-
       break;
     }
     case 'join_blocked':
@@ -403,33 +356,8 @@ const handleControlMessage = (
       break;
     case 'left':
       dispatch(participantsLeft({ id: data.id, timestamp: timestamp }));
-      if (conference === undefined) {
-        throw new Error('Cannot handle updateMedia when is WebRTCContext not initialized');
-      }
-      conference.webRtc.unsubscribeParticipant(data.id).catch((e) => console.warn('unsubscribeParticipant failed', e));
       break;
     case 'update': {
-      const { screen, video } = data.media;
-
-      if (conference === undefined) {
-        throw new Error('Cannot handle updateMedia when is WebRTCContext not initialized');
-      }
-      if (video !== undefined) {
-        conference.webRtc.updateMedia(buildSubscriberState(data.id, MediaSessionType.Video, video));
-      } else {
-        conference.webRtc
-          .unsubscribe({ participantId: data.id, mediaType: MediaSessionType.Video })
-          .catch((e) => console.warn('unsubscribe failed', e, data.id, MediaSessionType.Video));
-      }
-
-      if (screen !== undefined) {
-        conference.webRtc.updateMedia(buildSubscriberState(data.id, MediaSessionType.Screen, screen));
-      } else {
-        conference.webRtc
-          .unsubscribe({ participantId: data.id, mediaType: MediaSessionType.Screen })
-          .catch((e) => console.warn('unsubscribe failed', e, data.id, MediaSessionType.Screen));
-      }
-
       if (data.control !== undefined) {
         dispatch(
           participantsUpdate({
