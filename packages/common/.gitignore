@@ -83,7 +83,7 @@ typings/
 /coverage
 
 # production
-/build
+!/build
 /lib
 /dist
 lib

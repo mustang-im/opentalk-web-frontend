@@ -2,26 +2,51 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
-import dts from "rollup-plugin-dts";
-import { terser } from "rollup-plugin-terser";
-import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import url from '@rollup/plugin-url'
-import svgr from '@svgr/rollup'
-import pkg from "./package.json" assert { type: "json" };
+const resolve = require("@rollup/plugin-node-resolve");
+const commonjs = require("@rollup/plugin-commonjs");
+const typescript = require("@rollup/plugin-typescript");
+const dts = require("rollup-plugin-dts");
+const { terser } = require("rollup-plugin-terser");
+const peerDepsExternal = require("rollup-plugin-peer-deps-external");
+const url = require('@rollup/plugin-url')
+const svgr = require('@svgr/rollup');
+const pkg = require("./package.json");
+const path = require('path');
 
-export default [
+const dist = path.resolve(__dirname, './dist');
+
+module.exports = [
   {
     input: "index.ts",
     output: [
       {
-        file: pkg.main,
+        file: path.resolve(dist, "cjs", "index.development.js"),
         format: "cjs",
       },
       {
-        file: pkg.module,
+        file: path.resolve(dist, "esm", "index.development.js"),
+        format: "esm",
+      },
+    ],
+    plugins: [
+      peerDepsExternal(),
+      resolve(),
+      commonjs(),
+      typescript({ tsconfig: "./tsconfig.json" }),
+	    url(),
+      svgr({ icon: true }),
+    ],
+    external: Object.keys(pkg.peerDependencies),
+  },
+  {
+    input: "index.ts",
+    output: [
+      {
+        file: path.resolve(dist, "cjs", "index.production.js"),
+        format: "cjs",
+      },
+      {
+        file: path.resolve(dist, "esm", "index.production.js"),
         format: "esm",
       },
     ],
@@ -31,14 +56,14 @@ export default [
       commonjs(),
       terser(),
       typescript({ tsconfig: "./tsconfig.json" }),
-	url(),
-    svgr({ icon: true }),
+	    url(),
+      svgr({ icon: true }),
     ],
     external: Object.keys(pkg.peerDependencies),
   },
   {
     input: "dist/esm/types/index.d.ts",
     output: [{ file: "dist/index.d.ts", format: "esm" }],
-    plugins: [dts()],
+    plugins: [dts.default()],
   },
 ];
