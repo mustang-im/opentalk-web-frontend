@@ -82,9 +82,6 @@ const MAX_CHARACTERS_TITLE = 255;
 const MAX_CHARACTERS_PASSWORD = 255;
 const MAX_CHARACTERS_DESCRIPTION = 4096;
 
-const defaultStartDate = roundToUpper30();
-const defaultEndDate = addMinutes(defaultStartDate, DEFAULT_MINUTES_DIFFERENCE);
-
 const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: CreateOrUpdateMeetingFormProps) => {
   const { t } = useTranslation();
   const [createEvent, { isLoading: createEventIsLoading }] = useCreateEventMutation();
@@ -95,6 +92,9 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const navigate = useNavigate();
 
   const [overlappingEvent, setOverlappingEvent] = useState<SingleEvent>();
+
+  const defaultStartDate = roundToUpper30();
+  const defaultEndDate = addMinutes(defaultStartDate, DEFAULT_MINUTES_DIFFERENCE);
 
   const validationSchema = yup.object({
     title: yup
