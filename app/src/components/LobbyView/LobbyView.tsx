@@ -15,7 +15,12 @@ import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { startRoom } from '../../store/commonActions';
 import { selectFeatures } from '../../store/slices/configSlice';
-import { ConnectionState, selectInviteId, selectRoomConnectionState } from '../../store/slices/roomSlice';
+import {
+  ConnectionState,
+  selectInviteId,
+  selectPasswordRequired,
+  selectRoomConnectionState,
+} from '../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../store/slices/userSlice';
 import { formikProps } from '../../utils/formikUtils';
 import { useMediaContext } from '../MediaProvider';
@@ -38,6 +43,7 @@ const LobbyView: FC = () => {
   const inviteCode = useAppSelector(selectInviteId);
   const connectionState = useAppSelector(selectRoomConnectionState);
   const navigate = useNavigate();
+  const passwordRequired = useAppSelector(selectPasswordRequired);
 
   const enterRoom = useCallback(
     async (displayName: string, password: string) => {
@@ -145,26 +151,28 @@ const LobbyView: FC = () => {
                 placeholder={t('joinform-enter-name')}
                 autoComplete="user-name"
               />
-              <TextField
-                {...formikProps('password', formik)}
-                color={'secondary'}
-                placeholder={t('joinform-enter-password')}
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label={t('toggle-password-visibility')}
-                      onClick={handleClickShowPassword}
-                      edge="end"
-                    >
-                      {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                error={Boolean(joinError)}
-                helperText={joinError ? t(joinError) : ''}
-              />
+              {passwordRequired && (
+                <TextField
+                  {...formikProps('password', formik)}
+                  color={'secondary'}
+                  placeholder={t('joinform-enter-password')}
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label={t('toggle-password-visibility')}
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  error={Boolean(joinError)}
+                  helperText={joinError ? t(joinError) : ''}
+                />
+              )}
             </Stack>
           </SelfTest>
         </Stack>
