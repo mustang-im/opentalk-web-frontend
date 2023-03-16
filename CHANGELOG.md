@@ -13,6 +13,7 @@
 - Fix not showing participants in the waiting room when moderator is joining after them (!869)
 - Fix coffee break english labels (!881)
 - Add HotKeys coffee break when full screen is active (!886)
+- Fix missing notification when timer stops (!883)
 
 ### Stability Improvements
 

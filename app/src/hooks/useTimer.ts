@@ -137,7 +137,7 @@ const useTimer = () => {
         break;
       }
     }
-  }, [timerStyle, isUserReady]);
+  }, [timerStyle, isUserReady, kindStopTimer]);
 
   useEffect(() => {
     switch (timerMessage) {
@@ -151,7 +151,7 @@ const useTimer = () => {
         break;
       }
     }
-  }, [timerMessage]);
+  }, [timerMessage, switchStartedTimerStyle, switchStoppedTimerStyle]);
 };
 
 export default useTimer;
