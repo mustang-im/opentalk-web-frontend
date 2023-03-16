@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
+import { ParticipantId, setHotkeysEnabled } from '@opentalk/common';
 import { useEffect, useState, memo, useCallback } from 'react';
 
 import { readyToContinue, TimerStyle } from '../../api/types/outgoing/timer';
@@ -54,6 +54,7 @@ const CoffeeBreakLayer = ({ requester }: CoffeeBreakLayerProps) => {
     if (!open) {
       clearTimer();
     }
+    dispatch(setHotkeysEnabled(!open));
   }, [open]);
 
   const handleClose = () => {
