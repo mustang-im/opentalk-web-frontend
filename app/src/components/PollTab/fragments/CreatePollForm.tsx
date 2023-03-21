@@ -63,21 +63,26 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const totalParticipants = useAppSelector(selectParticipantsTotal);
+  const isEditing = initialValues?.id !== undefined;
+
   const saveFormValues = useCallback(
     (values: PollFormValues) => {
       if (isEmpty(values.topic)) {
         notifications.error(t('poll-save-form-error'));
       } else {
+        onClose();
         dispatch(savePollFormValues(values));
         notifications.success(t('poll-save-form-success'));
       }
     },
     [dispatch, t]
   );
+
   const onSubmit = (values: FormikValues) => {
     if (totalParticipants < 2) {
       return notifications.warning(t('poll-save-form-warning'));
     }
+    onClose();
     dispatch(
       start.action({
         topic: values.topic,
@@ -86,7 +91,6 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
         choices: values.choices,
       })
     );
-    onClose();
   };
 
   return (
@@ -107,7 +111,7 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                     {t('poll-button-back')}
                   </Button>
                   <Title variant={'h2'}>
-                    {initialValues?.id !== undefined ? t('poll-header-title-update') : t('poll-header-title-create')}
+                    {isEditing ? t('poll-header-title-update') : t('poll-header-title-create')}
                   </Title>
                 </Grid>
                 <Grid item xs={12} zeroMinWidth>
