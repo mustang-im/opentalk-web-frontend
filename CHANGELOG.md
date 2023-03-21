@@ -27,6 +27,7 @@
 
 ### Stability Improvements
 
+- Renegotiate media connections when tracks fail with on recovery (!899)
 - Reconnect media connections when they fail (!887)
 - Add connection information to participant stats panel (!849)
 - Fix: flickering local video element when start coffee break (!870)

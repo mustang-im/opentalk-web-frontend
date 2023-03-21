@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { MediaStreamState } from '../../../modules/WebRTC';
 import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectStatsById } from '../../../store/slices/connectionStatsSlice';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
@@ -85,7 +84,7 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
   const pinnedParticipantId = useAppSelector(selectPinnedParticipantId);
   const stats = useAppSelector(selectStatsById(mediaDescriptor));
   const { t } = useTranslation();
-  const online = subscriber?.streamState !== MediaStreamState.Offline || false;
+  const online = subscriber?.streamState?.connection === 'connected';
 
   const fullscreenHandle = useFullscreenContext();
 

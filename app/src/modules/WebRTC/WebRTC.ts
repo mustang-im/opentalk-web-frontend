@@ -18,7 +18,7 @@ import { BaseWebRtcConnection } from './BaseWebRtcConnection';
 import { MediaSignaling } from './MediaSignaling';
 import { PublisherConnection } from './PublisherConnection';
 import { StatsEvent } from './Statistics/ConnectionStats';
-import { SubscriberConnection } from './SubscriberConnection';
+import { SubscriberConnection, SubscriberState } from './SubscriberConnection';
 import { TurnProvider } from './TurnProvider';
 
 const STATS_INTERVAL = 2000; // ms
@@ -38,18 +38,10 @@ export const descriptorFromId = (id: MediaId): MediaDescriptor => {
   return { participantId: participantId as ParticipantId, mediaType: mediaType as MediaSessionType };
 };
 
-export type SubscriberState = MediaDescriptor & MediaSessionState;
-
-export enum MediaStreamState {
-  Offline = 'offline',
-  Broken = 'broken',
-  AudioBroken = 'audio_broken',
-  VideoBroken = 'video_broken',
-  Ok = 'ok',
-}
+export type SubscriberConfig = MediaDescriptor & MediaSessionState;
 
 export interface StreamStateChanged extends MediaDescriptor {
-  streamState: MediaStreamState;
+  streamState: SubscriberState;
 }
 
 export interface QualityLimit extends MediaDescriptor {
@@ -57,10 +49,10 @@ export interface QualityLimit extends MediaDescriptor {
 }
 
 export type WebRtcContextEvent = {
-  // A 'subscriberchange' event is sent when a new connection was created.
-  subscriberadded: SubscriberState;
+  // A 'subscriberadded' event is sent when a new connection was created.
+  subscriberadded: SubscriberConfig;
   // A 'subscriberchange' event is sent when an existing connection has been updated.
-  subscriberchange: SubscriberState;
+  subscriberchange: SubscriberConfig;
   // A 'streamstatechanged' event is sent when the state of a subscriber media stream changes, e.g. the first track is online.
   streamstatechanged: StreamStateChanged;
   // A 'subscriberclose' event is sent when a new connection was closed and removed from the WebRTC context.
@@ -85,7 +77,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
   */
   private subscribers: Map<
     MediaId,
-    { connection?: SubscriberConnection; action?: Promise<SubscriberConnection>; state: SubscriberState }
+    { connection?: SubscriberConnection; action?: Promise<SubscriberConnection>; state: SubscriberConfig }
   > = new Map();
 
   private publishers: Map<MediaId, PublisherConnection> = new Map();
@@ -315,21 +307,22 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     return subscriber.requestQuality(target);
   }
 
-  private createSubscriber(descriptor: MediaDescriptor, iceServers: RTCIceServer[]): SubscriberConnection {
-    const mediaId = idFromDescriptor(descriptor);
+  private createSubscriber(subscriberConfig: SubscriberConfig, iceServers: RTCIceServer[]): SubscriberConnection {
+    const mediaId = idFromDescriptor(subscriberConfig);
     const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
-      throw new Error(`Subscriber was closed while connect in progress for ${idFromDescriptor(descriptor)}`);
+      throw new Error(`Subscriber was closed while connect in progress for ${idFromDescriptor(subscriberConfig)}`);
     }
     if (subscriber?.connection) {
-      throw new Error(`Subscriber connection already exists for ${idFromDescriptor(descriptor)}`);
+      throw new Error(`Subscriber connection already exists for ${idFromDescriptor(subscriberConfig)}`);
     }
 
-    const connection = new SubscriberConnection(iceServers, descriptor, this.signaling);
+    subscriber.state = subscriberConfig;
+    const connection = new SubscriberConnection(iceServers, subscriberConfig, this.signaling);
 
     const closeHandler = () => {
-      this.eventEmitter.emit('subscriberclose', descriptor);
-      this.subscribers.delete(idFromDescriptor(descriptor));
+      this.eventEmitter.emit('subscriberclose', subscriberConfig);
+      this.subscribers.delete(idFromDescriptor(subscriberConfig));
       connection.removeEventListener('closed', closeHandler);
       connection.removeEventListener('streamstatechanged', changeHandler);
       connection.removeEventListener('qualityLimit', limitHandler);
@@ -362,7 +355,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
    *
    * @param subscriberConfig
    */
-  public updateMedia(subscriberConfig: SubscriberState) {
+  public updateMedia(subscriberConfig: SubscriberConfig) {
     const mediaId = idFromDescriptor(subscriberConfig);
     const subscriber = this.subscribers.get(mediaId) || { state: subscriberConfig };
 
@@ -380,7 +373,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
         console.debug(`updating subscriber while connect in progress - skip notification`, subscriberConfig);
       }
     } else {
-      // hand through config change notification; the subscriber will update on its own via WebRTC.
+      subscriber.connection?.updateConfig(subscriberConfig);
       this.eventEmitter.emit('subscriberchange', subscriberConfig);
     }
   }

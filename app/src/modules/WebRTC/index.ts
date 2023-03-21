@@ -7,8 +7,8 @@ import { ConferenceRoom } from './ConferenceRoom';
 import { MediaDescriptor } from './WebRTC';
 
 export { ConferenceRoom };
-export { WebRtc, idFromDescriptor, descriptorFromId, MediaStreamState } from './WebRTC';
-export type { MediaDescriptor, MediaId, SubscriberState, StreamStateChanged, QualityLimit } from './WebRTC';
+export { WebRtc, idFromDescriptor, descriptorFromId } from './WebRTC';
+export type { MediaDescriptor, MediaId, SubscriberConfig, StreamStateChanged, QualityLimit } from './WebRTC';
 
 /* TODO: find a better place to hold the ConferenceRoom state object.
   options:
@@ -17,6 +17,7 @@ export type { MediaDescriptor, MediaId, SubscriberState, StreamStateChanged, Qua
    - a singleton as global state
  */
 
+export const PACKET_LOSS_THRESHOLD = 0.1; //10%
 let currentConferenceRoom: ConferenceRoom | undefined = undefined;
 
 export const setCurrentConferenceRoom = (room: ConferenceRoom) => {

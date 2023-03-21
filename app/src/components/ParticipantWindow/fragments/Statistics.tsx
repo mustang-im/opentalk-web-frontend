@@ -7,7 +7,7 @@ import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
-import { MediaDescriptor, MediaStreamState } from '../../../modules/WebRTC';
+import { MediaDescriptor } from '../../../modules/WebRTC';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
 import { StatisticsContent } from './StatisticsContent';
 import { OverlayIconButton } from './VideoOverlay';
@@ -46,7 +46,11 @@ const Statistics = ({
   }, []);
 
   // show no stats when the participant is not publishing and therefore not connected
-  if (subscriber === undefined || subscriber.streamState === MediaStreamState.Offline) {
+  if (
+    subscriber === undefined ||
+    subscriber.streamState.connection === 'new' ||
+    subscriber.streamState.connection === 'closed'
+  ) {
     return <></>;
   }
 

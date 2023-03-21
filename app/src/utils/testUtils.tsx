@@ -37,7 +37,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { createOpenTalkTheme } from '../assets/themes/opentalk';
 import { MediaProvider } from '../components/MediaProvider';
-import { idFromDescriptor, MediaId, MediaStreamState, SubscriberState } from '../modules/WebRTC';
+import { idFromDescriptor, MediaId, StreamStateChanged, SubscriberConfig } from '../modules/WebRTC';
 import FullscreenProvider from '../provider/FullscreenProvider';
 import { appReducers } from '../store';
 import { Participant, ProtocolAccess, WaitingState } from '../store/slices/participantsSlice';
@@ -163,7 +163,7 @@ export const mockStore = (participantCount: number, options?: { video?: boolean;
   const participantsIds = range(participantCount);
   const participants = participantsIds.map((index) => mockedParticipant(index));
 
-  const subscribers: Array<SubscriberState & { streamState: MediaStreamState }> = [];
+  const subscribers: Array<SubscriberConfig & StreamStateChanged> = [];
   if (options?.video) {
     participants.forEach(({ id }) =>
       subscribers.push({
@@ -171,7 +171,7 @@ export const mockStore = (participantCount: number, options?: { video?: boolean;
         mediaType: MediaSessionType.Video,
         video: true,
         audio: true,
-        streamState: MediaStreamState.Ok,
+        streamState: { audioRunning: true, videoRunning: true, connection: 'connected' },
         videoSettings: VideoSetting.High,
       })
     );
@@ -184,7 +184,7 @@ export const mockStore = (participantCount: number, options?: { video?: boolean;
         mediaType: MediaSessionType.Screen,
         video: true,
         audio: false,
-        streamState: MediaStreamState.Ok,
+        streamState: { audioRunning: false, videoRunning: true, connection: 'connected' },
         videoSettings: VideoSetting.High,
       })
     );
@@ -200,13 +200,10 @@ export const mockStore = (participantCount: number, options?: { video?: boolean;
     },
     subscribers: {
       ids: subscribers.map(idFromDescriptor),
-      entities: subscribers.reduce(
-        (entities: Record<MediaId, SubscriberState & { streamState: MediaStreamState }>, subscriber) => {
-          entities[idFromDescriptor(subscriber)] = subscriber;
-          return entities;
-        },
-        {}
-      ),
+      entities: subscribers.reduce((entities: Record<MediaId, SubscriberConfig & StreamStateChanged>, subscriber) => {
+        entities[idFromDescriptor(subscriber)] = subscriber;
+        return entities;
+      }, {}),
     },
   };
 

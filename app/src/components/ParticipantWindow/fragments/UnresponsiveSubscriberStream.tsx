@@ -6,7 +6,7 @@ import React, { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
-import { MediaDescriptor, MediaStreamState } from '../../../modules/WebRTC';
+import { MediaDescriptor } from '../../../modules/WebRTC';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
 import { FailureBadge } from './FailureBadge';
 
@@ -17,37 +17,42 @@ type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
 const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
   const subscriber = useAppSelector(selectSubscriberById(descriptor));
   const { t } = useTranslation();
+  const streamState = subscriber?.streamState;
 
-  switch (subscriber?.streamState) {
-    case MediaStreamState.Broken:
-      if (subscriber?.audio || subscriber?.video) {
-        return (
-          <FailureBadge title={t('participant-stream-broken-tooltip')}>
-            <ConnectionGoodIcon color="error" fontSize="medium" />
-          </FailureBadge>
-        );
-      }
-      break;
-    case MediaStreamState.AudioBroken:
-      if (subscriber?.audio) {
-        return (
-          <FailureBadge title={t('participant-audio-broken-tooltip')}>
-            <MicOnIcon color="error" fontSize="medium" />
-          </FailureBadge>
-        );
-      }
-      break;
-    case MediaStreamState.VideoBroken:
-      if (subscriber?.video) {
-        return (
-          <FailureBadge title={t('participant-video-broken-tooltip')}>
-            <CameraOnIcon color="error" fontSize="medium" />
-          </FailureBadge>
-        );
-      }
-      break;
+  if (subscriber === undefined) {
+    return null;
   }
-  return null;
+
+  if (streamState === undefined || streamState.connection !== 'connected') {
+    return (
+      <FailureBadge title={t('participant-stream-broken-tooltip') || ''}>
+        <ConnectionGoodIcon color="error" fontSize="medium" />
+      </FailureBadge>
+    );
+  }
+
+  const audioBroken = subscriber.audio && !streamState.audioRunning;
+  const videoBroken = subscriber.video && !streamState.videoRunning;
+
+  if (!audioBroken && !videoBroken) {
+    return null;
+  }
+  let errorText = '';
+
+  if (audioBroken && videoBroken) {
+    errorText = t('participant-stream-broken-tooltip');
+  } else if (audioBroken) {
+    errorText = t('participant-audio-broken-tooltip');
+  } else if (videoBroken) {
+    errorText = t('participant-video-broken-tooltip');
+  }
+
+  return (
+    <FailureBadge title={errorText}>
+      {audioBroken && <MicOnIcon color="error" fontSize="medium" />}
+      {videoBroken && <CameraOnIcon color="error" fontSize="medium" />}
+    </FailureBadge>
+  );
 };
 
 export default UnresponsiveSubscriberStream;

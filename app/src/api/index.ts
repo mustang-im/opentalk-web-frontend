@@ -32,7 +32,7 @@ import {
   QualityLimit,
   shutdownConferenceContext,
   StreamStateChanged,
-  SubscriberState,
+  SubscriberConfig,
   WebRtc,
 } from '../modules/WebRTC';
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
@@ -185,8 +185,8 @@ const mapBreakoutToUiParticipant = (
 });
 
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
-  const addHandler = (mediaState: SubscriberState) => dispatch(subscriberAdded(mediaState));
-  const updateHandler = (mediaState: SubscriberState) => dispatch(subscriberUpdate(mediaState));
+  const addHandler = (mediaState: SubscriberConfig) => dispatch(subscriberAdded(mediaState));
+  const updateHandler = (mediaState: SubscriberConfig) => dispatch(subscriberUpdate(mediaState));
   const statsHandler = (connectionStats: Record<MediaId, StatsEvent>) =>
     dispatch(subscriberStatsUpdate(connectionStats));
   const closeHandler = (mediaDescriptor: MediaDescriptor) => dispatch(subscriberClose(mediaDescriptor));

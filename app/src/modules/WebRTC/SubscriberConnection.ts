@@ -1,19 +1,29 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { VideoSetting } from '@opentalk/common';
-import { debounce, max } from 'lodash';
+import { MediaSessionState, VideoSetting } from '@opentalk/common';
+import { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types';
+import { debounce, isEqual, max, some } from 'lodash';
 
 import { BandwidthController } from './BandwidthController';
 import { BaseWebRtcConnection } from './BaseWebRtcConnection';
 import { MediaSignaling } from './MediaSignaling';
-import { MediaDescriptor, MediaStreamState } from './WebRTC';
+import { SubscriberConfig } from './WebRTC';
+import { PACKET_LOSS_THRESHOLD } from './index';
 
 const QUALITY_DEBOUNCE_TIME = 500; //ms
+const RECOVERY_TIMEOUT = 10_000; //ms
+
+export interface SubscriberState {
+  audioRunning: boolean;
+  videoRunning: boolean;
+  connection: RTCIceConnectionState;
+}
 
 export class SubscriberConnection extends BaseWebRtcConnection {
+  private mediaConfig: MediaSessionState;
   private stream: MediaStream | undefined;
-  private streamState: MediaStreamState = MediaStreamState.Offline;
+  private streamState: SubscriberState = { audioRunning: false, videoRunning: false, connection: 'new' };
   private qualityTargetCount: Array<number> = [];
 
   private readyHandlers: (({ stream, reason }: { stream?: MediaStream; reason?: string }) => void)[] = [];
@@ -23,12 +33,15 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private lossCount = 0;
   private expectRestart = false;
 
+  private reconnectTimerHandle: TimeoutId | undefined = undefined;
+
   private readonly updateQualityTarget: () => void;
 
-  constructor(iceServers: RTCIceServer[], descriptor: MediaDescriptor, signaling: MediaSignaling) {
+  constructor(iceServers: RTCIceServer[], subscriberConfig: SubscriberConfig, signaling: MediaSignaling) {
     // quality setting needs to match the default setting of the backend
-    super(iceServers, descriptor, signaling, VideoSetting.High);
+    super(iceServers, subscriberConfig, signaling, VideoSetting.High);
 
+    this.mediaConfig = subscriberConfig;
     this.peerConnection.addEventListener('iceconnectionstatechange', () => {
       const state = this.peerConnection.iceConnectionState;
       switch (state) {
@@ -36,15 +49,23 @@ export class SubscriberConnection extends BaseWebRtcConnection {
           this.close();
           break;
         case 'disconnected':
-          this.streamState = MediaStreamState.Broken;
+          this.streamState = {
+            audioRunning: false,
+            videoRunning: false,
+            connection: this.peerConnection.iceConnectionState,
+          };
           this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
           console.warn(`Subscriber connection ${state}`);
+          this.checkMediaCondition();
           break;
         case 'failed':
-          this.streamState = MediaStreamState.Broken;
+          this.streamState = {
+            audioRunning: false,
+            videoRunning: false,
+            connection: this.peerConnection.iceConnectionState,
+          };
           this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
-          this.expectRestart = true;
-          this.signaling.resubscribe(this.descriptor);
+          this.iceRestart();
           console.warn(`Subscriber connection ${state}`);
           break;
         case 'connected':
@@ -52,10 +73,10 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       }
     });
     this.peerConnection.addEventListener('track', (event) => this.onTrackHandler(event));
-    this.signaling.requestOffer(descriptor);
+    this.signaling.requestOffer(subscriberConfig);
 
     this.bandwidthController.addEventListener('limit', async (limit: VideoSetting) => {
-      this.eventEmitter.emit('qualityLimit', { ...descriptor, limit });
+      this.eventEmitter.emit('qualityLimit', { ...subscriberConfig, limit });
       this.updateQualityLimit(limit);
     });
 
@@ -67,6 +88,44 @@ export class SubscriberConnection extends BaseWebRtcConnection {
     this.bandwidthController.downgradeTemporarily();
   }
 
+  private iceRestart() {
+    console.info(`Issue an ICE restart on subscriber connection ${this.descriptor}`);
+    this.expectRestart = true;
+    this.signaling.resubscribe(this.descriptor);
+    this.stopReconnectTimer();
+  }
+  private setReconnectTimer() {
+    if (this.reconnectTimerHandle !== undefined) {
+      console.warn('reconnect timer is already set');
+      return;
+    }
+    console.debug(`Set reconnect timer for subscriber connection ${this.descriptor}`);
+    this.reconnectTimerHandle = setTimeout(this.iceRestart.bind(this), RECOVERY_TIMEOUT);
+  }
+  private stopReconnectTimer() {
+    if (this.reconnectTimerHandle) {
+      console.debug('clear reconnect timer');
+      clearTimeout(this.reconnectTimerHandle);
+      this.reconnectTimerHandle = undefined;
+    }
+  }
+
+  private checkMediaCondition() {
+    if (this.mediaConfig.audio && !this.streamState.audioRunning) {
+      this.setReconnectTimer();
+      return;
+    }
+    if (this.mediaConfig.video && !this.streamState.videoRunning) {
+      this.setReconnectTimer();
+      return;
+    }
+    this.stopReconnectTimer();
+  }
+
+  public updateConfig(subscriberConfig: SubscriberConfig) {
+    this.mediaConfig = subscriberConfig;
+    this.checkMediaCondition();
+  }
   protected configureQuality(quality: VideoSetting) {
     this.signaling.configureReceiver(this.descriptor, quality);
   }
@@ -75,13 +134,13 @@ export class SubscriberConnection extends BaseWebRtcConnection {
     const stats = await super.updateStats();
 
     const packetLoss = stats?.inbound?.packetLoss || 0;
-    if (packetLoss > 0.05) {
+    if (packetLoss > PACKET_LOSS_THRESHOLD) {
       this.lossCount++;
       // wait for one round if the publishers control takes care
       if (this.lossCount >= 2) {
         this.bandwidthController.downgradeTemporarily();
       }
-    } else if (packetLoss < 0.01) {
+    } else if (packetLoss < PACKET_LOSS_THRESHOLD / 2) {
       this.lossCount = Math.max(0, this.lossCount - 1);
     }
 
@@ -105,36 +164,25 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   }
 
   private updateState() {
-    let nextState = MediaStreamState.Offline;
+    const nextState: SubscriberState = {
+      videoRunning: false,
+      audioRunning: false,
+      connection: this.peerConnection.iceConnectionState,
+    };
     if (this.peerConnection.iceConnectionState === 'connected' && this.stream?.active) {
-      const liveTracks = this.stream.getTracks().filter((t) => t.readyState === 'live');
+      const liveTracks = this.stream.getTracks().filter((track) => track.readyState === 'live');
       // Allows us to recognize when a track has problems.
       // See https://w3c.github.io/mediacapture-main/#track-muted
-      const brokenTracks = liveTracks.filter((t) => t.muted);
 
-      if (brokenTracks.length === liveTracks.length) {
-        nextState = MediaStreamState.Broken;
-      } else if (brokenTracks.length > 0) {
-        const audioBroken = brokenTracks.find((e) => e.kind === 'audio');
-        const videoBroken = brokenTracks.find((e) => e.kind === 'video');
-
-        if (audioBroken) {
-          nextState = MediaStreamState.AudioBroken;
-        }
-        if (videoBroken) {
-          nextState = MediaStreamState.VideoBroken;
-        }
-      } else {
-        nextState = MediaStreamState.Ok;
-      }
+      nextState.audioRunning = some(liveTracks, { kind: 'audio', muted: false });
+      nextState.videoRunning = some(liveTracks, { kind: 'video', muted: false });
     }
-
-    if (this.streamState !== nextState) {
-      this.streamState = nextState;
-
-      this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
+    if (isEqual(this.streamState, nextState)) {
+      return;
     }
     this.streamState = nextState;
+    this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
+    this.checkMediaCondition();
   }
 
   private onTrackHandler(event: RTCTrackEvent) {
@@ -243,7 +291,8 @@ export class SubscriberConnection extends BaseWebRtcConnection {
 
   public close() {
     this.stream?.getTracks().forEach((t) => t.stop());
-    this.streamState = MediaStreamState.Offline;
+    this.streamState = { audioRunning: false, videoRunning: false, connection: 'closed' };
+    this.stopReconnectTimer();
     super.close();
   }
 }

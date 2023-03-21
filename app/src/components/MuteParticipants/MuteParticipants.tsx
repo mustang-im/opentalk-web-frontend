@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { requestMute } from '../../api/types/outgoing/media';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { SubscriberState } from '../../modules/WebRTC';
+import { SubscriberConfig } from '../../modules/WebRTC';
 import { selectUnmutedParticipants } from '../../store/selectors';
 import { selectAllSubscribers } from '../../store/slices/mediaSubscriberSlice';
 import { Participant } from '../../store/slices/participantsSlice';
@@ -46,7 +46,7 @@ const MuteParticipants = () => {
 
   const muteAll = useCallback(() => {
     const unmutedIds = allSubscribers
-      .filter((subscriber: SubscriberState) => subscriber.mediaType === MediaSessionType.Video && subscriber.audio)
+      .filter((subscriber: SubscriberConfig) => subscriber.mediaType === MediaSessionType.Video && subscriber.audio)
       .map((subscriber) => subscriber.participantId);
     dispatch(requestMute.action({ targets: unmutedIds, force: true }));
   }, [allSubscribers, dispatch]);
@@ -54,7 +54,7 @@ const MuteParticipants = () => {
   const muteSelected = useCallback(() => {
     const subscribersIds = allSubscribers
       .filter(
-        (subscriber: SubscriberState) =>
+        (subscriber: SubscriberConfig) =>
           selectedParticipants.includes(subscriber.participantId) &&
           subscriber.mediaType === MediaSessionType.Video &&
           subscriber.audio
