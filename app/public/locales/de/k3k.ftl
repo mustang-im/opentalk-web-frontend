@@ -668,6 +668,7 @@ meeting-notification-banned = Sie wurden permanent vom Meeting entfernt
 meeting-notification-user-was-kicked = Sie haben {$user} vom Meeting entfernt
 meeting-notification-user-was-banned = Sie haben {$user} permanent vom Meeting entfernt
 meeting-notification-user-was-accepted = Sie haben {$user} erfolgreich in das Meeting aufgenommen
+meeting-notification-participant-limit-reached = Sie haben das Maximum von {$participantLimit} Teilnehmern in dieser Konferenz erreicht.
 
 feedback-button = Feedback
 feedback-button-close = Schließen

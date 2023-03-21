@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendParticipant, BreakoutRoomId, GroupId, ParticipantId, RoomId } from '@opentalk/common';
+import { BackendParticipant, BreakoutRoomId, GroupId, ParticipantId, RoomId, Tariff } from '@opentalk/common';
 import { InitialAutomod } from '@opentalk/components';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
@@ -50,6 +50,7 @@ export const joinSuccess = createAction<{
   isPresenter?: boolean;
   recording?: null | RecordingState;
   serverTimeOffset: number;
+  tariff: Tariff;
 }>('signaling/control/join_success');
 
 export const login = createAsyncThunk<{ permission: Array<string> }, string, { state: RootState; rejectValue: Error }>(

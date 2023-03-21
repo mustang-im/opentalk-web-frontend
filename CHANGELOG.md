@@ -30,6 +30,7 @@
 - Add unread indicator for chat messages (!844)
 - Add legal vote token copy field. (!836)
 - Lobby without password label as invited (!863)
+- Notify moderator if participant limit has been reached (!877)
 
 ## 1.2.0
 
