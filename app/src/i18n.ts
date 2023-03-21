@@ -22,6 +22,7 @@ i18n
   .init({
     fallbackLng: 'en',
     supportedLngs: ['de', 'en'],
+    nonExplicitSupportedLngs: true,
     ns: ['k3k'],
     defaultNS: 'k3k',
     debug: false,
