@@ -15,6 +15,7 @@
 - Add HotKeys coffee break when full screen is active (!886)
 - Fix missing notification when timer stops (!883)
 - Fix create meeting default start/end time (!888)
+- Fix browser language detection. (!889)
 
 ### Stability Improvements
 
