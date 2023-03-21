@@ -136,6 +136,7 @@
 - Fix the wrong percentage calculation of vote results (!767)
 - Refine wordings (!764)
 - Fix duration string for voting overview panel (!768)
+- Improve Waiting Participant List and Item (!890)
 
 ### Stability Improvements
 

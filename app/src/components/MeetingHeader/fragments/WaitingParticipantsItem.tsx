@@ -4,14 +4,13 @@
 import {
   Button,
   ListItem as MuiListItem,
-  ListItemAvatar as MuiListItemAvatar,
+  ListItemAvatar,
   ListItemText as MuiListItemText,
-  Stack,
   styled,
   Typography,
 } from '@mui/material';
 import { notifications, useDateFormat } from '@opentalk/common';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
@@ -25,21 +24,8 @@ const Avatar = styled(ParticipantAvatar)({
   fontSize: '0.75rem',
 });
 
-const ListItemAvatar = styled(MuiListItemAvatar)({
-  minWidth: 'initial',
-});
-
 const ListItem = styled(MuiListItem)(({ theme }) => ({
-  padding: theme.spacing(1, 1, 1, 0),
-  '& .more-icon': {
-    color: 'transparent',
-  },
-  ':hover': {
-    opacity: 0.8,
-    '& .more-icon': {
-      color: theme.palette.primary.contrastText,
-    },
-  },
+  padding: theme.spacing(1, 1, 0, 0),
 }));
 
 const ListItemText = styled(MuiListItemText)({
@@ -82,46 +68,39 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
     }
   }, [approveAllWaiting, handleAccept, handleApproveAll]);
 
-  const renderWaitingState = () => {
+  const ParticipantWaitingState = useMemo(() => {
     switch (participant.waitingState) {
       case WaitingState.Waiting:
         return (
-          <Button sx={{ whiteSpace: 'nowrap' }} variant="text" onClick={handleAccept}>
+          <Button variant="text" onClick={handleAccept}>
             {t('participant-menu-accept-participant')}
           </Button>
         );
       case WaitingState.Approved:
         return (
-          <Button sx={{ whiteSpace: 'nowrap' }} variant="text" disabled>
+          <Button variant="text" disabled>
             {t('participant-menu-accepted-participant')}
           </Button>
         );
+      default:
+        return null;
     }
-  };
+  }, [participant.waitingState, handleAccept, t]);
+
   return (
-    <ListItem button={false}>
-      <Stack spacing={2} direction={'row'} justifyContent={'center'} alignItems={'center'}>
-        <ListItemAvatar>
-          <Avatar src={participant.avatarUrl} alt={participant.displayName}>
-            {participant.displayName}
-          </Avatar>
-        </ListItemAvatar>
-        <Stack>
-          <ListItemText
-            primary={
-              <Typography variant={'body1'} noWrap>
-                {participant.displayName}
-              </Typography>
-            }
-            secondary={
-              <JoinedText sx={{ whiteSpace: 'nowrap' }} variant={'caption'}>
-                {t('participant-joined-text', { joinedTime: formattedTime })}
-              </JoinedText>
-            }
-          />
-        </Stack>
-        <Stack>{renderWaitingState()}</Stack>
-      </Stack>
+    <ListItem>
+      <ListItemAvatar>
+        <Avatar src={participant.avatarUrl} alt={participant.displayName}>
+          {participant.displayName}
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={<Typography variant={'body1'}>{participant.displayName}</Typography>}
+        secondary={
+          <JoinedText variant={'caption'}>{t('participant-joined-text', { joinedTime: formattedTime })}</JoinedText>
+        }
+      />
+      {ParticipantWaitingState}
     </ListItem>
   );
 };
