@@ -302,11 +302,6 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
         </Grid>
         <Grid item xs={12}>
           <StyledStack>
-            {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
-              <Typography color={'primary'} textAlign={'center'}>
-                {t('legal-vote-not-selected')}
-              </Typography>
-            )}
             <Typography variant={'h2'}>{vote?.name}</Typography>
             {getSubtitle(vote as LegalVoteType) && (
               <TopicTypography>{getSubtitle(vote as LegalVoteType)}</TopicTypography>
@@ -315,8 +310,15 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
           </StyledStack>
         </Grid>
         {renderVoteResult()}
-        {currentLegalVote && (
-          <Grid item xs={12} pb={1}>
+        {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
+          <Grid item xs={12} container justifyContent="flex-start">
+            <Typography color={'primary'} textAlign={'center'}>
+              {t('legal-vote-not-selected')}
+            </Typography>
+          </Grid>
+        )}
+        {currentLegalVote && allowedToVote && (
+          <Grid item xs={12} pb={1} container justifyContent="flex-end">
             <Button
               data-testid="legal-vote-save-button"
               type="button"
@@ -327,12 +329,12 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
             </Button>
           </Grid>
         )}
-        {currentLegalVote?.votedAt && (
+        {currentLegalVote?.votedAt && allowedToVote && (
           <Grid item xs={12}>
             <VoteResultDate date={new Date(currentLegalVote?.votedAt)} />
           </Grid>
         )}
-        {currentLegalVote && currentLegalVote.state === 'finished' && (
+        {currentLegalVote && currentLegalVote.state === 'finished' && allowedToVote && (
           <Grid item xs={12}>
             <LegalVoteTokenClipboard
               name={currentLegalVote.name}
