@@ -771,3 +771,6 @@ emoji-category-activities = Aktivitäten
 emoji-category-objects = Objekte
 emoji-category-symbols = Symbole
 emoji-category-flags = Flaggen
+
+closes-time-before-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in {$minute} Minuten automatisch beendet.
+closes-time-in-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in Kürze automatisch beendet.

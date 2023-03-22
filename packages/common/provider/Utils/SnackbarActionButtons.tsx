@@ -13,29 +13,35 @@ const SnackbarActionButtons = ({
   onAction,
   actionBtnText,
   cancelBtnText,
-}: Omit<ISnackbarActionButtonProps, 'msg'>) => (
-  <Grid container spacing={2}>
-    {actionBtnText && (
-      <Grid item>
-        <Button onClick={onAction} variant={'text'} color={'inherit'}>
-          {actionBtnText}
-        </Button>
-      </Grid>
-    )}
-    {cancelBtnText ? (
-      <Grid item>
+  hideCloseButton,
+}: Omit<ISnackbarActionButtonProps, 'msg'>) => {
+  const renderCancelGridItem = () => (
+    <Grid item>
+      {cancelBtnText && (
         <Button onClick={onCancel} color={'inherit'}>
           {cancelBtnText}
         </Button>
-      </Grid>
-    ) : (
-      <Grid item>
+      )}
+      {!cancelBtnText && (
         <IconButton onClick={onCancel}>
           <CloseIcon />
         </IconButton>
-      </Grid>
-    )}
-  </Grid>
-);
+      )}
+    </Grid>
+  );
+
+  return (
+    <Grid container spacing={2}>
+      {actionBtnText && (
+        <Grid item>
+          <Button onClick={onAction} variant={'text'} color={'inherit'}>
+            {actionBtnText}
+          </Button>
+        </Grid>
+      )}
+      {!hideCloseButton && renderCancelGridItem()}
+    </Grid>
+  );
+};
 
 export default SnackbarActionButtons;

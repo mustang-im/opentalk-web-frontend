@@ -67,6 +67,7 @@ export interface JoinSuccess {
   recording: null | RecordingState;
   timer?: TimerState;
   tariff: Tariff;
+  closesAt: Timestamp;
 }
 
 export interface JoinBlocked {
