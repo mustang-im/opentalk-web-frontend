@@ -1,9 +1,9 @@
 {
   "name": "@opentalk/common",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "author": "OpenTalk GmbH <mail@opentalk.eu>",
   "license": "EUPL-1.2",
-  "main": "dist/cjs/index.js",
+  "main": "dist/index.js",
   "module": "dist/esm/index.development.js",
   "types": "dist/index.d.ts",
   "files": [
