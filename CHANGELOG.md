@@ -16,6 +16,7 @@
 - Fix missing notification when timer stops (!883)
 - Fix create meeting default start/end time (!888)
 - Fix browser language detection. (!889)
+- Polished legal vote UI for unselected participant. (!893) 
 
 ### Stability Improvements
 
