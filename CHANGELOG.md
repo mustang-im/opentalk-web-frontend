@@ -25,6 +25,7 @@
 - Rework duration field and related types (!855)
 - Translated emoji picker categories to german. (!854)
 - Enhanced DurationField behavior. (!884)
+- Removed development error showing on the create meeting page. (!892)
 
 ### New Features
 

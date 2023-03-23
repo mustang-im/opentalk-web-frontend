@@ -10,27 +10,31 @@ import FormWrapper, { FormProps } from '../FormWrapper/FormWrapper';
 
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 
-export const ObservedInput = ({ error, onFocus, onBlur, ...props }: InputBaseProps) => {
-  const dispatch = useAppDispatch();
+export const ObservedInput = React.forwardRef(
+  ({ error, onFocus, onBlur, ...props }: InputBaseProps, ref: React.Ref<unknown>) => {
+    const dispatch = useAppDispatch();
 
-  const handleOnFocus = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => {
-      dispatch(setHotkeysEnabled(false));
-      onFocus && onFocus(event);
-    },
-    [dispatch, onFocus]
-  );
+    const handleOnFocus = useCallback(
+      (event: React.FocusEvent<HTMLInputElement>) => {
+        dispatch(setHotkeysEnabled(false));
+        onFocus && onFocus(event);
+      },
+      [dispatch, onFocus]
+    );
 
-  const handleOnBlur = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => {
-      dispatch(setHotkeysEnabled(true));
-      onBlur && onBlur(event);
-    },
-    [dispatch, onBlur]
-  );
+    const handleOnBlur = useCallback(
+      (event: React.FocusEvent<HTMLInputElement>) => {
+        dispatch(setHotkeysEnabled(true));
+        onBlur && onBlur(event);
+      },
+      [dispatch, onBlur]
+    );
 
-  return <InputBase {...props} error={error} onFocus={handleOnFocus} onBlur={handleOnBlur} />;
-};
+    return <InputBase ref={ref} {...props} error={error} onFocus={handleOnFocus} onBlur={handleOnBlur} />;
+  }
+);
+
+ObservedInput.displayName = 'ObservedInput';
 
 const TextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProps>(
   ({ label, error, helperText, fullWidth, ...props }, ref) => {
