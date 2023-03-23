@@ -17,15 +17,16 @@ import {
   Stack,
   Grid,
 } from '@mui/material';
-import { ParticipantId, ParticipationKind } from '@opentalk/common';
+import { DoneIcon, ParticipantId } from '@opentalk/common';
 import { SearchIcon } from '@opentalk/common';
+import { cloneDeep, isEmpty, some, differenceBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { selectWriter, uploadPdf } from '../../api/types/outgoing/protocol';
+import { deselectWriter, selectWriter, uploadPdf } from '../../api/types/outgoing/protocol';
 import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectCombinedParticipantsAndUser } from '../../store/selectors';
+import { selectAllProtocolParticipants } from '../../store/selectors';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
 import ParticipantAvatar from '../ParticipantAvatar';
 
@@ -64,93 +65,130 @@ export interface ProtocolParticipant {
 }
 
 const ProtocolTab = () => {
-  const [selectedParticipants, setSelectedParticipants] = useState<ProtocolParticipant[]>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [participants, setParticipants] = useState<ProtocolParticipant[]>([]);
   const { t } = useTranslation();
-  const allParticipants = useAppSelector(selectCombinedParticipantsAndUser);
   const dispatch = useAppDispatch();
   const protocolUrl = useAppSelector(selectProtocolUrl);
+  const [selectedParticipants, setSelectedParticipants] = useState<ProtocolParticipant[]>([]);
+  const [participants, setParticipants] = useState<ProtocolParticipant[]>([]);
+  const allProtocolParticipants = useAppSelector(selectAllProtocolParticipants);
+  const [searchMask, setSearchMask] = useState('');
 
-  const participantArray = useCallback(() => {
-    return allParticipants
-      .filter((participant) => participant.participationKind !== ParticipationKind.Guest)
-      .map(({ displayName, avatarUrl, id }) => ({
-        displayName,
-        avatarUrl,
-        id,
-        isSelected: false,
-      }));
-  }, [allParticipants]);
+  useEffect(() => {
+    setParticipants(allProtocolParticipants);
+    setSelectedParticipants(allProtocolParticipants);
+  }, [allProtocolParticipants]);
+
+  const handleSearch = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchMask(event.target.value);
+  }, []);
+
+  const getFilteredParticipants = useCallback(() => {
+    if (!isEmpty(searchMask)) {
+      return selectedParticipants.filter((participant) =>
+        participant.displayName.toString().toLocaleLowerCase().includes(searchMask.toString().toLocaleLowerCase())
+      );
+    }
+    return selectedParticipants;
+  }, [searchMask, selectedParticipants]);
 
   const checkAllHandler = useCallback(() => {
     let allChecked = false;
-    participants.forEach((participant) => {
+    selectedParticipants.forEach((participant) => {
       allChecked = participant.isSelected;
     });
-    const checkedArray = participants.map((participant) => {
+    const checkedArray = selectedParticipants.map((participant) => {
       participant.isSelected = !allChecked;
       return participant;
     });
-    setParticipants(checkedArray);
-  }, [participants]);
-
-  const handleSearch = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setParticipants((prevState) => {
-        if (e.target.value) {
-          return prevState.filter((participant) => participant.displayName.includes(e.target.value));
-        } else {
-          return participantArray();
-        }
-      });
-    },
-    [participantArray]
-  );
+    setSelectedParticipants(checkedArray);
+  }, [selectedParticipants]);
 
   const checkHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-      const newParticipantsArray = [...participants];
-      newParticipantsArray[index].isSelected = e.target.checked;
-      setParticipants(newParticipantsArray);
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newParticipantsArray = selectedParticipants.map((participant) => {
+        if (participant.id === event.target.id) {
+          participant.isSelected = event.target.checked;
+        }
+        return participant;
+      });
+      setSelectedParticipants(newParticipantsArray);
     },
-    [participants]
+    [selectedParticipants]
   );
 
   const sendInvitations = useCallback(() => {
-    const selectedUsers = selectedParticipants.map((user) => {
-      return user.id;
-    });
+    const participantComparator = (participant: ProtocolParticipant) => {
+      return `${participant.id}${participant.isSelected}`;
+    };
+    const differentParticipants = protocolUrl
+      ? differenceBy(participants, allProtocolParticipants, participantComparator)
+      : participants;
 
-    dispatch(
-      selectWriter.action({
-        participantIds: selectedUsers,
-      })
-    );
-  }, [selectedParticipants, dispatch]);
+    if (differentParticipants.length > 0) {
+      const selectedParticipantIds = differentParticipants
+        .filter((participant) => participant.isSelected)
+        .map((participant) => participant.id);
+      const deselectedParticipantIds = differentParticipants
+        .filter((participant) => !participant.isSelected)
+        .map((participant) => participant.id);
+      if (selectedParticipantIds.length > 0) {
+        dispatch(
+          selectWriter.action({
+            participantIds: selectedParticipantIds,
+          })
+        );
+      }
+      if (deselectedParticipantIds.length > 0) {
+        dispatch(
+          deselectWriter.action({
+            participantIds: deselectedParticipantIds,
+          })
+        );
+      }
+    }
+  }, [participants, dispatch]);
 
   const closeParticipantsListPanel = useCallback(() => {
     setAnchorEl(null);
   }, []);
 
   const assignButtonHandler = useCallback(() => {
-    setSelectedParticipants(participants.filter((item) => item.isSelected));
+    setParticipants(selectedParticipants);
     closeParticipantsListPanel();
-  }, [participants, closeParticipantsListPanel]);
+  }, [selectedParticipants, closeParticipantsListPanel]);
 
-  const openParticipantsListPanel = useCallback((event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  }, []);
-
-  useEffect(() => {
-    setParticipants(participantArray);
-  }, [participantArray]);
+  const openParticipantsListPanel = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      setSearchMask('');
+      setSelectedParticipants(cloneDeep(participants));
+      setAnchorEl(event.currentTarget);
+    },
+    [participants]
+  );
 
   const uploadPdfAction = useCallback(() => {
     dispatch(uploadPdf.action());
   }, [dispatch]);
 
+  const renderSelectedParticipantListItems = () => (
+    <SelectedParticipantsList>
+      {participants
+        .filter((participant) => participant.isSelected)
+        .map((participant, index) => (
+          <ListItem key={index} sx={{ px: 0 }}>
+            <ListItemAvatar>
+              <ParticipantAvatar src={participant.avatarUrl}>{participant.displayName}</ParticipantAvatar>
+            </ListItemAvatar>
+            <ListItemText primary={<Typography noWrap>{participant.displayName}</Typography>} />
+            <DoneIcon color={'success'} />
+          </ListItem>
+        ))}
+    </SelectedParticipantsList>
+  );
+
   const open = Boolean(anchorEl);
+  const hasSelectedParticipants = some(participants, 'isSelected');
 
   return (
     <Stack
@@ -168,42 +206,30 @@ const ProtocolTab = () => {
         sx={{ width: '100%' }}
         flex={0}
       >
-        <Grid container>
-          <Grid item xs={12}>
-            <Button onClick={openParticipantsListPanel}>{t('protocol-invite-button')}</Button>
-          </Grid>
-        </Grid>
-        <SelectedParticipantsList>
-          {selectedParticipants.map((participant, index) => (
-            <ListItem key={index} sx={{ px: 0 }}>
-              <ListItemAvatar>
-                <ParticipantAvatar src={participant.avatarUrl}>{participant.displayName}</ParticipantAvatar>
-              </ListItemAvatar>
-              <ListItemText primary={<Typography noWrap>{participant.displayName}</Typography>} />
-            </ListItem>
-          ))}
-        </SelectedParticipantsList>
+        <Button
+          sx={{ width: '100%' }}
+          onClick={openParticipantsListPanel}
+          aria-label={protocolUrl ? t('protocol-edit-invite-button') : t('protocol-invite-button')}
+        >
+          {protocolUrl ? t('protocol-edit-invite-button') : t('protocol-invite-button')}
+        </Button>
+        {renderSelectedParticipantListItems()}
       </Stack>
-      <Grid container>
-        <Grid item xs={12}>
-          {protocolUrl && (
-            <Button sx={{ width: 'auto' }} onClick={uploadPdfAction} aria-label={t('protocol-upload-pdf-button')}>
-              {t('protocol-upload-pdf-button')}
-            </Button>
-          )}
-        </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={12}>
-          <Button
-            aria-label={t('protocol-invite-send-button')}
-            disabled={!selectedParticipants.length}
-            onClick={sendInvitations}
-          >
-            {t('protocol-invite-send-button')}
+      <Stack direction="column" sx={{ width: '100%' }} spacing={1} alignItems="center">
+        {protocolUrl && (
+          <Button sx={{ width: '100%' }} onClick={uploadPdfAction} aria-label={t('protocol-upload-pdf-button')}>
+            {t('protocol-upload-pdf-button')}
           </Button>
-        </Grid>
-      </Grid>
+        )}
+        <Button
+          sx={{ width: '100%' }}
+          aria-label={protocolUrl ? t('protocol-update-invite-send-button') : t('protocol-invite-send-button')}
+          disabled={!hasSelectedParticipants}
+          onClick={sendInvitations}
+        >
+          {protocolUrl ? t('protocol-update-invite-send-button') : t('protocol-invite-send-button')}
+        </Button>
+      </Stack>
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{
@@ -221,7 +247,7 @@ const ProtocolTab = () => {
           <Stack spacing={2}>
             <TextField
               size={'small'}
-              onChange={(e) => handleSearch(e)}
+              onChange={(event) => handleSearch(event)}
               startAdornment={
                 <InputAdornment position="start">
                   <SearchIcon />
@@ -230,20 +256,20 @@ const ProtocolTab = () => {
               fullWidth
             />
             <Stack direction={'row'}>
-              <Button size={'small'} onClick={checkAllHandler}>
+              <Button size={'small'} sx={{ width: '100%' }} onClick={checkAllHandler}>
                 {t('poll-participant-list-button-select-all')}
               </Button>
             </Stack>
             <ParticipantsListGrid zeroMinWidth item>
               <List>
-                {participants.map((participant, index) => (
-                  <ListItem key={index}>
+                {getFilteredParticipants().map((participant) => (
+                  <ListItem key={participant.id}>
                     <FormControlLabel
                       control={
                         <Checkbox
                           checked={participant.isSelected}
                           id={participant.id}
-                          onChange={(e) => checkHandler(e, index)}
+                          onChange={checkHandler}
                           color="primary"
                         />
                       }

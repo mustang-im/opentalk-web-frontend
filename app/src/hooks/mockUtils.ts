@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 
 import store from '../store';
 import { updated as subscriberUpdate } from '../store/slices/mediaSubscriberSlice';
-import { join, WaitingState } from '../store/slices/participantsSlice';
+import { join, ProtocolAccess, WaitingState } from '../store/slices/participantsSlice';
 import { getRandomNumber } from '../utils/numberUtils';
 
 export const useMockUsers = (users: number) => {
@@ -30,6 +30,8 @@ export const useMockUsers = (users: number) => {
                 breakoutRoomId: null,
                 participationKind: ParticipationKind.User,
                 lastActive: new Date().toISOString(),
+                protocolAccess: ProtocolAccess.None,
+                isPresenter: false,
                 waitingState: WaitingState.Joined,
               },
             })

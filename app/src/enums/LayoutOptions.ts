@@ -6,6 +6,7 @@ enum LayoutOptions {
   Grid = 'grid',
   Speaker = 'speaker',
   Whiteboard = 'whiteboard',
+  Protocol = 'protocol',
 }
 
 export default LayoutOptions;

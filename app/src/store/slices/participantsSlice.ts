@@ -7,7 +7,6 @@ import {
   GroupId,
   ParticipantId,
   ParticipationKind,
-  ProtocolState,
   Timestamp,
 } from '@opentalk/common';
 import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadAction } from '@reduxjs/toolkit';
@@ -26,6 +25,12 @@ export enum WaitingState {
   Approved = 'approved',
 }
 
+export enum ProtocolAccess {
+  Read = 'read',
+  Write = 'write',
+  None = 'none',
+}
+
 export interface Participant {
   id: ParticipantId;
   breakoutRoomId: BreakoutRoomId | null;
@@ -40,8 +45,8 @@ export interface Participant {
   lastActive: string;
   role?: Role;
   waitingState: WaitingState;
-  protocol?: ProtocolState;
-  isPresenter?: boolean;
+  protocolAccess: ProtocolAccess;
+  isPresenter: boolean;
 }
 
 export const participantAdapter = createEntityAdapter<Participant>({
@@ -68,7 +73,7 @@ export const participantsSlice = createSlice({
             breakoutRoomId,
             participationKind,
             role,
-            protocol,
+            protocolAccess,
             isPresenter,
           },
         },
@@ -88,7 +93,7 @@ export const participantsSlice = createSlice({
         lastActive: joinedAt,
         role,
         waitingState: WaitingState.Joined,
-        protocol,
+        protocolAccess,
         isPresenter,
       });
     },
@@ -122,6 +127,8 @@ export const participantsSlice = createSlice({
         participationKind: data.participationKind,
         lastActive: timestamp,
         waitingState: WaitingState.Joined,
+        protocolAccess: ProtocolAccess.None,
+        isPresenter: false,
       };
       participantAdapter.upsertOne(state, participant);
     },
@@ -144,6 +151,8 @@ export const participantsSlice = createSlice({
         breakoutRoomId: null,
         participationKind: payload.control.participationKind,
         lastActive: payload.control.joinedAt,
+        protocolAccess: ProtocolAccess.None,
+        isPresenter: false,
         waitingState: WaitingState.Waiting,
       };
       participantAdapter.upsertOne(state, participant);
@@ -160,12 +169,12 @@ export const participantsSlice = createSlice({
     update: (
       state,
       {
-        payload: { id, displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, isPresenter, protocol },
+        payload: { id, displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, isPresenter, protocolAccess },
       }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups'>>
     ) => {
       participantAdapter.updateOne(state, {
         id,
-        changes: { displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, isPresenter, role, protocol },
+        changes: { displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, isPresenter, role, protocolAccess },
       });
     },
   },

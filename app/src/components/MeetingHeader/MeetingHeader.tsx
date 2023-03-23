@@ -24,13 +24,13 @@ import {
   SpeakerViewIcon,
   GridViewIcon,
   FullscreenViewIcon,
-  NewMessageIcon,
   SpeakerQueueIcon,
   PollIcon,
   LegalBallotIcon,
   WhiteboardIcon,
   RecordingsIcon,
   SecureIcon,
+  ProtocolIcon,
 } from '@opentalk/common';
 import { legalVoteStore, LegalVoteType } from '@opentalk/components';
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
@@ -59,11 +59,7 @@ import {
   setVotePollIdToShow,
   toggleDebugMode,
 } from '../../store/slices/uiSlice';
-import {
-  selectIsCurrentWhiteboardHighlighted,
-  selectIsCurrentProtocolHighlighted,
-  setProtocolHighlight,
-} from '../../store/slices/uiSlice';
+import { selectIsCurrentWhiteboardHighlighted } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import { selectIsWhiteboardAvailable } from '../../store/slices/whiteboardSlice';
 import { MAX_GRID_TILES } from '../GridView/GridView';
@@ -214,7 +210,6 @@ const CustomMenuItem = styled(MenuItem)(() => ({
 }));
 
 const MeetingHeader = () => {
-  const [infoEl, setInfoEl] = useState<null | HTMLElement>(null);
   const [viewEl, setViewEl] = useState<null | HTMLElement>(null);
   const [waitingEl, setWaitingEl] = useState<null | HTMLElement>(null);
   const [areAllApproved, setApproveAll] = useState<boolean>(false);
@@ -236,12 +231,9 @@ const MeetingHeader = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const isWhiteboardAvailable = useAppSelector(selectIsWhiteboardAvailable);
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
-  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const recording = useAppSelector(selectRecordingState);
   const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
-
   const fullscreenHandle = useFullscreenContext();
-
   const [clickCount, setClickCount] = useState(0);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -270,9 +262,7 @@ const MeetingHeader = () => {
     }
   }, [participantsNotApproved, participantsInWaitingRoomCount]);
 
-  const LogoImage = () => {
-    return <Logo width={'12.8997em'} height={'2.072em'} onClick={showDebugDialog} fill={'white'} />;
-  };
+  const logoImage = () => <Logo width={'12.8997em'} height={'2.072em'} onClick={showDebugDialog} fill={'white'} />;
 
   const pageCount = useMemo(() => {
     return Math.ceil(participants.length / MAX_GRID_TILES);
@@ -293,7 +283,6 @@ const MeetingHeader = () => {
   };
 
   const resetHTMLElements = () => {
-    setInfoEl(null);
     setViewEl(null);
     setWaitingEl(null);
   };
@@ -321,6 +310,8 @@ const MeetingHeader = () => {
     switch (selectedLayout) {
       case LayoutOptions.Grid:
         return <GridViewIcon />;
+      case LayoutOptions.Protocol:
+        return <Typography noWrap>{t('protocol-hide')}</Typography>;
       case LayoutOptions.Whiteboard:
         return <Typography noWrap>{t('whiteboard-hide')}</Typography>;
       case LayoutOptions.Speaker:
@@ -341,12 +332,14 @@ const MeetingHeader = () => {
     );
   };
 
-  const ViewPopper = () => (
+  const ViewPopper = (
     <ViewPopperContainer>
       <IconButton
         aria-describedby={'view-select'}
         onClick={(event) =>
-          selectedLayout === LayoutOptions.Whiteboard ? handleSelectedView(LayoutOptions.Grid) : toggleViewPopper(event)
+          [LayoutOptions.Protocol, LayoutOptions.Whiteboard].includes(selectedLayout)
+            ? handleSelectedView(LayoutOptions.Grid)
+            : toggleViewPopper(event)
         }
       >
         {renderViewIcon()}
@@ -380,17 +373,13 @@ const MeetingHeader = () => {
     </ViewPopperContainer>
   );
 
-  const RoomPopper = () => (
+  const roomPopper = () => (
     <div>
       <CurrentRoomText>
         {currentBreakoutRoom !== undefined ? currentBreakoutRoom.name : t('header-meeting-room')}
       </CurrentRoomText>
     </div>
   );
-
-  const toggleInfoPopper = (event: React.MouseEvent<HTMLElement>) => {
-    setInfoEl(infoEl ? null : event.currentTarget);
-  };
 
   const toggleWaitingPopper = (event: React.MouseEvent<HTMLElement>) => {
     setWaitingEl(waitingEl ? null : event.currentTarget);
@@ -447,39 +436,17 @@ const MeetingHeader = () => {
     }
   };
 
-  const navigateToProtocolUrl = () => {
-    protocolUrl !== null && window.open(protocolUrl, '_blank');
-    dispatch(setProtocolHighlight(false));
-    setInfoEl(null);
-  };
+  const handleProtocolClick = useCallback(() => {
+    if (selectedLayout !== LayoutOptions.Protocol) {
+      handleSelectedView(LayoutOptions.Protocol);
+    }
+  }, [selectedLayout, handleSelectedView]);
 
-  const renderProtocolInfo = () => (
-    <HeaderItem highlighted={isCurrentProtocolHighlighted}>
-      <ViewPopperContainer>
-        <IconButton aria-describedby={'view-select'} onClick={toggleInfoPopper}>
-          <NewMessageIcon />
-        </IconButton>
-        <Popover
-          open={Boolean(infoEl)}
-          anchorEl={infoEl}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          onClose={resetHTMLElements}
-          disablePortal
-        >
-          <PopperContainer>
-            <Button variant={'text'} size="small" color={'secondary'} onClick={navigateToProtocolUrl}>
-              {t('protocol-join-session')}
-            </Button>
-          </PopperContainer>
-        </Popover>
-      </ViewPopperContainer>
+  const RenderProtocolIcon = (
+    <HeaderItem highlighted={selectedLayout === LayoutOptions.Protocol}>
+      <IconButton aria-describedby={'view-select'} onClick={handleProtocolClick}>
+        <ProtocolIcon />
+      </IconButton>
     </HeaderItem>
   );
 
@@ -487,7 +454,7 @@ const MeetingHeader = () => {
     if (selectedLayout !== LayoutOptions.Whiteboard) {
       handleSelectedView(LayoutOptions.Whiteboard);
     }
-  }, [selectedLayout, isCurrentWhiteboardHighlighted, handleSelectedView]);
+  }, [selectedLayout, handleSelectedView]);
 
   const renderWhiteboardIcon = () => (
     <HeaderItem highlighted={isCurrentWhiteboardHighlighted}>
@@ -580,13 +547,11 @@ const MeetingHeader = () => {
 
   return (
     <Content>
-      <ContentItem>
-        <LogoImage />
-      </ContentItem>
+      <ContentItem>{logoImage()}</ContentItem>
       <ContentItem lgOrder={2}>
         <HeaderCenterContainer>
-          <HeaderItem>{RoomPopper()}</HeaderItem>
-          <HeaderItem>{ViewPopper()}</HeaderItem>
+          <HeaderItem>{roomPopper()}</HeaderItem>
+          <HeaderItem>{ViewPopper}</HeaderItem>
           {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
             <HeaderItem>
               <HeaderPagination
@@ -606,7 +571,7 @@ const MeetingHeader = () => {
             <>
               <HeaderDivider />
               {showWhiteboardIcon && renderWhiteboardIcon()}
-              {protocolUrl && renderProtocolInfo()}
+              {protocolUrl && selectedLayout !== LayoutOptions.Protocol && RenderProtocolIcon}
             </>
           )}
         </HeaderCenterContainer>

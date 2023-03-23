@@ -34,10 +34,9 @@ import SortOption from '../../../enums/SortOption';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
-import { Participant } from '../../../store/slices/participantsSlice';
-import { selectProtocolState } from '../../../store/slices/protocolSlice';
+import { Participant, ProtocolAccess } from '../../../store/slices/participantsSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
-import { selectIsModerator, selectOurUuid } from '../../../store/slices/userSlice';
+import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
 import ParticipantAvatar from '../../ParticipantAvatar';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
 
@@ -96,9 +95,9 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   const dispatch = useAppDispatch();
   const open = Boolean(anchorEl);
   const ownId = useAppSelector(selectOurUuid);
-  const protocolState = useAppSelector(selectProtocolState);
   const ownAudioEnabled = useAppSelector(selectAudioEnabled);
   const ownScreenShareEnabled = useAppSelector(selectShareScreenEnabled);
+  const userProtocolAccess = useAppSelector(selectUserProtocolAccess);
 
   const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
   const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
@@ -252,10 +251,10 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   };
 
   const isProtocolEditor = (participant: Participant) => {
-    if (participant.id === ownId && protocolState.readonly === false) {
+    if (participant.id === ownId && userProtocolAccess === ProtocolAccess.Write) {
       return true;
     }
-    if (participant.protocol && participant.protocol.readonly === false) {
+    if (participant.protocolAccess && participant.protocolAccess === ProtocolAccess.Write) {
       return true;
     }
     return false;

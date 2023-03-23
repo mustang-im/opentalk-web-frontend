@@ -9,7 +9,8 @@ import { RootState } from '../';
 import { Role } from '../../api/types/incoming/control';
 import { joinSuccess, login, startRoom } from '../commonActions';
 import { setFocusedSpeaker } from './mediaSlice';
-import { Participant, WaitingState } from './participantsSlice';
+import { Participant, ProtocolAccess, WaitingState } from './participantsSlice';
+import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
 
 interface UserState {
@@ -22,6 +23,7 @@ interface UserState {
   lastActive?: string;
   joinedAt?: string;
   isPresenter: boolean;
+  protocolAccess: ProtocolAccess;
 }
 
 const initialState: UserState = {
@@ -30,6 +32,7 @@ const initialState: UserState = {
   displayName: '',
   role: Role.User,
   isPresenter: false,
+  protocolAccess: ProtocolAccess.None,
 };
 
 export const userSlice = createSlice({
@@ -95,6 +98,12 @@ export const userSlice = createSlice({
         }
       }
     );
+    builder.addCase(setProtocolReadUrl, (state) => {
+      state.protocolAccess = ProtocolAccess.Read;
+    });
+    builder.addCase(setProtocolWriteUrl, (state) => {
+      state.protocolAccess = ProtocolAccess.Write;
+    });
   },
 });
 
@@ -108,6 +117,7 @@ export const selectGroups = createSelector(userState, (state) => state.groups);
 export const selectDisplayName = createSelector(userState, (state) => state.displayName);
 export const selectAvatarUrl = createSelector(userState, (state) => state.avatarUrl);
 export const selectIsPresenter = createSelector(userState, (state) => state.isPresenter);
+export const selectUserProtocolAccess = createSelector(userState, (state) => state.protocolAccess);
 export const selectIsLoggedIn = createSelector(userState, (state) => state.loggedIdToken !== undefined);
 export const selectIsAuthenticated = createSelector(
   userState,
@@ -137,6 +147,8 @@ export const selectUserAsPartialParticipant = createSelector(
       leftAt: null,
       participationKind,
       waitingState: WaitingState.Joined,
+      protocolAccess: state.protocolAccess,
+      isPresenter: state.isPresenter,
     };
   }
 );
