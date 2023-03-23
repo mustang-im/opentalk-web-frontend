@@ -103,11 +103,11 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
   );
 
   const connectionLossPercent = useMemo(() => {
-    if (stats?.packetLoss === undefined) {
+    if (stats?.connection.packetLoss === undefined) {
       return 0;
     }
-    return Math.round(stats.packetLoss * 100);
-  }, [stats?.packetLoss]);
+    return Math.round(stats.connection.packetLoss * 100);
+  }, [stats?.connection.packetLoss]);
 
   const getOverlayButtons = () => (
     <IndicatorContainer item>

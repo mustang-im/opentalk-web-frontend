@@ -21,6 +21,7 @@
 
 ### Stability Improvements
 
+- Add connection information to participant stats panel (!849)
 - Fix: flickering local video element when start coffee break (!870)
 - Clean-up dispatch of legal vote started action (!864)
 - Rework duration field and related types (!855)
@@ -35,6 +36,7 @@
 - Add legal vote token copy field. (!836)
 - Lobby without password label as invited (!863)
 - Notify moderator if participant limit has been reached (!877)
+
 
 ## 1.2.0
 

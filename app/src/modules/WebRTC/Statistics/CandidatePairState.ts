@@ -2,6 +2,29 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+export interface NetworkEndpoint {
+  port: number;
+  address?: string;
+  protocol: RTCIceProtocol;
+  networkType?: string;
+}
+
+function candidateToEndpoint(candidate: RTCIceCandidate): NetworkEndpoint | undefined {
+  const { address, port, protocol, networkType } = candidate;
+
+  const isAddressValid = address && address.length > 0 && address !== '(redacted)';
+
+  if (port === null || protocol === null) {
+    return undefined;
+  }
+  return {
+    address: isAddressValid ? address : undefined,
+    port,
+    protocol,
+    networkType,
+  };
+}
+
 export interface CandidatePairStats {
   timestamp: number;
   avgRTT?: number;
@@ -9,6 +32,8 @@ export interface CandidatePairStats {
   bitRateUp?: number;
   packetLoss?: number;
   dataLoss?: number;
+  remoteEndpoint?: NetworkEndpoint;
+  localEndpoint?: NetworkEndpoint;
 }
 
 export class CandidatePairState {
@@ -21,7 +46,13 @@ export class CandidatePairState {
   packetsDiscardedOnSend = 0;
   bytesDiscardedOnSend = 0;
 
-  constructor(report: RTCIceCandidatePairStats) {
+  remoteEndpoint?: NetworkEndpoint;
+  localEndpoint?: NetworkEndpoint;
+
+  constructor(report: RTCIceCandidatePairStats, localCandidate: RTCIceCandidate, remoteCandidate: RTCIceCandidate) {
+    this.remoteEndpoint = candidateToEndpoint(remoteCandidate);
+    this.localEndpoint = candidateToEndpoint(localCandidate);
+
     this.setState(report);
   }
 
@@ -37,7 +68,17 @@ export class CandidatePairState {
   }
 
   public update(report: RTCIceCandidatePairStats): CandidatePairStats {
-    const rates: CandidatePairStats = { timestamp: report.timestamp };
+    const rates: CandidatePairStats = {
+      timestamp: report.timestamp,
+      localEndpoint: this.localEndpoint,
+      remoteEndpoint: this.remoteEndpoint,
+    };
+
+    /*
+     The reports contain absolut or sum values,
+     So we need to compute the change since the last report.
+     We prefix these delta values with `d`.
+     */
     const dt = (report.timestamp - this.timestamp) / 1000.0;
     let dBytesSend;
 
@@ -49,9 +90,10 @@ export class CandidatePairState {
     }
 
     // non Firefox (v97) below here
-    if (report.currentRoundTripTime && report.responsesReceived && report.totalRoundTripTime) {
-      rates.avgRTT =
-        (report.totalRoundTripTime - this.totalRoundTripTime) / (report.responsesReceived - this.responsesReceived);
+    if (report.responsesReceived && report.totalRoundTripTime) {
+      const dReports = report.responsesReceived - this.responsesReceived;
+      const dRoundTripTime = report.totalRoundTripTime - this.totalRoundTripTime;
+      rates.avgRTT = dReports > 0 ? dRoundTripTime / dReports : report.currentRoundTripTime;
     }
 
     if (report.packetsSent !== undefined && report.packetsDiscardedOnSend !== undefined) {

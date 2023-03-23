@@ -261,6 +261,9 @@ statistics-jitter = jitter
 statistics-packets-lost = packet loss
 statistics-decode-time = decoding time
 statistics-latency = latency
+statistics-local-network-endpoint = local endpoint
+statistics-remote-network-endpoint = remote endpoint
+statistics-value-redacted = (redacted)
 
 slotmachine-label = Wheel Of Names
 slotmachine-pre-message = Lottery has
