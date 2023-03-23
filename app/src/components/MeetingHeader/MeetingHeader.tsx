@@ -17,6 +17,7 @@ import {
   MenuList,
   Badge,
   Chip as MuiChip,
+  List,
 } from '@mui/material';
 import { keyframes } from '@mui/system';
 import {
@@ -84,12 +85,13 @@ const CurrentRoomText = styled(Typography)(({ theme }) => ({
   fontSize: theme.typography.pxToRem(14),
 }));
 
-const WaitingPopperContainer = styled('div')(({ theme }) => ({
+const WaitingParticipantList = styled(List)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   height: '100%',
   maxHeight: 200,
-  overflow: 'scroll',
+  overflowX: 'hidden',
+  overflowY: 'scroll',
   alignItems: 'space-between',
   padding: theme.spacing(1, 1),
   borderRadius: '0.1rem',
@@ -413,13 +415,16 @@ const MeetingHeader = () => {
               onClose={resetHTMLElements}
               disablePortal
             >
-              <WaitingPopperContainer>
-                <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-                  <Typography variant="body2">{t('waiting-room-participant-label')}</Typography>
-                  <Button variant="text" disabled={!participantsNotApproved} onClick={() => setApproveAll(true)}>
-                    {t('approve-all-participants-from-waiting')}
-                  </Button>
-                </Stack>
+              <WaitingParticipantList
+                subheader={
+                  <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                    <Typography variant="body2">{t('waiting-room-participant-label')}</Typography>
+                    <Button variant="text" disabled={!participantsNotApproved} onClick={() => setApproveAll(true)}>
+                      {t('approve-all-participants-from-waiting')}
+                    </Button>
+                  </Stack>
+                }
+              >
                 {participantsInWaitingRoom.map((participant) => (
                   <WaitingParticipantItem
                     key={participant.id}
@@ -428,7 +433,7 @@ const MeetingHeader = () => {
                     handleApproveAll={() => setApproveAll(false)}
                   />
                 ))}
-              </WaitingPopperContainer>
+              </WaitingParticipantList>
             </Popover>
           </HeaderItem>
         </StyledBadge>
