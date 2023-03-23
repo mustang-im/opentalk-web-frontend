@@ -33,7 +33,7 @@ const CreateByModeratorsForm = ({ formik, handleNext, formName }: ICreateByModer
   return (
     <Grid container direction={'column'} spacing={1}>
       <GridItem item xs>
-        <DurationField {...formikDurationFieldProps(getFormName('duration'), formik, 0)} />
+        <DurationField {...formikDurationFieldProps(getFormName('duration'), formik, 0)} min={0} />
       </GridItem>
       <GridItem item xs>
         <CommonFormItem

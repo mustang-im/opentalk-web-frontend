@@ -125,6 +125,8 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
             ButtonProps={{
               size: 'small',
             }}
+            min={0}
+            allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
           />
 
           {timerStyle === TimerStyle.Normal && (
