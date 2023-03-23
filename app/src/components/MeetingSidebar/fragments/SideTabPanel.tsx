@@ -22,11 +22,9 @@ const TabContainer = styled('div')({
   flexDirection: 'column',
   maxHeight: 'calc(100vh - 19em)',
   overflow: 'auto',
+  // buttons shall take the whole width of the tab
   '.MuiButton-root': {
     flexGrow: 1,
-  },
-  '.MuiGrid-item': {
-    display: 'flex',
   },
 });
 

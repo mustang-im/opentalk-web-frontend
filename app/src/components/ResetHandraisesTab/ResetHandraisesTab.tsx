@@ -23,7 +23,7 @@ const ResetHandraisesTab = () => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid item xs={12} display="flex">
         <Button onClick={resetAllHandraises}>{t('reset-handraises-button')}</Button>
       </Grid>
     </Grid>

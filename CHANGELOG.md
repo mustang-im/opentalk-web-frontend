@@ -20,6 +20,7 @@
 - Polished legal vote UI for unselected participant. (!893)
 - Remove offline participant from the timer list. (!901)
 - Title texts Coffee break (!898)
+- Fix progress bar display for polls and votes (!894)
 
 ### Stability Improvements
 

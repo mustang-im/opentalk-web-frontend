@@ -2,12 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container, Typography, Button, Grid } from '@mui/material';
-import { DurationIcon, LegalBallotIcon, useDateFormat } from '@opentalk/common';
+import { DurationIcon, LegalBallotIcon, useDateFormat, ProgressBar } from '@opentalk/common';
 import { truncate } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { finish } from '../../../api/types/outgoing/poll';
-import ProgressBar from '../../../commonComponents/ProgressBar';
 import { useAppDispatch } from '../../../hooks';
 import { Poll } from '../../../store/slices/pollSlice';
 
@@ -93,7 +92,7 @@ const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} display="block">
           <ProgressBar
             endTime={startTime.getTime() + (poll.duration ? poll.duration : 0) * 1000}
             startTime={startTime.getTime()}
