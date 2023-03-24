@@ -36,6 +36,7 @@ interface TimerState {
   texts: Texts;
   durationOptions: Array<DurationValueOptions>;
   defaultValue: number;
+  min: number;
 }
 
 const getTimerState = (timerStyle: TimerStyle, t: TFunction<'translation', undefined>): TimerState => {
@@ -47,6 +48,7 @@ const getTimerState = (timerStyle: TimerStyle, t: TFunction<'translation', undef
       },
       durationOptions: [5, 10, 15, 30, 'custom'],
       defaultValue: 5,
+      min: 1,
     };
   } else {
     return {
@@ -56,6 +58,7 @@ const getTimerState = (timerStyle: TimerStyle, t: TFunction<'translation', undef
       },
       durationOptions: [null, 1, 2, 5, 'custom'],
       defaultValue: 1,
+      min: 1,
     };
   }
 };
@@ -65,7 +68,7 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   const dispatch = useAppDispatch();
   const isTimerRunning = useAppSelector(selectTimerRunning);
 
-  const { texts, durationOptions, defaultValue } = useMemo(() => getTimerState(timerStyle, t), [timerStyle, t]);
+  const { texts, durationOptions, defaultValue, min } = useMemo(() => getTimerState(timerStyle, t), [timerStyle, t]);
 
   const getTimerForStart = useCallback(
     (values: FormikValues) => {
@@ -128,14 +131,13 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
     <Container>
       <Stack spacing={2}>
         <Typography>{t('global-duration')}</Typography>
-
         <DurationField
           {...formikDurationFieldProps('duration', formik, defaultValue)}
           durationOptions={durationOptions}
           ButtonProps={{
             size: 'small',
           }}
-          min={0}
+          min={min}
           allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
         />
 

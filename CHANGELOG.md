@@ -26,6 +26,7 @@
 - Fix UI consistency for legal vote with other tabs (!878)
 - Fix Emoji picker container overflowing (!905)
 - Fix unwanted timer submitting (!906)
+- Fix minimum allowed value in the poll timer. (!897)
 
 ### Stability Improvements
 

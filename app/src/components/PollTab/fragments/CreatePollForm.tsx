@@ -123,6 +123,7 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                         ButtonProps={{
                           size: 'small',
                         }}
+                        min={1}
                       />
                     </Grid>
                     <Grid item xs={12}>
