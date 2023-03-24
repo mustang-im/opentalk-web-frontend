@@ -81,6 +81,12 @@ export const selectAllSubscribers = (state: RootState) => mediaSubscribersSelect
 export const selectSubscriberById = (descriptor: MediaDescriptor) => (state: RootState) =>
   mediaSubscribersSelectors.selectById(state, idFromDescriptor(descriptor));
 
+export const selectIsSubscriberOnlineByDescriptor = (descriptor: MediaDescriptor) => (state: RootState) => {
+  const subscriber = mediaSubscribersSelectors.selectById(state, idFromDescriptor(descriptor));
+  const mediaConnectionState = subscriber?.subscriberState?.connection;
+  return mediaConnectionState !== undefined && mediaConnectionState !== 'new' && mediaConnectionState !== 'closed';
+};
+
 export const actions = mediaSubscriberSlice.actions;
 
 export default mediaSubscriberSlice.reducer;

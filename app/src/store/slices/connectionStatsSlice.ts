@@ -3,7 +3,13 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { descriptorFromId, idFromDescriptor, MediaDescriptor, MediaId } from '../../modules/WebRTC';
+import {
+  descriptorFromId,
+  idFromDescriptor,
+  MediaDescriptor,
+  MediaId,
+  PACKET_LOSS_THRESHOLD,
+} from '../../modules/WebRTC';
 import { StatsEvent } from '../../modules/WebRTC/Statistics/ConnectionStats';
 import { hangUp } from '../commonActions';
 import { RootState } from '../index';
@@ -62,6 +68,15 @@ export const selectStatsById = (descriptor: MediaDescriptor) => (state: RootStat
     }
   }
   return undefined;
+};
+
+export const selectStatsPacketLossByDescriptor = (descriptor: MediaDescriptor) => (state: RootState) => {
+  const reports = connectionStatsSelectors.selectById(state, idFromDescriptor(descriptor))?.reports;
+  if (reports !== undefined && reports.length > 0) {
+    const packetLoss = reports[reports.length - 1]?.connection?.packetLoss;
+    return packetLoss !== undefined && packetLoss > PACKET_LOSS_THRESHOLD;
+  }
+  return false;
 };
 
 export const selectStats = (state: RootState) => {

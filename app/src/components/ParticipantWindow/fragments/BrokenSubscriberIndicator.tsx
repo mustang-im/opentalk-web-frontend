@@ -14,7 +14,7 @@ type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
   descriptor: MediaDescriptor;
 };
 
-const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
+const BrokenSubscriberIndicator = ({ descriptor }: IRemoteVideoProps) => {
   const subscriber = useAppSelector(selectSubscriberById(descriptor));
   const { t } = useTranslation();
   const subscriberState = subscriber?.subscriberState;
@@ -55,4 +55,4 @@ const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
   );
 };
 
-export default UnresponsiveSubscriberStream;
+export default BrokenSubscriberIndicator;
