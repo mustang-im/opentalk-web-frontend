@@ -48,7 +48,7 @@ const CoffeeBreakPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
     >
       <Content>
         <Typography id="transition-modal-title" variant="h5" component="h2">
-          {t('coffee-break-layer-title')}
+          {t('coffee-break-popover-title')}
         </Typography>
 
         <CoffeeBreakIcon />

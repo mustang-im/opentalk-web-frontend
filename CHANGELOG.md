@@ -19,6 +19,7 @@
 - Fix browser language detection. (!889)
 - Polished legal vote UI for unselected participant. (!893)
 - Remove offline participant from the timer list. (!901)
+- Title texts Coffee break (!898)
 
 ### Stability Improvements
 
