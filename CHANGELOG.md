@@ -36,6 +36,7 @@
 - Add legal vote token copy field. (!836)
 - Lobby without password label as invited (!863)
 - Notify moderator if participant limit has been reached (!877)
+- Show room blocker for a participant, that tries to join a full room (!876)
 
 
 ## 1.2.0

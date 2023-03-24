@@ -40,7 +40,7 @@ import {
 } from '../modules/WebRTC';
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
 import { AppDispatch, RootState } from '../store';
-import { hangUp, joinSuccess, login, startRoom } from '../store/commonActions';
+import { hangUp, joinSuccess, login, startRoom, joinBlocked } from '../store/commonActions';
 import * as breakoutStore from '../store/slices/breakoutSlice';
 import { ChatMessage, clearGlobalChat, received as chatReceived, setChatSettings } from '../store/slices/chatSlice';
 import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectionStatsSlice';
@@ -101,7 +101,7 @@ import {
 } from './types/incoming';
 import { ParticipantInOtherRoom } from './types/incoming/breakout';
 import { InitialChatHistory } from './types/incoming/chat';
-import { Role } from './types/incoming/control';
+import { Role, ControlMessage } from './types/incoming/control';
 import { Action as OutgoingActionType } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
@@ -397,6 +397,9 @@ const handleControlMessage = (
 
       break;
     }
+    case ControlMessage.JOIN_BLOCKED:
+      dispatch(joinBlocked({ message: data.message, reason: data.reason }));
+      break;
     case 'left':
       dispatch(participantsLeft({ id: data.id, timestamp: timestamp }));
       if (conference === undefined) {

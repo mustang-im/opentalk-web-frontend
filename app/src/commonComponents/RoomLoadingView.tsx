@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { CircularProgress, Typography } from '@mui/material';
-import { Container as MuiContainer, Stack, styled } from '@mui/material';
-import React, { useMemo } from 'react';
+import { Container as MuiContainer, Stack, styled, CircularProgress, Typography } from '@mui/material';
+import { getSentences } from '@opentalk/common';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../hooks';
@@ -17,28 +17,50 @@ const Container = styled(MuiContainer)(({ theme }) => ({
   color: theme.palette.common.white,
 }));
 
+const Title = styled(Typography)(({ theme }) => ({
+  color: theme.palette.common.white,
+  padding: theme.spacing(2, 0),
+}));
+
+const Text = styled(Typography)(({ theme }) => ({
+  color: theme.palette.common.white,
+  fontWeight: '200',
+}));
+
 const RoomLoadingView = () => {
   const connectionState = useAppSelector(selectRoomConnectionState);
   const { t } = useTranslation();
 
-  const title = useMemo(() => {
+  const sentences: Array<string> = useMemo(() => {
     switch (connectionState) {
       case ConnectionState.Setup:
-        return t('room-loading-setup');
+        return getSentences(t('room-loading-setup'));
       case ConnectionState.Starting:
-        return t('room-loading-starting');
+        return getSentences(t('room-loading-starting'));
       case ConnectionState.Reconnecting:
-        return t('room-loading-reconnect');
+        return getSentences(t('room-loading-reconnect'));
+      case ConnectionState.Blocked:
+        return getSentences(t('room-loading-blocked'));
       default:
-        return t('room-loading-generic');
+        return getSentences(t('room-loading-generic'));
     }
   }, [t, connectionState]);
 
+  // we assume that first sentence is always a title
+  // the rest will be handled as normal text
+  const title = sentences.shift();
+
   return (
     <Container>
-      <Stack spacing={6} alignItems="center">
+      <Stack spacing={2} alignItems="center">
         <CircularProgress color={'primary'} size={'8rem'} />
-        <Typography variant="h1">{title}</Typography>
+        <Title variant="h4">{title}</Title>
+        {sentences.length > 0 &&
+          sentences.map((sentence) => (
+            <Text key={sentence} variant="h1">
+              {sentence}
+            </Text>
+          ))}
       </Stack>
     </Container>
   );
