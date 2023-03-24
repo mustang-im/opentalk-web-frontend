@@ -8,7 +8,7 @@ import convertToSnakeCase from 'snakecase-keys';
 
 import { RootState } from '../';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
-import { hangUp, joinSuccess, joinBlocked, startRoom } from '../commonActions';
+import { hangUp, joinSuccess, startRoom } from '../commonActions';
 
 interface InviteState extends FetchRequestState {
   active?: boolean;
@@ -104,6 +104,10 @@ export const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    joinBlocked: (state, { payload: { reason } }: PayloadAction<{ reason?: string }>) => {
+      state.connectionState = ConnectionState.Blocked;
+      state.error = reason;
+    },
     connectionClosed: (state, { payload: { errorCode } }: PayloadAction<{ errorCode?: number }>) => {
       state.connectionState = errorCode ? ConnectionState.Reconnecting : ConnectionState.Leaving;
       state.error = `websocket_error_${errorCode}`;
@@ -181,14 +185,18 @@ export const roomSlice = createSlice({
     builder.addCase(hangUp.rejected, (state) => {
       state.connectionState = ConnectionState.Failed;
     });
-    builder.addCase(joinBlocked, (state) => {
-      state.connectionState = ConnectionState.Blocked;
-    });
   },
 });
 
 export const actions = roomSlice.actions;
-export const { connectionClosed, enteredWaitingRoom, readyToEnter, enableWaitingRoom, disableWaitingRoom } = actions;
+export const {
+  joinBlocked,
+  connectionClosed,
+  enteredWaitingRoom,
+  readyToEnter,
+  enableWaitingRoom,
+  disableWaitingRoom,
+} = actions;
 
 export const selectRoomPassword = (state: RootState) => state.room.password;
 export const selectRoomId = (state: RootState) => state.room.roomId;

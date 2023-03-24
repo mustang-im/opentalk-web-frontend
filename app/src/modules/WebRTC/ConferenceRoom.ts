@@ -8,7 +8,6 @@ import convertToSnakeCase from 'snakecase-keys';
 import { setCurrentConferenceRoom } from '.';
 import { ApiErrorWithBody, StartRoomError } from '../../api/rest';
 import { Message as IncomingMessage } from '../../api/types/incoming';
-import { ControlMessage } from '../../api/types/incoming/control';
 import {
   MediaStatus,
   SdpAnswer,
@@ -219,7 +218,7 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
             this.participantId = payload.id;
             // TODO start webRTC Subscriptions
             break;
-          case ControlMessage.JOIN_BLOCKED:
+          case 'join_blocked':
             // try to automatically rejoin a blocked room
             this.rejoinTimer = setTimeout(() => {
               this.join(this.participantName ?? '');
