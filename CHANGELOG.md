@@ -18,6 +18,7 @@
 - Fix create meeting default start/end time (!888)
 - Fix browser language detection. (!889)
 - Polished legal vote UI for unselected participant. (!893) 
+- Remove offline participant from the timer list. (!901)
 
 ### Stability Improvements
 
