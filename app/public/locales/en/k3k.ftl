@@ -330,7 +330,7 @@ poll-participant-list-button-save = Save
 poll-participant-list-button-start = Start Vote
 poll-participant-list-button-select-all = Select all
 
-legal-vote-success = Your vote was counted successfully at {{newLine}}{{atVoteTime}} on {{onVoteDate}} {{newLine}}using the following confirmation token. 
+legal-vote-success = Your vote was counted successfully at {{newLine}}{{atVoteTime}} on {{onVoteDate}} {{newLine}}using the following confirmation token.
 It can later be used to confirm the correctness of the voting result.
 legal-vote-not-selected = You have not been selected to participate in this vote.
 legal-vote-save-form-success = Your vote form was saved successfully
@@ -600,7 +600,7 @@ dashboard-update-meeting-dialog-ok = Update
 dashboard-create-meeting-dialog-cancel = Cancel
 
 dashboard-direct-meeting-title = Who do you want to invite to your meeting?
-dashboard-direct-meeting-label-select-participants = Invite Participants
+dashboard-direct-meeting-label-select-participants = Invite participants - A maximum of {maxParticipants} participants are admitted to the meeting, incl. you as moderator.
 dashboard-direct-meeting-button-cancel = Cancel
 dashboard-direct-meeting-button-open-room = Open Video Room
 dashboard-direct-meeting-button-send-invitations = Send Invitations
@@ -661,6 +661,7 @@ dashboard-meeting-details-page-participant-pending = Open invitations
 dashboard-meeting-details-page-participant-accepted = Accepted
 dashboard-meeting-details-page-participant-declined = Declined
 dashboard-meeting-details-page-participant-tentative = Tentative
+dashboard-meeting-details-page-participant-limit = Maximum of {maxParticipants} participants are admitted to the meeting, incl. you as moderator.
 
 dashboard-meeting-recurrence-none = No repetition
 dashboard-meeting-recurrence-daily = Daily

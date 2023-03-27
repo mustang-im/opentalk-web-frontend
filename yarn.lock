@@ -4870,7 +4870,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentalk/common@workspace:*, @opentalk/common@workspace:packages/common":
+"@opentalk/common@workspace:*, @opentalk/common@workspace:^, @opentalk/common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@opentalk/common@workspace:packages/common"
   dependencies:
@@ -5224,6 +5224,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@opentalk/rest-api-rtk-query@workspace:packages/rtk-rest-api"
   dependencies:
+    "@opentalk/common": "workspace:^"
     "@reduxjs/toolkit": ^1.8.5
     "@rollup/plugin-commonjs": ^22.0.2
     "@swc/core": ^1.2.155

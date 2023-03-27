@@ -331,7 +331,7 @@ poll-participant-list-button-save = Speichern
 poll-participant-list-button-start = Abstimmung starten
 poll-participant-list-button-select-all = Alle auswählen
 
-legal-vote-success = Ihre Stimme wurde um {{atVoteTime}} Uhr am {{onVoteDate}} {{newLine}}erfolgreich gezählt mit dem folgenden Verifikation-Code. 
+legal-vote-success = Ihre Stimme wurde um {{atVoteTime}} Uhr am {{onVoteDate}} {{newLine}}erfolgreich gezählt mit dem folgenden Verifikation-Code.
 Dieser kann später dazu verwendet werden die abgegebene Stimme zu verifizieren.
 legal-vote-not-selected = Sie wurden nicht ausgewählt um an dieser Abstimmung teilzunehmen.
 legal-vote-save-form-success = Ihre Abstimmung wurde erfolgreich gespeichert
@@ -599,7 +599,7 @@ dashboard-update-meeting-dialog-ok = Bearbeiten
 dashboard-create-meeting-dialog-cancel = Abbrechen
 
 dashboard-direct-meeting-title = Wen möchtest du zu deinem Meeting einladen?
-dashboard-direct-meeting-label-select-participants = Teilnehmer einladen
+dashboard-direct-meeting-label-select-participants = Teilnehmer einladen - Es werden max. {maxParticipants} Teilnehmer zum Meeting zugelassen, inkl. Ihnen, als Moderator.
 dashboard-direct-meeting-button-cancel = Abbrechen
 dashboard-direct-meeting-button-open-room = Videoraum öffnen
 dashboard-direct-meeting-button-send-invitations = Einladung versenden
@@ -660,6 +660,7 @@ dashboard-meeting-details-page-participant-pending = Offene Einladungen
 dashboard-meeting-details-page-participant-accepted = Angenommen
 dashboard-meeting-details-page-participant-declined = Abgelehnt
 dashboard-meeting-details-page-participant-tentative = Mit Vorbehalt
+dashboard-meeting-details-page-participant-limit =  Es werden max. {maxParticipants} Teilnehmer zum Meeting zugelassen, inkl. Ihnen, als Moderator.
 
 dashboard-meeting-recurrence-none = Keine Wiederholung
 dashboard-meeting-recurrence-daily = Täglich

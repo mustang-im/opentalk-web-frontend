@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { Tariff } from '@opentalk/common';
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
 import { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { BaseQueryFn, FetchArgs } from '@reduxjs/toolkit/query';
@@ -31,6 +32,10 @@ export const addRoomEndpoints = <
   getRoom: builder.query<PublicRoom, RoomId>({
     query: (id) => `rooms/${id}`,
     providesTags: (result) => (result ? [{ type: Tag.Room, id: result.id }] : []),
+  }),
+  getRoomTariff: builder.query<Tariff, RoomId>({
+    query: (id) => `rooms/${id}/tariff`,
+    providesTags: (result) => (result ? [{ type: Tag.Tariff, id: result.id }] : []),
   }),
   createRoom: builder.mutation<PrivateRoom, CreateRoomPayload>({
     query: (payload) => ({

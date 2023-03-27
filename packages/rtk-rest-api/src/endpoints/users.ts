@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { Tariff } from '@opentalk/common';
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import snakeCaseKeys from 'snakecase-keys';
@@ -34,6 +35,10 @@ export const addUserEndpoints = <
       body: snakeCaseKeys(updatedMe),
     }),
     invalidatesTags: [{ type: Tag.User, id: 'ME' }],
+  }),
+  getMeTariff: builder.query<Tariff, void>({
+    query: () => 'users/me/tariff',
+    providesTags: (result) => (result ? [{ type: Tag.Tariff, id: result.id }] : []),
   }),
   getUser: builder.query<User, UserId>({
     query: (id) => `users/${id}`,

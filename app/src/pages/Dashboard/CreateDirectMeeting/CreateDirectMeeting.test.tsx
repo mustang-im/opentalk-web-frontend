@@ -65,6 +65,16 @@ jest.mock('../../../api/rest', () => ({
       isSuccess: true,
     },
   ],
+  useGetMeTariffQuery: () => [
+    mockCreateEvent,
+    {
+      data: {
+        quotas: {
+          roomParticipantLimit: 4,
+        },
+      },
+    },
+  ],
 }));
 
 jest.mock('../../../components/SelectParticipants', () => ({

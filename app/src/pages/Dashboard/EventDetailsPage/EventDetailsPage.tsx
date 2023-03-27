@@ -4,6 +4,7 @@
 import { styled, Box, Button, Stack, Typography } from '@mui/material';
 import { notifications } from '@opentalk/common';
 import { EventId, InviteStatus, User } from '@opentalk/rest-api-rtk-query';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -12,6 +13,7 @@ import {
   useAcceptEventInviteMutation,
   useDeclineEventInviteMutation,
   useGetMeQuery,
+  useGetRoomTariffQuery,
 } from '../../../api/rest';
 import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
 import EventTimePreview from '../../../components/EventTimePreview';
@@ -33,6 +35,10 @@ const ButtonContainer = styled(Stack)(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+const ParticipantLimitTypography = styled(Typography)(({ theme }) => ({
+  paddingTop: theme.spacing(3),
+}));
+
 const EventDetailsPage = () => {
   const [acceptEventInvitation] = useAcceptEventInviteMutation();
   const [declineEventInvitation] = useDeclineEventInviteMutation();
@@ -41,6 +47,8 @@ const EventDetailsPage = () => {
   const { data: event, isLoading } = useGetEventQuery({ eventId, inviteesMax: 20 });
   const { data: me } = useGetMeQuery();
   const isMeetingCreator = me?.id === event?.createdBy.id;
+  const { data: tariff } = useGetRoomTariffQuery(event?.room.id ?? skipToken);
+  const roomParticipantLimit = tariff?.quotas.roomParticipantLimit;
 
   if (isLoading || !event) return <SuspenseLoading />;
 
@@ -148,7 +156,11 @@ const EventDetailsPage = () => {
         )}
 
         <InviteToMeeting existingEvent={event} showOnlyLinkFields />
-
+        {roomParticipantLimit && (
+          <ParticipantLimitTypography>
+            {t('dashboard-meeting-details-page-participant-limit', { maxParticipants: roomParticipantLimit })}
+          </ParticipantLimitTypography>
+        )}
         {event.invitees && event.invitees.length > 0 && <Stack mt={4}>{renderParticipantRows()}</Stack>}
 
         <AssetTable roomId={event.room.id} isMeetingCreator={isMeetingCreator} />
