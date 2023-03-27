@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MediaSessionType, ParticipantId, Timestamp, VideoSetting } from '@opentalk/common';
+import { BackendParticipant, MediaSessionType, ParticipantId, Timestamp, VideoSetting } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import convertToSnakeCase from 'snakecase-keys';
 
-import { setCurrentConferenceRoom } from '.';
+import { setCurrentConferenceRoom, SubscriberState } from '.';
 import { ApiErrorWithBody, StartRoomError } from '../../api/rest';
 import { Message as IncomingMessage } from '../../api/types/incoming';
-import { ControlMessage } from '../../api/types/incoming/control';
+import { Message as ControlMessage } from '../../api/types/incoming/control';
 import {
   MediaStatus,
   SdpAnswer,
@@ -80,6 +80,22 @@ export const startRoom = async (credentials: RoomCredentials, config: ConfigStat
   const { ticket, resumption }: { ticket: string; resumption: string } = await response.json();
 
   return { ticket, resumption };
+};
+
+/**
+ * Transforms the participants Publishing object from Record<MediaSessionType, MediaSessionState> to and array SubscriberState descriptions.
+ * @param {Participant} participant to get the media session state from
+ * @returns {Array<SubscriberState>} for this participant as stored in redux
+ */
+const subscriberListFromParticipant = (participant: BackendParticipant): Array<SubscriberState> => {
+  const list = new Array<SubscriberState>();
+  if (participant.media?.video) {
+    list.push({ participantId: participant.id, mediaType: MediaSessionType.Video, ...participant.media.video });
+  }
+  if (participant.media?.screen) {
+    list.push({ participantId: participant.id, mediaType: MediaSessionType.Screen, ...participant.media.screen });
+  }
+  return list;
 };
 
 type WebRtcMessage =
@@ -187,6 +203,57 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
     }
   }
 
+  private async handleControlMessage(message: ControlMessage) {
+    switch (message.message) {
+      case 'join_success': {
+        this.participantId = message.id;
+
+        message.participants
+          .flatMap(subscriberListFromParticipant)
+          .forEach((subscriber) => this.webRtc.updateMedia(subscriber));
+        break;
+      }
+      case 'join_blocked':
+        // try to automatically rejoin a blocked room
+        this.rejoinTimer = setTimeout(() => {
+          this.join(this.participantName ?? '');
+        }, REJOIN_ON_BLOCKED_CONNECTION_TIME);
+        break;
+      case 'joined': {
+        const subscribers = subscriberListFromParticipant(message);
+        subscribers.forEach((subscriber) => this.webRtc.updateMedia(subscriber));
+        break;
+      }
+      case 'update': {
+        const participantId = message.id;
+
+        if (message.media.video != undefined) {
+          this.webRtc.updateMedia({ participantId, mediaType: MediaSessionType.Video, ...message.media.video });
+        } else {
+          this.webRtc
+            .unsubscribe({ participantId, mediaType: MediaSessionType.Video })
+            .catch((e) => console.warn('unsubscribe failed', e, participantId, MediaSessionType.Video));
+        }
+
+        if (message.media.screen != undefined) {
+          this.webRtc.updateMedia({ participantId, mediaType: MediaSessionType.Screen, ...message.media.screen });
+        } else {
+          this.webRtc
+            .unsubscribe({ participantId, mediaType: MediaSessionType.Screen })
+            .catch((e) => console.warn('unsubscribe failed', e, participantId, MediaSessionType.Screen));
+        }
+
+        break;
+      }
+      case 'left': {
+        this.webRtc.unsubscribeParticipant(message.id).catch((e) => {
+          console.warn('unsubscribeParticipant failed', e);
+        });
+        break;
+      }
+    }
+  }
+
   private signalingMessageHandler = (message: IncomingMessage) => {
     // TODO consume media messages
     // inspect join_success for participantId
@@ -214,21 +281,7 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
         }
       }
       case 'control':
-        switch (payload.message) {
-          case 'join_success':
-            this.participantId = payload.id;
-            // TODO start webRTC Subscriptions
-            break;
-          case ControlMessage.JOIN_BLOCKED:
-            // try to automatically rejoin a blocked room
-            this.rejoinTimer = setTimeout(() => {
-              this.join(this.participantName ?? '');
-            }, REJOIN_ON_BLOCKED_CONNECTION_TIME);
-            break;
-          default:
-            console.error('Unknown type of control message');
-            break;
-        }
+        this.handleControlMessage(payload);
         break;
       default:
         //let the react app take care

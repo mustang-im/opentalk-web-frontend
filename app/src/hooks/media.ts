@@ -5,19 +5,19 @@ import { VideoSetting, notifications } from '@opentalk/common';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '.';
+import { useAppSelector } from '.';
 import { getMediaStream, MediaDescriptor, requestVideoQuality } from '../modules/WebRTC';
 import { selectQualityCap } from '../store/slices/mediaSlice';
 import { selectSubscriberById } from '../store/slices/mediaSubscriberSlice';
 
 export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' | 'audio') => {
-  const [media, setMediaStream] = useState<{ stream?: MediaStream; descriptor: MediaDescriptor }>({ descriptor });
-  const [loading, setLoading] = useState<boolean>(false);
+  const [media, setMediaStream] = useState<
+    { stream?: MediaStream; process?: Promise<void>; descriptor: MediaDescriptor } | undefined
+  >(undefined);
   const [qualityTarget, setQualityTarget] = useState<VideoSetting>(VideoSetting.Off);
   const releaseHandler = useRef<(() => void) | undefined>();
   const qualityMax = useAppSelector(selectQualityCap);
   const subscriber = useAppSelector(selectSubscriberById(descriptor));
-  const dispatch = useAppDispatch();
 
   const qualityCap = descriptor.mediaType === 'screen' ? Math.max(qualityMax, VideoSetting.Low) : qualityMax;
   const quality = Math.min(qualityCap, qualityTarget);
@@ -29,11 +29,11 @@ export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' |
       releaseHandler.current();
       releaseHandler.current = undefined;
     }
-  }, []);
+  }, [releaseHandler]);
 
   const reserve = useCallback(
-    (quality: VideoSetting) => {
-      requestVideoQuality(media.descriptor, quality)
+    (quality: VideoSetting, descriptor: MediaDescriptor) => {
+      requestVideoQuality(descriptor, quality)
         .then((newRelease) => {
           release();
           releaseHandler.current = newRelease;
@@ -42,33 +42,48 @@ export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' |
           console.error('requestVideoQuality failed', e);
         });
     },
-    [media.descriptor, release]
+    [release]
   );
 
   useEffect(() => {
-    if (media.stream !== undefined) {
-      reserve(quality);
+    if (media !== undefined) {
+      reserve(quality, media.descriptor);
     }
-  }, [media.stream, quality, reserve]);
+  }, [media, quality, reserve]);
 
   useEffect(() => {
-    if ((media.stream !== undefined && media.descriptor === descriptor) || loading) {
+    if (media?.descriptor === descriptor && (media?.process || media?.stream)) {
       return;
     }
-    if (subscriber && subscriber[mediaKind]) {
-      //TODO: use the thunk pending instead of loading
-      setLoading(true);
-      setMediaStream(({ descriptor }) => ({ stream: undefined, descriptor }));
-      getMediaStream(descriptor)
-        .then((stream) => setMediaStream({ stream, descriptor }))
-        .catch((e) => {
-          console.error(`Subscription for participant ${descriptor.participantId} failed: ${e}`);
-          //TODO: send an error report
-          notifications.error(t('signaling-subscription-failed'));
-        })
-        .finally(() => setLoading(false));
+    if (subscriber === undefined || subscriber[mediaKind] === undefined) {
+      return;
     }
-  }, [dispatch, subscriber, media, mediaKind, loading, descriptor, t]);
+
+    const process = getMediaStream(descriptor)
+      .then((stream) => {
+        const observedTrack = stream.getTracks().find((track) => track.kind === mediaKind);
+        if (observedTrack === undefined) {
+          console.error(`Expected media track unavailable for participant ${descriptor.participantId}`);
+          notifications.error(t('signaling-subscription-failed'));
+          return undefined;
+        }
+        const endedListener = () => {
+          setMediaStream(undefined);
+          observedTrack.removeEventListener('ended', endedListener);
+        };
+        observedTrack.addEventListener('ended', endedListener);
+        setMediaStream({ stream, descriptor });
+      })
+      .catch((e) => {
+        console.error(`Subscription for participant ${descriptor.participantId} failed: ${e}`);
+        //TODO: send an error report
+        notifications.error(t('signaling-subscription-failed'));
+      });
+
+    // store loading state
+    //TODO: use the thunk pending instead of loading
+    setMediaStream({ process, descriptor });
+  }, [subscriber, media, mediaKind, descriptor, t]);
 
   // detach on unmount
   useEffect(() => release, [release]);

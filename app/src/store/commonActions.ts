@@ -8,7 +8,7 @@ import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { InitialBreakout } from '../api/types/incoming/breakout';
-import { RecordingState, Role, JoinBlocked, ControlMessage } from '../api/types/incoming/control';
+import { RecordingState, Role } from '../api/types/incoming/control';
 import localMediaContext from '../modules/Media/LocalMedia';
 import localScreenContext from '../modules/Media/LocalScreen';
 import { ConferenceRoom, shutdownConferenceContext } from '../modules/WebRTC';
@@ -52,8 +52,6 @@ export const joinSuccess = createAction<{
   serverTimeOffset: number;
   tariff: Tariff;
 }>('signaling/control/join_success');
-
-export const joinBlocked = createAction<JoinBlocked>(`signaling/control/${ControlMessage.JOIN_BLOCKED}`);
 
 export const login = createAsyncThunk<{ permission: Array<string> }, string, { state: RootState; rejectValue: Error }>(
   'user/login',

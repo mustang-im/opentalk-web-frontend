@@ -106,6 +106,14 @@ export class MediaSignaling {
     });
   }
 
+  public resubscribe(descriptor: MediaDescriptor) {
+    this.startAction({
+      action: 'resubscribe',
+      target: descriptor.participantId,
+      mediaSessionType: descriptor.mediaType,
+    });
+  }
+
   public configureReceiver(descriptor: MediaDescriptor, videoSetting: VideoSetting) {
     if (!this.socket.isOpen()) {
       console.warn('skip configureReceiver for closed signaling');

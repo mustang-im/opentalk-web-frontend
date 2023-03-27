@@ -46,8 +46,6 @@ export enum MediaStreamState {
   AudioBroken = 'audio_broken',
   VideoBroken = 'video_broken',
   Ok = 'ok',
-  Disconnected = 'disconnected',
-  Failed = 'failed',
 }
 
 export interface StreamStateChanged extends MediaDescriptor {

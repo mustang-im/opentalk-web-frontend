@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Stack, Tooltip } from '@mui/material';
-import { CameraOnIcon, ConnectionGoodIcon, MicOnIcon, WarningIcon } from '@opentalk/common';
+import { CameraOnIcon, ConnectionGoodIcon, MicOnIcon } from '@opentalk/common';
 import React, { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { MediaDescriptor, MediaStreamState } from '../../../modules/WebRTC';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
+import { FailureBadge } from './FailureBadge';
 
 type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
   descriptor: MediaDescriptor;
@@ -18,52 +18,36 @@ const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
   const subscriber = useAppSelector(selectSubscriberById(descriptor));
   const { t } = useTranslation();
 
-  const renderFailedTooltip = (title: string, icon?: React.ReactNode) => (
-    <Tooltip title={title}>
-      <Stack direction={'row'}>
-        <WarningIcon color="error" fontSize="medium" />
-        {icon}
-      </Stack>
-    </Tooltip>
-  );
-
-  const unresponsiveSubscriberStreamState = () => {
-    switch (subscriber?.streamState) {
-      case MediaStreamState.Broken:
-        if (subscriber?.audio || subscriber?.video) {
-          return renderFailedTooltip(t('participant-stream-broken-tooltip') || '');
-        }
-        break;
-      case MediaStreamState.AudioBroken:
-        if (subscriber?.audio) {
-          return renderFailedTooltip(
-            t('participant-audio-broken-tooltip') || '',
+  switch (subscriber?.streamState) {
+    case MediaStreamState.Broken:
+      if (subscriber?.audio || subscriber?.video) {
+        return (
+          <FailureBadge title={t('participant-stream-broken-tooltip')}>
+            <ConnectionGoodIcon color="error" fontSize="medium" />
+          </FailureBadge>
+        );
+      }
+      break;
+    case MediaStreamState.AudioBroken:
+      if (subscriber?.audio) {
+        return (
+          <FailureBadge title={t('participant-audio-broken-tooltip')}>
             <MicOnIcon color="error" fontSize="medium" />
-          );
-        }
-        break;
-      case MediaStreamState.VideoBroken:
-        if (subscriber?.video) {
-          return renderFailedTooltip(
-            t('participant-video-broken-tooltip') || '',
+          </FailureBadge>
+        );
+      }
+      break;
+    case MediaStreamState.VideoBroken:
+      if (subscriber?.video) {
+        return (
+          <FailureBadge title={t('participant-video-broken-tooltip')}>
             <CameraOnIcon color="error" fontSize="medium" />
-          );
-        }
-        break;
-      case MediaStreamState.Disconnected:
-        return renderFailedTooltip(
-          t('participant-stream-disconnected') || '',
-          <ConnectionGoodIcon color="error" fontSize="medium" />
+          </FailureBadge>
         );
-      case MediaStreamState.Failed:
-        return renderFailedTooltip(
-          t('participant-stream-failed') || '',
-          <ConnectionGoodIcon color="error" fontSize="medium" />
-        );
-    }
-  };
-
-  return <>{unresponsiveSubscriberStreamState()}</>;
+      }
+      break;
+  }
+  return null;
 };
 
 export default UnresponsiveSubscriberStream;

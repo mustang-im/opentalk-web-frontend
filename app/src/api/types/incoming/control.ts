@@ -69,12 +69,8 @@ export interface JoinSuccess {
   tariff: Tariff;
 }
 
-export enum ControlMessage {
-  JOIN_BLOCKED = 'join_blocked',
-}
-
 export interface JoinBlocked {
-  message: ControlMessage.JOIN_BLOCKED;
+  message: 'join_blocked';
   reason: 'participant-limit-reached';
 }
 
