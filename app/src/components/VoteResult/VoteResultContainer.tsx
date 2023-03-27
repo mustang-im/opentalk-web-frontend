@@ -317,13 +317,13 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
             </Typography>
           </Grid>
         )}
-        {currentLegalVote && allowedToVote && (
+        {currentLegalVote && allowedToVote && currentLegalVote.state === 'active' && (
           <Grid item xs={12} pb={1} container justifyContent="flex-end">
             <Button
               data-testid="legal-vote-save-button"
               type="button"
               onClick={submitLegalVoteOption}
-              disabled={Boolean(currentLegalVote?.votedAt) || currentLegalVote?.state !== 'active'}
+              disabled={Boolean(currentLegalVote?.votedAt)}
             >
               {t('legal-vote-form-button-save')}
             </Button>
@@ -331,7 +331,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
         )}
         {currentLegalVote?.votedAt && allowedToVote && (
           <Grid item xs={12}>
-            <VoteResultDate date={new Date(currentLegalVote?.votedAt)} />
+            <VoteResultDate date={new Date(currentLegalVote?.votedAt)} state={currentLegalVote.state} />
           </Grid>
         )}
         {currentLegalVote && currentLegalVote.state === 'finished' && allowedToVote && (

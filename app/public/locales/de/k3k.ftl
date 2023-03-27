@@ -323,7 +323,9 @@ legal-vote-pseudonymous = Geheime Abstimmung
 
 legal-vote-success-clipboard-message = Du hast mit {{vote}} abgestimmt
 legal-vote-token-copy-success = Der Verifikation-Code wurde erfolgreich kopiert
-legal-vote-share-token = Diesen Code nicht mit Anderen teilen und an einem sicheren Ort aufbewahren!
+
+legal-vote-share-token-active = Der Token wird nach Ende der Abstimmung hier angezeigt.
+legal-vote-share-token-inactive = Diesen Code nicht mit Anderen teilen und an einem sicheren Ort aufbewahren!
 
 poll-participant-list-button-select = Auswählen
 poll-participant-list-button-close = Schließen

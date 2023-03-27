@@ -38,6 +38,7 @@
 - Enhanced DurationField behavior. (!884)
 - Removed development error showing on the create meeting page. (!892)
 - Enhanced behavior of poll temporary save. (!891)
+- Improved legal vote token message on the popover. (!900)
 
 ### New Features
 
