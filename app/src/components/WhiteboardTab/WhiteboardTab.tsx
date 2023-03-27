@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Button, Link as MUILink, Grid, Stack, styled } from '@mui/material';
+import { Box, Button, Link as MUILink, Stack, styled } from '@mui/material';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -43,7 +43,7 @@ const WhiteboardTab = () => {
   );
 
   return (
-    <>
+    <Stack height="100%" spacing={5}>
       <Box mb={'0.5rem'} width={'100%'} height={'100%'} overflow={'auto'} alignSelf={'flex-start'}>
         <Stack>
           {whiteboardAssets.map((asset) => {
@@ -55,16 +55,12 @@ const WhiteboardTab = () => {
           })}
         </Stack>
       </Box>
-      <Grid container>
-        <Grid item xs={12}>
-          {showWhiteboard ? (
-            <Button onClick={createPdf}>{t('whiteboard-create-pdf-button')}</Button>
-          ) : (
-            <Button onClick={handleStartWhiteboard}>{t('whiteboard-start-whiteboard-button')}</Button>
-          )}
-        </Grid>
-      </Grid>
-    </>
+      {showWhiteboard ? (
+        <Button onClick={createPdf}>{t('whiteboard-create-pdf-button')}</Button>
+      ) : (
+        <Button onClick={handleStartWhiteboard}>{t('whiteboard-start-whiteboard-button')}</Button>
+      )}
+    </Stack>
   );
 };
 

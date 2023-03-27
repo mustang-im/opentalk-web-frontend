@@ -144,7 +144,7 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
           )}
         </Stack>
         <Grid container>
-          <Grid item xs={12}>
+          <Grid item xs={12} display="flex">
             <Button type="submit">{texts?.button}</Button>
           </Grid>
         </Grid>

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Grid, Box, styled } from '@mui/material';
+import { Button, Box, styled, Stack } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { stopTimer, TimerStyle } from '../../../api/types/outgoing/timer';
@@ -34,7 +34,7 @@ const TimerOverview = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   };
 
   return (
-    <>
+    <Stack height="100%">
       {timerStyle === TimerStyle.CoffeeBreak && (
         <TimerBoxContainer>
           <TimerBoxItem>
@@ -54,15 +54,11 @@ const TimerOverview = ({ timerStyle }: { timerStyle: TimerStyle }) => {
         </TimerBoxContainer>
       )}
 
-      <Grid container>
-        <Grid item xs={12}>
-          <Button color="secondary" onClick={handleStop}>
-            {timerStyle === TimerStyle.Normal && t('timer-overview-button-stop')}
-            {timerStyle === TimerStyle.CoffeeBreak && t('coffee-break-overview-button-stop')}
-          </Button>
-        </Grid>
-      </Grid>
-    </>
+      <Button color="secondary" onClick={handleStop}>
+        {timerStyle === TimerStyle.Normal && t('timer-overview-button-stop')}
+        {timerStyle === TimerStyle.CoffeeBreak && t('coffee-break-overview-button-stop')}
+      </Button>
+    </Stack>
   );
 };
 

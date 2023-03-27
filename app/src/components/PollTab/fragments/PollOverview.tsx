@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import {
   Box,
+  Container,
   List as MuiList,
   ListItem,
   ListItemButton as MuiListItemButton,
@@ -28,11 +29,10 @@ const List = styled(MuiList)({
 });
 
 const EmptyPollContainer = styled(Box)({
-  paddingTop: '10.8rem',
-  width: '100%',
-  height: '100%',
-  overflow: 'auto',
-  alignSelf: 'flex-start',
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  alignSelf: 'center',
 });
 
 const ListItemButton = styled(MuiListItemButton)(({ theme }) => ({
@@ -59,14 +59,12 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
   if (polls.length === 0 && savedPolls.length === 0) {
     return (
       <EmptyPollContainer>
-        <Box display={'flex'} flexWrap={'wrap'} justifyContent={'center'} alignSelf={'center'}>
-          <Box marginBottom={2}>
-            <NoPollsIcon />
-          </Box>
-          <Typography align={'center'} variant={'body2'}>
-            {t('no-polls-in-conference')}
-          </Typography>
+        <Box marginBottom={2}>
+          <NoPollsIcon />
         </Box>
+        <Typography align={'center'} variant={'body2'}>
+          {t('no-polls-in-conference')}
+        </Typography>
       </EmptyPollContainer>
     );
   }
@@ -116,10 +114,10 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
   );
 
   return (
-    <>
+    <Container disableGutters>
       {savedPolls.length > 0 && renderSavedPolls()}
       {polls.length > 0 && renderPolls()}
-    </>
+    </Container>
   );
 };
 

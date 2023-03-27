@@ -156,12 +156,12 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
             </Grid>
             <Grid item xs mt={2}>
               <Grid container justifyContent={'space-between'} spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={6} display="flex">
                   <Button type="button" onClick={() => saveFormValues(formik.values)}>
                     {t('poll-form-button-save')}
                   </Button>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} display="flex">
                   <Button type="submit">{t('poll-form-button-submit')}</Button>
                 </Grid>
               </Grid>

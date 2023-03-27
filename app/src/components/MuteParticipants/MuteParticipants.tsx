@@ -66,15 +66,11 @@ const MuteParticipants = () => {
   return (
     <Grid container spacing={2}>
       <Grid item container spacing={1} xs={12}>
-        <Grid item xs={6}>
-          <Button onClick={muteAll} size={'small'}>
-            {t('mute-participants-button-all')}
-          </Button>
+        <Grid item xs={6} display="flex">
+          <Button onClick={muteAll}>{t('mute-participants-button-all')}</Button>
         </Grid>
-        <Grid item xs={6}>
-          <Button onClick={muteSelected} size={'small'}>
-            {t('mute-participants-button-selected')}
-          </Button>
+        <Grid item xs={6} display="flex">
+          <Button onClick={muteSelected}>{t('mute-participants-button-selected')}</Button>
         </Grid>
       </Grid>
       <Grid item xs={12}>
