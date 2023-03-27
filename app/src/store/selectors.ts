@@ -290,7 +290,7 @@ export const selectUnreadMessagesByTargetIdCount = (targetId: TargetId) =>
   });
 
 export const selectParticipantsReadyList = createSelector(
-  selectAllParticipants,
+  selectAllOnlineParticipantsInConference,
   selectParticipantsReady,
   (selectCombinedParticipantsAndUser, participantsReady) =>
     selectCombinedParticipantsAndUser.map((participant) => ({
