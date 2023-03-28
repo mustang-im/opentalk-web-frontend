@@ -6,13 +6,13 @@ import { TrickleCandidate, VideoSetting } from '@opentalk/common';
 import { BaseEventEmitter } from '../EventListener';
 import { MediaSignaling } from './MediaSignaling';
 import ConnectionStats, { StatsEvent } from './Statistics/ConnectionStats';
-import { MediaDescriptor, QualityLimit, StreamStateChanged } from './WebRTC';
+import { MediaDescriptor, QualityLimit, SubscriberStateChanged } from './WebRTC';
 
 export type ConnectionEvent = {
   closed: void;
   up: void;
   down: void;
-  streamstatechanged: StreamStateChanged;
+  subscriberstatechanged: SubscriberStateChanged;
   qualityLimit: QualityLimit;
 };
 

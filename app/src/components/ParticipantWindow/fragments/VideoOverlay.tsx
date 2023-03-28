@@ -84,7 +84,7 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
   const pinnedParticipantId = useAppSelector(selectPinnedParticipantId);
   const stats = useAppSelector(selectStatsById(mediaDescriptor));
   const { t } = useTranslation();
-  const online = subscriber?.streamState?.connection === 'connected';
+  const online = subscriber?.subscriberState?.connection === 'connected';
 
   const fullscreenHandle = useFullscreenContext();
 

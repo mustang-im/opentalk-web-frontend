@@ -23,7 +23,7 @@ export interface SubscriberState {
 export class SubscriberConnection extends BaseWebRtcConnection {
   private mediaConfig: MediaSessionState;
   private stream: MediaStream | undefined;
-  private streamState: SubscriberState = { audioRunning: false, videoRunning: false, connection: 'new' };
+  private subscriberState: SubscriberState = { audioRunning: false, videoRunning: false, connection: 'new' };
   private qualityTargetCount: Array<number> = [];
 
   private readyHandlers: (({ stream, reason }: { stream?: MediaStream; reason?: string }) => void)[] = [];
@@ -33,7 +33,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private lossCount = 0;
   private expectRestart = false;
 
-  private reconnectTimerHandle: TimeoutId | undefined = undefined;
+  private reconnectTimerHandle?: TimeoutId;
 
   private readonly updateQualityTarget: () => void;
 
@@ -49,22 +49,28 @@ export class SubscriberConnection extends BaseWebRtcConnection {
           this.close();
           break;
         case 'disconnected':
-          this.streamState = {
+          this.subscriberState = {
             audioRunning: false,
             videoRunning: false,
             connection: this.peerConnection.iceConnectionState,
           };
-          this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
+          this.eventEmitter.emit('subscriberstatechanged', {
+            subscriberState: this.subscriberState,
+            ...this.descriptor,
+          });
           console.warn(`Subscriber connection ${state}`);
           this.checkMediaCondition();
           break;
         case 'failed':
-          this.streamState = {
+          this.subscriberState = {
             audioRunning: false,
             videoRunning: false,
             connection: this.peerConnection.iceConnectionState,
           };
-          this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
+          this.eventEmitter.emit('subscriberstatechanged', {
+            subscriberState: this.subscriberState,
+            ...this.descriptor,
+          });
           this.iceRestart();
           console.warn(`Subscriber connection ${state}`);
           break;
@@ -111,11 +117,11 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   }
 
   private checkMediaCondition() {
-    if (this.mediaConfig.audio && !this.streamState.audioRunning) {
+    if (this.mediaConfig.audio && !this.subscriberState.audioRunning) {
       this.setReconnectTimer();
       return;
     }
-    if (this.mediaConfig.video && !this.streamState.videoRunning) {
+    if (this.mediaConfig.video && !this.subscriberState.videoRunning) {
       this.setReconnectTimer();
       return;
     }
@@ -177,11 +183,11 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       nextState.audioRunning = some(liveTracks, { kind: 'audio', muted: false });
       nextState.videoRunning = some(liveTracks, { kind: 'video', muted: false });
     }
-    if (isEqual(this.streamState, nextState)) {
+    if (isEqual(this.subscriberState, nextState)) {
       return;
     }
-    this.streamState = nextState;
-    this.eventEmitter.emit('streamstatechanged', { streamState: this.streamState, ...this.descriptor });
+    this.subscriberState = nextState;
+    this.eventEmitter.emit('subscriberstatechanged', { subscriberState: this.subscriberState, ...this.descriptor });
     this.checkMediaCondition();
   }
 
@@ -291,7 +297,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
 
   public close() {
     this.stream?.getTracks().forEach((t) => t.stop());
-    this.streamState = { audioRunning: false, videoRunning: false, connection: 'closed' };
+    this.subscriberState = { audioRunning: false, videoRunning: false, connection: 'closed' };
     this.stopReconnectTimer();
     super.close();
   }

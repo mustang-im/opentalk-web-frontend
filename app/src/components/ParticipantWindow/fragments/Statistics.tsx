@@ -48,8 +48,8 @@ const Statistics = ({
   // show no stats when the participant is not publishing and therefore not connected
   if (
     subscriber === undefined ||
-    subscriber.streamState.connection === 'new' ||
-    subscriber.streamState.connection === 'closed'
+    subscriber.subscriberState.connection === 'new' ||
+    subscriber.subscriberState.connection === 'closed'
   ) {
     return <></>;
   }

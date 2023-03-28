@@ -10,13 +10,13 @@ import {
   MediaDescriptor,
   SubscriberConfig,
   idFromDescriptor,
-  StreamStateChanged,
+  SubscriberStateChanged,
   QualityLimit,
 } from '../../modules/WebRTC';
 import { SubscriberState } from '../../modules/WebRTC/SubscriberConnection';
 
 interface State extends SubscriberConfig {
-  streamState: SubscriberState;
+  subscriberState: SubscriberState;
   limit: VideoSetting;
   error?: media.MediaError;
 }
@@ -32,7 +32,7 @@ export const mediaSubscriberSlice = createSlice({
     added: (state, { payload }: PayloadAction<SubscriberConfig>) => {
       mediaSubscriberAdapter.addOne(state, {
         ...payload,
-        streamState: { audioRunning: false, videoRunning: false, connection: 'new' },
+        subscriberState: { audioRunning: false, videoRunning: false, connection: 'new' },
         limit: VideoSetting.High,
       });
     },
@@ -46,16 +46,19 @@ export const mediaSubscriberSlice = createSlice({
     failed: (state, { payload }: PayloadAction<media.MediaError>) => {
       mediaSubscriberAdapter.updateOne(state, {
         id: payload.source,
-        changes: { error: payload, streamState: { audioRunning: false, videoRunning: false, connection: 'failed' } },
+        changes: {
+          error: payload,
+          subscriberState: { audioRunning: false, videoRunning: false, connection: 'failed' },
+        },
       });
     },
     closed: (state, { payload }: PayloadAction<MediaDescriptor>) => {
       mediaSubscriberAdapter.removeOne(state, idFromDescriptor(payload));
     },
-    mediaUpdated: (state, { payload }: PayloadAction<StreamStateChanged>) => {
+    mediaUpdated: (state, { payload }: PayloadAction<SubscriberStateChanged>) => {
       mediaSubscriberAdapter.updateOne(state, {
         id: idFromDescriptor(payload),
-        changes: { streamState: payload.streamState },
+        changes: { subscriberState: payload.subscriberState },
       });
     },
     limit: (state, { payload }: PayloadAction<QualityLimit>) => {

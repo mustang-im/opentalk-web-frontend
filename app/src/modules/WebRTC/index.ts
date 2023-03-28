@@ -8,7 +8,7 @@ import { MediaDescriptor } from './WebRTC';
 
 export { ConferenceRoom };
 export { WebRtc, idFromDescriptor, descriptorFromId } from './WebRTC';
-export type { MediaDescriptor, MediaId, SubscriberConfig, StreamStateChanged, QualityLimit } from './WebRTC';
+export type { MediaDescriptor, MediaId, SubscriberConfig, SubscriberStateChanged, QualityLimit } from './WebRTC';
 
 /* TODO: find a better place to hold the ConferenceRoom state object.
   options:

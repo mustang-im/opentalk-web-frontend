@@ -17,13 +17,13 @@ type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
 const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
   const subscriber = useAppSelector(selectSubscriberById(descriptor));
   const { t } = useTranslation();
-  const streamState = subscriber?.streamState;
+  const subscriberState = subscriber?.subscriberState;
 
   if (subscriber === undefined) {
     return null;
   }
 
-  if (streamState === undefined || streamState.connection !== 'connected') {
+  if (subscriberState === undefined || subscriberState.connection !== 'connected') {
     return (
       <FailureBadge title={t('participant-stream-broken-tooltip') || ''}>
         <ConnectionGoodIcon color="error" fontSize="medium" />
@@ -31,8 +31,8 @@ const UnresponsiveSubscriberStream = ({ descriptor }: IRemoteVideoProps) => {
     );
   }
 
-  const audioBroken = subscriber.audio && !streamState.audioRunning;
-  const videoBroken = subscriber.video && !streamState.videoRunning;
+  const audioBroken = subscriber.audio && !subscriberState.audioRunning;
+  const videoBroken = subscriber.video && !subscriberState.videoRunning;
 
   if (!audioBroken && !videoBroken) {
     return null;

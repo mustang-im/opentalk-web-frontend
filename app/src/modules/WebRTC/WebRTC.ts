@@ -40,8 +40,8 @@ export const descriptorFromId = (id: MediaId): MediaDescriptor => {
 
 export type SubscriberConfig = MediaDescriptor & MediaSessionState;
 
-export interface StreamStateChanged extends MediaDescriptor {
-  streamState: SubscriberState;
+export interface SubscriberStateChanged extends MediaDescriptor {
+  subscriberState: SubscriberState;
 }
 
 export interface QualityLimit extends MediaDescriptor {
@@ -53,8 +53,8 @@ export type WebRtcContextEvent = {
   subscriberadded: SubscriberConfig;
   // A 'subscriberchange' event is sent when an existing connection has been updated.
   subscriberchange: SubscriberConfig;
-  // A 'streamstatechanged' event is sent when the state of a subscriber media stream changes, e.g. the first track is online.
-  streamstatechanged: StreamStateChanged;
+  // A 'subscriberstatechanged' event is sent when the state of a subscriber media stream changes, e.g. the first track is online.
+  subscriberstatechanged: SubscriberStateChanged;
   // A 'subscriberclose' event is sent when a new connection was closed and removed from the WebRTC context.
   subscriberclose: MediaDescriptor;
   // 'statsUpdated' reports the connection bandwidth and packet loss for all active connections
@@ -324,12 +324,12 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
       this.eventEmitter.emit('subscriberclose', subscriberConfig);
       this.subscribers.delete(idFromDescriptor(subscriberConfig));
       connection.removeEventListener('closed', closeHandler);
-      connection.removeEventListener('streamstatechanged', changeHandler);
+      connection.removeEventListener('subscriberstatechanged', changeHandler);
       connection.removeEventListener('qualityLimit', limitHandler);
     };
 
-    const changeHandler = (streamStateEvent: StreamStateChanged) => {
-      this.eventEmitter.emit('streamstatechanged', streamStateEvent);
+    const changeHandler = (subscriberStateEvent: SubscriberStateChanged) => {
+      this.eventEmitter.emit('subscriberstatechanged', subscriberStateEvent);
     };
 
     const limitHandler = (qualityLimit: QualityLimit) => {
@@ -337,7 +337,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     };
 
     connection.addEventListener('closed', closeHandler);
-    connection.addEventListener('streamstatechanged', changeHandler);
+    connection.addEventListener('subscriberstatechanged', changeHandler);
     connection.addEventListener('qualityLimit', limitHandler);
 
     subscriber.connection = connection;
