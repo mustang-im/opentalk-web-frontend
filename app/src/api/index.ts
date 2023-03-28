@@ -162,7 +162,7 @@ const mapToUiParticipant = (
   role: control.role,
   waitingState,
   protocolAccess: mapProtocolToProtocolAccess(protocol),
-  isPresenter: media.isPresenter,
+  isPresenter: Boolean(media?.isPresenter),
 });
 
 const mapBreakoutToUiParticipant = (
@@ -369,7 +369,7 @@ const handleControlMessage = (
             id: data.id,
             lastActive: data.control.joinedAt,
             waitingState: WaitingState.Joined,
-            isPresenter: data.media.isPresenter,
+            isPresenter: Boolean(data.media?.isPresenter),
             protocolAccess: mapProtocolToProtocolAccess(data.protocol),
             ...data.control,
           })

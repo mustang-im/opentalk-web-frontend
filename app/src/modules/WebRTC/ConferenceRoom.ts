@@ -87,12 +87,13 @@ export const startRoom = async (credentials: RoomCredentials, config: ConfigStat
  * @param {Participant} participant to get the media session state from
  * @returns {Array<SubscriberConfig>} for this participant as stored in redux
  */
+
 const subscriberListFromParticipant = (participant: BackendParticipant): Array<SubscriberConfig> => {
   const list = new Array<SubscriberConfig>();
-  if (participant.media?.video) {
+  if (participant.media?.video !== undefined) {
     list.push({ participantId: participant.id, mediaType: MediaSessionType.Video, ...participant.media.video });
   }
-  if (participant.media?.screen) {
+  if (participant.media?.screen !== undefined) {
     list.push({ participantId: participant.id, mediaType: MediaSessionType.Screen, ...participant.media.screen });
   }
   return list;
@@ -227,7 +228,7 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
       case 'update': {
         const participantId = message.id;
 
-        if (message.media.video != undefined) {
+        if (message.media?.video !== undefined) {
           this.webRtc.updateMedia({ participantId, mediaType: MediaSessionType.Video, ...message.media.video });
         } else {
           this.webRtc
@@ -235,7 +236,7 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
             .catch((e) => console.warn('unsubscribe failed', e, participantId, MediaSessionType.Video));
         }
 
-        if (message.media.screen != undefined) {
+        if (message.media?.screen !== undefined) {
           this.webRtc.updateMedia({ participantId, mediaType: MediaSessionType.Screen, ...message.media.screen });
         } else {
           this.webRtc

@@ -31,6 +31,7 @@
 - Fix minimum allowed value in the poll timer. (!897)
 - Fix unresponsive hang up button on participant leave. (!903)
 - Fix cross icon showing on timer without ready check (!919)
+- Fix the app crash on moderator join event when media is undefined (!925)
 
 ### Stability Improvements
 
