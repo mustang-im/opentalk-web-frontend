@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
+import { memo } from 'react';
 
 import AudioButton from './fragments/AudioButton';
 import EndCallButton from './fragments/EndCallButton';
@@ -43,4 +44,4 @@ const Toolbar = ({ layout }: { layout?: LayoutTypes }) => {
   );
 };
 
-export default Toolbar;
+export default memo(Toolbar);

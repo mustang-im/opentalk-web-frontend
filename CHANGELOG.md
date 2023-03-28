@@ -27,6 +27,7 @@
 - Fix Emoji picker container overflowing (!905)
 - Fix unwanted timer submitting (!906)
 - Fix minimum allowed value in the poll timer. (!897)
+- Fix unresponsive hang up button on participant leave. (!903)
 
 ### Stability Improvements
 
