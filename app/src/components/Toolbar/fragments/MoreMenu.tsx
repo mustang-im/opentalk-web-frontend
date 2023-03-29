@@ -197,6 +197,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           msg: `You just triggered this notification. Success!`,
           variant: 'success',
           cancelBtnText: 'Dismiss',
+          onCancel: () => alert('Callback fnc to handle click, Action Cancel Btn Success'),
         }),
       icon: <ErrorIcon />,
     },

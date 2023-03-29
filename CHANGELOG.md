@@ -47,7 +47,7 @@
 - Lobby without password label as invited (!863)
 - Notify moderator if participant limit has been reached (!877)
 - Show room blocker for a participant, that tries to join a full room (!876)
-
+- Add time_limit quotas in conference (!875)
 
 ## 1.2.0
 

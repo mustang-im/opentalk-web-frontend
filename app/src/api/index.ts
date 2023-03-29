@@ -103,6 +103,7 @@ import { Role } from './types/incoming/control';
 import { Action as OutgoingActionType } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
+import { notifyBeforeEndConference } from './utils/notifyBeforeEndConference';
 
 /**
  * Transforms the dictionary of group chat histories into a list of groupIds and a flat list
@@ -304,6 +305,10 @@ const handleControlMessage = (
 
       if (data.timer) {
         dispatch(joinedTimer(data.timer));
+      }
+
+      if (data.closesAt) {
+        notifyBeforeEndConference(data.closesAt);
       }
 
       localMediaContext.updateConferenceContext(conference).catch((e: Error) => {

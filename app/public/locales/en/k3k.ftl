@@ -772,3 +772,6 @@ emoji-category-activities = Activities
 emoji-category-objects = Objects
 emoji-category-symbols = Symbols
 emoji-category-flags = Flags
+
+closes-time-before-one-minute = Maximum conference time will be reached. This conference will end automatically in {$minute} minutes.
+closes-time-in-one-minute = Maximum conference time will be reached. This conference will end automatically in a few seconds.
