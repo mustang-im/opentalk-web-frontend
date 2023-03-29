@@ -37,11 +37,11 @@ field-error-required ="{$fieldName}" is a required field
 joinform-banned-from-room = You were banned from this meeting.
 joinform-room-not-found = Room not found.
 
-room-loading-setup = Configuring connection...
-room-loading-starting = Connecting to room...
-room-loading-reconnect = Reconnecting to room...
-room-loading-generic = Loading room...
-room-loading-blocked = The maximum number of participants has been reached. If a position in the room becomes available, we will connect you automatically. Please wait or contact the moderator.
+room-loading-setup = <title>Configuring connection...</title>
+room-loading-starting = <title>Connecting to room...</title>
+room-loading-reconnect = <title>Reconnecting to room...</title>
+room-loading-generic = <title>Loading room...</title>
+room-loading-blocked = <title>The maximum number of participants has been reached</title><bodyText>If a position in the room becomes available, we will connect you automatically.<br /> Please wait or contact the moderator.</bodyText>
 
 http-error-message-400 = Can't create or modify the room, please try again
 http-error-message-401 = You are not authorized for this action

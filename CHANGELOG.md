@@ -40,6 +40,7 @@
 - Removed development error showing on the create meeting page. (!892)
 - Enhanced behavior of poll temporary save. (!891)
 - Improved legal vote token message on the popover. (!900)
+- Fix app not building on Safari (!910)
 
 ### New Features
 
