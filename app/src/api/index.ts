@@ -31,8 +31,8 @@ import {
   MediaId,
   QualityLimit,
   shutdownConferenceContext,
-  StreamStateChanged,
-  SubscriberState,
+  SubscriberStateChanged,
+  SubscriberConfig,
   WebRtc,
 } from '../modules/WebRTC';
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
@@ -185,12 +185,12 @@ const mapBreakoutToUiParticipant = (
 });
 
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
-  const addHandler = (mediaState: SubscriberState) => dispatch(subscriberAdded(mediaState));
-  const updateHandler = (mediaState: SubscriberState) => dispatch(subscriberUpdate(mediaState));
+  const addHandler = (config: SubscriberConfig) => dispatch(subscriberAdded(config));
+  const updateHandler = (config: SubscriberConfig) => dispatch(subscriberUpdate(config));
   const statsHandler = (connectionStats: Record<MediaId, StatsEvent>) =>
     dispatch(subscriberStatsUpdate(connectionStats));
   const closeHandler = (mediaDescriptor: MediaDescriptor) => dispatch(subscriberClose(mediaDescriptor));
-  const mediaChangeHandler = (mediaChange: StreamStateChanged) => dispatch(subscriberMediaUpdated(mediaChange));
+  const mediaChangeHandler = (mediaChange: SubscriberStateChanged) => dispatch(subscriberMediaUpdated(mediaChange));
   const upstreamLimitHandler = (limit: VideoSetting) => dispatch(setUpstreamLimit(limit));
   const subscriberLimitHandler = (limit: QualityLimit) => dispatch(subscriberLimit(limit));
   console.debug('init webRTC context');
@@ -199,7 +199,7 @@ const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
   webRtc.addEventListener('subscriberchange', updateHandler);
   webRtc.addEventListener('statsupdated', statsHandler);
   webRtc.addEventListener('subscriberclose', closeHandler);
-  webRtc.addEventListener('streamstatechanged', mediaChangeHandler);
+  webRtc.addEventListener('subscriberstatechanged', mediaChangeHandler);
   webRtc.addEventListener('upstreamLimit', upstreamLimitHandler);
   webRtc.addEventListener('subscriberLimit', subscriberLimitHandler);
 };

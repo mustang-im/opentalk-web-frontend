@@ -2,38 +2,29 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Popover } from '@mui/material';
-import { ConnectionGoodIcon, ConnectionMediumIcon, ConnectionBadIcon } from '@opentalk/common';
-import React, { useCallback, useState, useMemo } from 'react';
+import { ConnectionGoodIcon, ConnectionMediumIcon } from '@opentalk/common';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
-import { MediaDescriptor, MediaStreamState } from '../../../modules/WebRTC';
-import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
+import { MediaDescriptor } from '../../../modules/WebRTC';
+import { selectStatsPacketLossByDescriptor } from '../../../store/slices/connectionStatsSlice';
+import { selectIsSubscriberOnlineByDescriptor } from '../../../store/slices/mediaSubscriberSlice';
 import { StatisticsContent } from './StatisticsContent';
 import { OverlayIconButton } from './VideoOverlay';
 
 const Statistics = ({
   descriptor,
   disablePopoverPortal,
-  packetLossPercent,
 }: {
   descriptor: MediaDescriptor;
   disablePopoverPortal?: boolean | undefined;
-  packetLossPercent: number;
 }) => {
-  const subscriber = useAppSelector(selectSubscriberById(descriptor));
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
-
-  const connectionIcon = useMemo(() => {
-    if (packetLossPercent > 10) {
-      return <ConnectionBadIcon color="error" />;
-    } else if (packetLossPercent >= 1 && packetLossPercent <= 10) {
-      return <ConnectionMediumIcon color="warning" />;
-    }
-    return <ConnectionGoodIcon />;
-  }, [packetLossPercent]);
+  const isOnline = useAppSelector(selectIsSubscriberOnlineByDescriptor(descriptor));
+  const hasPaketLoss = useAppSelector(selectStatsPacketLossByDescriptor(descriptor));
 
   const handleClose = useCallback((event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -45,15 +36,14 @@ const Statistics = ({
     setAnchorEl(event.currentTarget);
   }, []);
 
-  // show no stats when the participant is not publishing and therefore not connected
-  if (subscriber === undefined || subscriber.streamState === MediaStreamState.Offline) {
-    return <></>;
+  if (!isOnline) {
+    return null;
   }
 
   return (
     <>
       <OverlayIconButton onClick={toggleStats} size="large" color="secondary" aria-label={t('statistics-video')}>
-        {connectionIcon}
+        {hasPaketLoss ? <ConnectionMediumIcon color="error" /> : <ConnectionGoodIcon />}
       </OverlayIconButton>
       <Popover
         open={open}

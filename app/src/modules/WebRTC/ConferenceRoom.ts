@@ -5,7 +5,7 @@ import { BackendParticipant, MediaSessionType, ParticipantId, Timestamp, VideoSe
 import { isEmpty } from 'lodash';
 import convertToSnakeCase from 'snakecase-keys';
 
-import { setCurrentConferenceRoom, SubscriberState } from '.';
+import { setCurrentConferenceRoom, SubscriberConfig } from '.';
 import { ApiErrorWithBody, StartRoomError } from '../../api/rest';
 import { Message as IncomingMessage } from '../../api/types/incoming';
 import { Message as ControlMessage } from '../../api/types/incoming/control';
@@ -85,10 +85,10 @@ export const startRoom = async (credentials: RoomCredentials, config: ConfigStat
 /**
  * Transforms the participants Publishing object from Record<MediaSessionType, MediaSessionState> to and array SubscriberState descriptions.
  * @param {Participant} participant to get the media session state from
- * @returns {Array<SubscriberState>} for this participant as stored in redux
+ * @returns {Array<SubscriberConfig>} for this participant as stored in redux
  */
-const subscriberListFromParticipant = (participant: BackendParticipant): Array<SubscriberState> => {
-  const list = new Array<SubscriberState>();
+const subscriberListFromParticipant = (participant: BackendParticipant): Array<SubscriberConfig> => {
+  const list = new Array<SubscriberConfig>();
   if (participant.media?.video) {
     list.push({ participantId: participant.id, mediaType: MediaSessionType.Video, ...participant.media.video });
   }
