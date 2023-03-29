@@ -9,6 +9,7 @@ import { RootState } from '../';
 import ChatScope from '../../enums/ChatScope';
 import LayoutOptions from '../../enums/LayoutOptions';
 import SortOption from '../../enums/SortOption';
+import { hangUp } from '../commonActions';
 import { leave, breakoutLeft } from './participantsSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
@@ -116,6 +117,9 @@ export const uiSlice = createSlice({
       if (state.pinnedParticipantId === id) {
         state.pinnedParticipantId = undefined;
       }
+    });
+    builder.addCase(hangUp.pending, (state) => {
+      state.votesPollIdToShow = undefined;
     });
     builder.addCase(connectionClosed, (state) => {
       state.chatConversationState = initialState.chatConversationState;

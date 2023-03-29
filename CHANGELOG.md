@@ -3,6 +3,7 @@
 ### UI/UX Fixes
 
 - Fix error on removing phone users from conference (!896)
+- Fix legal vote labels after re-joining a meeting (!902)
 - Change some legal vote wordings for german (!880)
 - Show no more outdated meetings in dashboard home (!859)
 - Rework protocol UX (!866)

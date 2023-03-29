@@ -948,6 +948,9 @@ export const apiMiddleware: Middleware = ({
           shutdownConferenceContext();
         }
       })
+      .addCase(hangUp.pending, () => {
+        dispatch(legalVoteStore.initialize());
+      })
       .addModule((builder) => outgoing.automod.handler(builder, dispatch))
       .addModule((builder) => outgoing.chat.handler(builder, dispatch))
       .addModule((builder) => outgoing.breakout.handler(builder, dispatch))
