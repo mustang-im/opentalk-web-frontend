@@ -125,14 +125,19 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   };
 
   const handleRemoval = () => {
-    if (participant.participationKind === 'user') {
+    if (participant.participationKind === ParticipationKind.User) {
       dispatch(banParticipant.action({ target: participant.id }));
       notifications.info(t('meeting-notification-user-was-banned', { user: participant.displayName }));
       return;
     }
-    if (participant.participationKind === 'guest') {
+    if (participant.participationKind === ParticipationKind.Guest) {
       dispatch(kickParticipant.action({ target: participant.id }));
       dispatch(enableWaitingRoom.action());
+      notifications.info(t('meeting-notification-user-was-kicked', { user: participant.displayName }));
+      return;
+    }
+    if (participant.participationKind === ParticipationKind.Sip) {
+      dispatch(kickParticipant.action({ target: participant.id }));
       notifications.info(t('meeting-notification-user-was-kicked', { user: participant.displayName }));
       return;
     }
