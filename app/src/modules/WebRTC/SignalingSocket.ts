@@ -41,7 +41,7 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
       this.socket.close();
     };
 
-    this.socket = new WebSocket(this.url, [`ticket#${ticket}`, `k3k-signaling-json-v${API_VERSION}`]);
+    this.socket = new WebSocket(this.url, [`ticket#${ticket}`, `opentalk-signaling-json-v${API_VERSION}`]);
     this.socket.onopen = this.onConnected;
     this.socket.onmessage = (ev) => {
       const message: IncomingMessage = convertToCamelCase(JSON.parse(ev.data), {
