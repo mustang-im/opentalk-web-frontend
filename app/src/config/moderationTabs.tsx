@@ -139,6 +139,7 @@ export const tabs: Array<Tab> = [
     tooltipTranslationKey: 'moderationbar-button-ballot-tooltip',
     featureKey: FeaturesKeys.Vote,
     key: FeaturesKeys.Vote,
+    titleKey: 'legal-vote-tab-title',
   },
   {
     icon: <TimerIcon />,
