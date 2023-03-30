@@ -336,7 +336,8 @@ legal-vote-not-selected = You have not been selected to participate in this vote
 legal-vote-save-form-success = Your vote form was saved successfully
 legal-vote-save-form-error = Saving failed, you need to specify a topic and a name
 
-legal-vote-share-token = Do not share this token with others and keep it in a safe place!
+legal-vote-share-token-active = The token will be displayed here after the end of vote.
+legal-vote-share-token-inactive = Do not share this token with others and keep it in a safe place!
 
 no-votes-in-conference = There are no votes for this conference at the moment.
 
