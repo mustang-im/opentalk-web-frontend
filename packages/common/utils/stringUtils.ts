@@ -31,35 +31,3 @@ export const getEnumKey = <T>(enumType: Record<string, T>, value: T) => {
   const index = Object.values(enumType).indexOf(value);
   return Object.keys(enumType)[index];
 };
-
-/**
- * Split text into sentences. Sentences can be separated by '.', '?' or '!' charracters.
- * A whitespace at the beggining of a sentence will be removed.
- * 
- * Note: We can switch to `Intl.Segment` instead as soon as Firefox will get support for it.
- * 
- * @param {string} text - original text
- * @returns {Array<string>} 
- */
-export const getSentences = (text: string): Array<string> => {
-  const segments = text.split(/(?=[.?!])|(?<=[.?!])/g);
-  const sentencesJoinedWithTheirSeparators = new Array<string>;
-  segments.forEach((segment) => {
-    const sentencesIndex = sentencesJoinedWithTheirSeparators.length;
-    // If segment is a separator, add it to the corresponding sentence
-    if (segment.match(/(?=[.?!])/) && sentencesIndex > 0) {
-      const sentence = sentencesJoinedWithTheirSeparators[sentencesIndex-1]
-      const sentenceWithItsSeparator = sentence.concat(segment);
-      sentencesJoinedWithTheirSeparators[sentencesIndex-1] = sentenceWithItsSeparator
-    } else {
-      let sentence = segment;
-      // Remove the whitespace at the beginning
-      if(segment.startsWith(' ')){
-        sentence = segment.slice(1)
-      }
-      sentencesJoinedWithTheirSeparators.push(sentence);
-    }
-  });
-
-  return sentencesJoinedWithTheirSeparators;
-};
