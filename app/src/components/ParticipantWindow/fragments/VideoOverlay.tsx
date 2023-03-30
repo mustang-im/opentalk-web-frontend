@@ -9,18 +9,17 @@ import { useTranslation } from 'react-i18next';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { MediaStreamState } from '../../../modules/WebRTC';
 import { useFullscreenContext } from '../../../provider/FullscreenProvider';
-import { selectStatsById } from '../../../store/slices/connectionStatsSlice';
-import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectStatsPacketLossByDescriptor } from '../../../store/slices/connectionStatsSlice';
+import { selectIsSubscriberOnlineByDescriptor } from '../../../store/slices/mediaSubscriberSlice';
 import { selectParticipantName } from '../../../store/slices/participantsSlice';
 import {
   pinnedParticipantIdSet,
   selectParticipantsLayout,
   selectPinnedParticipantId,
 } from '../../../store/slices/uiSlice';
+import BrokenSubscriberIndicator from './BrokenSubscriberIndicator';
 import Statistics from './Statistics';
-import UnresponsiveSubscriberStream from './UnresponsiveSubscriberStream';
 
 const OverlayContainer = styled(Grid)(({ theme }) => ({
   position: 'absolute',
@@ -80,12 +79,11 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
   const userLayout = useAppSelector(selectParticipantsLayout);
   const dispatch = useAppDispatch();
   const mediaDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
-  const subscriber = useAppSelector(selectSubscriberById(mediaDescriptor));
+  const isOnline = useAppSelector(selectIsSubscriberOnlineByDescriptor(mediaDescriptor));
+  const hasPacketLoss = useAppSelector(selectStatsPacketLossByDescriptor(mediaDescriptor));
   const displayName = useAppSelector(selectParticipantName(participantId));
   const pinnedParticipantId = useAppSelector(selectPinnedParticipantId);
-  const stats = useAppSelector(selectStatsById(mediaDescriptor));
   const { t } = useTranslation();
-  const online = subscriber?.streamState !== MediaStreamState.Offline || false;
 
   const fullscreenHandle = useFullscreenContext();
 
@@ -102,18 +100,9 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
     [fullscreenHandle, participantId]
   );
 
-  const connectionLossPercent = useMemo(() => {
-    if (stats?.connection.packetLoss === undefined) {
-      return 0;
-    }
-    return Math.round(stats.connection.packetLoss * 100);
-  }, [stats?.connection.packetLoss]);
-
   const getOverlayButtons = () => (
     <IndicatorContainer item>
-      {online && (active || connectionLossPercent >= 1) && (
-        <Statistics descriptor={mediaDescriptor} packetLossPercent={connectionLossPercent} />
-      )}
+      {isOnline && (active || hasPacketLoss) && <Statistics descriptor={mediaDescriptor} />}
       {active && (
         <>
           {userLayout === LayoutOptions.Speaker && (
@@ -132,7 +121,7 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
           </OverlayIconButton>
         </>
       )}
-      <UnresponsiveSubscriberStream descriptor={mediaDescriptor} />
+      <BrokenSubscriberIndicator descriptor={mediaDescriptor} />
     </IndicatorContainer>
   );
 

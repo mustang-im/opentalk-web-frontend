@@ -271,7 +271,7 @@ slotmachine-pre-message = Lottery has
 slotmachine-post-message = participants
 font-awesome-license = Font Awesome Licence
 
-legal-vote-header-title = Voting
+legal-vote-tab-title = Voting
 legal-vote-header-title-create = Create voting
 legal-vote-header-title-update = Update voting
 legal-vote-button-back = back
@@ -292,7 +292,7 @@ legal-vote-input-subtitle-required = Subtitle required
 legal-vote-input-topic-required = Topic required
 legal-vote-input-assignments-required = Min 2 participants must be assigned
 
-legal-vote-overview-button-create-vote = Create New Voting
+legal-vote-overview-button-create-vote = Create new voting
 legal-vote-form-button-save = Save
 legal-vote-form-button-continue = Continue
 
@@ -327,7 +327,7 @@ legal-vote-token-copy-success = The token was copied to your clipboard
 poll-participant-list-button-select = Select
 poll-participant-list-button-close = Close
 poll-participant-list-button-save = Save
-poll-participant-list-button-start = Start Vote
+poll-participant-list-button-start = Start vote
 poll-participant-list-button-select-all = Select all
 
 legal-vote-success = Your vote was counted successfully at {{newLine}}{{atVoteTime}} on {{onVoteDate}} {{newLine}}using the following confirmation token.
@@ -338,7 +338,7 @@ legal-vote-save-form-error = Saving failed, you need to specify a topic and a na
 
 legal-vote-share-token = Do not share this token with others and keep it in a safe place!
 
-no-votes-in-conference = There are no votes for this conference.
+no-votes-in-conference = There are no votes for this conference at the moment.
 
 breakout-room-tab-title = Create Breakout Rooms
 breakout-room-form-field-rooms = number of rooms
@@ -772,3 +772,6 @@ emoji-category-activities = Activities
 emoji-category-objects = Objects
 emoji-category-symbols = Symbols
 emoji-category-flags = Flags
+
+closes-time-before-one-minute = Maximum conference time will be reached. This conference will end automatically in {$minute} minutes.
+closes-time-in-one-minute = Maximum conference time will be reached. This conference will end automatically in a few seconds.

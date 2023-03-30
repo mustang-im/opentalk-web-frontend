@@ -36,6 +36,7 @@ const IconButton = styled(MuiIconButton)({
 const PickerContainer = styled('div')(({ theme }) => ({
   position: 'absolute',
   bottom: '4.375rem',
+  width: '100%',
 
   '.EmojiPickerReact.epr-dark-theme': {
     '--epr-dark': theme.palette.background.voteResult,
@@ -113,6 +114,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
           emojiStyle={EmojiStyle.NATIVE}
           skinTonePickerLocation={SkinTonePickerLocation.SEARCH}
           suggestedEmojisMode={SuggestionMode.RECENT}
+          width="100%"
         />
       </PickerContainer>
     );

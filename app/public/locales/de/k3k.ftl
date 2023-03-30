@@ -271,7 +271,7 @@ slotmachine-pre-message=Lotterie hat
 slotmachine-post-message=Teilnehmer
 font-awesome-license = Font Awesome Lizenz
 
-legal-vote-header-title = Abstimmungen
+legal-vote-tab-title = Abstimmungen
 legal-vote-header-title-create = Abstimmung erstellen
 legal-vote-header-title-update = Abstimmung bearbeiten
 legal-vote-button-back = zurück
@@ -337,7 +337,7 @@ legal-vote-not-selected = Sie wurden nicht ausgewählt um an dieser Abstimmung t
 legal-vote-save-form-success = Ihre Abstimmung wurde erfolgreich gespeichert
 legal-vote-save-form-error = Fehler beim Speichern, es müssen Thema und Name gesetzt werden
 
-no-votes-in-conference = Es gibt keine Abstimmungen für diese Konferenz.
+no-votes-in-conference = Es gibt keine Abstimmungen in dieser Konferenz im Moment.
 
 breakout-room-tab-title = Breakout-Räume erstellen
 breakout-room-form-field-rooms = Anzahl der Räume
@@ -771,3 +771,6 @@ emoji-category-activities = Aktivitäten
 emoji-category-objects = Objekte
 emoji-category-symbols = Symbole
 emoji-category-flags = Flaggen
+
+closes-time-before-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in {$minute} Minuten automatisch beendet.
+closes-time-in-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in Kürze automatisch beendet.

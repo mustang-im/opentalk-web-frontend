@@ -2,6 +2,8 @@
 
 ### UI/UX Fixes
 
+- Fix error on removing phone users from conference (!896)
+- Fix legal vote labels after re-joining a meeting (!902)
 - Change some legal vote wordings for german (!880)
 - Show no more outdated meetings in dashboard home (!859)
 - Rework protocol UX (!866)
@@ -21,9 +23,12 @@
 - Remove offline participant from the timer list. (!901)
 - Title texts Coffee break (!898)
 - Fix progress bar display for polls and votes (!894)
+- Fix UI consistency for legal vote with other tabs (!878)
+- Fix Emoji picker container overflowing (!905)
 
 ### Stability Improvements
 
+- Renegotiate media connections when tracks fail with on recovery (!899)
 - Reconnect media connections when they fail (!887)
 - Add connection information to participant stats panel (!849)
 - Fix: flickering local video element when start coffee break (!870)
@@ -43,7 +48,8 @@
 - Lobby without password label as invited (!863)
 - Notify moderator if participant limit has been reached (!877)
 - Show room blocker for a participant, that tries to join a full room (!876)
-
+- Add time_limit quotas in conference (!875)
+- Deactivate modules from room tariff info (!873)
 
 ## 1.2.0
 

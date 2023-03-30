@@ -1,10 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { Tariff, TariffId } from '@opentalk/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { merge } from 'lodash';
 
 import { RootState } from '../';
+import { joinSuccess } from '../commonActions';
 
 // Map is not recommended by redux/immer
 
@@ -25,20 +27,9 @@ export enum FeaturesKeys {
   Home = 'home',
   UserSearch = 'userSearch',
   MuteUsers = 'muteUsers',
-  BreakoutRooms = 'breakoutRooms',
-  Poll = 'poll',
-  Vote = 'vote',
-  AutoModeration = 'autoModeration',
-  Protocol = 'protocol',
-  Timer = 'timer',
-  CoffeeBreak = 'coffeeBreak',
-  AddUser = 'addUser',
-  TalkingStick = 'talkingStick',
-  WheelOfNames = 'wheelOfNames',
-  JoinWithoutMedia = 'joinWithoutMedia',
-  Whiteboard = 'whiteboard',
   ResetHandraises = 'resetHandraises',
-  Recording = 'recording',
+  AddUser = 'addUser',
+  JoinWithoutMedia = 'joinWithoutMedia',
 }
 
 type Features = {
@@ -75,6 +66,7 @@ export interface Config {
   videoBackgrounds: VideoBackground[];
   maxVideoBandwidth: number;
   libravatarDefaultImage?: DefaultAvatarImage;
+  tariff?: Tariff;
 }
 
 export interface ConfigState {
@@ -107,6 +99,7 @@ export interface ConfigState {
   maxVideoBandwidth: number;
   readonly features: Features;
   libravatarDefaultImage: DefaultAvatarImage;
+  tariff: Tariff;
 }
 /**
  * Initial Configuration.
@@ -151,23 +144,17 @@ export const initialState: ConfigState = {
     userSearch: true,
     muteUsers: true,
     resetHandraises: true,
-    breakoutRooms: true,
-    poll: true,
-    vote: true,
-    autoModeration: false,
-    protocol: false,
-    timer: false,
-    coffeeBreak: false,
     addUser: false,
-    talkingStick: false,
-    wheelOfNames: false,
-    joinWithoutMedia: false,
-    whiteboard: true,
-    recording: true,
   },
   videoBackgrounds: [],
   maxVideoBandwidth: 600000,
   libravatarDefaultImage: 'robohash',
+  tariff: {
+    id: '' as TariffId,
+    name: '',
+    quotas: {},
+    enabledModules: [],
+  },
 };
 
 export const configSlice = createSlice({
@@ -178,6 +165,11 @@ export const configSlice = createSlice({
       merge(state, payload);
       console.debug('config updated to:', state, payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(joinSuccess, (state, { payload }) => {
+      state.tariff = { ...payload.tariff };
+    });
   },
 });
 
@@ -203,5 +195,6 @@ export const selectIsBetaRelease = (state: RootState) => state.config.beta.isBet
 export const selectBetaBadgeUrl = (state: RootState) => state.config.beta.badgeUrl;
 export const selectErrorReportEmail = (state: RootState) => state.config.errorReportAddress;
 export const selectChangePassword = (state: RootState) => state.config.changePassword;
+export const selectEnabledModules = (state: RootState) => state.config.tariff.enabledModules;
 
 export default configSlice.reducer;

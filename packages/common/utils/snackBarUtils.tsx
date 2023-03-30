@@ -2,24 +2,26 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { OptionsObject, SnackbarKey, WithSnackbarProps } from '@opentalk/notistack';
+import { TFunctionResult } from 'i18next';
 import React from 'react';
 
 import useSnackbarFacade from '../hooks/snackbarFacade';
 import { SnackbarActionButtons } from '../provider/Utils';
 
 // Must be imported at least once in the app to initialize the ref
-let snackbarRef: WithSnackbarProps;
+export let snackbarRef: WithSnackbarProps;
 export const SnackbarUtilsConfigurator: React.FC = () => {
   snackbarRef = useSnackbarFacade();
   return null;
 };
 
 export interface ISnackbarActionButtonProps {
-  msg: string;
+  msg: (string | React.ReactNode) & TFunctionResult;
   onCancel?: () => void;
   onAction?: () => void;
   actionBtnText?: string;
   cancelBtnText?: string;
+  hideCloseButton?: boolean;
 }
 
 export interface ISnackActionsProps extends OptionsObject, ISnackbarActionButtonProps {}
@@ -35,14 +37,17 @@ export function notificationAction({
   cancelBtnText,
   onAction,
   onCancel,
+  hideCloseButton,
   ...options
-}: ISnackActionsProps): void {
+}: ISnackActionsProps) {
   const handleClick = (key: SnackbarKey, action: typeof onAction | typeof onCancel) => {
     snackbarRef.closeSnackbar(key);
+
     if (action) {
       action();
     }
   };
+
   snackbarRef.enqueueSnackbar(msg, {
     variant,
     ...options,
@@ -52,6 +57,7 @@ export function notificationAction({
         cancelBtnText={cancelBtnText}
         onAction={() => handleClick(key, onAction)}
         onCancel={() => handleClick(key, onCancel)}
+        hideCloseButton={hideCloseButton}
       />
     ),
   });

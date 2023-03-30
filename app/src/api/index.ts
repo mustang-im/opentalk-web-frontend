@@ -31,8 +31,8 @@ import {
   MediaId,
   QualityLimit,
   shutdownConferenceContext,
-  StreamStateChanged,
-  SubscriberState,
+  SubscriberStateChanged,
+  SubscriberConfig,
   WebRtc,
 } from '../modules/WebRTC';
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
@@ -103,6 +103,7 @@ import { Role } from './types/incoming/control';
 import { Action as OutgoingActionType } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
+import { notifyBeforeEndConference } from './utils/notifyBeforeEndConference';
 
 /**
  * Transforms the dictionary of group chat histories into a list of groupIds and a flat list
@@ -185,12 +186,12 @@ const mapBreakoutToUiParticipant = (
 });
 
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
-  const addHandler = (mediaState: SubscriberState) => dispatch(subscriberAdded(mediaState));
-  const updateHandler = (mediaState: SubscriberState) => dispatch(subscriberUpdate(mediaState));
+  const addHandler = (config: SubscriberConfig) => dispatch(subscriberAdded(config));
+  const updateHandler = (config: SubscriberConfig) => dispatch(subscriberUpdate(config));
   const statsHandler = (connectionStats: Record<MediaId, StatsEvent>) =>
     dispatch(subscriberStatsUpdate(connectionStats));
   const closeHandler = (mediaDescriptor: MediaDescriptor) => dispatch(subscriberClose(mediaDescriptor));
-  const mediaChangeHandler = (mediaChange: StreamStateChanged) => dispatch(subscriberMediaUpdated(mediaChange));
+  const mediaChangeHandler = (mediaChange: SubscriberStateChanged) => dispatch(subscriberMediaUpdated(mediaChange));
   const upstreamLimitHandler = (limit: VideoSetting) => dispatch(setUpstreamLimit(limit));
   const subscriberLimitHandler = (limit: QualityLimit) => dispatch(subscriberLimit(limit));
   console.debug('init webRTC context');
@@ -199,7 +200,7 @@ const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
   webRtc.addEventListener('subscriberchange', updateHandler);
   webRtc.addEventListener('statsupdated', statsHandler);
   webRtc.addEventListener('subscriberclose', closeHandler);
-  webRtc.addEventListener('streamstatechanged', mediaChangeHandler);
+  webRtc.addEventListener('subscriberstatechanged', mediaChangeHandler);
   webRtc.addEventListener('upstreamLimit', upstreamLimitHandler);
   webRtc.addEventListener('subscriberLimit', subscriberLimitHandler);
 };
@@ -304,6 +305,10 @@ const handleControlMessage = (
 
       if (data.timer) {
         dispatch(joinedTimer(data.timer));
+      }
+
+      if (data.closesAt) {
+        notifyBeforeEndConference(data.closesAt);
       }
 
       localMediaContext.updateConferenceContext(conference).catch((e: Error) => {
@@ -942,6 +947,9 @@ export const apiMiddleware: Middleware = ({
           console.info('switching room -- webRTC was running, shutting down');
           shutdownConferenceContext();
         }
+      })
+      .addCase(hangUp.pending, () => {
+        dispatch(legalVoteStore.initialize());
       })
       .addModule((builder) => outgoing.automod.handler(builder, dispatch))
       .addModule((builder) => outgoing.chat.handler(builder, dispatch))

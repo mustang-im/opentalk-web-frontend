@@ -17,6 +17,7 @@ import {
   notificationAction,
   notificationPersistent,
 } from '@opentalk/common';
+import { BackendModules } from '@opentalk/common';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -30,8 +31,8 @@ import {
 import { sendStartRecordingSignal, sendStopRecordingSignal } from '../../../api/types/outgoing/recording';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useEnabledModules } from '../../../hooks/enabledModules';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
-import { selectFeatures } from '../../../store/slices/configSlice';
 import { selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
 import { selectRecordingId, selectRecordingState } from '../../../store/slices/recordingSlice';
 import { selectWaitingRoomState } from '../../../store/slices/roomSlice';
@@ -60,8 +61,8 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const recording = useAppSelector(selectRecordingState);
   const dispatch = useAppDispatch();
   const recordingId = useAppSelector(selectRecordingId);
-  const features = useAppSelector(selectFeatures);
-  const hasRecordingFeatureOn = features.recording;
+  const enabledModules = useEnabledModules();
+  const hasRecordingFeatureOn = enabledModules.has(BackendModules.Recording);
 
   const toggleWaitingRoomItem = isWaitingRoomActive
     ? {
@@ -197,6 +198,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           msg: `You just triggered this notification. Success!`,
           variant: 'success',
           cancelBtnText: 'Dismiss',
+          onCancel: () => alert('Callback fnc to handle click, Action Cancel Btn Success'),
         }),
       icon: <ErrorIcon />,
     },

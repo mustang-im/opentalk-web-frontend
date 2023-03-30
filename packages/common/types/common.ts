@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Opaque } from 'type-fest';
-
 import { MilliSeconds, Seconds } from '../utils';
 
 export type ParticipantId = string & { readonly __tag: unique symbol };
@@ -17,8 +15,6 @@ export type PollId = string & { readonly __tag: unique symbol };
 export type ChoiceId = number & { readonly __tag: unique symbol };
 
 export type RoomId = string & { readonly __tag: unique symbol };
-
-export type TariffId = Opaque<string, 'tariffId'>;
 
 // (r.floren) Currently the Signaling API sends numbers as breakoutRoomIds.
 // This is about to change in the near future.
@@ -145,13 +141,6 @@ export interface BackendParticipant {
   control: IParticipantControl;
   protocol?: ProtocolState;
   media: ParticipantMediaState;
-}
-
-export interface Tariff {
-  id: TariffId;
-  name: string;
-  quotas: Record<string, number>;
-  enabledModules: Array<string>;
 }
 
 export interface CommonPoll {

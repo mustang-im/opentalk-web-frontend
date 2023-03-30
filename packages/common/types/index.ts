@@ -6,3 +6,4 @@ export * from './api';
 export * from './common';
 export * from './matchBuilder';
 export * from './tsHelper';
+export * from './tariff';
