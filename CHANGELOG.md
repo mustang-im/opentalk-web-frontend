@@ -25,6 +25,7 @@
 - Fix progress bar display for polls and votes (!894)
 - Fix UI consistency for legal vote with other tabs (!878)
 - Fix Emoji picker container overflowing (!905)
+- Fix unwanted timer submitting (!906)
 
 ### Stability Improvements
 

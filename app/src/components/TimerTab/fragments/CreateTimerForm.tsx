@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Stack, styled, Switch, Typography, Grid } from '@mui/material';
+import { Button, Stack, styled, Switch, Typography } from '@mui/material';
 import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { DurationValueOptions } from '@opentalk/common/components/DurationField';
 import { FormikValues, useFormik } from 'formik';
@@ -15,9 +15,16 @@ import CommonFormItem from '../../../commonComponents/CommonFormItem';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectTimerRunning } from '../../../store/slices/timerSlice';
 
-const Form = styled('form')({
+const Container = styled(Stack)({
   display: 'flex',
   flex: 1,
+  justifyContent: 'space-between',
+});
+
+const SubmitButton = styled(Button)({
+  '&.MuiButton-root': {
+    flexGrow: 0,
+  },
 });
 
 interface Texts {
@@ -113,43 +120,42 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
     };
   }, [isTimerRunning]);
 
+  const handleSubmit = () => {
+    formik.handleSubmit();
+  };
+
   return (
-    <Form onSubmit={formik.handleSubmit}>
-      <Stack justifyContent={'space-between'} sx={{ height: '100%', width: '100%' }}>
-        <Stack alignItems={'flex-start'} sx={{ width: '100%' }} spacing={2}>
-          <Typography>{t('global-duration')}</Typography>
+    <Container>
+      <Stack spacing={2}>
+        <Typography>{t('global-duration')}</Typography>
 
-          <DurationField
-            {...formikDurationFieldProps('duration', formik, defaultValue)}
-            durationOptions={durationOptions}
-            ButtonProps={{
-              size: 'small',
-            }}
-            min={0}
-            allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
-          />
+        <DurationField
+          {...formikDurationFieldProps('duration', formik, defaultValue)}
+          durationOptions={durationOptions}
+          ButtonProps={{
+            size: 'small',
+          }}
+          min={0}
+          allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
+        />
 
-          {timerStyle === TimerStyle.Normal && (
-            <>
-              <TextField {...formikProps('title', formik)} placeholder={t('global-title')} fullWidth />
-              <Stack sx={{ width: '100%' }} spacing={1}>
-                <CommonFormItem
-                  {...formikSwitchProps('enableReadyCheck', formik)}
-                  control={<Switch color="primary" />}
-                  label={t('timer-form-ready-to-continue')}
-                  labelPlacement="start"
-                />
-              </Stack>
-            </>
-          )}
-        </Stack>
-        <Grid container>
-          <Grid item xs={12} display="flex">
-            <Button type="submit">{texts?.button}</Button>
-          </Grid>
-        </Grid>
+        {timerStyle === TimerStyle.Normal && (
+          <>
+            <TextField {...formikProps('title', formik)} placeholder={t('global-title')} fullWidth />
+            <Stack spacing={1}>
+              <CommonFormItem
+                {...formikSwitchProps('enableReadyCheck', formik)}
+                control={<Switch color="primary" />}
+                label={t('timer-form-ready-to-continue')}
+                labelPlacement="start"
+              />
+            </Stack>
+          </>
+        )}
       </Stack>
-    </Form>
+
+      <SubmitButton onClick={handleSubmit}>{texts?.button}</SubmitButton>
+    </Container>
   );
 };
 
