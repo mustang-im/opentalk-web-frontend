@@ -26,4 +26,8 @@ export const formatDate = (date: Date, locale?: Locale, timeZone?: string) => {
   };
 };
 
+export const getCurrentTimezone = (): string => {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
 export { isValid as isValidDate } from 'date-fns';
