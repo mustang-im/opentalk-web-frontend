@@ -2,7 +2,8 @@
 
 ### UI/UX Fixes
 
-- Disable starting of a legal vote/poll when a coffee break is active
+- Stay in coffee break view when a timer is started (!915)
+- Disable starting of a legal vote/poll when a coffee break is active (!916)
 - Fix error on removing phone users from conference (!896)
 - Fix legal vote labels after re-joining a meeting (!902)
 - Change some legal vote wordings for german (!880)

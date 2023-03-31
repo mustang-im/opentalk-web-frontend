@@ -14,6 +14,7 @@ import {
   selectTimerStyle,
   setInitialStateTimer,
 } from '../../store/slices/timerSlice';
+import { selectIsCoffeeBreakOpen, setCoffeeBreakOpen } from '../../store/slices/uiSlice';
 import { selectOurUuid } from '../../store/slices/userSlice';
 import { FullScreenLayer } from './fragments/FullScreenLayer';
 import { InsideLayer } from './fragments/InsideLayer';
@@ -37,6 +38,7 @@ const CoffeeBreakLayer = ({ requester }: CoffeeBreakLayerProps) => {
   const timerStyle = useAppSelector(selectTimerStyle);
   const [open, setOpen] = useState(isTimerRunning);
   const isUserReady = participantsAreReady.includes(userId as ParticipantId);
+  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakOpen);
 
   const handleDone = useCallback(() => {
     if (timerStartTime && timerId) {
@@ -59,19 +61,22 @@ const CoffeeBreakLayer = ({ requester }: CoffeeBreakLayerProps) => {
 
   const handleClose = () => {
     setOpen(false);
-    handleDone();
-    clearTimer();
+    dispatch(setCoffeeBreakOpen(false));
+    if (timerStyle === TimerStyle.CoffeeBreak) {
+      handleDone();
+      clearTimer();
+    }
   };
 
   useEffect(() => {
-    if (timerStyle === TimerStyle.CoffeeBreak) {
+    if (isCoffeeBreakOpen || timerStyle === TimerStyle.CoffeeBreak) {
       setOpen(true);
     }
 
     return () => {
       setOpen(false);
     };
-  }, [timerStartTime]);
+  }, [timerStartTime, isCoffeeBreakOpen]);
 
   const renderRequesterLayer = () => {
     switch (requester) {

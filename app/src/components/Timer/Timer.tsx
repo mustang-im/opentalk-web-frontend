@@ -6,6 +6,7 @@ import { ParticipantId } from '@opentalk/common';
 import { TimerStyle } from '../../api/types/outgoing/timer';
 import { useAppSelector } from '../../hooks';
 import { selectParticipantsReady, selectTimerStyle } from '../../store/slices/timerSlice';
+import { selectIsCoffeeBreakOpen } from '../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid } from '../../store/slices/userSlice';
 import CoffeeBreakLayer from '../CoffeeBreakLayer';
 import { CoffeeBreakRequesters } from '../CoffeeBreakLayer/CoffeeBreakLayer';
@@ -18,6 +19,7 @@ const Timer = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
   const isModerator = useAppSelector(selectIsModerator);
   const participantsAreReady = useAppSelector(selectParticipantsReady);
   const isUserReady = participantsAreReady.includes(userId as ParticipantId);
+  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakOpen);
 
   const renderTimer = () => {
     switch (timerStyle) {
@@ -30,7 +32,17 @@ const Timer = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
         }
         return null;
 
+      case undefined:
       case TimerStyle.Normal:
+        if (isCoffeeBreakOpen && !isModerator) {
+          return (
+            <>
+              <CoffeeBreakLayer requester={CoffeeBreakRequesters.ViewMeeting} />
+              <TimerPopover anchorEl={anchorEl} />
+            </>
+          );
+        }
+
         return <TimerPopover anchorEl={anchorEl} />;
 
       default:
