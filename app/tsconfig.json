@@ -1,30 +1,35 @@
 {
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "es6",
-      "dom.iterable",
-      "dom",
-      "esnext"
-    ],
-    "downlevelIteration": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-	"jsx": "react-jsx",
-    "sourceMap": true
-  },
-  "include": [
-    "src"
-  ]
-}
+	"compilerOptions": {
+	  "target": "es5",
+	  "lib": [
+		"es6",
+		"dom.iterable",
+		"dom",
+		"esnext"
+	  ],
+	  "downlevelIteration": true,
+	  "allowJs": true,
+	  "skipLibCheck": true,
+	  "esModuleInterop": true,
+	  "allowSyntheticDefaultImports": true,
+	  "strict": true,
+	  "forceConsistentCasingInFileNames": true,
+	  "noFallthroughCasesInSwitch": true,
+	  "module": "esnext",
+	  "moduleResolution": "node",
+	  "resolveJsonModule": true,
+	  "isolatedModules": true,
+	  "noEmit": true,
+	  "jsx": "react-jsx",
+	/* To enable hotReload module uncoment the baseUrl and paths config bellow (don't forget to add path to your local library): */
+    //   "baseUrl": "./",
+    //   "paths": {
+    //     "@opentalk/components": [
+    //       "../../module-component"
+    //     ]
+    //   }
+	},
+	"include": [
+	  "src"
+	]
+  }

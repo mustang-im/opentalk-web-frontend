@@ -4,34 +4,14 @@
 
 const CracoEsbuildPlugin = require('craco-esbuild');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const path = require('path')
+const hotReload = require('./hotReloadLibraries.config')
 
-/* ENABLE HOT RELOADING FEATURE
- - Setting ENABLE_LOCAL_LIB_HOT_RELOAD to true will connect this app directly to the local library and
-   enable hot reload
-*/
-const ENABLE_LOCAL_LIB_HOT_RELOAD = false
-/* COMPONENTS_LIBRARY_PATH
- - Set your local path to the component library
-*/
-const COMPONENTS_LIBRARY_PATH = '../../module-component'
 
 
 module.exports = ({ env }) => {
     const isProductionBuild = process.env.NODE_ENV === "production"
     const analyzerMode = process.env.REACT_APP_INTERACTIVE_ANALYZE
         ? "server" : "json";
-	const externalLibraryResolver = {
-				react: path.resolve(__dirname, "../node_modules/react"),
-				"react-dom": path.resolve(__dirname, "../node_modules/react-dom"),
-				"react-redux": path.resolve(__dirname, "../node_modules/react-redux"),
-				"@opentalk/notistack": path.resolve(__dirname, "../node_modules/@opentalk/notistack"),
-				"@opentalk/common": path.resolve(__dirname, "../node_modules/@opentalk/common"),
-				"@mui/styles": path.resolve(__dirname, "../node_modules/@mui/styles"),
-				"@mui/material": path.resolve(__dirname, "../node_modules/@mui/material"),
-				"react-i18next": path.resolve(__dirname, "../node_modules/react-i18next"),
-				"@opentalk/components": path.resolve(__dirname, COMPONENTS_LIBRARY_PATH)
-	}
 
     return {
         plugins: [
@@ -47,15 +27,14 @@ module.exports = ({ env }) => {
             plugins: {
                 add: isProductionBuild ? [new BundleAnalyzerPlugin({ analyzerMode })] : []
             },
-			alias: !isProductionBuild && ENABLE_LOCAL_LIB_HOT_RELOAD ?  externalLibraryResolver : {},
 			configure: webpackConfig => {
 				const scopePluginIndex = webpackConfig.resolve.plugins.findIndex(
 				({ constructor }) => constructor && constructor.name === "ModuleScopePlugin",
 				);
 
 				webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
-
-				webpackConfig.module.rules.push({
+				const alias = !isProductionBuild && hotReload.enableHotReload ? hotReload.dependencies : {}
+				const rule = !isProductionBuild && hotReload.enableHotReload ? {
 					test: /\.tsx?$/,
 					loader: 'ts-loader',
 					exclude: /node_modules/,
@@ -63,7 +42,14 @@ module.exports = ({ env }) => {
 						transpileOnly: true,
 						configFile: 'tsconfig.json',
 					},
-				})
+				} : {}
+
+				webpackConfig.resolve.alias = {
+					...webpackConfig.resolve.alias,
+					...alias
+				}
+
+				webpackConfig.module.rules.push(rule)
 
 				return webpackConfig;
 			},
