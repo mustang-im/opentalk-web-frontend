@@ -1,22 +1,16 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendParticipant, BreakoutRoomId, GroupId, ParticipantId, RoomId, Tariff } from '@opentalk/common';
-import { InitialAutomod } from '@opentalk/components';
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { BreakoutRoomId, RoomId, notifications } from '@opentalk/common';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
-import { InitialBreakout } from '../api/types/incoming/breakout';
-import { RecordingState, Role } from '../api/types/incoming/control';
 import localMediaContext from '../modules/Media/LocalMedia';
 import localScreenContext from '../modules/Media/LocalScreen';
 import { ConferenceRoom, shutdownConferenceContext } from '../modules/WebRTC';
 import { getControllerBaseUrl } from '../utils/apiUtils';
 import { RootState } from './index';
-import { ChatMessage } from './slices/chatSlice';
-import { Participant } from './slices/participantsSlice';
-import { InitialPoll } from './slices/pollSlice';
 import { ConnectionState } from './slices/roomSlice';
 
 export interface RoomCredentials {
@@ -25,33 +19,6 @@ export interface RoomCredentials {
   inviteCode?: string;
   breakoutRoomId: BreakoutRoomId | null;
 }
-
-export const joinSuccess = createAction<{
-  participantId: ParticipantId;
-  role: Role;
-  avatarUrl?: string;
-  chat: {
-    enabled: boolean;
-    roomHistory: ChatMessage[];
-    lastSeenTimestampGlobal?: string;
-    lastSeenTimestampsGroup?: Record<string, string>;
-    lastSeenTimestampsPrivate?: Record<string, string>;
-  };
-  groups: GroupId[];
-  automod?: InitialAutomod;
-  breakout?: InitialBreakout;
-  polls?: InitialPoll;
-  participants: Participant[];
-  moderation?: {
-    raiseHandsEnabled: boolean;
-    waitingRoomEnabled: boolean;
-    waitingRoomParticipants: Array<BackendParticipant>;
-  };
-  isPresenter?: boolean;
-  recording?: null | RecordingState;
-  serverTimeOffset: number;
-  tariff: Tariff;
-}>('signaling/control/join_success');
 
 export const login = createAsyncThunk<{ permission: Array<string> }, string, { state: RootState; rejectValue: Error }>(
   'user/login',
@@ -84,6 +51,10 @@ export const startRoom = createAsyncThunk<
 });
 
 export const hangUp = createAsyncThunk<void, void, { state: RootState }>('room/hangup', async (_, { getState }) => {
+  // This ensures that all notifications visible to the user prior to hanging up
+  // and being redirected to the lobby room are cleared up. If you need to show
+  // notification after hanging up, make sure to call it after this function.
+  notifications.closeAll();
   const { connectionState } = getState().room;
   if (connectionState !== ConnectionState.Leaving) {
     throw new Error(`cannot hangup when state is '${connectionState}' and not 'leaving'.`);

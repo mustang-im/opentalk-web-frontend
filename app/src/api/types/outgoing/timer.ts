@@ -1,21 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createModule, Namespaced } from '@opentalk/common';
+import { createModule, Namespaced, TimerKind, TimerStyle } from '@opentalk/common';
 
 import { RootState } from '../../../store';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
 import { sendMessage } from '../../index';
-
-export enum TimerKind {
-  Stopwatch = 'stopwatch',
-  Countdown = 'countdown',
-}
-
-export enum TimerStyle {
-  CoffeeBreak = 'coffee-break',
-  Normal = 'normal',
-}
 
 export interface StartTimer {
   action: 'start';

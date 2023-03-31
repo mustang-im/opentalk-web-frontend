@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { GroupId, ParticipantId } from '@opentalk/common';
+import { GroupId, ParticipantId, ChatScope, ChatMessage as ChatMessageType } from '@opentalk/common';
 
-import ChatScope from '../enums/ChatScope';
-import { ChatMessage as ChatMessageType } from '../store/slices/chatSlice';
 import { RoomEvent } from '../store/slices/eventSlice';
-import { isEventMessage } from './typeGardUtils';
+import { isEventMessage } from './typeGuardUtils';
 
 describe('should check if message is event type', () => {
   const chatMessage: ChatMessageType = {

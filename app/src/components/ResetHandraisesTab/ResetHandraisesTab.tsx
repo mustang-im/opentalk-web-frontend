@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid } from '@mui/material';
+import { Participant } from '@opentalk/common';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { resetRaisedHands } from '../../api/types/outgoing/moderation';
 import { useAppDispatch } from '../../hooks';
-import { Participant } from '../../store/slices/participantsSlice';
 
 export interface MutedParticipant extends Participant {
   selected: boolean;

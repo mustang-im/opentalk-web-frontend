@@ -2,11 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Checkbox, FormControlLabel as MuiFormControlLabel, Popover, styled, Typography } from '@mui/material';
+import { Participant } from '@opentalk/common';
 import { concat, without } from 'lodash';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { Participant } from '../../../store/slices/participantsSlice';
 
 interface IParticipantsEditorProps {
   onChange: (participants: Participant[]) => void;

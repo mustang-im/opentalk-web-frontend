@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, setHotkeysEnabled } from '@opentalk/common';
+import { ParticipantId, setHotkeysEnabled, TimerStyle } from '@opentalk/common';
 import { useEffect, useState, memo, useCallback } from 'react';
 
-import { readyToContinue, TimerStyle } from '../../api/types/outgoing/timer';
+import { readyToContinue } from '../../api/types/outgoing/timer';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
   selectParticipantsReady,

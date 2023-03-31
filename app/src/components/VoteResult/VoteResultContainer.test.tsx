@@ -39,6 +39,17 @@ const votesData: LegalVoteType = {
   token: 'abcd',
 };
 
+jest.mock('@opentalk/common', () => {
+  const originalModule = jest.requireActual('@opentalk/common');
+
+  //Mock the default export and named export 'foo'
+  return {
+    __esModule: true,
+    ...originalModule,
+    getCurrentTimezone: () => 'Europe/Belgrade',
+  };
+});
+
 describe('VoteResultContainer', () => {
   afterEach(() => cleanup());
 
@@ -141,7 +152,10 @@ describe('VoteResultContainer', () => {
 
     await waitFor(() => {
       expect(dispatch.mock.calls).toContainEqual([
-        { payload: { legalVoteId: testId, option: 'yes', token: 'abcd' }, type: 'signaling/legal_vote/vote' },
+        {
+          payload: { legalVoteId: testId, option: 'yes', token: 'abcd', timezone: 'Europe/Belgrade' },
+          type: 'signaling/legal_vote/vote',
+        },
       ]);
     });
 
@@ -152,7 +166,10 @@ describe('VoteResultContainer', () => {
 
     await waitFor(() => {
       expect(dispatch.mock.calls).toContainEqual([
-        { payload: { legalVoteId: testId, option: 'no', token: 'abcd' }, type: 'signaling/legal_vote/vote' },
+        {
+          payload: { legalVoteId: testId, option: 'no', token: 'abcd', timezone: 'Europe/Belgrade' },
+          type: 'signaling/legal_vote/vote',
+        },
       ]);
     });
 
@@ -160,7 +177,10 @@ describe('VoteResultContainer', () => {
     fireEvent.click(saveButton);
     await waitFor(() => {
       expect(dispatch.mock.calls).toContainEqual([
-        { payload: { legalVoteId: testId, option: 'abstain', token: 'abcd' }, type: 'signaling/legal_vote/vote' },
+        {
+          payload: { legalVoteId: testId, option: 'abstain', token: 'abcd', timezone: 'Europe/Belgrade' },
+          type: 'signaling/legal_vote/vote',
+        },
       ]);
     });
     expect(checkboxAbstain).toBeChecked();

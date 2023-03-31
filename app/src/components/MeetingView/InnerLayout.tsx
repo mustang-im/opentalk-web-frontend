@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, CircularProgress } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
+import { ParticipantId, TimerStyle } from '@opentalk/common';
 import { legalVoteStore } from '@opentalk/components';
 
-import { TimerStyle } from '../../api/types/outgoing/timer';
 import { useAppSelector } from '../../hooks';
 import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../store/slices/pollSlice';
 import { selectRoomConnectionState, ConnectionState } from '../../store/slices/roomSlice';

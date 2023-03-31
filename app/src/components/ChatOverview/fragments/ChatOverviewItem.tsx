@@ -9,11 +9,10 @@ import {
   Grid,
   styled,
 } from '@mui/material';
-import { TargetId, useDateFormat } from '@opentalk/common';
+import { TargetId, useDateFormat, ChatScope } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
-import ChatScope from '../../../enums/ChatScope';
 import { useAppSelector } from '../../../hooks';
 import { selectUnreadMessagesByTargetIdCount } from '../../../store/selectors';
 import { ChatProps } from '../../../store/slices/chatSlice';

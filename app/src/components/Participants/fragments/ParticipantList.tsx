@@ -12,7 +12,7 @@ import {
   Switch,
   ListItem,
 } from '@mui/material';
-import { ArrowDownIcon } from '@opentalk/common';
+import { ArrowDownIcon, Participant } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,7 +21,6 @@ import {
   selectAllGroupParticipantsSortedAndFiltered,
   selectAllParticipantsSortedAndFiltered,
 } from '../../../store/selectors';
-import { Participant } from '../../../store/slices/participantsSlice';
 import { selectShowParticipantGroups, setSortByGroups } from '../../../store/slices/uiSlice';
 import ParticipantListItem from './ParticipantListItem';
 

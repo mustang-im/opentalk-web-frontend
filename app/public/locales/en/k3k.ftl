@@ -140,15 +140,17 @@ encrypted-messages = This is the beginning of your chat history. Nobody has acce
 moderation-rights-granted = You have been granted moderation rights.
 moderation-rights-revoked = Your moderation rights have been revoked.
 
+sort-label = Order
 sort-by = Sort by
 sort-groups-on = Group filter on
 sort-groups-off = Group filter off
-sort-name-asc = Name Ascending
-sort-name-dsc = Name Descending
+sort-name-asc = Name (A - Z)
+sort-name-dsc = Name (Z - A)
 sort-first-join = First Join Time
 sort-last-join = Last Join Time
 sort-last-active = Last Active
 sort-raised-hand = Raised Hand First
+sort-random = Random
 
 grant-presenter-role = Grant presenter role
 revoke-presenter-role = Revoke presenter role
@@ -238,10 +240,24 @@ moderationbar-button-protocol-tooltip = Protocol
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Reset raised hands
 moderationbar-button-debriefing = Debriefing
+moderationbar-button-talking-stick-tooltip = Talking stick
 
 mute-participants-tab-title = Mute participants
 mute-participants-button-all = All
 mute-participants-button-selected = Selected
+
+talking-stick-tab-title = Talking stick
+talking-stick-skip-speaker = Skip speaker
+talking-stick-participant-amount-notification = Note: We recommend to use the Talking Stick with minimum of 3 people.
+talking-stick-started-first-line = The Talking Stick is started.
+talking-stick-started-second-line = Participant list equals speaker list.
+talking-stick-finished = The Talking Stick is finished.
+talking-stick-next-announcement = You are next.
+talking-stick-speaker-announcement = It's your turn now. Please turn on the microphone!
+talking-stick-notification-unmute = Unmute
+talking-stick-notification-next-speaker = Next speaker
+talking-stick-unmuted-notification = You are unmuted. When you're done, please pass the talking stick to the next speaker.
+talking-stick-unmuted-notification-last-participant = You are unmuted. You are the last person, when you're done, please hand over the talking stick.
 
 reset-handraises-tab-title = Reset raised hands
 reset-handraises-button = All
@@ -520,6 +536,7 @@ global-state-canceled = canceled
 global-accept = Accept
 global-cancel = Cancel
 global-decline = Decline
+global-stop = Stop
 global-favorite = Marked as favorite
 global-invite = Invitation
 global-month = Month
@@ -549,6 +566,7 @@ global-fullscreen = Fullscreen
 global-shortcut = Shortcut
 global-space = space
 global-anonymous = Anonymous
+global-start-now = Start now
 
 dashboard-home = Home
 dashboard-meetings = Meetings

@@ -35,7 +35,6 @@ module.exports = {
         react: path.resolve(__dirname, '../../node_modules/react'),
         'react-dom': path.resolve(__dirname, '../../node_modules/react-dom'),
         'react-redux': path.resolve(__dirname, '../../node_modules/react-redux'),
-        '@opentalk/notistack': path.resolve(__dirname, '../../node_modules/@opentalk/notistack'),
         '@mui/styles': path.resolve(__dirname, '../../node_modules/@mui/styles'),
         '@mui/material': path.resolve(__dirname, '../../node_modules/@mui/material'),
         'react-i18next': path.resolve(__dirname, '../../node_modules/react-i18next'),

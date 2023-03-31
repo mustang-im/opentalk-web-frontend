@@ -9,13 +9,13 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { notifications, useDateFormat } from '@opentalk/common';
+import { notifications, useDateFormat, Participant, WaitingState } from '@opentalk/common';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
 import { useAppDispatch } from '../../../hooks';
-import { approveToEnter, Participant, WaitingState } from '../../../store/slices/participantsSlice';
+import { approveToEnter } from '../../../store/slices/participantsSlice';
 import ParticipantAvatar from '../../ParticipantAvatar';
 
 const Avatar = styled(ParticipantAvatar)({

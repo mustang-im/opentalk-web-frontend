@@ -19,8 +19,9 @@ import {
   MediaSessionType,
   ParticipationKind,
   useDateFormat,
+  ChatScope,
 } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
+import { notifications, Participant, ProtocolAccess, SortOption } from '@opentalk/common';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -29,12 +30,9 @@ import { grantModeratorRole, revokeModeratorRole } from '../../../api/types/outg
 import { grantPresenterRole, revokePresenterRole } from '../../../api/types/outgoing/media';
 import { banParticipant, kickParticipant, enableWaitingRoom } from '../../../api/types/outgoing/moderation';
 import IconButton from '../../../commonComponents/IconButton';
-import ChatScope from '../../../enums/ChatScope';
-import SortOption from '../../../enums/SortOption';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
-import { Participant, ProtocolAccess } from '../../../store/slices/participantsSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
 import ParticipantAvatar from '../../ParticipantAvatar';

@@ -3,12 +3,11 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, List as MuiList, styled, Typography } from '@mui/material';
 import { TargetId } from '@opentalk/common';
-import { BackIcon, NewMessageIcon } from '@opentalk/common';
+import { BackIcon, NewMessageIcon, ChatScope } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as NoNewMessageImage } from '../../assets/images/no-messages-illustration.svg';
-import ChatScope from '../../enums/ChatScope';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectAllGroupAndPrivateChats } from '../../store/slices/chatSlice';
 import { selectAllOnlineParticipants } from '../../store/slices/participantsSlice';

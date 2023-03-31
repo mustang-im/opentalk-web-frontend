@@ -8,8 +8,16 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { ThemeProvider } from '@mui/material';
 import '@mui/material';
 import '@mui/styles';
-import { MediaSessionType, ParticipantId, ParticipationKind, VideoSetting } from '@opentalk/common';
-import { SnackbarProvider } from '@opentalk/common';
+import {
+  SnackbarProvider,
+  Participant,
+  ProtocolAccess,
+  WaitingState,
+  MediaSessionType,
+  ParticipantId,
+  ParticipationKind,
+  VideoSetting,
+} from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
 import { AuthProvider } from '@opentalk/react-redux-appauth';
 import {
@@ -39,7 +47,6 @@ import { MediaProvider } from '../components/MediaProvider';
 import { idFromDescriptor, MediaId, SubscriberStateChanged, SubscriberConfig } from '../modules/WebRTC';
 import FullscreenProvider from '../provider/FullscreenProvider';
 import { appReducers } from '../store';
-import { Participant, ProtocolAccess, WaitingState } from '../store/slices/participantsSlice';
 
 export const loadLanguage = async (lng: string) => {
   const filename = 'public/locales/' + lng + '/k3k.ftl';

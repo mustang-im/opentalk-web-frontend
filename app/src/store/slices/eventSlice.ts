@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
+import { ParticipantId, ChatScope } from '@opentalk/common';
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 import { RootState } from '..';
-import ChatScope from '../../enums/ChatScope';
 import { setChatSettings } from './chatSlice';
 import { join as participantJoin, leave as participantLeave } from './participantsSlice';
 import { connectionClosed } from './roomSlice';

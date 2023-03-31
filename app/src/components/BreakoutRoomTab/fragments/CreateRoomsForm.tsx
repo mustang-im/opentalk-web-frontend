@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, FormHelperText, Button, Grid } from '@mui/material';
 import { Seconds } from '@opentalk/common';
-import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon } from '@opentalk/common';
+import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon, Participant } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { Step, FormikWizard } from 'formik-wizard-form';
@@ -18,7 +18,6 @@ import { start } from '../../../api/types/outgoing/breakout';
 import AccordionItem from '../../../commonComponents/AccordionItem';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectCombinedParticipantsAndUser, selectCombinedParticipantsAndUserCount } from '../../../store/selectors';
-import { Participant } from '../../../store/slices/participantsSlice';
 import { spliceIntoChunks } from '../../../utils/arrayUtils';
 import CreateByParticipantsForm from './CreateByParticipantsForm';
 import CreateByRoomsForm from './CreateByRoomsForm';

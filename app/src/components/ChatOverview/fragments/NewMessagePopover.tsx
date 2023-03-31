@@ -2,11 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { MenuItem as MuiMenuItem, Menu as MuiMenu, styled, ListItemText } from '@mui/material';
-import { TargetId } from '@opentalk/common';
+import { TargetId, ChatScope } from '@opentalk/common';
 import React, { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ChatScope from '../../../enums/ChatScope';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAllOnlineParticipants } from '../../../store/slices/participantsSlice';
 import { chatConversationStateSet } from '../../../store/slices/uiSlice';

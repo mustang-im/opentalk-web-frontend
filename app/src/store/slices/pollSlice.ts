@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { PollId } from '@opentalk/common';
+import { PollId, ChoiceResult, Choice, joinSuccess } from '@opentalk/common';
 import { createEntityAdapter, createSlice, EntityId, EntityState, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
-import { ChoiceResult, Started, LiveUpdate, Done, Choice } from '../../api/types/incoming/poll';
-import { joinSuccess } from '../commonActions';
+import { Started, LiveUpdate, Done } from '../../api/types/incoming/poll';
 
 export interface Poll {
   id: PollId;
@@ -20,16 +19,6 @@ export interface Poll {
   live: boolean;
   voted: boolean;
   selectedChoiceId?: Choice['id'];
-}
-
-export interface InitialPoll {
-  id: PollId;
-  duration: number;
-  live: boolean;
-  started: string;
-  topic: string;
-  choices: Array<Choice>;
-  results?: Array<ChoiceResult>;
 }
 
 export interface PollFormValues {

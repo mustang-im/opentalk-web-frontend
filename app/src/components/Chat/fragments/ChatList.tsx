@@ -2,15 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, List, ListItem, styled, Typography } from '@mui/material';
-import { ParticipantId, TargetId } from '@opentalk/common';
+import { ParticipantId, TargetId, ChatScope, ChatMessage as ChatMessageType } from '@opentalk/common';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as EncryptedMessagesImage } from '../../../assets/images/encrypted-messages-illustration.svg';
-import ChatScope from '../../../enums/ChatScope';
 import { useAppSelector } from '../../../hooks';
 import { selectCombinedMessageAndEvents } from '../../../store/selectors';
-import type { ChatMessage as ChatMessageType } from '../../../store/slices/chatSlice';
 import type { RoomEvent } from '../../../store/slices/eventSlice';
 import { selectChatSearchValue } from '../../../store/slices/uiSlice';
 import ChatMessage from './ChatMessage';

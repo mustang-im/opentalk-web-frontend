@@ -1,12 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { RoomMode, TimerStyle } from '@opentalk/common';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useAppSelector } from '.';
-import { TimerStyle } from '../api/types/outgoing/timer';
 import { ModerationTabKeys, Tab, tabs as initialTabs } from '../config/moderationTabs';
 import { selectFeatures } from '../store/slices/configSlice';
+import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
 import { useEnabledModules } from './enabledModules';
 
@@ -17,6 +18,7 @@ const useTabs = () => {
   const features = useAppSelector(selectFeatures);
   const enabledModules = useEnabledModules();
   const timerStyle = useAppSelector(selectTimerStyle);
+  const currentRoomMode = useAppSelector(selectCurrentRoomMode);
   const handleTabSelect = useCallback((tabIndex: number) => setValue(tabIndex), [setValue]);
 
   useEffect(() => {
@@ -33,34 +35,42 @@ const useTabs = () => {
   }, [enabledModules, features]);
 
   const setDisabledTabs = useCallback(() => {
-    if (tabs.length === 0) {
-      return;
+    if (!currentRoomMode && !timerStyle) {
+      // We assume that the tabs are already filtered by the enabled module.
+      return setTabs((tabs) => tabs.map((tab) => ({ ...tab, disabled: false })));
     }
 
-    if (!timerStyle) {
-      setTabs(filteredTabs);
-      return;
+    if (currentRoomMode === RoomMode.TalkingStick) {
+      const enabledModules = [ModerationTabKeys.Home, ModerationTabKeys.TalkingStick];
+      return setTabs((tabs) =>
+        tabs.map((tab) => {
+          if (enabledModules.includes(tab.key as ModerationTabKeys)) {
+            return { ...tab, disabled: false };
+          }
+          return { ...tab, disabled: true };
+        })
+      );
     }
 
     const isTimerCoffee = timerStyle === TimerStyle.CoffeeBreak;
     const isTimerNormal = timerStyle === TimerStyle.Normal;
 
-    const mapTabs = tabs.map((tab) => {
-      if (isTimerNormal && tab.key === ModerationTabKeys.CoffeeBreak) {
-        return { ...tab, disabled: true };
-      }
-      if (isTimerCoffee && tab.key === ModerationTabKeys.Timer) {
-        return { ...tab, disabled: true };
-      }
-      return tab;
-    });
-
-    setTabs(mapTabs);
-  }, [tabs, timerStyle]);
+    return setTabs((tabs) =>
+      tabs.map((tab) => {
+        if (isTimerNormal && tab.key === ModerationTabKeys.CoffeeBreak) {
+          return { ...tab, disabled: true };
+        }
+        if (isTimerCoffee && tab.key === ModerationTabKeys.Timer) {
+          return { ...tab, disabled: true };
+        }
+        return { ...tab, disabled: false };
+      })
+    );
+  }, [tabs, timerStyle, currentRoomMode]);
 
   useEffect(() => {
     setDisabledTabs();
-  }, [timerStyle, filteredTabs]);
+  }, [timerStyle, currentRoomMode, filteredTabs]);
 
   return { tabs, value, handleTabSelect };
 };

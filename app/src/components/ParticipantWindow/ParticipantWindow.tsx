@@ -2,22 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box as MuiBox } from '@mui/material';
-import { AutomodSelectionStrategy, MediaSessionType, ParticipantId } from '@opentalk/common';
-import React, { useMemo, useState } from 'react';
+import { MediaSessionType, ParticipantId } from '@opentalk/common';
+import React from 'react';
+import { useMemo, useState } from 'react';
 
-import automod from '../../api/types/outgoing/automod';
 import NameTile from '../../commonComponents/NameTile/NameTile';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
 import { selectSubscriberById } from '../../store/slices/mediaSubscriberSlice';
-import {
-  selectModerationActive,
-  selectRemaining,
-  selectSelectionMode,
-  selectSpeaker,
-} from '../../store/slices/moderationSlice';
 import { selectParticipantName } from '../../store/slices/participantsSlice';
-import { selectOurUuid } from '../../store/slices/userSlice';
 import HandRaisedIndicator from './fragments/HandRaisedIndicator';
 import ParticipantVideo from './fragments/ParticipantVideo';
 import VideoOverlay from './fragments/VideoOverlay';
@@ -57,15 +50,7 @@ const ParticipantWindow = ({
   alwaysShowOverlay,
   isThumbnail,
 }: ParticipantWindowProps) => {
-  const dispatch = useAppDispatch();
-  const speaker = useAppSelector(selectSpeaker);
-  const ourUuid = useAppSelector(selectOurUuid);
-
   const fullscreenHandle = useFullscreenContext();
-
-  const moderationActive = useAppSelector(selectModerationActive);
-  const moderationMode = useAppSelector(selectSelectionMode);
-  const moderationRemaining = useAppSelector(selectRemaining);
   const displayName = useAppSelector(selectParticipantName(participantId));
   const [activeOverlay, setActiveOverlay] = useState<boolean>(!!alwaysShowOverlay);
 
@@ -88,14 +73,6 @@ const ParticipantWindow = ({
         presenterVideoIsActive={activePresenter}
         isThumbnail={isThumbnail}
       />
-
-      {moderationActive &&
-        speaker === ourUuid &&
-        moderationMode === AutomodSelectionStrategy.Nomination &&
-        moderationRemaining?.includes(participantId) && (
-          <button onClick={() => dispatch(automod.actions.pass.action({ next: participantId }))}>Yield Next</button>
-        )}
-
       <VideoOverlay participantId={participantId} active={activeOverlay && !fullscreenHandle.active} />
       {!fullscreenHandle.active && (
         <NameTile audioOn={!!videoSubscriber?.audio} displayName={displayName || ''} className="positionBottom" />

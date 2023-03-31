@@ -2,12 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { TargetId } from '@opentalk/common';
+import { TargetId, ChatScope } from '@opentalk/common';
 import { debounce } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import ChatScope from '../../enums/ChatScope';
 import { useAppSelector } from '../../hooks';
 import { selectChatSearchValue, setChatSearchValue } from '../../store/slices/uiSlice';
 import ChatForm from './fragments/ChatForm';

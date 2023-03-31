@@ -1,13 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { notifications, ParticipantId } from '@opentalk/common';
+import { notifications, ParticipantId, TimerStyle } from '@opentalk/common';
 import { parseISO } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '.';
-import { TimerStyle } from '../api/types/outgoing/timer';
 import { useMediaContext } from '../components/MediaProvider';
 import { selectServerTimeOffset } from '../store/slices/roomSlice';
 import {

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid } from '@mui/material';
-import { MediaSessionType, ParticipantId } from '@opentalk/common';
+import { MediaSessionType, ParticipantId, Participant } from '@opentalk/common';
 import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { SubscriberConfig } from '../../modules/WebRTC';
 import { selectUnmutedParticipants } from '../../store/selectors';
 import { selectAllSubscribers } from '../../store/slices/mediaSubscriberSlice';
-import { Participant } from '../../store/slices/participantsSlice';
 import SearchTextField from '../SearchTextField/index';
 import MuteParticipantsList from './fragments/MuteParticipantsList';
 

@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Tariff, TariffId } from '@opentalk/common';
+import { Tariff, TariffId, joinSuccess } from '@opentalk/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { merge } from 'lodash';
 
 import { RootState } from '../';
-import { joinSuccess } from '../commonActions';
 
 // Map is not recommended by redux/immer
 

@@ -1,32 +1,38 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { GroupId, ParticipationKind, TargetId } from '@opentalk/common';
+import {
+  GroupId,
+  ParticipationKind,
+  TargetId,
+  Participant,
+  ProtocolAccess,
+  sortParticipantsWithConfig,
+  SortOption,
+  ChatMessage as ChatMessageType,
+  ChatScope,
+  FilterableParticipant,
+} from '@opentalk/common';
+import { automodStore } from '@opentalk/components';
 import { createSelector } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
 import _, { intersection } from 'lodash';
 import { some } from 'lodash';
 
 import { ProtocolParticipant } from '../components/ProtocolTab/ProtocolTab';
-import ChatScope from '../enums/ChatScope';
-import SortOption from '../enums/SortOption';
 import { selectCurrentBreakoutRoomId } from './slices/breakoutSlice';
 import {
   selectChatMessages,
-  ChatMessage as ChatMessageType,
   selectAllChatMessages,
   selectLastSeenTimestamps,
   selectLastSeenTimestampGlobal,
   TimestampState,
-  ChatMessage,
 } from './slices/chatSlice';
 import { selectGlobalEvents, RoomEvent } from './slices/eventSlice';
 import { selectFocusedSpeaker } from './slices/mediaSlice';
 import { selectUnmutedSubscribers } from './slices/mediaSubscriberSlice';
 import { selectHandUp, selectHandUpdatedAt } from './slices/moderationSlice';
 import {
-  Participant,
-  ProtocolAccess,
   selectAllOnlineParticipants,
   selectAllOnlineParticipantsInConference,
   selectAllParticipants,
@@ -62,6 +68,12 @@ export const selectCombinedParticipantsAndUserInCoference = createSelector(
   selectAllOnlineParticipantsInConference,
   selectUserAsParticipant,
   (participants, user) => (user ? [...participants, user] : participants)
+);
+
+export const selectCombinedUserFirstAndParticipantsInConference = createSelector(
+  selectAllOnlineParticipantsInConference,
+  selectUserAsParticipant,
+  (participants, user) => (user ? [user, ...participants] : participants)
 );
 
 export const selectCombinedParticipantsAndUser = createSelector(
@@ -155,43 +167,19 @@ export const selectAllGroupParticipants = createSelector(
   }
 );
 
-const sortAndFilterParticipants = (participants: Participant[], sortOption: SortOption, searchValue: string) => {
-  switch (sortOption) {
-    case SortOption.NameASC:
-      participants.sort((a, b) =>
-        a.displayName.localeCompare(b.displayName, i18next.language, { ignorePunctuation: true })
-      );
-      break;
-    case SortOption.NameDESC:
-      participants.sort((a, b) =>
-        b.displayName.localeCompare(a.displayName, i18next.language, { ignorePunctuation: true })
-      );
-      break;
-    case SortOption.FirstJoin:
-      participants.sort((a, b) => Date.parse(a.joinedAt) - Date.parse(b.joinedAt));
-      break;
-    case SortOption.LastJoin:
-      participants.sort((a, b) => Date.parse(b.joinedAt) - Date.parse(a.joinedAt));
-      break;
-    case SortOption.RaisedHandFirst:
-      participants
-        .sort((a, b) => {
-          const dateA = a.handUpdatedAt !== undefined ? Date.parse(a.handUpdatedAt) : 0;
-          const dateB = b.handUpdatedAt !== undefined ? Date.parse(b.handUpdatedAt) : 0;
-          return dateA - dateB;
-        })
-        .sort((p) => (p.handIsUp ? -1 : 1));
-      break;
-    case SortOption.LastActive:
-      participants.sort((a, b) => Date.parse(b.lastActive) - Date.parse(a.lastActive));
-      break;
-    default:
-      break;
-  }
+export const sortParticipants = sortParticipantsWithConfig({ language: i18next.language });
 
+/**
+ * @private
+ */
+const filterParticipants = <T extends FilterableParticipant>(participants: T[], searchValue: string) => {
   return participants.filter((participant) =>
     participant.displayName.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
   );
+};
+
+const sortAndFilterParticipants = (participants: Participant[], sortOption: SortOption, searchValue: string) => {
+  return filterParticipants(sortParticipants(participants, sortOption), searchValue);
 };
 
 export const selectAllGroupParticipantsSortedAndFiltered = createSelector(
@@ -217,7 +205,7 @@ export const selectCombinedMessageAndEvents = (scope: ChatScope, targetId: Targe
     return _.sortBy(merged, ['timestamp']);
   });
 
-const filterMessagesByTimestampStates = (messages: ChatMessage[], lastSeenTimestamps: TimestampState[]) => {
+const filterMessagesByTimestampStates = (messages: ChatMessageType[], lastSeenTimestamps: TimestampState[]) => {
   const targetIds = [...new Set(lastSeenTimestamps.map((seenState) => seenState.target as TargetId))];
   const filteredMessages = messages.filter((message) => {
     if (targetIds.includes(message.target as TargetId)) {
@@ -312,3 +300,21 @@ export const selectVotingUsers = createSelector(selectCombinedParticipantsAndUse
     return record.role === 'user' || record.participationKind === 'user';
   });
 });
+
+export const selectTalkingStickParticipants = createSelector(
+  selectCombinedParticipantsAndUserInCoference,
+  automodStore.selectAutomoderationParticipantIds,
+  (onlineParticipants, talkingStickIds): Participant[] => {
+    const participantsInTalkingStick: Participant[] = [];
+
+    talkingStickIds.forEach((participantId) => {
+      const foundParticipant = onlineParticipants.find((participant) => participant.id === participantId);
+
+      if (foundParticipant) {
+        participantsInTalkingStick.push(foundParticipant);
+      }
+    });
+
+    return participantsInTalkingStick;
+  }
+);

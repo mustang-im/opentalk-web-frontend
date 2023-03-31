@@ -3,37 +3,14 @@
 // SPDX-License-Identifier: EUPL-1.2
 //! Incoming Breakout Room related messages
 import {
+  BreakoutRoom,
   BreakoutRoomId,
   ErrorStruct,
   isEnumErrorStruct,
   NamespacedIncoming,
   ParticipantId,
-  ParticipationKind,
+  ParticipantInOtherRoom,
 } from '@opentalk/common';
-
-interface BreakoutRoom {
-  id: BreakoutRoomId;
-  name: string;
-}
-
-export interface InitialBreakout {
-  participants: Array<ParticipantInOtherRoom>;
-  rooms: Array<BreakoutRoom>;
-  // ISO timestamp or null, null means the room won't expire.
-  expires: string | null;
-  // BreakoutRoomId or null, null means the participant is in the parent room.
-  current: BreakoutRoomId | null;
-}
-
-export interface ParticipantInOtherRoom {
-  // BreakoutRoomId or null, null means the participant is in the parent room.
-  breakoutRoom: BreakoutRoomId | null;
-  id: ParticipantId;
-  displayName: string;
-  avatarUrl?: string;
-  leftAt: string | null;
-  participationKind: ParticipationKind;
-}
 
 export interface AssocParticipantInOtherRoom {
   // BreakoutRoomId or null, null means the participant was in the parent room.

@@ -10,6 +10,7 @@ export * from './common';
 export * from './control';
 export * from './matchBuilder';
 export * from './participant';
+export * from './poll';
 export * from './sort';
 export * from './tsHelper';
 export * from './tariff';

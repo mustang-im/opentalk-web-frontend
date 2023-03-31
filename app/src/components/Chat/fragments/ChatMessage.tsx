@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Stack, styled, Typography, useTheme } from '@mui/material';
-import { ModeratorIcon, useDateFormat } from '@opentalk/common';
+import { ModeratorIcon, useDateFormat, ChatMessage as IChatMessage } from '@opentalk/common';
 import Linkify from 'linkify-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,11 +10,10 @@ import { useTranslation } from 'react-i18next';
 import { Role } from '../../../api/types/incoming/control';
 import { useAppSelector } from '../../../hooks';
 import { RootState } from '../../../store';
-import { ChatMessage as IChatMessage } from '../../../store/slices/chatSlice';
 import { RoomEvent } from '../../../store/slices/eventSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 import { selectAvatarUrl, selectDisplayName, selectOurUuid } from '../../../store/slices/userSlice';
-import { isEventMessage } from '../../../utils/typeGardUtils';
+import { isEventMessage } from '../../../utils/typeGuardUtils';
 import ParticipantAvatar from '../../ParticipantAvatar';
 import TextWithDivider from '../../TextWithDivider';
 

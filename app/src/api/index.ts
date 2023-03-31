@@ -11,15 +11,32 @@ import {
   VideoSetting,
   matchBuilder,
   ProtocolState,
+  ChatMessage,
+  notificationAction,
+  notificationPersistent,
+  notifications,
+  Participant,
+  ProtocolAccess,
+  WaitingState,
+  ParticipantInOtherRoom,
+  InitialChatHistory,
+  ChatScope,
+  joinSuccess,
+  AutomodSelectionStrategy,
+  createStackedMessages,
 } from '@opentalk/common';
-import { notificationAction, notificationPersistent, notifications } from '@opentalk/common';
-import { AutomodMessageType, LegalVoteMessageType, legalVoteStore } from '@opentalk/components';
+import {
+  LegalVoteMessageType,
+  legalVoteStore,
+  automodStore,
+  createTalkingStickNotification,
+  AutomodEventType,
+} from '@opentalk/components';
 import { token_updated } from '@opentalk/react-redux-appauth';
 import { AnyAction, freeze } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 import { Middleware } from 'redux';
 
-import ChatScope from '../enums/ChatScope';
 import LayoutOptions from '../enums/LayoutOptions';
 import i18n from '../i18n';
 import localMediaContext from '../modules/Media/LocalMedia';
@@ -37,9 +54,9 @@ import {
 } from '../modules/WebRTC';
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
 import { AppDispatch, RootState } from '../store';
-import { hangUp, joinSuccess, login, startRoom } from '../store/commonActions';
+import { hangUp, login, startRoom } from '../store/commonActions';
 import * as breakoutStore from '../store/slices/breakoutSlice';
-import { ChatMessage, clearGlobalChat, received as chatReceived, setChatSettings } from '../store/slices/chatSlice';
+import { clearGlobalChat, received as chatReceived, setChatSettings } from '../store/slices/chatSlice';
 import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectionStatsSlice';
 import * as mediaStore from '../store/slices/mediaSlice';
 import { setFocusedSpeaker, setUpstreamLimit } from '../store/slices/mediaSlice';
@@ -51,18 +68,15 @@ import {
   mediaUpdated as subscriberMediaUpdated,
   updated as subscriberUpdate,
 } from '../store/slices/mediaSubscriberSlice';
-import * as automodStore from '../store/slices/moderationSlice';
+import { forceLowerHand, disableRaisedHands, enableRaisedHands } from '../store/slices/moderationSlice';
 import {
   breakoutJoined,
   breakoutLeft,
   join as participantsJoin,
   leave as participantsLeft,
-  Participant,
-  ProtocolAccess,
   update as participantsUpdate,
   waitingRoomJoined,
   waitingRoomLeft,
-  WaitingState,
   selectParticipantsTotal,
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
@@ -77,8 +91,7 @@ import {
   selectParticipantLimit,
   joinBlocked,
 } from '../store/slices/roomSlice';
-import * as slotStore from '../store/slices/slotSlice';
-import { joinedTimer, startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
+import { startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
 import { participantsLayoutSet } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
@@ -97,10 +110,8 @@ import {
   timer,
   recording,
 } from './types/incoming';
-import { ParticipantInOtherRoom } from './types/incoming/breakout';
-import { InitialChatHistory } from './types/incoming/chat';
 import { Role } from './types/incoming/control';
-import { Action as OutgoingActionType } from './types/outgoing';
+import { Action as OutgoingActionType, automod } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
 import { notifyBeforeEndConference } from './utils/notifyBeforeEndConference';
@@ -224,6 +235,12 @@ const dispatchError = (message: string) => {
 };
 
 /**
+ * Started talking stick notification ID, reused accross different
+ * event handlers.
+ */
+const startedId = 'handleAutomodMessage-started-id';
+
+/**
  * Handles messages in the control namespace
  * @param {AppDispatch} dispatch  function
  * @param {ConferenceRoom} conference context of the current conference room
@@ -290,8 +307,22 @@ const handleControlMessage = (
           recording: data.recording,
           serverTimeOffset,
           tariff: data.tariff,
+          timer: data.timer,
         })
       );
+
+      if (data.automod) {
+        if (data.automod.config.selectionStrategy === AutomodSelectionStrategy.Playlist) {
+          notificationAction({
+            key: startedId,
+            msg: createStackedMessages([
+              i18next.t('talking-stick-started-first-line'),
+              i18next.t('talking-stick-started-second-line'),
+            ]),
+            variant: 'info',
+          });
+        }
+      }
 
       if (data.whiteboard?.status === 'initialized') {
         dispatch(setWhiteboardAvailable({ showWhiteboard: true, url: data.whiteboard.url }));
@@ -301,10 +332,6 @@ const handleControlMessage = (
           actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
           onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Whiteboard)),
         });
-      }
-
-      if (data.timer) {
-        dispatch(joinedTimer(data.timer));
       }
 
       if (data.closesAt) {
@@ -510,21 +537,89 @@ const handleBreakoutMessage = (dispatch: AppDispatch, data: breakout.Message, ti
  * @param dispatch AppDispatch function
  * @param data mediaMsgs Message content
  */
-const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodMessageType) => {
+const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, state: RootState) => {
+  const stoppedId = 'handleAutomodMessage-stopped-id';
+  const nextId = 'handleAutomodMessage-next-id';
+  const currentId = 'handleAutomodMessage-current-id';
+  const unmutedId = 'handleAutomodMessage-unmute-only-id';
+  const MIN_RECOMMENDED_TALKING_STICK_PARTICIPANTS = 3;
+
   switch (data.message) {
-    case 'started':
+    case 'started': {
+      notifications.close(stoppedId);
+      notifications.close(nextId);
+      notifications.close(currentId);
+      notifications.close(unmutedId);
+      localMediaContext.reconfigure({ audio: false });
       dispatch(automodStore.started(data));
+
+      const totalParticipants = selectParticipantsTotal(state);
+      if (totalParticipants < MIN_RECOMMENDED_TALKING_STICK_PARTICIPANTS) {
+        notifications.warning(i18next.t('talking-stick-participant-amount-notification'));
+      }
+
+      if (data.selectionStrategy === AutomodSelectionStrategy.Playlist) {
+        notificationAction({
+          key: startedId,
+          msg: createStackedMessages([
+            i18next.t('talking-stick-started-first-line'),
+            i18next.t('talking-stick-started-second-line'),
+          ]),
+          variant: 'info',
+        });
+
+        if (data.issuedBy === state.user.uuid) {
+          dispatch(automod.actions.selectNext.action());
+        }
+      }
       break;
+    }
     case 'stopped':
+      notifications.close(startedId);
+      notifications.close(nextId);
+      notifications.close(currentId);
+      notifications.close(unmutedId);
+      localMediaContext.reconfigure({ audio: false });
       dispatch(automodStore.stopped());
+      notificationAction({
+        key: stoppedId,
+        msg: i18next.t('talking-stick-finished'),
+        variant: 'info',
+      });
       break;
-    case 'start_animation':
-      dispatch(slotStore.initLottery({ winner: data.result, pool: data.pool }));
-      break;
+    // case 'start_animation':
+    //   dispatch(slotStore.initLottery({ winner: data.result, pool: data.pool }));
+    //   break;
     case 'remaining_updated':
       dispatch(automodStore.remainingUpdated(data));
       break;
     case 'speaker_updated':
+      localMediaContext.reconfigure({ audio: false });
+      notifications.close(nextId);
+      notifications.close(currentId);
+      notifications.close(unmutedId);
+      if (data.remaining && data.remaining[0] && data.remaining[0] === state.user.uuid) {
+        notificationAction({
+          key: nextId,
+          msg: i18next.t('talking-stick-next-announcement'),
+          variant: 'warning',
+        });
+      }
+      if (data.speaker === state.user.uuid) {
+        notificationAction({
+          key: currentId,
+          persist: true,
+          variant: 'success',
+          hideCloseButton: true,
+          msg: createTalkingStickNotification({
+            localMediaContext,
+            currentId,
+            unmutedId,
+            passTalkingStick: () => dispatch(automod.actions.pass.action()),
+            lastSpeaker: Boolean(data.remaining && data.remaining.length === 0),
+          }),
+        });
+      }
       dispatch(automodStore.speakerUpdated(data));
       break;
     case 'error':
@@ -614,12 +709,12 @@ const handlePollVoteMessage = (dispatch: AppDispatch, data: poll.Message) => {
 const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message, state: RootState) => {
   switch (data.message) {
     case 'kicked':
-      notifications.warning(i18next.t('meeting-notification-kicked'));
       dispatch(hangUp());
+      notifications.warning(i18next.t('meeting-notification-kicked'));
       break;
     case 'banned':
-      notifications.warning(i18next.t('meeting-notification-banned'));
       dispatch(hangUp());
+      notifications.warning(i18next.t('meeting-notification-banned'));
       break;
     case 'waiting_room_enabled':
       dispatch(enableWaitingRoom());
@@ -641,16 +736,16 @@ const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message
       break;
     case 'raised_hand_reset_by_moderator':
       notifications.info(i18next.t('reset-handraises-notification'));
-      dispatch(automodStore.forceLowerHand());
+      dispatch(forceLowerHand());
       break;
     case 'raise_hands_disabled':
       notifications.info(i18next.t('turn-handraises-off-notification'));
-      dispatch(automodStore.forceLowerHand());
-      dispatch(automodStore.disableRaisedHands());
+      dispatch(forceLowerHand());
+      dispatch(disableRaisedHands());
       break;
     case 'raise_hands_enabled':
       notifications.info(i18next.t('turn-handraises-on-notification'));
-      dispatch(automodStore.enableRaisedHands());
+      dispatch(enableRaisedHands());
       break;
     case 'debriefing_started':
       notifications.info(i18next.t('debriefing-started-notification'));
@@ -729,13 +824,13 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
  * @param {AppDispatch} dispatch - this is the dispatch function from the redux store.
  * @param {timer.Message} data Message content
  */
-const handleTimerMessage = (dispatch: AppDispatch, data: timer.Message, timestamp: Timestamp) => {
+const handleTimerMessage = (dispatch: AppDispatch, data: timer.Message) => {
   switch (data.message) {
     case 'started':
-      dispatch(startedTimer({ payload: data, timestamp: timestamp }));
+      dispatch(startedTimer(data));
       break;
     case 'stopped':
-      dispatch(stoppedTimer({ message: data.message, kindStopTimer: data.kind }));
+      dispatch(stoppedTimer(data));
       break;
     case 'updated_ready_status':
       dispatch(updateParticipantsReady(data));
@@ -857,7 +952,7 @@ const onMessage =
         });
         break;
       case 'automod':
-        handleAutomodMessage(dispatch, message.payload);
+        handleAutomodMessage(dispatch, message.payload, getState());
         break;
       case 'legal_vote':
         handleLegalVoteMessage(dispatch, message.payload);
@@ -875,7 +970,7 @@ const onMessage =
         handleChatMessage(dispatch, message.payload, message.timestamp, getState());
         break;
       case 'timer':
-        handleTimerMessage(dispatch, message.payload, message.timestamp);
+        handleTimerMessage(dispatch, message.payload);
         break;
       case 'whiteboard':
         handleWhiteboardMessage(dispatch, message.payload);

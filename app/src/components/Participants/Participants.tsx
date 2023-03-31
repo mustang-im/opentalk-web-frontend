@@ -2,9 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
+import { automodStore, TalkingStickParticipantList } from '@opentalk/components';
 import React from 'react';
 
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { selectTalkingStickParticipants } from '../../store/selectors';
 import { setParticipantsSearchValue } from '../../store/slices/uiSlice';
 import SearchTextField from '../SearchTextField';
 import ParticipantList from './fragments/ParticipantList';
@@ -17,11 +19,19 @@ const Container = styled('div')(({ theme }) => ({
 
 const Participants = () => {
   const dispatch = useAppDispatch();
+  const isAutomodActive = useAppSelector(automodStore.selectAutomodActiveState);
+  const talkingStickParticipants = useAppSelector(selectTalkingStickParticipants);
 
   return (
     <Container>
-      <SearchTextField onSearch={(v) => dispatch(setParticipantsSearchValue(v))} fullWidth showSort />
-      <ParticipantList />
+      {isAutomodActive ? (
+        <TalkingStickParticipantList participants={talkingStickParticipants} />
+      ) : (
+        <>
+          <SearchTextField onSearch={(v) => dispatch(setParticipantsSearchValue(v))} fullWidth showSort />
+          <ParticipantList />
+        </>
+      )}
     </Container>
   );
 };
