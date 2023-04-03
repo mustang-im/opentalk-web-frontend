@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Disable starting of a legal vote/poll when a coffee break is active
 - Fix error on removing phone users from conference (!896)
 - Fix legal vote labels after re-joining a meeting (!902)
 - Change some legal vote wordings for german (!880)

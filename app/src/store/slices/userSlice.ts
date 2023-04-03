@@ -32,7 +32,7 @@ const initialState: UserState = {
   displayName: '',
   role: Role.User,
   isPresenter: false,
-  protocolAccess: ProtocolAccess.None,
+  protocolAccess: 'none' as ProtocolAccess.None, // this will be fixed with the next version of the ts-jest
 };
 
 export const userSlice = createSlice({

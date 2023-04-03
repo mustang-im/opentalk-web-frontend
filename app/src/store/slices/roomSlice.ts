@@ -1,14 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FetchRequestError, FetchRequestState, InviteCode, RoomId } from '@opentalk/common';
+import { FetchRequestError, FetchRequestState, InviteCode, RoomId, RoomMode } from '@opentalk/common';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { RootState } from '../';
+import { StartTimer } from '../../api/types/incoming/timer';
+import { TimerStyle } from '../../api/types/outgoing/timer';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
 import { hangUp, joinSuccess, startRoom } from '../commonActions';
+import { startedTimer, stoppedTimer } from './timerSlice';
 
 interface InviteState extends FetchRequestState {
   active?: boolean;
@@ -41,6 +44,7 @@ interface RoomState {
   serverTimeOffset: number;
   passwordRequired: boolean;
   participantLimit: number;
+  currentMode?: RoomMode;
 }
 
 export interface InviteRoomVerifyResponse {
@@ -185,6 +189,16 @@ export const roomSlice = createSlice({
     builder.addCase(hangUp.rejected, (state) => {
       state.connectionState = ConnectionState.Failed;
     });
+    builder.addCase(startedTimer, (state, { payload: { payload } }: PayloadAction<{ payload: StartTimer }>) => {
+      if (payload.style === TimerStyle.CoffeeBreak) {
+        state.currentMode = RoomMode.CoffeeBreak;
+      } else {
+        state.currentMode = undefined;
+      }
+    });
+    builder.addCase(stoppedTimer, (state) => {
+      state.currentMode = undefined;
+    });
   },
 });
 
@@ -206,5 +220,6 @@ export const selectWaitingRoomState = (state: RootState) => state.room.waitingRo
 export const selectServerTimeOffset = (state: RootState) => state.room.serverTimeOffset;
 export const selectPasswordRequired = (state: RootState) => state.room.passwordRequired;
 export const selectParticipantLimit = (state: RootState) => state.room.participantLimit;
+export const selectCurrentRoomMode = (state: RootState) => state.room.currentMode;
 
 export default roomSlice.reducer;

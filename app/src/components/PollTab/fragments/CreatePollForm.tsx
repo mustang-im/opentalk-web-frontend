@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, styled, Switch, Typography, Tooltip } from '@mui/material';
-import { Seconds, BackIcon, notifications } from '@opentalk/common';
+import { Seconds, BackIcon, notifications, RoomMode } from '@opentalk/common';
 import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { FormikValues, Formik } from 'formik';
 import i18next from 'i18next';
 import { isEmpty } from 'lodash';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -17,6 +17,7 @@ import TextField from '../../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
 import { PollFormValues, savePollFormValues } from '../../../store/slices/pollSlice';
+import { selectCurrentRoomMode } from '../../../store/slices/roomSlice';
 import AnswersFormElement from './AnswersFormElement';
 
 interface ICreatePollForm {
@@ -64,7 +65,7 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
   const dispatch = useAppDispatch();
   const totalParticipants = useAppSelector(selectParticipantsTotal);
   const isEditing = initialValues?.id !== undefined;
-
+  const isCoffeeBreakActive = useAppSelector(selectCurrentRoomMode) === RoomMode.CoffeeBreak;
   const saveFormValues = useCallback(
     (values: PollFormValues) => {
       if (isEmpty(values.topic)) {
@@ -163,7 +164,9 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                   </Button>
                 </Grid>
                 <Grid item xs={6} display="flex">
-                  <Button type="submit">{t('poll-form-button-submit')}</Button>
+                  <Button disabled={isCoffeeBreakActive} type="submit">
+                    {t('poll-form-button-submit')}
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
