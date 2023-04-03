@@ -50,6 +50,7 @@
 - Enhanced behavior of poll temporary save. (!891)
 - Improved legal vote token message on the popover. (!900)
 - Fix app not building on Safari (!910)
+- Add separate keys for moderation sidebar tabs (!917)
 
 ### New Features
 

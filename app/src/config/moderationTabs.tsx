@@ -39,6 +39,20 @@ const ResetHandraisesTab = React.lazy(() => import('../components/ResetHandraise
 const TimerTab = React.lazy(() => import('../components/TimerTab'));
 const WhiteboardTab = React.lazy(() => import('../components/WhiteboardTab'));
 
+export enum ModerationTabKeys {
+  Home = 'tab-home',
+  MuteUsers = 'tab-mute-users',
+  ResetHandraises = 'tab-reset-handraises',
+  Breakout = 'tab-breakout-rooms',
+  Whiteboard = 'tab-whiteboard',
+  Polls = 'tab-polls',
+  LegalVote = 'tab-voting',
+  Timer = 'tab-timer',
+  CoffeeBreak = 'tab-coffee-break',
+  Protocol = 'tab-protocol',
+  AddUser = 'tab-add-user',
+}
+
 export interface Tab {
   icon?: React.ReactElement;
   divider: boolean;
@@ -67,7 +81,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-home-tooltip',
     featureKey: FeaturesKeys.Home,
-    key: FeaturesKeys.Home,
+    key: ModerationTabKeys.Home,
   },
   {
     icon: <MuteAllIcon />,
@@ -79,7 +93,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-mute-tooltip',
     featureKey: FeaturesKeys.MuteUsers,
-    key: FeaturesKeys.MuteUsers,
+    key: ModerationTabKeys.MuteUsers,
     titleKey: 'mute-participants-tab-title',
   },
   {
@@ -92,7 +106,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-reset-handraises-tooltip',
     featureKey: FeaturesKeys.ResetHandraises,
-    key: FeaturesKeys.ResetHandraises,
+    key: ModerationTabKeys.ResetHandraises,
     titleKey: 'reset-handraises-tab-title',
   },
   {
@@ -109,7 +123,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-breakout-tooltip',
     moduleKey: BackendModules.Breakout,
-    key: BackendModules.Breakout,
+    key: ModerationTabKeys.Breakout,
     titleKey: 'breakout-room-tab-title',
   },
   {
@@ -122,7 +136,7 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     moduleKey: BackendModules.Whiteboard,
-    key: BackendModules.Whiteboard,
+    key: ModerationTabKeys.Whiteboard,
     titleKey: 'whiteboard-tab-title',
   },
   {
@@ -135,7 +149,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-poll-tooltip',
     moduleKey: BackendModules.Polls,
-    key: BackendModules.Polls,
+    key: ModerationTabKeys.Polls,
     titleKey: 'poll-tab-title',
   },
   {
@@ -148,7 +162,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-ballot-tooltip',
     moduleKey: BackendModules.LegalVote,
-    key: BackendModules.LegalVote,
+    key: ModerationTabKeys.LegalVote,
     titleKey: 'legal-vote-tab-title',
   },
   {
@@ -161,7 +175,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-timer-tooltip',
     moduleKey: BackendModules.Timer,
-    key: BackendModules.Timer,
+    key: ModerationTabKeys.Timer,
     titleKey: 'timer-tab-title',
   },
   {
@@ -174,7 +188,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-coffee-break-tooltip',
     moduleKey: BackendModules.Timer,
-    key: 'tab-coffee-break',
+    key: ModerationTabKeys.CoffeeBreak,
     titleKey: 'coffee-break-tab-title',
   },
   {
@@ -187,7 +201,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
     moduleKey: BackendModules.Protocol,
-    key: BackendModules.Protocol,
+    key: ModerationTabKeys.Protocol,
     titleKey: 'protocol-tab-title',
   },
   {
@@ -196,7 +210,7 @@ export const tabs: Array<Tab> = [
     component: <Typography variant={'body2'}>Add User</Typography>,
     tooltipTranslationKey: 'moderationbar-button-add-user-tooltip',
     featureKey: FeaturesKeys.AddUser,
-    key: FeaturesKeys.AddUser,
+    key: ModerationTabKeys.AddUser,
   },
   {
     icon: <WoolBallIcon />,
