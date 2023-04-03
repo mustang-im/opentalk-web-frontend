@@ -35,6 +35,7 @@
 - Fix unresponsive hang up button on participant leave. (!903)
 - Fix cross icon showing on timer without ready check (!919)
 - Fix the app crash on moderator join event when media is undefined (!925)
+- Fix both coffee break and timer tabs being disabled (!918)
 
 ### Stability Improvements
 
