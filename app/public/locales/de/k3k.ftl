@@ -235,6 +235,7 @@ moderationbar-button-wheel-tooltip = Diese Funktion befindet sich noch in der En
 moderationbar-button-protocol-tooltip = Protokoll
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
+moderationbar-button-debriefing = Nachbesprechung
 
 mute-participants-tab-title = Teilnehmer stummschalten
 mute-participants-button-all = Alle
@@ -243,6 +244,15 @@ mute-participants-button-selected = Nach Auswahl
 reset-handraises-tab-title = Gehobene Hände zurücksetzen
 reset-handraises-button = Alle
 reset-handraises-notification = Alle gehobene Hände wurden vom Moderator zurückgesetzt
+
+debriefing-tab-title = Nachbesprechung
+debriefing-button-all = Konferenz beenden
+debriefing-moderator-section-title = Beenden und Nachbesprechung starten
+debriefing-button-moderators = Für Moderatoren
+debriefing-button-moderators-and-users = Für Moderatoren + registrierte Nutzer
+debriefing-started-notification = Nachbesprechung wurde gestartet - Der Warteraum ist aktiviert.
+debriefing-session-ended-notification = Die Konferenz wurde vom Moderator beendet.
+debriefing-session-ended-for-all-notification = Die Konferenz ist für alle beendet.
 
 media-received-request-mute-ok = Stummschalten
 media-received-force-mute = Sie sind von {$origin} stummgeschaltet worden.

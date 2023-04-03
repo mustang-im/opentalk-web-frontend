@@ -235,6 +235,7 @@ moderationbar-button-wheel-tooltip = This feature is under development - Who is 
 moderationbar-button-protocol-tooltip = Protocol
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Reset raised hands
+moderationbar-button-debriefing = Debriefing
 
 mute-participants-tab-title = Mute participants
 mute-participants-button-all = All
@@ -243,6 +244,15 @@ mute-participants-button-selected = Selected
 reset-handraises-tab-title = Reset raised hands
 reset-handraises-button = All
 reset-handraises-notification = All raised hands were reset by the moderator
+
+debriefing-tab-title = Debriefing
+debriefing-button-all = End of the conference
+debriefing-moderator-section-title = End conference and start debriefing
+debriefing-button-moderators = For moderator
+debriefing-button-moderators-and-users = For moderator + registered user
+debriefing-started-notification = Debriefing initiated - Waiting room is activated.
+debriefing-session-ended-notification = The conference was closed by the moderator.
+debriefing-session-ended-for-all-notification = The conference is ended for all.
 
 media-received-request-mute-ok = Mute
 media-received-force-mute = You were muted by {$origin}.

@@ -175,3 +175,9 @@ export type DefaultAvatarImage = '404' | 'mm' | 'monsterid' | 'wavatar' | 'retro
 export enum RoomMode {
   CoffeeBreak = 'coffee-break',
 }
+
+export enum KickScope {
+  All = 'all',
+  Guests = 'guests',
+  UsersAndGuests = 'users_and_guests',
+}
