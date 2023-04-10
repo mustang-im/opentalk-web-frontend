@@ -9,7 +9,8 @@ WORKDIR /app
 COPY .yarnrc.yml yarn.lock package.json tsconfig.base.json ./
 COPY .yarn ./.yarn
 COPY app/package.json ./app/package.json
-COPY app/tsconfig.json ./app/tsconfig.json
+COPY app/tsconfig.hot.json ./app/tsconfig.hot.json
+COPY app/tsconfig.dev.json ./app/tsconfig.dev.json
 COPY packages/fluent_conv/package.json ./packages/fluent_conv/package.json
 COPY packages/i18next-fluent/package.json ./packages/i18next-fluent/package.json
 COPY packages/i18next-fluent/tsconfig.json ./packages/i18next-fluent/tsconfig.json

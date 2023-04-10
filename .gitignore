@@ -4,6 +4,7 @@
 
 # private config
 .pre-commit-config.yaml
+!example/git_hooks/.pre-commit-config.yaml
 
 ### Node template
 # Logs
@@ -168,9 +169,6 @@ fabric.properties
 
 # Local History for Visual Studio Code
 .history/
-
-# tsconfig.json - now it's automaticly created depending of the enviorment
-tsconfig.json
 
 ### Deployment config
 public/*config.json

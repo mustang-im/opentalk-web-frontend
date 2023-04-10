@@ -1,5 +1,5 @@
 {
-	"extends": "./hotReload/path.alias.json",
+	"extends": "./hotReload/components.tsconfig.json",
 	"compilerOptions": {
 	  "target": "es5",
 	  "lib": [

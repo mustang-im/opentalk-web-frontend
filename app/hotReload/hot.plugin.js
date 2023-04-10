@@ -1,16 +1,24 @@
-const { getPlugin, pluginByName, throwUnexpectedConfigError } = require('@craco/craco');
-const path = require('path');
-const configTs = require('./path.alias.json');
-
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-module.exports = {
-  overrideWebpackConfig: ({ webpackConfig, pluginOptions = {}, context: { env, paths } }) => {
-    if (process.env.REACT_HOT_MODE === 'hot') {
-      //   const { tsConfigFileName = 'tsconfig.hot.json' } = pluginOptions;
-      //   paths.appTsConfig.replace('tsconfig.json', tsConfigFileName);
+const path = require('path');
+const { throwUnexpectedConfigError } = require('@craco/craco');
 
+const throwError = (message) =>
+  throwUnexpectedConfigError({
+    packageName: 'craco',
+    githubRepo: 'gsoft-inc/craco',
+    message,
+    githubIssueQuery: 'webpack',
+  });
+
+module.exports = {
+  overrideWebpackConfig: ({ webpackConfig }) => {
+    if (process.env.REACT_HOT_MODE === 'hot') {
+      const configTs = require('./components.tsconfig.json');
+      if (!configTs) {
+        throwError('Please create components.tsconfig.json in hotReload repository');
+      }
       console.log('adding ts-loader');
       const tsLoader = {
         test: /\.tsx?$/,

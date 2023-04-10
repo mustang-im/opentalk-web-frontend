@@ -3,7 +3,7 @@
 	   "baseUrl": "./",
       	"paths": {
         "@opentalk/components": [
-          "../../../module-component"
+          "../../../components"
         ]
       }
 	}
