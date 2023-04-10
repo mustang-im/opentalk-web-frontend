@@ -4,9 +4,7 @@
 
 const CracoEsbuildPlugin = require('craco-esbuild');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const hotReload = require('./hotReloadLibraries.config')
-
-
+const HotReloadPlugin = require('./hotReload/hot.plugin')
 
 module.exports = ({ env }) => {
     const isProductionBuild = process.env.NODE_ENV === "production"
@@ -15,6 +13,9 @@ module.exports = ({ env }) => {
 
     return {
         plugins: [
+			{
+				plugin: HotReloadPlugin
+			},
             {
                 plugin: CracoEsbuildPlugin,
                 options: {
@@ -33,24 +34,6 @@ module.exports = ({ env }) => {
 				);
 
 				webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
-				const alias = !isProductionBuild && hotReload.enableHotReload ? hotReload.dependencies : {}
-				const rule = !isProductionBuild && hotReload.enableHotReload ? {
-					test: /\.tsx?$/,
-					loader: 'ts-loader',
-					exclude: /node_modules/,
-					options: {
-						transpileOnly: true,
-						configFile: 'tsconfig.json',
-					},
-				} : {}
-
-				webpackConfig.resolve.alias = {
-					...webpackConfig.resolve.alias,
-					...alias
-				}
-
-				webpackConfig.module.rules.push(rule)
-
 				return webpackConfig;
 			},
         },

@@ -7,6 +7,7 @@
     "lint": "yarn workspaces foreach -pA run lint",
     "fmt": "yarn workspaces foreach -pA run fmt",
     "start": "yarn build:libs && yarn workspace @opentalk/opentalk start",
+    "start:hot": "yarn build:libs && yarn workspace @opentalk/opentalk start:hot",
     "analyze": "yarn build:libs && yarn workspace @opentalk/opentalk analyze",
     "watch": "yarn workspaces foreach -p run watch",
     "build": "yarn workspaces foreach -vptR --from '@opentalk/opentalk' run build",
