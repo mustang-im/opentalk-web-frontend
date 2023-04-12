@@ -63,6 +63,7 @@
 - Show room blocker for a participant, that tries to join a full room (!876)
 - Add time_limit quotas in conference (!875)
 - Deactivate modules from room tariff info (!873)
+- Rework Notistack integration(!922)
 
 ## 1.2.0
 

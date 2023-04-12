@@ -93,8 +93,3 @@ Copyright:
  2022 OpenTalk GmbH <mail@opentalk.eu>
 License: LicenseRef-MIT-fluent_conv
 
-Files: packages/notistack/*
-Copyright:
- 2018-2020 Hossein Dehnokhalaji
- 2022 OpenTalk GmbH <mail@opentalk.eu>
-License: LicenseRef-MIT-notistack

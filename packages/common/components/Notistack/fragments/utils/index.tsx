@@ -1,19 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { OptionsObject, SnackbarKey, WithSnackbarProps } from '@opentalk/notistack';
 import { TFunctionResult } from 'i18next';
+import { OptionsObject, SnackbarKey, enqueueSnackbar, closeSnackbar } from 'notistack';
 import React from 'react';
 
-import useSnackbarFacade from '../hooks/snackbarFacade';
-import { SnackbarActionButtons } from '../provider/Utils';
-
-// Must be imported at least once in the app to initialize the ref
-export let snackbarRef: WithSnackbarProps;
-export const SnackbarUtilsConfigurator: React.FC = () => {
-  snackbarRef = useSnackbarFacade();
-  return null;
-};
+import SnackbarActionButtons from '../SnackbarActionButtons';
 
 export interface ISnackbarActionButtonProps {
   msg: (string | React.ReactNode) & TFunctionResult;
@@ -30,7 +22,7 @@ export interface ISnackbarPersistentProps extends Omit<OptionsObject, 'persist' 
   msg: string;
 }
 
-export function notificationAction({
+export const notificationAction = ({
   msg,
   variant,
   actionBtnText,
@@ -39,16 +31,16 @@ export function notificationAction({
   onCancel,
   hideCloseButton,
   ...options
-}: ISnackActionsProps) {
+}: ISnackActionsProps) => {
   const handleClick = (key: SnackbarKey, action: typeof onAction | typeof onCancel) => {
-    snackbarRef.closeSnackbar(key);
+    closeSnackbar(key);
 
     if (action) {
       action();
     }
   };
 
-  snackbarRef.enqueueSnackbar(msg, {
+  enqueueSnackbar(msg, {
     variant,
     ...options,
     action: (key: SnackbarKey) => (
@@ -61,18 +53,18 @@ export function notificationAction({
       />
     ),
   });
-}
+};
 
-export function notificationPersistent({ msg, variant, ...options }: ISnackbarPersistentProps): void {
-  snackbarRef.enqueueSnackbar(msg, {
+export const notificationPersistent = ({ msg, variant, ...options }: ISnackbarPersistentProps) => {
+  enqueueSnackbar(msg, {
     variant,
     ...options,
     action: null,
     persist: true,
   });
-}
+};
 
-const notifications = {
+export const notifications = {
   success(msg: string, options: OptionsObject = {}): void {
     this.toast(msg, { ...options, variant: 'success' });
   },
@@ -86,15 +78,12 @@ const notifications = {
     this.toast(msg, { ...options, variant: 'error' });
   },
   toast(msg: string, options: OptionsObject = {}): void {
-    snackbarRef.enqueueSnackbar(msg, options);
+    enqueueSnackbar(msg, options);
   },
   close(key: SnackbarKey): void {
-    snackbarRef.closeSnackbar(key);
+    closeSnackbar(key);
   },
   closeAll(): void {
-    snackbarRef.closeSnackbar();
+    closeSnackbar();
   },
 };
-
-// Export no-named default so consumer can name as desired/required
-export default notifications;

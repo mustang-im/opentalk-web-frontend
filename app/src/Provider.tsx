@@ -5,7 +5,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@mui/material';
-import { NotificationProvider } from '@opentalk/common';
+import { SnackbarProvider } from '@opentalk/common';
 import { AuthProvider } from '@opentalk/react-redux-appauth';
 import deLocale from 'date-fns/locale/de';
 import enLocale from 'date-fns/locale/en-US';
@@ -58,13 +58,13 @@ const Provider = ({ children }: IProviderProps) => {
         >
           <ThemeProvider theme={inRoom ? createOpenTalkTheme('dark') : createOpenTalkTheme()}>
             <CssBaseline />
-            <NotificationProvider>
+            <SnackbarProvider>
               <BreakoutRoomProvider>
                 <MediaProvider>
                   <FullscreenProvider>{children}</FullscreenProvider>
                 </MediaProvider>
               </BreakoutRoomProvider>
-            </NotificationProvider>
+            </SnackbarProvider>
           </ThemeProvider>
         </AuthProvider>
       </LocalizationProvider>

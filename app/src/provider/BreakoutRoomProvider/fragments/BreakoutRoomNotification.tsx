@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, Typography } from '@mui/material';
-import { notifications } from '@opentalk/common';
-import { SnackbarKey, SnackbarMessage } from '@opentalk/notistack';
+import { notifications, SnackbarKey, SnackbarMessage } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 

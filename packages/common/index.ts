@@ -8,5 +8,4 @@ export * from './types';
 export { ErrorStruct } from './utils';
 export * from './utils';
 export * from './store';
-export * from './provider';
 export * from './hooks';

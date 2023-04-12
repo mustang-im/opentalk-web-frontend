@@ -11,6 +11,17 @@ import ProgressBar from './ProgressBar';
 import TextField from './TextField';
 import ToolbarMenuUtils from './ToolbarMenuUtils';
 
+export * from 'notistack';
+export {
+  SnackbarProvider,
+  ISnackActionsProps,
+  ISnackbarPersistentProps,
+  ISnackbarActionButtonProps,
+  notificationAction,
+  notificationPersistent,
+  notifications,
+} from './Notistack';
+
 export {
   ProgressBar,
   AccordionItem,

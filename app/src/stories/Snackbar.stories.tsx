@@ -2,9 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, Divider } from '@mui/material';
-import { notifications, ISnackActionsProps, notificationAction } from '@opentalk/common';
-import { NotificationProvider } from '@opentalk/common';
-import { SnackbarProvider, VariantType } from '@opentalk/notistack';
+import { notifications, ISnackActionsProps, notificationAction, VariantType } from '@opentalk/common';
+import { SnackbarProvider } from '@opentalk/common';
 import { ComponentMeta } from '@storybook/react';
 import React from 'react';
 
@@ -35,7 +34,7 @@ export default {
 } as ComponentMeta<typeof SnackbarProvider>;
 
 export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActionsProps) => (
-  <NotificationProvider>
+  <SnackbarProvider>
     <Container>
       <Button
         variant={'contained'}
@@ -109,5 +108,5 @@ export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActi
         Custom Action Notification
       </Button>
     </Container>
-  </NotificationProvider>
+  </SnackbarProvider>
 );
