@@ -12,7 +12,6 @@ const RemoteAudioStreams = () => {
   const subscribers = useAppSelector(selectAllSubscribers);
 
   const subscribersWithAudio = subscribers.filter(({ audio }) => audio);
-
   return (
     <>
       {subscribersWithAudio.map((descriptor) => (
