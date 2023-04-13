@@ -171,3 +171,7 @@ export enum WaitingState {
 }
 
 export type DefaultAvatarImage = '404' | 'mm' | 'monsterid' | 'wavatar' | 'retro' | 'robohash' | 'pagan';
+
+export enum RoomMode {
+  CoffeeBreak = 'coffee-break',
+}

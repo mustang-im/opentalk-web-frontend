@@ -18,13 +18,16 @@ import {
   ProtocolIcon,
   CoffeeBreakIcon,
   BackendModules,
+  RoomMode,
 } from '@opentalk/common';
 import React, { Suspense } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { TimerStyle } from '../api/types/outgoing/timer';
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
+import { useAppSelector } from '../hooks';
 import { FeaturesKeys } from '../store/slices/configSlice';
+import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 
 const MenuTabs = React.lazy(() => import('../components/MenuTabs'));
 const BreakoutRoomTab = React.lazy(() => import('../components/BreakoutRoomTab'));
@@ -48,6 +51,10 @@ export interface Tab {
   disabled?: boolean;
   titleKey?: string;
 }
+
+export const currentRoomMode = (): RoomMode | undefined => {
+  return useAppSelector(selectCurrentRoomMode);
+};
 
 export const tabs: Array<Tab> = [
   {
@@ -136,7 +143,7 @@ export const tabs: Array<Tab> = [
     divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
-        <LegalVote />
+        <LegalVote currentRoomMode={currentRoomMode} />
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-ballot-tooltip',
