@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsReadyList } from '../../../store/selectors';
+import { selectReadyCheckEnabled } from '../../../store/slices/timerSlice';
 import ParticipantAvatar from '../../ParticipantAvatar';
 
 const List = styled(MuiList)({
@@ -17,7 +18,11 @@ const List = styled(MuiList)({
 
 const UserList = () => {
   const participants = useAppSelector(selectParticipantsReadyList);
+  const isReadyCheckEnabled = useAppSelector(selectReadyCheckEnabled);
   const { t } = useTranslation();
+
+  const renderReadyStatus = (isReady: boolean) =>
+    isReady ? <DoneIcon fontSize="small" color="primary" /> : <CloseIcon fontSize="small" color="warning" />;
 
   const renderUsers = () => {
     return participants.map((participant) => {
@@ -28,11 +33,7 @@ const UserList = () => {
               <ParticipantAvatar src={participant.avatarUrl}>{participant.displayName}</ParticipantAvatar>
             </ListItemAvatar>
             <ListItemText primary={<Typography noWrap>{participant.displayName}</Typography>} />
-            {participant.isReady ? (
-              <DoneIcon fontSize="small" color="primary" />
-            ) : (
-              <CloseIcon fontSize="small" color="warning" />
-            )}
+            {isReadyCheckEnabled && renderReadyStatus(participant.isReady)}
           </ListItem>
         );
       }
