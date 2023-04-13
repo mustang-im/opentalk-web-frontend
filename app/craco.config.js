@@ -4,6 +4,7 @@
 
 const CracoEsbuildPlugin = require('craco-esbuild');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const HotReloadPlugin = require('./hotReload/hot.plugin')
 
 module.exports = ({ env }) => {
     const isProductionBuild = process.env.NODE_ENV === "production"
@@ -12,6 +13,9 @@ module.exports = ({ env }) => {
 
     return {
         plugins: [
+			{
+				plugin: HotReloadPlugin
+			},
             {
                 plugin: CracoEsbuildPlugin,
                 options: {
@@ -24,6 +28,14 @@ module.exports = ({ env }) => {
             plugins: {
                 add: isProductionBuild ? [new BundleAnalyzerPlugin({ analyzerMode })] : []
             },
+			configure: webpackConfig => {
+				const scopePluginIndex = webpackConfig.resolve.plugins.findIndex(
+				({ constructor }) => constructor && constructor.name === "ModuleScopePlugin",
+				);
+
+				webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
+				return webpackConfig;
+			},
         },
 		jest: {
 			configure: (jestConfig) => {

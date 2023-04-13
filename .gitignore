@@ -4,6 +4,7 @@
 
 # private config
 .pre-commit-config.yaml
+!example/git_hooks/.pre-commit-config.yaml
 
 ### Node template
 # Logs

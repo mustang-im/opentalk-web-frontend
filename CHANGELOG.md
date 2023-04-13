@@ -31,6 +31,7 @@
 
 ### Stability Improvements
 
+- Improving development workflow for external libraries (!908)
 - Renegotiate media connections when tracks fail with on recovery (!899)
 - Reconnect media connections when they fail (!887)
 - Add connection information to participant stats panel (!849)

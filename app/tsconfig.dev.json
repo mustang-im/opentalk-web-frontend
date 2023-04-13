@@ -1,13 +1,7 @@
 {
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
+	"compilerOptions": {
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom.iterable",
-      "dom",
-      "esnext"
-    ],
+    "lib": ["es6", "dom.iterable", "dom", "esnext"],
     "downlevelIteration": true,
     "allowJs": true,
     "skipLibCheck": true,
@@ -21,10 +15,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "sourceMap": true
+    "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
