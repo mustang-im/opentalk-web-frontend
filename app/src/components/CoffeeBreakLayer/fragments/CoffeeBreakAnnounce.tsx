@@ -8,9 +8,11 @@ import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '@opentalk/common';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { TimerStyle } from '../../../api/types/outgoing/timer';
 import { ReactComponent as LogoIconDefault } from '../../../assets/images/logo.svg';
 import { useAppSelector } from '../../../hooks';
-import { selectTimerRunning } from '../../../store/slices/timerSlice';
+import { selectTimerRunning, selectTimerStyle } from '../../../store/slices/timerSlice';
+import { selectIsCoffeeBreakOpen } from '../../../store/slices/uiSlice';
 import CoffeeBreakTimer from './CoffeeBreakTimer';
 
 const LogoIcon = styled(LogoIconDefault)(({ theme }) => ({
@@ -41,19 +43,21 @@ export interface CoffeeBreakAnnounceProps {
 export const CoffeeBreakAnnounce = memo(({ handleClose }: CoffeeBreakAnnounceProps) => {
   const { t } = useTranslation();
   const isTimerRunning = useAppSelector(selectTimerRunning);
+  const timerStyle = useAppSelector(selectTimerStyle);
+  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakOpen);
 
   return (
     <>
       <LogoIcon />
 
       <Content>
-        {isTimerRunning && <CoffeeBreakIcon />}
+        {isTimerRunning && isCoffeeBreakOpen && <CoffeeBreakIcon />}
 
         <Typography variant="h3" component="h2">
-          {isTimerRunning ? t('coffee-break-layer-title') : t('coffee-break-stopped-title')}
+          {isTimerRunning && isCoffeeBreakOpen ? t('coffee-break-layer-title') : t('coffee-break-stopped-title')}
         </Typography>
 
-        {isTimerRunning && <CoffeeBreakTimer />}
+        {isTimerRunning && timerStyle === TimerStyle.CoffeeBreak && <CoffeeBreakTimer />}
 
         <Button onClick={handleClose}>{t('coffee-break-layer-button')}</Button>
       </Content>

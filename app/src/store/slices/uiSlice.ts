@@ -6,6 +6,9 @@ import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
+import type { TimerState } from '../../api/types/incoming/control';
+import type { StartTimer } from '../../api/types/incoming/timer';
+import { TimerStyle } from '../../api/types/outgoing/timer';
 import ChatScope from '../../enums/ChatScope';
 import LayoutOptions from '../../enums/LayoutOptions';
 import SortOption from '../../enums/SortOption';
@@ -13,6 +16,7 @@ import { hangUp } from '../commonActions';
 import { leave, breakoutLeft } from './participantsSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
+import { joinedTimer, startedTimer } from './timerSlice';
 import { setWhiteboardAvailable } from './whiteboardSlice';
 
 export interface IChatConversationState {
@@ -35,6 +39,7 @@ interface UIState {
   chatSearchValue: string;
   isCurrentWhiteboardHighlighted?: boolean;
   isCurrentProtocolHighlighted?: boolean;
+  isCoffeeBreakOpen: boolean;
 }
 
 const initialState: UIState = {
@@ -55,6 +60,7 @@ const initialState: UIState = {
   chatSearchValue: '',
   isCurrentWhiteboardHighlighted: undefined,
   isCurrentProtocolHighlighted: undefined,
+  isCoffeeBreakOpen: false,
 };
 
 export const uiSlice = createSlice({
@@ -106,6 +112,9 @@ export const uiSlice = createSlice({
     setProtocolHighlight(state, { payload: highlight }: PayloadAction<boolean>) {
       state.isCurrentProtocolHighlighted = highlight;
     },
+    setCoffeeBreakOpen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
+      state.isCoffeeBreakOpen = isOpenFlag;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(leave, (state, { payload: { id } }: PayloadAction<{ id: ParticipantId }>) => {
@@ -141,6 +150,16 @@ export const uiSlice = createSlice({
     builder.addCase(legalVoteStore.started, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
       state.votesPollIdToShow = vote.legalVoteId;
     });
+    builder.addCase(startedTimer, (state, { payload: { payload } }: PayloadAction<{ payload: StartTimer }>) => {
+      if (payload.style === TimerStyle.CoffeeBreak) {
+        state.isCoffeeBreakOpen = true;
+      }
+    });
+    builder.addCase(joinedTimer, (state, { payload }: PayloadAction<TimerState>) => {
+      if (payload.style === TimerStyle.CoffeeBreak) {
+        state.isCoffeeBreakOpen = true;
+      }
+    });
   },
 });
 
@@ -158,6 +177,7 @@ export const {
   toggleDebugMode,
   setChatSearchValue,
   setProtocolHighlight,
+  setCoffeeBreakOpen,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -176,5 +196,6 @@ export const selectDebugMode = (state: RootState) => state.ui.debugMode;
 export const selectChatSearchValue = (state: RootState) => state.ui.chatSearchValue;
 export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.ui.isCurrentWhiteboardHighlighted;
 export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui.isCurrentProtocolHighlighted;
+export const selectIsCoffeeBreakOpen = (state: RootState) => state.ui.isCoffeeBreakOpen;
 
 export default uiSlice.reducer;
