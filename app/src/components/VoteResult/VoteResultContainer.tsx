@@ -334,7 +334,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
             <VoteResultDate date={new Date(currentLegalVote?.votedAt)} state={currentLegalVote.state} />
           </Grid>
         )}
-        {currentLegalVote && currentLegalVote.state === 'finished' && allowedToVote && (
+        {currentLegalVote && currentLegalVote.votedAt && currentLegalVote.state === 'finished' && allowedToVote && (
           <Grid item xs={12}>
             <LegalVoteTokenClipboard
               name={currentLegalVote.name}
