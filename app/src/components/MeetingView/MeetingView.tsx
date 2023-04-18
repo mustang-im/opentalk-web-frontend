@@ -7,7 +7,8 @@ import { useRef, useState, useEffect } from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { useTimer } from '../../hooks';
-import { selectDebugMode } from '../../store/slices/uiSlice';
+import { selectDebugMode, selectIsCoffeeBreakOpen } from '../../store/slices/uiSlice';
+import { selectIsModerator } from '../../store/slices/userSlice';
 import DebugPanel from '../DebugPanel';
 import HotKeys from '../HotKeys';
 import LocalVideo from '../LocalVideo';
@@ -52,8 +53,11 @@ const MeetingView = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallPortraitScreen = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
   const debugMode = useAppSelector(selectDebugMode);
+  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakOpen);
+  const isModerator = useAppSelector(selectIsModerator);
   const containerRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const enableAudio = isModerator || !isCoffeeBreakOpen;
 
   useTimer();
 
@@ -66,7 +70,7 @@ const MeetingView = () => {
     <Container ref={containerRef}>
       {debugMode && <DebugPanel />}
 
-      <RemoteAudioStreams />
+      {enableAudio && <RemoteAudioStreams />}
 
       <Timer anchorEl={anchorEl} />
 

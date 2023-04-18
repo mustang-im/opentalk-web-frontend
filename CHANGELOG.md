@@ -5,6 +5,7 @@
 - Stay in coffee break view when a timer is started (!915)
 - Disable starting of a legal vote/poll when a coffee break is active (!916)
 - Hide legal vote token for unsubmitted users after vote is finnished. (!926)
+- Disable remote audio while in coffee break view (!924)
 - Fix error on removing phone users from conference (!896)
 - Fix legal vote labels after re-joining a meeting (!902)
 - Change some legal vote wordings for german (!880)
