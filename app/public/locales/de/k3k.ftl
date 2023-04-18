@@ -292,6 +292,8 @@ legal-vote-input-subtitle-required = Untertitel erforderlich
 legal-vote-input-topic-required = Thema erforderlich
 legal-vote-input-assignments-required = Mindestens zwei Teilnehmer müssen ausgewählt werden
 
+legal-vote-popover-results-button = Votingergebnisse anzeigen
+
 legal-vote-overview-button-create-vote = Abstimmung erstellen
 legal-vote-form-button-save = Speichern
 legal-vote-form-button-continue = Fortsetzen
@@ -333,7 +335,7 @@ poll-participant-list-button-save = Speichern
 poll-participant-list-button-start = Abstimmung starten
 poll-participant-list-button-select-all = Alle auswählen
 
-legal-vote-success = Ihre Stimme wurde um {{atVoteTime}} Uhr am {{onVoteDate}} {{newLine}}erfolgreich gezählt mit dem folgenden Verifikation-Code.
+legal-vote-success = Ihre Stimme wurde um {{atVoteTime}} Uhr am {{onVoteDate}} erfolgreich gezählt mit dem folgenden Verifikation-Code.
 Dieser kann später dazu verwendet werden die abgegebene Stimme zu verifizieren.
 legal-vote-not-selected = Sie wurden nicht ausgewählt um an dieser Abstimmung teilzunehmen.
 legal-vote-save-form-success = Ihre Abstimmung wurde erfolgreich gespeichert

@@ -21,7 +21,7 @@ import {
   LegalVoteCountdown,
   LegalVoteTokenClipboard,
 } from '@opentalk/components';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Choice, ChoiceResult } from '../../api/types/incoming/poll';
@@ -57,6 +57,7 @@ const MainContainer = styled(Container)(({ theme }) => ({
   zIndex: 1000,
   maxHeight: '34rem',
   overflowY: 'auto',
+  scrollBehavior: 'smooth',
 }));
 
 const StyledStack = styled(Stack)(() => ({
@@ -106,6 +107,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const isModerator = useAppSelector(selectIsModerator);
   const startTime = new Date(currentLegalVote?.startTime ?? new Date());
   const formattedTime = useDateFormat(startTime, 'time');
+  const [showResults, setShowResults] = useState(false);
 
   const closeResultWindow = () => {
     dispatch(closePollResultWindow());
@@ -276,10 +278,31 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
     return null;
   };
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setShowResults(false);
+  }, [currentLegalVote]);
+
+  const showResultsHandler = () => {
+    setShowResults(true);
+  };
+
+  const scrollToResults = () => {
+    if (resultsRef && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const showTableHint =
+    !showResults && currentLegalVote && isModerator && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0
+      ? true
+      : false;
+
   return (
     <MainContainer maxWidth="sm">
       <Grid container rowSpacing={1.4}>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ scrollBehavior: 'smooth' }}>
           <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1}>
             <Box display="flex" alignItems="center" flex={1} gap={1}>
               <Chip
@@ -337,7 +360,12 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
         )}
         {currentLegalVote?.votedAt && allowedToVote && (
           <Grid item xs={12}>
-            <VoteResultDate date={new Date(currentLegalVote?.votedAt)} state={currentLegalVote.state} />
+            <VoteResultDate
+              date={new Date(currentLegalVote?.votedAt)}
+              state={currentLegalVote.state}
+              showTableHint={showTableHint}
+              showResultsHandler={showResultsHandler}
+            />
           </Grid>
         )}
         {currentLegalVote && currentLegalVote.votedAt && currentLegalVote.state === 'finished' && allowedToVote && (
@@ -350,11 +378,15 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
             />
           </Grid>
         )}
-        {currentLegalVote && isModerator && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
-          <Grid item xs={12}>
-            <VoteResultTable voteId={currentLegalVote.id} />
-          </Grid>
-        )}
+
+        {showResults &&
+          currentLegalVote &&
+          isModerator &&
+          Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
+            <Grid ref={resultsRef} item xs={12}>
+              <VoteResultTable scrollToResults={scrollToResults} voteId={currentLegalVote.id} />
+            </Grid>
+          )}
       </Grid>
     </MainContainer>
   );
