@@ -1,10 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FetchRequestError, ParticipantId, RoomId } from '@opentalk/common';
+import { FetchRequestError, notifications, ParticipantId, RoomId } from '@opentalk/common';
+import { logged_out } from '@opentalk/react-redux-appauth';
 import { fetchQuery, createOpenTalkApiWithReactHooks } from '@opentalk/rest-api-rtk-query';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
+import i18next from 'i18next';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { RootState } from '../store';
@@ -104,6 +106,18 @@ const baseQuery = fetchQuery({
 });
 
 export const restApi = createOpenTalkApiWithReactHooks(baseQuery);
+
+export const rtkQueryErrorLoggerMiddlware: Middleware =
+  ({ dispatch }) =>
+  (next) =>
+  (action) => {
+    // If rtk query get rejected, user will be logged out with notification error
+    if (isRejectedWithValue(action)) {
+      dispatch(logged_out());
+      notifications.error(i18next.t('error-system-currently-unavailable'));
+    }
+    return next(action);
+  };
 
 // Re-export the most common api hooks
 export const {

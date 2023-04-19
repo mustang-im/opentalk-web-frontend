@@ -19,6 +19,8 @@ error-invite-link = Dieser Einladungs-Link ist nicht mehr aktiv.
 signaling-subscription-failed = Die Verbindung zu einen Teilnehmer ist leider fehlgeschlagen.
 media-subscription-failed = Keine Verbindung zum Teilnehmer
 
+error-system-currently-unavailable = Das System ist zur Zeit nicht erreichbar, bitte versuchen sie es später nochmal.
+
 login-form-title = Anmeldung
 login-form-body = Bitte melden Sie sich an
 login-form-body-loading = Anmeldung läuft

@@ -9,7 +9,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { merge } from 'lodash';
 
 import { apiMiddleware } from '../api';
-import { restApi } from '../api/rest';
+import { restApi, rtkQueryErrorLoggerMiddlware } from '../api/rest';
 import breakoutReducer from './slices/breakoutSlice';
 import chatReducer from './slices/chatSlice';
 import { initialState as initialConfig } from './slices/configSlice';
@@ -31,7 +31,7 @@ import uiReducer from './slices/uiSlice';
 import userReducer from './slices/userSlice';
 import whiteboardReducer from './slices/whiteboardSlice';
 
-const middleware: Array<Middleware> = [apiMiddleware, restApi.middleware];
+const middleware: Array<Middleware> = [apiMiddleware, restApi.middleware, rtkQueryErrorLoggerMiddlware];
 
 const logger = (store: MiddlewareAPI) => (next: Dispatch) => (action: AnyAction) => {
   if (action.type.startsWith('signaling/media') || action.type.startsWith('stats/statsUpdated')) {
