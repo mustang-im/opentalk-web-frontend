@@ -7,8 +7,10 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
 import { Role } from '../../api/types/incoming/control';
+import { sendChatMessage } from '../../api/types/outgoing/chat';
+import { lowerHand, raiseHand } from '../../api/types/outgoing/control';
 import { joinSuccess, login, startRoom } from '../commonActions';
-import { setFocusedSpeaker } from './mediaSlice';
+import { setAudioEnable, setFocusedSpeaker, setScreenShare, setVideoEnable } from './mediaSlice';
 import { Participant, ProtocolAccess, WaitingState } from './participantsSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
@@ -98,6 +100,24 @@ export const userSlice = createSlice({
         }
       }
     );
+    builder.addCase(raiseHand.action, (state) => {
+      state.lastActive = new Date().toISOString();
+    });
+    builder.addCase(lowerHand.action, (state) => {
+      state.lastActive = new Date().toISOString();
+    });
+    builder.addCase(setAudioEnable, (state) => {
+      state.lastActive = new Date().toISOString();
+    });
+    builder.addCase(setVideoEnable, (state) => {
+      state.lastActive = new Date().toISOString();
+    });
+    builder.addCase(setScreenShare, (state) => {
+      state.lastActive = new Date().toISOString();
+    });
+    builder.addCase(sendChatMessage.action, (state) => {
+      state.lastActive = new Date().toISOString();
+    });
     builder.addCase(setProtocolReadUrl, (state) => {
       state.protocolAccess = ProtocolAccess.Read;
     });

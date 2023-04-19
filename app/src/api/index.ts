@@ -367,7 +367,7 @@ const handleControlMessage = (
         dispatch(
           participantsUpdate({
             id: data.id,
-            lastActive: data.control.joinedAt,
+            lastActive: timestamp,
             waitingState: WaitingState.Joined,
             isPresenter: Boolean(data.media?.isPresenter),
             protocolAccess: mapProtocolToProtocolAccess(data.protocol),

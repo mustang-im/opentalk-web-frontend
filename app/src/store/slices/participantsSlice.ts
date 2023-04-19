@@ -16,6 +16,7 @@ import { ParticipantInOtherRoom } from '../../api/types/incoming/breakout';
 import { Role } from '../../api/types/incoming/control';
 import { joinSuccess } from '../commonActions';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
+import { ChatMessage, received } from './chatSlice';
 import { setFocusedSpeaker } from './mediaSlice';
 import { connectionClosed } from './roomSlice';
 
@@ -169,12 +170,33 @@ export const participantsSlice = createSlice({
     update: (
       state,
       {
-        payload: { id, displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, role, isPresenter, protocolAccess },
+        payload: {
+          id,
+          displayName,
+          handIsUp,
+          lastActive,
+          joinedAt,
+          leftAt,
+          handUpdatedAt,
+          role,
+          isPresenter,
+          protocolAccess,
+        },
       }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups'>>
     ) => {
       participantAdapter.updateOne(state, {
         id,
-        changes: { displayName, handIsUp, joinedAt, leftAt, handUpdatedAt, isPresenter, role, protocolAccess },
+        changes: {
+          displayName,
+          handIsUp,
+          lastActive,
+          joinedAt,
+          leftAt,
+          handUpdatedAt,
+          isPresenter,
+          role,
+          protocolAccess,
+        },
       });
     },
   },
@@ -184,6 +206,13 @@ export const participantsSlice = createSlice({
       participantAdapter.setAll(state, participants);
     });
     builder.addCase(connectionClosed, () => participantAdapter.getInitialState());
+
+    builder.addCase(received, (state, { payload }: PayloadAction<ChatMessage>) => {
+      participantAdapter.updateOne(state, {
+        id: payload.source,
+        changes: { lastActive: payload.timestamp },
+      });
+    });
     builder.addCase(
       setFocusedSpeaker,
       (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp?: Timestamp }>) => {
