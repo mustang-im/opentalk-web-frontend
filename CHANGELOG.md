@@ -54,6 +54,7 @@
 
 ### New Features
 
+- Add account management tab to the dashboard (!930)
 - Feat: show quotas information in dashboard (!865)
 - Lobby / Waiting room move button / password (!852)
 - Add unread indicator for chat messages (!844)

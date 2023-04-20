@@ -24,6 +24,7 @@ window.config = {
   insecure: ${INSECURE:-false},
   baseUrl: "${BASE_URL}",
   helpdeskUrl: "${HELPDESK_URL}",
+  accountManagementUrl: "${ACCOUNT_MANAGEMENT_URL}",
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
   beta: {
     isBeta: ${IS_BETA_RELEASE:-true},

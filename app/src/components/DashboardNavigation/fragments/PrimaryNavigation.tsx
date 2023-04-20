@@ -11,14 +11,14 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { BackIcon, FeedbackIcon, ForwardIcon, HelpIcon, SignOutIcon } from '@opentalk/common';
+import { BackIcon, FeedbackIcon, ForwardIcon, HelpIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
 import { useAuth } from '@opentalk/react-redux-appauth';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../hooks';
-import { selectHelpdeskUrl, selectUserSurveyUrl } from '../../../store/slices/configSlice';
+import { selectAccountManagementUrl, selectHelpdeskUrl, selectUserSurveyUrl } from '../../../store/slices/configSlice';
 import FeedbackDialog from '../../FeedbackDialog/FeedbackDialog';
 import { PrimaryRoute } from '../DashboardNavigation';
 import ProfileChip from './ProfileChip';
@@ -159,6 +159,7 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
   const navigate = useNavigate();
   const helpdeskUrl = useAppSelector(selectHelpdeskUrl);
   const userSurveyEnabled = useAppSelector(selectUserSurveyUrl);
+  const accountManagementUrl = useAppSelector(selectAccountManagementUrl);
   const auth = useAuth();
 
   const logout = useCallback(async () => {
@@ -210,6 +211,16 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
       )}
       <List>
         {renderNavItems()}
+        {accountManagementUrl && (
+          <ListItem>
+            <Button href={accountManagementUrl} role="button" disableRipple disabled={auth.isLoading}>
+              <SettingsIcon />
+              <Collapse orientation="horizontal" in={!collapsedBar}>
+                <ListItemText>{t('dashboard-account-management')}</ListItemText>
+              </Collapse>
+            </Button>
+          </ListItem>
+        )}
         {helpdeskUrl && (
           <ListItem isSubmenuOpen={false} role="button">
             <Button href={helpdeskUrl} disableRipple target="_blank">

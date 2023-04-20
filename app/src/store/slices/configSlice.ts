@@ -67,6 +67,7 @@ export interface Config {
   maxVideoBandwidth: number;
   libravatarDefaultImage?: DefaultAvatarImage;
   tariff?: Tariff;
+  accountManagementUrl?: string;
 }
 
 export interface ConfigState {
@@ -100,6 +101,7 @@ export interface ConfigState {
   readonly features: Features;
   libravatarDefaultImage: DefaultAvatarImage;
   tariff: Tariff;
+  accountManagementUrl?: string;
 }
 /**
  * Initial Configuration.
@@ -196,5 +198,6 @@ export const selectBetaBadgeUrl = (state: RootState) => state.config.beta.badgeU
 export const selectErrorReportEmail = (state: RootState) => state.config.errorReportAddress;
 export const selectChangePassword = (state: RootState) => state.config.changePassword;
 export const selectEnabledModules = (state: RootState) => state.config.tariff.enabledModules;
+export const selectAccountManagementUrl = (state: RootState) => state.config.accountManagementUrl;
 
 export default configSlice.reducer;

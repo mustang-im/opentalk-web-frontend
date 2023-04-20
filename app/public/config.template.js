@@ -8,6 +8,7 @@ window.config = {
   baseUrl: '${BASE_URL}',
   helpdeskUrl: '${HELPDESK_URL}',
   userSurveyUrl: '${USER_SURVEY_URL}',
+  accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
   userSurveyApiKey: '${USER_SURVEY_API_KEY}',
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
   beta: {
