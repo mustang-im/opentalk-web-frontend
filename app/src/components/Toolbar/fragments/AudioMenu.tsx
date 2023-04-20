@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ThemeProvider, Typography, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { ThemeProvider, Typography, MenuItem, ListItemIcon, ListItemText, styled } from '@mui/material';
 import { MicOnIcon, notifications } from '@opentalk/common';
 import { ErrorIcon, WarningIcon } from '@opentalk/common';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
@@ -15,6 +15,10 @@ import { selectAudioDeviceId } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';
 import DeviceList from './DeviceList';
 import { MenuTitle, ToolbarMenu, ToolbarMenuProps } from './ToolbarMenuUtils';
+
+const MultilineTypography = styled(Typography)({
+  whiteSpace: 'pre-wrap',
+});
 
 const AudioMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const { t } = useTranslation();
@@ -81,10 +85,7 @@ const AudioMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
             <ListItemIcon>
               <ErrorIcon />
             </ListItemIcon>
-
-            <Typography variant="body2" noWrap>
-              {t('device-permission-denied')}
-            </Typography>
+            <MultilineTypography variant="body2">{t('device-permission-denied')}</MultilineTypography>
           </MenuItem>
         )}
         {devices === undefined || !mediaContext.hasAllAudioDetails ? (
