@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container as MuiContainer } from '@mui/material';
-import { useSnackbarFacade } from '@opentalk/common';
+import { SnackbarProvider } from '@opentalk/common';
 import { FullScreen as ReactFullScreen } from 'react-full-screen';
 
 import LayoutOptions from '../../enums/LayoutOptions';
@@ -28,7 +28,6 @@ const Container = styled(MuiContainer)({
 const Cinema = () => {
   const userLayout = useAppSelector(selectParticipantsLayout);
   const fullscreenHandle = useFullscreenContext();
-  const { snackbars } = useSnackbarFacade();
 
   const renderView = () => {
     if (fullscreenHandle.active) {
@@ -51,8 +50,7 @@ const Cinema = () => {
   return (
     <Container disableGutters maxWidth={false}>
       <FullScreen handle={fullscreenHandle}>
-        {fullscreenHandle.active && snackbars}
-        {renderView()}
+        <SnackbarProvider>{renderView()}</SnackbarProvider>
       </FullScreen>
     </Container>
   );

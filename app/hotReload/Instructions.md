@@ -1,6 +1,6 @@
 ## Configuration
 
-1. Create a file `./components.alias.json` inside hotReload directory
+1. Create a file `./components.tsconfig.json` inside hotReload directory
 
 with this information
 

@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { useSnackbar } from '@opentalk/notistack';
 
 declare namespace Intl {
   interface DateTimeFormatOptions {
@@ -17,8 +16,4 @@ declare namespace SVG {
     const src: string;
     export default src;
   }
-}
-
-declare module '@opentalk/notistack' {
-  useSnackbar, OptionsObject, SnackbarKey, WithSnackbarProps;
 }

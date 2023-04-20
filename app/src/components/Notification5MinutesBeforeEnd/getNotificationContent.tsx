@@ -3,8 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Box } from '@mui/material';
 import { styled } from '@mui/system';
-import { CloseIcon, FeedbackIcon, IconButton, snackbarRef } from '@opentalk/common';
-import { SnackbarKey } from '@opentalk/notistack';
+import { CloseIcon, FeedbackIcon, IconButton, SnackbarKey, closeSnackbar } from '@opentalk/common';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,9 +11,10 @@ import AnimationTimerDown from './fragments/AnimationTimerDown';
 
 const BoxContent = styled(Box)(({ theme }) => ({
   display: 'flex',
-  gap: theme.spacing(0, 4),
-  height: '60px',
-  padding: '0 30px',
+  gap: theme.spacing(2),
+  minHeight: '60px',
+  padding: '7px 0 7px 16px',
+  borderRadius: '4px',
   background: theme.palette.error.main,
 }));
 
@@ -36,7 +36,7 @@ const getNotificationContent = (
 
     const handleClose = useCallback(() => {
       setIsOpenNotification(false);
-      snackbarRef.closeSnackbar(key);
+      closeSnackbar(key);
     }, []);
 
     useEffect(() => {

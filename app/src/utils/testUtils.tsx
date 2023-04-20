@@ -9,9 +9,8 @@ import { ThemeProvider } from '@mui/material';
 import '@mui/material';
 import '@mui/styles';
 import { MediaSessionType, ParticipantId, ParticipationKind, VideoSetting } from '@opentalk/common';
-import { SnackbarUtilsConfigurator } from '@opentalk/common';
+import { SnackbarProvider } from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
-import { SnackbarProvider } from '@opentalk/notistack';
 import { AuthProvider } from '@opentalk/react-redux-appauth';
 import {
   DateTime,
@@ -89,16 +88,7 @@ export const render = async (ui: React.ReactElement, store?: Store, options?: Re
         <LocalizationProvider dateAdapter={AdapterDateFns} utils={DateFnsUtils}>
           <ThemeProvider theme={createOpenTalkTheme()}>
             <I18nextProvider i18n={i18n}>
-              <SnackbarProvider
-                maxSnack={3}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-              >
-                <SnackbarUtilsConfigurator />
-                {children}
-              </SnackbarProvider>
+              <SnackbarProvider>{children}</SnackbarProvider>
             </I18nextProvider>
           </ThemeProvider>
         </LocalizationProvider>
@@ -118,14 +108,7 @@ export const render = async (ui: React.ReactElement, store?: Store, options?: Re
                 scope="void"
               >
                 <I18nextProvider i18n={i18n}>
-                  <SnackbarProvider
-                    maxSnack={3}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                  >
-                    <SnackbarUtilsConfigurator />
+                  <SnackbarProvider>
                     <MediaProvider>
                       <FullscreenProvider>{children}</FullscreenProvider>
                     </MediaProvider>
