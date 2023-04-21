@@ -550,6 +550,7 @@ dashboard-settings-video = Video
 dashboard-settings-audio = Audio
 dashboard-settings-accessibility = Accessibility
 dashboard-settings-logout = Logout
+dashboard-account-management = Account management
 dashboard-faq = FAQ
 dashboard-close-navbar = Close navigation
 dashboard-open-navbar = Open navigation
