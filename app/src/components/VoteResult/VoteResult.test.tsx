@@ -4,7 +4,7 @@
 import { LegalVoteId } from '@opentalk/common';
 
 import { createStore, render, screen, cleanup, fireEvent } from '../../utils/testUtils';
-import VoteResilt, { IVoteResult } from './VoteResult';
+import VoteResilt, { IVoteResult, VoteType } from './VoteResult';
 
 describe('testing vote results', () => {
   const { store } = createStore();
@@ -19,6 +19,7 @@ describe('testing vote results', () => {
   };
 
   const voteResultsProps: IVoteResult = {
+    voteType: VoteType.LegalVote,
     title: 'Yes',
     optionIndex: 1,
     voteData: voteData,

@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Fix: Poll/Voting User not able to submit their poll (!936)
 - Stay in coffee break view when a timer is started (!915)
 - Disable starting of a legal vote/poll when a coffee break is active (!916)
 - Hide legal vote token for unsubmitted users after vote is finnished. (!926)

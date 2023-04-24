@@ -32,7 +32,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectPollVoteById, closeResultWindow as closePollResultWindow, voted } from '../../store/slices/pollSlice';
 import { setVotePollIdToShow } from '../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid } from '../../store/slices/userSlice';
-import VoteResult from './VoteResult';
+import VoteResult, { VoteType } from './VoteResult';
 import VoteResultDate from './fragments/VoteResultDate';
 
 const TooltipIcon = styled('div')(({ color }) => ({
@@ -141,6 +141,10 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
 
   const allowedToVote = ourUuid ? currentLegalVote?.allowedParticipants?.includes(ourUuid as ParticipantId) : false;
 
+  useEffect(() => {
+    vote && setVotePollIdToShow(vote.id);
+  }, [vote]);
+
   const mapVoteKey = (key: string) => {
     return t(`legal-vote-${key}-label`);
   };
@@ -176,6 +180,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
                     key={index}
                     title={mapVoteKey(voteKey as VoteOption)}
                     optionIndex={index}
+                    voteType={VoteType.LegalVote}
                     voteData={{
                       votePercentage:
                         currentLegalVote?.votes && currentLegalVote?.votes[voteKey as VoteOption] != 0
@@ -208,6 +213,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
               <Grid item key={index}>
                 <VoteResult
                   key={index}
+                  voteType={VoteType.Poll}
                   title={choice.content || ''}
                   optionIndex={index}
                   voteData={{

@@ -7,6 +7,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
 import type { TimerState } from '../../api/types/incoming/control';
+import { Started as PollStartedInterface } from '../../api/types/incoming/poll';
 import type { StartTimer } from '../../api/types/incoming/timer';
 import { TimerStyle } from '../../api/types/outgoing/timer';
 import ChatScope from '../../enums/ChatScope';
@@ -14,6 +15,7 @@ import LayoutOptions from '../../enums/LayoutOptions';
 import SortOption from '../../enums/SortOption';
 import { hangUp } from '../commonActions';
 import { leave, breakoutLeft } from './participantsSlice';
+import { started as PollStarted } from './pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
 import { joinedTimer, startedTimer } from './timerSlice';
@@ -149,6 +151,9 @@ export const uiSlice = createSlice({
     });
     builder.addCase(legalVoteStore.started, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
       state.votesPollIdToShow = vote.legalVoteId;
+    });
+    builder.addCase(PollStarted, (state, { payload: vote }: PayloadAction<PollStartedInterface>) => {
+      state.votesPollIdToShow = vote.id;
     });
     builder.addCase(startedTimer, (state, { payload: { payload } }: PayloadAction<{ payload: StartTimer }>) => {
       if (payload.style === TimerStyle.CoffeeBreak) {

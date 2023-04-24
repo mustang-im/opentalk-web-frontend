@@ -7,7 +7,12 @@ import { legalVoteStore } from '@opentalk/components';
 import React, { useState } from 'react';
 
 import { useAppSelector } from '../../hooks';
+import { selectCurrentShownPollVote } from '../../store/slices/pollSlice';
 
+export enum VoteType {
+  Poll = 'Poll',
+  LegalVote = 'LegalVote',
+}
 interface IVoteData {
   numberOfVotes: number;
   votePercentage: number;
@@ -23,6 +28,7 @@ export interface IVoteResult {
   onVote: () => void;
   showResult?: boolean;
   isChecked?: boolean;
+  voteType: VoteType;
 }
 
 const ProgressContainer = styled('div')({
@@ -64,8 +70,11 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   },
 }));
 
-const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked }: IVoteResult) => {
-  const didVote = Boolean(useAppSelector(legalVoteStore.selectCurrentShownVote)?.votedAt);
+const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, voteType }: IVoteResult) => {
+  const didVote =
+    voteType === VoteType.LegalVote
+      ? Boolean(useAppSelector(legalVoteStore.selectCurrentShownVote)?.votedAt)
+      : Boolean(useAppSelector(selectCurrentShownPollVote)?.voted);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 
   return (
