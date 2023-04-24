@@ -8,6 +8,7 @@
 - Fix german Protokoll ausblenden label (!933)
 - Fix audio/video permission denied message (!931)
 - Fix sorting of participants by last active (!929)
+- Fix the legal vote token copy text for german users (!935)
 - Stay in coffee break view when a timer is started (!915)
 - Disable starting of a legal vote/poll when a coffee break is active (!916)
 - Hide legal vote token for unsubmitted users after vote is finnished. (!926)
