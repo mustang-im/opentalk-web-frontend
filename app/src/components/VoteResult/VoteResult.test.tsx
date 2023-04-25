@@ -4,7 +4,7 @@
 import { LegalVoteId } from '@opentalk/common';
 
 import { createStore, render, screen, cleanup, fireEvent } from '../../utils/testUtils';
-import VoteResilt, { IVoteResult, VoteType } from './VoteResult';
+import VoteResult, { IVoteResult, VoteType } from './VoteResult';
 
 describe('testing vote results', () => {
   const { store } = createStore();
@@ -28,7 +28,7 @@ describe('testing vote results', () => {
   };
 
   test('component should render wothout breaking', async () => {
-    await render(<VoteResilt {...voteResultsProps} />, store);
+    await render(<VoteResult {...voteResultsProps} />, store);
     const yesCheckbox = screen.getByRole('checkbox', { name: voteResultsProps.title });
 
     expect(yesCheckbox).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('testing vote results', () => {
   });
 
   test('on click should fire onVote event', async () => {
-    await render(<VoteResilt {...voteResultsProps} />, store);
+    await render(<VoteResult {...voteResultsProps} />, store);
     const yesCheckbox = screen.getByRole('checkbox', { name: voteResultsProps.title });
     expect(yesCheckbox).toBeInTheDocument();
     fireEvent.click(yesCheckbox);
