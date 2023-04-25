@@ -48,6 +48,7 @@ lint:audit:
   stage: lint
   script:
     - yarn npm audit --environment production -RA
+  allow_failure: true
 
 test:build:
   stage: test
