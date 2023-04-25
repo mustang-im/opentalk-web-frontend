@@ -4363,8 +4363,8 @@ __metadata:
   linkType: soft
 
 "@opentalk/components@npm:^1.0.20":
-  version: 1.0.20
-  resolution: "@opentalk/components@npm:1.0.20::__archiveUrl=https%3A%2F%2Fgit.opentalk.dev%2Fapi%2Fv4%2Fprojects%2F264%2Fpackages%2Fnpm%2F%40opentalk%2Fcomponents%2F-%2F%40opentalk%2Fcomponents-1.0.20.tgz"
+  version: 1.0.22
+  resolution: "@opentalk/components@npm:1.0.22::__archiveUrl=https%3A%2F%2Fgit.opentalk.dev%2Fapi%2Fv4%2Fprojects%2F434%2Fpackages%2Fnpm%2F%40opentalk%2Fcomponents%2F-%2F%40opentalk%2Fcomponents-1.0.22.tgz"
   peerDependencies:
     "@emotion/react": ^11.10.4
     "@emotion/styled": ^11.8.1
@@ -4381,7 +4381,7 @@ __metadata:
     react-redux: ^7.2.8
     typescript: ^4.9.4
     yup: ^0.32.11
-  checksum: 0d4edbfdbe6b31ba33318592e3fd7c42f92843e920f8e076be97026a30a99cda5d8ca54387dfaaabbba296464040aff71c1d6fafc49ae40175517a6d455e6104
+  checksum: 9ce9f31eb368d8295af0cd09425cc5df2920e085458af8aad8b3806919aa44a9a461b9525e1aa64b84ca272c6087ea3be7c07e63c24246ed2fc3a9ae8994500e
   languageName: node
   linkType: hard
 
