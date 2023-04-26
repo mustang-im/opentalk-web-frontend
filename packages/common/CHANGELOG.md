@@ -1,8 +1,10 @@
 ## 1.0.6
 
-### Stability Improvements
+### New Features
 
--
+- Talking Stick: Add necessary types and shared components for the talking stick feature.
+
+### Stability Improvements
 
 ## 1.0.5
 

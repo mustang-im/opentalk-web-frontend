@@ -18,6 +18,7 @@ Files:
  app/tsconfig.json
  app/README.md
  app/.depcheckrc
+ packages/**/*.snap
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: EUPL-1.2
 

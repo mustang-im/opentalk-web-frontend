@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MilliSeconds, Seconds } from '../utils';
+import { Seconds } from '../utils';
 
 export type ParticipantId = string & { readonly __tag: unique symbol };
 export type GroupId = string & { readonly __tag: unique symbol };
@@ -72,13 +72,6 @@ export interface TrickleCandidate {
   candidate: string;
 }
 
-export enum AutomodSelectionStrategy {
-  None = 'none',
-  Playlist = 'playlist',
-  Random = 'random',
-  Nomination = 'nomination',
-}
-
 export type Namespaces =
   | 'automod'
   | 'breakout'
@@ -100,23 +93,6 @@ export interface Namespaced<P = void, T extends string = Namespaces> {
 }
 export interface NamespacedIncoming<P = void, T extends string = Namespaces> extends Namespaced<P, T> {
   timestamp: Timestamp;
-}
-
-export interface AutomodParameter {
-  // The strategy used to determine the next speaker
-  selectionStrategy: AutomodSelectionStrategy;
-  // Is `list` visible to the frontend
-  showList: boolean;
-  // If a raised hand should add a participant into `list`
-  considerHandRaise: boolean;
-  // Time limit in milliseconds each speaker has before its speaking status gets revoked
-  timeLimit?: MilliSeconds;
-  // Depending on the `selection_strategy` this will prevent participants to become
-  // speaker twice in a single automod session
-  allowDoubleSelection: boolean;
-  /// The frontend will play an animation when a random selection
-  /// is being made
-  animationOnRandom: boolean;
 }
 
 export interface IParticipantControl {
@@ -173,7 +149,7 @@ export enum WaitingState {
 export type DefaultAvatarImage = '404' | 'mm' | 'monsterid' | 'wavatar' | 'retro' | 'robohash' | 'pagan';
 
 export enum RoomMode {
-  CoffeeBreak = 'coffee-break',
+  CoffeeBreak = 'coffee-break'
 }
 
 export enum KickScope {

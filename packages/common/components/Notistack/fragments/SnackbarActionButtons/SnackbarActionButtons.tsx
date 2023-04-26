@@ -14,18 +14,20 @@ const SnackbarActionButtons = ({
   actionBtnText,
   cancelBtnText,
   hideCloseButton,
+  actionBtnAttributes = {},
+  cancelBtnAttributes = {}
 }: Omit<ISnackbarActionButtonProps, 'msg'>) => {
   return (
     <Box display="flex" gap={1}>
       {actionBtnText && (
-        <Button onClick={onAction} variant={'text'} color={'inherit'}>
+        <Button onClick={onAction} variant={'text'} color={'inherit'} {...actionBtnAttributes}>
           {actionBtnText}
         </Button>
       )}
       {!hideCloseButton && (
         <>
           {cancelBtnText && (
-            <Button onClick={onCancel} color={'inherit'}>
+            <Button onClick={onCancel} color={'inherit'} {...cancelBtnAttributes}>
               {cancelBtnText}
             </Button>
           )}

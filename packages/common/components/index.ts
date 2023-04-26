@@ -10,6 +10,7 @@ import ParticipantAvatar from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
 import TextField from './TextField';
 import ToolbarMenuUtils from './ToolbarMenuUtils';
+import SortPopoverMenu from './SortPopoverMenu';
 
 export * from 'notistack';
 export {
@@ -32,4 +33,5 @@ export {
   TextField,
   ToolbarMenuUtils,
   IconButton,
+  SortPopoverMenu
 };
