@@ -59,6 +59,7 @@ import {
   selectPaginationPageState,
   setVotePollIdToShow,
   toggleDebugMode,
+  selectIsCurrentProtocolHighlighted,
 } from '../../store/slices/uiSlice';
 import { selectIsCurrentWhiteboardHighlighted } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
@@ -233,6 +234,7 @@ const MeetingHeader = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const isWhiteboardAvailable = useAppSelector(selectIsWhiteboardAvailable);
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
+  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const recording = useAppSelector(selectRecordingState);
   const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
   const fullscreenHandle = useFullscreenContext();
@@ -448,7 +450,7 @@ const MeetingHeader = () => {
   }, [selectedLayout, handleSelectedView]);
 
   const RenderProtocolIcon = (
-    <HeaderItem highlighted={selectedLayout === LayoutOptions.Protocol}>
+    <HeaderItem highlighted={isCurrentProtocolHighlighted}>
       <IconButton aria-describedby={'view-select'} onClick={handleProtocolClick}>
         <ProtocolIcon />
       </IconButton>
