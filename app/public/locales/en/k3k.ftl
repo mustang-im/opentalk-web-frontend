@@ -292,6 +292,8 @@ legal-vote-input-subtitle-required = Subtitle required
 legal-vote-input-topic-required = Topic required
 legal-vote-input-assignments-required = Min 2 participants must be assigned
 
+legal-vote-popover-results-button = Show voting results
+
 legal-vote-overview-button-create-vote = Create new voting
 legal-vote-form-button-save = Save
 legal-vote-form-button-continue = Continue
@@ -330,7 +332,7 @@ poll-participant-list-button-save = Save
 poll-participant-list-button-start = Start vote
 poll-participant-list-button-select-all = Select all
 
-legal-vote-success = Your vote was counted successfully at {{newLine}}{{atVoteTime}} on {{onVoteDate}} {{newLine}}using the following confirmation token.
+legal-vote-success = Your vote was counted successfully at {{atVoteTime}} on {{onVoteDate}} using the following confirmation token.
 It can later be used to confirm the correctness of the voting result.
 legal-vote-not-selected = You have not been selected to participate in this vote.
 legal-vote-save-form-success = Your vote form was saved successfully

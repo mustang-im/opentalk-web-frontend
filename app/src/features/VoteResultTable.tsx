@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { legalVoteStore } from '@opentalk/components';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../hooks';
@@ -21,6 +22,7 @@ const CustomTable = styled(Table)(({ theme }) => ({
 
 interface VoteResultTableProps {
   voteId: string;
+  scrollToResults: () => void;
 }
 
 function VoteResultTable(props: VoteResultTableProps) {
@@ -30,6 +32,10 @@ function VoteResultTable(props: VoteResultTableProps) {
   if (!vote) {
     return null;
   }
+
+  useEffect(() => {
+    props.scrollToResults();
+  }, []);
 
   const participants = Object.entries(vote.votingRecord || {});
   const total = vote.votes['yes'] + vote.votes['no'] + vote.votes['abstain'];
