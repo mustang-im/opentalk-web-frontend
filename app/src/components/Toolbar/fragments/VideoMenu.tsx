@@ -76,6 +76,10 @@ const ClearBackground = styled(VideoBackgroundImage)(({ theme }) => ({
   color: theme.palette.secondary.main,
 }));
 
+const MultilineTypography = styled(Typography)({
+  whiteSpace: 'pre-wrap',
+});
+
 const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -193,9 +197,7 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
               <ErrorIcon />
             </ListItemIcon>
 
-            <Typography variant="body2" noWrap>
-              {t('device-permission-denied')}
-            </Typography>
+            <MultilineTypography variant="body2">{t('device-permission-denied')}</MultilineTypography>
           </MenuItem>
         )}
 
