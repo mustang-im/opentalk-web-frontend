@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendModules } from '@opentalk/common';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useAppSelector } from '.';
 import { TimerStyle } from '../api/types/outgoing/timer';
-import { Tab, tabs as initialTabs } from '../config/moderationTabs';
+import { ModerationTabKeys, Tab, tabs as initialTabs } from '../config/moderationTabs';
 import { selectFeatures } from '../store/slices/configSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
 import { useEnabledModules } from './enabledModules';
@@ -47,10 +46,10 @@ const useTabs = () => {
     const isTimerNormal = timerStyle === TimerStyle.Normal;
 
     const mapTabs = tabs.map((tab) => {
-      if (isTimerNormal && tab.moduleKey === BackendModules.Timer) {
+      if (isTimerNormal && tab.key === ModerationTabKeys.CoffeeBreak) {
         return { ...tab, disabled: true };
       }
-      if (isTimerCoffee && tab.moduleKey === BackendModules.Timer) {
+      if (isTimerCoffee && tab.key === ModerationTabKeys.Timer) {
         return { ...tab, disabled: true };
       }
       return tab;
