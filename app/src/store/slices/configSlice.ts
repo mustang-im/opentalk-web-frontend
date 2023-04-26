@@ -30,6 +30,7 @@ export enum FeaturesKeys {
   ResetHandraises = 'resetHandraises',
   AddUser = 'addUser',
   JoinWithoutMedia = 'joinWithoutMedia',
+  Debriefing = 'debriefing',
 }
 
 type Features = {
@@ -146,6 +147,7 @@ export const initialState: ConfigState = {
     userSearch: true,
     muteUsers: true,
     resetHandraises: true,
+    debriefing: true,
     addUser: false,
   },
   videoBackgrounds: [],

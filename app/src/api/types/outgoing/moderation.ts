@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createModule, Namespaced, ParticipantId } from '@opentalk/common';
+import { createModule, KickScope, Namespaced, ParticipantId } from '@opentalk/common';
 
 import { RootState } from '../../../store';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
@@ -39,6 +39,11 @@ export interface ResetRaisedHands {
   action: 'reset_raised_hands';
 }
 
+export interface Debrief {
+  action: 'debrief';
+  kickScope: KickScope;
+}
+
 export type Action =
   | KickParticipant
   | BanParticipant
@@ -47,7 +52,8 @@ export type Action =
   | AcceptParticipantFromWaitingRoomToRoom
   | ResetRaisedHands
   | EnableRaiseHands
-  | DisableRaiseHands;
+  | DisableRaiseHands
+  | Debrief;
 
 export type Moderation = Namespaced<Action, 'moderation'>;
 
@@ -62,6 +68,7 @@ export const acceptParticipantFromWaitingRoomToRoom = createSignalingApiCall<Acc
 export const resetRaisedHands = createSignalingApiCall<ResetRaisedHands>('moderation', 'reset_raised_hands');
 export const enableRaiseHands = createSignalingApiCall<EnableRaiseHands>('moderation', 'enable_raise_hands');
 export const disableRaiseHands = createSignalingApiCall<DisableRaiseHands>('moderation', 'disable_raise_hands');
+export const debrief = createSignalingApiCall<Debrief>('moderation', 'debrief');
 
 export const handler = createModule<RootState>((builder) => {
   builder
@@ -88,6 +95,9 @@ export const handler = createModule<RootState>((builder) => {
     })
     .addCase(disableRaiseHands.action, () => {
       sendMessage(disableRaiseHands());
+    })
+    .addCase(debrief.action, (_state, action) => {
+      sendMessage(debrief(action.payload));
     });
 });
 

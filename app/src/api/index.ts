@@ -611,7 +611,7 @@ const handlePollVoteMessage = (dispatch: AppDispatch, data: poll.Message) => {
  * @param {AppDispatch} dispatch function to fire an event
  * @param {moderation.Message} data Message content
  */
-const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message) => {
+const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message, state: RootState) => {
   switch (data.message) {
     case 'kicked':
       notifications.warning(i18next.t('meeting-notification-kicked'));
@@ -651,6 +651,19 @@ const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message
     case 'raise_hands_enabled':
       notifications.info(i18next.t('turn-handraises-on-notification'));
       dispatch(automodStore.enableRaisedHands());
+      break;
+    case 'debriefing_started':
+      notifications.info(i18next.t('debriefing-started-notification'));
+      break;
+    case 'session_ended':
+      notifications.info(
+        i18next.t(
+          state.user.role === Role.Moderator
+            ? 'debriefing-session-ended-for-all-notification'
+            : 'debriefing-session-ended-notification'
+        )
+      );
+      dispatch(hangUp());
       break;
     default: {
       const dataString = JSON.stringify(data, null, 2);
@@ -850,7 +863,7 @@ const onMessage =
         handleLegalVoteMessage(dispatch, message.payload);
         break;
       case 'moderation':
-        handleModerationMessage(dispatch, message.payload);
+        handleModerationMessage(dispatch, message.payload, getState());
         break;
       case 'protocol':
         handleProtocolMessage(dispatch, message.payload, getState());

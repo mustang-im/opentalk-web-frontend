@@ -37,6 +37,14 @@ export interface HandraisesDisabled {
 export interface HandraisesEnabled {
   message: 'raise_hands_enabled';
 }
+
+export interface DebriefStarted {
+  message: 'debriefing_started';
+}
+export interface DebriefSessionEnded {
+  message: 'session_ended';
+}
+
 /* MODERATOR ONLY */
 
 // Signals to moderator that a participant has joined the waiting room.
@@ -60,7 +68,9 @@ export type Message =
   | leftWaitingRoom
   | HandraisesReset
   | HandraisesDisabled
-  | HandraisesEnabled;
+  | HandraisesEnabled
+  | DebriefStarted
+  | DebriefSessionEnded;
 
 export type Moderation = NamespacedIncoming<Message, 'moderation'>;
 

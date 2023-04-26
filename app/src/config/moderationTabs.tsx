@@ -17,6 +17,7 @@ import {
   RaiseHandOffIcon,
   ProtocolIcon,
   CoffeeBreakIcon,
+  DebriefingIcon,
   BackendModules,
   RoomMode,
 } from '@opentalk/common';
@@ -25,6 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { TimerStyle } from '../api/types/outgoing/timer';
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
+import DebriefingTab from '../components/DebriefingTab';
 import { useAppSelector } from '../hooks';
 import { FeaturesKeys } from '../store/slices/configSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
@@ -108,6 +110,19 @@ export const tabs: Array<Tab> = [
     featureKey: FeaturesKeys.ResetHandraises,
     key: ModerationTabKeys.ResetHandraises,
     titleKey: 'reset-handraises-tab-title',
+  },
+  {
+    icon: <DebriefingIcon />,
+    divider: false,
+    component: (
+      <Suspense fallback={<SuspenseLoading />}>
+        <DebriefingTab />
+      </Suspense>
+    ),
+    tooltipTranslationKey: 'moderationbar-button-debriefing',
+    featureKey: FeaturesKeys.Debriefing,
+    key: FeaturesKeys.Debriefing,
+    titleKey: 'debriefing-tab-title',
   },
   {
     divider: true,

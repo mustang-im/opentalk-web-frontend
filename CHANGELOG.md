@@ -73,6 +73,7 @@
 - Add time_limit quotas in conference (!875)
 - Deactivate modules from room tariff info (!873)
 - Rework Notistack integration(!922)
+- Add Debriefing in conference (!921)
 
 ## 1.2.0
 
