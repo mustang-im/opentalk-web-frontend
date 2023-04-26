@@ -374,7 +374,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
               name={currentLegalVote.name}
               timestamp={currentLegalVote.votedAt || ''}
               token={currentLegalVote.token || ''}
-              vote={selectedLegalVoteOption as string}
+              vote={t(`legal-vote-${selectedLegalVoteOption}-label`) as string}
             />
           </Grid>
         )}
