@@ -13,6 +13,7 @@ import { PACKET_LOSS_THRESHOLD } from './index';
 
 const QUALITY_DEBOUNCE_TIME = 500; //ms
 const RECOVERY_TIMEOUT = 10_000; //ms
+const CLOSE_TIMEOUT = 30_000; //ms
 
 export interface SubscriberState {
   audioRunning: boolean;
@@ -34,6 +35,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private expectRestart = false;
 
   private reconnectTimerHandle?: TimeoutId;
+  private closeTimerHandle?: TimeoutId;
 
   private readonly updateQualityTarget: () => void;
 
@@ -117,20 +119,34 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   }
 
   private checkMediaCondition() {
-    if (this.mediaConfig.audio && !this.subscriberState.audioRunning) {
+    const hasBrokenTrack =
+      (this.mediaConfig.audio && !this.subscriberState.audioRunning) ||
+      (this.mediaConfig.video && !this.subscriberState.videoRunning);
+
+    if (this.isActive() && hasBrokenTrack) {
       this.setReconnectTimer();
-      return;
+    } else {
+      this.stopReconnectTimer();
     }
-    if (this.mediaConfig.video && !this.subscriberState.videoRunning) {
-      this.setReconnectTimer();
-      return;
+  }
+
+  private updateCloseTimer() {
+    if (this.isActive() && this.closeTimerHandle !== undefined) {
+      clearTimeout(this.closeTimerHandle);
     }
-    this.stopReconnectTimer();
+
+    if (!this.isActive() && this.closeTimerHandle === undefined) {
+      this.closeTimerHandle = setTimeout(() => {
+        this.close();
+        this.closeTimerHandle = undefined;
+      }, CLOSE_TIMEOUT);
+    }
   }
 
   public updateConfig(subscriberConfig: SubscriberConfig) {
     this.mediaConfig = subscriberConfig;
     this.checkMediaCondition();
+    this.updateCloseTimer();
   }
   protected configureQuality(quality: VideoSetting) {
     this.signaling.configureReceiver(this.descriptor, quality);
@@ -241,7 +257,12 @@ export class SubscriberConnection extends BaseWebRtcConnection {
     }
 
     this.setQualityTarget(maxQuality);
+    this.updateCloseTimer();
   };
+
+  public isActive() {
+    return this.mediaConfig.audio || (this.mediaConfig.video && this.currentQuality !== VideoSetting.Off);
+  }
 
   private releaseCallback = (target: VideoSetting) => () => {
     const count = this.qualityTargetCount[target];
@@ -299,6 +320,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
     this.stream?.getTracks().forEach((t) => t.stop());
     this.subscriberState = { audioRunning: false, videoRunning: false, connection: 'closed' };
     this.stopReconnectTimer();
+    this.closeTimerHandle && clearTimeout(this.closeTimerHandle);
     super.close();
   }
 }

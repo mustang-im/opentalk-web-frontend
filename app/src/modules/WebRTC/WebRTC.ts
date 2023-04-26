@@ -170,9 +170,9 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     }
   }
 
-  private getPublisher = (descriptor: MediaDescriptor) => this.publishers.get(idFromDescriptor(descriptor));
+  private getPublisherConnection = (descriptor: MediaDescriptor) => this.publishers.get(idFromDescriptor(descriptor));
 
-  private getSubscriber(descriptor: MediaDescriptor) {
+  private getSubscriberConnection(descriptor: MediaDescriptor) {
     const subscriber = this.subscribers.get(idFromDescriptor(descriptor));
     if (subscriber === undefined) {
       throw new Error(`unknown connection (handle: ${idFromDescriptor(descriptor)})`);
@@ -188,7 +188,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
 
   // To be used for the dispatch signaling messages on _existing_ connections
   private async getOnlineConnection(descriptor: MediaDescriptor) {
-    const connection = this.getPublisher(descriptor) || (await this.getSubscriber(descriptor));
+    const connection = this.getPublisherConnection(descriptor) || (await this.getSubscriberConnection(descriptor));
     if (connection === undefined) {
       throw new Error(`unknown connection (handle: ${idFromDescriptor(descriptor)})`);
     }
@@ -225,7 +225,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
    * @param sdp
    */
   public async handleSdpOffer(descriptor: MediaDescriptor, sdp: string) {
-    const subscriber = await this.getSubscriber(descriptor);
+    const subscriber = await this.getSubscriberConnection(descriptor);
     subscriber.handleOffer(sdp);
   }
 
@@ -252,8 +252,15 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
    * @param up
    */
   public async setConnectionState(descriptor: MediaDescriptor, up: boolean) {
-    const connection = await this.getOnlineConnection(descriptor);
-    connection.up = up;
+    const connection = await this.getOnlineConnection(descriptor).catch(() => {
+      if (up) {
+        console.error(`Connection not available for ${idFromDescriptor(descriptor)} - Failed to set state up.`);
+      }
+      return undefined;
+    });
+    if (connection !== undefined) {
+      connection.up = up;
+    }
   }
 
   public async handleMediaStatus(descriptor: MediaDescriptor, statusChange: MediaStatusChange) {
@@ -261,7 +268,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     if (connection instanceof PublisherConnection) {
       connection.updateMediaStatus(statusChange);
     } else {
-      console.error('media status is expected on publishers only', descriptor, statusChange);
+      console.error(`media status is expected on publishers only. id: ${idFromDescriptor(descriptor)} `, statusChange);
     }
   }
 
@@ -292,22 +299,48 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
    * @param descriptor
    */
   public async getMediaStream(descriptor: MediaDescriptor): Promise<MediaStream> {
-    const subscriber = await this.getSubscriber(descriptor);
+    const mediaId = idFromDescriptor(descriptor);
+    const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
-      throw new Error(`subscriber media (handle: ${idFromDescriptor(descriptor)}) not available`);
+      throw new Error(`subscriber media (handle: ${mediaId}) not available`);
     }
-    return subscriber.getMediaStream();
+    if (subscriber.connection !== undefined) {
+      return subscriber.connection.getMediaStream();
+    }
+
+    if (subscriber.action === undefined) {
+      subscriber.action = this.createSubscriber(subscriber.state);
+      this.subscribers.set(mediaId, subscriber);
+    }
+    const connection = await subscriber.action;
+    subscriber.action = undefined;
+    subscriber.connection = connection;
+    this.subscribers.set(mediaId, subscriber);
+    return connection.getMediaStream();
   }
 
   public async requestQuality(descriptor: MediaDescriptor, target: VideoSetting): Promise<(() => void) | undefined> {
-    const subscriber = await this.getSubscriber(descriptor);
+    const mediaId = idFromDescriptor(descriptor);
+    const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
       throw new Error(`subscriber media (handle: ${idFromDescriptor(descriptor)}) not available`);
     }
-    return subscriber.requestQuality(target);
+
+    let connection = subscriber.connection;
+    if (subscriber.action !== undefined) {
+      connection = await subscriber.action;
+    }
+
+    if (connection === undefined) {
+      subscriber.action = this.createSubscriber(subscriber.state);
+      this.subscribers.set(mediaId, subscriber);
+      subscriber.action.catch((e) => console.error('failed to fetch TURN credentials', e));
+      connection = await subscriber.action;
+    }
+    return connection.requestQuality(target);
   }
 
-  private createSubscriber(subscriberConfig: SubscriberConfig, iceServers: RTCIceServer[]): SubscriberConnection {
+  private async createSubscriber(subscriberConfig: SubscriberConfig): Promise<SubscriberConnection> {
     const mediaId = idFromDescriptor(subscriberConfig);
     const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
@@ -317,12 +350,21 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
       throw new Error(`Subscriber connection already exists for ${idFromDescriptor(subscriberConfig)}`);
     }
 
+    const iceServers = await this.turnProvider.get();
+
     subscriber.state = subscriberConfig;
     const connection = new SubscriberConnection(iceServers, subscriberConfig, this.signaling);
 
     const closeHandler = () => {
+      const mediaId = idFromDescriptor(subscriberConfig);
       this.eventEmitter.emit('subscriberclose', subscriberConfig);
-      this.subscribers.delete(idFromDescriptor(subscriberConfig));
+      const subscriber = this.subscribers.get(mediaId);
+      if (subscriber !== undefined) {
+        subscriber.connection = undefined;
+        this.subscribers.set(mediaId, subscriber);
+      } else {
+        console.warn(`missing WebRTC subsciber state for ${mediaId}`);
+      }
       connection.removeEventListener('closed', closeHandler);
       connection.removeEventListener('subscriberstatechanged', changeHandler);
       connection.removeEventListener('qualityLimit', limitHandler);
@@ -343,7 +385,6 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     subscriber.connection = connection;
     subscriber.action = undefined;
     this.subscribers.set(mediaId, subscriber);
-    this.eventEmitter.emit('subscriberadded', subscriber.state);
     return connection;
   }
 
@@ -357,16 +398,20 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
    */
   public updateMedia(subscriberConfig: SubscriberConfig) {
     const mediaId = idFromDescriptor(subscriberConfig);
-    const subscriber = this.subscribers.get(mediaId) || { state: subscriberConfig };
 
-    subscriber.state = subscriberConfig;
-    this.subscribers.set(mediaId, subscriber);
+    if (!this.subscribers.has(mediaId)) {
+      this.subscribers.set(mediaId, { state: subscriberConfig });
+      this.eventEmitter.emit('subscriberadded', subscriberConfig);
+    }
 
-    if ((subscriberConfig.audio || subscriberConfig.video) && subscriber.connection === undefined) {
+    const subscriber = this.subscribers.get(mediaId);
+    if (subscriber === undefined) {
+      throw 'subscriber not available when added just before';
+    }
+
+    if (subscriberConfig.audio && subscriber.connection === undefined) {
       if (subscriber.action === undefined) {
-        subscriber.action = this.turnProvider
-          .get()
-          .then((iceServers) => this.createSubscriber(subscriberConfig, iceServers));
+        subscriber.action = this.createSubscriber(subscriberConfig);
         this.subscribers.set(mediaId, subscriber);
         subscriber.action.catch((e) => console.error('failed to fetch TURN credentials', e));
       } else {
@@ -406,7 +451,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     const mediaId = idFromDescriptor(descriptor);
     // async work first to avoid races
     const iceServers = await this.turnProvider.get();
-    const oldConnection = this.getPublisher(descriptor);
+    const oldConnection = this.getPublisherConnection(descriptor);
     if (oldConnection !== undefined) {
       throw new Error(`republishing for ${descriptor.mediaType} - close old connection first`);
     }

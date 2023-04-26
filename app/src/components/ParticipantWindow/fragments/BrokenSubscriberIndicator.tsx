@@ -19,7 +19,7 @@ const BrokenSubscriberIndicator = ({ descriptor }: IRemoteVideoProps) => {
   const { t } = useTranslation();
   const subscriberState = subscriber?.subscriberState;
 
-  if (subscriber === undefined) {
+  if (subscriber === undefined || !(subscriber.audio || subscriber.video)) {
     return null;
   }
 
