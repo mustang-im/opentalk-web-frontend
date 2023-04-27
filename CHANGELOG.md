@@ -45,6 +45,7 @@
 
 ### Stability Improvements
 
+- Fix: failed request will cause endless loop (!928)
 - Improving development workflow for external libraries (!908)
 - Renegotiate media connections when tracks fail with on recovery (!899)
 - Reconnect media connections when they fail (!887)
