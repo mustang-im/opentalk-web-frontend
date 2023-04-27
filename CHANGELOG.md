@@ -12,6 +12,7 @@
 
 ### New Features
 
+- Add shared folder icon button to the meeting header (!943)
 - Introduced Automod feature called the "Talking Stick" (!912)
 - Implement dynamic media subscriptions management (!942)
 - Fix emoji picker popover cutoff on small devices (!952)

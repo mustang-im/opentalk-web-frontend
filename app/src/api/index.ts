@@ -26,11 +26,11 @@ import {
   createStackedMessages,
 } from '@opentalk/common';
 import {
+  AutomodEventType,
   LegalVoteMessageType,
-  legalVoteStore,
   automodStore,
   createTalkingStickNotification,
-  AutomodEventType,
+  legalVoteStore,
 } from '@opentalk/components';
 import { token_updated } from '@opentalk/react-redux-appauth';
 import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
@@ -307,6 +307,7 @@ const handleControlMessage = (
           serverTimeOffset,
           tariff: data.tariff,
           timer: data.timer,
+          sharedFolder: data.sharedFolder,
         })
       );
 

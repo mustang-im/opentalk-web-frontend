@@ -30,6 +30,7 @@ import {
   WhiteboardIcon,
   RecordingsIcon,
   ProtocolIcon,
+  SharedFolderIcon,
 } from '@opentalk/common';
 import { legalVoteStore, LegalVoteType } from '@opentalk/components';
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
@@ -50,6 +51,13 @@ import {
 import { Poll, selectAllPollVotes } from '../../store/slices/pollSlice';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
 import { selectRecordingState } from '../../store/slices/recordingSlice';
+import {
+  selectSharedFolderPassword,
+  selectSharedFolderUrl,
+  selectIsSharedFolderAvailable,
+  selectIsSharedFolderOpened,
+  sharedFolderOpened,
+} from '../../store/slices/sharedFolderSlice';
 import {
   participantsLayoutSet,
   selectParticipantsLayout,
@@ -220,6 +228,7 @@ const PollIcon = styled(DefaultPollIcon)(() => ({
 }));
 
 const MeetingHeader = () => {
+  const [sharedFolderEl, setSharedFolderEl] = useState<null | HTMLElement>(null);
   const [viewEl, setViewEl] = useState<null | HTMLElement>(null);
   const [waitingEl, setWaitingEl] = useState<null | HTMLElement>(null);
   const [areAllApproved, setApproveAll] = useState<boolean>(false);
@@ -247,6 +256,10 @@ const MeetingHeader = () => {
   const fullscreenHandle = useFullscreenContext();
   const [clickCount, setClickCount] = useState(0);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
+  const isSharedFolderOpened = useAppSelector(selectIsSharedFolderOpened);
+  const sharedFolderUrl = useAppSelector(selectSharedFolderUrl);
+  const sharedFolderPassword = useAppSelector(selectSharedFolderPassword);
+  const isSharedFolderAvailable = useAppSelector(selectIsSharedFolderAvailable);
 
   const showDebugDialog = () => {
     if (clickTimer.current) {
@@ -289,6 +302,10 @@ const MeetingHeader = () => {
     dispatch(paginationPageSet(page));
   };
 
+  const toggleSharedFolderPopper = (event: React.MouseEvent<HTMLElement>) => {
+    setSharedFolderEl(sharedFolderEl ? null : event.currentTarget);
+  };
+
   const toggleViewPopper = (event: React.MouseEvent<HTMLElement>) => {
     setViewEl(viewEl ? null : event.currentTarget);
   };
@@ -296,6 +313,7 @@ const MeetingHeader = () => {
   const resetHTMLElements = () => {
     setViewEl(null);
     setWaitingEl(null);
+    setSharedFolderEl(null);
   };
 
   const handleSelectedView = async (layout: LayoutOptions) => {
@@ -471,13 +489,61 @@ const MeetingHeader = () => {
     }
   }, [selectedLayout, handleSelectedView]);
 
-  const RenderProtocolIcon = (
-    <HeaderItem highlighted={isCurrentProtocolHighlighted}>
-      <IconButton aria-describedby={'view-select'} onClick={handleProtocolClick}>
-        <ProtocolIcon />
-      </IconButton>
-    </HeaderItem>
-  );
+  const renderProtocolIcon = () => {
+    return (
+      <HeaderItem highlighted={isCurrentProtocolHighlighted}>
+        <IconButton aria-describedby={'view-select'} onClick={handleProtocolClick}>
+          <ProtocolIcon />
+        </IconButton>
+      </HeaderItem>
+    );
+  };
+
+  const renderSharedFolderIcon = () => {
+    return (
+      <HeaderItem highlighted={!isSharedFolderOpened}>
+        <IconButton aria-describedby={'view-select'} onClick={toggleSharedFolderPopper}>
+          <SharedFolderIcon />
+        </IconButton>
+        <Popover
+          open={Boolean(sharedFolderEl)}
+          anchorEl={sharedFolderEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          onClose={resetHTMLElements}
+          disablePortal
+        >
+          {sharedFolderUrl && (
+            <MenuItem
+              onClick={() => {
+                dispatch(sharedFolderOpened());
+                window.open(sharedFolderUrl, 'sharedFolder');
+                resetHTMLElements();
+              }}
+            >
+              {t('shared-folder-open-label')}
+            </MenuItem>
+          )}
+          {sharedFolderPassword && (
+            <MenuItem
+              onClick={() => {
+                navigator.clipboard.writeText(sharedFolderPassword);
+                resetHTMLElements();
+              }}
+            >
+              {t('shared-folder-password-label')}
+            </MenuItem>
+          )}
+        </Popover>
+      </HeaderItem>
+    );
+  };
 
   const handleWhiteboardClick = useCallback(() => {
     if (selectedLayout !== LayoutOptions.Whiteboard) {
@@ -600,9 +666,10 @@ const MeetingHeader = () => {
             <>
               <HeaderDivider />
               {showWhiteboardIcon && renderWhiteboardIcon()}
-              {protocolUrl && selectedLayout !== LayoutOptions.Protocol && RenderProtocolIcon}
+              {protocolUrl && selectedLayout !== LayoutOptions.Protocol && renderProtocolIcon()}
             </>
           )}
+          {isSharedFolderAvailable && renderSharedFolderIcon()}
         </HeaderCenterContainer>
       </ContentItem>
       <ContentItem>
