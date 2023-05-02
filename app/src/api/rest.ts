@@ -111,8 +111,8 @@ export const rtkQueryErrorLoggerMiddlware: Middleware =
   ({ dispatch }) =>
   (next) =>
   (action) => {
-    // If rtk query get rejected, user will be logged out with notification error
-    if (isRejectedWithValue(action)) {
+    // If rtk query get rejected with 401 error, user will be logged out with notification error
+    if (isRejectedWithValue(action) && (action.payload.status === 401 || action.payload.status >= 500)) {
       dispatch(logged_out());
       notifications.error(i18next.t('error-system-currently-unavailable'));
     }
