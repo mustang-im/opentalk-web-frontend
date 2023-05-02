@@ -7,11 +7,18 @@ import React from 'react';
 
 import SnackbarActionButtons from '../SnackbarActionButtons';
 
+export interface AdditionalButtonAttributes {
+  variant?: "text" | "outlined" | "contained";
+  color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
+}
+
 export interface ISnackbarActionButtonProps {
   msg: (string | React.ReactNode) & TFunctionResult;
   onCancel?: () => void;
   onAction?: () => void;
   actionBtnText?: string;
+  actionBtnAttributes?: AdditionalButtonAttributes;
+  cancelBtnAttributes?: AdditionalButtonAttributes;
   cancelBtnText?: string;
   hideCloseButton?: boolean;
 }
@@ -30,6 +37,8 @@ export const notificationAction = ({
   onAction,
   onCancel,
   hideCloseButton,
+  actionBtnAttributes = {},
+  cancelBtnAttributes = {},
   ...options
 }: ISnackActionsProps) => {
   const handleClick = (key: SnackbarKey, action: typeof onAction | typeof onCancel) => {
@@ -50,6 +59,8 @@ export const notificationAction = ({
         onAction={() => handleClick(key, onAction)}
         onCancel={() => handleClick(key, onCancel)}
         hideCloseButton={hideCloseButton}
+        actionBtnAttributes={actionBtnAttributes}
+        cancelBtnAttributes={cancelBtnAttributes}
       />
     ),
   });

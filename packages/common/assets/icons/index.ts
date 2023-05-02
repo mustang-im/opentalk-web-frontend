@@ -68,6 +68,7 @@ import SortIcon from './SortIcon';
 import SpeakerQueueIcon from './SpeakerQueueIcon';
 import SpeakerViewIcon from './SpeakerViewIcon';
 import StatisticsIcon from './StatisticsIcon';
+import TalkingStickIcon from './TalkingStickIcon';
 import TimerIcon from './TimerIcon';
 import TrashIcon from './TrashIcon';
 import UnlockedIcon from './UnlockedIcon';
@@ -145,6 +146,7 @@ export {
   SpeakerQueueIcon,
   SpeakerViewIcon,
   StatisticsIcon,
+  TalkingStickIcon,
   TimerIcon,
   TrashIcon,
   UnlockedIcon,

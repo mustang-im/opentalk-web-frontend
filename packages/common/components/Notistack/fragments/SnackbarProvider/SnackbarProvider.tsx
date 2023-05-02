@@ -31,6 +31,9 @@ const useStyles = makeStyles(() => ({
 
     '& .notistack-MuiContent': {
       flexWrap: 'nowrap',
+      "& #notistack-snackbar": {
+        alignItems: "flex-start"
+      }
     },
   },
 }));
