@@ -45,6 +45,7 @@
 
 ### Stability Improvements
 
+- Fix: Guest user unable to join meeting after 401 error handling (!945)
 - Forbidden results break the app (!944)
 - Fix: failed request will cause endless loop (!928)
 - Improving development workflow for external libraries (!908)

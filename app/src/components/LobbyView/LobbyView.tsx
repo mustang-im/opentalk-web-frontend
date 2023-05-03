@@ -34,12 +34,12 @@ const LobbyView: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [joinError, setJoinError] = useState<string | undefined>();
-  const { data } = useGetMeQuery();
   const { roomId, breakoutRoomId } = useParams<'roomId' | 'breakoutRoomId'>() as {
     roomId: RoomId;
     breakoutRoomId?: BreakoutRoomId;
   };
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const { data } = useGetMeQuery(undefined, { skip: !isLoggedIn });
   const inviteCode = useAppSelector(selectInviteId);
   const connectionState = useAppSelector(selectRoomConnectionState);
   const navigate = useNavigate();
