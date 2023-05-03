@@ -3,7 +3,7 @@
 ### UI/UX Fixes
 
 - Fix: Poll/Voting User not able to submit their poll (!936)
-- Fix legal vote popover layout issues (!927) 
+- Fix legal vote popover layout issues (!927)
 - Highlight the protocol icon on first appearance (!934)
 - Fix german Protokoll ausblenden label (!933)
 - Fix audio/video permission denied message (!931)
@@ -45,6 +45,7 @@
 
 ### Stability Improvements
 
+- Forbidden results break the app (!944)
 - Fix: failed request will cause endless loop (!928)
 - Improving development workflow for external libraries (!908)
 - Renegotiate media connections when tracks fail with on recovery (!899)
