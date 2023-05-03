@@ -9,8 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useGetMeQuery, useGetRoomQuery } from '../../../api/rest';
-import { useAppDispatch } from '../../../hooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { hangUp } from '../../../store/commonActions';
+import { selectIsLoggedIn } from '../../../store/slices/userSlice';
 import CloseMettingDialog from '../../CloseMettingDialog';
 import ToolbarButton from './ToolbarButton';
 
@@ -20,8 +21,9 @@ const EndCallButton = () => {
   const { roomId } = useParams<'roomId'>() as {
     roomId: RoomId;
   };
-  const { data: me } = useGetMeQuery();
-  const { data: roomData } = useGetRoomQuery(roomId);
+  const isLoggedInUser = useAppSelector(selectIsLoggedIn);
+  const { data: me } = useGetMeQuery(undefined, { skip: !isLoggedInUser });
+  const { data: roomData } = useGetRoomQuery(roomId, { skip: !isLoggedInUser });
 
   const [isConfirmDialogVisible, showConfirmDialog] = useState(false);
   const isMeetingCreator = me?.id && roomData?.createdBy?.id ? me.id === roomData.createdBy?.id : false;
