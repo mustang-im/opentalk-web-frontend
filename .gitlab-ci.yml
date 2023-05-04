@@ -11,6 +11,7 @@ stages:
   - test
   - build
   - deploy
+  - destroy
 
 lint:prettier+eslint:
   stage: lint
@@ -59,30 +60,24 @@ test:build:
     - yarn test
     - yarn build
 
-
-test:container:
-  stage: test
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: ['']
-  script:
-    - mkdir -p /kaniko/.docker
-    - >
-      echo
-      "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" >
-      /kaniko/.docker/config.json
-    - >
-      /kaniko/executor
-      --registry-mirror=mirror.gcr.io
-      --context $CI_PROJECT_DIR
-      --dockerfile $CI_PROJECT_DIR/ci/Dockerfile
-      --no-push
-      --force
-
 build:container:
+  variables:
+    IMAGE_DESTIANTION_ARGS: --no-push
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      variables:
+        IMAGE_DESTIANTION_ARGS: --destination $CI_REGISTRY_IMAGE:latest
     - if: $CI_COMMIT_TAG != null
+      variables:
+        IMAGE_DESTIANTION_ARGS: >
+          --destination $CI_REGISTRY_IMAGE:latest
+          --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - if: >
+        $CI_PROJECT_ROOT_NAMESPACE != 'opentalk' &&
+        $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH &&
+        $CI_COMMIT_BRANCH != null
+      variables:
+        IMAGE_DESTIANTION_ARGS: --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -98,8 +93,7 @@ build:container:
       --registry-mirror=mirror.gcr.io
       --context $CI_PROJECT_DIR
       --dockerfile $CI_PROJECT_DIR/ci/Dockerfile
-      --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
-      --destination $CI_REGISTRY_IMAGE:latest
+      $IMAGE_DESTIANTION_ARGS
       --force
 
 build:container-profiling:
@@ -174,3 +168,41 @@ publish:common:
         echo "Version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} has
         already been published, so no new version has been published."
       fi
+
+deploy:review-app:
+  stage: deploy
+  rules:
+    - if: $CI_PROJECT_ROOT_NAMESPACE != 'opentalk' &&
+          $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH &&
+          $CI_COMMIT_BRANCH != null
+  image: alpine/helm:3.10.2
+  tags:
+    - kubernetes
+  before_script:
+    - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN}
+      opentalk https://git.opentalk.dev/api/v4/projects/218/packages/helm/stable
+  script:
+    - helm upgrade --version 0.1.0 --install frontend-$GITLAB_USER_ID-$CI_COMMIT_BRANCH opentalk/ot-web-frontend-helm
+      --set image.repository=$CI_REGISTRY_IMAGE
+      --set image.tag=$CI_COMMIT_BRANCH
+      --set ingress.tls[0].secretName=frontend-$GITLAB_USER_ID-$CI_COMMIT_BRANCH-tls
+      --set ot_frontend_url=www.$GITLAB_USER_ID-$CI_COMMIT_BRANCH.review-latest.kube.opentalk.run
+      --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
+      --set ot_backend_url=controller.review-latest.kube.opentalk.run
+      -n review-latest --create-namespace
+
+destroy:review-app:
+  stage: destroy
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+          $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
+          $CI_COMMIT_TITLE =~ /^Merge branch '[^']+'.*$/
+  allow_failure: true
+  image:
+    name: alpine/helm:3.10.2
+    entrypoint: ['']
+  tags:
+    - kubernetes
+  script:
+    - export SOURCE_BRANCH=$(echo $CI_COMMIT_TITLE | awk -F"'" '{print $2}')
+    - helm uninstall frontend-$GITLAB_USER_ID-$SOURCE_BRANCH -n review-latest
