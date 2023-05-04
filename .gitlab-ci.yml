@@ -216,7 +216,7 @@ destroy:review-app:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
           $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
-          $CI_COMMIT_TITLE =~ /^Merge branch '[^']+' into '[^']+'$/
+          $CI_COMMIT_TITLE =~ /^Merge branch '[^']+'.*$/
   allow_failure: true
   image:
     name: alpine/helm:3.10.2
