@@ -60,26 +60,6 @@ test:build:
     - yarn test
     - yarn build
 
-
-test:container:
-  stage: test
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: ['']
-  script:
-    - mkdir -p /kaniko/.docker
-    - >
-      echo
-      "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" >
-      /kaniko/.docker/config.json
-    - >
-      /kaniko/executor
-      --registry-mirror=mirror.gcr.io
-      --context $CI_PROJECT_DIR
-      --dockerfile $CI_PROJECT_DIR/ci/Dockerfile
-      --no-push
-      --force
-
 build:container:
   variables:
     IMAGE_DESTIANTION_ARGS: --no-push
