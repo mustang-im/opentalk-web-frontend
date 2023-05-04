@@ -241,7 +241,9 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     if (connection instanceof PublisherConnection) {
       connection.handleAnswer(sdp);
     } else {
-      console.error('got SDP answer is expected on publishers only', descriptor, sdp);
+      console.error(
+        `SDP answer is expected on publishers only. suscriber: ${idFromDescriptor(descriptor)} ; SDP message: ${sdp}`
+      );
     }
   }
 
@@ -254,7 +256,11 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
   public async setConnectionState(descriptor: MediaDescriptor, up: boolean) {
     const connection = await this.getOnlineConnection(descriptor).catch(() => {
       if (up) {
-        console.error(`Connection not available for ${idFromDescriptor(descriptor)} - Failed to set state up.`);
+        console.error(
+          `failed to set connection state 'up' because there is no connection available for subscriber ${idFromDescriptor(
+            descriptor
+          )}.`
+        );
       }
       return undefined;
     });
@@ -268,7 +274,11 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     if (connection instanceof PublisherConnection) {
       connection.updateMediaStatus(statusChange);
     } else {
-      console.error(`media status is expected on publishers only. id: ${idFromDescriptor(descriptor)} `, statusChange);
+      console.error(
+        `media status is expected on publishers only. subscriber:${idFromDescriptor(descriptor)}; change:'${
+          statusChange.kind
+        }': ${statusChange.receiving}`
+      );
     }
   }
 

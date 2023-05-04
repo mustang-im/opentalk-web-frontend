@@ -292,7 +292,6 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       sdp: sdp,
       type: 'offer',
     });
-    console.debug('answerOffer', this.expectRestart);
     const answer = await this.peerConnection.createAnswer({
       iceRestart: this.expectRestart,
     });
