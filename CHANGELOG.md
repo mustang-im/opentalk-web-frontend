@@ -3,19 +3,53 @@
 ### UI/UX Fixes
 
 - Fix: Poll/Voting User not able to submit their poll (!936)
-- Fix legal vote popover layout issues (!927)
 - Highlight the protocol icon on first appearance (!934)
 - Fix german Protokoll ausblenden label (!933)
 - Fix audio/video permission denied message (!931)
 - Fix sorting of participants by last active (!929)
 - Fix the legal vote token copy text for german users (!935)
-- Stay in coffee break view when a timer is started (!915)
+- Fix both coffee break and timer tabs being disabled (!918)
+
+### Stability Improvements
+
+- Fix: Guest user unable to join meeting after 401 error handling (!945)
+- Forbidden results break the app (!944)
+- Fix: failed request will cause endless loop (!928)
+- Improving development workflow for external libraries (!908)
+- Add separate keys for moderation sidebar tabs (!917)
+
+### New Features
+
+- Rework Notistack integration(!922)
+- Add Debriefing in conference (!921)
+
+## 1.3.2
+
+### UI/UX Fixes
+
+- Fix legal vote popover layout issues (!927)
+- Disable starting of a legal vote/poll when a coffee break is active
+- Fix the app crash on moderator join event when media is undefined (!925)
 - Disable starting of a legal vote/poll when a coffee break is active (!916)
-- Hide legal vote token for unsubmitted users after vote is finnished. (!926)
+- Fix minimum allowed value in the poll timer. (!897)
+- Fix unresponsive hang up button on participant leave. (!903)
+- Fix cross icon showing on timer without ready check (!919)
+
+## 1.3.1
+
+### UI/UX Fixes
+
+- Hide legal vote token for unsubmitted users after vote is finished. (!926)
 - Disable remote audio while in coffee break view (!924)
+
+## 1.3.0
+
+### UI/UX Fixes
+
+- Stay in coffee break view when a timer is started (!915)
 - Fix error on removing phone users from conference (!896)
 - Fix legal vote labels after re-joining a meeting (!902)
-- Change some legal vote wordings for german (!880)
+- Fix some legal vote wordings for German (!880)
 - Show no more outdated meetings in dashboard home (!859)
 - Rework protocol UX (!866)
 - Change UX for whiteboard access (!841)
@@ -25,43 +59,33 @@
 - Fix UI for moderation tabs on the side panel for community features (!853)
 - Add details for overlapping event dialog (!868)
 - Fix not showing participants in the waiting room when moderator is joining after them (!869)
-- Fix coffee break english labels (!881)
+- Fix coffee break English labels (!881)
 - Add HotKeys coffee break when full screen is active (!886)
 - Fix missing notification when timer stops (!883)
 - Fix create meeting default start/end time (!888)
-- Fix browser language detection. (!889)
-- Polished legal vote UI for unselected participant. (!893)
-- Remove offline participant from the timer list. (!901)
+- Fix browser language detection (!889)
+- Polished legal vote UI for unselected participant (!893)
+- Remove offline participant from the timer list (!901)
 - Title texts Coffee break (!898)
 - Fix progress bar display for polls and votes (!894)
 - Fix UI consistency for legal vote with other tabs (!878)
 - Fix Emoji picker container overflowing (!905)
 - Fix unwanted timer submitting (!906)
-- Fix minimum allowed value in the poll timer. (!897)
-- Fix unresponsive hang up button on participant leave. (!903)
-- Fix cross icon showing on timer without ready check (!919)
-- Fix the app crash on moderator join event when media is undefined (!925)
-- Fix both coffee break and timer tabs being disabled (!918)
 
 ### Stability Improvements
 
-- Fix: Guest user unable to join meeting after 401 error handling (!945)
-- Forbidden results break the app (!944)
-- Fix: failed request will cause endless loop (!928)
-- Improving development workflow for external libraries (!908)
 - Renegotiate media connections when tracks fail with on recovery (!899)
 - Reconnect media connections when they fail (!887)
 - Add connection information to participant stats panel (!849)
 - Fix: flickering local video element when start coffee break (!870)
 - Clean-up dispatch of legal vote started action (!864)
 - Rework duration field and related types (!855)
-- Translated emoji picker categories to german. (!854)
-- Enhanced DurationField behavior. (!884)
+- Translated emoji picker categories to German (!854)
+- Enhanced DurationField behavior (!884)
 - Removed development error showing on the create meeting page. (!892)
-- Enhanced behavior of poll temporary save. (!891)
-- Improved legal vote token message on the popover. (!900)
+- Enhanced behavior of poll temporary save (!891)
+- Improved legal vote token message on the popover (!900)
 - Fix app not building on Safari (!910)
-- Add separate keys for moderation sidebar tabs (!917)
 
 ### New Features
 
@@ -69,14 +93,12 @@
 - Feat: show quotas information in dashboard (!865)
 - Lobby / Waiting room move button / password (!852)
 - Add unread indicator for chat messages (!844)
-- Add legal vote token copy field. (!836)
+- Add legal vote token copy field (!836)
 - Lobby without password label as invited (!863)
 - Notify moderator if participant limit has been reached (!877)
 - Show room blocker for a participant, that tries to join a full room (!876)
-- Add time_limit quotas in conference (!875)
-- Deactivate modules from room tariff info (!873)
-- Rework Notistack integration(!922)
-- Add Debriefing in conference (!921)
+- Add time limit quotas in conference (!875)
+- Deactivate modules according to room tariff info (!873)
 
 ## 1.2.0
 
