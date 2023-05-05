@@ -1,13 +1,15 @@
 ## Unreleased
 
+## 1.4.x
+
 ### UI/UX Fixes
 
 - Fix: Poll/Voting User not able to submit their poll (!936)
 - Highlight the protocol icon on first appearance (!934)
-- Fix german Protokoll ausblenden label (!933)
+- Fix German 'Protokoll ausblenden label' (!933)
 - Fix audio/video permission denied message (!931)
 - Fix sorting of participants by last active (!929)
-- Fix the legal vote token copy text for german users (!935)
+- Fix the legal vote token copy text for German users (!935)
 - Fix both coffee break and timer tabs being disabled (!918)
 
 ### Stability Improvements
