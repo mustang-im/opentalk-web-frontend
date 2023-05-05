@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { SharedFolderData } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { DateTimeWithTimezone, EntityBase, InviteStatus } from './common';
@@ -198,6 +199,7 @@ interface AbstractEvent extends BaseEvent {
   inviteesTruncated?: boolean;
   invitees?: Array<EventInvite>;
   inviteStatus: InviteStatus;
+  sharedFolder?: SharedFolderData;
 }
 
 /**

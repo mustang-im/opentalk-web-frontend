@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Event } from '@opentalk/rest-api-rtk-query';
 import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+import store from '../../../store';
 import { screen, render, eventMockedData, fireEvent } from '../../../utils/testUtils';
 import StandardCard from './StandardCard';
 
@@ -51,7 +53,9 @@ describe('Standard Card', () => {
   test('render component without crashing', async () => {
     await render(
       <BrowserRouter>
-        <StandardCard {...dummyMeetingCardData} />
+        <Provider store={store}>
+          <StandardCard {...dummyMeetingCardData} />
+        </Provider>
       </BrowserRouter>
     );
     expect(screen.getByRole('link', { name: 'dashboard-home-join' })).toBeInTheDocument();
@@ -63,7 +67,9 @@ describe('Standard Card', () => {
   test('card is not marked as favorite with flag favorite={false}, svg fav should not be in document', async () => {
     await render(
       <BrowserRouter>
-        <StandardCard {...dummyMeetingCardData} event={{ ...dummyMeetingCardData.event, isFavorite: false }} />
+        <Provider store={store}>
+          <StandardCard {...dummyMeetingCardData} event={{ ...dummyMeetingCardData.event, isFavorite: false }} />
+        </Provider>
       </BrowserRouter>
     );
     expect(screen.queryByTestId('favorite-icon-visible')).not.toBeInTheDocument();
@@ -72,7 +78,9 @@ describe('Standard Card', () => {
   test('click on more menu should display popup with edit, fav and delete option for meeting creator', async () => {
     await render(
       <BrowserRouter>
-        <StandardCard {...dummyMeetingCardData} />
+        <Provider store={store}>
+          <StandardCard {...dummyMeetingCardData} />
+        </Provider>
       </BrowserRouter>
     );
 
@@ -89,7 +97,9 @@ describe('Standard Card', () => {
   test('when user is not creator, meeting is marked as fav, click on more menu should display popup with remove favorite option', async () => {
     await render(
       <BrowserRouter>
-        <StandardCard {...dummyMeetingCardData} isMeetingCreator={false} />
+        <Provider store={store}>
+          <StandardCard {...dummyMeetingCardData} isMeetingCreator={false} />
+        </Provider>
       </BrowserRouter>
     );
     const MoreMenu = screen.getByRole('button', { name: 'toolbar-button-more-tooltip-title' });
@@ -105,11 +115,13 @@ describe('Standard Card', () => {
   test('when user is not creator, meeting is not marked as fav, click on more menu should display popup with add favorite option', async () => {
     await render(
       <BrowserRouter>
-        <StandardCard
-          {...dummyMeetingCardData}
-          event={{ ...dummyMeetingCardData.event, isFavorite: false }}
-          isMeetingCreator={false}
-        />
+        <Provider store={store}>
+          <StandardCard
+            {...dummyMeetingCardData}
+            event={{ ...dummyMeetingCardData.event, isFavorite: false }}
+            isMeetingCreator={false}
+          />
+        </Provider>
       </BrowserRouter>
     );
     const MoreMenu = screen.getByRole('button', { name: 'toolbar-button-more-tooltip-title' });

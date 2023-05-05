@@ -2,12 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, IconButton, InputAdornment, Tooltip } from '@mui/material';
-import { BackIcon, CopyIcon } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
+import { BackIcon, CopyIcon, notifications } from '@opentalk/common';
 import { Event, isEvent, FindUserResponse } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
 import { merge } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -62,12 +61,17 @@ const InviteToMeeting = ({
   const [isGuestLinkCopied, setGuestLinkCopied] = useState(false);
   const [isRoomPasswordCopied, setIsRoomPasswordCopied] = useState(false);
   //TODO: There has to be a better way of keeping track of what should be highlighted as copied, maybe we need a follow up issue for it
+  const [isSharedFolderUrlCopied, setIsSharedFolderUrlCopied] = useState(false);
+  const [isSharedFolderPasswordCopied, setIsSharedFolderPasswordCopied] = useState(false);
 
   const { data: tariff } = useGetMeTariffQuery();
   const userTariffLimit = tariff?.quotas.roomParticipantLimit;
 
   const roomUrl = useMemo(() => new URL(`/room/${existingEvent?.room.id}`, baseUrl), [baseUrl, existingEvent]);
   const createGuestLink = useCallback((inviteCode: string) => new URL(`/invite/${inviteCode}`, baseUrl), [baseUrl]);
+
+  const roomSharedFolderUrl = existingEvent.sharedFolder?.readWrite?.url;
+  const roomSharedFolderPassword = existingEvent.sharedFolder?.readWrite?.password;
 
   useEffect(() => {
     if (existingEvent) {
@@ -125,12 +129,15 @@ const InviteToMeeting = ({
   const roomPassword = existingEvent?.room?.password?.trim() || undefined;
   //TODO: Part of line 67 TODO: Also feels very bad to have all of these hardcoded functions to which you add state changes
 
+  //TODO: Part of line 67 TODO: Also feels very bad to have all of these hardcoded functions to which you add state changes
   const copyRoomLinkToClipboard = useCallback(() => {
     navigator.clipboard.writeText(roomUrl.toString()).then(() => {
       setRoomLinkCopied(true);
       setSipLinkCopied(false);
       setGuestLinkCopied(false);
       setIsRoomPasswordCopied(false);
+      setIsSharedFolderUrlCopied(false);
+      setIsSharedFolderPasswordCopied(false);
       notifications.success(t('global-copy-link-success'));
     });
   }, [t, roomUrl]);
@@ -142,6 +149,8 @@ const InviteToMeeting = ({
         setRoomLinkCopied(false);
         setGuestLinkCopied(false);
         setIsRoomPasswordCopied(false);
+        setIsSharedFolderUrlCopied(false);
+        setIsSharedFolderPasswordCopied(false);
         notifications.success(t('global-dial-in-link-success'));
       });
     }
@@ -154,6 +163,8 @@ const InviteToMeeting = ({
         setRoomLinkCopied(false);
         setSipLinkCopied(false);
         setIsRoomPasswordCopied(false);
+        setIsSharedFolderUrlCopied(false);
+        setIsSharedFolderPasswordCopied(false);
         notifications.success(t('global-copy-link-success'));
       });
     }
@@ -163,6 +174,8 @@ const InviteToMeeting = ({
     if (roomPassword !== undefined) {
       navigator.clipboard.writeText(roomPassword.toString()).then(() => {
         setIsRoomPasswordCopied(true);
+        setIsSharedFolderUrlCopied(false);
+        setIsSharedFolderPasswordCopied(false);
         setGuestLinkCopied(false);
         setRoomLinkCopied(false);
         setSipLinkCopied(false);
@@ -170,6 +183,34 @@ const InviteToMeeting = ({
       });
     }
   }, [t, roomPassword]);
+
+  const copyRoomSharedFolderUrlToClipboard = useCallback(() => {
+    if (roomSharedFolderUrl) {
+      navigator.clipboard.writeText(roomSharedFolderUrl.toString()).then(() => {
+        setIsSharedFolderUrlCopied(true);
+        setIsSharedFolderPasswordCopied(false);
+        setRoomLinkCopied(false);
+        setSipLinkCopied(false);
+        setGuestLinkCopied(false);
+        setIsRoomPasswordCopied(false);
+        notifications.success(t('global-copy-link-success'));
+      });
+    }
+  }, [t, roomSharedFolderUrl]);
+
+  const copyRoomSharedFolderPasswordToClipboard = useCallback(() => {
+    if (roomSharedFolderPassword) {
+      navigator.clipboard.writeText(roomSharedFolderPassword.toString()).then(() => {
+        setIsSharedFolderPasswordCopied(true);
+        setIsSharedFolderUrlCopied(false);
+        setIsRoomPasswordCopied(false);
+        setGuestLinkCopied(false);
+        setRoomLinkCopied(false);
+        setSipLinkCopied(false);
+        notifications.success(t('global-copy-link-success'));
+      });
+    }
+  }, [t, roomSharedFolderPassword]);
 
   const handleCancelMeetingPress = () => {
     if (directMeeting && isEvent(existingEvent)) {
@@ -275,6 +316,54 @@ const InviteToMeeting = ({
             />
           </Tooltip>
         </Grid>
+        {features.sharedFolder && roomSharedFolderUrl && (
+          <>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label={t('dashboard-meeting-shared-folder-label')}
+                disabled
+                checked={isSharedFolderUrlCopied || undefined}
+                value={roomSharedFolderUrl ? roomSharedFolderUrl.toString() : '-'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={t('dashboard-direct-meeting-copy-link-aria-label')}
+                      onClick={copyRoomSharedFolderUrlToClipboard}
+                      onMouseDown={copyRoomSharedFolderUrlToClipboard}
+                      edge="end"
+                      disabled={roomSharedFolderUrl === undefined}
+                    >
+                      <CopyIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label={t('dashboard-meeting-shared-folder-password-label')}
+                disabled
+                checked={isSharedFolderPasswordCopied || undefined}
+                value={roomSharedFolderPassword}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={'dashboard-meeting-shared-folder-password-label'}
+                      onClick={copyRoomSharedFolderPasswordToClipboard}
+                      onMouseDown={copyRoomSharedFolderPasswordToClipboard}
+                      edge="end"
+                      disabled={roomSharedFolderPassword === undefined}
+                    >
+                      <CopyIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                fullWidth
+              />
+            </Grid>
+          </>
+        )}
         {!showOnlyLinkFields && features.userSearch && (
           <Grid item xs={12}>
             {features.userSearch && (

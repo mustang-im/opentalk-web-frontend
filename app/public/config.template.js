@@ -38,6 +38,7 @@ window.config = {
     resetHandraises: true,
     addUser: false,
     joinWithoutMedia: false,
+    sharedFolder: false,
   },
   videoBackgrounds: '${VIDEO_BACKGROUNDS}',
   maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}'

@@ -694,6 +694,15 @@ dashboard-meeting-notification-success-edit = The changes in {$event} were saved
 dashboard-meeting-notification-error = Something went wrong. Please try again later.
 dashboard-meeting-switch-enabled = Enabled
 dashboard-meeting-switch-disabled = Disabled
+dashboard-meeting-shared-folder-label = Shared folder
+dashboard-meeting-shared-folder-password-label = Folder password - For moderator ( with write permissions )
+dashboard-meeting-shared-folder-create-error-message = Unfortunately, the shared folder could not be created.
+dashboard-meeting-shared-folder-create-retry-error-message = Unfortunately, the shared folder could not be created. Please try again later.
+dashboard-meeting-shared-folder-delete-error-message = Unfortunately, an error occurred, the shared folder could not be deleted.
+dashboard-meeting-shared-folder-delete-retry-error-message = Unfortunately, the shared folder could not be deleted. Please try again later.
+dashboard-meeting-shared-folder-error-cancel-button = Cancel
+dashboard-meeting-shared-folder-error-retry-button = Retry
+dashboard-meeting-shared-folder-error-ok-button = Ok
 
 dashboard-meeting-details-page-description-title = Description
 dashboard-meeting-details-page-time-independent = time independent

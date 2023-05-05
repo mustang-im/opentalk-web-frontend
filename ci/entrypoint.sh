@@ -9,6 +9,7 @@ ACTIVE_FEATURES="{
     resetHandraises: ${FEATURE_RESET_HANDRAISES:-true},
     addUser: ${FEATURE_ADD_USER:-false},
     joinWithoutMedia: ${FEATURE_JOIN_WITHOUT_MEDIA:-false},
+    sharedFolder: ${FEATURE_SHARED_FOLDER:-false},
 }"
 
 DEFAULT_VIDEO_BACKGROUNDS='[]'

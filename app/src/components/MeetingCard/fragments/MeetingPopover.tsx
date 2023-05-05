@@ -2,15 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Stack } from '@mui/material';
-import { MoreIcon, notifications } from '@opentalk/common';
+import { MoreIcon, notificationAction, notifications } from '@opentalk/common';
 import { Event, EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
   useDeclineEventInviteMutation,
   useDeleteEventMutation,
+  useDeleteEventSharedFolderMutation,
   useMarkFavoriteEventMutation,
   useUnmarkFavoriteEventMutation,
 } from '../../../api/rest';
@@ -58,6 +59,8 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   const [declineEventInvitation] = useDeclineEventInviteMutation();
   const [isConfirmDialogVisible, showConfirmDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
+  const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
+  const isFirstTryToDeleteSharedFolder = useRef(true);
 
   const openPopupMenu = (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
     stopPropagation(mouseEvent);
@@ -104,7 +107,39 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
     showConfirmDialog(true);
   };
 
-  const deleteMeeting = () => {
+  const deleteMeeting = async () => {
+    if ('sharedFolder' in event) {
+      try {
+        await deleteSharedFolder({ eventId, forceDeletion: false }).unwrap();
+      } catch (error) {
+        if (isFirstTryToDeleteSharedFolder.current) {
+          showConfirmDialog(false);
+          setAnchorEl(undefined);
+          notificationAction({
+            msg: t('dashboard-meeting-shared-folder-delete-error-message'),
+            variant: 'error',
+            actionBtnText: t('dashboard-meeting-shared-folder-error-retry-button'),
+            cancelBtnText: t('dashboard-meeting-shared-folder-error-cancel-button'),
+            persist: true,
+            onAction: () => {
+              isFirstTryToDeleteSharedFolder.current = false;
+              deleteMeeting();
+            },
+            onCancel: () => {
+              isFirstTryToDeleteSharedFolder.current = true;
+              showConfirmDialog(false);
+              setAnchorEl(undefined);
+            },
+          });
+          return;
+        } else {
+          isFirstTryToDeleteSharedFolder.current = true;
+          notifications.error(t('dashboard-meeting-shared-folder-delete-retry-error-message'));
+          return;
+        }
+      }
+    }
+
     deleteEvent(eventId);
     showConfirmDialog(false);
     setAnchorEl(undefined);

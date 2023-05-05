@@ -13,9 +13,14 @@ import {
   Typography,
   Tooltip,
 } from '@mui/material';
-import { ForwardIcon } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
-import { formikMinimalProps, formikProps, formikDateTimePickerProps } from '@opentalk/common';
+import {
+  ForwardIcon,
+  notifications,
+  notificationAction,
+  formikMinimalProps,
+  formikProps,
+  formikDateTimePickerProps,
+} from '@opentalk/common';
 import {
   CreateEventPayload,
   Event,
@@ -37,7 +42,7 @@ import {
 import { useFormik } from 'formik';
 import { FormikValues } from 'formik/dist/types';
 import { get, isEmpty } from 'lodash';
-import React, { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -47,8 +52,12 @@ import {
   useCreateRoomInviteMutation,
   useLazyGetEventsQuery,
   useUpdateEventMutation,
+  useCreateEventSharedFolderMutation,
+  useDeleteEventSharedFolderMutation,
 } from '../../api/rest';
 import { FormWrapper, LimitedTextField, Select } from '../../commonComponents';
+import { useAppSelector } from '../../hooks';
+import { selectFeatures } from '../../store/slices/configSlice';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToNearest30 from '../../utils/roundToNearest30';
 import roundToUpper30 from '../../utils/roundToUpper30';
@@ -87,6 +96,8 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const [createEvent, { isLoading: createEventIsLoading }] = useCreateEventMutation();
   const [updateEvent, { isLoading: updateEventIsLoading }] = useUpdateEventMutation();
   const [checkForEvents] = useLazyGetEventsQuery();
+  const [createSharedFolder] = useCreateEventSharedFolderMutation();
+  const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
 
   const [createRoomInvite] = useCreateRoomInviteMutation();
   const navigate = useNavigate();
@@ -95,6 +106,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
 
   const defaultStartDate = roundToUpper30();
   const defaultEndDate = addMinutes(defaultStartDate, DEFAULT_MINUTES_DIFFERENCE);
+  const features = useAppSelector(selectFeatures);
+  const [isFirstTryToCreateSharedFolder, setIsFirstTryToCreateSharedFolder] = useState(true);
+  const [isFirstTryToDeleteSharedFolder, setIsFirstTryToDeleteSharedFolder] = useState(true);
+  const event = useRef<Event | undefined>(undefined);
 
   const validationSchema = yup.object({
     title: yup
@@ -155,6 +170,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
         return true;
       }),
     isAdhoc: yup.boolean().optional(),
+    sharedFolder: yup.boolean().optional(),
   });
 
   const mapRruleToInterval = (timeIndependent: boolean, interval: string): string | undefined => {
@@ -213,6 +229,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
           ? mapIntervalToRule(existingEvent.recurrencePattern[0])
           : IntervalEnum.NONE,
       isAdhoc: existingEvent && Boolean(existingEvent.isAdhoc),
+      sharedFolder: (existingEvent?.sharedFolder && Boolean(existingEvent.sharedFolder)) || false,
     },
     validationSchema,
     validateOnChange: false,
@@ -307,10 +324,20 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const handleCreateEvent = async (values: FormikValues) => {
     const payload = createPayload(values) as CreateEventPayload;
     try {
-      const event = await createEvent(payload).unwrap();
-      await createRoomInvite({ id: event.room.id }).unwrap();
-      notifications.success(t('dashboard-meeting-notification-success-create', { event: event.title }));
-      navigate(`/dashboard/meetings/update/${event.id}/1`, { state: { ...getReferrerRouterState(window.location) } });
+      // prevents new events to be saved as a second event
+      if (event.current === undefined) {
+        event.current = await createEvent(payload).unwrap();
+      }
+      const goToNextStep = await handleCreateDeleteSharedFolder(event.current, values);
+      if (goToNextStep === false) {
+        return;
+      }
+
+      await createRoomInvite({ id: event.current.room.id }).unwrap();
+      notifications.success(t('dashboard-meeting-notification-success-create', { event: event.current.title }));
+      navigate(`/dashboard/meetings/update/${event.current.id}/1`, {
+        state: { ...getReferrerRouterState(window.location) },
+      });
     } catch (err) {
       notifications.error(t('dashboard-meeting-notification-error'));
     }
@@ -320,15 +347,100 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     const payload = createPayload(values) as UpdateEventPayload;
     try {
       if (existingEvent) {
+        const goToNextStep = await handleCreateDeleteSharedFolder(existingEvent, values);
+        if (goToNextStep === false) {
+          return;
+        }
         const event = await updateEvent({
           eventId: existingEvent.id,
           ...payload,
         }).unwrap();
+
         notifications.success(t('dashboard-meeting-notification-success-edit', { event: event.title }));
       }
     } catch (err) {
       notifications.error(t('dashboard-meeting-notification-error'));
     }
+  };
+
+  const handleCreateDeleteSharedFolder = async (event: Event, values: FormikValues) => {
+    if (!event.sharedFolder && values.sharedFolder) {
+      return handleCreateSharedFolder(event, values);
+    }
+    if (event.sharedFolder && !values.sharedFolder) {
+      return handleDeleteSharedFolder(event, values);
+    }
+    return true;
+  };
+
+  const handleCreateSharedFolder = async (event: Event, values: FormikValues) => {
+    if (isFirstTryToCreateSharedFolder) {
+      try {
+        setIsFirstTryToCreateSharedFolder(false);
+        await createSharedFolder({ eventId: event.id }).unwrap();
+      } catch (error) {
+        notificationAction({
+          msg: t('dashboard-meeting-shared-folder-create-error-message'),
+          variant: 'error',
+          actionBtnText: t('dashboard-meeting-shared-folder-error-retry-button'),
+          cancelBtnText: t('dashboard-meeting-shared-folder-error-cancel-button'),
+          persist: true,
+          onAction: () => {
+            formik.handleSubmit();
+          },
+          onCancel: () => {
+            values.sharedFolder = false;
+            setIsFirstTryToCreateSharedFolder(true);
+          },
+        });
+        return false;
+      }
+    } else {
+      try {
+        await createSharedFolder({ eventId: event.id }).unwrap();
+      } catch (error) {
+        values.sharedFolder = false;
+        notifications.error(t('dashboard-meeting-shared-folder-create-retry-error-message'));
+        setIsFirstTryToCreateSharedFolder(true);
+        return true;
+      }
+    }
+    return true;
+  };
+
+  const handleDeleteSharedFolder = async (event: Event, values: FormikValues) => {
+    if (isFirstTryToDeleteSharedFolder) {
+      try {
+        setIsFirstTryToDeleteSharedFolder(false);
+        await deleteSharedFolder({ eventId: event.id, forceDeletion: false }).unwrap();
+      } catch (error) {
+        notificationAction({
+          msg: t('dashboard-meeting-shared-folder-delete-error-message'),
+          variant: 'error',
+          actionBtnText: t('dashboard-meeting-shared-folder-error-retry-button'),
+          cancelBtnText: t('dashboard-meeting-shared-folder-error-cancel-button'),
+          persist: true,
+          onAction: () => {
+            formik.handleSubmit();
+          },
+          onCancel: () => {
+            values.sharedFolder = true;
+            setIsFirstTryToDeleteSharedFolder(true);
+          },
+        });
+        return false;
+      }
+    } else {
+      try {
+        await deleteSharedFolder({ eventId: event.id, forceDeletion: false }).unwrap();
+      } catch (error) {
+        values.sharedFolder = true;
+        notifications.error(t('dashboard-meeting-shared-folder-delete-retry-error-message'));
+        setIsFirstTryToDeleteSharedFolder(true);
+        return true;
+      }
+    }
+    return true;
   };
 
   const handleConfirmSameTimeEvents = () => {
@@ -467,6 +579,17 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               sx={{ margin: 0, gap: 1, verticalAlign: 'baseline', width: 'max-content' }}
             />
           </Stack>
+          {features.sharedFolder && (
+            <Stack>
+              <Typography pb={1.3}>{t('dashboard-meeting-shared-folder-label')}</Typography>
+              <FormControlLabel
+                checked={formik.values.sharedFolder}
+                control={<Switch {...formikMinimalProps('sharedFolder', formik)} />}
+                label={t(`dashboard-meeting-switch-${formik.values.sharedFolder ? 'enabled' : 'disabled'}`)}
+                sx={{ margin: 0, gap: 1, verticalAlign: 'baseline', width: 'max-content' }}
+              />
+            </Stack>
+          )}
         </Stack>
         <Grid container item justifyContent={'space-between'} spacing={2}>
           <Grid item xs={12} sm={'auto'}>
@@ -485,7 +608,11 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               </Grid>
             )}
             <Grid item>
-              <Button onClick={handleSubmit} fullWidth disabled={createEventIsLoading || updateEventIsLoading}>
+              <Button
+                onClick={handleSubmit}
+                fullWidth
+                disabled={formik.isSubmitting || createEventIsLoading || updateEventIsLoading}
+              >
                 {t(`global-save${existingEvent ? '-changes' : ''}`)}
               </Button>
             </Grid>

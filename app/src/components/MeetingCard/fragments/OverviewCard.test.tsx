@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Event, InviteStatus, UserId, TimelessEvent } from '@opentalk/rest-api-rtk-query';
 import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+import store from '../../../store';
 import { screen, render, fireEvent, eventMockedData } from '../../../utils/testUtils';
 import OverviewCard from './OverviewCard';
 
@@ -68,7 +70,9 @@ describe('OverviewCard', () => {
   test('component is rendered without crashing', async () => {
     await render(
       <BrowserRouter>
-        <OverviewCard isMeetingCreator={false} event={mockedMeeting} />
+        <Provider store={store}>
+          <OverviewCard isMeetingCreator={false} event={mockedMeeting} />
+        </Provider>
       </BrowserRouter>
     );
 
@@ -80,7 +84,9 @@ describe('OverviewCard', () => {
   test('component is not marked as favorite', async () => {
     await render(
       <BrowserRouter>
-        <OverviewCard isMeetingCreator={false} event={{ ...mockedMeeting, isFavorite: false }} />
+        <Provider store={store}>
+          <OverviewCard isMeetingCreator={false} event={{ ...mockedMeeting, isFavorite: false }} />
+        </Provider>
       </BrowserRouter>
     );
     expect(screen.queryByTestId('favorite-icon-visible')).not.toBeInTheDocument();
@@ -89,7 +95,9 @@ describe('OverviewCard', () => {
   test('pending invite displays right action buttons', async () => {
     await render(
       <BrowserRouter>
-        <OverviewCard isMeetingCreator={false} event={timeDependentMeeting} />
+        <Provider store={store}>
+          <OverviewCard isMeetingCreator={false} event={timeDependentMeeting} />
+        </Provider>
       </BrowserRouter>
     );
     const acceptButton = screen.getByRole('button', { name: /global-accept/i });
@@ -101,7 +109,9 @@ describe('OverviewCard', () => {
   test('click on pending invite accept button should triger right action', async () => {
     await render(
       <BrowserRouter>
-        <OverviewCard isMeetingCreator={false} event={timeDependentMeeting} />
+        <Provider store={store}>
+          <OverviewCard isMeetingCreator={false} event={timeDependentMeeting} />
+        </Provider>
       </BrowserRouter>
     );
     const acceptButton = screen.getByRole('button', { name: /global-accept/i });
@@ -113,7 +123,9 @@ describe('OverviewCard', () => {
   test('click on pending invite decline button should triger right action', async () => {
     await render(
       <BrowserRouter>
-        <OverviewCard isMeetingCreator={false} event={timeDependentMeeting} />
+        <Provider store={store}>
+          <OverviewCard isMeetingCreator={false} event={timeDependentMeeting} />
+        </Provider>
       </BrowserRouter>
     );
     const declineButton = screen.getByRole('button', { name: /global-decline/i });
@@ -125,7 +137,9 @@ describe('OverviewCard', () => {
   test('click on more menu should display popup with edit, fav and delete options for meeting creator', async () => {
     await render(
       <BrowserRouter>
-        <OverviewCard isMeetingCreator={true} event={mockedMeeting} />
+        <Provider store={store}>
+          <OverviewCard isMeetingCreator={true} event={mockedMeeting} />
+        </Provider>
       </BrowserRouter>
     );
     const MoreMenu = screen.getByRole('button', { name: 'toolbar-button-more-tooltip-title' });
@@ -141,10 +155,12 @@ describe('OverviewCard', () => {
   test('when user is not creator, meeting is marked as fav, click on more menu should display popup with remove favorite option', async () => {
     await render(
       <BrowserRouter>
-        <OverviewCard
-          event={{ ...mockedMeeting, createdBy: { ...mockedMeeting.createdBy, id: '3645d74d' as UserId } }}
-          isMeetingCreator={false}
-        />
+        <Provider store={store}>
+          <OverviewCard
+            event={{ ...mockedMeeting, createdBy: { ...mockedMeeting.createdBy, id: '3645d74d' as UserId } }}
+            isMeetingCreator={false}
+          />
+        </Provider>
       </BrowserRouter>
     );
     const MoreMenu = screen.getByRole('button', { name: 'toolbar-button-more-tooltip-title' });
