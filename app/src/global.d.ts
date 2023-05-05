@@ -7,7 +7,6 @@ import { ConfigState } from './store/slices/configSlice';
 
 export {};
 
-declare module '@opentalk/components';
 declare global {
   interface Window {
     config: ConfigState;

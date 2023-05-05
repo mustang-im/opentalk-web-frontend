@@ -10,8 +10,8 @@ import {
   ParticipantMediaState,
   Tariff,
   Timestamp,
+  InitialAutomod,
 } from '@opentalk/common';
-import { InitialAutomod } from '@opentalk/components';
 
 import { InitialPoll } from '../../../store/slices/pollSlice';
 import { TimerKind, TimerStyle } from '../outgoing/timer';

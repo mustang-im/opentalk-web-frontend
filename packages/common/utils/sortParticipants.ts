@@ -38,7 +38,7 @@ export const sortParticipantsWithConfig =
       case SortOption.LastActive:
         return localParticipants.sort((a, b) => Date.parse(b.lastActive) - Date.parse(a.lastActive));
       case SortOption.Random:
-        return shuffleArrayItems(localParticipants);
+        return localParticipants.length > 1 ? shuffleArrayItems(localParticipants) : localParticipants;
       default:
         return localParticipants;
     }

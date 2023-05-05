@@ -26,3 +26,5 @@ export enum ProtocolAccess {
   Write = 'write',
   None = 'none',
 }
+
+export type FilterableParticipant = Pick<Participant, 'displayName'>;
