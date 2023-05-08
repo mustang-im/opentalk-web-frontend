@@ -102,26 +102,19 @@ export function createSignalingApiCall<P extends Action>(namespace: Namespaces, 
   return prepareMessage;
 }
 
-export type CreateSignalingApiCallType<
-  P extends Action,
-  N extends string = Namespaces,
-  A extends string = Property<P, 'action'>
-> = (namespace: N, actionType: A) => PrepareMessageCreator<P, DistributiveOmit<P, 'action'>, N>;
-
-export type ActionsObjectType = (payload: never) => never;
-
-export type createOutgoingType = (
-  createSignalingApiCall: CreateSignalingApiCallType<Action, Namespaces>,
-  createModule: <S>(
-    inner: (builder: MiddlewareMapBuilder<S>, dispatch: Dispatch) => void
-  ) => (matchBuilder: MiddlewareMapBuilder<S>, dispatch: Dispatch) => void,
-  sendMessage2: (message: Namespaced<Action, Namespaces>) => void
-) => {
-  handler: (matchBuilder: MiddlewareMapBuilder<DefaultRootState>, dispatch: Dispatch<AnyAction>) => void;
-  actions: Record<string, PrepareMessageCreator<string, DistributiveOmit<AnyAction, 'action'>, string>>;
-};
-
+export type SendMessageType = (message: Namespaced<Action, Namespaces>) => void;
 export type CreateModuleType = <S>(
   inner: (builder: MiddlewareMapBuilder<S>, dispatch: Dispatch) => void
 ) => (matchBuilder: MiddlewareMapBuilder<S>, dispatch: Dispatch) => void;
-export type SendMessageType = (message: Namespaced<Action, Namespaces>) => void;
+
+export type CreateSignalingApiCallType = typeof createSignalingApiCall
+export type ActionsObjectType = (payload: never) => never;
+
+//We pass the type of the actions from the respective module. Possibly there is a definination which covers all types.
+export type createOutgoingType<T> = (
+  createModule: CreateModuleType,
+  sendMessage: SendMessageType
+) => {
+  handler: (matchBuilder: MiddlewareMapBuilder<DefaultRootState>, dispatch: Dispatch<AnyAction>) => void;
+  actions: T;
+};

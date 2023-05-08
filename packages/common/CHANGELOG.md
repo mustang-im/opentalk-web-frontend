@@ -6,6 +6,9 @@
 
 ### Stability Improvements
 
+- Moved shared types between enterprise components and monorepo into the common package. (!948)
+- Enforce minimum participants for the participant shuffle method. (!948)
+
 ## 1.0.5
 
 ### Stability Improvements

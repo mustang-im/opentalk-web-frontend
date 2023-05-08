@@ -13,5 +13,5 @@ export * from './participant';
 export * from './sort';
 export * from './tsHelper';
 export * from './tariff';
-
+export * from './whiteboard';
 export * from './actions/joinSuccess';

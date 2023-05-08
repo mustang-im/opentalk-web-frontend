@@ -16,7 +16,7 @@ export interface RecordingState {
   recordingId?: string;
 }
 
-export interface JoinSuccessOutgoing {
+export interface JoinSuccessInternalState {
   participantId: ParticipantId;
   role: Role;
   avatarUrl?: string;
@@ -41,6 +41,7 @@ export interface JoinSuccessOutgoing {
   recording?: null | RecordingState;
   serverTimeOffset: number;
   tariff: Tariff;
+  timer?: TimerState;
 }
 
 export interface JoinSuccessIncoming {
