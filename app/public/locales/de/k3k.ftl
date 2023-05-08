@@ -427,7 +427,7 @@ breakout-room-room-overview-participant-list = Teilnehmer in Breakout-Räumen
 moderator-join-breakout-room = Raum betreten
 header-meeting-room = Meeting-Raum
 
-meeting-room-header-connection-secure = Die Verbindung ist verschlüsselt.
+secure-connection-message = Diese Verbindung ist verschlüsselt und sicher.
 
 participant-joined-text = Beigetreten {$joinedTime}
 participant-hand-raise-text = Hand gehoben {$handUpdated}

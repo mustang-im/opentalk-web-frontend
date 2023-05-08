@@ -13,6 +13,10 @@
 - Fix emoji picker popover cutoff on small devices (!952)
 - Add missing dropdown labels on the view filter. (!951)
 
+### Stability Improvements
+
+- Secure connection information is more eye-catching for the user (!949)
+
 ## 1.4.x
 
 ### UI/UX Fixes

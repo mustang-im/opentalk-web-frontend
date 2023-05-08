@@ -427,7 +427,7 @@ breakout-room-room-overview-participant-list-me = (me)
 moderator-join-breakout-room = Join room
 header-meeting-room = Meeting Room
 
-meeting-room-header-connection-secure = Your connection is secured by TLS-encryption.
+secure-connection-message = This connection is encrypted and safe.
 
 participant-joined-text = Joined {$joinedTime}
 participant-hand-raise-text = Hand raised {$handUpdated}

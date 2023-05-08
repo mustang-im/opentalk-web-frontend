@@ -7,7 +7,6 @@ import {
   styled,
   Pagination,
   Typography,
-  Tooltip,
   Stack,
   Button,
   Menu,
@@ -21,16 +20,15 @@ import {
 } from '@mui/material';
 import { keyframes } from '@mui/system';
 import {
-  DurationIcon,
+  DurationIcon as DefaultDurationIcon,
   SpeakerViewIcon,
   GridViewIcon,
   FullscreenViewIcon,
   SpeakerQueueIcon,
-  PollIcon,
+  PollIcon as DefaultPollIcon,
   LegalBallotIcon,
   WhiteboardIcon,
   RecordingsIcon,
-  SecureIcon,
   ProtocolIcon,
 } from '@opentalk/common';
 import { legalVoteStore, LegalVoteType } from '@opentalk/components';
@@ -67,6 +65,7 @@ import { selectIsWhiteboardAvailable } from '../../store/slices/whiteboardSlice'
 import { MAX_GRID_TILES } from '../GridView/GridView';
 import { Vote } from '../VoteResult/VoteResultContainer';
 import MeetingTimer from './fragments/MeetingTimer';
+import SecureConnectionField from './fragments/SecureConnectionField';
 import WaitingParticipantItem from './fragments/WaitingParticipantsItem';
 
 const blink = keyframes`from { opacity: 1; } to { opacity: 0.3; }`;
@@ -163,11 +162,6 @@ const RightHeaderItem = styled(HeaderItem)(({ theme }) => ({
   '& > :last-child': {
     marginRight: theme.spacing(1),
   },
-  '& svg': {
-    width: '0.6em',
-    height: '0.6em',
-    fill: theme.palette.common.white,
-  },
 }));
 
 const Content = styled('div')(({ theme }) => ({
@@ -217,6 +211,14 @@ const ViewDropdownIcon = styled(ListItemIcon)(({ theme }) => ({
   minWidth: 35,
 }));
 
+const DurationIcon = styled(DefaultDurationIcon)(() => ({
+  width: '0.6em',
+}));
+
+const PollIcon = styled(DefaultPollIcon)(() => ({
+  width: '0.6em',
+}));
+
 const MeetingHeader = () => {
   const [viewEl, setViewEl] = useState<null | HTMLElement>(null);
   const [waitingEl, setWaitingEl] = useState<null | HTMLElement>(null);
@@ -236,7 +238,7 @@ const MeetingHeader = () => {
   const polls = useAppSelector(selectAllPollVotes);
   const hasVotesOrPolls = votes.length + polls.length > 0;
   const menuRef = useRef<HTMLDivElement>(null);
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | SVGSVGElement | null>(null);
   const isWhiteboardAvailable = useAppSelector(selectIsWhiteboardAvailable);
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
   const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
@@ -306,14 +308,7 @@ const MeetingHeader = () => {
     await fullscreenHandle.enter();
   }, [fullscreenHandle]);
 
-  const renderSecurityIcon = () =>
-    window.location.protocol === 'https:' && (
-      <Tooltip title={`${t('meeting-room-header-connection-secure')}`}>
-        <Stack>
-          <SecureIcon aria-label="secure connection" />
-        </Stack>
-      </Tooltip>
-    );
+  const renderSecurityIcon = () => window.location.protocol === 'https:' && <SecureConnectionField />;
 
   const renderViewIcon = () => {
     switch (selectedLayout) {
