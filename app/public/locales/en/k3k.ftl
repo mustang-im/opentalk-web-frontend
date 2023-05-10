@@ -809,3 +809,8 @@ emoji-category-flags = Flags
 
 closes-time-before-one-minute = Maximum conference time will be reached. This conference will end automatically in {$minute} minutes.
 closes-time-in-one-minute = Maximum conference time will be reached. This conference will end automatically in a few seconds.
+
+conference-view-trigger-button = Select view
+conference-view-speaker = Speaker-View
+conference-view-grid = Grid-View
+conference-view-fullscreen = Fullscreen

@@ -10,14 +10,14 @@ import {
   Tooltip,
   Stack,
   Button,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
   Menu,
   MenuList,
+  MenuItem,
   Badge,
   Chip as MuiChip,
   List,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import { keyframes } from '@mui/system';
 import {
@@ -212,6 +212,11 @@ const CustomMenuItem = styled(MenuItem)(() => ({
   },
 }));
 
+const ViewDropdownIcon = styled(ListItemIcon)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(16),
+  minWidth: 35,
+}));
+
 const MeetingHeader = () => {
   const [viewEl, setViewEl] = useState<null | HTMLElement>(null);
   const [waitingEl, setWaitingEl] = useState<null | HTMLElement>(null);
@@ -336,10 +341,15 @@ const MeetingHeader = () => {
     );
   };
 
+  const isViewPopoverOpen = Boolean(viewEl);
   const ViewPopper = (
     <ViewPopperContainer>
       <IconButton
-        aria-describedby={'view-select'}
+        id="view-popover-menu-button"
+        aria-expanded={isViewPopoverOpen ? 'true' : undefined}
+        aria-haspopup="true"
+        aria-controls={isViewPopoverOpen ? 'view-popover-menu' : undefined}
+        aria-label={t('conference-view-trigger-button')}
         onClick={(event) =>
           [LayoutOptions.Protocol, LayoutOptions.Whiteboard].includes(selectedLayout)
             ? handleSelectedView(LayoutOptions.Grid)
@@ -349,29 +359,46 @@ const MeetingHeader = () => {
         {renderViewIcon()}
       </IconButton>
       <Popover
-        open={Boolean(viewEl)}
+        open={isViewPopoverOpen}
         anchorEl={viewEl}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'center',
+          horizontal: 'left',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'center',
+          horizontal: 'left',
         }}
         onClose={resetHTMLElements}
-        disablePortal
+        role={undefined}
       >
         <PopperContainer>
-          <IconButton onClick={() => handleSelectedView(LayoutOptions.Grid)}>
-            <GridViewIcon />
-          </IconButton>
-          <IconButton onClick={() => handleSelectedView(LayoutOptions.Speaker)}>
-            <SpeakerViewIcon />
-          </IconButton>
-          <IconButton onClick={openFullscreenView}>
-            <FullscreenViewIcon />
-          </IconButton>
+          <MenuList id="view-popover-menu" autoFocusItem={isViewPopoverOpen} aria-labelledby="view-popover-menu-button">
+            <MenuItem
+              sx={(theme) => ({ padding: theme.spacing(1) })}
+              onClick={() => handleSelectedView(LayoutOptions.Grid)}
+            >
+              <ViewDropdownIcon aria-hidden={true}>
+                <GridViewIcon sx={{ fontSize: 'inherit' }} />
+              </ViewDropdownIcon>
+              {t('conference-view-grid')}
+            </MenuItem>
+            <MenuItem
+              sx={(theme) => ({ padding: theme.spacing(1) })}
+              onClick={() => handleSelectedView(LayoutOptions.Speaker)}
+            >
+              <ViewDropdownIcon aria-hidden={true}>
+                <SpeakerViewIcon sx={{ fontSize: 'inherit' }} />
+              </ViewDropdownIcon>
+              {t('conference-view-speaker')}
+            </MenuItem>
+            <MenuItem sx={(theme) => ({ padding: theme.spacing(1) })} onClick={openFullscreenView}>
+              <ViewDropdownIcon aria-hidden={true}>
+                <FullscreenViewIcon sx={{ fontSize: 'inherit' }} />
+              </ViewDropdownIcon>
+              {t('conference-view-fullscreen')}
+            </MenuItem>
+          </MenuList>
         </PopperContainer>
       </Popover>
     </ViewPopperContainer>
