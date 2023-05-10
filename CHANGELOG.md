@@ -10,7 +10,7 @@
 
 - Introduced Automod feature called the "Talking Stick" (!912)
 - Implement dynamic media subscriptions management (!942)
-
+- Fix emoji picker popover cutoff on small devices (!952)
 
 ## 1.4.x
 

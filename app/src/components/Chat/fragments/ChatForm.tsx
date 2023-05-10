@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { IconButton as MuiIconButton, InputAdornment, styled, Tooltip } from '@mui/material';
+import { IconButton as MuiIconButton, InputAdornment, styled, Tooltip, Popover } from '@mui/material';
 import { GroupId, ParticipantId, setHotkeysEnabled, TargetId, ChatScope } from '@opentalk/common';
 import { SendMessageIcon } from '@opentalk/common';
 import Picker, {
@@ -14,7 +14,7 @@ import Picker, {
   Categories,
 } from 'emoji-picker-react';
 import { useFormik } from 'formik';
-import React, { useState, KeyboardEventHandler, useMemo, FocusEvent } from 'react';
+import React, { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
@@ -33,8 +33,6 @@ const IconButton = styled(MuiIconButton)({
 });
 
 const PickerContainer = styled('div')(({ theme }) => ({
-  position: 'absolute',
-  bottom: '4.375rem',
   width: '100%',
 
   '.EmojiPickerReact.epr-dark-theme': {
@@ -72,11 +70,13 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
   const dispatch = useAppDispatch();
   const [openPicker, setOpenPicker] = useState(false);
   const isChatEnabled = useAppSelector(selectChatEnabledState);
+  const emojiButton = useRef<HTMLButtonElement | null>(null);
 
   const emojiPickerCategories = useMemo(() => {
-    return Object.values(Categories).map((category) => {
-      return { category, name: t(`emoji-category-${category}`) };
-    });
+    return Object.values(Categories).reduce((categories, category) => {
+      if (category === Categories.SUGGESTED) return categories;
+      return categories.concat({ category, name: t(`emoji-category-${category}`) });
+    }, [] as Array<{ category: Categories; name: string }>);
   }, [t]);
 
   const handleEmojiClick = (data: EmojiClickData) => {
@@ -95,8 +95,20 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
     }
   };
 
-  const renderPicker = () =>
-    openPicker && (
+  const renderPicker = () => (
+    <Popover
+      open={openPicker}
+      anchorEl={emojiButton.current}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+      transformOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      onClose={() => setOpenPicker(false)}
+    >
       <PickerContainer onFocus={focusHandler} onBlur={blurHandler}>
         <Picker
           onEmojiClick={handleEmojiClick}
@@ -113,10 +125,11 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
           emojiStyle={EmojiStyle.NATIVE}
           skinTonePickerLocation={SkinTonePickerLocation.SEARCH}
           suggestedEmojisMode={SuggestionMode.RECENT}
-          width="100%"
+          width="300px"
         />
       </PickerContainer>
-    );
+    </Popover>
+  );
 
   const handleSubmitOnEnter: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey) {
@@ -196,6 +209,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
         startAdornment={
           <InputAdornment position="start">
             <IconButton
+              ref={emojiButton}
               aria-label="emoji picker open"
               aria-pressed={openPicker}
               onClick={() => setOpenPicker(!openPicker)}
