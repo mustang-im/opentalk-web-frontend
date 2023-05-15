@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { LegalVoteMessage, AutomodMessage } from '@opentalk/components';
+import { LegalVoteMessage, AutomodEvent } from '@opentalk/components';
 
 import BreakoutMessage from './breakout';
 import ChatMessage from './chat';
@@ -26,7 +26,7 @@ export * as media from './media';
 export * as recording from './recording';
 
 export type Message =
-  | AutomodMessage
+  | AutomodEvent
   | BreakoutMessage
   | ChatMessage
   | ControlMessage

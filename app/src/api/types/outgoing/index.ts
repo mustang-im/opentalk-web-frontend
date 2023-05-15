@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { AutomodAction, AutomodMessage, LegalVoteAction, LegalVoteMessage } from '@opentalk/components';
+import { AutomodCommand, AutomodCommandType, LegalVoteAction, LegalVoteMessage } from '@opentalk/components';
 
 import * as breakout from './breakout';
 import BreakoutMessage from './breakout';
@@ -38,7 +38,7 @@ export * as whiteboard from './whiteboard';
 export * as recording from './recording';
 
 export type Action =
-  | AutomodAction
+  | AutomodCommandType
   | breakout.Action
   | chat.Action
   | control.Action
@@ -52,7 +52,7 @@ export type Action =
   | recording.Action;
 
 export type Message =
-  | AutomodMessage
+  | AutomodCommand
   | BreakoutMessage
   | ChatMessage
   | ControlMessage

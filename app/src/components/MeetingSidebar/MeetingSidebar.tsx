@@ -3,15 +3,12 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Paper, styled, Tooltip, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
-import { BackendModules, setHotkeysEnabled } from '@opentalk/common';
-import { LegalVoteProvider } from '@opentalk/components';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { legalVote } from '../../api/types/outgoing';
 import { Tab } from '../../config/moderationTabs';
 import { useAppSelector, useTabs } from '../../hooks';
-import { selectVotingUsers } from '../../store/selectors';
-import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
+import { EnterpriseProvider } from '../../provider/EnterpriseProvider';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import LocalVideo from '../LocalVideo/index';
 import MenuTabs from '../MenuTabs/MenuTabs';
@@ -44,8 +41,6 @@ const MeetingSidebar = () => {
   const theme = useTheme();
   const isSmartphone = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallDeviceInLandscape = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
-  const votingUsers = useAppSelector(selectVotingUsers);
-  const libravatarDefaultImage = useAppSelector(selectLibravatarDefaultImage);
   const isModerator = useAppSelector(selectIsModerator);
   const { tabs, value, handleTabSelect } = useTabs();
 
@@ -63,22 +58,7 @@ const MeetingSidebar = () => {
             title={tab.tooltipTranslationKey ? t(tab.tooltipTranslationKey) : ''}
           >
             <SideTabPanel value={value} index={index} tabTitle={tab.titleKey ? t(tab.titleKey) : ''}>
-              {tab.moduleKey === BackendModules.LegalVote ? (
-                <LegalVoteProvider
-                  apiMessages={{
-                    cancel: legalVote.actions.cancel,
-                    stop: legalVote.actions.stop,
-                    start: legalVote.actions.start,
-                  }}
-                  votingUsers={votingUsers}
-                  setHotkeysEnabled={setHotkeysEnabled}
-                  libravatarDefaultImage={libravatarDefaultImage}
-                >
-                  {tab.component}
-                </LegalVoteProvider>
-              ) : (
-                tab.component
-              )}
+              <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
             </SideTabPanel>
           </Tooltip>
         );

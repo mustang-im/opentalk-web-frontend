@@ -1,7 +1,16 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { GroupId, ParticipantId, ParticipationKind, Timestamp } from '@opentalk/common';
+import {
+  GroupId,
+  ParticipantId,
+  ParticipationKind,
+  Timestamp,
+  Participant,
+  ProtocolAccess,
+  WaitingState,
+  joinSuccess,
+} from '@opentalk/common';
 import { logged_out } from '@opentalk/react-redux-appauth';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -9,9 +18,8 @@ import { RootState } from '../';
 import { Role } from '../../api/types/incoming/control';
 import { sendChatMessage } from '../../api/types/outgoing/chat';
 import { lowerHand, raiseHand } from '../../api/types/outgoing/control';
-import { joinSuccess, login, startRoom } from '../commonActions';
+import { login, startRoom } from '../commonActions';
 import { setAudioEnable, setFocusedSpeaker, setScreenShare, setVideoEnable } from './mediaSlice';
-import { Participant, ProtocolAccess, WaitingState } from './participantsSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
 

@@ -36,20 +36,3 @@ export interface InitialAutomod {
   config: AutomodStartConfig;
   speaker: ParticipantId | null;
 }
-
-export interface AutomodParameter {
-  // The strategy used to determine the next speaker
-  selectionStrategy: AutomodSelectionStrategy;
-  // Is `list` visible to the frontend
-  showList: boolean;
-  // If a raised hand should add a participant into `list`
-  considerHandRaise: boolean;
-  // Time limit in milliseconds each speaker has before its speaking status gets revoked
-  timeLimit?: MilliSeconds;
-  // Depending on the `selection_strategy` this will prevent participants to become
-  // speaker twice in a single automod session
-  allowDoubleSelection: boolean;
-  /// The frontend will play an animation when a random selection
-  /// is being made
-  animationOnRandom: boolean;
-}

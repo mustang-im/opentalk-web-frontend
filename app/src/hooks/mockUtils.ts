@@ -1,13 +1,21 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { GroupId, MediaSessionType, ParticipantId, ParticipationKind, VideoSetting } from '@opentalk/common';
+import {
+  GroupId,
+  MediaSessionType,
+  ParticipantId,
+  ParticipationKind,
+  VideoSetting,
+  ProtocolAccess,
+  WaitingState,
+} from '@opentalk/common';
 import { useEffect } from 'react';
 import { v4 } from 'uuid';
 
 import store from '../store';
 import { updated as subscriberUpdate } from '../store/slices/mediaSubscriberSlice';
-import { join, ProtocolAccess, WaitingState } from '../store/slices/participantsSlice';
+import { join } from '../store/slices/participantsSlice';
 import { getRandomNumber } from '../utils/numberUtils';
 
 export const useMockUsers = (users: number) => {

@@ -1,16 +1,24 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FetchRequestError, FetchRequestState, InviteCode, RoomId, RoomMode } from '@opentalk/common';
+import {
+  FetchRequestError,
+  FetchRequestState,
+  InviteCode,
+  RoomId,
+  joinSuccess,
+  TimerStyle,
+  RoomMode,
+  AutomodSelectionStrategy,
+} from '@opentalk/common';
+import { automodStore } from '@opentalk/components';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { RootState } from '../';
-import { StartTimer } from '../../api/types/incoming/timer';
-import { TimerStyle } from '../../api/types/outgoing/timer';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
-import { hangUp, joinSuccess, startRoom } from '../commonActions';
+import { hangUp, startRoom } from '../commonActions';
 import { startedTimer, stoppedTimer } from './timerSlice';
 
 interface InviteState extends FetchRequestState {
@@ -175,10 +183,21 @@ export const roomSlice = createSlice({
       state.connectionState = ConnectionState.Failed;
     });
     builder.addCase(joinSuccess, (state, { payload }) => {
+      state.currentMode = undefined;
       state.serverTimeOffset = payload.serverTimeOffset;
       state.connectionState = ConnectionState.Online;
       state.waitingRoomEnabled = Boolean(payload.moderation?.waitingRoomEnabled);
       state.participantLimit = payload.tariff.quotas?.roomParticipantLimit;
+
+      if (payload.timer && payload.timer.style === TimerStyle.CoffeeBreak) {
+        state.currentMode = RoomMode.CoffeeBreak;
+      }
+
+      if (payload.automod) {
+        if (payload.automod.config.selectionStrategy === AutomodSelectionStrategy.Playlist) {
+          state.currentMode = RoomMode.TalkingStick;
+        }
+      }
     });
     builder.addCase(hangUp.pending, (state) => {
       state.connectionState = ConnectionState.Leaving;
@@ -189,7 +208,7 @@ export const roomSlice = createSlice({
     builder.addCase(hangUp.rejected, (state) => {
       state.connectionState = ConnectionState.Failed;
     });
-    builder.addCase(startedTimer, (state, { payload: { payload } }: PayloadAction<{ payload: StartTimer }>) => {
+    builder.addCase(startedTimer, (state, { payload }) => {
       if (payload.style === TimerStyle.CoffeeBreak) {
         state.currentMode = RoomMode.CoffeeBreak;
       } else {
@@ -197,6 +216,14 @@ export const roomSlice = createSlice({
       }
     });
     builder.addCase(stoppedTimer, (state) => {
+      state.currentMode = undefined;
+    });
+    builder.addCase(automodStore.started, (state, { payload: { selectionStrategy } }) => {
+      if (selectionStrategy === AutomodSelectionStrategy.Playlist) {
+        state.currentMode = RoomMode.TalkingStick;
+      }
+    });
+    builder.addCase(automodStore.stopped, (state) => {
       state.currentMode = undefined;
     });
   },

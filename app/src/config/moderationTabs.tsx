@@ -18,13 +18,14 @@ import {
   ProtocolIcon,
   CoffeeBreakIcon,
   DebriefingIcon,
+  TalkingStickIcon,
   BackendModules,
   RoomMode,
+  TimerStyle,
 } from '@opentalk/common';
 import React, { Suspense } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { TimerStyle } from '../api/types/outgoing/timer';
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
 import DebriefingTab from '../components/DebriefingTab';
 import { useAppSelector } from '../hooks';
@@ -33,7 +34,12 @@ import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 
 const MenuTabs = React.lazy(() => import('../components/MenuTabs'));
 const BreakoutRoomTab = React.lazy(() => import('../components/BreakoutRoomTab'));
-const LegalVote = React.lazy(() => import('@opentalk/components'));
+const LegalVote = React.lazy(() =>
+  import('@opentalk/components').then((module) => ({ default: module.LegalVoteComponent }))
+);
+const TalkingStickTabPanel = React.lazy(() =>
+  import('@opentalk/components').then((module) => ({ default: module.TalkingStickTabPanel }))
+);
 const PollTab = React.lazy(() => import('../components/PollTab'));
 const MuteParticipantsTab = React.lazy(() => import('../components/MuteParticipants'));
 const ProtocolTab = React.lazy(() => import('../components/ProtocolTab'));
@@ -53,6 +59,7 @@ export enum ModerationTabKeys {
   CoffeeBreak = 'tab-coffee-break',
   Protocol = 'tab-protocol',
   AddUser = 'tab-add-user',
+  TalkingStick = 'tab-talking-stick',
 }
 
 export interface Tab {
@@ -179,6 +186,19 @@ export const tabs: Array<Tab> = [
     moduleKey: BackendModules.LegalVote,
     key: ModerationTabKeys.LegalVote,
     titleKey: 'legal-vote-tab-title',
+  },
+  {
+    icon: <TalkingStickIcon />,
+    divider: false,
+    component: (
+      <Suspense fallback={<SuspenseLoading />}>
+        <TalkingStickTabPanel />
+      </Suspense>
+    ),
+    tooltipTranslationKey: 'moderationbar-button-talking-stick-tooltip',
+    moduleKey: BackendModules.Automod,
+    key: ModerationTabKeys.TalkingStick,
+    titleKey: 'talking-stick-tab-title',
   },
   {
     icon: <TimerIcon />,

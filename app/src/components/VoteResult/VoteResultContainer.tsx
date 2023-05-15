@@ -13,7 +13,17 @@ import {
   Chip as MuiChip,
   Button,
 } from '@mui/material';
-import { ParticipantId, PollId, LegalVoteId, CloseIcon, ClockIcon, useDateFormat } from '@opentalk/common';
+import {
+  ParticipantId,
+  PollId,
+  LegalVoteId,
+  CloseIcon,
+  ClockIcon,
+  useDateFormat,
+  Choice,
+  ChoiceResult,
+  getCurrentTimezone,
+} from '@opentalk/common';
 import {
   LegalVoteType,
   VoteOption,
@@ -24,7 +34,6 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Choice, ChoiceResult } from '../../api/types/incoming/poll';
 import legalVoteSignaling from '../../api/types/outgoing/legal-vote';
 import { vote as pollVote } from '../../api/types/outgoing/poll';
 import VoteResultTable from '../../features/VoteResultTable';
@@ -166,6 +175,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
         legalVoteId: currentLegalVote?.id as LegalVoteId,
         option: selectedLegalVoteOption,
         token: currentLegalVote?.token || '',
+        timezone: getCurrentTimezone(),
       })
     );
   };

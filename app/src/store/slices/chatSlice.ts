@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { GroupId, ParticipantId, TargetId, Timestamp } from '@opentalk/common';
+import { GroupId, ParticipantId, TargetId, Timestamp, ChatScope, ChatMessage, joinSuccess } from '@opentalk/common';
 import {
   createEntityAdapter,
   createSelector,
@@ -13,8 +13,6 @@ import {
 import { last } from 'lodash';
 
 import { RootState } from '../';
-import ChatScope from '../../enums/ChatScope';
-import { joinSuccess } from '../commonActions';
 import { selectOurUuid } from './userSlice';
 
 const getTargetId = (chatMessage: ChatMessage) => chatMessage.group || chatMessage.target || chatMessage.source;
@@ -35,16 +33,6 @@ const reduceMessagesToChats = (chatMessages: ChatMessage[]) =>
     }
     return acc;
   }, []);
-
-export type ChatMessage = {
-  id: string;
-  timestamp: string;
-  source: ParticipantId;
-  content: string;
-  scope: ChatScope;
-  group?: GroupId;
-  target?: ParticipantId | GroupId;
-};
 
 export type ChatProps = {
   id: string;

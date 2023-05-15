@@ -1,11 +1,16 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendParticipant, NamespacedIncoming, ParticipantId, Timestamp } from '@opentalk/common';
+import {
+  BackendParticipant,
+  NamespacedIncoming,
+  ParticipantId,
+  Timestamp,
+  TimerKind,
+  TimerStyle,
+} from '@opentalk/common';
 
-import { TimerKind, TimerStyle } from '../outgoing/timer';
-
-export interface StartTimer {
+export interface TimerStarted {
   message: 'started';
   timerId: string;
   readyCheckEnabled: boolean;
@@ -18,7 +23,7 @@ export interface StartTimer {
 
 export type TimerStopKind = 'by_moderator' | 'expired' | 'creator_left';
 
-export interface StopTimer {
+export interface TimerStopped {
   message: 'stopped';
   participantId: ParticipantId;
   kind: TimerStopKind;
@@ -33,7 +38,7 @@ export interface ReadyToContinue extends BackendParticipant {
   participantId: ParticipantId;
 }
 
-export type Message = StartTimer | StopTimer | ReadyToContinue;
+export type Message = TimerStarted | TimerStopped | ReadyToContinue;
 
 export type Timer = NamespacedIncoming<Message, 'timer'>;
 

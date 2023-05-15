@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton as MuiIconButton, InputAdornment, styled, Tooltip } from '@mui/material';
-import { GroupId, ParticipantId, setHotkeysEnabled, TargetId } from '@opentalk/common';
+import { GroupId, ParticipantId, setHotkeysEnabled, TargetId, ChatScope } from '@opentalk/common';
 import { SendMessageIcon } from '@opentalk/common';
 import Picker, {
   EmojiClickData,
@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
 import { LimitedTextField } from '../../../commonComponents';
-import ChatScope from '../../../enums/ChatScope';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
 import { formikProps } from '../../../utils/formikUtils';

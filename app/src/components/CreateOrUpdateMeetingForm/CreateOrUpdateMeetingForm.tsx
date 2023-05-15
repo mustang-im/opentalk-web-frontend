@@ -52,7 +52,7 @@ import { FormWrapper, LimitedTextField, Select } from '../../commonComponents';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToNearest30 from '../../utils/roundToNearest30';
 import roundToUpper30 from '../../utils/roundToUpper30';
-import { isInvalidDate } from '../../utils/typeGardUtils';
+import { isInvalidDate } from '../../utils/typeGuardUtils';
 import EventConflictDialog from './fragment/EventConflictDialog';
 import TimePickers from './fragment/TimePickers';
 

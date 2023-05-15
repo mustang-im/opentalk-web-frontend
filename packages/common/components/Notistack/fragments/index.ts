@@ -11,3 +11,4 @@ export {
   notificationPersistent,
   notifications,
 } from './utils';
+export * from "./StackedMessages";

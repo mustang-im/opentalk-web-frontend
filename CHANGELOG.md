@@ -1,5 +1,9 @@
 ## Unreleased
 
+### New Features
+
+- Introduced Automod feature called the "Talking Stick" (!912)
+
 ## 1.4.x
 
 ### UI/UX Fixes

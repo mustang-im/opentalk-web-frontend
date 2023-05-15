@@ -2,14 +2,21 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Switch, Typography } from '@mui/material';
-import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
+import {
+  formikDurationFieldProps,
+  formikProps,
+  formikSwitchProps,
+  DurationField,
+  TimerKind,
+  TimerStyle,
+} from '@opentalk/common';
 import { DurationValueOptions } from '@opentalk/common/components/DurationField';
 import { FormikValues, useFormik } from 'formik';
 import { useCallback, useEffect, useMemo } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { TimerKind, startTimer, TimerStyle } from '../../../api/types/outgoing/timer';
+import { startTimer } from '../../../api/types/outgoing/timer';
 import { TextField } from '../../../commonComponents';
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
 import { useAppDispatch, useAppSelector } from '../../../hooks';

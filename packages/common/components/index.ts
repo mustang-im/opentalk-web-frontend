@@ -21,6 +21,8 @@ export {
   notificationAction,
   notificationPersistent,
   notifications,
+  StackedMessages,
+  createStackedMessages
 } from './Notistack';
 
 export {

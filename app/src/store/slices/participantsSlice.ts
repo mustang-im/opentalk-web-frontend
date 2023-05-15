@@ -3,52 +3,22 @@
 // SPDX-License-Identifier: EUPL-1.2
 import {
   BackendParticipant,
-  BreakoutRoomId,
-  GroupId,
+  ChatMessage,
   ParticipantId,
-  ParticipationKind,
   Timestamp,
+  Participant,
+  WaitingState,
+  ProtocolAccess,
+  ParticipantInOtherRoom,
+  joinSuccess,
 } from '@opentalk/common';
 import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
-import { ParticipantInOtherRoom } from '../../api/types/incoming/breakout';
-import { Role } from '../../api/types/incoming/control';
-import { joinSuccess } from '../commonActions';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
-import { ChatMessage, received } from './chatSlice';
+import { received } from './chatSlice';
 import { setFocusedSpeaker } from './mediaSlice';
 import { connectionClosed } from './roomSlice';
-
-export enum WaitingState {
-  Joined = 'joined',
-  Waiting = 'waiting',
-  Approved = 'approved',
-}
-
-export enum ProtocolAccess {
-  Read = 'read',
-  Write = 'write',
-  None = 'none',
-}
-
-export interface Participant {
-  id: ParticipantId;
-  breakoutRoomId: BreakoutRoomId | null;
-  displayName: string;
-  avatarUrl?: string;
-  handIsUp: boolean;
-  joinedAt: string;
-  leftAt: string | null;
-  handUpdatedAt?: string;
-  groups: GroupId[];
-  participationKind: ParticipationKind;
-  lastActive: string;
-  role?: Role;
-  waitingState: WaitingState;
-  protocolAccess: ProtocolAccess;
-  isPresenter: boolean;
-}
 
 export const participantAdapter = createEntityAdapter<Participant>({
   sortComparer: (a, b) => a.displayName.localeCompare(b.displayName),

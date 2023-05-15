@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Box, styled, Stack } from '@mui/material';
+import { TimerStyle } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
-import { stopTimer, TimerStyle } from '../../../api/types/outgoing/timer';
+import { stopTimer } from '../../../api/types/outgoing/timer';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectTimerId } from '../../../store/slices/timerSlice';
 import TimerCoffeeBreakCounter from './TimerCoffeeBreakCounter';

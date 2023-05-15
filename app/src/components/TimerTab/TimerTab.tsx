@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { TimerStyle } from '../../api/types/outgoing/timer';
+import { TimerStyle } from '@opentalk/common';
+
 import { useAppSelector } from '../../hooks';
 import { selectTimerRunning } from '../../store/slices/timerSlice';
 import CreateTimerForm from './fragments/CreateTimerForm';

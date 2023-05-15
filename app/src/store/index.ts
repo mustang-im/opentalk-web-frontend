@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { HotkeysReducer } from '@opentalk/common';
-import { legalVoteStore } from '@opentalk/components';
+import { legalVoteStore, automodStore } from '@opentalk/components';
 import { authReducer } from '@opentalk/react-redux-appauth';
 import { configureStore, Middleware, MiddlewareAPI, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
@@ -63,6 +63,7 @@ if (process.env.NODE_ENV === 'development') {
 
 export const appReducers = {
   auth: authReducer,
+  automod: automodStore.automodReducer,
   breakout: breakoutReducer,
   chat: chatReducer,
   config: configReducer,

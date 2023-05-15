@@ -1,9 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
+import { ParticipantId, TimerStyle } from '@opentalk/common';
 
-import { TimerStyle } from '../api/types/outgoing/timer';
 import { selectParticipants } from '../store/slices/participantsSlice';
 import { selectTimerRunning, selectTimerStyle } from '../store/slices/timerSlice';
 import { selectDisplayName, selectOurUuid } from '../store/slices/userSlice';

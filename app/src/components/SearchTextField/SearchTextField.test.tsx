@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { render, screen, fireEvent, waitFor, createStore, cleanup } from '../../utils/testUtils';
-import SearchTextField from './SearchTextField';
-import { sortOptionItems } from './fragments/SortPopover';
+import SearchTextField, { items } from './SearchTextField';
 
 describe('SearchTextField', () => {
   const { store, dispatch } = createStore();
@@ -67,9 +66,7 @@ describe('SearchTextField', () => {
 
     fireEvent.click(sortButton);
     await waitFor(() => {
-      sortOptionItems.map((option) =>
-        expect(screen.getByRole('menuitem', { name: option.i18nKey })).toBeInTheDocument()
-      );
+      items.map((item) => expect(screen.getByRole('menuitem', { name: item.i18nKey })).toBeInTheDocument());
     });
   });
 

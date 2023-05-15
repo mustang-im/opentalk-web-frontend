@@ -1,13 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, Timestamp } from '@opentalk/common';
+import { ParticipantId, Timestamp, TimerKind, TimerStyle, joinSuccess } from '@opentalk/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
-import { StartTimer, ReadyToContinue, TimerStopKind } from '../../api/types/incoming/timer';
-import { TimerState } from './../../api/types/incoming/control';
-import { TimerKind, TimerStyle } from './../../api/types/outgoing/timer';
+import { TimerStarted, ReadyToContinue, TimerStopKind, TimerStopped } from '../../api/types/incoming/timer';
 
 interface RealTime {
   format: string;
@@ -51,11 +49,8 @@ export const timerSlice = createSlice({
   initialState: initialState as State,
   reducers: {
     setInitialStateTimer: () => initialState,
-    startedTimer: (
-      state,
-      { payload: { payload, timestamp } }: PayloadAction<{ payload: StartTimer; timestamp: Timestamp }>
-    ) => {
-      state.startedAt = timestamp;
+    startedTimer: (state, { payload }: PayloadAction<TimerStarted>) => {
+      state.startedAt = payload.startedAt;
       state.endsAt = payload.endsAt;
       state.timerId = payload.timerId;
       state.readyCheckEnabled = payload.readyCheckEnabled;
@@ -65,20 +60,10 @@ export const timerSlice = createSlice({
       state.kind = payload.kind;
       state.style = payload.style;
     },
-    joinedTimer: (state, { payload }: PayloadAction<TimerState>) => {
-      state.endsAt = payload.endsAt;
-      state.kind = payload.kind;
-      state.readyCheckEnabled = payload.readyCheckEnabled;
-      state.startedAt = payload.startedAt;
-      state.style = payload.style;
-      state.timerId = payload.timerId;
-      state.message = 'started';
-      state.running = true;
-    },
-    stoppedTimer: (state, { payload }: { payload: { message: 'stopped'; kindStopTimer: TimerStopKind } }) => {
+    stoppedTimer: (state, { payload }: PayloadAction<TimerStopped>) => {
       state.running = false;
       state.message = payload.message;
-      state.kindStopTimer = payload.kindStopTimer;
+      state.kindStopTimer = payload.kind;
     },
     updateParticipantsReady: (state, { payload }: PayloadAction<ReadyToContinue>) => {
       if (payload.status === true && !state.participantsReady.includes(payload.participantId)) {
@@ -96,6 +81,20 @@ export const timerSlice = createSlice({
       state.initialTime = action.payload as RealTime;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(joinSuccess, (state, { payload: { timer } }) => {
+      if (timer) {
+        state.endsAt = timer.endsAt;
+        state.kind = timer.kind;
+        state.readyCheckEnabled = timer.readyCheckEnabled;
+        state.startedAt = timer.startedAt;
+        state.style = timer.style;
+        state.timerId = timer.timerId;
+        state.message = 'started';
+        state.running = true;
+      }
+    });
+  },
 });
 
 export const {
@@ -105,7 +104,6 @@ export const {
   setRealTime,
   setInitialTime,
   setInitialStateTimer,
-  joinedTimer,
 } = timerSlice.actions;
 
 export const actions = timerSlice.actions;

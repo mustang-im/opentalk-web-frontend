@@ -4,4 +4,4 @@
 import { createAction } from "@reduxjs/toolkit";
 import { JoinSuccessInternalState } from "../../types";
 
-export const joinSuccess = createAction<JoinSuccessInternalState >('signaling/control/join_success');
+export const joinSuccess = createAction<JoinSuccessInternalState>('signaling/control/join_success');

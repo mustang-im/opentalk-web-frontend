@@ -8,8 +8,8 @@ import {
   ParticipantId,
   TrickleCandidate,
   VideoSetting,
+  createModule,
 } from '@opentalk/common';
-import { createModule } from '@opentalk/common';
 
 import { RootState } from '../../../store';
 import { createSignalingApiCall } from '../../createSignalingApiCall';

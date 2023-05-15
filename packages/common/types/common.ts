@@ -150,6 +150,7 @@ export type DefaultAvatarImage = '404' | 'mm' | 'monsterid' | 'wavatar' | 'retro
 
 export enum RoomMode {
   CoffeeBreak = 'coffee-break',
+  TalkingStick = 'talking-stick'
 }
 
 export enum KickScope {

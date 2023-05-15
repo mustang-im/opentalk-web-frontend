@@ -140,15 +140,17 @@ encrypted-messages = Dies ist der Anfang Ihres Chatverlaufs. Niemand hat Zugriff
 moderation-rights-granted = Ihnen wurden die Moderatorenrechte gewährt
 moderation-rights-revoked = Ihnen wurden die Moderatorenrechte entzogen
 
+sort-label = Reihenfolge
 sort-by = Sortierung nach
 sort-groups-on = Gruppenfilter an
 sort-groups-off = Gruppenfilter aus
-sort-name-asc = Name aufsteigend
-sort-name-dsc = Name absteigend
+sort-name-asc = Name (A - Z)
+sort-name-dsc = Name (Z - A)
 sort-first-join = Zuerst beigetreten
 sort-last-join = Zuletzt beigetreten
 sort-last-active = Zuletzt aktiv
 sort-raised-hand = Zuerst Handzeichen gegeben
+sort-random = Zufällig
 
 grant-presenter-role = Präsentatorrolle zuweisen
 revoke-presenter-role = Widerrufen Sie die Rolle des Präsentators
@@ -238,10 +240,24 @@ moderationbar-button-protocol-tooltip = Protokoll
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
 moderationbar-button-debriefing = Nachbesprechung
+moderationbar-button-talking-stick-tooltip = Talking Stick
 
 mute-participants-tab-title = Teilnehmer stummschalten
 mute-participants-button-all = Alle
 mute-participants-button-selected = Nach Auswahl
+
+talking-stick-tab-title = Talking Stick
+talking-stick-skip-speaker = Redner überspringen
+talking-stick-participant-amount-notification = Hinweis: Wir empfehlen den Talking Stick ab mind. 3 Personen zu benutzen.
+talking-stick-started-first-line = Der Talking Stick wurde gestartet.
+talking-stick-started-second-line = Teilnehmerliste entspricht Rednerliste.
+talking-stick-finished = Der Talking Stick ist beendet.
+talking-stick-next-announcement = Sie sind als nächstes dran.
+talking-stick-speaker-announcement = Sie sind jetzt dran. Bitte schalten Sie das Mikro ein!
+talking-stick-notification-unmute = Einschalten
+talking-stick-notification-next-speaker = Weitergeben
+talking-stick-unmuted-notification = Die Teilnehmen hören Sie jetzt. Wenn Sie fertig sind, geben Sie bitte den Redestab weiter.
+talking-stick-unmuted-notification-last-participant = Die Teilnehmer hören... Sie jetzt. Sie sind der letzte Teilnehmer, wenn Sie fertig sind, geben Sie bitte den Redestab ab.
 
 reset-handraises-tab-title = Gehobene Hände zurücksetzen
 reset-handraises-button = Alle
@@ -520,6 +536,7 @@ global-state-canceled = abgebrochen
 global-accept = Annehmen
 global-cancel = Abbrechen
 global-decline = Ablehnen
+global-stop = Stoppen
 global-favorite = Als Favorit markiert
 global-invite = Einladung
 global-month = Monat
@@ -549,6 +566,7 @@ global-fullscreen = ganzer Bildschirm
 global-shortcut = Abkürzung
 global-space = Leertaste
 global-anonymous = Anonym
+global-start-now = Jetzt starten
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings
