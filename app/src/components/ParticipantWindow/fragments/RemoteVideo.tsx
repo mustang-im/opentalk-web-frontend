@@ -64,10 +64,6 @@ const RemoteVideo = ({ descriptor }: IRemoteVideoProps) => {
   }, [containerRef, setSize]);
 
   useEffect(() => {
-    if (stream === undefined) {
-      return;
-    }
-
     switch (true) {
       case size >= 500:
         setQualityTarget(VideoSetting.High);

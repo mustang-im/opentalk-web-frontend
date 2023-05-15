@@ -7,13 +7,15 @@ import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolki
 import { RootState } from '..';
 import { media } from '../../api/types/incoming';
 import {
-  MediaDescriptor,
-  SubscriberConfig,
   idFromDescriptor,
-  SubscriberStateChanged,
+  MediaDescriptor,
   QualityLimit,
+  SubscriberConfig,
+  SubscriberStateChanged,
 } from '../../modules/WebRTC';
 import { SubscriberState } from '../../modules/WebRTC/SubscriberConnection';
+import { hangUp } from '../commonActions';
+import { leave } from './participantsSlice';
 
 interface State extends SubscriberConfig {
   subscriberState: SubscriberState;
@@ -53,7 +55,13 @@ export const mediaSubscriberSlice = createSlice({
       });
     },
     closed: (state, { payload }: PayloadAction<MediaDescriptor>) => {
-      mediaSubscriberAdapter.removeOne(state, idFromDescriptor(payload));
+      mediaSubscriberAdapter.updateOne(state, {
+        id: idFromDescriptor(payload),
+        changes: {
+          subscriberState: { audioRunning: false, videoRunning: false, connection: 'closed' },
+          limit: VideoSetting.High,
+        },
+      });
     },
     mediaUpdated: (state, { payload }: PayloadAction<SubscriberStateChanged>) => {
       mediaSubscriberAdapter.updateOne(state, {
@@ -67,6 +75,17 @@ export const mediaSubscriberSlice = createSlice({
         changes: { limit: payload.limit },
       });
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(leave, (state, { payload: { id } }) => {
+      mediaSubscriberAdapter.removeMany(state, [
+        idFromDescriptor({ participantId: id, mediaType: MediaSessionType.Screen }),
+        idFromDescriptor({ participantId: id, mediaType: MediaSessionType.Video }),
+      ]);
+    });
+    builder.addCase(hangUp.pending, (state) => {
+      mediaSubscriberAdapter.removeAll(state);
+    });
   },
 });
 

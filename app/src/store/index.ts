@@ -33,15 +33,13 @@ import whiteboardReducer from './slices/whiteboardSlice';
 
 const middleware: Array<Middleware> = [apiMiddleware, restApi.middleware, rtkQueryErrorLoggerMiddlware];
 
-const logger = (store: MiddlewareAPI) => (next: Dispatch) => (action: AnyAction) => {
+const logger = () => (next: Dispatch) => (action: AnyAction) => {
   if (action.type.startsWith('signaling/media') || action.type.startsWith('stats/statsUpdated')) {
     return next(action);
   }
 
-  console.log('dispatching', action);
-  const result = next(action);
-  console.log('next state', store.getState());
-  return result;
+  console.debug('dispatching', action);
+  return next(action);
 };
 
 const crashReporter = (store: MiddlewareAPI) => (next: Dispatch) => (action: AnyAction) => {

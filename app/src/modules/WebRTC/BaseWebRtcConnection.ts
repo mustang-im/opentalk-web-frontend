@@ -6,7 +6,7 @@ import { TrickleCandidate, VideoSetting } from '@opentalk/common';
 import { BaseEventEmitter } from '../EventListener';
 import { MediaSignaling } from './MediaSignaling';
 import ConnectionStats, { StatsEvent } from './Statistics/ConnectionStats';
-import { MediaDescriptor, QualityLimit, SubscriberStateChanged } from './WebRTC';
+import { idFromDescriptor, MediaDescriptor, QualityLimit, SubscriberStateChanged } from './WebRTC';
 
 export type ConnectionEvent = {
   closed: void;
@@ -75,28 +75,27 @@ export abstract class BaseWebRtcConnection extends BaseEventEmitter<ConnectionEv
 
     this.peerConnection = new RTCPeerConnection({ iceServers: iceServers });
     this.peerConnection.addEventListener('icecandidate', signaling.createIceCandidateHandler(descriptor));
-    // connectionState is not implemented in Firefox - using iceConnectionState
+    /* only needed to debug webrtc signaling issues
     this.peerConnection.addEventListener('signalingstatechange', (ev) => {
       console.debug(
-        `WebRtcConnection: Signaling state changed to ${this.peerConnection.signalingState}`,
-        descriptor,
-        ev
+        `Signaling state for ${idFromDescriptor(descriptor)} changed to ${this.peerConnection.signalingState}`
       );
     });
-    this.peerConnection.addEventListener('iceconnectionstatechange', (ev) => {
+     */
+    this.peerConnection.addEventListener('iceconnectionstatechange', () => {
       console.debug(
-        `WebRtcConnection: ICE connection state changed to ${this.peerConnection.iceConnectionState}`,
-        descriptor,
-        ev
+        `ICE connection state for ${idFromDescriptor(descriptor)} changed to '${
+          this.peerConnection.iceConnectionState
+        }'`
       );
     });
-    this.peerConnection.addEventListener('icegatheringstatechange', (ev) => {
+    /* only needed to debug webrtc ICE discovery issues
+    this.peerConnection.addEventListener('icegatheringstatechange', () => {
       console.debug(
-        `WebRtcConnection: ICE gathering state changed to ${this.peerConnection.iceGatheringState}`,
-        descriptor,
-        ev
+        `ICE gathering state for ${idFromDescriptor(descriptor)} changed to '${this.peerConnection.iceGatheringState}'`
       );
     });
+    */
   }
 
   public handleSdpCandidate(candidate?: TrickleCandidate) {

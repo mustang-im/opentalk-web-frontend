@@ -142,7 +142,6 @@ export default class ConnectionStats {
     }
 
     if (connection === undefined) {
-      console.error('no selected candidatePair found', reports);
       return undefined;
     }
 

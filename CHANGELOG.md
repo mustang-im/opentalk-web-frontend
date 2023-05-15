@@ -1,8 +1,14 @@
 ## Unreleased
 
+### UI/UX Fixes
+
+### Stability Improvements
+
 ### New Features
 
 - Introduced Automod feature called the "Talking Stick" (!912)
+- Implement dynamic media subscriptions management (!942)
+
 
 ## 1.4.x
 
