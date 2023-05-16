@@ -22,3 +22,7 @@ export const getDuration = (interval: Interval) => ({
   format: getIntervalToDurationString(interval),
   duration: intervalToDuration(interval),
 });
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

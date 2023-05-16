@@ -3,7 +3,11 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { SnackbarKey, SnackbarProvider as SnackbarProviderDefault } from 'notistack';
+import {
+  SnackbarKey,
+  SnackbarProvider as SnackbarProviderDefault,
+  SnackbarProviderProps as SnackbarProviderPropsDefault,
+} from 'notistack';
 import React from 'react';
 
 import { CloseIcon } from '../../../../assets/icons';
@@ -31,19 +35,24 @@ const useStyles = makeStyles(() => ({
 
     '& .notistack-MuiContent': {
       flexWrap: 'nowrap',
-      "& #notistack-snackbar": {
-        alignItems: "flex-start"
-      }
+      '& #notistack-snackbar': {
+        alignItems: 'flex-start',
+      },
     },
   },
 }));
 
+export interface SnackbarProviderProps extends SnackbarProviderPropsDefault {
+  children: React.ReactNode;
+}
+
 // TODO: // suggesting export, we are just reuising de name as default...
-export const SnackbarProvider = ({ children }: { children: React.ReactNode }) => {
+export const SnackbarProvider = (props: SnackbarProviderProps) => {
   const classes = useStyles();
   const onClickDismiss = (key: SnackbarKey) => {
     notifications.close(key);
   };
+  const { children, Components } = props;
 
   return (
     <SnackbarProviderDefault
@@ -63,6 +72,7 @@ export const SnackbarProvider = ({ children }: { children: React.ReactNode }) =>
           <CloseIcon />
         </IconButton>
       )}
+      Components={Components}
     >
       {children}
     </SnackbarProviderDefault>

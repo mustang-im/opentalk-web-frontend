@@ -17,6 +17,9 @@
 - Fix: make clear search button focusable with tab key (!961)
 - Add translated labels to emoji and send button (!959)
 
+- Disable time limit notifications in the lobby (!955)
+- Fix time limit notification for guests joined at the end (!955)
+
 ### Stability Improvements
 
 - Remove redux from the dependencies (!962)
@@ -28,7 +31,7 @@
 - Introduced Automod feature called the "Talking Stick" (!912)
 - Implement dynamic media subscriptions management (!942)
 - Fix emoji picker popover cutoff on small devices (!952)
-- Add missing dropdown labels on the view filter. (!951)
+- Add missing dropdown labels on the view filter (!951)
 
 ### Stability Improvements
 

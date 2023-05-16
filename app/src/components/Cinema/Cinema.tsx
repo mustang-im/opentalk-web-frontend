@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container as MuiContainer } from '@mui/material';
-import { SnackbarProvider } from '@opentalk/common';
 import { FullScreen as ReactFullScreen } from 'react-full-screen';
 
 import LayoutOptions from '../../enums/LayoutOptions';
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
+import SnackbarProvider from '../../provider/SnackbarProvider';
 import { selectParticipantsLayout } from '../../store/slices/uiSlice';
 import FullscreenView from '../FullscreenView/index';
 import GridView from '../GridView';
@@ -31,7 +31,14 @@ const Cinema = () => {
 
   const renderView = () => {
     if (fullscreenHandle.active) {
-      return <FullscreenView />;
+      return (
+        //This additional provider is a workaround for the fullscreen mode
+        //Otherwise the snackbars from the main provider in the Provider.tsx are
+        //in the background and not visible for the user
+        <SnackbarProvider>
+          <FullscreenView />
+        </SnackbarProvider>
+      );
     } else {
       switch (userLayout) {
         case LayoutOptions.Speaker:
@@ -49,9 +56,7 @@ const Cinema = () => {
 
   return (
     <Container disableGutters maxWidth={false}>
-      <FullScreen handle={fullscreenHandle}>
-        <SnackbarProvider>{renderView()}</SnackbarProvider>
-      </FullScreen>
+      <FullScreen handle={fullscreenHandle}>{renderView()}</FullScreen>
     </Container>
   );
 };

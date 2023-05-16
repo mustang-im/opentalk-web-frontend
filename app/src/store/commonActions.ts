@@ -6,6 +6,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
+import { stopTimeLimitNotification } from '../components/TimeLimitNotification';
 import localMediaContext from '../modules/Media/LocalMedia';
 import localScreenContext from '../modules/Media/LocalScreen';
 import { ConferenceRoom, shutdownConferenceContext } from '../modules/WebRTC';
@@ -55,6 +56,9 @@ export const hangUp = createAsyncThunk<void, void, { state: RootState }>('room/h
   // and being redirected to the lobby room are cleared up. If you need to show
   // notification after hanging up, make sure to call it after this function.
   notifications.closeAll();
+  // A workaround to disable notifications about time limitation of the conference, as they
+  // have they own timeout strategy
+  stopTimeLimitNotification();
   const { connectionState } = getState().room;
   if (connectionState !== ConnectionState.Leaving) {
     throw new Error(`cannot hangup when state is '${connectionState}' and not 'leaving'.`);
