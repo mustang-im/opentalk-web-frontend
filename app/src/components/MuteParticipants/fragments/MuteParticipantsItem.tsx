@@ -10,9 +10,9 @@ import {
   FormControlLabel as MuiFormControlLabel,
   ListItemText,
 } from '@mui/material';
+import { ParticipantAvatar } from '@opentalk/common';
 import React from 'react';
 
-import ParticipantAvatar from '../../ParticipantAvatar/index';
 import { MutedParticipant } from '../MuteParticipants';
 
 type MuteParticipantsItemProps = {

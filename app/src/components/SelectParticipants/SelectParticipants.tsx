@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Chip, CircularProgress, InputAdornment, Stack, Typography } from '@mui/material';
-import { CloseIcon, CopyIcon, SearchIcon } from '@opentalk/common';
+import { CloseIcon, CopyIcon, ParticipantAvatar, SearchIcon } from '@opentalk/common';
 import { Email, FindUserResponse, EventInvite } from '@opentalk/rest-api-rtk-query';
 import { differenceBy, debounce } from 'lodash';
 import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
@@ -11,7 +11,6 @@ import * as Yup from 'yup';
 
 import { useGetMeQuery, useLazyFindUsersQuery } from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
-import ParticipantAvatar from '../ParticipantAvatar';
 
 export type EmailUser = {
   email: Email;

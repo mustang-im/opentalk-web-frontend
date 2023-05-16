@@ -17,6 +17,7 @@
 ### UI/UX Fixes
 
 - Translation protect for names & shortcuts against browser-plugins (!956)
+- Fix:Different participant avatars for chat and voting (!957)
 - Fix: Poll/Voting User not able to submit their poll (!936)
 - Highlight the protocol icon on first appearance (!934)
 - Fix German 'Protokoll ausblenden label' (!933)

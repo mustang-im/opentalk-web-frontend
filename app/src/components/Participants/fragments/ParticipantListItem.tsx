@@ -21,7 +21,7 @@ import {
   useDateFormat,
   ChatScope,
 } from '@opentalk/common';
-import { notifications, Participant, ProtocolAccess, SortOption } from '@opentalk/common';
+import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -35,7 +35,6 @@ import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/sli
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
-import ParticipantAvatar from '../../ParticipantAvatar';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
 
 const Avatar = styled(ParticipantAvatar)({
