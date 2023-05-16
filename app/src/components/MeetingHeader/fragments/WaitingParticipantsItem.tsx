@@ -95,7 +95,11 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={<Typography variant={'body1'}>{participant.displayName}</Typography>}
+        primary={
+          <Typography variant={'body1'} translate="no">
+            {participant.displayName}
+          </Typography>
+        }
         secondary={
           <JoinedText variant={'caption'}>{t('participant-joined-text', { joinedTime: formattedTime })}</JoinedText>
         }

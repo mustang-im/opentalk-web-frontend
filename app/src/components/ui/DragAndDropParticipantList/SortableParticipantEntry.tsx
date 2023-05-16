@@ -41,6 +41,7 @@ export const SortableParticipantEntry = ({ id, index, provided, isDragging }: En
       data-is-dragging={isDragging}
       data-testid={id}
       data-index={index}
+      translate="no"
     >
       {displayName}
     </ListEntry>

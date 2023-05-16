@@ -96,6 +96,7 @@ const ParticipantsEditor = ({
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleOnChangeParticipant(event, participant)}
           />
         }
+        translate="no"
         label={participant.displayName}
         labelPlacement={'start'}
       />

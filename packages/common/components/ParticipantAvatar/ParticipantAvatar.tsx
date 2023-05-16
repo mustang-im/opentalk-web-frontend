@@ -58,6 +58,7 @@ const ParticipantAvatar = ({
       bgColor={theme.palette.avatar.background}
       color={color}
       alt={displayName}
+      translate="no"
       src={src}
       data-testid="participantAvatar"
     >

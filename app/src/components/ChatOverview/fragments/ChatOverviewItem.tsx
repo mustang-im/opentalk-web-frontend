@@ -61,7 +61,7 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const renderPrimaryText = () => (
     <Grid container direction={'row'} spacing={1}>
       <Grid item zeroMinWidth xs>
-        <Typography fontWeight={fontWeight} variant={'body1'} color={'textPrimary'} noWrap>
+        <Typography fontWeight={fontWeight} variant={'body1'} color={'textPrimary'} noWrap translate="no">
           {getDisplayName()}
         </Typography>
       </Grid>

@@ -276,11 +276,15 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
         <Grid item xs zeroMinWidth>
           <ListItemText
             primary={
-              <Typography variant={'body1'} noWrap>
+              <Typography variant={'body1'} noWrap translate="no">
                 {participant?.displayName}
               </Typography>
             }
-            secondary={<JoinedText variant={'caption'}>{getContextText()}</JoinedText>}
+            secondary={
+              <JoinedText variant={'caption'} translate="no">
+                {getContextText()}
+              </JoinedText>
+            }
           />
         </Grid>
         {participant.id !== ownId && <Grid item>{renderMenu()}</Grid>}

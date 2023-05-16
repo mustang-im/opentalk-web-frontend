@@ -35,10 +35,14 @@ const ProfileChip = ({ collapsed, withLabel }: ChipProps) => {
         },
       }}
     >
-      <ParticipantAvatar src={data?.avatarUrl}>{displayName}</ParticipantAvatar>
+      <ParticipantAvatar src={data?.avatarUrl} translate="no">
+        {displayName}
+      </ParticipantAvatar>
       {withLabel && (
         <Collapse orientation="horizontal" in={!collapsed}>
-          <Typography noWrap>{displayName}</Typography>
+          <Typography noWrap translate="no">
+            {displayName}
+          </Typography>
         </Collapse>
       )}
     </Button>

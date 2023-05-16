@@ -280,7 +280,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
       >
         <MenuTitleContainer direction="row">
           <Avatar src={avatarUrl}>{displayName}</Avatar>
-          <MenuTitle>{displayName}</MenuTitle>
+          <MenuTitle translate="no">{displayName}</MenuTitle>
         </MenuTitleContainer>
         <Divider />
         {isModerator && renderMenuItems(moderatorMenuItems)}

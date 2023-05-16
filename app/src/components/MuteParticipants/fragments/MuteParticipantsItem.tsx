@@ -59,7 +59,7 @@ const MuteParticipantsItem = ({ participant, onCheck }: MuteParticipantsItemProp
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => onCheck(event.target.checked)}
             />
           }
-          label={<ListItemText>{participant.displayName}</ListItemText>}
+          label={<ListItemText translate="no">{participant.displayName}</ListItemText>}
           labelPlacement={'start'}
         />
       </Grid>

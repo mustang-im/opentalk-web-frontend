@@ -103,7 +103,7 @@ const RoomOverviewListItem = ({ joinRoom, groupedParticipants, breakoutRoomId }:
                 >
                   {participant?.displayName}
                 </Avatar>
-                <Typography variant={'body1'} noWrap>
+                <Typography variant={'body1'} noWrap translate="no">
                   {getParticipantLabel(participant)}
                 </Typography>
               </Stack>

@@ -77,6 +77,7 @@ export const PresenterOverlay = ({
         <Statistics descriptor={videoDescriptor} disablePopoverPortal={fullscreenMode} />
         <OverlayIconButton
           onClick={togglePin}
+          translate="no"
           color={isVideoPinned ? 'primary' : 'secondary'}
           aria-label={t(`indicator-pinned`, {
             participantName: displayName || '',
