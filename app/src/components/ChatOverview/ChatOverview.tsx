@@ -100,6 +100,7 @@ const ChatOverview = () => {
           disabled={participants.length === 0}
           onClick={newMessageClickHandler}
           variant={'text'}
+          focusRipple={true}
           startIcon={<NewMessageIcon />}
         >
           {t('button-new-message')}
