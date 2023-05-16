@@ -42,7 +42,8 @@ const MeetingSidebar = () => {
   const isSmartphone = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallDeviceInLandscape = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
   const isModerator = useAppSelector(selectIsModerator);
-  const { tabs, value, handleTabSelect } = useTabs();
+  const CHAT_PANEL_VALUE = 0;
+  const { tabs, mainTabValue, handleMainTabSelect } = useTabs();
 
   if (isSmartphone || isSmallDeviceInLandscape) {
     return null;
@@ -57,7 +58,7 @@ const MeetingSidebar = () => {
             placement="right"
             title={tab.tooltipTranslationKey ? t(tab.tooltipTranslationKey) : ''}
           >
-            <SideTabPanel value={value} index={index} tabTitle={tab.titleKey ? t(tab.titleKey) : ''}>
+            <SideTabPanel value={mainTabValue} index={index} tabTitle={tab.titleKey ? t(tab.titleKey) : ''}>
               <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
             </SideTabPanel>
           </Tooltip>
@@ -68,7 +69,7 @@ const MeetingSidebar = () => {
 
   return isModerator ? (
     <SideBar>
-      <ModerationSideToolbar selectedTabs={tabs} onSelect={handleTabSelect} />
+      <ModerationSideToolbar selectedTabs={tabs} onSelect={handleMainTabSelect} value={mainTabValue} />
       <ProfileWindow isModerator={isModerator}>
         <LocalVideo />
         <Toolbar />
@@ -80,7 +81,7 @@ const MeetingSidebar = () => {
       <ProfileWindow>
         <LocalVideo />
         <Toolbar />
-        <SideTabPanel value={value} index={0}>
+        <SideTabPanel value={CHAT_PANEL_VALUE} index={0}>
           <MenuTabs />
         </SideTabPanel>
       </ProfileWindow>

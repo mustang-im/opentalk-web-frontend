@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Tab as MuiTab, Tabs as MuiTabs, styled, Tooltip, Divider, Button } from '@mui/material';
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Tab as TabProps } from '../../config/moderationTabs';
@@ -73,15 +73,14 @@ const ToolbarDivider = styled(Divider)(({ theme }) => ({
 export type ModerationSideToolbarProps = {
   onSelect: (tabIndex: number) => void;
   selectedTabs: TabProps[];
+  value: number;
 };
 
-const ModerationSideToolbar = ({ onSelect, selectedTabs }: ModerationSideToolbarProps) => {
-  const [value, setValue] = useState(0);
+const ModerationSideToolbar = ({ onSelect, selectedTabs, value }: ModerationSideToolbarProps) => {
   const { t } = useTranslation();
 
   const handleChange = useCallback(
     (_event: React.SyntheticEvent<Element, Event>, tabIndex: number) => {
-      setValue(tabIndex);
       onSelect(tabIndex);
     },
     [onSelect]

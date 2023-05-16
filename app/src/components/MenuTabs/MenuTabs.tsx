@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Box, Typography, Badge } from '@mui/material';
-import { ParticipantId, GroupId, ChatScope } from '@opentalk/common';
+import { ParticipantId, GroupId, ChatScope, RoomMode } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -17,6 +17,7 @@ import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';
 import TabPanel from './fragments/TabPanel';
+import { selectCurrentRoomMode } from '../../store/slices/roomSlice';
 
 const MessagesBadge = styled(Badge)(({ theme }) => ({
   right: -4,
@@ -90,6 +91,7 @@ const MenuTabs = () => {
   const unreadMessagesCount = useAppSelector(selectUnreadMessageCount);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
   const allChatMessages = useAppSelector(selectAllChatMessages);
+  const currentRoomMode = useAppSelector(selectCurrentRoomMode);
 
   const dispatch = useDispatch();
 
@@ -144,6 +146,12 @@ const MenuTabs = () => {
       setCurrentTab(SidebarTab.Messages);
     }
   }, [chatConversationState]);
+
+  useEffect(() => {
+    if (currentRoomMode === RoomMode.TalkingStick) {
+      setCurrentTab(SidebarTab.People);
+    }
+  }, [currentRoomMode]);
 
   const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
     setCurrentTab(newValue);
