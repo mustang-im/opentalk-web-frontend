@@ -196,7 +196,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
         endAdornment={
           <InputAdornment position="end">
             <IconButton
-              aria-label="submit chat message"
+              aria-label={t('chat-submit-button')}
               type={'submit'}
               edge="end"
               data-testid={'send-message-button'}
@@ -210,7 +210,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
           <InputAdornment position="start">
             <IconButton
               ref={emojiButton}
-              aria-label="emoji picker open"
+              aria-label={t(`chat-${openPicker ? 'close' : 'open'}-emoji-picker`)}
               aria-pressed={openPicker}
               onClick={() => setOpenPicker(!openPicker)}
               role="button"

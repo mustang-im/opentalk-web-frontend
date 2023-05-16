@@ -5,6 +5,7 @@
 - Fix: new message dialog tab order (!965)
 - Fix: automatically open talking stick tab for moderator on start (!960)
 - Fix: make clear search button focusable with tab key (!961)
+- Add translated labels to emoji and send button (!959)
 
 ### Stability Improvements
 
