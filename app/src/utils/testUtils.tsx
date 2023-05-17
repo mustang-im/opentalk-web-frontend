@@ -31,6 +31,7 @@ import {
   TimelessEvent,
 } from '@opentalk/rest-api-rtk-query';
 import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
+import { createStore as createStoreTlk } from '@reduxjs/toolkit';
 import { act, render as rtlRender, RenderOptions } from '@testing-library/react';
 import fs from 'fs';
 import i18n from 'i18next';
@@ -39,7 +40,6 @@ import React from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { createStore as createStoreTlk } from 'redux';
 import { v4 as uuidv4 } from 'uuid';
 
 import { createOpenTalkTheme } from '../assets/themes/opentalk';

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ParticipantId, ParticipationKind, ProtocolAccess, WaitingState } from '@opentalk/common';
-import { Store } from 'redux';
+import { Store } from '@reduxjs/toolkit';
 
 import { join, leave } from '../../store/slices/participantsSlice';
 import { screen, render, createStore, waitFor, fireEvent } from '../../utils/testUtils';

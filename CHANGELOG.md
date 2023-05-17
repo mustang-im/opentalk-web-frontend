@@ -4,6 +4,8 @@
 
 ### Stability Improvements
 
+- Remove redux from the dependencies (!962)
+
 ### New Features
 
 - Introduced Automod feature called the "Talking Stick" (!912)

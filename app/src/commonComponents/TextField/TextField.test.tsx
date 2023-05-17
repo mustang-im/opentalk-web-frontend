@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { Store } from '@reduxjs/toolkit';
 import { cleanup } from '@testing-library/react';
 import React from 'react';
-import { Store } from 'redux';
 
 import TextField from '.';
 import { createStore, fireEvent, render, screen } from '../../utils/testUtils';

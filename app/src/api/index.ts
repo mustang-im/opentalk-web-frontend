@@ -33,9 +33,8 @@ import {
   AutomodEventType,
 } from '@opentalk/components';
 import { token_updated } from '@opentalk/react-redux-appauth';
-import { AnyAction, freeze } from '@reduxjs/toolkit';
+import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
 import i18next from 'i18next';
-import { Middleware } from 'redux';
 
 import LayoutOptions from '../enums/LayoutOptions';
 import i18n from '../i18n';
