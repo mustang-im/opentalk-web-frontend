@@ -569,6 +569,7 @@ global-shortcut = Abkürzung
 global-space = Leertaste
 global-anonymous = Anonym
 global-start-now = Jetzt starten
+global-clear = löschen
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings

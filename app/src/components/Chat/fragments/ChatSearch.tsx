@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { InputAdornment, styled } from '@mui/material';
 import { CloseIcon, SearchIcon } from '@opentalk/common';
+import i18next from 'i18next';
 import { ChangeEvent, ForwardedRef, forwardRef, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -35,12 +36,30 @@ const startAdornment = (
 );
 
 const EndAdornment = styled((props: EndAdornmentProps) => (
-  <InputAdornment position="end" onClick={props.hasValue ? props.onClick : undefined} className={props.className}>
+  <InputAdornment
+    component="button"
+    type="reset"
+    position="end"
+    tabIndex={0}
+    onClick={props.hasValue ? props.onClick : undefined}
+    className={props.className}
+    aria-label={i18next.t('global-clear')}
+  >
     {props.hasValue && <CloseIcon />}
   </InputAdornment>
-))(({ hasValue }) => ({
+))(({ hasValue, theme }) => ({
   cursor: hasValue ? 'pointer' : 'text',
   pointerEvents: hasValue ? 'auto' : 'none',
+  width: theme.spacing(2),
+  height: theme.spacing(2),
+  background: 'transparent',
+  border: 'none',
+  padding: 0,
+}));
+
+const DummyBlock = styled(() => <div role="presentation" aria-hidden={true} />)(({ theme }) => ({
+  width: theme.spacing(2),
+  height: theme.spacing(2),
 }));
 
 const ChatSearch = (props: ChatSearchProps, ref: ForwardedRef<HTMLInputElement>) => {
@@ -71,7 +90,7 @@ const ChatSearch = (props: ChatSearchProps, ref: ForwardedRef<HTMLInputElement>)
       startAdornment={startAdornment}
       value={props.value}
       // We have to use empty adornment in order to keep layout persistant when clear icon changes visibility.
-      endAdornment={<EndAdornment onClick={clear} hasValue={hasValue} />}
+      endAdornment={hasValue ? <EndAdornment onClick={clear} hasValue={hasValue} /> : <DummyBlock />}
       onChange={onChangeMiddleware}
       onKeyUp={onKeyUp}
     />
