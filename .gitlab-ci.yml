@@ -172,9 +172,7 @@ publish:common:
 deploy:review-app:
   stage: deploy
   rules:
-    - if: $CI_PROJECT_ROOT_NAMESPACE != 'opentalk' &&
-          $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH &&
-          $CI_COMMIT_BRANCH != null
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   image: alpine/helm:3.10.2
   tags:
     - kubernetes
@@ -182,11 +180,11 @@ deploy:review-app:
     - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN}
       opentalk https://git.opentalk.dev/api/v4/projects/218/packages/helm/stable
   script:
-    - helm upgrade --version 0.1.0 --install frontend-$GITLAB_USER_ID-$CI_COMMIT_BRANCH opentalk/ot-web-frontend-helm
-      --set image.repository=$CI_REGISTRY_IMAGE
-      --set image.tag=$CI_COMMIT_BRANCH
-      --set ingress.tls[0].secretName=frontend-$GITLAB_USER_ID-$CI_COMMIT_BRANCH-tls
-      --set ot_frontend_url=www.$GITLAB_USER_ID-$CI_COMMIT_BRANCH.review-latest.kube.opentalk.run
+    - helm upgrade --version 0.1.0 --install frontend-$CI_MERGE_REQUEST_IID opentalk/ot-web-frontend-helm
+      --set image.repository=$CI_REGISTRY/$CI_MERGE_REQUEST_SOURCE_PROJECT_PATH
+      --set image.tag=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+      --set ingress.tls[0].secretName=frontend-$CI_MERGE_REQUEST_IID-tls
+      --set ot_frontend_url=www.$CI_MERGE_REQUEST_IID.review-latest.kube.opentalk.run
       --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
       --set ot_backend_url=controller.review-latest.kube.opentalk.run
       -n review-latest --create-namespace
@@ -196,7 +194,7 @@ destroy:review-app:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
           $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
-          $CI_COMMIT_TITLE =~ /^Merge branch '[^']+'.*$/
+          $CI_PIPELINE_SOURCE == 'push'
   allow_failure: true
   image:
     name: alpine/helm:3.10.2
@@ -204,5 +202,5 @@ destroy:review-app:
   tags:
     - kubernetes
   script:
-    - export SOURCE_BRANCH=$(echo $CI_COMMIT_TITLE | awk -F"'" '{print $2}')
-    - helm uninstall frontend-$GITLAB_USER_ID-$SOURCE_BRANCH -n review-latest
+    - merge_id=$(echo $CI_COMMIT_MESSAGE| awk -F! '{print $2}')
+    - helm uninstall frontend-$merge_id -n review-latest
