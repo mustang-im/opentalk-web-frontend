@@ -8,6 +8,7 @@ import {
   ListItemText as MuiListItemText,
   Typography,
   Grid,
+  Badge,
 } from '@mui/material';
 import {
   MicOffIcon,
@@ -20,6 +21,8 @@ import {
   ParticipationKind,
   useDateFormat,
   ChatScope,
+  PhoneIcon,
+  TelephoneStrokeIcon,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
 import React, { useCallback, useState } from 'react';
@@ -61,6 +64,24 @@ const ListItem = styled(MuiListItem)(({ theme }) => ({
   },
 }));
 
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, 30%)',
+    background: theme.palette.text.disabled,
+    width: '100%',
+  },
+}));
+
+const MicOffIconStyled = styled(MicOffIcon)({
+  opacity: '0.5',
+});
+
+const PhoneOffIconStyled = styled(TelephoneStrokeIcon)({
+  opacity: '0.5',
+});
+
 const ListItemText = styled(MuiListItemText)({
   '& p': {
     fontWeight: 400,
@@ -69,9 +90,11 @@ const ListItemText = styled(MuiListItemText)({
 });
 
 const IconsContainer = styled(Grid)({
+  alignItems: 'center',
+  display: 'flex',
   '& svg': {
-    width: '0.6em',
-    height: '0.6em',
+    width: '0.8em',
+    height: '0.8em',
   },
 });
 
@@ -222,9 +245,9 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
     } else if (isScreenShareEnabled) {
       return <ShareScreenOnIcon />;
     } else if (isAudioEnabled) {
-      return <MicOnIcon />;
+      return isSipParticipant ? <PhoneIcon /> : <MicOnIcon />;
     }
-    return <MicOffIcon />;
+    return isSipParticipant ? <PhoneOffIconStyled /> : <MicOffIconStyled />;
   }, [participant, subscriberVideo, subscriberScreen, ownAudioEnabled, ownScreenShareEnabled]);
 
   const renderMenu = () => (
@@ -262,15 +285,34 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
     return false;
   };
 
+  const renderAvatar = useCallback(() => {
+    {
+      const isGuestUser = participant.role === Role.Guest;
+
+      if (isGuestUser) {
+        {
+          return (
+            <StyledBadge badgeContent={t('guest-label')}>
+              <Avatar src={participant?.avatarUrl} alt={participant?.displayName} isSipParticipant={isSipParticipant}>
+                {participant?.displayName}
+              </Avatar>
+            </StyledBadge>
+          );
+        }
+      }
+      return (
+        <Avatar src={participant?.avatarUrl} alt={participant?.displayName} isSipParticipant={isSipParticipant}>
+          {participant?.displayName}
+        </Avatar>
+      );
+    }
+  }, [participant.role]);
+
   return (
     <ListItem>
       <Grid container spacing={2} direction={'row'} wrap={'nowrap'}>
         <Grid item>
-          <ListItemAvatar>
-            <Avatar src={participant?.avatarUrl} alt={participant?.displayName} isSipParticipant={isSipParticipant}>
-              {participant?.displayName}
-            </Avatar>
-          </ListItemAvatar>
+          <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
         </Grid>
         <Grid item xs zeroMinWidth>
           <ListItemText
@@ -288,9 +330,9 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
         </Grid>
         {participant.id !== ownId && <Grid item>{renderMenu()}</Grid>}
         {isProtocolEditor(participant) && (
-          <Grid item alignContent={'flex-end'}>
+          <IconsContainer item>
             <ProtocolIcon />
-          </Grid>
+          </IconsContainer>
         )}
         <IconsContainer item>{renderIcon()}</IconsContainer>
       </Grid>

@@ -159,6 +159,8 @@ menutabs-chat = Chat
 menutabs-people = People
 menutabs-messages = Messages
 
+guest-label = Guest
+
 # $roomName (String) - Breakout Room Name.
 # $timeInSeconds (Number) - The duration in seconds.
 # $numberOfOtherRooms (number) - Number of other rooms.
