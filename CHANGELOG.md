@@ -2,6 +2,8 @@
 
 ### UI/UX Fixes
 
+- Fix: new message dialog tab order (!965)
+
 ### Stability Improvements
 
 - Remove redux from the dependencies (!962)

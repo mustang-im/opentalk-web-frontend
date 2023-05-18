@@ -26,6 +26,12 @@ const Menu = styled(MuiMenu)(({ theme }) => ({
 
 const MenuItem = styled(MuiMenuItem)(() => ({
   justifyContent: 'space-between',
+
+  "&[aria-disabled='true']": {
+    paddingLeft: 0,
+    paddingRight: 0,
+    opacity: 1,
+  },
 }));
 
 function NewMessagePopover<T>({ setAnchorEl, anchorEl, open }: INewMessagePopoverProps<T>) {
@@ -51,7 +57,9 @@ function NewMessagePopover<T>({ setAnchorEl, anchorEl, open }: INewMessagePopove
   const renderGroupItems = () =>
     groups.length > 0
       ? [
-          <ListItemText key={'chat-group-scope'}>{t('chat-group-scope')}</ListItemText>,
+          <MenuItem disabled={true} key={'chat-group-scope'}>
+            <ListItemText>{t('chat-group-scope')}</ListItemText>
+          </MenuItem>,
           groups.map((group) => (
             <MenuItem key={group} onClick={() => handleChatSelected(group, ChatScope.Group)}>
               <ListItemText>{group}</ListItemText>
@@ -63,7 +71,9 @@ function NewMessagePopover<T>({ setAnchorEl, anchorEl, open }: INewMessagePopove
   const renderParticipantItems = () =>
     participants.length > 0
       ? [
-          <ListItemText key={'chat-private-scope'}>{t('chat-private-scope')}</ListItemText>,
+          <MenuItem disabled={true} key={'chat-private-scope'}>
+            <ListItemText>{t('chat-private-scope')}</ListItemText>
+          </MenuItem>,
           participants.map((participant) => (
             <MenuItem key={participant.id} onClick={() => handleChatSelected(participant.id, ChatScope.Private)}>
               <ListItemText translate="no">{participant.displayName}</ListItemText>
