@@ -17,7 +17,7 @@ import {
   Stack,
   Grid,
 } from '@mui/material';
-import { DoneIcon, ParticipantId } from '@opentalk/common';
+import { DoneIcon, ParticipantAvatar, ParticipantId } from '@opentalk/common';
 import { SearchIcon } from '@opentalk/common';
 import { cloneDeep, isEmpty, some, differenceBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -28,7 +28,6 @@ import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectAllProtocolParticipants } from '../../store/selectors';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
-import ParticipantAvatar from '../ParticipantAvatar';
 
 const ParticipantSelectContainer = styled(Container)(({ theme }) => ({
   width: '19rem',

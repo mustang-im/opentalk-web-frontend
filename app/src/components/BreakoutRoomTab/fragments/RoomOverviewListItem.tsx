@@ -11,7 +11,7 @@ import {
   AccordionSummary as MuiAccordionSummary,
   Stack,
 } from '@mui/material';
-import { BreakoutRoomId, ParticipationKind, Participant } from '@opentalk/common';
+import { BreakoutRoomId, ParticipationKind, Participant, ParticipantAvatar } from '@opentalk/common';
 import { ArrowDownIcon } from '@opentalk/common';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks';
 import { selectBreakoutRoomById, selectCurrentBreakoutRoomId } from '../../../store/slices/breakoutSlice';
 import { selectOurUuid } from '../../../store/slices/userSlice';
-import ParticipantAvatar from '../../ParticipantAvatar';
 
 const Avatar = styled(ParticipantAvatar)({
   width: '2.25rem',

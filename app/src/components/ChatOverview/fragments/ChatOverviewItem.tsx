@@ -9,7 +9,7 @@ import {
   Grid,
   styled,
 } from '@mui/material';
-import { TargetId, useDateFormat, ChatScope } from '@opentalk/common';
+import { TargetId, useDateFormat, ChatScope, ParticipantAvatar } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
@@ -17,7 +17,6 @@ import { useAppSelector } from '../../../hooks';
 import { selectUnreadMessagesByTargetIdCount } from '../../../store/selectors';
 import { ChatProps } from '../../../store/slices/chatSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
-import ParticipantAvatar from '../../ParticipantAvatar';
 
 const ListItemContainer = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),

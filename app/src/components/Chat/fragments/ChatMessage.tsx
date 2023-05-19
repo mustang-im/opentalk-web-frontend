@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Stack, styled, Typography, useTheme } from '@mui/material';
-import { ModeratorIcon, useDateFormat, ChatMessage as IChatMessage } from '@opentalk/common';
+import { ModeratorIcon, useDateFormat, ChatMessage as IChatMessage, ParticipantAvatar } from '@opentalk/common';
 import Linkify from 'linkify-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,6 @@ import { RoomEvent } from '../../../store/slices/eventSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 import { selectAvatarUrl, selectDisplayName, selectOurUuid } from '../../../store/slices/userSlice';
 import { isEventMessage } from '../../../utils/typeGuardUtils';
-import ParticipantAvatar from '../../ParticipantAvatar';
 import TextWithDivider from '../../TextWithDivider';
 
 const EventTypography = styled(TextWithDivider)(({ theme }) => ({

@@ -3,14 +3,13 @@
 // SPDX-License-Identifier: EUPL-1.2
 import styled from '@emotion/styled';
 import { List as MuiList, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
-import { DoneIcon, CloseIcon } from '@opentalk/common';
+import { DoneIcon, CloseIcon, ParticipantAvatar } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsReadyList } from '../../../store/selectors';
 import { selectReadyCheckEnabled } from '../../../store/slices/timerSlice';
-import ParticipantAvatar from '../../ParticipantAvatar';
 
 const List = styled(MuiList)({
   overflow: 'auto',

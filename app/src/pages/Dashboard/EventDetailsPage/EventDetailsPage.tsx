@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box, Button, Stack, Typography } from '@mui/material';
-import { notifications } from '@opentalk/common';
+import { notifications, ParticipantAvatar } from '@opentalk/common';
 import { EventId, InviteStatus, User } from '@opentalk/rest-api-rtk-query';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,6 @@ import {
 import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
 import EventTimePreview from '../../../components/EventTimePreview';
 import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting';
-import ParticipantAvatar from '../../../components/ParticipantAvatar';
 import AssetTable from './fragments/AssetTable';
 import ButtonBack from './fragments/ButtonBack';
 

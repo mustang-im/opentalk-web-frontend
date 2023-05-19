@@ -16,6 +16,7 @@ import {
   notifications,
   notificationAction,
   notificationPersistent,
+  ParticipantAvatar,
 } from '@opentalk/common';
 import { BackendModules } from '@opentalk/common';
 import React, { useState } from 'react';
@@ -37,7 +38,6 @@ import { selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
 import { selectRecordingId, selectRecordingState } from '../../../store/slices/recordingSlice';
 import { selectWaitingRoomState } from '../../../store/slices/roomSlice';
 import { selectIsModerator, selectDisplayName, selectAvatarUrl } from '../../../store/slices/userSlice';
-import ParticipantAvatar from '../../ParticipantAvatar';
 import InviteGuestDialog from './InviteGuestDialog';
 import ShortcutListDialog from './ShortcutListDialog';
 import { ToolbarMenuProps, ToolbarMenuItem, ToolbarMenu } from './ToolbarMenuUtils';

@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Divider, Stack, styled, Typography } from '@mui/material';
+import { ParticipantAvatar } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetMeQuery } from '../../../api/rest';
-import ParticipantAvatar from '../../../components/ParticipantAvatar';
 import ProfileNameForm from './fragments/ProfileNameForm';
 
 const Avatar = styled(ParticipantAvatar)({
