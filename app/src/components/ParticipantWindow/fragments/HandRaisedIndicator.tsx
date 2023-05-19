@@ -49,6 +49,7 @@ const HandRaisedIndicator = ({ participantId }: { participantId: ParticipantId }
   return (
     <HandIconContainer
       display={participant.handIsUp}
+      translate="no"
       aria-label={t('indicator-has-raised-hand', { participantName: participant.displayName || '' })}
     >
       <RaiseHandOnIcon aria-label="raise-hand-icon" />

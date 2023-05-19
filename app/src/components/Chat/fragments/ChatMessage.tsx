@@ -144,7 +144,9 @@ const ChatMessage = ({ message }: IChatMessageProps) => {
       default:
         return (
           <EventTypography variant={'body2'} data-testid={'user-event-message'}>
-            <EventNameTypography variant={'caption'}>{sender?.displayName}</EventNameTypography>
+            <EventNameTypography variant={'caption'} translate="no">
+              {sender?.displayName}
+            </EventNameTypography>
             <EventMessageTypography variant={'caption'}>
               {t(`participant-${message.event}-event`)}
             </EventMessageTypography>
@@ -158,7 +160,13 @@ const ChatMessage = ({ message }: IChatMessageProps) => {
   const isModerator = sender?.role === Role.Moderator;
   const renderNameAndTime = () => (
     <Box display={'flex'} flexDirection={ownMessage ? 'row-reverse' : 'row'} alignItems={'center'} gap={1}>
-      <NameTypography noWrap isModerator={isModerator} title={displayName} textAlign={ownMessage ? 'right' : 'left'}>
+      <NameTypography
+        noWrap
+        isModerator={isModerator}
+        title={displayName}
+        textAlign={ownMessage ? 'right' : 'left'}
+        translate="no"
+      >
         {displayName}
       </NameTypography>
       {isModerator && <ModeratorIcon color="primary" />}

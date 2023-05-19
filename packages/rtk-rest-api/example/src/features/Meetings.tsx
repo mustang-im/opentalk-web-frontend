@@ -15,7 +15,9 @@ export const MeetingArticle = ({ meeting }: { meeting: Event }) => {
   return (
     <article>
       <h2>{meeting.title || 'No Title Given'}</h2>
-      <p>Created by: {meeting.createdBy?.displayName || 'John doe'}</p>
+      <p>
+        Created by: <span translate="no">{meeting.createdBy?.displayName || 'John doe'}</span>
+      </p>
       {!isTimelessEvent(meeting) && (
         <p>
           {new Date(meeting.startsAt?.datetime).toDateString()} - {new Date(meeting.endsAt?.datetime).toDateString()}

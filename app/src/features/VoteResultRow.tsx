@@ -25,7 +25,13 @@ function VoteResultRow(props: VoteResultRowProps) {
   return (
     <TableRow>
       <TableCell>
-        <Typography noWrap component="span" sx={{ maxWidth: '150px', display: 'block' }} title={participantLabel}>
+        <Typography
+          noWrap
+          component="span"
+          sx={{ maxWidth: '150px', display: 'block' }}
+          translate="no"
+          title={participantLabel}
+        >
           {participantLabel}
         </Typography>
       </TableCell>

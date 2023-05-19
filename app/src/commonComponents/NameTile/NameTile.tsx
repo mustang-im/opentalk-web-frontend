@@ -61,7 +61,7 @@ const NameTile = ({ audioOn, displayName, ...props }: NameTileProps) => {
           <StyledMicOffIcon data-testid="micOff" />
         </MicBox>
       )}
-      <Typography variant={'body2'} noWrap py={0}>
+      <Typography variant={'body2'} noWrap py={0} translate="no">
         {displayName}
       </Typography>
     </NameBox>

@@ -180,7 +180,13 @@ const ProtocolTab = () => {
             <ListItemAvatar>
               <ParticipantAvatar src={participant.avatarUrl}>{participant.displayName}</ParticipantAvatar>
             </ListItemAvatar>
-            <ListItemText primary={<Typography noWrap>{participant.displayName}</Typography>} />
+            <ListItemText
+              primary={
+                <Typography noWrap translate="no">
+                  {participant.displayName}
+                </Typography>
+              }
+            />
             <DoneIcon color={'success'} />
           </ListItem>
         ))}
@@ -273,7 +279,11 @@ const ProtocolTab = () => {
                           color="primary"
                         />
                       }
-                      label={<Typography noWrap>{participant.displayName}</Typography>}
+                      label={
+                        <Typography noWrap translate="no">
+                          {participant.displayName}
+                        </Typography>
+                      }
                       labelPlacement={'start'}
                     />
                   </ListItem>

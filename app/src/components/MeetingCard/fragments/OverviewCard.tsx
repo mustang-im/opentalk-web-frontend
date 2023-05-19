@@ -206,7 +206,7 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
         </Typography>
       </Grid>
       <Grid item margin={'auto'} xs={3} sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <Typography sx={{ maxWidth: '50ch' }} variant={'body1'} fontWeight={400} noWrap>
+        <Typography sx={{ maxWidth: '50ch' }} variant={'body1'} fontWeight={400} noWrap translate="no">
           {t('dashboard-home-created-by', { author: createdBy.displayName })}
         </Typography>
       </Grid>

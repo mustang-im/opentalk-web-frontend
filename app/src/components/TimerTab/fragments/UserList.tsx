@@ -32,7 +32,13 @@ const UserList = () => {
             <ListItemAvatar>
               <ParticipantAvatar src={participant.avatarUrl}>{participant.displayName}</ParticipantAvatar>
             </ListItemAvatar>
-            <ListItemText primary={<Typography noWrap>{participant.displayName}</Typography>} />
+            <ListItemText
+              primary={
+                <Typography noWrap translate="no">
+                  {participant.displayName}
+                </Typography>
+              }
+            />
             {isReadyCheckEnabled && renderReadyStatus(participant.isReady)}
           </ListItem>
         );

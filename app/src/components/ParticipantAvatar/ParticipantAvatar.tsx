@@ -51,7 +51,15 @@ const ParticipantAvatar = ({ isSipParticipant, specialCharacter, ...props }: Par
   const src = props.src ? addParameterToLibravatarUrl(props.src, { defaultImage }) : undefined;
 
   return (
-    <Avatar {...props} bgColor={avatarBg} color={color} alt={displayName} src={src} data-testid="participantAvatar">
+    <Avatar
+      translate="no"
+      {...props}
+      bgColor={avatarBg}
+      color={color}
+      alt={displayName}
+      src={src}
+      data-testid="participantAvatar"
+    >
       {specialCharacter ? specialCharacter : renderIconOrInitials()}
     </Avatar>
   );

@@ -109,6 +109,7 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
             <OverlayIconButton
               color={pinnedParticipantId === participantId ? 'primary' : 'secondary'}
               onClick={togglePin}
+              translate="no"
               aria-label={t(`indicator-pinned`, {
                 participantName: displayName || '',
               })}
