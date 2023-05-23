@@ -17,6 +17,7 @@
 
 ### UI/UX Fixes
 
+- Change Icons, size and label for participants list (!964)
 - Translation protect for names & shortcuts against browser-plugins (!956)
 - Fix:Different participant avatars for chat and voting (!957)
 - Fix: Poll/Voting User not able to submit their poll (!936)

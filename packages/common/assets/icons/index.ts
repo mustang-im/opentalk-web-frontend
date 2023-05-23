@@ -69,6 +69,7 @@ import SpeakerQueueIcon from './SpeakerQueueIcon';
 import SpeakerViewIcon from './SpeakerViewIcon';
 import StatisticsIcon from './StatisticsIcon';
 import TalkingStickIcon from './TalkingStickIcon';
+import TelephoneStrokeIcon from './TelephoneStrokeIcon';
 import TimerIcon from './TimerIcon';
 import TrashIcon from './TrashIcon';
 import UnlockedIcon from './UnlockedIcon';
@@ -155,4 +156,5 @@ export {
   WheelOfNamesIcon,
   WhiteboardIcon,
   WoolBallIcon,
+  TelephoneStrokeIcon,
 };

@@ -159,6 +159,8 @@ menutabs-chat = Chat
 menutabs-people = Teilnehmer
 menutabs-messages = Nachrichten
 
+guest-label = Gast
+
 # $roomName (String) - Raumname.
 # $timeInSeconds (Number) - The duration in seconds.
 # $numberOfOtherRooms (number) - Anzahl an weiteren räumen.
