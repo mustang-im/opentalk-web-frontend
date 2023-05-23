@@ -11,6 +11,7 @@
 - Introduced Automod feature called the "Talking Stick" (!912)
 - Implement dynamic media subscriptions management (!942)
 - Fix emoji picker popover cutoff on small devices (!952)
+- Add missing dropdown labels on the view filter. (!951)
 
 ## 1.4.x
 

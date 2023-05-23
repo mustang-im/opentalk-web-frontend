@@ -809,3 +809,8 @@ emoji-category-flags = Flaggen
 
 closes-time-before-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in {$minute} Minuten automatisch beendet.
 closes-time-in-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in Kürze automatisch beendet.
+
+conference-view-trigger-button = Ansichtsauswahl
+conference-view-speaker = Sprecheransicht
+conference-view-grid = Kachelansicht
+conference-view-fullscreen = Vollbildansicht
