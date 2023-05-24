@@ -14,7 +14,7 @@ import { MeetingsProp } from '../EventsOverviewPage';
 
 interface MeetingsOverviewProp {
   entries: MeetingsProp[];
-  expandAll: boolean;
+  expandAccordion: string;
 }
 
 const Accordion = styled(({ children, ...props }: AccordionProps) => (
@@ -51,7 +51,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   marginLeft: theme.spacing(-2),
 }));
 
-const EventsOverview = ({ entries, expandAll }: MeetingsOverviewProp) => {
+const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
   const [expanded, setExpanded] = useState<string[]>([]);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
@@ -59,17 +59,16 @@ const EventsOverview = ({ entries, expandAll }: MeetingsOverviewProp) => {
   };
 
   useEffect(() => {
-    if (expandAll) {
-      setExpanded(entries.map((event) => event.title));
-    }
-  }, [expandAll, entries]);
+    console.log('rerenders');
+  }, []);
 
-  // close all accordion only if expandAll change
   useEffect(() => {
-    if (!expandAll) {
-      setExpanded([]);
+    if (expandAccordion === 'all') {
+      setExpanded(entries.map((event) => event.title));
+    } else {
+      setExpanded([expandAccordion]);
     }
-  }, [expandAll]);
+  }, [expandAccordion, entries]);
 
   return (
     <Stack spacing={1} overflow={'auto'} flex={'1 1 auto'} height={0}>

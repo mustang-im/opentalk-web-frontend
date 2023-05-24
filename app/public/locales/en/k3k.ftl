@@ -704,8 +704,11 @@ dashboard-meeting-shared-folder-error-cancel-button = Cancel
 dashboard-meeting-shared-folder-error-retry-button = Retry
 dashboard-meeting-shared-folder-error-ok-button = Ok
 
+dashboard-meeting-details-page-future = future
+dashboard-meeting-details-page-past = past
 dashboard-meeting-details-page-description-title = Description
 dashboard-meeting-details-page-time-independent = time independent
+
 dashboard-meeting-details-page-all-day = all day at {$date}
 dashboard-meeting-details-page-participant-pending = Open invitations
 dashboard-meeting-details-page-participant-accepted = Accepted

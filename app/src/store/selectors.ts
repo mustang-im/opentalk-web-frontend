@@ -14,6 +14,7 @@ import {
   FilterableParticipant,
 } from '@opentalk/common';
 import { automodStore } from '@opentalk/components';
+import { CursorPaginated, Event, EventException } from '@opentalk/rest-api-rtk-query';
 import { createSelector } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
 import _, { intersection } from 'lodash';
@@ -238,5 +239,16 @@ export const selectTalkingStickParticipants = createSelector(
     });
 
     return participantsInTalkingStick;
+  }
+);
+
+export const selectFilteredEventByFavorite = createSelector(
+  [(state: { data: CursorPaginated<EventException | Event> | undefined }) => state.data],
+  (data): Array<EventException | Event> => {
+    if (data === undefined) {
+      return [];
+    }
+    const { data: selectedEvents } = data;
+    return selectedEvents;
   }
 );

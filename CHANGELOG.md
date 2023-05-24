@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Rework of dashboard meeting overview (!968)
 - Fix: Legal vote token not being completely visible (!967)
 - Fix: Legal vote results are not visible to every participant (!967)
 - Fix handling when time limit quota is elapsed (!974)
