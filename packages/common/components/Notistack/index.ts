@@ -4,12 +4,11 @@
 
 export {
   SnackbarProvider,
-  ISnackActionsProps,
-  ISnackbarPersistentProps,
-  ISnackbarActionButtonProps,
   notificationAction,
   notificationPersistent,
   notifications,
   StackedMessages,
-  createStackedMessages
+  createStackedMessages,
 } from './fragments';
+
+export type { ISnackActionsProps, ISnackbarPersistentProps, ISnackbarActionButtonProps } from './fragments';

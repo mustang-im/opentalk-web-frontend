@@ -5,9 +5,9 @@ import { Tariff } from '@opentalk/common';
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import snakeCaseKeys from 'snakecase-keys';
-import { FindUserResponse } from 'types/user';
 
 import { UserMe, UpdateMePayload, User, EventId, Tag, Tags, UserId } from '../types';
+import { FindUserResponse } from '../types/user';
 
 export type FindUsersParams = {
   /**

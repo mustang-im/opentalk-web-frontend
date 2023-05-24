@@ -6,4 +6,4 @@
 #tsconfig.hot.json and tsconfig.dev.json
 
 tsconfig.json
-hotReload/components.tsconfig.json
+hotReload/packages.tsconfig.json

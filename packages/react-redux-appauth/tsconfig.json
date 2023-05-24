@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "dist",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -31,6 +30,6 @@
     "examples/*.tsx",
     "examples/**/*.ts",
     "examples/**/*.tsx"
-  ],
+, "index.ts"  ],
   "exclude": ["node_modules"]
 }

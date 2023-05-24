@@ -12,7 +12,7 @@ Files:
  tsconfig.base.json
  app/tsconfig.dev.json
  app/tsconfig.hot.json
- app/hotReload/components.tsconfig.example.json
+ app/hotReload/packages.tsconfig.example.json
  app/hotReload/Instructions.md
  app/package.json
  app/tsconfig.json

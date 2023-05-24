@@ -16,7 +16,7 @@ export default [
   // an array for the `output` option, where we can specify
   // `file` and `format` for each target)
   {
-    input: 'src/index.ts',
+    input: 'index.ts',
     plugins: [
       ts({
         transpiler: 'swc',
@@ -37,5 +37,4 @@ export default [
       '@reduxjs/toolkit/query/react',
     ],
   },
-  // { input: './dist/dts/index.d.ts', output: [{ file: 'dist/index.d.ts', format: 'es' }], plugins: [dts()] },
 ];

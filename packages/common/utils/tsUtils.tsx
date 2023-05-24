@@ -1,17 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { ErrorStruct } from '../types';
 
 declare const UnitSymbol: unique symbol;
 export type Unit<S> = number & { [UnitSymbol]: S };
 
 declare const MilliSecondsSymbol: unique symbol;
 export type MilliSeconds = Unit<typeof MilliSecondsSymbol>;
-
-export interface ErrorStruct<E extends string> {
-  message: 'error';
-  error: E;
-}
 
 declare const SecondsSymbol: unique symbol;
 export type Seconds = Unit<typeof SecondsSymbol>;

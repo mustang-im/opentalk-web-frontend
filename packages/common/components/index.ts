@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import AccordionItem from './AccordionItem';
 import CommonFormItem from './CommonFormItem';
-import DurationField from './DurationField';
+import { DurationField, DurationValueOptions } from './DurationField';
 import FormWrapper from './FormWrapper';
 import IconButton from './IconButton';
 import ParticipantAvatar from './ParticipantAvatar';
@@ -16,15 +16,13 @@ import ToolbarMenuUtils from './ToolbarMenuUtils';
 export * from 'notistack';
 export {
   SnackbarProvider,
-  ISnackActionsProps,
-  ISnackbarPersistentProps,
-  ISnackbarActionButtonProps,
   notificationAction,
   notificationPersistent,
   notifications,
   StackedMessages,
   createStackedMessages,
 } from './Notistack';
+export type { ISnackActionsProps, ISnackbarPersistentProps, ISnackbarActionButtonProps } from './Notistack';
 
 export type { ToggleOptions } from './Toggle';
 export {
@@ -40,3 +38,5 @@ export {
   SortPopoverMenu,
   Toggle,
 };
+
+export type { DurationValueOptions };
