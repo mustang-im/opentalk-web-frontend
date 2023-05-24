@@ -4,7 +4,7 @@
 
 const CracoEsbuildPlugin = require('craco-esbuild');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const HotReloadPlugin = require('./hotReload/hot.plugin')
+const HotReloadPlugin = require('./hotReload/hot.plugin');
 
 module.exports = ({ env }) => {
     const isProductionBuild = process.env.NODE_ENV === "production"
