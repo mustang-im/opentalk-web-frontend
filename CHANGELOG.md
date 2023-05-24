@@ -2,6 +2,9 @@
 
 ### UI/UX Fixes
 
+- Fix: Legal vote token not being completely visible (!967)
+- Fix: Legal vote results are not visible to every participant (!967)
+
 ### Stability Improvements
 
 ### New Features

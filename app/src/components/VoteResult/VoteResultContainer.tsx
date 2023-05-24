@@ -40,7 +40,7 @@ import VoteResultTable from '../../features/VoteResultTable';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectPollVoteById, closeResultWindow as closePollResultWindow, voted } from '../../store/slices/pollSlice';
 import { setVotePollIdToShow } from '../../store/slices/uiSlice';
-import { selectIsModerator, selectOurUuid } from '../../store/slices/userSlice';
+import { selectOurUuid } from '../../store/slices/userSlice';
 import VoteResult, { VoteType } from './VoteResult';
 import VoteResultDate from './fragments/VoteResultDate';
 
@@ -113,7 +113,6 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const { t } = useTranslation();
   const currentLegalVote = useAppSelector(legalVoteStore.selectVoteById(legalVoteId));
   const currentPoll = useAppSelector(selectPollVoteById(legalVoteId));
-  const isModerator = useAppSelector(selectIsModerator);
   const startTime = new Date(currentLegalVote?.startTime ?? new Date());
   const formattedTime = useDateFormat(startTime, 'time');
   const [showResults, setShowResults] = useState(false);
@@ -305,7 +304,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   };
 
   const showTableHint =
-    !showResults && currentLegalVote && isModerator && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0
+    !showResults && currentLegalVote && allowedToVote && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0
       ? true
       : false;
 
@@ -391,7 +390,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
 
         {showResults &&
           currentLegalVote &&
-          isModerator &&
+          allowedToVote &&
           Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
             <Grid ref={resultsRef} item xs={12}>
               <VoteResultTable scrollToResults={scrollToResults} voteId={currentLegalVote.id} />

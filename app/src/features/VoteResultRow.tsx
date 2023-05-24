@@ -20,7 +20,7 @@ function VoteResultRow(props: VoteResultRowProps) {
   const user = useAppSelector(selectUserAsParticipant);
   const { token } = props;
 
-  const participantLabel = token !== '' ? token.slice(0, 10) : (participant || user)?.displayName || '';
+  const participantLabel = token || (participant || user)?.displayName || '';
 
   return (
     <TableRow>
