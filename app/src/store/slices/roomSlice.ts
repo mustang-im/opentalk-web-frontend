@@ -10,6 +10,7 @@ import {
   TimerStyle,
   RoomMode,
   AutomodSelectionStrategy,
+  EventInfo,
 } from '@opentalk/common';
 import { automodStore } from '@opentalk/components';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -53,6 +54,7 @@ interface RoomState {
   passwordRequired: boolean;
   participantLimit: number;
   currentMode?: RoomMode;
+  eventInfo?: EventInfo;
 }
 
 export interface InviteRoomVerifyResponse {
@@ -198,6 +200,7 @@ export const roomSlice = createSlice({
           state.currentMode = RoomMode.TalkingStick;
         }
       }
+      state.eventInfo = payload.eventInfo;
     });
     builder.addCase(hangUp.pending, (state) => {
       state.connectionState = ConnectionState.Leaving;
@@ -248,5 +251,6 @@ export const selectServerTimeOffset = (state: RootState) => state.room.serverTim
 export const selectPasswordRequired = (state: RootState) => state.room.passwordRequired;
 export const selectParticipantLimit = (state: RootState) => state.room.participantLimit;
 export const selectCurrentRoomMode = (state: RootState) => state.room.currentMode;
+export const selectEventInfo = (state: RootState) => state.room.eventInfo;
 
 export default roomSlice.reducer;

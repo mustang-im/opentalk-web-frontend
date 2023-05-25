@@ -6,6 +6,7 @@ import { InitialBreakout } from '../breakout';
 import { ChatMessage, InitialChat } from '../chat';
 import { BackendParticipant, GroupId, ParticipantId, ParticipantMediaState, Role, Timestamp } from '../common';
 import { TimerState } from '../control';
+import { EventInfo } from '../eventInfo';
 import { Participant } from '../participant';
 import { InitialPoll } from '../poll';
 import { SharedFolderData } from '../sharedFolder';
@@ -44,6 +45,7 @@ export interface JoinSuccessInternalState {
   tariff: Tariff;
   timer?: TimerState;
   sharedFolder: SharedFolderData;
+  eventInfo?: EventInfo;
 }
 
 export interface JoinSuccessIncoming {
@@ -68,4 +70,5 @@ export interface JoinSuccessIncoming {
   tariff: Tariff;
   closesAt: Timestamp;
   sharedFolder: SharedFolderData;
+  eventInfo?: EventInfo;
 }
