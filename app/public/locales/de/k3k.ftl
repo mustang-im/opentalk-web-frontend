@@ -817,3 +817,5 @@ conference-view-trigger-button = Ansichtsauswahl
 conference-view-speaker = Sprecheransicht
 conference-view-grid = Kachelansicht
 conference-view-fullscreen = Vollbildansicht
+shared-folder-open-label = Geteilten Ordner öffnen
+shared-folder-password-label = Ordner-Passwort kopieren

@@ -24,6 +24,7 @@ import pollReducer from './slices/pollSlice';
 import protocolReducer from './slices/protocolSlice';
 import recordingReducer from './slices/recordingSlice';
 import roomReducer from './slices/roomSlice';
+import sharedFolderReducer from './slices/sharedFolderSlice';
 import slotReducer from './slices/slotSlice';
 import speedMeterReducer from './slices/speedMeterSlice';
 import timerReducer from './slices/timerSlice';
@@ -84,6 +85,7 @@ export const appReducers = {
   whiteboard: whiteboardReducer,
   recording: recordingReducer,
   hotkeys: HotkeysReducer,
+  sharedFolder: sharedFolderReducer,
 };
 
 const store = configureStore({

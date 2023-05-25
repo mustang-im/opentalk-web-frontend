@@ -8,6 +8,7 @@ import { BackendParticipant, GroupId, ParticipantId, ParticipantMediaState, Role
 import { TimerState } from '../control';
 import { Participant } from '../participant';
 import { InitialPoll } from '../poll';
+import { SharedFolderData } from '../sharedFolder';
 import { Tariff } from '../tariff';
 import { WhiteboardState } from '../whiteboard';
 
@@ -42,6 +43,7 @@ export interface JoinSuccessInternalState {
   serverTimeOffset: number;
   tariff: Tariff;
   timer?: TimerState;
+  sharedFolder: SharedFolderData;
 }
 
 export interface JoinSuccessIncoming {
@@ -65,4 +67,5 @@ export interface JoinSuccessIncoming {
   timer?: TimerState;
   tariff: Tariff;
   closesAt: Timestamp;
+  sharedFolder: SharedFolderData;
 }

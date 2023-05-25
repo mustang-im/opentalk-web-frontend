@@ -61,6 +61,7 @@ import SearchIcon from './SearchIcon';
 import SecureIcon from './SecureIcon';
 import SendMessageIcon from './SendMessageIcon';
 import SettingsIcon from './SettingsIcon';
+import SharedFolderIcon from './SharedFolderIcon';
 import ShareScreenOffIcon from './ShareScreenOffIcon';
 import ShareScreenOnIcon from './ShareScreenOnIcon';
 import SignOutIcon from './SignOutIcon';
@@ -140,6 +141,7 @@ export {
   SecureIcon,
   SendMessageIcon,
   SettingsIcon,
+  SharedFolderIcon,
   ShareScreenOffIcon,
   ShareScreenOnIcon,
   SignOutIcon,

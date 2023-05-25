@@ -16,3 +16,4 @@ export * from './tsHelper';
 export * from './tariff';
 export * from './whiteboard';
 export * from './actions/joinSuccess';
+export * from './sharedFolder';

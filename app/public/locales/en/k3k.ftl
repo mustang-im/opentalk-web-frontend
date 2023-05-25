@@ -817,3 +817,5 @@ conference-view-trigger-button = Select view
 conference-view-speaker = Speaker-View
 conference-view-grid = Grid-View
 conference-view-fullscreen = Fullscreen
+shared-folder-open-label = Open shared folder
+shared-folder-password-label = Copy Folder-password

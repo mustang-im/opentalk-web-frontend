@@ -61,6 +61,7 @@ const InviteToMeeting = ({
   const [isSipLinkCopied, setSipLinkCopied] = useState(false);
   const [isGuestLinkCopied, setGuestLinkCopied] = useState(false);
   const [isRoomPasswordCopied, setIsRoomPasswordCopied] = useState(false);
+  //TODO: There has to be a better way of keeping track of what should be highlighted as copied, maybe we need a follow up issue for it
 
   const { data: tariff } = useGetMeTariffQuery();
   const userTariffLimit = tariff?.quotas.roomParticipantLimit;
@@ -122,6 +123,7 @@ const InviteToMeeting = ({
   ]);
 
   const roomPassword = existingEvent?.room?.password?.trim() || undefined;
+  //TODO: Part of line 67 TODO: Also feels very bad to have all of these hardcoded functions to which you add state changes
 
   const copyRoomLinkToClipboard = useCallback(() => {
     navigator.clipboard.writeText(roomUrl.toString()).then(() => {
