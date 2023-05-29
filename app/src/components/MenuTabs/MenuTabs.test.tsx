@@ -31,9 +31,9 @@ describe('MenuTabs Component', () => {
     expect(messageTab).toBeInTheDocument();
     expect(messageTab).toHaveAttribute('aria-selected', 'false');
 
-    expect(screen.getByRole('button', { name: /emoji picker open/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /chat-open-emoji-picker/i })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /smiling face emoji/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /submit chat message/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /chat-submit-button/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText('chatinput-placeholder')).toBeInTheDocument();
   });
 

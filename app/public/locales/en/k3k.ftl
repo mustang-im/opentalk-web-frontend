@@ -124,6 +124,9 @@ chat-input-error-required = Empty messages are not allowed
 chat-no-search-results = No messages matching the criteria
 chat-search-reset = Reset
 chat-delete-global-messages-success = The global chat has been deleted by the moderator.
+chat-open-emoji-picker = open emoji picker
+chat-close-emoji-picker = close emoji picker
+chat-submit-button = submit chat message
 
 no-group-participants-label = without group
 button-back-messages = Back
