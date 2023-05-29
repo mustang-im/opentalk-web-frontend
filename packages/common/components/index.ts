@@ -8,9 +8,10 @@ import FormWrapper from './FormWrapper';
 import IconButton from './IconButton';
 import ParticipantAvatar from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
-import TextField from './TextField';
-import ToolbarMenuUtils from './ToolbarMenuUtils';
 import SortPopoverMenu from './SortPopoverMenu';
+import TextField from './TextField';
+import Toggle from './Toggle';
+import ToolbarMenuUtils from './ToolbarMenuUtils';
 
 export * from 'notistack';
 export {
@@ -22,7 +23,7 @@ export {
   notificationPersistent,
   notifications,
   StackedMessages,
-  createStackedMessages
+  createStackedMessages,
 } from './Notistack';
 
 export {
@@ -35,5 +36,6 @@ export {
   TextField,
   ToolbarMenuUtils,
   IconButton,
-  SortPopoverMenu
+  SortPopoverMenu,
+  Toggle,
 };

@@ -242,7 +242,7 @@ export const selectTalkingStickParticipants = createSelector(
   }
 );
 
-export const selectFilteredEventByFavorite = createSelector(
+export const selectFavoriteEvents = createSelector(
   [(state: { data: CursorPaginated<EventException | Event> | undefined }) => state.data],
   (data): Array<EventException | Event> => {
     if (data === undefined) {

@@ -2,17 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, Skeleton, Stack, styled, Typography } from '@mui/material';
-import { ArrowDownIcon, formatDate } from '@opentalk/common';
+import { ArrowDownIcon, formatDate, Toggle } from '@opentalk/common';
 import { DateTime, Event, EventException, InviteStatus, isTimelessEvent } from '@opentalk/rest-api-rtk-query';
 import { endOfISOWeek, getWeek, isAfter, isBefore, isEqual, startOfISOWeek } from 'date-fns';
 import i18n, { t } from 'i18next';
 import { groupBy } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetEventsQuery } from '../../../api/rest';
-import { Toggle } from '../../../commonComponents';
-import { selectFilteredEventByFavorite } from '../../../store/selectors';
+import { selectFavoriteEvents } from '../../../store/selectors';
 import { useHeader } from '../../../templates/DashboardTemplate';
 import { getExpandedEvents } from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
@@ -128,8 +127,8 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
     };
   }, [header, setHeader, filter]);
 
-  const formatItemsAsMeetingProps = (event: Array<Event>) => {
-    const groupByTimeFilter = groupBy(event, (event) =>
+  const formatEventsAsMeetingProps = (events: Array<Event>) => {
+    const groupByTimeFilter = groupBy(events, (event) =>
       filterByTimePeriod(
         filter.timePeriod,
         isTimelessEvent(event) ? event.createdAt : (event.startsAt?.datetime as DateTime)
@@ -139,32 +138,31 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
     return [...groupByTimeFilterArray];
   };
 
-  const formatedEventsByHeaderChange = useMemo(() => {
-    {
-      return (events: Array<Event>) => {
-        if (filter.favoriteMeetings) {
-          return events.filter((events) => events.isFavorite);
-        }
-        if (filter.openInvitedMeeting) {
-          return events.filter((events) => events.inviteStatus !== InviteStatus.Accepted);
-        }
-        return events;
-      };
-    }
-  }, [filter.favoriteMeetings, filter.openInvitedMeeting]);
+  const formatEventsByHeaderChange = useCallback(
+    (events: Array<Event>) => {
+      if (filter.favoriteMeetings) {
+        return events.filter((events) => events.isFavorite);
+      }
+      if (filter.openInvitedMeeting) {
+        return events.filter((events) => events.inviteStatus !== InviteStatus.Accepted);
+      }
+      return events;
+    },
+    [filter.favoriteMeetings, filter.openInvitedMeeting]
+  );
 
   const { filteredData, isLoading } = useGetEventsQuery(
     { favorites: filter.favoriteMeetings, perPage: 100, adhoc: false },
     {
       selectFromResult: ({ data, isLoading }) => ({
-        filteredData: selectFilteredEventByFavorite({ data }),
+        filteredData: selectFavoriteEvents({ data }),
         isLoading,
       }),
     }
   );
 
-  const evenData = useMemo(() => {
-    const expandedEvents = formatedEventsByHeaderChange(getExpandedEvents(filteredData, true));
+  const eventData = useMemo(() => {
+    const expandedEvents = formatEventsByHeaderChange(getExpandedEvents(filteredData, true));
     let currentFilteredEvents: Array<Event> = [];
 
     if (timePeriodFilter === TimePerspectiveFilter.TimeIndependent) {
@@ -183,18 +181,18 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
           (!isTimelessEvent(event) && isAfter(new Date(event.startsAt.datetime), currentDate))
         );
       });
-      const events = formatItemsAsMeetingProps(currentFilteredEvents);
-      if (events.length > 0) {
-        setExpandAccordion(events[0].title);
+      const meetingProps = formatEventsAsMeetingProps(currentFilteredEvents);
+      if (meetingProps.length > 0) {
+        setExpandAccordion(meetingProps[0].title);
       }
-      return events;
+      return meetingProps;
     } else {
       const currentDate = new Date();
       currentFilteredEvents = expandedEvents.filter(
         (event) => !isTimelessEvent(event) && isBefore(new Date(event.startsAt.datetime), currentDate)
       );
       setExpandAccordion('');
-      return formatItemsAsMeetingProps(currentFilteredEvents);
+      return formatEventsAsMeetingProps(currentFilteredEvents);
     }
   }, [t, filter, timePeriodFilter, filteredData]);
 
@@ -227,7 +225,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
           <ArrowDownIcon color="secondary" />
         </ArrowDownButton>
       </Stack>
-      <EventsOverview data-testid="EventsOverview" entries={evenData || []} expandAccordion={expandAccordion} />
+      <EventsOverview data-testid="EventsOverview" entries={eventData || []} expandAccordion={expandAccordion} />
     </Stack>
   );
 };
