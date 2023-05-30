@@ -42,18 +42,22 @@ const lightPalette: PaletteOptions = {
   error: {
     main: '#F1554C',
     contrastText: '#FFF',
+    dark: '#D01A11',
   },
   warning: {
     main: '#FF9300',
     contrastText: '#FFF',
+    dark: '#CC7700',
   },
   info: {
     main: '#239EB1',
     contrastText: '#FFF',
+    dark: '#1B7A88',
   },
   success: {
     main: '#3ABD9F',
     contrastText: '#FFF',
+    dark: '#2B8C76',
   },
   text: {
     primary: '#20434F',
@@ -96,18 +100,22 @@ const darkPalette: PaletteOptions = {
   error: {
     main: '#F1554C',
     contrastText: '#FFF',
+    dark: '#D01A11',
   },
   warning: {
     main: '#FF9300',
     contrastText: '#FFF',
+    dark: '#CC7700',
   },
   info: {
     main: '#239EB1',
     contrastText: '#FFF',
+    dark: '#1B7A88',
   },
   success: {
     main: '#3ABD9F',
     contrastText: '#FFF',
+    dark: '#2B8C76',
   },
   text: {
     primary: '#FFF',

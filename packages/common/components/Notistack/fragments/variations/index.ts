@@ -16,5 +16,5 @@ export function getNotistackComponents(components: ComponentsParameter = {}): No
   return {
     ...components,
     binaryAction: BinaryActionNotification
-  } as const;
+  }
 }

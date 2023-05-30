@@ -579,6 +579,7 @@ global-space = Leertaste
 global-anonymous = Anonym
 global-start-now = Jetzt starten
 global-clear = löschen
+global-close = Beenden
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings

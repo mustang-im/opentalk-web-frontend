@@ -579,6 +579,7 @@ global-space = space
 global-anonymous = Anonymous
 global-start-now = Start now
 global-clear = Clear
+global-close = Close
 
 dashboard-home = Home
 dashboard-meetings = Meetings
