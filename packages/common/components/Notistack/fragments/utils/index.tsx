@@ -23,7 +23,7 @@ export interface ISnackbarActionButtonProps {
   hideCloseButton?: boolean;
 }
 
-export interface ISnackActionsProps extends OptionsObject, ISnackbarActionButtonProps {}
+export interface ISnackActionsProps extends OptionsObject, ISnackbarActionButtonProps { }
 
 export interface ISnackbarPersistentProps extends Omit<OptionsObject, 'persist' | 'action' | 'autoHideDuration'> {
   msg: string;
@@ -90,6 +90,21 @@ export const notifications = {
   },
   toast(msg: string, options: OptionsObject = {}): void {
     enqueueSnackbar(msg, options);
+  },
+  binaryAction: (
+    message: string, 
+    options: OptionsObject<"binaryAction"> & {
+      type?: 'info' | 'warning' | 'error' | 'success';
+      primaryBtnText?: string;
+      secondaryBtnText?: string;
+      onPrimary?: (props: { id: SnackbarKey }) => void;
+      onSecondary?: (props: { id: SnackbarKey }) => void;
+      primaryBtnProps?: AdditionalButtonAttributes;
+      secondaryBtnProps?: AdditionalButtonAttributes;
+      closable?: boolean;
+    } = {}
+  ) => {
+    return enqueueSnackbar({ ...options, message, variant: 'binaryAction' });
   },
   close(key: SnackbarKey): void {
     closeSnackbar(key);

@@ -12,3 +12,6 @@ export {
   notifications,
 } from './utils';
 export * from "./StackedMessages";
+export {
+  getNotistackComponents
+} from "./variations";

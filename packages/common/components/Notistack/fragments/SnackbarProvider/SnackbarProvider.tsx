@@ -13,6 +13,7 @@ import React from 'react';
 import { CloseIcon } from '../../../../assets/icons';
 import IconButtonDefault from '../../../IconButton';
 import { notifications } from '../utils';
+import { getNotistackComponents } from '../variations';
 
 const IconButton = styled(IconButtonDefault)(({ theme }) => ({
   marginRight: theme.spacing(2),
@@ -72,7 +73,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
           <CloseIcon />
         </IconButton>
       )}
-      Components={Components}
+      Components={getNotistackComponents(Components)}
     >
       {children}
     </SnackbarProviderDefault>
