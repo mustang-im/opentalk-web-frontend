@@ -12,12 +12,12 @@ import { useAppSelector } from '../../hooks';
 import { selectUnreadMessageCount } from '../../store/selectors';
 import { addLastSeenTimestamp, selectAllChatMessages } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
+import { selectCurrentRoomMode } from '../../store/slices/roomSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
 import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';
 import TabPanel from './fragments/TabPanel';
-import { selectCurrentRoomMode } from '../../store/slices/roomSlice';
 
 const MessagesBadge = styled(Badge)(({ theme }) => ({
   right: -4,

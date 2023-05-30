@@ -215,4 +215,25 @@ export const addEventsEndpoints = <
     }),
     invalidatesTags: (res, error, { eventId }) => [{ type: Tag.Event, id: eventId }],
   }),
+  /**
+   * Create a shared folder for event
+   * Possibly needs the body changed or no body at all
+   */
+  createEventSharedFolder: builder.mutation<unknown, { eventId: EventId }>({
+    query: ({ eventId }) => ({
+      url: `events/${eventId}/shared_folder`,
+      method: 'PUT',
+    }),
+    invalidatesTags: (res, error, { eventId }) => [{ type: Tag.Event, id: eventId }],
+  }),
+  /**
+   * Delete shared folder info
+   */
+  deleteEventSharedFolder: builder.mutation<unknown, { eventId: EventId; forceDeletion: boolean }>({
+    query: ({ eventId, forceDeletion }) => ({
+      url: `events/${eventId}/shared_folder?force_delete_reference_if_shared_folder_deletion_fails=${forceDeletion}`,
+      method: 'DELETE',
+    }),
+    invalidatesTags: (res, error, { eventId }) => [{ type: Tag.Event, id: eventId }],
+  }),
 });

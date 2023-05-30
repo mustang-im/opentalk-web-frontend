@@ -30,6 +30,7 @@ export enum FeaturesKeys {
   AddUser = 'addUser',
   JoinWithoutMedia = 'joinWithoutMedia',
   Debriefing = 'debriefing',
+  SharedFolder = 'sharedFolder',
 }
 
 type Features = {

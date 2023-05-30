@@ -56,6 +56,7 @@ The frontend will then be available via http://localhost:8090
 frontend                                                                                                                                                                        |
 | CHANGE_PASSWORD_ACTIVE           | no       | false                              | enable the reset password button in the dashboard profile settings |
 | CHANGE_PASSWORD_URL       | no       | null                               | set the reset password url for password button in dashboard profile settings |
+| FEATURE_SHARED_FOLDER           | no       | false                              | enable the shared folder feature |
 
 ## Use yarn to build a local version
 
@@ -129,6 +130,7 @@ window.config = {
       "resetHandraises": true,
       "addUser": true,
       "joinWithoutMedia": false,
+      "sharedFolder": false,
     }
 }
 

@@ -694,6 +694,15 @@ dashboard-meeting-notification-success-edit = Die Änderungen an {$event} wurden
 dashboard-meeting-notification-error = Es ist ein Fehler aufgetreten. Versuche es bitte später erneut.
 dashboard-meeting-switch-enabled = Aktiviert
 dashboard-meeting-switch-disabled = Deaktiviert
+dashboard-meeting-shared-folder-label = Geteilter Ordner
+dashboard-meeting-shared-folder-password-label = Ordner Passwort - Für Moderator ( mit Schreibrechten )
+dashboard-meeting-shared-folder-create-error-message = Es ist leider ein Fehler aufgetreten, der geteilte Ordner konnte nicht erstellt werden.
+dashboard-meeting-shared-folder-create-retry-error-message = Leider konnte der geteilte Ordner nicht erstellt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt nocheinmal.
+dashboard-meeting-shared-folder-delete-error-message = Es ist leider ein Fehler aufgetreten, der geteilte Ordner konnte nicht gelöscht werden.
+dashboard-meeting-shared-folder-delete-retry-error-message = Leider konnte der geteilte Ordner nicht gelöscht werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt nocheinmal.
+dashboard-meeting-shared-folder-error-cancel-button = Abbrechen
+dashboard-meeting-shared-folder-error-retry-button = Wiederholen
+dashboard-meeting-shared-folder-error-ok-button = Ok
 
 dashboard-meeting-details-page-description-title = Beschreibung
 dashboard-meeting-details-page-time-independent = zeitunabhängig
