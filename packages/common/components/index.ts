@@ -26,6 +26,7 @@ export {
   createStackedMessages,
 } from './Notistack';
 
+export type { ToggleOptions } from './Toggle';
 export {
   ProgressBar,
   AccordionItem,

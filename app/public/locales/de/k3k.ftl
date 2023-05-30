@@ -671,6 +671,7 @@ dashboard-events-my-meetings = Meine Meetings
 dashboard-events-filter-by-invites = Nur Einladungen anzeigen
 dashboard-events-filter-by-favorites = Nur Favoriten anzeigen
 dashboard-events-search = Suchen
+dashboard-events-note-limited-view = Hinweis: Sie haben wiederkehrende Meetings in Ihrer Liste, wir haben die Ansicht zeitlich eingeschränkt.
 
 dashbooard-event-accept-invitation-notification = Einladung für das Meeting {meetingTitle} akzeptiert
 dashbooard-event-decline-invitation-notification = Einladung für das Meeting {meetingTitle} abgelehnt

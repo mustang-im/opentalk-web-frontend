@@ -6,8 +6,9 @@ import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
 import { ArrowDownIcon } from '@opentalk/common';
-import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
-import React, { useEffect, useState } from 'react';
+import { EventType, isTimelessEvent } from '@opentalk/rest-api-rtk-query';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import MeetingCard from '../../../../components/MeetingCard';
 import { MeetingsProp } from '../EventsOverviewPage';
@@ -57,10 +58,13 @@ const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
   const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded ? [...expanded, panel] : expanded.filter((e) => e !== panel));
   };
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    console.log('rerenders');
-  }, []);
+  const isContainingReaccurentEvents = useMemo(() => {
+    return entries.find((meetings) =>
+      meetings.events.find((event) => !isTimelessEvent(event) && event.type === EventType.Recurring)
+    );
+  }, [entries]);
 
   useEffect(() => {
     if (expandAccordion === 'all') {
@@ -72,6 +76,11 @@ const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
 
   return (
     <Stack spacing={1} overflow={'auto'} flex={'1 1 auto'} height={0}>
+      {isContainingReaccurentEvents && (
+        <Typography variant="h2" component={'h2'}>
+          {t('dashboard-events-note-limited-view')}
+        </Typography>
+      )}
       {entries.map((entry) => (
         <Accordion
           data-testid="EventAccordion"
