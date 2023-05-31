@@ -2,6 +2,16 @@
 
 ### UI/UX Fixes
 
+### Stability Improvements
+
+### New Features
+
+### Stability Improvements
+
+## 1.5.x
+
+### UI/UX Fixes
+
 - Fix: new message dialog tab order (!965)
 - Fix: automatically open talking stick tab for moderator on start (!960)
 - Fix: make clear search button focusable with tab key (!961)
