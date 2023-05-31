@@ -187,8 +187,10 @@ breakout-notification-session-ended-cta = The Breakout Session you were part of 
 
 toolbar-button-audio-turn-on-tooltip-title = Turn On Audio
 toolbar-button-audio-turn-off-tooltip-title = Turn Off Audio
+toolbar-button-audio-context-title = additional options microphone
 toolbar-button-video-turn-on-tooltip-title = Turn On Video
 toolbar-button-video-turn-off-tooltip-title = Turn Off Video
+toolbar-button-video-context-title = additional options camera
 toolbar-button-raise-hand-tooltip-title = Raise Your Hand
 toolbar-button-lower-hand-tooltip-title = Lower Your Hand
 toolbar-button-handraises-disabled = Handraises were disabled by the moderator

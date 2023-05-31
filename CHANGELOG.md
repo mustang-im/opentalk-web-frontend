@@ -11,13 +11,12 @@
 - Change wording and add link to recording stopped notification (!969)
 
 ### Stability Improvements
-- Fix crash on leaving conference after switching between chats (!975)
 
+- Fix crash on leaving conference after switching between chats (!975)
 - Fix: Correct the handling media and connection change events (!976)
+- Add aria labels to cam/mic option buttons (!972)
 
 ### New Features
-
-### Stability Improvements
 
 ## 1.5.x
 

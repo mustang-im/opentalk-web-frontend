@@ -73,6 +73,7 @@ const AudioMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         onClose={onClose}
         disablePortal={fullscreenHandle.active}
         data-testid="toolbarAudioMenu"
+        id="audio-context-menu"
       >
         <MenuItem>
           <MenuTitle fontWeight={'bold'}>

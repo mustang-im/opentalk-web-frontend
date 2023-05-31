@@ -78,9 +78,11 @@ export type ToolbarButtonProps = {
   hasContext?: boolean;
   tooltipTitle: string;
   contextDisabled?: boolean;
+  contextTitle?: string;
+  contextMenuId?: string;
+  contextMenuExpanded?: boolean;
   disabled?: boolean;
   active: boolean;
-  ariaLabelText?: string;
   onClick: (event?: MouseEvent) => void;
   openMenu?: () => void;
   children: ReactNode;
@@ -92,9 +94,11 @@ const ToolbarButton = ({
   onClick,
   hasContext,
   contextDisabled,
+  contextTitle,
+  contextMenuId,
+  contextMenuExpanded,
   disabled,
   active,
-  ariaLabelText,
   openMenu,
   tooltipTitle,
   isLobby,
@@ -107,12 +111,10 @@ const ToolbarButton = ({
           variant={'toolbar'}
           isActive={active}
           disabled={disabled || undefined}
-          aria-label={ariaLabelText || tooltipTitle}
+          aria-label={tooltipTitle}
           onClick={(event) => onClick(event)}
           isLobby={isLobby}
-          data-testid="toolbarButton"
           {...props}
-          role="button"
         >
           {children}
         </ToolbarIconButton>
@@ -124,7 +126,9 @@ const ToolbarButton = ({
               if (openMenu) openMenu();
             }}
             isLobby={isLobby}
-            data-testid="toolbarToggleButton"
+            aria-label={contextTitle}
+            aria-controls={contextMenuId}
+            aria-expanded={contextMenuExpanded}
           >
             <ArrowDownIcon />
           </ToggleButton>
