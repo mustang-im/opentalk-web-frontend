@@ -13,8 +13,9 @@ import {
   Avatar,
   Stack,
   MenuItem as MuiMenuItem,
-  ListItemIcon,
   ListItemText,
+  FormGroup,
+  MenuList,
 } from '@mui/material';
 import {
   CameraOnIcon,
@@ -38,7 +39,7 @@ import { selectQualityCap, selectVideoDeviceId, selectVideoBackgroundEffects } f
 import { mirroredVideoSet, selectMirroredVideoEnabled } from '../../../store/slices/uiSlice';
 import { useMediaContext } from '../../MediaProvider';
 import DeviceList from './DeviceList';
-import { MenuTitle, ToolbarMenu, ToolbarMenuProps } from './ToolbarMenuUtils';
+import { ToolbarMenu, ToolbarMenuProps, MenuSectionTitle } from './ToolbarMenuUtils';
 
 const SliderContainer = styled(ListItem)(({ theme }) => ({
   background: theme.palette.secondary.lightest,
@@ -59,6 +60,10 @@ const FormControlLabel = styled(MuiFormControlLabel)({
   justifyContent: 'space-between',
 });
 
+const BackgroundOptionsContainer = styled(Stack)(({ theme }) => ({
+  margin: theme.spacing(0.5, 1.5),
+}));
+
 const VideoBackgroundImage = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== 'active',
 })<{ active: boolean }>(({ active, theme }) => ({
@@ -68,6 +73,24 @@ const VideoBackgroundImage = styled(Avatar, {
   cursor: 'pointer',
   borderRadius: active ? theme.borderRadius.small : 0,
   outline: ` ${active ? '3px' : 0} solid ${theme.palette.warning.main}`,
+}));
+
+const BackgroundImageList = styled(MenuList)(({ theme }) => ({
+  margin: theme.spacing(1, 2, 0),
+  display: 'grid',
+  justifyContent: 'space-evenly',
+  gridTemplateColumns: 'repeat(3, auto)',
+  gridGap: theme.spacing(2),
+}));
+
+const BackgroundImageItem = styled(MenuItem)(({ theme }) => ({
+  width: 'fit-content',
+  padding: 0,
+  '&.Mui-focusVisible': {
+    '& > .MuiAvatar-root': {
+      outline: `solid ${theme.palette.primary.main}`,
+    },
+  },
 }));
 
 const ClearBackground = styled(VideoBackgroundImage)(({ theme }) => ({
@@ -139,23 +162,44 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
     }
   }, [loadingList, setLoadingList, mediaContext, open]);
 
+  // We need this mapping for screen readers to read slider labels properly
+  // A function passed to the getAriaValueText prop of the Slider must have signature
+  // (number) => string
+  const getSliderLabel = (value: VideoSetting) => {
+    switch (value) {
+      case VideoSetting.Off:
+        return t('quality-audio-only');
+
+      case VideoSetting.Low:
+        return t('quality-low');
+
+      case VideoSetting.Medium:
+        return t('quality-medium');
+
+      case VideoSetting.High:
+        return t('quality-high');
+
+      default:
+        return 'Unknown slider value';
+    }
+  };
+
   const qualityMarks = [
     {
       value: VideoSetting.Off,
-      label: t('quality-audio-only'),
+      label: getSliderLabel(VideoSetting.Off),
     },
     {
       value: VideoSetting.Low,
-      id: 'quality-low',
-      label: t('quality-low'),
+      label: getSliderLabel(VideoSetting.Low),
     },
     {
       value: VideoSetting.Medium,
-      label: t('quality-medium'),
+      label: getSliderLabel(VideoSetting.Medium),
     },
     {
       value: VideoSetting.High,
-      label: t('quality-high'),
+      label: getSliderLabel(VideoSetting.High),
     },
   ];
 
@@ -185,49 +229,45 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         onClose={onClose}
         disablePortal={fullscreenHandle.active}
         id="video-context-menu"
+        aria-labelledby="video-menu-title"
+        role="menu"
       >
-        <MenuItem>
-          <MenuTitle>
-            <CameraOnIcon />
-            {t('videomenu-choose-input')}
-          </MenuTitle>
-        </MenuItem>
-        {mediaContext.permissionDenied && (
-          <MenuItem>
-            <ListItemIcon>
-              <ErrorIcon />
-            </ListItemIcon>
+        <MenuSectionTitle id="video-menu-title" sx={{ pt: 1.5, pb: 1.5 }}>
+          <CameraOnIcon />
+          {t('videomenu-choose-input')}
+        </MenuSectionTitle>
 
+        {mediaContext.permissionDenied && (
+          <MenuSectionTitle>
+            <ErrorIcon />
             <MultilineTypography variant="body2">{t('device-permission-denied')}</MultilineTypography>
-          </MenuItem>
+          </MenuSectionTitle>
         )}
 
         {devices === undefined || !mediaContext.hasAllVideoDetails ? (
-          <MenuItem>
-            <ListItemIcon>
-              <WarningIcon />
-            </ListItemIcon>
+          <MenuSectionTitle>
+            <WarningIcon />
             <ListItemText>{t('devicemenu-wait-for-permission')}</ListItemText>
-          </MenuItem>
+          </MenuSectionTitle>
         ) : (
           <DeviceList
             devices={devices}
             selectedDevice={selectedDevice}
             onClick={(deviceId: DeviceId) => handleClick(deviceId)}
+            ariaLabelId="video-menu-title"
           />
         )}
-        <Divider sx={{ mb: 0 }} />
 
-        <MenuItem>
-          <MenuTitle>
-            <SettingsIcon />
-            {t('videomenu-settings')}
-          </MenuTitle>
-        </MenuItem>
-        <Typography fontWeight={'normal'} id="quality-slider" sx={{ pt: 0, pb: 2, px: 2 }}>
+        <Divider variant="middle" />
+
+        <MenuSectionTitle>
+          <SettingsIcon />
+          {t('videomenu-settings')}
+        </MenuSectionTitle>
+        <Typography fontWeight={'normal'} id="quality-slider" sx={{ pt: 1, pb: 2, px: 2 }}>
           {t('quality-cap-setting')}
         </Typography>
-        <SliderContainer sx={{ px: 5 }}>
+        <SliderContainer sx={{ px: 3 }}>
           <Slider
             value={qualityCap}
             onChangeCommitted={(ev, value) => mediaContext.setMaxQuality(value as VideoSetting)}
@@ -237,69 +277,70 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
             marks={qualityMarks}
             min={VideoSetting.Off}
             max={VideoSetting.High}
+            getAriaValueText={(value) => getSliderLabel(value)}
           />
         </SliderContainer>
-        <Divider sx={{ mb: 0 }} />
 
-        <MenuItem>
-          <MenuTitle>{t('videomenu-background')}</MenuTitle>
-        </MenuItem>
-        {!isBrowserSafari && (
-          <MenuItem>
+        <Divider variant="middle" />
+
+        <MenuSectionTitle>{t('videomenu-background')}</MenuSectionTitle>
+        <FormGroup>
+          <BackgroundOptionsContainer spacing={1}>
+            {!isBrowserSafari && (
+              <FormControlLabel
+                control={<Switch onChange={(_, enabled) => setBlur(enabled)} value={isBlurred} checked={isBlurred} />}
+                label={
+                  <Typography fontWeight={'normal'}>
+                    {t(isBlurred ? 'videomenu-blur-on' : 'videomenu-blur-off')}
+                  </Typography>
+                }
+                labelPlacement="start"
+              />
+            )}
             <FormControlLabel
-              control={<Switch onChange={(_, enabled) => setBlur(enabled)} value={isBlurred} checked={isBlurred} />}
+              control={<Switch onChange={toggleMirroring} value={mirroringEnabled} checked={mirroringEnabled} />}
               label={
                 <Typography fontWeight={'normal'}>
-                  {t(isBlurred ? 'videomenu-blur-on' : 'videomenu-blur-off')}
+                  {t(mirroringEnabled ? 'videomenu-mirroring-on' : 'videomenu-mirroring-off')}
                 </Typography>
               }
               labelPlacement="start"
             />
-          </MenuItem>
-        )}
-        <MenuItem>
-          <FormControlLabel
-            control={<Switch onChange={toggleMirroring} value={mirroringEnabled} checked={mirroringEnabled} />}
-            label={
-              <Typography fontWeight={'normal'}>
-                {t(mirroringEnabled ? 'videomenu-mirroring-on' : 'videomenu-mirroring-off')}
-              </Typography>
-            }
-            labelPlacement="start"
-          />
-        </MenuItem>
-        <Divider variant="middle" />
+          </BackgroundOptionsContainer>
+        </FormGroup>
+
         {!isBrowserSafari && videoBackgrounds.length > 0 && (
-          <Stack>
-            <Typography fontWeight={'normal'} px={2}>
+          <>
+            <Divider variant="middle" />
+            <Typography fontWeight={'normal'} id="background-images-title" sx={{ px: 2 }}>
               {t('videomenu-background-images')}
             </Typography>
-
-            <Stack direction="row" spacing={2} p={2} flexWrap="wrap">
-              <ClearBackground
-                variant="square"
-                onClick={() => setBlur(false)}
-                active={backgroundEffects.style === 'off'}
-              >
-                <CloseIcon />
-              </ClearBackground>
+            <BackgroundImageList aria-labelledby="background-images-title" role="listbox">
+              <BackgroundImageItem onClick={() => setBlur(false)} aria-label={t('videomenu-background-no-image')}>
+                <ClearBackground variant="square" active={backgroundEffects.style === 'off'}>
+                  <CloseIcon />
+                </ClearBackground>
+              </BackgroundImageItem>
               {videoBackgrounds.map((image) => {
                 const selectedEnabled = backgroundEffects.imageUrl === image.url;
                 return (
-                  <VideoBackgroundImage
-                    src={image.thumb}
+                  <BackgroundImageItem
                     key={image.url}
-                    alt={image.altText}
-                    variant="square"
                     onClick={() => (!selectedEnabled ? setImageBackground(image.url) : setBlur(false))}
-                    active={selectedEnabled}
-                  />
+                    aria-label={image.altText}
+                  >
+                    <VideoBackgroundImage
+                      src={image.thumb}
+                      key={image.url}
+                      alt={image.altText}
+                      variant="square"
+                      active={selectedEnabled}
+                    />
+                  </BackgroundImageItem>
                 );
               })}
-            </Stack>
-
-            <Divider variant="middle" />
-          </Stack>
+            </BackgroundImageList>
+          </>
         )}
       </ToolbarMenu>
     </ThemeProvider>

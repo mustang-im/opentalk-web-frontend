@@ -76,6 +76,7 @@ videomenu-mirroring-on = Own video mirroring on
 videomenu-mirroring-off = Own video mirroring off
 videomenu-background = Background
 videomenu-background-images = Background images
+videomenu-background-no-image = No background image
 remotevideo-no-stream = no video stream
 localvideo-no-device = no video device found
 

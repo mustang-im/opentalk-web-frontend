@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ThemeProvider, Typography, MenuItem, ListItemIcon, ListItemText, styled } from '@mui/material';
+import { ThemeProvider, Typography, ListItemText, styled } from '@mui/material';
 import { MicOnIcon, notifications } from '@opentalk/common';
 import { ErrorIcon, WarningIcon } from '@opentalk/common';
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectAudioDeviceId } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';
 import DeviceList from './DeviceList';
-import { MenuTitle, ToolbarMenu, ToolbarMenuProps } from './ToolbarMenuUtils';
+import { MenuSectionTitle, ToolbarMenu, ToolbarMenuProps } from './ToolbarMenuUtils';
 
 const MultilineTypography = styled(Typography)({
   whiteSpace: 'pre-wrap',
@@ -72,35 +72,33 @@ const AudioMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         open={open}
         onClose={onClose}
         disablePortal={fullscreenHandle.active}
-        data-testid="toolbarAudioMenu"
         id="audio-context-menu"
+        aria-labelledby="audio-menu-title"
+        role="listbox"
       >
-        <MenuItem>
-          <MenuTitle fontWeight={'bold'}>
-            <MicOnIcon />
-            {t('audiomenu-choose-input')}
-          </MenuTitle>
-        </MenuItem>
+        <MenuSectionTitle id="audio-menu-title" sx={{ pt: 1.5, pb: 1.5 }}>
+          <MicOnIcon />
+          {t('audiomenu-choose-input')}
+        </MenuSectionTitle>
+
         {mediaContext.permissionDenied && (
-          <MenuItem>
-            <ListItemIcon>
-              <ErrorIcon />
-            </ListItemIcon>
+          <MenuSectionTitle>
+            <ErrorIcon />
             <MultilineTypography variant="body2">{t('device-permission-denied')}</MultilineTypography>
-          </MenuItem>
+          </MenuSectionTitle>
         )}
+
         {devices === undefined || !mediaContext.hasAllAudioDetails ? (
-          <MenuItem>
-            <ListItemIcon>
-              <WarningIcon />
-            </ListItemIcon>
+          <MenuSectionTitle>
+            <WarningIcon />
             <ListItemText>{t('devicemenu-wait-for-permission')}</ListItemText>
-          </MenuItem>
+          </MenuSectionTitle>
         ) : (
           <DeviceList
             devices={devices}
             selectedDevice={selectedDevice}
             onClick={(deviceId: DeviceId) => handleClick(deviceId)}
+            ariaLabelId="audio-menu-title"
           />
         )}
       </ToolbarMenu>

@@ -76,6 +76,7 @@ videomenu-mirroring-on = Eigenes Video spiegeln
 videomenu-mirroring-off = Eigenes Video nicht spiegeln
 videomenu-background = Hintergrund
 videomenu-background-images = Hintergrundbilder
+videomenu-background-no-image = Kein Hintergrundbild
 localvideo-no-device = Keine Videocamera vorhanden oder freigegeben
 remotevideo-no-stream = Kein Videosignal
 

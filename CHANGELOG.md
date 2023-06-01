@@ -19,6 +19,7 @@
 - Fix crash on leaving conference after switching between chats (!975)
 - Fix: Correct the handling media and connection change events (!976)
 - Add aria labels to camera and microphone option buttons (!972)
+- Improve keyboard accessibility of video and audio context menus (!973)
 
 ### New Features
 

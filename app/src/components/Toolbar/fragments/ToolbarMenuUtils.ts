@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MenuItem, Typography, Menu, styled } from '@mui/material';
+import { MenuItem, Typography, styled, Popover } from '@mui/material';
 
 export interface ToolbarMenuProps {
   anchorEl: HTMLDivElement | null;
@@ -9,7 +9,7 @@ export interface ToolbarMenuProps {
   open: boolean;
 }
 
-const ToolbarMenu = styled(Menu)(({ theme }) => ({
+const ToolbarMenu = styled(Popover)(({ theme }) => ({
   maxWidth: '27rem',
 
   '& .MuiPaper-root': {
@@ -39,4 +39,8 @@ const MenuTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-export { ToolbarMenuItem, ToolbarMenu, MenuTitle };
+const MenuSectionTitle = styled(MenuTitle)(({ theme }) => ({
+  padding: theme.spacing(0, 1.5, 1),
+}));
+
+export { ToolbarMenuItem, ToolbarMenu, MenuTitle, MenuSectionTitle };

@@ -12,11 +12,12 @@ interface DevicelistProps {
   devices: Array<MediaDeviceInfo>;
   selectedDevice: DeviceId | undefined;
   onClick: (deviceId: DeviceId) => void;
+  ariaLabelId: string;
 }
 
-const DeviceList = ({ devices, selectedDevice, onClick }: DevicelistProps) => {
+const DeviceList = ({ devices, selectedDevice, onClick, ariaLabelId }: DevicelistProps) => {
   return (
-    <MenuList>
+    <MenuList aria-labelledby={ariaLabelId} autoFocusItem role="listbox">
       {devices.map(({ deviceId, label }) => (
         <ToolbarMenuItem
           selected={selectedDevice && deviceId === selectedDevice}

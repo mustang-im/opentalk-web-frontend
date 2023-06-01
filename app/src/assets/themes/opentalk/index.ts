@@ -208,6 +208,10 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
                 opacity: 1,
               },
             },
+            '&.Mui-focusVisible': {
+              backgroundColor: theme.palette.primary.main,
+              transitionDuration: '100ms',
+            },
           }),
           track: {
             opacity: 1,
@@ -241,6 +245,10 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
           thumb: ({ theme }) => ({
             color: theme.palette.secondary.main,
             boxShadow: '0 0 0 0px !important',
+            '&.Mui-focusVisible': {
+              backgroundColor: theme.palette.primary.main,
+              transitionDuration: '100ms',
+            },
           }),
           markLabel: ({ theme }) => ({
             color: theme.palette.text.primary,
