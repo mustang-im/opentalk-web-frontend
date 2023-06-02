@@ -822,8 +822,8 @@ emoji-category-objects = Objekte
 emoji-category-symbols = Symbole
 emoji-category-flags = Flaggen
 
-closes-time-before-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in {$minute} Minuten automatisch beendet.
-closes-time-in-one-minute = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in Kürze automatisch beendet.
+time-limit-more-than-one-minute-remained = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in {$minutes} Minuten automatisch beendet.
+time-limit-less-than-one-minute-remained = Maximale Konferenz-Zeit wird erreicht. Diese Konferenz wird in Kürze automatisch beendet.
 
 conference-view-trigger-button = Ansichtsauswahl
 conference-view-speaker = Sprecheransicht

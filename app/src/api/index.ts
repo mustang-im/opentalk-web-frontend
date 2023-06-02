@@ -36,6 +36,7 @@ import { token_updated } from '@opentalk/react-redux-appauth';
 import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
+import { startTimeLimitNotification } from '../components/TimeLimitNotification';
 import LayoutOptions from '../enums/LayoutOptions';
 import i18n from '../i18n';
 import localMediaContext from '../modules/Media/LocalMedia';
@@ -113,7 +114,6 @@ import { Role } from './types/incoming/control';
 import { Action as OutgoingActionType, automod } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
-import { notifyBeforeEndConference } from './utils/notifyBeforeEndConference';
 
 /**
  * Transforms the dictionary of group chat histories into a list of groupIds and a flat list
@@ -335,7 +335,7 @@ const handleControlMessage = (
       }
 
       if (data.closesAt) {
-        notifyBeforeEndConference(data.closesAt);
+        startTimeLimitNotification(data.closesAt);
       }
 
       localMediaContext.updateConferenceContext(conference).catch((e: Error) => {
