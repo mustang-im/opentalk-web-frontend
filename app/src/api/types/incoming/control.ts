@@ -37,6 +37,10 @@ export interface Update extends BackendParticipant {
   message: 'update';
 }
 
+export interface TimeLimitQuotaElapsed {
+  message: 'time_limit_quota_elapsed';
+}
+
 export interface RoleUpdated {
   message: 'role_updated';
   newRole: Role;
@@ -54,6 +58,7 @@ export type Message =
   | Joined
   | Left
   | RoleUpdated
+  | TimeLimitQuotaElapsed
   | ErrorStruct<ControlError>;
 export type Control = NamespacedIncoming<Message, 'control'>;
 

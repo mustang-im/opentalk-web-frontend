@@ -412,6 +412,9 @@ const handleControlMessage = (
         notifications.warning(i18next.t('moderation-rights-revoked'));
       }
       break;
+    case 'time_limit_quota_elapsed':
+      dispatch(hangUp());
+      break;
     default: {
       const dataString = JSON.stringify(data, null, 2);
       console.error(`Unknown control message type: ${dataString}`);
