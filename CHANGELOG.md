@@ -11,6 +11,8 @@
 ### Stability Improvements
 - Fix crash on leaving conference after switching between chats (!975)
 
+- Fix: Correct the handling media and connection change events (!976)
+
 ### New Features
 
 ### Stability Improvements

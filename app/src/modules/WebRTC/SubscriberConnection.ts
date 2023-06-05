@@ -133,6 +133,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private updateCloseTimer() {
     if (this.isActive() && this.closeTimerHandle !== undefined) {
       clearTimeout(this.closeTimerHandle);
+      this.closeTimerHandle = undefined;
     }
 
     if (!this.isActive() && this.closeTimerHandle === undefined) {

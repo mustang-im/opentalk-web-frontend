@@ -61,8 +61,8 @@ import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectio
 import * as mediaStore from '../store/slices/mediaSlice';
 import { setFocusedSpeaker, setUpstreamLimit } from '../store/slices/mediaSlice';
 import {
-  added as subscriberAdded,
-  closed as subscriberClose,
+  closed as subscriberClosed,
+  removed as subscriberRemoved,
   failed as subscriberFailed,
   limit as subscriberLimit,
   mediaUpdated as subscriberMediaUpdated,
@@ -196,20 +196,20 @@ const mapBreakoutToUiParticipant = (
 });
 
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
-  const addHandler = (config: SubscriberConfig) => dispatch(subscriberAdded(config));
   const updateHandler = (config: SubscriberConfig) => dispatch(subscriberUpdate(config));
   const statsHandler = (connectionStats: Record<MediaId, StatsEvent>) =>
     dispatch(subscriberStatsUpdate(connectionStats));
-  const closeHandler = (mediaDescriptor: MediaDescriptor) => dispatch(subscriberClose(mediaDescriptor));
+  const closeHandler = (mediaDescriptor: MediaDescriptor) => dispatch(subscriberClosed(mediaDescriptor));
+  const removeHandler = (mediaDescriptor: MediaDescriptor) => dispatch(subscriberRemoved(mediaDescriptor));
   const mediaChangeHandler = (mediaChange: SubscriberStateChanged) => dispatch(subscriberMediaUpdated(mediaChange));
   const upstreamLimitHandler = (limit: VideoSetting) => dispatch(setUpstreamLimit(limit));
   const subscriberLimitHandler = (limit: QualityLimit) => dispatch(subscriberLimit(limit));
   console.debug('init webRTC context');
 
-  webRtc.addEventListener('subscriberadded', addHandler);
-  webRtc.addEventListener('subscriberchange', updateHandler);
+  webRtc.addEventListener('unpublished', removeHandler);
+  webRtc.addEventListener('subscriberchanged', updateHandler);
   webRtc.addEventListener('statsupdated', statsHandler);
-  webRtc.addEventListener('subscriberclose', closeHandler);
+  webRtc.addEventListener('subscriberclosed', closeHandler);
   webRtc.addEventListener('subscriberstatechanged', mediaChangeHandler);
   webRtc.addEventListener('upstreamLimit', upstreamLimitHandler);
   webRtc.addEventListener('subscriberLimit', subscriberLimitHandler);

@@ -35,11 +35,9 @@ import whiteboardReducer from './slices/whiteboardSlice';
 const middleware: Array<Middleware> = [apiMiddleware, restApi.middleware, rtkQueryErrorLoggerMiddlware];
 
 const logger = () => (next: Dispatch) => (action: AnyAction) => {
-  if (action.type.startsWith('signaling/media') || action.type.startsWith('stats/statsUpdated')) {
-    return next(action);
+  if (!(action.type.startsWith('signaling/media') || action.type.startsWith('stats/statsUpdated'))) {
+    console.debug('dispatching', action);
   }
-
-  console.debug('dispatching', action);
   return next(action);
 };
 

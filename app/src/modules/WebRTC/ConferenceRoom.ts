@@ -5,7 +5,7 @@ import { BackendParticipant, MediaSessionType, ParticipantId, Timestamp, VideoSe
 import { isEmpty } from 'lodash';
 import convertToSnakeCase from 'snakecase-keys';
 
-import { setCurrentConferenceRoom, SubscriberConfig } from '.';
+import { MediaDescriptor, setCurrentConferenceRoom, SubscriberConfig } from '.';
 import { ApiErrorWithBody, StartRoomError } from '../../api/rest';
 import { Message as IncomingMessage } from '../../api/types/incoming';
 import { Message as ControlMessage } from '../../api/types/incoming/control';
@@ -228,28 +228,24 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
       case 'update': {
         const participantId = message.id;
 
+        const videoDescriptor: MediaDescriptor = { participantId, mediaType: MediaSessionType.Video };
+        const screenDescriptor: MediaDescriptor = { participantId, mediaType: MediaSessionType.Screen };
         if (message.media?.video !== undefined) {
-          this.webRtc.updateMedia({ participantId, mediaType: MediaSessionType.Video, ...message.media.video });
+          this.webRtc.updateMedia({ ...videoDescriptor, ...message.media.video });
         } else {
-          this.webRtc
-            .unsubscribe({ participantId, mediaType: MediaSessionType.Video })
-            .catch((e) => console.warn('unsubscribe failed', e, participantId, MediaSessionType.Video));
+          this.webRtc.unsubscribe(videoDescriptor);
         }
 
         if (message.media?.screen !== undefined) {
-          this.webRtc.updateMedia({ participantId, mediaType: MediaSessionType.Screen, ...message.media.screen });
+          this.webRtc.updateMedia({ ...screenDescriptor, ...message.media.screen });
         } else {
-          this.webRtc
-            .unsubscribe({ participantId, mediaType: MediaSessionType.Screen })
-            .catch((e) => console.warn('unsubscribe failed', e, participantId, MediaSessionType.Screen));
+          this.webRtc.unsubscribe(screenDescriptor);
         }
 
         break;
       }
       case 'left': {
-        this.webRtc.unsubscribeParticipant(message.id).catch((e) => {
-          console.warn('unsubscribeParticipant failed', e);
-        });
+        this.webRtc.unsubscribeParticipant(message.id);
         break;
       }
     }
