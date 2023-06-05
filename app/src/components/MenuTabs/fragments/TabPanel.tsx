@@ -4,26 +4,25 @@
 import { Box } from '@mui/material';
 import React from 'react';
 
+import { MenuTab } from '../MenuTabs';
+
 interface TabPanelProps {
   children?: React.ReactNode;
-  index: number | string;
-  value: number | string | Record<string, unknown>;
+  value: MenuTab;
+  hidden: boolean;
 }
 
-const TabPanel = ({ children, value, index }: TabPanelProps) => {
-  if (value !== index) {
-    return null;
-  }
+const TabPanel = ({ children, value, hidden }: TabPanelProps) => {
   return (
     <Box
       flex={1}
-      display={'flex'}
+      display={hidden ? 'none' : 'flex'}
       role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
+      id={`tabpanel-${value}`}
+      aria-hidden={hidden}
+      aria-labelledby={`tab-${value}`}
     >
-      {children}
+      {!hidden && children}
     </Box>
   );
 };

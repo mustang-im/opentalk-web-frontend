@@ -9,13 +9,12 @@ import {
   Grid,
   styled,
 } from '@mui/material';
-import { TargetId, useDateFormat, ChatScope, ParticipantAvatar } from '@opentalk/common';
+import { useDateFormat, ChatScope, ParticipantAvatar } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
-import { selectUnreadMessagesByTargetIdCount } from '../../../store/selectors';
-import { ChatProps } from '../../../store/slices/chatSlice';
+import { ChatProps, selectUnreadPersonalMessageCountByTarget } from '../../../store/slices/chatSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 
 const ListItemContainer = styled('div')(({ theme }) => ({
@@ -44,7 +43,7 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const date = new Date(chat.lastMessage?.timestamp) ?? Date.now;
   const formattedTime = useDateFormat(date, 'time');
   const getDisplayName = () => (isEmpty(participant) ? chat.id : participant?.displayName);
-  const lastSeenTimestampCount = useAppSelector(selectUnreadMessagesByTargetIdCount(chat.id as TargetId));
+  const lastSeenTimestampCount = useAppSelector(selectUnreadPersonalMessageCountByTarget(chat.id));
   const [fontWeight, setFontWeigth] = useState('normal');
 
   useEffect(() => {

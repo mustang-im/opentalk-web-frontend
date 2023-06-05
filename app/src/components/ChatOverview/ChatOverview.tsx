@@ -2,14 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, List as MuiList, styled, Typography } from '@mui/material';
-import { TargetId } from '@opentalk/common';
-import { BackIcon, NewMessageIcon, ChatScope } from '@opentalk/common';
+import { BackIcon, NewMessageIcon, ChatScope, TargetId } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as NoNewMessageImage } from '../../assets/images/no-messages-illustration.svg';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectAllGroupAndPrivateChats } from '../../store/slices/chatSlice';
+import { selectAllPersonalChats } from '../../store/slices/chatSlice';
 import { selectAllOnlineParticipants } from '../../store/slices/participantsSlice';
 import { chatConversationStateSet, selectChatConversationState } from '../../store/slices/uiSlice';
 import Chat from '../Chat';
@@ -29,7 +28,7 @@ const List = styled(MuiList)({
 const ChatOverview = () => {
   const chatConversationState = useAppSelector(selectChatConversationState);
   const { t } = useTranslation();
-  const chats = useAppSelector(selectAllGroupAndPrivateChats);
+  const chats = useAppSelector(selectAllPersonalChats);
   const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement>();
   const participants = useAppSelector(selectAllOnlineParticipants);
@@ -61,11 +60,7 @@ const ChatOverview = () => {
       <List>
         {chats.map((chat) =>
           chat.scope !== ChatScope.Global ? (
-            <ChatOverviewItem
-              key={chat.id}
-              onClick={() => setSelectedChat(chat.scope, chat.id as TargetId)}
-              chat={chat}
-            />
+            <ChatOverviewItem key={chat.id} onClick={() => setSelectedChat(chat.scope, chat.id)} chat={chat} />
           ) : null
         )}
       </List>
@@ -92,7 +87,7 @@ const ChatOverview = () => {
             {t('button-back-messages')}
           </Button>
         </div>
-        <Chat scope={chatConversationState.scope} targetId={chatConversationState.targetId} />
+        <Chat scope={chatConversationState.scope} target={chatConversationState.targetId} />
       </Box>
     );
 
