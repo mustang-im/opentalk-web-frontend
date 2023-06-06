@@ -135,8 +135,7 @@ export const getConstraints = (options?: {
       ideal: r.width,
       max: Math.max(r.width, defaultResolution.width),
     };
-    videoSettings.frameRate = { ideal: 25, min: 10, max: 30 };
-
+    videoSettings.frameRate = { ideal: 25 }; // Safari 16.5 'min' and 'max' here
     videoSettings.deviceId = options?.videoDevice;
 
     if (typeof constraints.video === 'object') {
