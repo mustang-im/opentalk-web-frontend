@@ -60,9 +60,9 @@ const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
   };
   const { t } = useTranslation();
 
-  const isContainingReaccurentEvents = useMemo(() => {
+  const isContainingRecurringEvents = useMemo(() => {
     return entries.find((meetings) =>
-      meetings.events.find((event) => !isTimelessEvent(event) && event.type === EventType.Recurring)
+      meetings?.events?.find((event) => !isTimelessEvent(event) && event.type === EventType.Recurring)
     );
   }, [entries]);
 
@@ -76,7 +76,7 @@ const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
 
   return (
     <Stack spacing={1} overflow={'auto'} flex={'1 1 auto'} height={0}>
-      {isContainingReaccurentEvents && (
+      {isContainingRecurringEvents && (
         <Typography variant="h2" component={'h2'}>
           {t('dashboard-events-note-limited-view')}
         </Typography>
@@ -93,7 +93,7 @@ const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
             <Typography>{entry.title}</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {entry.events.map((event) => (
+            {entry.events?.map((event) => (
               <MeetingCard
                 key={`${isTimelessEvent(event) ? '' : event.startsAt?.datetime}.${event.id}`}
                 event={event}

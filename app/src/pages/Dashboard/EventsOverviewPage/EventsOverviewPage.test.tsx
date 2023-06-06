@@ -17,7 +17,8 @@ jest.mock('../../../api/rest', () => ({
   ...jest.requireActual('../../../api/rest'),
   useGetEventsQuery: () => ({
     isLoading: false,
-    filteredData: [createMockEvent()],
+    events: [createMockEvent()],
+    isFatching: false,
   }),
   useGetMeQuery: () => ({
     data: {

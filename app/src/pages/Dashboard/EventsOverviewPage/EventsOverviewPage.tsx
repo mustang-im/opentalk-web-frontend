@@ -3,7 +3,14 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, Skeleton, Stack, styled, Typography } from '@mui/material';
 import { ArrowDownIcon, formatDate, Toggle, ToggleOptions } from '@opentalk/common';
-import { DateTime, Event, EventException, InviteStatus, isTimelessEvent } from '@opentalk/rest-api-rtk-query';
+import {
+  CursorPaginated,
+  DateTime,
+  Event,
+  EventException,
+  InviteStatus,
+  isTimelessEvent,
+} from '@opentalk/rest-api-rtk-query';
 import { endOfISOWeek, getWeek, formatRFC3339, startOfISOWeek } from 'date-fns';
 import i18n, { t } from 'i18next';
 import { groupBy } from 'lodash';
@@ -11,7 +18,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetEventsQuery } from '../../../api/rest';
-import { selectFavoriteEvents } from '../../../store/selectors';
 import { useHeader } from '../../../templates/DashboardTemplate';
 import { getExpandedEvents } from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
@@ -77,7 +83,7 @@ export enum TimePerspectiveFilter {
   Past = 'past',
 }
 
-const GET_EVENTS_RESULTS_PER_REQUEST = 100;
+const EVENTS_PER_REQUEST = 100;
 
 const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
   const [expandAccordion, setExpandAccordion] = useState<string>('');
@@ -127,10 +133,10 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
   const formatEventsByHeaderChange = useCallback(
     (events: Array<Event>) => {
       if (filter.favoriteMeetings) {
-        return events.filter((events) => events.isFavorite);
+        return events.filter((event) => event.isFavorite);
       }
       if (filter.openInvitedMeeting) {
-        return events.filter((events) => events.inviteStatus !== InviteStatus.Accepted);
+        return events.filter((event) => event.inviteStatus !== InviteStatus.Accepted);
       }
       return events;
     },
@@ -139,20 +145,57 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
 
   const timeMinFilter = useMemo(() => {
     if (timePeriodFilter === TimePerspectiveFilter.Future) {
-      return formatRFC3339(new Date()) as DateTime;
+      // setSecond to 0 to optimize the request and not ask data on every second when switching timePeriodFilter
+      return formatRFC3339(new Date().setSeconds(0, 0)) as DateTime;
     }
   }, [timePeriodFilter]);
 
   const timeMaxFilter = useMemo(() => {
     if (timePeriodFilter === TimePerspectiveFilter.Past) {
-      return formatRFC3339(new Date()) as DateTime;
+      // setSecond to 0 to optimize the request and not ask data on every second when switching timePeriodFilter
+      return formatRFC3339(new Date().setSeconds(0, 0)) as DateTime;
     }
   }, [timePeriodFilter]);
 
-  const { filteredData, isLoading, isFetching } = useGetEventsQuery(
+  /**
+   * Returns memorized function to optimize the performance (acts like memorized selector)
+   **/
+  const selectAndTransformToMeetingProps = (data: CursorPaginated<Event | EventException> | undefined) =>
+    useMemo(() => {
+      if (!data) {
+        return [];
+      }
+      const expandedEvents = formatEventsByHeaderChange(
+        getExpandedEvents(data.data, true, undefined, undefined, undefined, timePeriodFilter)
+      );
+      if (timePeriodFilter === TimePerspectiveFilter.TimeIndependent) {
+        const constructMeetingProp = {
+          title: t('dashboard-meeting-details-page-time-independent'),
+          events: expandedEvents,
+        };
+        setExpandAccordion('all');
+        return [constructMeetingProp];
+      }
+      const eventsGroupedByTimeFilter = groupBy(expandedEvents, (event) =>
+        filterByTimePeriod(
+          filter.timePeriod,
+          isTimelessEvent(event) ? event.createdAt : (event.startsAt?.datetime as DateTime)
+        )
+      );
+      const eventsTransformedAsMeetingProp = Object.entries(eventsGroupedByTimeFilter).map(([title, events]) => ({
+        title,
+        events,
+      }));
+      if (eventsTransformedAsMeetingProp.length > 0) {
+        setExpandAccordion(eventsTransformedAsMeetingProp[0].title);
+      }
+      return [...eventsTransformedAsMeetingProp];
+    }, [timePeriodFilter, filter, data]);
+
+  const { events, isLoading, isFetching } = useGetEventsQuery(
     {
       favorites: filter.favoriteMeetings,
-      perPage: GET_EVENTS_RESULTS_PER_REQUEST,
+      perPage: EVENTS_PER_REQUEST,
       adhoc: false,
       timeIndependent: timePeriodFilter === TimePerspectiveFilter.TimeIndependent,
       timeMin: timeMinFilter,
@@ -160,40 +203,12 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
     },
     {
       selectFromResult: ({ data, isLoading, isFetching }) => ({
-        filteredData: selectFavoriteEvents({ data }),
+        events: selectAndTransformToMeetingProps(data),
         isLoading,
         isFetching,
       }),
     }
   );
-
-  const eventsAsMeetingProps = useMemo(() => {
-    const expandedEvents = formatEventsByHeaderChange(
-      getExpandedEvents(filteredData, true, undefined, undefined, undefined, timePeriodFilter)
-    );
-    if (timePeriodFilter === TimePerspectiveFilter.TimeIndependent) {
-      const constructMeetingProp = {
-        title: t('dashboard-meeting-details-page-time-independent'),
-        events: expandedEvents,
-      };
-      setExpandAccordion('all');
-      return [constructMeetingProp];
-    }
-    const eventsGroupedByTimeFilter = groupBy(expandedEvents, (event) =>
-      filterByTimePeriod(
-        filter.timePeriod,
-        isTimelessEvent(event) ? event.createdAt : (event.startsAt?.datetime as DateTime)
-      )
-    );
-    const eventsTransformedAsMeetingProp = Object.entries(eventsGroupedByTimeFilter).map(([title, events]) => ({
-      title,
-      events,
-    }));
-    if (eventsTransformedAsMeetingProp.length > 0) {
-      setExpandAccordion(eventsTransformedAsMeetingProp[0].title);
-    }
-    return [...eventsTransformedAsMeetingProp];
-  }, [filteredData, filter]);
 
   if (isLoading) {
     return (
@@ -232,7 +247,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
           <Skeleton variant="rectangular" height={50} />
         </Stack>
       ) : (
-        <EventsOverview entries={eventsAsMeetingProps || []} expandAccordion={expandAccordion} />
+        <EventsOverview entries={events || []} expandAccordion={expandAccordion} />
       )}
     </Stack>
   );
