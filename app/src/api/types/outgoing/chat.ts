@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createModule, Namespaced, ParticipantId, GroupId, ChatScope } from '@opentalk/common';
+import { createModule, Namespaced, ChatScope, TargetId } from '@opentalk/common';
 
 import { RootState } from '../../../store';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
@@ -12,7 +12,7 @@ interface ChatActionBase {
 }
 interface SendMessage extends ChatActionBase {
   action: 'send_message';
-  target?: ParticipantId | GroupId;
+  target?: TargetId;
   scope: ChatScope;
 }
 interface EnableChat {
@@ -23,11 +23,14 @@ interface DisableChat {
   action: 'disable_chat';
 }
 
-interface SetLastSeenTimestamp {
-  action: 'set_last_seen_timestamp';
-  target?: ParticipantId | GroupId;
+export interface LastSeenTimestampAddedPayload {
   scope: ChatScope;
   timestamp: string;
+  target?: TargetId;
+}
+
+interface SetLastSeenTimestamp extends LastSeenTimestampAddedPayload {
+  action: 'set_last_seen_timestamp';
 }
 
 export interface ClearGlobalMessages {

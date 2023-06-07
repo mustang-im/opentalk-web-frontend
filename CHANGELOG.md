@@ -5,8 +5,10 @@
 - Fix: Legal vote token not being completely visible (!967)
 - Fix: Legal vote results are not visible to every participant (!967)
 - Fix handling when time limit quota is elapsed (!974)
+- Fix chat indicator related issues (!975)
 
 ### Stability Improvements
+- Fix crash on leaving conference after switching between chats (!975)
 
 ### New Features
 

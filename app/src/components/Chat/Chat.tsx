@@ -4,10 +4,12 @@
 import { styled } from '@mui/material';
 import { TargetId, ChatScope } from '@opentalk/common';
 import { debounce } from 'lodash';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { LastSeenTimestampAddedPayload, setLastSeenTimestamp } from '../../api/types/outgoing/chat';
 import { useAppSelector } from '../../hooks';
+import { lastSeenTimestampAdded, selectLastMessageForScope } from '../../store/slices/chatSlice';
 import { selectChatSearchValue, setChatSearchValue } from '../../store/slices/uiSlice';
 import ChatForm from './fragments/ChatForm';
 import ChatList from './fragments/ChatList';
@@ -24,16 +26,25 @@ const Container = styled('div')(({ theme }) => ({
 }));
 
 interface IChatProps {
-  targetId?: TargetId;
-  scope?: ChatScope;
+  scope: ChatScope;
+  target?: TargetId;
 }
 
-const Chat = ({ targetId, scope }: IChatProps) => {
+const Chat = ({ target, scope }: IChatProps) => {
   // Default value is used when we switch tabs and component remounts.
   const defaultChatValue = useAppSelector(selectChatSearchValue);
   const [searchValue, setSearchValue] = useState<string>(defaultChatValue);
   const dispatch = useDispatch();
   const chatSearchInputReference = useRef<HTMLInputElement | null>(null);
+  const lastMessageForScope = useAppSelector(selectLastMessageForScope(scope, target));
+
+  //Adds a last seen timestamp when the specific scope is opened or a message in the scope is received while open
+  useEffect(() => {
+    const timestamp = lastMessageForScope ? lastMessageForScope.timestamp : new Date().toISOString();
+    const payload: LastSeenTimestampAddedPayload = { scope, timestamp, target };
+    dispatch(lastSeenTimestampAdded(payload));
+    dispatch(setLastSeenTimestamp.action(payload));
+  }, [lastMessageForScope]);
 
   const debouncedSetChatSearchValue = useCallback(
     debounce((value: string) => {
@@ -58,8 +69,8 @@ const Chat = ({ targetId, scope }: IChatProps) => {
   return (
     <Container data-testid={'chat'}>
       <ChatSearch value={searchValue} onChange={onChangeMiddleware} ref={chatSearchInputReference} />
-      <ChatList scope={scope} targetId={targetId} onReset={resetSearch} />
-      <ChatForm scope={scope} targetId={targetId} />
+      <ChatList scope={scope} targetId={target} onReset={resetSearch} />
+      <ChatForm scope={scope} targetId={target} />
     </Container>
   );
 };
