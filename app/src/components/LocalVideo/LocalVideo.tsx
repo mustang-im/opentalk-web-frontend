@@ -103,6 +103,8 @@ const LocalVideo = ({
   const isVideoRunning =
     outgoingVideoStream?.getVideoTracks().find((t) => t.enabled && t.readyState === 'live') !== undefined;
 
+  const isVideoMissing = videoEnabled && !isLoadingMedia && !isVideoRunning;
+
   const attachVideo = useCallback((refObject: RefObject<HTMLVideoElement>, stream: MediaStream) => {
     if (refObject.current !== null) {
       refObject.current.volume = 0;
@@ -118,10 +120,10 @@ const LocalVideo = ({
   }, []);
 
   useEffect(() => {
-    if (videoEnabled && !isVideoRunning) {
+    if (isVideoMissing) {
       console.warn('Video is enabled but video tracks are closed');
     }
-  }, [isVideoRunning, t, videoEnabled]);
+  }, [isVideoMissing, t]);
 
   useEffect(() => {
     if (screenShareEnabled && videoEnabled) {
@@ -179,7 +181,7 @@ const LocalVideo = ({
           {!hideUserName && <NameTile audioOn={isAudioOn} displayName={displayName || ''} className="positionBottom" />}
         </>
       )}
-      {videoEnabled && !isVideoRunning && !isLoadingMedia && <NoVideoText>{t('localvideo-no-device')}</NoVideoText>}
+      {isVideoMissing && <NoVideoText>{t('localvideo-no-device')}</NoVideoText>}
     </Container>
   );
 };
