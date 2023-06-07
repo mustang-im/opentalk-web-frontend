@@ -49,18 +49,18 @@ export interface QualityLimit extends MediaDescriptor {
 }
 
 export type WebRtcContextEvent = {
-  // A 'subscriberadded' event is sent when a new connection was created.
-  subscriberadded: SubscriberConfig;
-  // A 'subscriberchange' event is sent when an existing connection has been updated.
-  subscriberchange: SubscriberConfig;
+  // A 'subscriberchanged' event is sent when a subscriber config has been updated or created.
+  subscriberchanged: SubscriberConfig;
   // A 'subscriberstatechanged' event is sent when the state of a subscriber media stream changes, e.g. the first track is online.
   subscriberstatechanged: SubscriberStateChanged;
-  // A 'subscriberclose' event is sent when a new connection was closed and removed from the WebRTC context.
-  subscriberclose: MediaDescriptor;
+  // A 'subscriberclosed' event is sent when a connection was closed and removed from the WebRTC context e.g. when unused for a while.
+  subscriberclosed: MediaDescriptor;
   // 'statsUpdated' reports the connection bandwidth and packet loss for all active connections
   statsupdated: Record<MediaId, StatsEvent>;
   subscriberLimit: QualityLimit;
   upstreamLimit: VideoSetting;
+  // A 'unpublished' event is sent when a participant stops publishing e.g. when leaving the conference.
+  unpublished: MediaDescriptor;
 };
 
 export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
@@ -314,18 +314,9 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     if (subscriber === undefined) {
       throw new Error(`subscriber media (handle: ${mediaId}) not available`);
     }
-    if (subscriber.connection !== undefined) {
-      return subscriber.connection.getMediaStream();
-    }
 
-    if (subscriber.action === undefined) {
-      subscriber.action = this.createSubscriber(subscriber.state);
-      this.subscribers.set(mediaId, subscriber);
-    }
-    const connection = await subscriber.action;
-    subscriber.action = undefined;
-    subscriber.connection = connection;
-    this.subscribers.set(mediaId, subscriber);
+    const connection = subscriber.connection || (await (subscriber.action || this.createSubscriber(mediaId)));
+
     return connection.getMediaStream();
   }
 
@@ -336,66 +327,75 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
       throw new Error(`subscriber media (handle: ${idFromDescriptor(descriptor)}) not available`);
     }
 
-    let connection = subscriber.connection;
-    if (subscriber.action !== undefined) {
-      connection = await subscriber.action;
-    }
+    const connection = subscriber.connection || (await (subscriber.action || this.createSubscriber(mediaId)));
 
-    if (connection === undefined) {
-      subscriber.action = this.createSubscriber(subscriber.state);
-      this.subscribers.set(mediaId, subscriber);
-      subscriber.action.catch((e) => console.error('failed to fetch TURN credentials', e));
-      connection = await subscriber.action;
-    }
     return connection.requestQuality(target);
   }
 
-  private async createSubscriber(subscriberConfig: SubscriberConfig): Promise<SubscriberConnection> {
-    const mediaId = idFromDescriptor(subscriberConfig);
+  private async createSubscriber(mediaId: MediaId): Promise<SubscriberConnection> {
     const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
-      throw new Error(`Subscriber was closed while connect in progress for ${idFromDescriptor(subscriberConfig)}`);
-    }
-    if (subscriber?.connection) {
-      throw new Error(`Subscriber connection already exists for ${idFromDescriptor(subscriberConfig)}`);
+      throw new Error(`subscriber was closed while connect in progress for ${mediaId}`);
     }
 
-    const iceServers = await this.turnProvider.get();
+    if (subscriber.action !== undefined) {
+      throw new Error(`subscriber has an ongoing action in progress for ${mediaId}`);
+    }
 
-    subscriber.state = subscriberConfig;
-    const connection = new SubscriberConnection(iceServers, subscriberConfig, this.signaling);
+    subscriber.action = (async () => {
+      const iceServers = await this.turnProvider.get().catch((e) => {
+        console.error('failed to fetch TURN credentials', e);
+        return [];
+      });
+      const subscriber = this.subscribers.get(mediaId);
+      if (subscriber === undefined) {
+        throw new Error(`subscriber was closed while connect in progress for ${mediaId}`);
+      }
+      if (subscriber?.connection) {
+        throw new Error(`subscriber connection already exists for ${mediaId}`);
+      }
+      const connection = new SubscriberConnection(iceServers, subscriber.state, this.signaling);
+      subscriber.connection = connection;
+      this.subscribers.set(mediaId, subscriber);
 
-    const closeHandler = () => {
-      const mediaId = idFromDescriptor(subscriberConfig);
-      this.eventEmitter.emit('subscriberclose', subscriberConfig);
+      const closeHandler = () => {
+        const subscriber = this.subscribers.get(mediaId);
+        if (subscriber !== undefined) {
+          this.eventEmitter.emit('subscriberclosed', subscriber.state);
+          subscriber.connection = undefined;
+          this.subscribers.set(mediaId, subscriber);
+        } else {
+          console.warn(`missing WebRTC subsciber state for ${mediaId}`);
+        }
+        connection.removeEventListener('closed', closeHandler);
+        connection.removeEventListener('subscriberstatechanged', changeHandler);
+        connection.removeEventListener('qualityLimit', limitHandler);
+      };
+
+      const changeHandler = (subscriberStateEvent: SubscriberStateChanged) => {
+        this.eventEmitter.emit('subscriberstatechanged', subscriberStateEvent);
+      };
+
+      const limitHandler = (qualityLimit: QualityLimit) => {
+        this.eventEmitter.emit('subscriberLimit', qualityLimit);
+      };
+
+      connection.addEventListener('closed', closeHandler);
+      connection.addEventListener('subscriberstatechanged', changeHandler);
+      connection.addEventListener('qualityLimit', limitHandler);
+
+      return connection;
+    })().finally(() => {
       const subscriber = this.subscribers.get(mediaId);
       if (subscriber !== undefined) {
-        subscriber.connection = undefined;
+        subscriber.action = undefined;
         this.subscribers.set(mediaId, subscriber);
-      } else {
-        console.warn(`missing WebRTC subsciber state for ${mediaId}`);
       }
-      connection.removeEventListener('closed', closeHandler);
-      connection.removeEventListener('subscriberstatechanged', changeHandler);
-      connection.removeEventListener('qualityLimit', limitHandler);
-    };
+    });
 
-    const changeHandler = (subscriberStateEvent: SubscriberStateChanged) => {
-      this.eventEmitter.emit('subscriberstatechanged', subscriberStateEvent);
-    };
-
-    const limitHandler = (qualityLimit: QualityLimit) => {
-      this.eventEmitter.emit('subscriberLimit', qualityLimit);
-    };
-
-    connection.addEventListener('closed', closeHandler);
-    connection.addEventListener('subscriberstatechanged', changeHandler);
-    connection.addEventListener('qualityLimit', limitHandler);
-
-    subscriber.connection = connection;
-    subscriber.action = undefined;
     this.subscribers.set(mediaId, subscriber);
-    return connection;
+
+    return subscriber.action;
   }
 
   /**
@@ -411,7 +411,6 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
 
     if (!this.subscribers.has(mediaId)) {
       this.subscribers.set(mediaId, { state: subscriberConfig });
-      this.eventEmitter.emit('subscriberadded', subscriberConfig);
     }
 
     const subscriber = this.subscribers.get(mediaId);
@@ -420,21 +419,18 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     }
 
     if (subscriberConfig.audio && subscriber.connection === undefined) {
-      if (subscriber.action === undefined) {
-        subscriber.action = this.createSubscriber(subscriberConfig);
-        this.subscribers.set(mediaId, subscriber);
-        subscriber.action.catch((e) => console.error('failed to fetch TURN credentials', e));
-      } else {
-        console.debug(`updating subscriber while connect in progress - skip notification`, subscriberConfig);
-      }
+      (subscriber.action || this.createSubscriber(mediaId)).then((connection) => {
+        connection.updateConfig(subscriberConfig);
+      });
     } else {
       subscriber.connection?.updateConfig(subscriberConfig);
-      this.eventEmitter.emit('subscriberchange', subscriberConfig);
     }
+    this.eventEmitter.emit('subscriberchanged', subscriberConfig);
   }
 
-  public async unsubscribe(descriptor: MediaDescriptor) {
+  public unsubscribe(descriptor: MediaDescriptor) {
     const mediaId = idFromDescriptor(descriptor);
+    this.eventEmitter.emit('unpublished', descriptor);
     const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
       return;
@@ -443,17 +439,17 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
     subscriber.connection = undefined;
   }
 
-  public async unsubscribeParticipant(id: ParticipantId) {
+  public unsubscribeParticipant(id: ParticipantId) {
     const videoDescriptor = { participantId: id, mediaType: MediaSessionType.Video };
     const screenDescriptor = { participantId: id, mediaType: MediaSessionType.Screen };
 
     const videoConnection = this.subscribers.get(idFromDescriptor(videoDescriptor));
     if (videoConnection) {
-      await this.unsubscribe(videoDescriptor);
+      this.unsubscribe(videoDescriptor);
     }
     const screenConnection = this.subscribers.get(idFromDescriptor(screenDescriptor));
     if (screenConnection) {
-      await this.unsubscribe(screenDescriptor);
+      this.unsubscribe(screenDescriptor);
     }
   }
 

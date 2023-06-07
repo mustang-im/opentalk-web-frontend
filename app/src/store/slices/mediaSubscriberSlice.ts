@@ -31,19 +31,22 @@ export const mediaSubscriberSlice = createSlice({
   name: 'subscribers',
   initialState: mediaSubscriberAdapter.getInitialState(),
   reducers: {
-    added: (state, { payload }: PayloadAction<SubscriberConfig>) => {
-      mediaSubscriberAdapter.addOne(state, {
-        ...payload,
-        subscriberState: { audioRunning: false, videoRunning: false, connection: 'new' },
-        limit: VideoSetting.High,
-      });
-    },
     updated: (state, { payload }: PayloadAction<SubscriberConfig>) => {
-      const { video, videoSettings, audio } = payload;
-      mediaSubscriberAdapter.updateOne(state, {
-        id: idFromDescriptor(payload),
-        changes: { video, videoSettings, audio },
-      });
+      const id = idFromDescriptor(payload);
+      const lastConfig = mediaSubscriberAdapter.getSelectors().selectById(state, id);
+      if (lastConfig === undefined) {
+        mediaSubscriberAdapter.addOne(state, {
+          ...payload,
+          subscriberState: { audioRunning: false, videoRunning: false, connection: 'new' },
+          limit: VideoSetting.High,
+        });
+      } else {
+        const { video, videoSettings, audio } = payload;
+        mediaSubscriberAdapter.updateOne(state, {
+          id,
+          changes: { video, videoSettings, audio },
+        });
+      }
     },
     failed: (state, { payload }: PayloadAction<media.MediaError>) => {
       mediaSubscriberAdapter.updateOne(state, {
@@ -75,6 +78,9 @@ export const mediaSubscriberSlice = createSlice({
         changes: { limit: payload.limit },
       });
     },
+    removed: (state, { payload }: PayloadAction<MediaDescriptor>) => {
+      mediaSubscriberAdapter.removeOne(state, idFromDescriptor(payload));
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(leave, (state, { payload: { id } }) => {
@@ -89,7 +95,7 @@ export const mediaSubscriberSlice = createSlice({
   },
 });
 
-export const { updated, mediaUpdated, closed, added, limit, failed } = mediaSubscriberSlice.actions;
+export const { updated, mediaUpdated, closed, removed, limit, failed } = mediaSubscriberSlice.actions;
 
 export const mediaSubscribersSelectors = mediaSubscriberAdapter.getSelectors<RootState>((state) => state.subscribers);
 export const selectUnmutedSubscribers = (state: RootState) =>

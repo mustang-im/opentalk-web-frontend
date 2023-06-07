@@ -236,14 +236,14 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
       if (
         permissionDenied ||
         (hasAllDevicesDetails &&
-          !(audio === true && defaultAudioDevice === undefined) &&
-          !(video === true && defaultVideoDevice === undefined))
+          !(audio && defaultAudioDevice === undefined) &&
+          !(video && defaultVideoDevice === undefined))
       ) {
         return Promise.resolve();
       }
 
-      const requestAudio = audio === true || (audio === undefined && video === undefined);
-      const requestVideo = video === true;
+      const requestAudio = audio || (audio === undefined && video === undefined);
+      const requestVideo = video;
       const constraints = getConstraints({ constraints: { audio: requestAudio, video: requestVideo } });
       return fetchProtectedDeviceDetails(constraints).catch((e) =>
         errorNotificationHandler(e, HandledErrorType.Audio, 'device-details')

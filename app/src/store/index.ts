@@ -35,11 +35,11 @@ import whiteboardReducer from './slices/whiteboardSlice';
 const middleware: Array<Middleware> = [apiMiddleware, restApi.middleware, rtkQueryErrorLoggerMiddlware];
 
 const logger = () => (next: Dispatch) => (action: AnyAction) => {
-  if (action.type.startsWith('signaling/media') || action.type.startsWith('stats/statsUpdated')) {
-    return next(action);
+  if (!action.type.startsWith('stats/statsUpdated')) {
+    const payloadJSON = action.payload ? `: ${JSON.stringify(action.payload)}` : '';
+    const metaJSON = action.meta ? ` (meta: ${JSON.stringify(action.meta)}` : '';
+    console.debug(`action: ${action.type}${payloadJSON}${metaJSON}`);
   }
-
-  console.debug('dispatching', action);
   return next(action);
 };
 

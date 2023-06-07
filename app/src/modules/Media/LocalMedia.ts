@@ -86,7 +86,7 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
    * The object reference is kept stable,
    * only tracks are exchanged during runtime.
    */
-  public readonly outputMediaStream = new MediaStream();
+  public readonly outputMediaStream = new MediaStream([blackTrack(), silentTrack()]);
 
   private readonly levelContext: Promise<{
     audioContext: AudioContext; // with worklet loaded;
