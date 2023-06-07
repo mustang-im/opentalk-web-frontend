@@ -7,7 +7,7 @@ export type ParticipantId = string & { readonly __tag: unique symbol };
 export type GroupId = string & { readonly __tag: unique symbol };
 // (r.floren) Quick hack to fix issues regarding this new superfluous type.
 export type UserId = (string & { readonly __tag: unique symbol }) | ParticipantId;
-export type TargetId = GroupId | UserId;
+export type TargetId = GroupId | ParticipantId;
 
 export type LegalVoteId = string & { readonly __tag: unique symbol };
 

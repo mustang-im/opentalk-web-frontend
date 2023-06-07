@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { GroupId, ParticipantId, Timestamp } from './common';
+import { GroupId, ParticipantId, TargetId, Timestamp } from './common';
 
 export enum ChatScope {
   Global = 'global',
@@ -16,7 +16,7 @@ export type ChatMessage = {
   content: string;
   scope: ChatScope;
   group?: GroupId;
-  target?: ParticipantId | GroupId;
+  target?: TargetId;
 };
 
 export interface ChatMessageBase {
@@ -30,8 +30,8 @@ export interface BaseMessageWithTimestamp extends ChatMessageBase {
 }
 
 export interface ChatBase extends ChatMessageBase {
-  scope: ChatScope.Private | ChatScope.Global | ChatScope.Group;
-  target?: ParticipantId | GroupId;
+  scope: ChatScope;
+  target?: TargetId;
 }
 
 export type ChatMessageWithTimestamp = ChatBase & BaseMessageWithTimestamp;

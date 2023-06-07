@@ -1,3 +1,9 @@
+## 1.0.16
+
+### Stability Improvements
+
+- Adjust chat types which were not aligned with backend (!978)
+
 ## 1.0.6
 
 ### New Features
