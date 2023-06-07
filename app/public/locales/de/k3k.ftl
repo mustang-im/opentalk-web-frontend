@@ -671,6 +671,7 @@ dashboard-events-my-meetings = Meine Meetings
 dashboard-events-filter-by-invites = Nur Einladungen anzeigen
 dashboard-events-filter-by-favorites = Nur Favoriten anzeigen
 dashboard-events-search = Suchen
+dashboard-events-note-limited-view = Hinweis: Sie haben wiederkehrende Meetings in Ihrer Liste, wir haben die Ansicht zeitlich eingeschränkt.
 
 dashbooard-event-accept-invitation-notification = Einladung für das Meeting {meetingTitle} akzeptiert
 dashbooard-event-decline-invitation-notification = Einladung für das Meeting {meetingTitle} abgelehnt
@@ -704,6 +705,8 @@ dashboard-meeting-shared-folder-error-cancel-button = Abbrechen
 dashboard-meeting-shared-folder-error-retry-button = Wiederholen
 dashboard-meeting-shared-folder-error-ok-button = Ok
 
+dashboard-meeting-details-page-future = zukünftige
+dashboard-meeting-details-page-past = vergangene
 dashboard-meeting-details-page-description-title = Beschreibung
 dashboard-meeting-details-page-time-independent = zeitunabhängig
 dashboard-meeting-details-page-all-day = ganztags am {$date}

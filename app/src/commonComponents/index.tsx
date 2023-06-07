@@ -10,17 +10,5 @@ import RadioGroup from './RadioGroup/RadioGroup';
 import Rating from './Rating/Rating';
 import Select from './Select/Select';
 import TextField from './TextField/TextField';
-import Toggle from './Toggle/Toggle';
 
-export {
-  CommonTextField,
-  FormWrapper,
-  NameTile,
-  NumberInput,
-  RadioGroup,
-  Rating,
-  Select,
-  TextField,
-  LimitedTextField,
-  Toggle,
-};
+export { CommonTextField, FormWrapper, NameTile, NumberInput, RadioGroup, Rating, Select, TextField, LimitedTextField };

@@ -9,13 +9,13 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-type Option<Value> = {
+export type ToggleOptions<Value> = {
   label: string;
   value: Value;
 };
 
 type ToggleProps<Value> = {
-  options: Array<Option<Value>>;
+  options: Array<ToggleOptions<Value>>;
   onChange: (newValue: Value) => void;
 };
 

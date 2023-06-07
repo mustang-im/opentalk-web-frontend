@@ -2,12 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, IconButton, Grid, styled, useMediaQuery, useTheme, Tooltip, Stack } from '@mui/material';
-import { InviteIcon, FavoriteIcon, SearchIcon, AddIcon } from '@opentalk/common';
+import { InviteIcon, FavoriteIcon, SearchIcon, AddIcon, Toggle } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import Toggle from '../../../../commonComponents/Toggle';
 import getReferrerRouterState from '../../../../utils/getReferrerRouterState';
 import { DashboardEventsFilters } from '../EventsOverviewPage';
 

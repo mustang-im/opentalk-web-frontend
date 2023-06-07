@@ -6,15 +6,16 @@ import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
 import { ArrowDownIcon } from '@opentalk/common';
-import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
-import React, { useEffect, useState } from 'react';
+import { EventType, isTimelessEvent } from '@opentalk/rest-api-rtk-query';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import MeetingCard from '../../../../components/MeetingCard';
 import { MeetingsProp } from '../EventsOverviewPage';
 
 interface MeetingsOverviewProp {
   entries: MeetingsProp[];
-  expandAll: boolean;
+  expandAccordion: string;
 }
 
 const Accordion = styled(({ children, ...props }: AccordionProps) => (
@@ -51,28 +52,35 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   marginLeft: theme.spacing(-2),
 }));
 
-const EventsOverview = ({ entries, expandAll }: MeetingsOverviewProp) => {
+const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
   const [expanded, setExpanded] = useState<string[]>([]);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded ? [...expanded, panel] : expanded.filter((e) => e !== panel));
   };
+  const { t } = useTranslation();
+
+  const isContainingRecurringEvents = useMemo(() => {
+    return entries.find((meetings) =>
+      meetings?.events?.find((event) => !isTimelessEvent(event) && event.type === EventType.Recurring)
+    );
+  }, [entries]);
 
   useEffect(() => {
-    if (expandAll) {
+    if (expandAccordion === 'all') {
       setExpanded(entries.map((event) => event.title));
+    } else {
+      setExpanded([expandAccordion]);
     }
-  }, [expandAll, entries]);
-
-  // close all accordion only if expandAll change
-  useEffect(() => {
-    if (!expandAll) {
-      setExpanded([]);
-    }
-  }, [expandAll]);
+  }, [expandAccordion, entries]);
 
   return (
     <Stack spacing={1} overflow={'auto'} flex={'1 1 auto'} height={0}>
+      {isContainingRecurringEvents && (
+        <Typography variant="h2" component={'h2'}>
+          {t('dashboard-events-note-limited-view')}
+        </Typography>
+      )}
       {entries.map((entry) => (
         <Accordion
           data-testid="EventAccordion"
@@ -85,7 +93,7 @@ const EventsOverview = ({ entries, expandAll }: MeetingsOverviewProp) => {
             <Typography>{entry.title}</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {entry.events.map((event) => (
+            {entry.events?.map((event) => (
               <MeetingCard
                 key={`${isTimelessEvent(event) ? '' : event.startsAt?.datetime}.${event.id}`}
                 event={event}

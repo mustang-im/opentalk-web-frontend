@@ -14,14 +14,18 @@ import {
 import { addMonths, isAfter } from 'date-fns';
 import _ from 'lodash';
 
+import { TimePerspectiveFilter } from '../pages/Dashboard/EventsOverviewPage/EventsOverviewPage';
+
 export const getExpandedEvents = (
   eventList: (EventException | Event)[],
   filterDeclined?: boolean,
   maxEntries?: number,
   firstDateIsoString?: string,
-  maxMonths?: number
+  maxMonths?: number,
+  filter?: TimePerspectiveFilter
 ): Event[] => {
   const events = Array<Event>();
+  const DEFAULT_MONTHS_CONSIDERED = 3;
   eventList.forEach((event) => {
     if (isEvent(event) && (filterDeclined ? event.inviteStatus !== InviteStatus.Declined : true)) {
       if (!isTimelessEvent(event) && event.type === EventType.Recurring) {
@@ -37,10 +41,14 @@ export const getExpandedEvents = (
               ${recurrencePattern}`
         );
 
-        const maxConsideredMonths = maxMonths ? maxMonths : 1;
-        const end = addMonths(startDate, maxConsideredMonths);
-        const timeline = rule.between(startDate, end, true);
-        const firstDateTime = firstDateIsoString ? new Date(firstDateIsoString) : undefined;
+        const maxConsideredMonths = maxMonths ? maxMonths : DEFAULT_MONTHS_CONSIDERED;
+        const startDateByFilter = filter === TimePerspectiveFilter.Future ? new Date() : startDate;
+        const end = addMonths(startDateByFilter, maxConsideredMonths);
+
+        const timeline = rule.between(startDateByFilter, end, true);
+        const firstIsoDate = firstDateIsoString ? new Date(firstDateIsoString) : undefined;
+        const firstDateTime = filter === TimePerspectiveFilter.Future ? new Date() : firstIsoDate;
+
         timeline
           .slice(0, maxEntries)
           .filter((value) => firstDateTime === undefined || isAfter(new Date(value.toISOString()), firstDateTime))

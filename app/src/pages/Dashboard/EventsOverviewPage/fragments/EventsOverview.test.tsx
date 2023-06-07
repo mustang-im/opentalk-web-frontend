@@ -17,13 +17,13 @@ const mockEvents = [
 describe('EventsOverview', () => {
   test('page will not crash', async () => {
     const { store } = createStore();
-    await render(<EventsOverview entries={mockEvents as MeetingsProp[]} expandAll={false} />, store);
+    await render(<EventsOverview entries={mockEvents as MeetingsProp[]} expandAccordion={''} />, store);
     expect(screen.getAllByTestId('EventAccordion')).toHaveLength(1);
   });
 
   test('Accordion Title should be in the document', async () => {
     const { store } = createStore();
-    await render(<EventsOverview entries={mockEvents as MeetingsProp[]} expandAll={false} />, store);
+    await render(<EventsOverview entries={mockEvents as MeetingsProp[]} expandAccordion={'false'} />, store);
     expect(screen.getByText('Time Independent Meetings')).toBeInTheDocument();
   });
 });
