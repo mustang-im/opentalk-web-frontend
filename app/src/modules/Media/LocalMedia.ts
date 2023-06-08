@@ -158,7 +158,9 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
       await this.replaceTrack(silentTrack());
     }
     const { audioContext } = await this.levelContext;
-    await audioContext.suspend();
+    if (audioContext.state === 'running') {
+      await audioContext.suspend();
+    }
   }
 
   private stoppedAudioHandler = async () => {

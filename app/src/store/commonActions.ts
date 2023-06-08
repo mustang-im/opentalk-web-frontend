@@ -63,7 +63,7 @@ export const hangUp = createAsyncThunk<void, void, { state: RootState }>('room/h
   if (connectionState !== ConnectionState.Leaving) {
     throw new Error(`cannot hangup when state is '${connectionState}' and not 'leaving'.`);
   }
-  await shutdownConferenceContext();
+  shutdownConferenceContext();
   localScreenContext.release();
   return localMediaContext.release();
 });

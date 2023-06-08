@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Fix: Safari user is not redirect to lobby page after remove participant action (!920)
 - Rework of dashboard meeting overview (!968)
 - Fix: Legal vote token not being completely visible (!967)
 - Fix: Legal vote results are not visible to every participant (!967)
