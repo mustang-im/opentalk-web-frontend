@@ -43,5 +43,6 @@ window.config = {
     sharedFolder: false,
   },
   videoBackgrounds: '${VIDEO_BACKGROUNDS}',
-  maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}'
+  maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}',
+  version: '${PRODUCT_VERSION}'
 };

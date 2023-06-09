@@ -840,3 +840,6 @@ shared-folder-password-label = Copy Folder-password
 
 imprint-label = Imprint
 data-protection-label = Data protection
+
+version-label = Product version - {$version}
+dev-version = (preview)
