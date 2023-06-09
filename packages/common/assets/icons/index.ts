@@ -36,6 +36,7 @@ import GridViewIcon from './GridViewIcon';
 import HelpIcon from './HelpIcon';
 import HiddenIcon from './HiddenIcon';
 import HomeIcon from './HomeIcon';
+import InfoIcon from "./InfoIcon";
 import InviteIcon from './InviteIcon';
 import LegalBallotIcon from './LegalBallotIcon';
 import LockedIcon from './LockedIcon';
@@ -116,6 +117,7 @@ export {
   HelpIcon,
   HiddenIcon,
   HomeIcon,
+  InfoIcon,
   InviteIcon,
   LegalBallotIcon,
   LockedIcon,
