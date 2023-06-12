@@ -20,8 +20,9 @@ import { PublisherConnection } from './PublisherConnection';
 import { StatsEvent } from './Statistics/ConnectionStats';
 import { SubscriberConnection, SubscriberState } from './SubscriberConnection';
 import { TurnProvider } from './TurnProvider';
+import { PACKET_LOSS_THRESHOLD } from './index';
 
-const STATS_INTERVAL = 2000; // ms
+export const STATS_INTERVAL = 2000; // ms
 
 export interface MediaDescriptor {
   participantId: ParticipantId;
@@ -83,7 +84,12 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
   private publishers: Map<MediaId, PublisherConnection> = new Map();
   private statsTimer?: NodeJS.Timer;
 
-  private publisherController = new BandwidthController(4 * STATS_INTERVAL, 10 * 60_000, STATS_INTERVAL);
+  private publisherController = new BandwidthController(
+    VideoSetting.Low,
+    4 * STATS_INTERVAL,
+    10 * 60_000,
+    STATS_INTERVAL
+  );
 
   public constructor(signaling: MediaSignaling, turnProvider: TurnProvider, maxVideoBandwidth: number) {
     super();
@@ -143,11 +149,13 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
           { up: 0, down: 0, upLoss: 0, downLoss: 0 }
         );
 
-        if (this.statsBitrate.upLoss > 0.05) {
+        // Uplink loss is harder to observe so we need to be more sensitive hence PACKET_LOSS_THRESHOLD/2
+        if (this.statsBitrate.upLoss > PACKET_LOSS_THRESHOLD / 2) {
           this.publisherController.downgradeTemporarily();
         }
 
-        if (this.statsBitrate.upLoss > 0 || this.statsBitrate.downLoss > 0) {
+        // Only log when loss is greater than 1%
+        if (this.statsBitrate.upLoss > 0.01 || this.statsBitrate.downLoss > 0.01) {
           console.debug(
             `bandwidth up:${formatBitRate(this.statsBitrate.up)} down:${formatBitRate(
               this.statsBitrate.down

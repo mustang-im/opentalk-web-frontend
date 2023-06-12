@@ -12,6 +12,7 @@
 
 ### Stability Improvements
 
+- Tweak bandwidth control for lossy networks (!985)
 - Fix crash on leaving conference after switching between chats (!975)
 - Fix: Correct the handling media and connection change events (!976)
 - Add aria labels to cam/mic option buttons (!972)
