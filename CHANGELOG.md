@@ -12,6 +12,8 @@
 
 ### Stability Improvements
 
+- Fix: Safari: after switching audioDevice audio is not working anymore (!983)
+- Fix crash on leaving conference after switching between chats (!975)
 - Tweak bandwidth control for lossy networks (!985)
 - Fix crash on leaving conference after switching between chats (!975)
 - Fix: Correct the handling media and connection change events (!976)

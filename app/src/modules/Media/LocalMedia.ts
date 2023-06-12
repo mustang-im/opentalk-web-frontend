@@ -156,6 +156,9 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
     this.sourceNode = undefined;
     if (replace) {
       await this.replaceTrack(silentTrack());
+    } else {
+      const oldTrack = this.outputMediaStream.getTracks().find((t) => t.kind === 'audio');
+      oldTrack?.stop();
     }
     const { audioContext } = await this.levelContext;
     if (audioContext.state === 'running') {
