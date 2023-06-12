@@ -1,6 +1,10 @@
-## 1.0.16
+## 1.0.17
 
-### Stability Improvements
+### New Features
+
+- Add informational icon. (!980)
+
+## 1.0.16
 
 - Adjust chat types which were not aligned with backend (!978)
 
