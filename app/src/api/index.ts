@@ -96,6 +96,7 @@ import { participantsLayoutSet } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import showConsentNotification from '../utils/showConsentNotification';
+import showRecordingStoppedNotification from '../utils/showRecordingStoppedNotification';
 import { restApi } from './rest';
 import {
   breakout,
@@ -308,6 +309,7 @@ const handleControlMessage = (
           tariff: data.tariff,
           timer: data.timer,
           sharedFolder: data.sharedFolder,
+          eventInfo: data.eventInfo,
         })
       );
 
@@ -922,7 +924,7 @@ const handleRecordingMessage = (dispatch: AppDispatch, data: recording.Message) 
       break;
     case 'stopped':
       dispatch(recordingStopped());
-      notifications.info(i18next.t('recording-stopped-message'));
+      showRecordingStoppedNotification();
       break;
     default: {
       const dataString = JSON.stringify(data, null, 2);

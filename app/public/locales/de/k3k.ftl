@@ -814,7 +814,7 @@ recording-active-label = Recording läuft
 
 recording-accept = Erlauben
 recording-decline = Verweigern
-recording-stopped-message = Die Aufnahme wurde beendet.
+recording-stopped-message =  <messageContent>Die Aufnahme wurde beendet. Die entsprechende Datei befindet sich im Dashboard unter den <messageLink>Meeting-Details</messageLink>.</messageContent>
 
 emoji-category-smileys_people = Smileys & Personen
 emoji-category-animals_nature = Tiere & Natur
