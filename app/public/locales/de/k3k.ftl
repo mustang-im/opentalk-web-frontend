@@ -725,6 +725,9 @@ dashboard-meeting-recurrence-weekly = Wöchentlich
 dashboard-meeting-recurrence-bi-weekly = 14-Tägig
 dashboard-meeting-recurrence-monthly = Monatlich
 
+dashboard-payment-status-downgraded = Achtung: Für Ihren Account ist derzeit keine gültige Zahlmethode hinterlegt.<br /> Die Nutzung ist derzeit auf den {$tariffName}-Tarif eingeschränkt.
+dashboard-add-payment-button = Jetzt auswählen
+
 meeting-notification-kicked = Sie wurden vom Meeting entfernt
 meeting-notification-banned = Sie wurden permanent vom Meeting entfernt
 meeting-notification-user-was-kicked = Sie haben {$user} vom Meeting entfernt

@@ -26,6 +26,12 @@ jest.mock('../../../api/rest', () => ({
   }),
 }));
 
+jest.mock('../../../templates/DashboardTemplate', () => ({
+  useHeader: () => ({
+    setHeader: jest.fn(),
+  }),
+}));
+
 describe('Dashboard HomePage', () => {
   test('page will not crash', async () => {
     const { store } = createStore();
