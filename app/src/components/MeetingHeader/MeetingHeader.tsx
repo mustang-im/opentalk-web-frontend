@@ -51,6 +51,7 @@ import {
 import { Poll, selectAllPollVotes } from '../../store/slices/pollSlice';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
 import { selectRecordingState } from '../../store/slices/recordingSlice';
+import { selectEventInfo } from '../../store/slices/roomSlice';
 import {
   selectSharedFolderPassword,
   selectSharedFolderUrl,
@@ -73,6 +74,7 @@ import { selectIsWhiteboardAvailable } from '../../store/slices/whiteboardSlice'
 import { MAX_GRID_TILES } from '../GridView/GridView';
 import { Vote } from '../VoteResult/VoteResultContainer';
 import MeetingTimer from './fragments/MeetingTimer';
+import RoomTitle from './fragments/RoomTitle';
 import SecureConnectionField from './fragments/SecureConnectionField';
 import WaitingParticipantItem from './fragments/WaitingParticipantsItem';
 
@@ -85,12 +87,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     animation: `${blink} 1s ease alternate`,
     animationIterationCount: 'infinite',
   },
-}));
-
-const CurrentRoomText = styled(Typography)(({ theme }) => ({
-  textTransform: 'inherit',
-  padding: theme.spacing(0.5, 1),
-  fontSize: theme.typography.pxToRem(14),
 }));
 
 const WaitingParticipantList = styled(List)(({ theme }) => ({
@@ -235,7 +231,6 @@ const MeetingHeader = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const selectedLayout = useAppSelector(selectParticipantsLayout);
-  const currentBreakoutRoom = useAppSelector(selectCurrentBreakoutRoom);
   const participants = useAppSelector(selectAllOnlineParticipants);
   const selectedPage = useAppSelector(selectPaginationPageState);
   const protocolUrl = useAppSelector(selectProtocolUrl);
@@ -260,6 +255,8 @@ const MeetingHeader = () => {
   const sharedFolderUrl = useAppSelector(selectSharedFolderUrl);
   const sharedFolderPassword = useAppSelector(selectSharedFolderPassword);
   const isSharedFolderAvailable = useAppSelector(selectIsSharedFolderAvailable);
+  const currentBreakoutRoom = useAppSelector(selectCurrentBreakoutRoom);
+  const roomInfo = useAppSelector(selectEventInfo);
 
   const showDebugDialog = () => {
     if (clickTimer.current) {
@@ -415,14 +412,6 @@ const MeetingHeader = () => {
         </PopperContainer>
       </Popover>
     </ViewPopperContainer>
-  );
-
-  const roomPopper = () => (
-    <div>
-      <CurrentRoomText>
-        {currentBreakoutRoom !== undefined ? currentBreakoutRoom.name : t('header-meeting-room')}
-      </CurrentRoomText>
-    </div>
   );
 
   const toggleWaitingPopper = (event: React.MouseEvent<HTMLElement>) => {
@@ -640,12 +629,24 @@ const MeetingHeader = () => {
     }
   };
 
+  const getRoomTitle = () => {
+    let roomTitle;
+    if (currentBreakoutRoom && currentBreakoutRoom.name) {
+      roomTitle = currentBreakoutRoom.name;
+    } else if (roomInfo && roomInfo.title) {
+      roomTitle = roomInfo.title;
+    }
+    return roomTitle;
+  };
+
   return (
     <Content>
       <ContentItem>{logoImage()}</ContentItem>
       <ContentItem lgOrder={2}>
         <HeaderCenterContainer>
-          <HeaderItem>{roomPopper()}</HeaderItem>
+          <HeaderItem>
+            <RoomTitle title={getRoomTitle()} />
+          </HeaderItem>
           <HeaderItem>{ViewPopper}</HeaderItem>
           {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
             <HeaderItem>

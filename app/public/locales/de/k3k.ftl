@@ -431,7 +431,7 @@ breakout-room-room-overview-no-duration = Keine Laufzeit
 breakout-room-room-overview-participant-list = Teilnehmer in Breakout-Räumen
 
 moderator-join-breakout-room = Raum betreten
-header-meeting-room = Meeting-Raum
+fallback-room-title = Meeting-Raum
 
 secure-connection-message = Diese Verbindung ist verschlüsselt und sicher.
 

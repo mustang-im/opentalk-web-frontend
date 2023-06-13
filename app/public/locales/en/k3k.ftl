@@ -431,7 +431,7 @@ breakout-room-room-overview-participant-list = Participants in Breakout Rooms
 breakout-room-room-overview-participant-list-me = (me)
 
 moderator-join-breakout-room = Join room
-header-meeting-room = Meeting Room
+fallback-room-title = Meeting room
 
 secure-connection-message = This connection is encrypted and safe.
 
