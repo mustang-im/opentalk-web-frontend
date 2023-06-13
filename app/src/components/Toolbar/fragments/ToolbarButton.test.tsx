@@ -13,7 +13,8 @@ describe('<ToolbarButton />', () => {
   const ToolbarButtonProps = {
     hasContext: true,
     contextDisabled: false,
-    tooltipTitle: 'tooltipTitleTest',
+    contextTitle: 'toolbarToggleButton',
+    tooltipTitle: 'toolbarMainButton',
     disabled: false,
     active: false,
     onClick: jest.fn(),
@@ -22,26 +23,23 @@ describe('<ToolbarButton />', () => {
     isLobby: false,
   };
 
-  test('render ToolbarButton component', () => {
-    render(<ToolbarButton {...ToolbarButtonProps} ariaLabelText="ariaLabelTextTest" />);
-    expect(screen.getByTestId('toolbarButton')).toBeInTheDocument();
-    expect(screen.getByTestId('toolbarToggleButton')).toBeInTheDocument();
-    expect(screen.getByLabelText('ariaLabelTextTest')).toBeInTheDocument();
+  test('render ToolbarButton with context and children', () => {
+    render(<ToolbarButton {...ToolbarButtonProps} />);
+    expect(screen.getByRole('button', { name: 'toolbarMainButton' })).toBeInTheDocument();
     expect(screen.getByTestId('toolbarChildrenTest')).toBeInTheDocument();
-    expect(screen.getByLabelText('tooltipTitleTest')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'toolbarToggleButton' })).toBeInTheDocument();
   });
 
-  test('render ToolbarButton without context & ariaLabelText', () => {
+  test('render ToolbarButton without context', () => {
     render(<ToolbarButton {...ToolbarButtonProps} hasContext={false} />);
-    expect(screen.getByTestId('toolbarButton')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'toolbarMainButton' })).toBeInTheDocument();
     expect(screen.getByTestId('toolbarChildrenTest')).toBeInTheDocument();
-    expect(screen.queryByTestId('toolbarToggleButton')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('ariaLabelTextTest')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'toolbarToggleButton' })).not.toBeInTheDocument();
   });
 
   test('testing click on ToolbarButton', () => {
     render(<ToolbarButton {...ToolbarButtonProps} onClick={handleClick} />);
-    const button = screen.getByTestId('toolbarButton');
+    const button = screen.getByRole('button', { name: 'toolbarMainButton' });
 
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
@@ -50,7 +48,7 @@ describe('<ToolbarButton />', () => {
 
   test('testing click on disabled ToolbarButton', () => {
     render(<ToolbarButton {...ToolbarButtonProps} openMenu={handleClick} disabled />);
-    const button = screen.getByTestId('toolbarButton');
+    const button = screen.getByRole('button', { name: 'toolbarMainButton' });
 
     expect(button).toBeInTheDocument();
     expect(button).toBeDisabled();
@@ -60,8 +58,7 @@ describe('<ToolbarButton />', () => {
 
   test('testing click on ToggleToolbarButton', () => {
     render(<ToolbarButton {...ToolbarButtonProps} openMenu={handleClick} />);
-    const toggleButton = screen.getByTestId('toolbarToggleButton');
-
+    const toggleButton = screen.getByRole('button', { name: 'toolbarToggleButton' });
     expect(toggleButton).toBeInTheDocument();
     fireEvent.click(toggleButton);
     expect(handleClick).toHaveBeenCalledTimes(1);

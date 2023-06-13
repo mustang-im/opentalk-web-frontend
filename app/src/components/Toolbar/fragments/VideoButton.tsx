@@ -31,6 +31,8 @@ const VideoButton = ({ isLobby }: { isLobby?: boolean }) => {
     return t('toolbar-button-video-turn-on-tooltip-title');
   };
 
+  const contextTitle = t('toolbar-button-video-context-title');
+
   return (
     <div ref={menuRef}>
       <ToolbarButton
@@ -50,6 +52,9 @@ const VideoButton = ({ isLobby }: { isLobby?: boolean }) => {
         }}
         hasContext
         contextDisabled={!mediaContext.hasCamera}
+        contextTitle={contextTitle}
+        contextMenuId="video-context-menu"
+        contextMenuExpanded={showMenu}
         disabled={!mediaContext.hasCamera || isLoadingMedia}
         active={videoEnabled}
         openMenu={() => {

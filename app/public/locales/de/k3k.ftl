@@ -187,8 +187,10 @@ breakout-notification-session-ended-cta = Die Breakout Session wurde beendet. Bi
 
 toolbar-button-audio-turn-on-tooltip-title = Mikrofon aktivieren
 toolbar-button-audio-turn-off-tooltip-title = Mikrofon deaktivieren
+toolbar-button-audio-context-title = Zusatzoptionen Mikrofon
 toolbar-button-video-turn-on-tooltip-title = Kamera aktivieren
 toolbar-button-video-turn-off-tooltip-title = Kamera deaktivieren
+toolbar-button-video-context-title = Zusatzoptionen Kamera
 toolbar-button-raise-hand-tooltip-title = Hand heben
 toolbar-button-lower-hand-tooltip-title = Hand runternehmen
 toolbar-button-handraises-disabled = Der Moderator hat das Handheben deaktiviert

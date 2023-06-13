@@ -60,6 +60,8 @@ const AudioButton = ({ isLobby }: { isLobby?: boolean }) => {
     return t('toolbar-button-audio-turn-on-tooltip-title');
   };
 
+  const contextTitle = t('toolbar-button-audio-context-title');
+
   return (
     <div ref={menuRef}>
       <ToolbarButton
@@ -72,6 +74,9 @@ const AudioButton = ({ isLobby }: { isLobby?: boolean }) => {
         active={audioEnabled}
         isLobby={isLobby}
         data-testid="toolbarAudioButton"
+        contextTitle={contextTitle}
+        contextMenuId="audio-context-menu"
+        contextMenuExpanded={showMenu}
       >
         {indicator}
       </ToolbarButton>

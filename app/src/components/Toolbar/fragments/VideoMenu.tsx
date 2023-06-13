@@ -184,6 +184,7 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         open={open}
         onClose={onClose}
         disablePortal={fullscreenHandle.active}
+        id="video-context-menu"
       >
         <MenuItem>
           <MenuTitle>
