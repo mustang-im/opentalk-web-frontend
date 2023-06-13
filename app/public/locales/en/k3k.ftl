@@ -837,3 +837,6 @@ conference-view-grid = Grid-View
 conference-view-fullscreen = Fullscreen
 shared-folder-open-label = Open shared folder
 shared-folder-password-label = Copy Folder-password
+
+imprint-label = Imprint
+data-protection-label = Data protection

@@ -7,8 +7,9 @@ import { useTranslation } from 'react-i18next';
 
 import { enterRoom } from '../../api/types/outgoing/control';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectFeatures } from '../../store/slices/configSlice';
+import { selectFeatures, selectShowmprintContainer } from '../../store/slices/configSlice';
 import { selectRoomConnectionState, ConnectionState } from '../../store/slices/roomSlice';
+import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider/MediaProvider';
 import SelfTest from '../SelfTest';
 
@@ -19,6 +20,7 @@ const WaitingView = () => {
   const dispatch = useAppDispatch();
   const mediaContext = useMediaContext();
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
+  const showImprintContainer = useAppSelector(selectShowmprintContainer);
 
   const readyToEnter = connectionState === ConnectionState.ReadyToEnter;
 
@@ -31,26 +33,29 @@ const WaitingView = () => {
   }, [dispatch, joinWithoutMedia, mediaContext]);
 
   return (
-    <Container>
-      <SelfTest
-        actionButton={
-          <Button onClick={moveToRoom} disabled={!readyToEnter}>
-            {readyToEnter ? t('joinform-enter-now') : t('joinform-waiting-room-enter')}
-          </Button>
-        }
-      >
-        <Typography
-          variant="body1"
-          textAlign={'center'}
-          fontSize={'1.37rem'}
-          color={theme.palette.text.secondary}
-          justifyContent="center"
-          width={'100%'}
+    <>
+      <Container>
+        <SelfTest
+          actionButton={
+            <Button onClick={moveToRoom} disabled={!readyToEnter}>
+              {readyToEnter ? t('joinform-enter-now') : t('joinform-waiting-room-enter')}
+            </Button>
+          }
         >
-          {readyToEnter ? t('in-waiting-room-ready') : t('in-waiting-room')}
-        </Typography>
-      </SelfTest>
-    </Container>
+          <Typography
+            variant="body1"
+            textAlign={'center'}
+            fontSize={'1.37rem'}
+            color={theme.palette.text.secondary}
+            justifyContent="center"
+            width={'100%'}
+          >
+            {readyToEnter ? t('in-waiting-room-ready') : t('in-waiting-room')}
+          </Typography>
+        </SelfTest>
+      </Container>
+      {showImprintContainer && <ImprintContainer />}
+    </>
   );
 };
 

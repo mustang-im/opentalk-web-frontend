@@ -21,6 +21,8 @@
 
 ### New Features
 
+- Show imprint and data protection footer in the lobby and waiting roomm (!984)
+
 ## 1.5.x
 
 ### UI/UX Fixes

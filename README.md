@@ -57,6 +57,8 @@ frontend                                                                        
 | CHANGE_PASSWORD_ACTIVE           | no       | false                              | enable the reset password button in the dashboard profile settings |
 | CHANGE_PASSWORD_URL       | no       | null                               | set the reset password url for password button in dashboard profile settings |
 | FEATURE_SHARED_FOLDER           | no       | false                              | enable the shared folder feature |
+| IMPRINT_URL             | no      |                                                   | The URL to the imprint page |
+| DATA_PROTECTION_URL             | no      |                                                   | The URL to the data protection page |
 
 ## Use yarn to build a local version
 
