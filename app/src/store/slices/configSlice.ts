@@ -69,6 +69,8 @@ export interface Config {
   libravatarDefaultImage?: DefaultAvatarImage;
   tariff?: Tariff;
   accountManagementUrl?: string;
+  imprintUrl?: string;
+  dataProtectionUrl?: string;
 }
 
 export interface ConfigState {
@@ -103,6 +105,8 @@ export interface ConfigState {
   libravatarDefaultImage: DefaultAvatarImage;
   tariff: Tariff;
   accountManagementUrl?: string;
+  imprintUrl?: string;
+  dataProtectionUrl?: string;
 }
 /**
  * Initial Configuration.
@@ -201,5 +205,13 @@ export const selectErrorReportEmail = (state: RootState) => state.config.errorRe
 export const selectChangePassword = (state: RootState) => state.config.changePassword;
 export const selectEnabledModules = (state: RootState) => state.config.tariff.enabledModules;
 export const selectAccountManagementUrl = (state: RootState) => state.config.accountManagementUrl;
+export const selectImprintUrl = (state: RootState) => state.config.imprintUrl;
+export const selectDataProtectionUrl = (state: RootState) => state.config.dataProtectionUrl;
+export const selectShowmprintContainer = (state: RootState) => {
+  if (state.config.imprintUrl || state.config.dataProtectionUrl) {
+    return true;
+  }
+  return false;
+};
 
 export default configSlice.reducer;

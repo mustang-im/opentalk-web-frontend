@@ -25,6 +25,8 @@ window.config = {
   insecure: ${INSECURE:-false},
   baseUrl: "${BASE_URL}",
   helpdeskUrl: "${HELPDESK_URL}",
+  imprintUrl: "${IMPRINT_URL}",
+  dataProtectionUrl: "${DATA_PROTECTION_URL}",
   accountManagementUrl: "${ACCOUNT_MANAGEMENT_URL}",
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
   beta: {

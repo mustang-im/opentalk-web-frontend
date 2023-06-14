@@ -7,6 +7,8 @@ window.config = {
   insecure: false,
   baseUrl: '${BASE_URL}',
   helpdeskUrl: '${HELPDESK_URL}',
+  imprintUrl: '${IMPRINT_URL}',
+  dataProtectionUrl: '${DATA_PROTECTION_URL}',
   userSurveyUrl: '${USER_SURVEY_URL}',
   accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
   userSurveyApiKey: '${USER_SURVEY_API_KEY}',

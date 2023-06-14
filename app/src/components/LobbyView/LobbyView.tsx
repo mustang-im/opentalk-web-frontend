@@ -5,7 +5,7 @@ import { Button, Container, IconButton, InputAdornment, Stack } from '@mui/mater
 import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon, setHotkeysEnabled } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
-import React, { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -14,7 +14,7 @@ import { ApiErrorWithBody, StartRoomError, useGetMeQuery } from '../../api/rest'
 import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { startRoom } from '../../store/commonActions';
-import { selectFeatures } from '../../store/slices/configSlice';
+import { selectFeatures, selectShowmprintContainer } from '../../store/slices/configSlice';
 import {
   ConnectionState,
   selectInviteId,
@@ -23,6 +23,7 @@ import {
 } from '../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../store/slices/userSlice';
 import { formikProps } from '../../utils/formikUtils';
+import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider';
 import SelfTest from '../SelfTest';
 
@@ -44,6 +45,7 @@ const LobbyView: FC = () => {
   const connectionState = useAppSelector(selectRoomConnectionState);
   const navigate = useNavigate();
   const passwordRequired = useAppSelector(selectPasswordRequired);
+  const showImprintContainer = useAppSelector(selectShowmprintContainer);
 
   const enterRoom = useCallback(
     async (displayName: string, password: string) => {
@@ -127,57 +129,60 @@ const LobbyView: FC = () => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <Container>
-        <Stack direction={'column'} spacing={4} justifyContent={'center'} alignItems={'center'}>
-          <SelfTest
-            actionButton={
-              <Button
-                type={'submit'}
-                disabled={
-                  !(isLoggedIn || inviteCode !== undefined) ||
-                  connectionState === ConnectionState.Starting ||
-                  !formik.isValid
-                }
-              >
-                {t('joinform-enter-now')}
-              </Button>
-            }
-          >
-            <Stack direction={'row'} spacing={1}>
-              <TextField
-                {...formikProps('name', formik)}
-                color={'secondary'}
-                placeholder={t('joinform-enter-name')}
-                autoComplete="user-name"
-              />
-              {passwordRequired && (
-                <TextField
-                  {...formikProps('password', formik)}
-                  color={'secondary'}
-                  placeholder={t('joinform-enter-password')}
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label={t('toggle-password-visibility')}
-                        onClick={handleClickShowPassword}
-                        edge="end"
-                      >
-                        {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
-                      </IconButton>
-                    </InputAdornment>
+    <>
+      <form onSubmit={formik.handleSubmit}>
+        <Container>
+          <Stack direction={'column'} spacing={4} justifyContent={'center'} alignItems={'center'}>
+            <SelfTest
+              actionButton={
+                <Button
+                  type={'submit'}
+                  disabled={
+                    !(isLoggedIn || inviteCode !== undefined) ||
+                    connectionState === ConnectionState.Starting ||
+                    !formik.isValid
                   }
-                  error={Boolean(joinError)}
-                  helperText={joinError ? t(joinError) : ''}
+                >
+                  {t('joinform-enter-now')}
+                </Button>
+              }
+            >
+              <Stack direction={'row'} spacing={1}>
+                <TextField
+                  {...formikProps('name', formik)}
+                  color={'secondary'}
+                  placeholder={t('joinform-enter-name')}
+                  autoComplete="user-name"
                 />
-              )}
-            </Stack>
-          </SelfTest>
-        </Stack>
-      </Container>
-    </form>
+                {passwordRequired && (
+                  <TextField
+                    {...formikProps('password', formik)}
+                    color={'secondary'}
+                    placeholder={t('joinform-enter-password')}
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label={t('toggle-password-visibility')}
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    error={Boolean(joinError)}
+                    helperText={joinError ? t(joinError) : ''}
+                  />
+                )}
+              </Stack>
+            </SelfTest>
+          </Stack>
+        </Container>
+      </form>
+      {showImprintContainer && <ImprintContainer />}
+    </>
   );
 };
 

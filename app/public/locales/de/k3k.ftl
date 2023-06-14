@@ -836,3 +836,6 @@ conference-view-grid = Kachelansicht
 conference-view-fullscreen = Vollbildansicht
 shared-folder-open-label = Geteilten Ordner öffnen
 shared-folder-password-label = Ordner-Passwort kopieren
+
+imprint-label = Impressum
+data-protection-label = Datenschutz
