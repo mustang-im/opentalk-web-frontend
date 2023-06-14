@@ -5,6 +5,12 @@
 - Extend hot reload functionality for packages (!966)
 - Use single snackbar provider (!994)
 
+### UI/UX Fixes
+
+- Add missing names to toolbar buttons (!988)
+
+### New Features
+
 ## 1.5.x
 
 ### UI/UX Fixes

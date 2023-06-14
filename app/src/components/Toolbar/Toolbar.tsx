@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import AudioButton from './fragments/AudioButton';
 import EndCallButton from './fragments/EndCallButton';
@@ -32,8 +33,9 @@ const MainContainer = styled('div')(({ theme }) => ({
 }));
 
 const Toolbar = ({ layout }: { layout?: LayoutTypes }) => {
+  const { t } = useTranslation();
   return (
-    <MainContainer className={layout} data-testid={'Toolbar'}>
+    <MainContainer role={'tablist'} aria-label={t('toolbar-aria-label')} className={layout} data-testid={'Toolbar'}>
       <HandraiseButton />
       <ShareScreenButton />
       <AudioButton />
