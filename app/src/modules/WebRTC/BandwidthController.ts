@@ -21,7 +21,7 @@ export type BandwidthControllerEvent = {
  * until `maxInterval` is reached.
  *
  * This controller is quite simple and assumes that there is no accurate bandwidth
- * estimation, therefore it has to "try and error".
+ * estimation, therefore it has to "trial and error".
  */
 
 export class BandwidthController extends BaseEventEmitter<BandwidthControllerEvent> {
@@ -37,16 +37,20 @@ export class BandwidthController extends BaseEventEmitter<BandwidthControllerEve
   protected readonly maxInterval: number;
   protected readonly lockInterval: number;
 
+  public readonly minQuality: VideoSetting;
+
   /**
    * Creates a multi-level backoff controller.
    *
+   * @param minQuality - lowest quality that will not be downgraded further
    * @param baseInterval - smallest interval to wait on loss
    * @param maxInterval - highest interval to wait before re-checking
    * @param lockInterval - interval during the that new loss signals will be ignored (baseInterval > lockInterval)
    */
 
-  constructor(baseInterval: number, maxInterval = 6 * 60_000, lockInterval?: number) {
+  constructor(minQuality: VideoSetting, baseInterval: number, maxInterval = 6 * 60_000, lockInterval?: number) {
     super();
+    this.minQuality = minQuality;
     this.baseInterval = baseInterval;
     this.maxInterval = maxInterval;
     this.lockInterval = lockInterval || baseInterval / 2;
@@ -144,7 +148,7 @@ export class BandwidthController extends BaseEventEmitter<BandwidthControllerEve
 
   private onCheckEnd() {
     this.timeout = undefined;
-    if (this.qualityLimit <= VideoSetting.Off) {
+    if (this.qualityLimit <= this.minQuality) {
       throw new Error('invalid backoff state: check ended done on lowest level');
     }
     this.resetStageBackoffExponent(this.qualityLimit - 1);
@@ -178,13 +182,13 @@ export class BandwidthController extends BaseEventEmitter<BandwidthControllerEve
 
     this.backoffStart = now;
 
-    if (this.qualityLimit > VideoSetting.Off) {
+    if (this.qualityLimit > this.minQuality) {
       console.debug(`paket loss signal - init backoff`);
       this.setQualityLimit(this.qualityLimit - 1);
       this.increaseStageBackoffExponent(this.qualityLimit);
       this.startBackoff();
     } else {
-      console.warn(`paket loss signal while in audio only mode`);
+      console.warn(`paket loss signal while low quality(${this.minQuality}) mode`);
     }
   }
 }

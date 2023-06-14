@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MediaSessionState, VideoSetting } from '@opentalk/common';
+import { MediaSessionState, MediaSessionType, VideoSetting } from '@opentalk/common';
 import { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types';
 import { debounce, isEqual, max, some } from 'lodash';
 
 import { BandwidthController } from './BandwidthController';
 import { BaseWebRtcConnection } from './BaseWebRtcConnection';
 import { MediaSignaling } from './MediaSignaling';
-import { SubscriberConfig } from './WebRTC';
+import { STATS_INTERVAL, SubscriberConfig } from './WebRTC';
 import { PACKET_LOSS_THRESHOLD } from './index';
 
 const QUALITY_DEBOUNCE_TIME = 500; //ms
@@ -30,7 +30,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private readyHandlers: (({ stream, reason }: { stream?: MediaStream; reason?: string }) => void)[] = [];
 
   // use a random base interval to avoid control ringing
-  private bandwidthController = new BandwidthController(4000 * (0.7 + Math.random()), 5 * 60_000, 1000);
+  private bandwidthController: BandwidthController;
   private lossCount = 0;
   private expectRestart = false;
 
@@ -44,6 +44,14 @@ export class SubscriberConnection extends BaseWebRtcConnection {
     super(iceServers, subscriberConfig, signaling, VideoSetting.High);
 
     this.mediaConfig = subscriberConfig;
+    const minQuality = subscriberConfig.mediaType === MediaSessionType.Screen ? VideoSetting.Low : VideoSetting.Off;
+    // randomize the decay time so that Subscribers do not upgrade all at the same time
+    this.bandwidthController = new BandwidthController(
+      minQuality,
+      STATS_INTERVAL * 4 * (0.4 + 0.6 * Math.random()),
+      5 * 60_000,
+      1000
+    );
     this.peerConnection.addEventListener('iceconnectionstatechange', () => {
       const state = this.peerConnection.iceConnectionState;
       switch (state) {
