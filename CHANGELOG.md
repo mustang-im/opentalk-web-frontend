@@ -9,6 +9,7 @@
 - Fix handling when time limit quota is elapsed (!974)
 - Fix chat indicator related issues (!975)
 - Change wording and add link to recording stopped notification (!969)
+- Fix: add missing focus style on the new message button (!958)
 
 ### Stability Improvements
 

@@ -24,7 +24,7 @@ const Menu = styled(MuiMenu)(({ theme }) => ({
   },
 }));
 
-const MenuItem = styled(MuiMenuItem)(() => ({
+const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
   justifyContent: 'space-between',
 
   "&[aria-disabled='true']": {
@@ -32,6 +32,10 @@ const MenuItem = styled(MuiMenuItem)(() => ({
     paddingRight: 0,
     opacity: 1,
   },
+
+  "&.Mui-focusVisible": {
+    backgroundColor: theme.palette.secondary.lighter
+  }
 }));
 
 function NewMessagePopover<T>({ setAnchorEl, anchorEl, open }: INewMessagePopoverProps<T>) {
