@@ -21,8 +21,8 @@ import { useAppSelector } from '../../../hooks';
 import { selectAccountManagementUrl, selectHelpdeskUrl, selectUserSurveyUrl } from '../../../store/slices/configSlice';
 import FeedbackDialog from '../../FeedbackDialog/FeedbackDialog';
 import { PrimaryRoute } from '../DashboardNavigation';
-import ProfileChip from './ProfileChip';
 import CollapseRow from './CollapseRow';
+import ProfileChip from './ProfileChip';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'grid',

@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, styled } from "@mui/material"
-import { BackIcon, ForwardIcon } from "@opentalk/common";
-import { useTranslation } from "react-i18next";
+import { Button, styled } from '@mui/material';
+import { BackIcon, ForwardIcon } from '@opentalk/common';
+import { useTranslation } from 'react-i18next';
 
 const CustomButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'collapsed',
@@ -39,7 +39,7 @@ const CollapseButton = (props: CollapseButtonProps) => {
     >
       {props.collapsed ? <ForwardIcon /> : <BackIcon />}
     </CustomButton>
-  )
-}
+  );
+};
 
 export default CollapseButton;

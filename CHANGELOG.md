@@ -2,7 +2,7 @@
 
 ### UI/UX Fixes
 
-- Fix: Safari user is not redirect to lobby page after remove participant action (!920)
+- Fix: (Safari) user was not redirected to lobby page after remove participant action (!920)
 - Rework of dashboard meeting overview (!968)
 - Fix: Legal vote token not being completely visible (!967)
 - Fix: Legal vote results are not visible to every participant (!967)
@@ -13,15 +13,16 @@
 
 ### Stability Improvements
 
-- Fix: Safari: after switching audioDevice audio is not working anymore (!983)
+- Fix: (Safari) audio was not working after switching audio device (!983)
 - Fix crash on leaving conference after switching between chats (!975)
 - Tweak bandwidth control for lossy networks (!985)
 - Fix crash on leaving conference after switching between chats (!975)
 - Fix: Correct the handling media and connection change events (!976)
-- Add aria labels to cam/mic option buttons (!972)
+- Add aria labels to camera and microphone option buttons (!972)
 
 ### New Features
 
+- Add version badge to Dashboard and 'MoreMenu' (!981)
 - Show imprint and data protection footer in the lobby and waiting roomm (!984)
 
 ## 1.5.x

@@ -1,7 +1,16 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Typography, ThemeProvider, Divider as MuiDivider, MenuList, ListItemIcon, Stack, Box } from '@mui/material';
+import {
+  styled,
+  Typography,
+  ThemeProvider,
+  Divider as MuiDivider,
+  MenuList,
+  ListItemIcon,
+  Stack,
+  Box,
+} from '@mui/material';
 import {
   ErrorIcon,
   AddUserIcon,
@@ -246,7 +255,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const MenuTitleContainer = styled(Stack)(({ theme }) => ({
     alignItems: 'center',
     padding: theme.spacing(1, 2, 0, 1),
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   }));
 
   const MenuTitle = styled(Typography)(({ theme }) => ({

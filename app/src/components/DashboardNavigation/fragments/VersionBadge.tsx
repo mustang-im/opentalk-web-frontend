@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Chip, Tooltip, styled } from "@mui/material";
-import { useTranslation } from "react-i18next";
+import { Chip, Tooltip, styled } from '@mui/material';
 import { InfoIcon } from '@opentalk/common';
+import { useTranslation } from 'react-i18next';
 
 const CustomChip = styled(Chip, {
   shouldForwardProp: (prop) => prop !== 'collapsed',
@@ -15,7 +15,7 @@ const CustomChip = styled(Chip, {
   '& > .MuiChip-icon': {
     margin: 0,
     zIndex: 2,
-    width: '2rem'
+    width: '2rem',
   },
 
   '& > span': {
@@ -24,7 +24,7 @@ const CustomChip = styled(Chip, {
     maxWidth: collapsed ? '0' : '20rem',
     transition: 'max-width 300ms ease-out',
     padding: 0,
-  }
+  },
 }));
 
 interface VersionBadgeProps {
@@ -37,9 +37,16 @@ const VersionBadge = (props: VersionBadgeProps) => {
 
   return (
     <Tooltip title={t('version-label', { version })}>
-      <CustomChip aria-label={t('version-label', { version })} label={version} variant="outlined" color="secondary" icon={<InfoIcon />} collapsed={props.collapsed} />
+      <CustomChip
+        aria-label={t('version-label', { version })}
+        label={version}
+        variant="outlined"
+        color="secondary"
+        icon={<InfoIcon />}
+        collapsed={props.collapsed}
+      />
     </Tooltip>
   );
-}
+};
 
 export default VersionBadge;

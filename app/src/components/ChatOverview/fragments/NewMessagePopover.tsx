@@ -33,9 +33,9 @@ const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
     opacity: 1,
   },
 
-  "&.Mui-focusVisible": {
-    backgroundColor: theme.palette.secondary.lighter
-  }
+  '&.Mui-focusVisible': {
+    backgroundColor: theme.palette.secondary.lighter,
+  },
 }));
 
 function NewMessagePopover<T>({ setAnchorEl, anchorEl, open }: INewMessagePopoverProps<T>) {
