@@ -18,7 +18,6 @@ const ToolbarMenu = styled(Menu)(({ theme }) => ({
 }));
 
 const ToolbarMenuItem = styled(MenuItem)(({ theme }) => ({
-  minWidth: '25rem',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   fontSize: '0.875rem',

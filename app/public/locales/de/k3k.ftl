@@ -839,3 +839,6 @@ shared-folder-password-label = Ordner-Passwort kopieren
 
 imprint-label = Impressum
 data-protection-label = Datenschutz
+
+version-label = Produktversion - {$version}
+dev-version = (Vorschau)

@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { BackIcon, FeedbackIcon, ForwardIcon, HelpIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
+import { FeedbackIcon, HelpIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
 import { useAuth } from '@opentalk/react-redux-appauth';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,7 @@ import { selectAccountManagementUrl, selectHelpdeskUrl, selectUserSurveyUrl } fr
 import FeedbackDialog from '../../FeedbackDialog/FeedbackDialog';
 import { PrimaryRoute } from '../DashboardNavigation';
 import ProfileChip from './ProfileChip';
+import CollapseRow from './CollapseRow';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -31,24 +32,6 @@ const Container = styled('div')(({ theme }) => ({
   background: theme.palette.background.paper,
   padding: theme.spacing(3, 0),
   transition: 'all 300ms ease-out',
-}));
-
-const CollapseButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== 'collapsed',
-})<{ collapsed: boolean }>(({ collapsed, theme }) => ({
-  width: '2rem',
-  height: '2rem',
-  minWidth: 0,
-  padding: theme.spacing(1),
-  borderRadius: '100%',
-  marginLeft: 'auto',
-  marginRight: theme.spacing(collapsed ? 5.5 : 4),
-  transition: 'all 200ms linear',
-
-  '& svg': {
-    width: '0.5em',
-    height: '0.5em',
-  },
 }));
 
 const ListItem = styled(MuiListItem, {
@@ -254,17 +237,7 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
         </ListItem>
       </List>
 
-      {isDesktop && (
-        <CollapseButton
-          variant="outlined"
-          color={'secondary'}
-          collapsed={collapsedBar}
-          onClick={() => setcollapsedBar((prevCollapsedBar) => !prevCollapsedBar)}
-          aria-label={t(`dashboard-${collapsedBar ? 'open' : 'close'}-navbar`)}
-        >
-          {collapsedBar ? <ForwardIcon /> : <BackIcon />}
-        </CollapseButton>
-      )}
+      <CollapseRow collapsed={collapsedBar} onChange={setcollapsedBar} />
     </Container>
   );
 };

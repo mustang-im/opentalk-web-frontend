@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Typography, ThemeProvider, Divider as MuiDivider, MenuList, ListItemIcon, Stack } from '@mui/material';
+import { styled, Typography, ThemeProvider, Divider as MuiDivider, MenuList, ListItemIcon, Stack, Box } from '@mui/material';
 import {
   ErrorIcon,
   AddUserIcon,
@@ -246,6 +246,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const MenuTitleContainer = styled(Stack)(({ theme }) => ({
     alignItems: 'center',
     padding: theme.spacing(1, 2, 0, 1),
+    justifyContent: 'space-between'
   }));
 
   const MenuTitle = styled(Typography)(({ theme }) => ({
@@ -278,9 +279,12 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         disablePortal
         data-testid="moreMenu"
       >
-        <MenuTitleContainer direction="row">
-          <Avatar src={avatarUrl}>{displayName}</Avatar>
-          <MenuTitle translate="no">{displayName}</MenuTitle>
+        <MenuTitleContainer direction="row" spacing={2}>
+          <Box display="flex" alignItems="center">
+            <Avatar src={avatarUrl}>{displayName}</Avatar>
+            <MenuTitle translate="no">{displayName}</MenuTitle>
+          </Box>
+          <small>{window.config.version || t('dev-version')}</small>
         </MenuTitleContainer>
         <Divider />
         {isModerator && renderMenuItems(moderatorMenuItems)}

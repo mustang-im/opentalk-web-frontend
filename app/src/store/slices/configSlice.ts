@@ -71,6 +71,7 @@ export interface Config {
   accountManagementUrl?: string;
   imprintUrl?: string;
   dataProtectionUrl?: string;
+  version?: `v${string}`;
 }
 
 export interface ConfigState {
@@ -107,6 +108,7 @@ export interface ConfigState {
   accountManagementUrl?: string;
   imprintUrl?: string;
   dataProtectionUrl?: string;
+  version?: `v${string}`;
 }
 /**
  * Initial Configuration.
