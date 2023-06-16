@@ -1,65 +1,48 @@
-## Unreleased
-
-### UI/UX Fixes
-
-- Fix: (Safari) user was not redirected to lobby page after remove participant action (!920)
-- Rework of dashboard meeting overview (!968)
-- Fix: Legal vote token not being completely visible (!967)
-- Fix: Legal vote results are not visible to every participant (!967)
-- Fix handling when time limit quota is elapsed (!974)
-- Fix chat indicator related issues (!975)
-- Change wording and add link to recording stopped notification (!969)
-- Fix: add missing focus style on the new message button (!958)
-- Change english coffee break layer title (!987)
-
-### Stability Improvements
-
-- Fix: (Safari) audio was not working after switching audio device (!983)
-- Fix crash on leaving conference after switching between chats (!975)
-- Tweak bandwidth control for lossy networks (!985)
-- Fix crash on leaving conference after switching between chats (!975)
-- Fix: Correct the handling media and connection change events (!976)
-- Add aria labels to camera and microphone option buttons (!972)
-- Improve keyboard accessibility of video and audio context menus (!973)
-
-### New Features
-
-- Add version badge to Dashboard and 'MoreMenu' (!981)
-- Show payment warning in dashboard if there is a payment issue (!982)
-- Show imprint and data protection footer in the lobby and waiting roomm (!984)
-- Show meeting title in the meeting header (!986)
-
-
 ## 1.5.x
 
 ### UI/UX Fixes
 
+- Fix: Redirect user to lobby page after remove participant action (Safari) (!920)
+- Fix: Legal vote token not being completely visible (!967)
+- Fix: Legal vote results are not visible to every participant (!967)
+- Fix: Close the conference when time limit quota is elapsed (!974)
+- Fix: Update chat indicator correctly (!975)
+- Fix: Add missing focus style on the new message button (!958)
+- Fix: Better title in English coffee break screen (!987)
 - Fix: new message dialog tab order (!965)
 - Fix: automatically open talking stick tab for moderator on start (!960)
 - Fix: make clear search button focusable with tab key (!961)
 - Add translated labels to emoji and send button (!959)
-
 - Disable time limit notifications in the lobby (!955)
 - Fix time limit notification for guests joined at the end (!955)
+- Fix emoji picker popover cutoff on small devices (!952)
+- Add missing labels to view selection drop-down menu (!951)
+- Secure connection information is more eye-catching for the user (!949)
 
 ### Stability Improvements
 
+- Fix: audio was not working after switching audio device (Safari) (!983)
+- Tweak bandwidth control for lossy networks (!985)
+- Fix crash on leaving conference after switching between chats (!975)
+- Add aria labels to camera and microphone option buttons (!972)
+- Improve keyboard accessibility of video and audio context menus (!973)
+- Fix: Correct the handling media and connection change events (!976)
 - Remove redux from the dependencies (!962)
 
 ### New Features
 
+- Add category filters to meeting overview in dashboard (!968)
+- Add version badge to Dashboard and 'MoreMenu' (!981)
+- Show payment warning in dashboard if there is a payment issue (!982)
+- Show imprint and data protection footer in the lobby and waiting room (!984)
+- Show meeting title in the meeting header (!986)
+- Change wording and add link to recording stopped notification (!969)
 - Add shared folder icon button to the meeting header (!943)
 - Add shared folder setup to the dashboard (!947)
-- Introduced Automod feature called the "Talking Stick" (!912)
-- Implement dynamic media subscriptions management (!942)
-- Fix emoji picker popover cutoff on small devices (!952)
-- Add missing dropdown labels on the view filter (!951)
+- Introduced "Talking Stick"-mode as first auto moderation feature (!912)
 
-### Stability Improvements
 
-- Secure connection information is more eye-catching for the user (!949)
-
-## 1.4.x
+## 1.4.0
 
 ### UI/UX Fixes
 
@@ -86,6 +69,7 @@
 
 - Rework Notistack integration(!922)
 - Add Debriefing in conference (!921)
+- Implement dynamic media subscriptions management (!942)
 
 ## 1.3.2
 
