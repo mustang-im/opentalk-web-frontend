@@ -6,14 +6,16 @@ import { AddIcon, CameraOnIcon } from '@opentalk/common';
 import { DateTime, Event, EventException, RoomId } from '@opentalk/rest-api-rtk-query';
 import { formatRFC3339 } from 'date-fns';
 import { isEmpty } from 'lodash';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { useGetEventsQuery } from '../../../api/rest';
 import FavoriteMeetingsCard, { FavoriteMeetingProps } from '../../../components/FavoriteMeetingsCard';
 import MeetingCard from '../../../components/MeetingCard';
+import PaymentStatusBanner from '../../../components/PaymentStatusBanner';
 import StartMeetingImage from '../../../components/StartMeetingImage';
+import { useHeader } from '../../../templates/DashboardTemplate';
 import { getExpandedEvents } from '../../../utils/eventUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
 
@@ -46,6 +48,7 @@ const Home = () => {
   const maxEventsPerPage = 4;
   const maxConsideredMonths = 12;
   const maxUsedEntries = 366;
+  const { setHeader } = useHeader();
 
   const { data: favoritesEvents, isLoading: favoritesEventsIsLoading } = useGetEventsQuery({
     favorites: true,
@@ -66,6 +69,13 @@ const Home = () => {
   });
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
+  useEffect(() => {
+    setHeader(<PaymentStatusBanner />);
+    return () => {
+      setHeader(undefined);
+    };
+  }, []);
 
   const renderStartDirectMeetingButton = () => (
     <Button

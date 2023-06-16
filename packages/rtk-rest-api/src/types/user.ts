@@ -64,15 +64,11 @@ export type FindUserResponse = RegisteredUser | UnregisteredUser;
  *
  * Usually retrieved by calling GET /me
  */
-export type UserMe = {
-  id: UserId;
-  displayName: string;
-  email: Email;
-  title: string;
-  firstname: string;
-  lastname: string;
+export type UserMe = User & {
   conferenceTheme: string;
   dashboardTheme: string;
   language: string;
-  avatarUrl?: string;
+  tariffStatus: TariffStatus;
 };
+
+type TariffStatus = 'paid' | 'downgraded' | 'default';
