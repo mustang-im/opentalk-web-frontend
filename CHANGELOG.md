@@ -25,6 +25,8 @@
 
 - Add version badge to Dashboard and 'MoreMenu' (!981)
 - Show imprint and data protection footer in the lobby and waiting roomm (!984)
+- Show meeting title in the meeting header (!986)
+
 
 ## 1.5.x
 
