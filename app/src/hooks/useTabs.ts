@@ -4,11 +4,12 @@
 import { RoomMode, TimerStyle } from '@opentalk/common';
 import { useCallback, useEffect, useState } from 'react';
 
-import { useAppSelector } from '.';
+import { useAppDispatch, useAppSelector } from '.';
 import { ModerationTabKeys, Tab, tabs as initialTabs } from '../config/moderationTabs';
 import { selectFeatures } from '../store/slices/configSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
+import { setActiveTab } from '../store/slices/uiSlice';
 import { useEnabledModules } from './enabledModules';
 
 const useTabs = () => {
@@ -19,8 +20,16 @@ const useTabs = () => {
   const enabledModules = useEnabledModules();
   const timerStyle = useAppSelector(selectTimerStyle);
   const currentRoomMode = useAppSelector(selectCurrentRoomMode);
+  const dispatch = useAppDispatch();
 
   const handleMainTabSelect = useCallback((tabIndex: number) => setMainTabValue(tabIndex), [setMainTabValue]);
+
+  useEffect(() => {
+    const tab = tabs[mainTabValue];
+    if (tab) {
+      dispatch(setActiveTab(tab.key));
+    }
+  }, [mainTabValue]);
 
   useEffect(() => {
     // Only tabs with module key are conditional, otherwise they are always shown.

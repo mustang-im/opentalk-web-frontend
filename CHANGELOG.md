@@ -40,7 +40,7 @@
 - Add shared folder icon button to the meeting header (!943)
 - Add shared folder setup to the dashboard (!947)
 - Introduced "Talking Stick"-mode as first auto moderation feature (!912)
-
+- Add chat unread indicator to the home icon (!992)
 
 ## 1.4.0
 

@@ -75,7 +75,7 @@ export enum MenuTab {
 }
 
 const MenuTabs = () => {
-  const [currentTab, setCurrentTab] = useState<MenuTab>(MenuTab.Chat);
+  const [currentTab, setCurrentTab] = useState<MenuTab>();
   const { t } = useTranslation();
   const chatConversationState = useAppSelector(selectChatConversationState);
   const unreadGlobalMessageCount = useAppSelector(selectUnreadGlobalMessageCount);
@@ -92,6 +92,8 @@ const MenuTabs = () => {
   useEffect(() => {
     if (currentRoomMode === RoomMode.TalkingStick) {
       setCurrentTab(MenuTab.People);
+    } else {
+      setCurrentTab(MenuTab.Chat);
     }
   }, [currentRoomMode]);
 
