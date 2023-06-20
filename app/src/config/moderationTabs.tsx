@@ -23,7 +23,6 @@ import {
   TimerStyle,
 } from '@opentalk/common';
 import React, { Suspense } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
 import DebriefingTab from '../components/DebriefingTab';
@@ -60,17 +59,29 @@ export enum ModerationTabKeys {
   Protocol = 'tab-protocol',
   AddUser = 'tab-add-user',
   TalkingStick = 'tab-talking-stick',
+  Debriefing = 'tab-debriefing',
+  Wollknaul = 'tab-wollknaul',
+  SpeakerQueue = 'tab-speaker-queue',
+  WheelOfNames = 'tab-wheel-of-names',
+  Divider = 'tab-divider',
 }
 
 export interface Tab {
+  /**
+   * Unique identifier for each rendered tab
+   */
+  key: ModerationTabKeys;
   icon?: React.ReactElement;
-  divider: boolean;
   component?: React.ReactNode;
   tooltipTranslationKey?: string;
+  /**
+   * Key that links it to enabled feature
+   */
   featureKey?: FeaturesKeys;
+  /**
+   * Links to module enabled by the backend
+   */
   moduleKey?: BackendModules;
-  static?: boolean;
-  key: string;
   disabled?: boolean;
   titleKey?: string;
 }
@@ -82,7 +93,6 @@ export const currentRoomMode = (): RoomMode | undefined => {
 export const tabs: Array<Tab> = [
   {
     icon: <HomeIconComponent />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <MenuTabs />
@@ -94,7 +104,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <MuteAllIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <MuteParticipantsTab />
@@ -107,7 +116,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <RaiseHandOffIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <ResetHandraisesTab />
@@ -120,7 +128,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <DebriefingIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <DebriefingTab />
@@ -128,16 +135,14 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-debriefing',
     featureKey: FeaturesKeys.Debriefing,
-    key: FeaturesKeys.Debriefing,
+    key: ModerationTabKeys.Debriefing,
     titleKey: 'debriefing-tab-title',
   },
   {
-    divider: true,
-    key: uuidv4(),
+    key: ModerationTabKeys.Divider,
   },
   {
     icon: <BreakroomsIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <BreakoutRoomTab />
@@ -150,7 +155,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <WhiteboardIcon />,
-    divider: false,
     tooltipTranslationKey: 'moderationbar-button-whiteboard-tooltip',
     component: (
       <Suspense fallback={<SuspenseLoading />}>
@@ -163,7 +167,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <PollIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <PollTab />
@@ -176,7 +179,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <LegalBallotIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <LegalVote currentRoomMode={currentRoomMode} />
@@ -189,7 +191,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <TalkingStickIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <TalkingStickTabPanel />
@@ -202,7 +203,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <TimerIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <TimerTab timerStyle={TimerStyle.Normal} />
@@ -215,7 +215,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <CoffeeBreakIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <TimerTab timerStyle={TimerStyle.CoffeeBreak} />
@@ -228,7 +227,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <ProtocolIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <ProtocolTab />
@@ -241,7 +239,6 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <AddUserIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Add User</Typography>,
     tooltipTranslationKey: 'moderationbar-button-add-user-tooltip',
     featureKey: FeaturesKeys.AddUser,
@@ -249,23 +246,20 @@ export const tabs: Array<Tab> = [
   },
   {
     icon: <WoolBallIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Wollknaul</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wollknaul-tooltip',
-    key: 'Wollknaul',
+    key: ModerationTabKeys.Wollknaul,
   },
   {
     icon: <SpeakerQueueIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Speaker Queue</Typography>,
     tooltipTranslationKey: 'moderationbar-button-speaker-queue-tooltip',
-    key: 'Speaker Queue',
+    key: ModerationTabKeys.SpeakerQueue,
   },
   {
     icon: <WheelOfNamesIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Wheel Of Names</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wheel-tooltip',
-    key: 'Wheel Of Names',
+    key: ModerationTabKeys.WheelOfNames,
   },
 ];

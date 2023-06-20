@@ -5,7 +5,7 @@ import { Tab as MuiTab, Tabs as MuiTabs, styled, Tooltip, Divider, Button } from
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Tab as TabProps } from '../../config/moderationTabs';
+import { ModerationTabKeys, Tab as TabProps } from '../../config/moderationTabs';
 
 const Tabs = styled(MuiTabs)(({ theme }) => ({
   //todo align a proper background color from theme (for now nothing fit)
@@ -92,8 +92,8 @@ const ModerationSideToolbar = ({ onSelect, selectedTabs, value }: ModerationSide
 
   const renderTabs = () =>
     selectedTabs.map((tab) =>
-      tab.divider ? (
-        <Tab key={tab.key} label="" icon={<ToolbarDivider />} disabled />
+      tab.key === ModerationTabKeys.Divider ? (
+        <Tab key={tab.key} icon={<ToolbarDivider />} disabled />
       ) : (
         <Tooltip key={tab.key} placement="right" title={renderTooltipTitle(tab)}>
           <Tab icon={tab.icon} component={Button} disabled={tab.disabled} />

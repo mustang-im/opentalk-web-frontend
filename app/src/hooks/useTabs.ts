@@ -35,7 +35,7 @@ const useTabs = () => {
     // Only tabs with module key are conditional, otherwise they are always shown.
     const tabsFirstFilter = initialTabs.filter(
       (tab) =>
-        tab.divider ||
+        tab.key === ModerationTabKeys.Divider ||
         (tab.featureKey && features[tab.featureKey]) ||
         (tab.moduleKey ? enabledModules.has(tab.moduleKey) : false)
     );

@@ -6,7 +6,7 @@ import { useTheme } from '@mui/styles';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Tab } from '../../config/moderationTabs';
+import { ModerationTabKeys, Tab } from '../../config/moderationTabs';
 import { useAppSelector, useTabs } from '../../hooks';
 import { EnterpriseProvider } from '../../provider/EnterpriseProvider';
 import { selectIsModerator } from '../../store/slices/userSlice';
@@ -51,7 +51,7 @@ const MeetingSidebar = () => {
 
   const renderTabs = () => {
     return tabs?.map((tab: Tab, index) => {
-      if (!tab.divider) {
+      if (tab.key !== ModerationTabKeys.Divider) {
         return (
           <Tooltip
             key={tab.key}
