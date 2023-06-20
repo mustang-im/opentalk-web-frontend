@@ -47,6 +47,7 @@ interface UIState {
   isCurrentProtocolHighlighted?: boolean;
   isCoffeeBreakOpen: boolean;
   activeTab: string;
+  isFullscreenMode: boolean;
 }
 
 const initialState: UIState = {
@@ -69,6 +70,7 @@ const initialState: UIState = {
   isCurrentProtocolHighlighted: undefined,
   isCoffeeBreakOpen: false,
   activeTab: 'tab-home',
+  isFullscreenMode: false,
 };
 
 export const uiSlice = createSlice({
@@ -125,6 +127,9 @@ export const uiSlice = createSlice({
     },
     setActiveTab(state, { payload: activeTab }: PayloadAction<string>) {
       state.activeTab = activeTab;
+    },
+    toggledFullScreenMode(state) {
+      state.isFullscreenMode = !state.isFullscreenMode;
     },
   },
   extraReducers: (builder) => {
@@ -193,6 +198,7 @@ export const {
   setProtocolHighlight,
   setCoffeeBreakOpen,
   setActiveTab,
+  toggledFullScreenMode,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -213,5 +219,6 @@ export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.
 export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui.isCurrentProtocolHighlighted;
 export const selectIsCoffeeBreakOpen = (state: RootState) => state.ui.isCoffeeBreakOpen;
 export const selectActiveTab = (state: RootState) => state.ui.activeTab;
+export const selectIsFullscreenMode = (state: RootState) => state.ui.isFullscreenMode;
 
 export default uiSlice.reducer;

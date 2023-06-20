@@ -59,6 +59,7 @@ import {
   selectIsSharedFolderOpened,
   sharedFolderOpened,
 } from '../../store/slices/sharedFolderSlice';
+import { toggledFullScreenMode } from '../../store/slices/uiSlice';
 import {
   participantsLayoutSet,
   selectParticipantsLayout,
@@ -321,6 +322,7 @@ const MeetingHeader = () => {
   const openFullscreenView = useCallback(async () => {
     resetHTMLElements();
     await fullscreenHandle.enter();
+    dispatch(toggledFullScreenMode());
   }, [fullscreenHandle]);
 
   const renderSecurityIcon = () => window.location.protocol === 'https:' && <SecureConnectionField />;

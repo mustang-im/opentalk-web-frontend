@@ -1,3 +1,9 @@
+## Unreleased
+
+### Stability Improvements
+
+- Use single snackbar provider (!994)
+
 ## 1.5.x
 
 ### UI/UX Fixes
