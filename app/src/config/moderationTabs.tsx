@@ -5,7 +5,6 @@ import { Typography } from '@mui/material';
 import {
   AddUserIcon,
   BreakroomsIcon,
-  HomeIcon,
   LegalBallotIcon,
   MuteAllIcon,
   PollIcon,
@@ -28,6 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
 import DebriefingTab from '../components/DebriefingTab';
+import HomeIconComponent from '../components/HomeIconComponent';
 import { useAppSelector } from '../hooks';
 import { FeaturesKeys } from '../store/slices/configSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
@@ -81,7 +81,7 @@ export const currentRoomMode = (): RoomMode | undefined => {
 
 export const tabs: Array<Tab> = [
   {
-    icon: <HomeIcon />,
+    icon: <HomeIconComponent />,
     divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>

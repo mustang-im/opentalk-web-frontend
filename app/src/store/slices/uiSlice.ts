@@ -46,6 +46,7 @@ interface UIState {
   isCurrentWhiteboardHighlighted?: boolean;
   isCurrentProtocolHighlighted?: boolean;
   isCoffeeBreakOpen: boolean;
+  activeTab: string;
 }
 
 const initialState: UIState = {
@@ -67,6 +68,7 @@ const initialState: UIState = {
   isCurrentWhiteboardHighlighted: undefined,
   isCurrentProtocolHighlighted: undefined,
   isCoffeeBreakOpen: false,
+  activeTab: 'tab-home',
 };
 
 export const uiSlice = createSlice({
@@ -120,6 +122,9 @@ export const uiSlice = createSlice({
     },
     setCoffeeBreakOpen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
       state.isCoffeeBreakOpen = isOpenFlag;
+    },
+    setActiveTab(state, { payload: activeTab }: PayloadAction<string>) {
+      state.activeTab = activeTab;
     },
   },
   extraReducers: (builder) => {
@@ -187,6 +192,7 @@ export const {
   setChatSearchValue,
   setProtocolHighlight,
   setCoffeeBreakOpen,
+  setActiveTab,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -206,5 +212,6 @@ export const selectChatSearchValue = (state: RootState) => state.ui.chatSearchVa
 export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.ui.isCurrentWhiteboardHighlighted;
 export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui.isCurrentProtocolHighlighted;
 export const selectIsCoffeeBreakOpen = (state: RootState) => state.ui.isCoffeeBreakOpen;
+export const selectActiveTab = (state: RootState) => state.ui.activeTab;
 
 export default uiSlice.reducer;
