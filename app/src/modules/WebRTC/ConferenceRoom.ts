@@ -256,7 +256,6 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
     // inspect join_success for participantId
 
     const { namespace, payload, timestamp } = message;
-
     switch (namespace) {
       case 'media': {
         const subType = payload.message;
