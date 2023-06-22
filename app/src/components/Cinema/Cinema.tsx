@@ -7,7 +7,6 @@ import { FullScreen as ReactFullScreen } from 'react-full-screen';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
-import SnackbarProvider from '../../provider/SnackbarProvider';
 import { selectParticipantsLayout } from '../../store/slices/uiSlice';
 import FullscreenView from '../FullscreenView/index';
 import GridView from '../GridView';
@@ -31,14 +30,7 @@ const Cinema = () => {
 
   const renderView = () => {
     if (fullscreenHandle.active) {
-      return (
-        //This additional provider is a workaround for the fullscreen mode
-        //Otherwise the snackbars from the main provider in the Provider.tsx are
-        //in the background and not visible for the user
-        <SnackbarProvider>
-          <FullscreenView />
-        </SnackbarProvider>
-      );
+      return <FullscreenView />;
     } else {
       switch (userLayout) {
         case LayoutOptions.Speaker:

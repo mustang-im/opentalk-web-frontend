@@ -53,7 +53,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
   const onClickDismiss = (key: SnackbarKey) => {
     notifications.close(key);
   };
-  const { children, Components } = props;
+  const { children, Components, domRoot } = props;
 
   return (
     <SnackbarProviderDefault
@@ -74,6 +74,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
         </IconButton>
       )}
       Components={getNotistackComponents(Components)}
+      domRoot={domRoot}
     >
       {children}
     </SnackbarProviderDefault>

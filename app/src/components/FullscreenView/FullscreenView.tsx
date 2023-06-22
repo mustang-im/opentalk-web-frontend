@@ -6,10 +6,11 @@ import { CloseIcon } from '@opentalk/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
 import { selectCombinedSpeakerId } from '../../store/selectors';
 import { selectAllOnlineParticipants } from '../../store/slices/participantsSlice';
+import { toggledFullScreenMode } from '../../store/slices/uiSlice';
 import LocalVideo from '../LocalVideo';
 import ParticipantWindow from '../ParticipantWindow';
 import Toolbar from '../Toolbar';
@@ -60,6 +61,8 @@ const FullscreenView = () => {
   const usedParticipantId = fullscreenSpeakerId || selectedSpeakerId;
   const selectedParticipant = participants.find((p) => p.id === usedParticipantId) || participants[0];
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const timer = setTimeout(() => setIsActiveOverlay(false), 5000);
     return () => clearTimeout(timer);
@@ -75,13 +78,19 @@ const FullscreenView = () => {
 
   const toggleLocalVideoPin = () => setIsLocalVideoPinned((prevState) => !prevState);
 
+  const handleCloseFullscreen = async () => {
+    await fullscreenHandle.exit();
+    dispatch(toggledFullScreenMode());
+  };
+
   return (
     <Container
       onMouseMove={() => setIsActiveOverlay(true)}
       onMouseLeave={() => setIsActiveOverlay(false)}
+      id="fullscreen-container"
       data-testid="fullscreen"
     >
-      <IconButton aria-label={t('indicator-fullscreen-close')} onClick={fullscreenHandle.exit} color="secondary">
+      <IconButton aria-label={t('indicator-fullscreen-close')} onClick={handleCloseFullscreen} color="secondary">
         <CloseIcon />
       </IconButton>
       <Slide direction="down" in={isLocalVideoPinned || isActiveOverlay} mountOnEnter>
