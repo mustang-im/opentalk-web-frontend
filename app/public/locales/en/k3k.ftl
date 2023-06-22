@@ -204,7 +204,7 @@ toolbar-button-end-call-tooltip-title = Leave Call
 
 toolbar-button-screen-share-tooltip-request-moderator-presenter-role = Ask a moderator to allow to share your screen
 
-toolbar-aria-label =  Personal control panel
+toolbar-aria-label = Personal control panel
 
 more-menu-leave-call = Leave Call
 more-menu-create-invite = Invite guest
@@ -251,6 +251,7 @@ moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Reset raised hands
 moderationbar-button-debriefing = Debriefing
 moderationbar-button-talking-stick-tooltip = Talking stick
+moderationbar-aria-label = Moderation sidebar
 
 mute-participants-tab-title = Mute participants
 mute-participants-button-all = All

@@ -4,10 +4,12 @@
 import { Box, Typography, styled } from '@mui/material';
 import React, { forwardRef } from 'react';
 
+import { ModerationTabKey } from '../../../config/moderationTabs';
+
 interface SideTabPanelProps {
+  value: ModerationTabKey;
   children?: React.ReactNode;
-  index: number;
-  value: number;
+  hidden?: boolean;
   tabTitle?: string;
 }
 
@@ -28,26 +30,22 @@ const TabContainer = styled('div')({
   },
 });
 
-const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, index, tabTitle }, ref) => {
-  if (value !== index) {
-    return null;
-  }
-
+const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, hidden, tabTitle }, ref) => {
   return (
     <Box
       {...ref}
       flex={1}
-      display={'flex'}
+      display={hidden ? 'none' : 'flex'}
       role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
+      aria-hidden={hidden}
+      id={`tabpanel-${value}`}
+      aria-labelledby={value}
       flexDirection={'column'}
       maxWidth={'100%'}
       maxHeight={'100%'}
     >
       <TabTitle>{tabTitle}</TabTitle>
-      <TabContainer>{children}</TabContainer>
+      {!hidden && <TabContainer>{children}</TabContainer>}
     </Box>
   );
 });

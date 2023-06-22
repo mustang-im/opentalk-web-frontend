@@ -5,7 +5,7 @@ import { RoomMode, TimerStyle } from '@opentalk/common';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '.';
-import { ModerationTabKeys, Tab, tabs as initialTabs } from '../config/moderationTabs';
+import { ModerationTabKey, Tab, tabs as initialTabs } from '../config/moderationTabs';
 import { selectFeatures } from '../store/slices/configSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
@@ -13,35 +13,22 @@ import { setActiveTab } from '../store/slices/uiSlice';
 import { useEnabledModules } from './enabledModules';
 
 const useTabs = () => {
-  const [filteredTabs, setFilteredTabs] = useState<Tab[]>([]);
   const [tabs, setTabs] = useState<Tab[]>([]);
-  const [mainTabValue, setMainTabValue] = useState<number>(0);
   const features = useAppSelector(selectFeatures);
   const enabledModules = useEnabledModules();
   const timerStyle = useAppSelector(selectTimerStyle);
   const currentRoomMode = useAppSelector(selectCurrentRoomMode);
   const dispatch = useAppDispatch();
 
-  const handleMainTabSelect = useCallback((tabIndex: number) => setMainTabValue(tabIndex), [setMainTabValue]);
-
-  useEffect(() => {
-    const tab = tabs[mainTabValue];
-    if (tab) {
-      dispatch(setActiveTab(tab.key));
-    }
-  }, [mainTabValue]);
-
   useEffect(() => {
     // Only tabs with module key are conditional, otherwise they are always shown.
     const tabsFirstFilter = initialTabs.filter(
       (tab) =>
-        tab.key === ModerationTabKeys.Divider ||
+        tab.divider ||
         (tab.featureKey && features[tab.featureKey]) ||
         (tab.moduleKey ? enabledModules.has(tab.moduleKey) : false)
     );
-    setFilteredTabs(tabsFirstFilter);
     setTabs(tabsFirstFilter);
-    setMainTabValue(0);
   }, [enabledModules, features]);
 
   const setDisabledTabs = useCallback(() => {
@@ -51,11 +38,11 @@ const useTabs = () => {
     }
 
     if (currentRoomMode === RoomMode.TalkingStick) {
-      const enabledModules = [ModerationTabKeys.Home, ModerationTabKeys.TalkingStick];
-      setMainTabValue(tabs.findIndex((tab) => tab.key === ModerationTabKeys.TalkingStick));
+      const enabledModules = [ModerationTabKey.Home, ModerationTabKey.TalkingStick];
+      dispatch(setActiveTab(ModerationTabKey.TalkingStick));
       return setTabs((tabs) =>
         tabs.map((tab) => {
-          if (enabledModules.includes(tab.key as ModerationTabKeys)) {
+          if (enabledModules.includes(tab.key)) {
             return { ...tab, disabled: false };
           }
           return { ...tab, disabled: true };
@@ -68,10 +55,10 @@ const useTabs = () => {
 
     return setTabs((tabs) =>
       tabs.map((tab) => {
-        if (isTimerNormal && tab.key === ModerationTabKeys.CoffeeBreak) {
+        if (isTimerNormal && tab.key === ModerationTabKey.CoffeeBreak) {
           return { ...tab, disabled: true };
         }
-        if (isTimerCoffee && tab.key === ModerationTabKeys.Timer) {
+        if (isTimerCoffee && tab.key === ModerationTabKey.Timer) {
           return { ...tab, disabled: true };
         }
         return { ...tab, disabled: false };
@@ -81,9 +68,9 @@ const useTabs = () => {
 
   useEffect(() => {
     setDisabledTabs();
-  }, [timerStyle, currentRoomMode, filteredTabs]);
+  }, [timerStyle, currentRoomMode]);
 
-  return { tabs, mainTabValue, handleMainTabSelect };
+  return tabs;
 };
 
 export default useTabs;

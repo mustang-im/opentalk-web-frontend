@@ -46,7 +46,7 @@ const ResetHandraisesTab = React.lazy(() => import('../components/ResetHandraise
 const TimerTab = React.lazy(() => import('../components/TimerTab'));
 const WhiteboardTab = React.lazy(() => import('../components/WhiteboardTab'));
 
-export enum ModerationTabKeys {
+export enum ModerationTabKey {
   Home = 'tab-home',
   MuteUsers = 'tab-mute-users',
   ResetHandraises = 'tab-reset-handraises',
@@ -70,7 +70,7 @@ export interface Tab {
   /**
    * Unique identifier for each rendered tab
    */
-  key: ModerationTabKeys;
+  key: ModerationTabKey;
   icon?: React.ReactElement;
   component?: React.ReactNode;
   tooltipTranslationKey?: string;
@@ -82,6 +82,7 @@ export interface Tab {
    * Links to module enabled by the backend
    */
   moduleKey?: BackendModules;
+  divider?: boolean;
   disabled?: boolean;
   titleKey?: string;
 }
@@ -100,7 +101,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-home-tooltip',
     featureKey: FeaturesKeys.Home,
-    key: ModerationTabKeys.Home,
+    key: ModerationTabKey.Home,
   },
   {
     icon: <MuteAllIcon />,
@@ -111,7 +112,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-mute-tooltip',
     featureKey: FeaturesKeys.MuteUsers,
-    key: ModerationTabKeys.MuteUsers,
+    key: ModerationTabKey.MuteUsers,
     titleKey: 'mute-participants-tab-title',
   },
   {
@@ -123,7 +124,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-reset-handraises-tooltip',
     featureKey: FeaturesKeys.ResetHandraises,
-    key: ModerationTabKeys.ResetHandraises,
+    key: ModerationTabKey.ResetHandraises,
     titleKey: 'reset-handraises-tab-title',
   },
   {
@@ -135,11 +136,12 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-debriefing',
     featureKey: FeaturesKeys.Debriefing,
-    key: ModerationTabKeys.Debriefing,
+    key: ModerationTabKey.Debriefing,
     titleKey: 'debriefing-tab-title',
   },
   {
-    key: ModerationTabKeys.Divider,
+    key: ModerationTabKey.Divider,
+    divider: true,
   },
   {
     icon: <BreakroomsIcon />,
@@ -150,7 +152,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-breakout-tooltip',
     moduleKey: BackendModules.Breakout,
-    key: ModerationTabKeys.Breakout,
+    key: ModerationTabKey.Breakout,
     titleKey: 'breakout-room-tab-title',
   },
   {
@@ -162,7 +164,7 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     moduleKey: BackendModules.Whiteboard,
-    key: ModerationTabKeys.Whiteboard,
+    key: ModerationTabKey.Whiteboard,
     titleKey: 'whiteboard-tab-title',
   },
   {
@@ -174,7 +176,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-poll-tooltip',
     moduleKey: BackendModules.Polls,
-    key: ModerationTabKeys.Polls,
+    key: ModerationTabKey.Polls,
     titleKey: 'poll-tab-title',
   },
   {
@@ -186,7 +188,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-ballot-tooltip',
     moduleKey: BackendModules.LegalVote,
-    key: ModerationTabKeys.LegalVote,
+    key: ModerationTabKey.LegalVote,
     titleKey: 'legal-vote-tab-title',
   },
   {
@@ -198,7 +200,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-talking-stick-tooltip',
     moduleKey: BackendModules.Automod,
-    key: ModerationTabKeys.TalkingStick,
+    key: ModerationTabKey.TalkingStick,
     titleKey: 'talking-stick-tab-title',
   },
   {
@@ -210,7 +212,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-timer-tooltip',
     moduleKey: BackendModules.Timer,
-    key: ModerationTabKeys.Timer,
+    key: ModerationTabKey.Timer,
     titleKey: 'timer-tab-title',
   },
   {
@@ -222,7 +224,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-coffee-break-tooltip',
     moduleKey: BackendModules.Timer,
-    key: ModerationTabKeys.CoffeeBreak,
+    key: ModerationTabKey.CoffeeBreak,
     titleKey: 'coffee-break-tab-title',
   },
   {
@@ -234,7 +236,7 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
     moduleKey: BackendModules.Protocol,
-    key: ModerationTabKeys.Protocol,
+    key: ModerationTabKey.Protocol,
     titleKey: 'protocol-tab-title',
   },
   {
@@ -242,24 +244,24 @@ export const tabs: Array<Tab> = [
     component: <Typography variant={'body2'}>Add User</Typography>,
     tooltipTranslationKey: 'moderationbar-button-add-user-tooltip',
     featureKey: FeaturesKeys.AddUser,
-    key: ModerationTabKeys.AddUser,
+    key: ModerationTabKey.AddUser,
   },
   {
     icon: <WoolBallIcon />,
     component: <Typography variant={'body2'}>Wollknaul</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wollknaul-tooltip',
-    key: ModerationTabKeys.Wollknaul,
+    key: ModerationTabKey.Wollknaul,
   },
   {
     icon: <SpeakerQueueIcon />,
     component: <Typography variant={'body2'}>Speaker Queue</Typography>,
     tooltipTranslationKey: 'moderationbar-button-speaker-queue-tooltip',
-    key: ModerationTabKeys.SpeakerQueue,
+    key: ModerationTabKey.SpeakerQueue,
   },
   {
     icon: <WheelOfNamesIcon />,
     component: <Typography variant={'body2'}>Wheel Of Names</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wheel-tooltip',
-    key: ModerationTabKeys.WheelOfNames,
+    key: ModerationTabKey.WheelOfNames,
   },
 ];

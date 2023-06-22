@@ -1,14 +1,15 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Paper, styled, Tooltip, useMediaQuery } from '@mui/material';
+import { Paper, styled, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ModerationTabKeys, Tab } from '../../config/moderationTabs';
-import { useAppSelector, useTabs } from '../../hooks';
+import { ModerationTabKey } from '../../config/moderationTabs';
+import { useAppDispatch, useAppSelector, useTabs as useSidebarTabs } from '../../hooks';
 import { EnterpriseProvider } from '../../provider/EnterpriseProvider';
+import { selectActiveTab, setActiveTab } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import LocalVideo from '../LocalVideo/index';
 import MenuTabs from '../MenuTabs/MenuTabs';
@@ -42,26 +43,29 @@ const MeetingSidebar = () => {
   const isSmartphone = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallDeviceInLandscape = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
   const isModerator = useAppSelector(selectIsModerator);
-  const CHAT_PANEL_VALUE = 0;
-  const { tabs, mainTabValue, handleMainTabSelect } = useTabs();
+  const CHAT_PANEL_VALUE = ModerationTabKey.Home;
+  const activeTab = useAppSelector(selectActiveTab);
+  const dispatch = useAppDispatch();
+  const tabs = useSidebarTabs();
+
+  const handleSetActiveTab = (tabKey: ModerationTabKey) => dispatch(setActiveTab(tabKey));
 
   if (isSmartphone || isSmallDeviceInLandscape) {
     return null;
   }
 
-  const renderTabs = () => {
-    return tabs?.map((tab: Tab, index) => {
-      if (tab.key !== ModerationTabKeys.Divider) {
+  const renderTabPanelContent = () => {
+    return tabs.map((tab) => {
+      if (!tab.divider) {
         return (
-          <Tooltip
+          <SideTabPanel
             key={tab.key}
-            placement="right"
-            title={tab.tooltipTranslationKey ? t(tab.tooltipTranslationKey) : ''}
+            value={tab.key}
+            hidden={activeTab !== tab.key}
+            tabTitle={tab.titleKey ? t(tab.titleKey) : ''}
           >
-            <SideTabPanel value={mainTabValue} index={index} tabTitle={tab.titleKey ? t(tab.titleKey) : ''}>
-              <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
-            </SideTabPanel>
-          </Tooltip>
+            <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
+          </SideTabPanel>
         );
       }
     });
@@ -69,11 +73,11 @@ const MeetingSidebar = () => {
 
   return isModerator ? (
     <SideBar>
-      <ModerationSideToolbar selectedTabs={tabs} onSelect={handleMainTabSelect} value={mainTabValue} />
+      <ModerationSideToolbar displayedTabs={tabs} onSelect={handleSetActiveTab} activeTab={activeTab} />
       <ProfileWindow isModerator={isModerator}>
         <LocalVideo />
         <Toolbar />
-        {renderTabs()}
+        {renderTabPanelContent()}
       </ProfileWindow>
     </SideBar>
   ) : (
@@ -81,7 +85,7 @@ const MeetingSidebar = () => {
       <ProfileWindow>
         <LocalVideo />
         <Toolbar />
-        <SideTabPanel value={CHAT_PANEL_VALUE} index={0}>
+        <SideTabPanel value={CHAT_PANEL_VALUE}>
           <MenuTabs />
         </SideTabPanel>
       </ProfileWindow>
