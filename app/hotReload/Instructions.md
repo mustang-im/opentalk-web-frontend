@@ -1,23 +1,35 @@
 ## Configuration
 
-1. Create a file `./components.tsconfig.json` inside hotReload directory
+Create a file `./packages.tsconfig.json` inside hotReload directory (you can reuse `./packages.tsconfig.example.json`)
+and insert all the packages you want to be hot reloaded and their paths on your machine.
 
-with this information
+e.g.
 
 ```json
 {
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@opentalk/components": ["../../../componentes"]
+      "@opentalk/components": ["../../../components"],
+      "@opentalk/common": ["../../packages/common"]
+      // ... insert more, if you like
     }
   }
 }
 ```
 
-- `["../../../componentes"]` - should match the path to your local components directory
+IMPORTANT: Please ensure, that `"@opentalk/components"` path match the exact location to the `@opentalk/components` folder on your machine.
 
-2. Match @opentalk/common version in your local /components library
+For now avaliable packages for hot reload are:
+
+1. @opentalk/common
+2. @opentalk/components
+3. @opentalk/rest-api-rtk-query
+4. @opentalk/react-redux-appauth
+
+### @opentalk/components specific
+
+1. Match @opentalk/common version in your local components library
 
 - go to your local @opentalk/components/package.json
 - modify devDependency version of @opentalk/common to match your local latest version (monorepo/packages/common/package.json)
@@ -27,13 +39,13 @@ with this information
    yarn install
 ```
 
-3. Delete all build files in your local @opentalk/components (/dist - folder)
+2. Delete all build files in your local @opentalk/components (/dist - folder)
 
 ```bash
    rm -rf dist
 ```
 
-4. run the frontend app
+3. run the frontend app
 
 ```bash
    yarn start:hot

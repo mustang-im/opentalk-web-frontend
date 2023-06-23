@@ -12,14 +12,14 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { ClockIcon } from '../../assets/icons';
 import { isNumber } from 'lodash';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils'; 
+import { ClockIcon } from '../../assets/icons';
 import { IFormikCustomFieldPropsReturnDurationValue } from '../../utils';
 import TextField from '../TextField';
+import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils';
 
 export type DurationValueOptions = number | 'custom' | null;
 interface IDurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue {
@@ -67,7 +67,7 @@ const Container = styled(Stack)(({ theme }) => ({
   maxWidth: '17.875rem',
 }));
 
-const DurationField = ({
+export const DurationField = ({
   name,
   value,
   setFieldValue,
@@ -76,7 +76,7 @@ const DurationField = ({
   error,
   helperText,
   min = 1,
-  allowEmpty
+  allowEmpty,
 }: IDurationFieldProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -110,7 +110,7 @@ const DurationField = ({
       default:
         return `${duration} min`;
     }
-  }
+  };
 
   const renderDurationOptions = () => (
     <Stack spacing={1} flexDirection={'row'} flexWrap={'wrap'} justifyContent={'space-between'} alignItems={'baseline'}>
@@ -144,7 +144,7 @@ const DurationField = ({
       return;
     }
     setCustomDurationFieldValue(Math.max(min, nextValue));
-  }
+  };
 
   const open = Boolean(anchorEl);
 
@@ -195,5 +195,3 @@ const DurationField = ({
     </Box>
   );
 };
-
-export default DurationField;

@@ -1,14 +1,9 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "outDir": "build/esm/",
-      "removeComments": true
-    },
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "**/__tests__/*",
-      "**/__fixtures__/*"
-    ]
-  }
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "build/esm/",
+    "removeComments": true
+  },
+  "include": ["src/**/*", "index.ts"],
+  "exclude": ["**/__tests__/*", "**/__fixtures__/*"]
+}

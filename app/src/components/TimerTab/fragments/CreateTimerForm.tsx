@@ -10,7 +10,7 @@ import {
   TimerKind,
   TimerStyle,
 } from '@opentalk/common';
-import { DurationValueOptions } from '@opentalk/common/components/DurationField';
+import { DurationValueOptions } from '@opentalk/common';
 import { FormikValues, useFormik } from 'formik';
 import { useCallback, useEffect, useMemo } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';

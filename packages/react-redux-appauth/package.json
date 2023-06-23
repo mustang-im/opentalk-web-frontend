@@ -18,6 +18,7 @@
     "eslint-plugin-react": "^7.31.8",
     "prettier": "^2.7.1",
     "react-redux": "^7.2.8",
+    "shx": "^0.3.4",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
@@ -36,7 +37,8 @@
     "build": "tsc -p tsconfig.release.json && tsc -p tsconfig.release.cjs.json",
     "test": "jest --coverage src --passWithNoTests",
     "lint": "eslint . --ext .ts,.tsx",
-    "prepack": "yarn build"
+    "prepack": "yarn build",
+    "hot-reload:remove-build": "node -e \"if (require('fs').readFileSync('../../app/hotReload/packages.tsconfig.json', {encoding: 'utf8'}).includes('@opentalk/react-redux-appauth')){process.exit(1)}\" || shx rm -rf ./build"
   },
   "publishConfig": {
     "access": "public"

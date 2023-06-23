@@ -161,16 +161,10 @@ Libraries, except the app, will be moved to a separate repository and released t
 
 ### Development
 
-As libraries are not part app, the app hot loading will not pickup changes you make to libraries per default.
-If you work on a library and want to have live reload in the app you need to start a wachter for this library.
+`@opentalk` packages/libraries are not a part of the app. Therefore the default hot reload mechanism will not work for changes you make there.
+If you work on a package and want to speed-up the development by using hot reload, you need additional setup on your local system.
+For details, please refer to the `app/hotReload/Instructions.md` manual.
 
-To do this execute either (in a new terminal window):
-
-- Change into the directroy of that library and `yarn watch`
-- `yarn workspace <libraryPackageName> watch`
-
-This will watch the changes you make to the library and builds it on demand.
-The webDev server of the app should then pickup the changed library build and reload the page / restart the app.
 
 #### Commands
 
@@ -185,6 +179,11 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits in the app.\
 You will also see any lint errors in the console.
 If you plan to modify one of the libraries in this monorepo, execute a watcher inside of that library. See [Development](Development) for details information how to that.
+
+### `yarn start:hot`
+
+Similar to `yarn start` with extended hot reload functionality for the `@opentalk` packages.
+For details, please refer to the `app/hotReload/Instructions.md` manual.
 
 ### `yarn test`
 

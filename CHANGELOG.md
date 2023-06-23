@@ -2,6 +2,7 @@
 
 ### Stability Improvements
 
+- Extend hot reload functionality for packages (!966)
 - Use single snackbar provider (!994)
 
 ## 1.5.x
