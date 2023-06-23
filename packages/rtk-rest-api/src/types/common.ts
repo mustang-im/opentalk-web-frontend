@@ -72,3 +72,10 @@ export interface EntityBase {
   updatedBy: User;
   updatedAt: DateTime;
 }
+
+export interface CallIn {
+  tel: string;
+  id: string;
+  password: string;
+  uri?: string;
+}
