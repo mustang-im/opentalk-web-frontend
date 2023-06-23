@@ -43,9 +43,9 @@ const WhiteboardTab = () => {
   );
 
   return (
-    <Stack height="100%" spacing={5}>
+    <Stack height="100%" spacing={1}>
       <Box mb={'0.5rem'} width={'100%'} height={'100%'} overflow={'auto'} alignSelf={'flex-start'}>
-        <Stack>
+        <Stack spacing={2}>
           {whiteboardAssets.map((asset) => {
             return (
               <Link key={asset.assetId} onClick={() => handleDownload(asset)}>

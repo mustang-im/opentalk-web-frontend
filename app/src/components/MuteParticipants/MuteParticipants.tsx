@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Grid } from '@mui/material';
+import { Button, Stack, Box } from '@mui/material';
 import { MediaSessionType, ParticipantId, Participant } from '@opentalk/common';
 import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -63,22 +63,20 @@ const MuteParticipants = () => {
   }, [allSubscribers, selectedParticipants, dispatch]);
 
   return (
-    <Grid container spacing={2}>
-      <Grid item container spacing={1} xs={12}>
-        <Grid item xs={6} display="flex">
-          <Button onClick={muteAll}>{t('mute-participants-button-all')}</Button>
-        </Grid>
-        <Grid item xs={6} display="flex">
-          <Button onClick={muteSelected}>{t('mute-participants-button-selected')}</Button>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <SearchTextField onSearch={(v) => handleSearchChange(v)} fullWidth />
-      </Grid>
-      <Grid item xs={12}>
+    <Stack flex={1} spacing={2} overflow="hidden">
+      <Box display="flex" justifyContent="space-between" gap={2}>
+        <Button onClick={muteAll} fullWidth>
+          {t('mute-participants-button-all')}
+        </Button>
+        <Button onClick={muteSelected} fullWidth>
+          {t('mute-participants-button-selected')}
+        </Button>
+      </Box>
+      <SearchTextField onSearch={(v) => handleSearchChange(v)} fullWidth />
+      <Box overflow="auto">
         <MuteParticipantsList participantsList={participantsList} onCheck={handleSelectParticipant} />
-      </Grid>
-    </Grid>
+      </Box>
+    </Stack>
   );
 };
 

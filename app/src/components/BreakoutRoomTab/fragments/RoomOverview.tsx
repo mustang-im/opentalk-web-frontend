@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button as MuiButton, Grid, styled, Box, Typography } from '@mui/material';
+import { Button as MuiButton, styled, Box, Typography } from '@mui/material';
 import { BreakoutRoomId, RoomId } from '@opentalk/common';
 import { ClockIcon } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ import RoomOverviewListItem from './RoomOverviewListItem';
 const StyledClockIcon = styled(ClockIcon)(({ theme }) => ({
   verticalAlign: 'middle',
   marginRight: theme.spacing(1),
-  fill: theme.palette.secondary.contrastText,
+  fill: theme.palette.primary.main,
 }));
 
 const Button = styled(MuiButton)(({ theme }) => ({
@@ -35,7 +35,7 @@ const Button = styled(MuiButton)(({ theme }) => ({
 const ListContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  maxHeight: 'calc(100vh - 29em)',
+  flex: 1,
   overflow: 'auto',
 });
 
@@ -124,31 +124,30 @@ const RoomOverview = () => {
   };
 
   return (
-    <Box display={'flex'} flex={1} justifyContent={'space-between'} flexDirection={'column'}>
-      <Grid container spacing={2} direction={'column'}>
-        <Grid item>
-          <Typography variant={'h6'} gutterBottom>
-            {t('breakout-room-room-overview-title')}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant={'body2'} color={'primary'}>
-            <StyledClockIcon />
-            {renderDurationText()}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid container item direction={'column'} flex={1}>
-        <Typography variant={'body2'} noWrap>
+    <Box display="flex" flex={1} gap={1} flexDirection="column" overflow="hidden">
+      <Box>
+        <Typography variant={'h6'}>{t('breakout-room-room-overview-title')}</Typography>
+      </Box>
+
+      <Box>
+        <Typography variant={'body2'} color={'primary'}>
+          <StyledClockIcon />
+          {renderDurationText()}
+        </Typography>
+      </Box>
+
+      <Box display="flex" flexDirection="column" flex={1} gap={1} overflow="hidden">
+        <Typography variant={'body2'} noWrap paddingTop={1}>
           {t('breakout-room-room-overview-participant-list')}
         </Typography>
         <ListContainer>{renderAccordions()}</ListContainer>
-      </Grid>
-      <Grid item>
+      </Box>
+
+      <Box>
         <Button color={'primary'} variant={'contained'} onClick={stopBreakoutRoom}>
           {t('breakout-room-room-overview-button-close')}
         </Button>
-      </Grid>
+      </Box>
     </Box>
   );
 };

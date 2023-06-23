@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Box, styled, Stack } from '@mui/material';
+import { Button, styled, Stack, Box } from '@mui/material';
 import { TimerStyle } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
@@ -12,15 +12,9 @@ import TimerCoffeeBreakCounter from './TimerCoffeeBreakCounter';
 import TimerNormalCounter from './TimerNormalCounter';
 import UserList from './UserList';
 
-const TimerBoxContainer = styled(Box)({
-  width: '100%',
-  height: '100%',
-  overflow: 'auto',
-  alignSelf: 'flex-start',
-});
-
-const TimerBoxItem = styled(Box)({
-  paddingTop: '1rem',
+const TimerBoxContainer = styled(Stack)({
+  overflow: 'hidden',
+  flex: 1,
 });
 
 const TimerOverview = ({ timerStyle }: { timerStyle: TimerStyle }) => {
@@ -35,25 +29,23 @@ const TimerOverview = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   };
 
   return (
-    <Stack height="100%">
-      {timerStyle === TimerStyle.CoffeeBreak && (
-        <TimerBoxContainer>
-          <TimerBoxItem>
+    <Stack flex={1} spacing={1} overflow="hidden">
+      <TimerBoxContainer spacing={1}>
+        {timerStyle === TimerStyle.CoffeeBreak && (
+          <Box>
             <TimerCoffeeBreakCounter />
-          </TimerBoxItem>
-        </TimerBoxContainer>
-      )}
+          </Box>
+        )}
 
-      {timerStyle === TimerStyle.Normal && (
-        <TimerBoxContainer>
-          <TimerBoxItem>
-            <TimerNormalCounter />
-          </TimerBoxItem>
-          <TimerBoxItem>
+        {timerStyle === TimerStyle.Normal && (
+          <>
+            <Box>
+              <TimerNormalCounter />
+            </Box>
             <UserList />
-          </TimerBoxItem>
-        </TimerBoxContainer>
-      )}
+          </>
+        )}
+      </TimerBoxContainer>
 
       <Button color="secondary" onClick={handleStop}>
         {timerStyle === TimerStyle.Normal && t('timer-overview-button-stop')}

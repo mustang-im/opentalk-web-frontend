@@ -12,7 +12,7 @@ const NoSearchResult = (props: NoSearchResultProps) => {
   const { t } = useTranslation();
 
   return (
-    <Stack spacing={2} alignItems="center">
+    <Stack flex={1} spacing={2} justifyContent="center" alignItems="center">
       <Typography display="block" textAlign="center" component="span">
         {t('chat-no-search-results')}
       </Typography>

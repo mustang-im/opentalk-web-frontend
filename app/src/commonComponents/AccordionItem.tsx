@@ -21,9 +21,12 @@ interface IAccordionProps<T> {
   editComponent?: React.ReactNode;
 }
 
-const Accordion = styled(MuiAccordion)({
+const Accordion = styled(MuiAccordion)(({ theme }) => ({
+  width: '100%',
+  minHeight: '3rem',
   backgroundColor: 'transparent',
   boxShadow: 'none',
+  margin: 0,
   '&:not(:last-child)': {
     borderBottom: 0,
   },
@@ -31,9 +34,9 @@ const Accordion = styled(MuiAccordion)({
     display: 'none',
   },
   '&.Mui-expanded': {
-    margin: 'auto',
+    margin: theme.spacing(0),
   },
-});
+}));
 
 const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.lighter,
@@ -72,7 +75,8 @@ const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
+  margin: 0,
 }));
 
 const SummaryText = styled(Typography)<{ component: string }>(({ theme }) => ({

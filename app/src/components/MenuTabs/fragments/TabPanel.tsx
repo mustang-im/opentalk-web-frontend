@@ -21,6 +21,8 @@ const TabPanel = ({ children, value, hidden }: TabPanelProps) => {
       id={`tabpanel-${value}`}
       aria-hidden={hidden}
       aria-labelledby={`tab-${value}`}
+      overflow="hidden"
+      mt={2}
     >
       {!hidden && children}
     </Box>

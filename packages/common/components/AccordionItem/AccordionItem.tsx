@@ -25,14 +25,12 @@ interface IAccordionProps<T> {
 const Accordion = styled(MuiAccordion)({
   backgroundColor: 'transparent',
   boxShadow: 'none',
+  marginBottom: 0,
   '&:not(:last-child)': {
     borderBottom: 0,
   },
   '&:before': {
     display: 'none',
-  },
-  '&.Mui-expanded': {
-    margin: 'auto',
   },
 });
 

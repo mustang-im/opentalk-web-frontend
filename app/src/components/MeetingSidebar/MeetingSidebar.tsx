@@ -32,9 +32,10 @@ const ProfileWindow = styled('div', {
   flexDirection: 'column',
   borderRadius: theme.borderRadius.medium,
   padding: theme.spacing(2),
-  '&-webkit-transform': 'translateZ(0)',
+  transform: 'translateZ(0)',
   boxShadow: '0 1.187rem 3.187rem 0 rgb(0 0 0 / 16%), 0 0.875rem 1.187rem 0 rgb(0 0 0 / 7%)',
   width: '21rem',
+  overflow: 'hidden',
 }));
 
 const MeetingSidebar = () => {

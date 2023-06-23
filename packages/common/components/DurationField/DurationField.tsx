@@ -57,9 +57,7 @@ const Chip = styled(MuiChip)(({ theme }) => ({
 }));
 
 const StyledClockIcon = styled(ClockIcon)({
-  width: '1rem',
   fill: 'currentColor',
-  marginRight: '1ex',
 });
 
 const Container = styled(Stack)(({ theme }) => ({
@@ -150,8 +148,7 @@ export const DurationField = ({
 
   return (
     <Box>
-      <Button variant={'text'} onClick={handlePopoverOpen} {...ButtonProps}>
-        <StyledClockIcon />
+      <Button variant={'text'} onClick={handlePopoverOpen} {...ButtonProps} startIcon={<StyledClockIcon />}>
         {renderButtonText()}
       </Button>
       <Popover

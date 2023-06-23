@@ -8,6 +8,7 @@
 - Fix styling of the voting kind dropdown (!989)
 - Fix german term for talking stick (!1012)
 - Remove unmute button for already unmuted talking stick participant (!1009)
+- Fixed overflowing layout issues in all features (!1011)
 
 ### Stability Improvements
 

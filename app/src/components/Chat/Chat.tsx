@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled } from '@mui/material';
+import { styled, Stack } from '@mui/material';
 import { TargetId, ChatScope } from '@opentalk/common';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -15,15 +15,11 @@ import ChatForm from './fragments/ChatForm';
 import ChatList from './fragments/ChatList';
 import ChatSearch from './fragments/ChatSearch';
 
-const Container = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
+const Container = styled(Stack)({
   flex: 1,
-  marginTop: theme.spacing(2),
-  gap: theme.spacing(1),
-  maxWidth: '100%',
-}));
+  overflow: 'hidden',
+  width: '100%',
+});
 
 interface IChatProps {
   scope: ChatScope;
@@ -67,7 +63,7 @@ const Chat = ({ target, scope }: IChatProps) => {
   };
 
   return (
-    <Container data-testid={'chat'}>
+    <Container data-testid={'chat'} spacing={1}>
       <ChatSearch value={searchValue} onChange={onChangeMiddleware} ref={chatSearchInputReference} />
       <ChatList scope={scope} targetId={target} onReset={resetSearch} />
       <ChatForm scope={scope} targetId={target} />

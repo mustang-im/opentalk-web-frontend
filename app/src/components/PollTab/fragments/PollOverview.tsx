@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: EUPL-1.2
 import {
   Box,
-  Container,
   List as MuiList,
   ListItem,
   ListItemButton as MuiListItemButton,
   ListItemText,
   styled,
   Typography,
+  Stack,
 } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,13 +26,13 @@ interface IPollOverview {
 
 const List = styled(MuiList)({
   width: '100%',
+  overflow: 'auto',
 });
 
-const EmptyPollContainer = styled(Box)({
-  display: 'flex',
-  flexWrap: 'wrap',
+const EmptyPollContainer = styled(Stack)({
   justifyContent: 'center',
-  alignSelf: 'center',
+  alignItems: 'center',
+  flex: 1,
 });
 
 const ListItemButton = styled(MuiListItemButton)(({ theme }) => ({
@@ -114,10 +114,12 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
   );
 
   return (
-    <Container disableGutters>
-      {savedPolls.length > 0 && renderSavedPolls()}
-      {polls.length > 0 && renderPolls()}
-    </Container>
+    <Box display="flex" flexDirection="column" flex={1} marginBottom={1} overflow="hidden">
+      <Box height="100%" overflow="auto">
+        {savedPolls.length > 0 && renderSavedPolls()}
+        {polls.length > 0 && renderPolls()}
+      </Box>
+    </Box>
   );
 };
 

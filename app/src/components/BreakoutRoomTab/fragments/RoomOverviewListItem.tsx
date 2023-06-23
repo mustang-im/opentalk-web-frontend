@@ -35,18 +35,10 @@ const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
   margin: 0,
   padding: 0,
   flexDirection: 'row-reverse',
-  maxHeight: '2rem !important',
-  minHeight: '2rem !important',
-  '& .MuiAccordionSummary-content.Mui-expanded': {
-    marginLeft: theme.spacing(1),
-  },
+  gap: theme.spacing(1),
   '& .MuiAccordionSummary-content': {
-    marginLeft: theme.spacing(1),
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  '& .MuiIconButton-edgeEnd': {
-    marginRight: 0,
   },
   '& svg': {
     width: '0.75rem',
@@ -94,7 +86,7 @@ const RoomOverviewListItem = ({ joinRoom, groupedParticipants, breakoutRoomId }:
         <List>
           {groupedParticipants.map((participant) => {
             return (
-              <Stack spacing={1} direction={'row'} alignItems={'center'} width={'18em'} py={1} key={participant.id}>
+              <Stack spacing={1} direction={'row'} alignItems={'center'} py={1} key={participant.id}>
                 <Avatar
                   src={participant?.avatarUrl}
                   alt={participant?.displayName}
