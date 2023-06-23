@@ -1,5 +1,10 @@
 ## Unreleased
 
+
+### UI/UX Fixes
+
+- OTaaS: Remove Settings for OTaaS Customers (!1000)
+
 ### Stability Improvements
 
 - Extend hot reload functionality for packages (!966)

@@ -100,12 +100,15 @@ export interface ConfigState {
     ndtDownloadWorkerJs: string;
     ndtUploadWorkerJs: string;
   };
+  provider: {
+    active: boolean;
+    accountManagementUrl?: string;
+  };
   readonly videoBackgrounds: readonly VideoBackground[];
   maxVideoBandwidth: number;
   readonly features: Features;
   libravatarDefaultImage: DefaultAvatarImage;
   tariff: Tariff;
-  accountManagementUrl?: string;
   imprintUrl?: string;
   dataProtectionUrl?: string;
   version?: `v${string}`;
@@ -155,6 +158,9 @@ export const initialState: ConfigState = {
     resetHandraises: true,
     debriefing: true,
     addUser: false,
+  },
+  provider: {
+    active: false,
   },
   videoBackgrounds: [],
   maxVideoBandwidth: 600000,
@@ -206,8 +212,9 @@ export const selectBetaBadgeUrl = (state: RootState) => state.config.beta.badgeU
 export const selectErrorReportEmail = (state: RootState) => state.config.errorReportAddress;
 export const selectChangePassword = (state: RootState) => state.config.changePassword;
 export const selectEnabledModules = (state: RootState) => state.config.tariff.enabledModules;
-export const selectAccountManagementUrl = (state: RootState) => state.config.accountManagementUrl;
+export const selectAccountManagementUrl = (state: RootState) => state.config.provider.accountManagementUrl;
 export const selectImprintUrl = (state: RootState) => state.config.imprintUrl;
+export const selectIsProviderActive = (state: RootState) => state.config.provider.active;
 export const selectDataProtectionUrl = (state: RootState) => state.config.dataProtectionUrl;
 export const selectShowmprintContainer = (state: RootState) => {
   if (state.config.imprintUrl || state.config.dataProtectionUrl) {
