@@ -61,8 +61,8 @@ import {
 } from '../../store/slices/sharedFolderSlice';
 import { toggledFullScreenMode } from '../../store/slices/uiSlice';
 import {
-  participantsLayoutSet,
-  selectParticipantsLayout,
+  updatedCinemaLayout,
+  selectCinemaLayout,
   paginationPageSet,
   selectPaginationPageState,
   setVotePollIdToShow,
@@ -231,7 +231,7 @@ const MeetingHeader = () => {
   const [areAllApproved, setApproveAll] = useState<boolean>(false);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const selectedLayout = useAppSelector(selectParticipantsLayout);
+  const selectedLayout = useAppSelector(selectCinemaLayout);
   const participants = useAppSelector(selectAllOnlineParticipants);
   const selectedPage = useAppSelector(selectPaginationPageState);
   const protocolUrl = useAppSelector(selectProtocolUrl);
@@ -316,7 +316,7 @@ const MeetingHeader = () => {
 
   const handleSelectedView = async (layout: LayoutOptions) => {
     resetHTMLElements();
-    dispatch(participantsLayoutSet(layout));
+    dispatch(updatedCinemaLayout(layout));
   };
 
   const openFullscreenView = useCallback(async () => {
