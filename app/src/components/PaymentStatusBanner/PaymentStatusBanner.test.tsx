@@ -23,7 +23,7 @@ const mockUseGetMeQuery = useGetMeQuery as jest.Mock;
 const ACCOUNT_MANAGEMENT_URL = 'account.management.url';
 const { store } = createStore({
   initialState: {
-    config: { accountManagementUrl: ACCOUNT_MANAGEMENT_URL },
+    config: { provider: { accountManagementUrl: ACCOUNT_MANAGEMENT_URL } },
   },
 });
 

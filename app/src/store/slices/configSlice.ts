@@ -68,7 +68,10 @@ export interface Config {
   maxVideoBandwidth: number;
   libravatarDefaultImage?: DefaultAvatarImage;
   tariff?: Tariff;
-  accountManagementUrl?: string;
+  provider: {
+    active: boolean;
+    accountManagementUrl?: string;
+  };
   imprintUrl?: string;
   dataProtectionUrl?: string;
   version?: `v${string}`;

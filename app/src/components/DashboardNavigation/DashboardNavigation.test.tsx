@@ -92,6 +92,9 @@ describe('dashboard navigation', () => {
         oidcConfig: {
           authority: 'http://test-url',
         },
+        provider: {
+          accountManagementUrl: 'http://localhost:3000',
+        },
       },
     },
   });
