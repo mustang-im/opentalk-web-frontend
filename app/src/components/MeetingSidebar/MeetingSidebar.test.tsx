@@ -36,7 +36,7 @@ describe('MeetingSidebar', () => {
     expect(screen.getByTestId('toolbarMenuButton')).toBeInTheDocument();
     expect(screen.getByTestId('toolbarEndCallButton')).toBeInTheDocument();
 
-    expect(screen.getByRole('tablist')).toBeInTheDocument();
+    expect(screen.getByTestId('Toolbar')).toHaveAttribute('role', 'tablist');
   });
 
   test('render MeetingSidebar component without crashing for user with role of guest', async () => {
@@ -56,7 +56,7 @@ describe('MeetingSidebar', () => {
     expect(screen.getByTestId('toolbarMenuButton')).toBeInTheDocument();
     expect(screen.getByTestId('toolbarEndCallButton')).toBeInTheDocument();
 
-    expect(screen.getByRole('tablist')).toBeInTheDocument();
+    expect(screen.getByTestId('Toolbar')).toHaveAttribute('role', 'tablist');
     tabsNames.map((name) => expect(screen.queryByLabelText(name as string)).not.toBeInTheDocument());
 
     expect(screen.getByText('menutabs-chat')).toBeInTheDocument();

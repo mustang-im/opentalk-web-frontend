@@ -203,6 +203,7 @@ toolbar-button-screen-share-turn-off-tooltip-title = Bildschirm nicht mehr teile
 toolbar-button-end-call-tooltip-title = Raum verlassen
 
 toolbar-button-screen-share-tooltip-request-moderator-presenter-role = Frage einen Moderator um deinen Bildschirm zu teilen
+toolbar-aria-label =  Persönliche Kontrollleiste
 
 more-menu-leave-call = Anruf beenden
 more-menu-create-invite = Gast einladen

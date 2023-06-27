@@ -204,6 +204,8 @@ toolbar-button-end-call-tooltip-title = Leave Call
 
 toolbar-button-screen-share-tooltip-request-moderator-presenter-role = Ask a moderator to allow to share your screen
 
+toolbar-aria-label =  Personal control panel
+
 more-menu-leave-call = Leave Call
 more-menu-create-invite = Invite guest
 more-menu-start-recording = Start recording
