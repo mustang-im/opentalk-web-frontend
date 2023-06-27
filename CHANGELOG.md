@@ -10,6 +10,7 @@
 - Add missing names to toolbar buttons (!988)
 
 ### New Features
+- Add a new call_in field to the room field of events (!999)
 
 ## 1.5.x
 

@@ -35,9 +35,11 @@ export function createMockEvent(isFavorite?: boolean) {
     description: '',
     room: {
       id: uuidv4() as RoomId,
-      sipTel: '030123456789',
-      sipId: '0740685437',
-      sipPassword: '1679386192',
+      callIn: {
+        tel: '030123456789',
+        id: '0740685437',
+        password: '1679386192',
+      },
     },
     inviteesTruncated: true,
     invitees: [],

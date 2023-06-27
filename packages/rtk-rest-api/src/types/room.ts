@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Opaque } from 'type-fest';
 
-import { DateTime } from './common';
+import { CallIn, DateTime } from './common';
 import { User } from './user';
 
 export type RoomId = Opaque<string, 'roomId'>;
@@ -67,9 +67,7 @@ export type UpdateRoomSipConfigPayload = {
 export type RoomSipConfigResponse = {
   room: RoomId;
   password?: string;
-  sipId: SipId;
-  sipPassword: string;
-  sipTel: string;
+  callIn: CallIn;
   lobby: boolean;
 };
 

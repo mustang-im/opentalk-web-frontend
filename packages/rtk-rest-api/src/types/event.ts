@@ -4,7 +4,7 @@
 import { SharedFolderData } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
-import { DateTimeWithTimezone, EntityBase, InviteStatus } from './common';
+import { CallIn, DateTimeWithTimezone, EntityBase, InviteStatus } from './common';
 import { EventInvite } from './eventInvite';
 import { RoomId } from './room';
 
@@ -17,16 +17,13 @@ export type EventInstanceId = Opaque<string, 'eventInstanceId'>;
 export type EventAndInstanceId = Opaque<string, 'eventAndInstanceId'>;
 
 /**
- * RoomDetails in an Event object
+ * EventRoomInfo in an Event object
  */
-type RoomDetails = {
+type EventRoomInfo = {
   id: RoomId;
   password?: string;
-  sipTel?: string;
-  sipUri?: string;
-  sipId?: string;
-  sipPassword?: string;
   waitingRoom: boolean;
+  callIn?: CallIn;
 };
 
 /**
@@ -195,7 +192,7 @@ interface AbstractEvent extends BaseEvent {
   id: EventId;
   title: string;
   description: string;
-  room: RoomDetails;
+  room: EventRoomInfo;
   inviteesTruncated?: boolean;
   invitees?: Array<EventInvite>;
   inviteStatus: InviteStatus;
@@ -263,7 +260,7 @@ export interface EventInstance extends BaseEvent, EventOccurrence {
   type: EventType.Instance;
   title: string;
   description: string;
-  room: RoomDetails;
+  room: EventRoomInfo;
   inviteesTruncated?: boolean;
   invitees?: Array<EventInvite>;
   isAllDay: boolean;
@@ -283,7 +280,7 @@ export interface EventException extends BaseEvent, EventOccurrence {
   originalStartsAt: DateTimeWithTimezone;
   title?: string;
   description?: string;
-  room?: RoomDetails;
+  room?: EventRoomInfo;
   isAllDay?: boolean;
   status?: EventStatus;
   startsAt?: DateTimeWithTimezone;

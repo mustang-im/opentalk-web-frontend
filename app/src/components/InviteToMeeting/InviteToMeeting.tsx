@@ -99,8 +99,8 @@ const InviteToMeeting = ({
       });
   }, [t, selectedUsers, existingEvent, creatEventInvitation, invitationsSent, isError]);
 
-  const sipLink = existingEvent?.room?.sipTel
-    ? `${existingEvent.room.sipTel},,${existingEvent.room.sipId},,${existingEvent.room.sipPassword}`
+  const sipLink = existingEvent?.room?.callIn
+    ? `${existingEvent.room.callIn?.tel},,${existingEvent.room.callIn?.id},,${existingEvent.room.callIn?.password}`
     : undefined;
 
   //TODO: Add a way to generate a new permanent link if none are present (button inside the input)

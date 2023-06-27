@@ -4,6 +4,8 @@
 import { rest } from 'msw';
 import { v5 as uuidv5 } from 'uuid';
 
+import { CallIn } from '../../types';
+
 type User = {
   id: string;
   display_name: string;
@@ -24,10 +26,7 @@ type Event = {
   room: {
     id: string;
     password?: string;
-    sip_tel?: string;
-    sip_uri?: string;
-    sip_id?: string;
-    sip_password?: string;
+    call_in?: CallIn;
   };
   is_time_independent: boolean;
   invitees_truncated: boolean;
@@ -85,10 +84,11 @@ export const generateMockEvent = (
   room: {
     id: 'string',
     password: 'string',
-    sip_tel: 'string',
-    sip_uri: 'string',
-    sip_id: 'string',
-    sip_password: 'string',
+    call_in: {
+      id: 'string',
+      password: 'string',
+      tel: 'string',
+    },
   },
   invitees_truncated: true,
   invitees: [
