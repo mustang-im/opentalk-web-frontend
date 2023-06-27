@@ -11,13 +11,15 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { HomeIcon, SettingsIcon, MeetingsIcon } from '@opentalk/common';
+import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon } from '@opentalk/common';
 import React, { useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useGetMeQuery } from '../api/rest';
 import { ReactComponent as Logo } from '../assets/images/logoGradient.svg';
 import DashboardNavigation, { PrimaryRoute } from '../components/DashboardNavigation';
+import { useAppSelector } from '../hooks';
+import { selectIsProviderActive } from '../store/slices/configSlice';
 
 const DashboardLogo = styled(Logo)({
   gridArea: 'Logo',
@@ -63,43 +65,64 @@ export const useHeader = () => {
   return useOutletContext<DashboardTemplateContext>();
 };
 
-const routes: Array<PrimaryRoute> = [
-  {
-    icon: <HomeIcon />,
-    path: '/dashboard/',
-    name: 'dashboard-home',
-  },
-  {
-    icon: <MeetingsIcon />,
-    path: 'meetings',
-    name: 'dashboard-meetings',
-  },
-  {
-    icon: <SettingsIcon />,
-    path: 'settings',
-    name: 'dashboard-settings',
-    childRoutes: [
-      {
-        path: 'general',
-        name: 'dashboard-settings-general',
-      },
-      {
-        path: 'profile',
-        name: 'dashboard-settings-profile',
-      },
-      {
-        path: 'account',
-        name: 'dashboard-settings-account',
-      },
-    ],
-  },
-];
+const getRoutes = (useProviderSettings: boolean) => {
+  const routes: Array<PrimaryRoute> = [
+    {
+      icon: <HomeIcon />,
+      path: '/dashboard/',
+      name: 'dashboard-home',
+    },
+    {
+      icon: <MeetingsIcon />,
+      path: 'meetings',
+      name: 'dashboard-meetings',
+    },
+  ];
+
+  if (useProviderSettings) {
+    const providerMenu = {
+      icon: <MyAccountIcon />,
+      path: 'settings',
+      name: 'dashboard-my-profile',
+      childRoutes: [
+        {
+          path: 'profile',
+          name: 'dashboard-settings-profile',
+        },
+      ],
+    };
+    routes.push(providerMenu);
+  } else {
+    const communityUsers = {
+      icon: <SettingsIcon />,
+      path: 'settings',
+      name: 'dashboard-settings',
+      childRoutes: [
+        {
+          path: 'general',
+          name: 'dashboard-settings-general',
+        },
+        {
+          path: 'profile',
+          name: 'dashboard-settings-profile',
+        },
+        {
+          path: 'account',
+          name: 'dashboard-settings-account',
+        },
+      ],
+    };
+    routes.push(communityUsers);
+  }
+  return routes;
+};
 
 const DashboardTemplate = () => {
   const [header, setHeader] = useState<React.ReactNode>();
   const { isLoading } = useGetMeQuery();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  const isProviderActive = useAppSelector(selectIsProviderActive);
 
   if (isLoading) {
     return (
@@ -148,7 +171,7 @@ const DashboardTemplate = () => {
   return (
     <Container maxWidth={false} disableGutters>
       <Stack direction={{ xs: 'column', md: 'row' }} height={'100%'}>
-        <DashboardNavigation routes={routes} />
+        <DashboardNavigation routes={getRoutes(isProviderActive)} />
         <Stack component={Main} spacing={{ xs: 2, md: 5 }} maxHeight={'100%'} height={{ xs: 0, sm: '100%' }}>
           <Grid spacing={2} container direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
             <Grid item alignSelf={'flex-end'}>

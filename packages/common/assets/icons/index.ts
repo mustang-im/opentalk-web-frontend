@@ -36,7 +36,7 @@ import GridViewIcon from './GridViewIcon';
 import HelpIcon from './HelpIcon';
 import HiddenIcon from './HiddenIcon';
 import HomeIcon from './HomeIcon';
-import InfoIcon from "./InfoIcon";
+import InfoIcon from './InfoIcon';
 import InviteIcon from './InviteIcon';
 import LegalBallotIcon from './LegalBallotIcon';
 import LockedIcon from './LockedIcon';
@@ -46,6 +46,7 @@ import MicOnIcon from './MicOnIcon';
 import ModeratorIcon from './ModeratorIcon';
 import MoreIcon from './MoreIcon';
 import MuteAllIcon from './MuteAllIcon';
+import MyAccountIcon from './MyAccountIcon';
 import NewMessageIcon from './NewMessageIcon';
 import NoOfParticipantsIcon from './NoOfParticipantsIcon';
 import NoOfRoomsIcon from './NoOfRoomsIcon';
@@ -62,9 +63,9 @@ import SearchIcon from './SearchIcon';
 import SecureIcon from './SecureIcon';
 import SendMessageIcon from './SendMessageIcon';
 import SettingsIcon from './SettingsIcon';
-import SharedFolderIcon from './SharedFolderIcon';
 import ShareScreenOffIcon from './ShareScreenOffIcon';
 import ShareScreenOnIcon from './ShareScreenOnIcon';
+import SharedFolderIcon from './SharedFolderIcon';
 import SignOutIcon from './SignOutIcon';
 import SortIcon from './SortIcon';
 import SpeakerQueueIcon from './SpeakerQueueIcon';
@@ -161,4 +162,5 @@ export {
   WhiteboardIcon,
   WoolBallIcon,
   TelephoneStrokeIcon,
+  MyAccountIcon,
 };

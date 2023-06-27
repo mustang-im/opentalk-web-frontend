@@ -10,7 +10,6 @@ window.config = {
   imprintUrl: '${IMPRINT_URL}',
   dataProtectionUrl: '${DATA_PROTECTION_URL}',
   userSurveyUrl: '${USER_SURVEY_URL}',
-  accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
   userSurveyApiKey: '${USER_SURVEY_API_KEY}',
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
   beta: {
@@ -41,6 +40,10 @@ window.config = {
     addUser: false,
     joinWithoutMedia: false,
     sharedFolder: false,
+  },
+  provider: {
+	active: false, // indicates if we are are in the provider context
+	accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
   },
   videoBackgrounds: '${VIDEO_BACKGROUNDS}',
   maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}',

@@ -585,6 +585,7 @@ dashboard-meetings-update = Meeting aktualisieren
 dashboard-statistics = Statistik
 dashboard-recordings = Aufzeichnungen
 dashboard-settings = Einstellungen
+dashboard-my-profile = Mein Profil
 dashboard-settings-general = Allgemein
 dashboard-settings-account = Benutzerkonto
 dashboard-settings-profile = Mein Profil
