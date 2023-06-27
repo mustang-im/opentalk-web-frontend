@@ -7,6 +7,7 @@
 
 ### Stability Improvements
 
+- Update the semver package to >=7.5.2 (!1002)
 - Fix tests failing after moving accountManagementUrl for OTass (!1005)
 - Extend hot reload functionality for packages (!966)
 - Use single snackbar provider (!994)
