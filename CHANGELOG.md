@@ -1,22 +1,20 @@
 ## Unreleased
 
-
 ### UI/UX Fixes
 
-- OTaaS: Remove Settings for OTaaS Customers (!1000)
+- Remove settings if provided by a service provider (!1000)
+- Add missing names to toolbar buttons (!988)
 
 ### Stability Improvements
 
 - Update the semver package to >=7.5.2 (!1002)
-- Fix tests failing after moving accountManagementUrl for OTass (!1005)
+- Fix tests failing after moving accountManagementUrl (!1005)
 - Extend hot reload functionality for packages (!966)
 - Use single snackbar provider (!994)
-
-### UI/UX Fixes
-
-- Add missing names to toolbar buttons (!988)
+- Upgrade test packages to remove unmaintained packaged (!1006).
 
 ### New Features
+
 - Add a new call_in field to the room field of events (!999)
 
 ## 1.5.x
