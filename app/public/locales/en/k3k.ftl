@@ -729,7 +729,7 @@ dashboard-meeting-recurrence-weekly = Weekly
 dashboard-meeting-recurrence-bi-weekly = Bi-Weekly
 dashboard-meeting-recurrence-monthly = Monthly
 
-dashboard-payment-status-downgraded = Attention: There is currently no valid payment method stored for your account.<br /> Currently you are restricted to the {$tariffName} tariff.
+dashboard-payment-status-downgraded = Attention: There is currently no valid payment method stored for your account.<br /> Currently you are restricted to the {$tariffName} plan.
 dashboard-add-payment-button = Add payment
 
 meeting-notification-kicked = You were removed from the meeting
