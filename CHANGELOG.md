@@ -8,6 +8,7 @@
 
 ### Stability Improvements
 
+- Fix tests in common package (!1007)
 - Update the semver package to >=7.5.2 (!1002)
 - Fix tests failing after moving accountManagementUrl (!1005)
 - Extend hot reload functionality for packages (!966)

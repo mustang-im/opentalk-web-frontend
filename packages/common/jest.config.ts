@@ -7,6 +7,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '@mui/styled-engine': path.resolve(__dirname, '../../app/node_modules/@mui/styled-engine'),
+    '^.+\\.svg$': 'jest-svg-transformer',
   },
   setupFilesAfterEnv: ['./setupTests.ts'],
 };
