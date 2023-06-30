@@ -18,6 +18,7 @@
 ### New Features
 
 - Add a new call_in field to the room field of events (!999)
+- Hide dial-in option when no call-in info is sent (!1001)
 
 ## 1.5.x
 

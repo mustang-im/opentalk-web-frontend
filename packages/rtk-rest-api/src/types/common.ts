@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Opaque } from 'type-fest';
 
+import { SipId } from './room';
 import { User } from './user';
 
 export type UserId = Opaque<string, 'userId'>;
@@ -74,8 +75,8 @@ export interface EntityBase {
 }
 
 export interface CallIn {
+  id: SipId;
   tel: string;
-  id: string;
   password: string;
   uri?: string;
 }

@@ -60,7 +60,7 @@ const InviteToMeeting = ({
   const [isSipLinkCopied, setSipLinkCopied] = useState(false);
   const [isGuestLinkCopied, setGuestLinkCopied] = useState(false);
   const [isRoomPasswordCopied, setIsRoomPasswordCopied] = useState(false);
-  //TODO: There has to be a better way of keeping track of what should be highlighted as copied, maybe we need a follow up issue for it
+  //TODO: There has to be a better way of keeping track of what should be highlighted as copied, maybe we need a follow up issue for it - https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1367
   const [isSharedFolderUrlCopied, setIsSharedFolderUrlCopied] = useState(false);
   const [isSharedFolderPasswordCopied, setIsSharedFolderPasswordCopied] = useState(false);
 
@@ -72,6 +72,8 @@ const InviteToMeeting = ({
 
   const roomSharedFolderUrl = existingEvent.sharedFolder?.readWrite?.url;
   const roomSharedFolderPassword = existingEvent.sharedFolder?.readWrite?.password;
+
+  const callInDetails = existingEvent.room.callIn;
 
   useEffect(() => {
     if (existingEvent) {
@@ -99,9 +101,7 @@ const InviteToMeeting = ({
       });
   }, [t, selectedUsers, existingEvent, creatEventInvitation, invitationsSent, isError]);
 
-  const sipLink = existingEvent?.room?.callIn
-    ? `${existingEvent.room.callIn?.tel},,${existingEvent.room.callIn?.id},,${existingEvent.room.callIn?.password}`
-    : undefined;
+  const sipLink = callInDetails ? `${callInDetails.tel},,${callInDetails.id},,${callInDetails.password}` : undefined;
 
   //TODO: Add a way to generate a new permanent link if none are present (button inside the input)
   const inviteUrl = useMemo(() => {
@@ -127,7 +127,6 @@ const InviteToMeeting = ({
   ]);
 
   const roomPassword = existingEvent?.room?.password?.trim() || undefined;
-  //TODO: Part of line 67 TODO: Also feels very bad to have all of these hardcoded functions to which you add state changes
 
   //TODO: Part of line 67 TODO: Also feels very bad to have all of these hardcoded functions to which you add state changes
   const copyRoomLinkToClipboard = useCallback(() => {
@@ -245,29 +244,31 @@ const InviteToMeeting = ({
             />
           </Tooltip>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label={t('dashboard-direct-meeting-invitation-sip-field-label')}
-            disabled
-            checked={isSipLinkCopied || undefined}
-            value={sipLink || '-'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label={t('dashboard-direct-meeting-copy-sip-aria-label')}
-                  onClick={copySipLinkToClipboard}
-                  onMouseDown={copySipLinkToClipboard}
-                  edge="end"
-                  href={`tel:${sipLink}`}
-                  disabled={sipLink === undefined}
-                >
-                  <CopyIcon />
-                </IconButton>
-              </InputAdornment>
-            }
-            fullWidth
-          />
-        </Grid>
+        {callInDetails && sipLink && (
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label={t('dashboard-direct-meeting-invitation-sip-field-label')}
+              disabled
+              checked={isSipLinkCopied || undefined}
+              value={sipLink || '-'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={t('dashboard-direct-meeting-copy-sip-aria-label')}
+                    onClick={copySipLinkToClipboard}
+                    onMouseDown={copySipLinkToClipboard}
+                    edge="end"
+                    href={`tel:${sipLink}`}
+                    disabled={sipLink === undefined}
+                  >
+                    <CopyIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+              fullWidth
+            />
+          </Grid>
+        )}
         <Grid item xs={12} sm={6}>
           <Tooltip title={t('dashboard-direct-meeting-invitation-guest-link-tooltip') || ''}>
             <TextField
