@@ -39,6 +39,7 @@
 - Fix emoji picker popover cutoff on small devices (!952)
 - Add missing labels to view selection drop-down menu (!951)
 - Secure connection information is more eye-catching for the user (!949)
+- Fix: Remove console error message when closing a running vote (!996)
 
 ### Stability Improvements
 

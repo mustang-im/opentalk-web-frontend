@@ -645,6 +645,9 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
  */
 const handleLegalVoteMessage = (dispatch: AppDispatch, data: LegalVoteMessageType) => {
   switch (data.message) {
+    case 'pdf_asset':
+      //TODO implement pdf asset handling
+      break;
     case 'started':
       dispatch(legalVoteStore.started(data));
       break;
