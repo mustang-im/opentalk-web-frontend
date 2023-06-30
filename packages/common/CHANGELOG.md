@@ -1,3 +1,9 @@
+## 1.0.18
+
+### New Features
+
+- Add legal vote image. (!1008)
+
 ## 1.0.17
 
 ### New Features

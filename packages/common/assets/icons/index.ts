@@ -50,6 +50,7 @@ import MyAccountIcon from './MyAccountIcon';
 import NewMessageIcon from './NewMessageIcon';
 import NoOfParticipantsIcon from './NoOfParticipantsIcon';
 import NoOfRoomsIcon from './NoOfRoomsIcon';
+import NoVotesIcon from './NoVotesIcon';
 import PhoneIcon from './PhoneIcon';
 import PictureIcon from './PictureIcon';
 import PinIcon from './PinIcon';
@@ -131,6 +132,7 @@ export {
   NewMessageIcon,
   NoOfParticipantsIcon,
   NoOfRoomsIcon,
+  NoVotesIcon,
   PhoneIcon,
   PictureIcon,
   PinIcon,
