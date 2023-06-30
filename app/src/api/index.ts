@@ -555,7 +555,6 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
       notifications.close(nextId);
       notifications.close(currentId);
       notifications.close(unmutedId);
-      localMediaContext.reconfigure({ audio: false });
       dispatch(automodStore.started(data));
 
       const totalParticipants = selectParticipantsTotal(state);
@@ -584,7 +583,6 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
       notifications.close(nextId);
       notifications.close(currentId);
       notifications.close(unmutedId);
-      localMediaContext.reconfigure({ audio: false });
       dispatch(automodStore.stopped());
       notificationAction({
         key: stoppedId,
@@ -599,7 +597,9 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
       dispatch(automodStore.remainingUpdated(data));
       break;
     case 'speaker_updated':
-      localMediaContext.reconfigure({ audio: false });
+      if (data.speaker !== state.user.uuid) {
+        localMediaContext.reconfigure({ audio: false });
+      }
       notifications.close(nextId);
       notifications.close(currentId);
       notifications.close(unmutedId);
@@ -622,6 +622,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
             unmutedId,
             passTalkingStick: () => dispatch(automod.actions.pass.action()),
             lastSpeaker: Boolean(data.remaining && data.remaining.length === 0),
+            isUnmuted: state.media.audioEnabled,
           }),
         });
       }
