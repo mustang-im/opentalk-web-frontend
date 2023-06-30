@@ -91,6 +91,7 @@ import {
   selectParticipantLimit,
   joinBlocked,
 } from '../store/slices/roomSlice';
+import { sharedFolderUpdated } from '../store/slices/sharedFolderSlice';
 import { startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
 import { updatedCinemaLayout } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
@@ -110,6 +111,7 @@ import {
   chat,
   timer,
   recording,
+  sharedFolder,
 } from './types/incoming';
 import { Role } from './types/incoming/control';
 import { Action as OutgoingActionType, automod } from './types/outgoing';
@@ -940,6 +942,19 @@ const handleRecordingMessage = (dispatch: AppDispatch, data: recording.Message) 
   }
 };
 
+const handleSharedFolderMessage = (dispatch: AppDispatch, data: sharedFolder.Message) => {
+  switch (data.message) {
+    case 'updated':
+      dispatch(sharedFolderUpdated({ read: data.read, readWrite: data.readWrite }));
+      break;
+    default: {
+      const dataString = JSON.stringify(data, null, 2);
+      console.error(`Unknown shared_folder message type: ${dataString}`);
+      throw new Error(`Unknown message type: ${dataString}`);
+    }
+  }
+};
+
 /**
  * Handle incoming websocket messages, sent from the signaling server
  *
@@ -988,6 +1003,9 @@ const onMessage =
         break;
       case 'recording':
         handleRecordingMessage(dispatch, message.payload);
+        break;
+      case 'shared_folder':
+        handleSharedFolderMessage(dispatch, message.payload);
         break;
       default: {
         const dataString = JSON.stringify(message, null, 2);

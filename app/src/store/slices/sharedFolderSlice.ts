@@ -22,6 +22,9 @@ export const sharedFolderSlice = createSlice({
     sharedFolderOpened: (state) => {
       state.opened = true;
     },
+    sharedFolderUpdated: (state, { payload }) => {
+      state.sharedFolderData = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(joinSuccess, (state, { payload: { sharedFolder } }) => {
@@ -30,7 +33,7 @@ export const sharedFolderSlice = createSlice({
   },
 });
 
-export const { sharedFolderOpened } = sharedFolderSlice.actions;
+export const { sharedFolderOpened, sharedFolderUpdated } = sharedFolderSlice.actions;
 
 export const actions = sharedFolderSlice.actions;
 

@@ -85,7 +85,8 @@ export type Namespaces =
   | 'protocol'
   | 'timer'
   | 'recording'
-  | 'whiteboard';
+  | 'whiteboard'
+  | 'shared_folder';
 
 export interface Namespaced<P = void, T extends string = Namespaces> {
   namespace: T;
