@@ -35,7 +35,7 @@
     "@mui/material": "^5.10.5",
     "@mui/styles": "^5.10.3",
     "@opentalk/common": "workspace:*",
-    "@opentalk/components": "^1.0.25",
+    "@opentalk/components": "^1.0.26",
     "@opentalk/fluent_conv": "workspace:*",
     "@opentalk/i18next-fluent": "workspace:*",
     "@opentalk/react-redux-appauth": "workspace:*",
