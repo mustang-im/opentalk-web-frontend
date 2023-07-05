@@ -249,18 +249,18 @@ moderationbar-button-protocol-tooltip = Protokoll
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
 moderationbar-button-debriefing = Nachbesprechung
-moderationbar-button-talking-stick-tooltip = Talking Stick
+moderationbar-button-talking-stick-tooltip = Redestab
 
 mute-participants-tab-title = Teilnehmer stummschalten
 mute-participants-button-all = Alle
 mute-participants-button-selected = Nach Auswahl
 
-talking-stick-tab-title = Talking Stick
+talking-stick-tab-title = Redestab
 talking-stick-skip-speaker = Redner überspringen
-talking-stick-participant-amount-notification = Hinweis: Wir empfehlen den Talking Stick ab mind. 3 Personen zu benutzen.
-talking-stick-started-first-line = Der Talking Stick wurde gestartet.
+talking-stick-participant-amount-notification = Hinweis: Wir empfehlen den Redestab ab mind. 3 Personen zu benutzen.
+talking-stick-started-first-line = Der Redestab wurde gestartet.
 talking-stick-started-second-line = Teilnehmerliste entspricht Rednerliste.
-talking-stick-finished = Der Talking Stick ist beendet.
+talking-stick-finished = Der Redestab ist beendet.
 talking-stick-next-announcement = Sie sind als nächstes dran.
 talking-stick-speaker-announcement = Sie sind jetzt dran. Bitte schalten Sie das Mikro ein!
 talking-stick-notification-unmute = Einschalten

@@ -6,6 +6,7 @@
 - Add missing names to toolbar buttons (!988)
 - Change tariff to plan in english translation (!1004)
 - Fix styling of the voting kind dropdown (!989)
+- Fix german term for talking stick (!1012)
 
 ### Stability Improvements
 
