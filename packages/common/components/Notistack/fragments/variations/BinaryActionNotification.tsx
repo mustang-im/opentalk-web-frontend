@@ -28,8 +28,8 @@ import type {
 } from '../utils';
 
 const AlertBox = styled(Box, { shouldForwardProp: (prop: string) => !['type'].includes(prop) })(({ theme, type = 'info' }) => ({
-  color: theme.palette[type].contrastText,
-  backgroundColor: theme.palette[type].main,
+  color: theme.palette.notistack[type].color,
+  backgroundColor: theme.palette.notistack[type].backgroundColor,
   borderRadius: theme.spacing(1),
   display: 'flex',
   flexDirection: 'column',
@@ -46,6 +46,16 @@ const CustomButton = styled(Button)(({ theme, color, variant }) => {
         backgroundColor: theme.palette[color].dark,
         color: theme.palette[color].contrastText
       };
+    }
+
+    if (color === 'primary' || color === 'secondary') {
+      return {
+        backgroundColor: theme.palette.notistack[color].backgroundColor,
+        color: theme.palette.notistack[color].color,
+        '&:hover': {
+          backgroundColor: theme.palette.notistack[color].hovered,
+        }
+      }
     }
   }
 
@@ -74,7 +84,8 @@ const BinaryActionNotification = React.forwardRef<HTMLDivElement, BinaryActionNo
   secondaryBtnProps = {},
   type = 'info',
   closable = true,
-  ...snackbarContentProps
+  className,
+  style,
 }, ref) => {
   const { t } = useTranslation();
 
@@ -91,7 +102,7 @@ const BinaryActionNotification = React.forwardRef<HTMLDivElement, BinaryActionNo
   }
 
   return (
-    <SnackbarContent ref={ref} role='alertdialog' {...snackbarContentProps}>
+    <SnackbarContent ref={ref} role='alertdialog' className={className} style={style}>
       <AlertBox type={type}>
         <Box display='flex' gap={1} flex={1}>
           <Box display='flex' flexDirection='column' flex={1}>
@@ -108,14 +119,14 @@ const BinaryActionNotification = React.forwardRef<HTMLDivElement, BinaryActionNo
           )}
         </Box>
         <Box display='flex' alignSelf='end' gap={1} pr={2}>
-          {typeof onSecondary === 'function' && (
-            <CustomButton variant='contained' color='secondary' {...secondaryBtnProps} data-id="binary-action-secondary" type='button' onClick={proxySecondaryClickEvent} focusRipple>
-              {secondaryBtnText}
-            </CustomButton>
-          )}
           {typeof onPrimary === 'function' && (
             <CustomButton variant='contained' color='primary' {...primaryBtnProps} data-id="binary-action-primary" type='button' onClick={proxyPrimaryClickEvent} focusRipple>
               {primaryBtnText}
+            </CustomButton>
+          )}
+          {typeof onSecondary === 'function' && (
+            <CustomButton variant='contained' color='secondary' {...secondaryBtnProps} data-id="binary-action-secondary" type='button' onClick={proxySecondaryClickEvent} focusRipple>
+              {secondaryBtnText}
             </CustomButton>
           )}
         </Box>
