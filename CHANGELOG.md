@@ -31,6 +31,7 @@
 - Add a new call_in field to the room field of events (!999)
 - Hide dial-in option when no call-in info is sent (!1001)
 - Glitchtip integration (!1016)
+- Control talking stick with the shortcut (!1013)
 
 ## 1.5.x
 

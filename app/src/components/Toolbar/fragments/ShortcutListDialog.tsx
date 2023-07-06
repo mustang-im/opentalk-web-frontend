@@ -79,6 +79,14 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
             </TableRow>
             <TableRow>
               <TableCell>
+                <code>n</code>
+              </TableCell>
+              <TableCell>
+                <Typography fontWeight={300}>{t('shortcut-pass-talking-stick')}</Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
                 <code>{t('global-space')}</code>
               </TableCell>
               <TableCell>

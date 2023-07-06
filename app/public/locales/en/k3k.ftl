@@ -365,6 +365,9 @@ legal-vote-pseudonymous = Hidden Vote
 legal-vote-success-clipboard-message = You voted {{vote}}
 legal-vote-token-copy-success = The token was copied to your clipboard
 
+legal-vote-share-token-active = The token will be displayed here after the end of vote.
+legal-vote-share-token-inactive = Do not share this token with others and keep it in a safe place!
+
 poll-participant-list-button-select = Select
 poll-participant-list-button-close = Close
 poll-participant-list-button-save = Save
@@ -376,9 +379,6 @@ It can later be used to confirm the correctness of the voting result.
 legal-vote-not-selected = You have not been selected to participate in this vote.
 legal-vote-save-form-success = Your vote form was saved successfully
 legal-vote-save-form-error = Saving failed, you need to specify a topic and a name
-
-legal-vote-share-token-active = The token will be displayed here after the end of vote.
-legal-vote-share-token-inactive = Do not share this token with others and keep it in a safe place!
 
 no-votes-in-conference = There are no votes for this conference at the moment.
 
@@ -724,7 +724,6 @@ dashboard-meeting-details-page-future = future
 dashboard-meeting-details-page-past = past
 dashboard-meeting-details-page-description-title = Description
 dashboard-meeting-details-page-time-independent = time independent
-
 dashboard-meeting-details-page-all-day = all day at {$date}
 dashboard-meeting-details-page-participant-pending = Open invitations
 dashboard-meeting-details-page-participant-accepted = Accepted
@@ -821,6 +820,7 @@ whiteboard-new-whiteboard-message-button = Open
 whiteboard-hide = Hide whiteboard
 
 shortcut-hold-to-speak = Hold to speak
+shortcut-pass-talking-stick = Pass on talking stick
 
 meeting-required-start-date = Start date is required
 meeting-required-end-date = End date is required

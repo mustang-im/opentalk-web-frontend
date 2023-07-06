@@ -599,6 +599,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
     case 'speaker_updated':
       if (data.speaker !== state.user.uuid) {
         localMediaContext.reconfigure({ audio: false });
+        dispatch(automodStore.actions.setAsInactiveSpeaker());
       }
       notifications.close(nextId);
       notifications.close(currentId);
@@ -610,7 +611,8 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
           variant: 'warning',
         });
       }
-      if (data.speaker === state.user.uuid) {
+      if (data.speaker === state.user.uuid && state.automod.speakerState === 'inactive') {
+        dispatch(automodStore.actions.setAsActiveSpeaker());
         notificationAction({
           key: currentId,
           persist: true,

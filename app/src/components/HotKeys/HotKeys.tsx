@@ -1,13 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { selectHotkeysEnabled } from '@opentalk/common';
+import { RoomMode, selectHotkeysEnabled } from '@opentalk/common';
+import { automodStore } from '@opentalk/components';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { automod } from '../../api/types/outgoing';
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
 import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../../store/slices/mediaSlice';
+import { selectCurrentRoomMode } from '../../store/slices/roomSlice';
 import { useMediaContext } from '../MediaProvider';
 
 export const HOTKEYS = ['v', 'm', 'f'];
@@ -18,6 +22,9 @@ const HotKeys = () => {
   const hotkeysEnabled = useAppSelector(selectHotkeysEnabled);
   const audioEnabled = useAppSelector(selectAudioEnabled);
   const videoEnabled = useAppSelector(selectVideoEnabled);
+  const roomMode = useAppSelector(selectCurrentRoomMode);
+  const speakerState = useAppSelector(automodStore.selectSpeakerState);
+  const dispatch = useDispatch();
 
   const isLoadingMedia = useAppSelector(selectMediaChangeInProgress);
   const push2TalkStart = useRef<Promise<void> | undefined>();
@@ -111,6 +118,16 @@ const HotKeys = () => {
         }
       }
 
+      if (!repeat && key === 'n' && roomMode === RoomMode.TalkingStick && speakerState === 'active') {
+        event.preventDefault();
+        // Attempted to achieve `setAsTransitioningSpeaker` in a middleware, but we are unable
+        // to define `pass.action` case twice as it is already defined in the ee-components.
+        // We would need to extract case definition from ee-components to the middleware,
+        // which then brings same sequential updates like in here, just in the different place.
+        dispatch(automodStore.actions.setAsTransitioningSpeaker());
+        dispatch(automod.actions.pass.action());
+      }
+
       if (key === ' ' && (type === 'keyup' || type === 'keydown')) {
         event.preventDefault();
 
@@ -128,6 +145,9 @@ const HotKeys = () => {
       toggleAudio,
       toggleVideo,
       toggleFullscreenView,
+      roomMode,
+      speakerState,
+      dispatch,
     ]
   );
 
