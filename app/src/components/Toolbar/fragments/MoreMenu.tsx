@@ -190,10 +190,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           onSecondary: () => alert('Secondary button clicked'),
           persist: true,
           type: 'error',
-          secondaryBtnProps: {
-            variant: 'contained',
-            color: 'error',
-          },
         }),
       icon: <ErrorIcon />,
     },
