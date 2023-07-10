@@ -16,6 +16,7 @@
 - Extend hot reload functionality for packages (!966)
 - Use single snackbar provider (!994)
 - Upgrade test packages to remove unmaintained packaged (!1006).
+- Improve sidebar tab definition, types and accessibility (!997)
 
 ### New Features
 

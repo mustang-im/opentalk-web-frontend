@@ -203,7 +203,8 @@ toolbar-button-screen-share-turn-off-tooltip-title = Bildschirm nicht mehr teile
 toolbar-button-end-call-tooltip-title = Raum verlassen
 
 toolbar-button-screen-share-tooltip-request-moderator-presenter-role = Frage einen Moderator um deinen Bildschirm zu teilen
-toolbar-aria-label =  Persönliche Kontrollleiste
+
+toolbar-aria-label = Persönliche Kontrollleiste
 
 more-menu-leave-call = Anruf beenden
 more-menu-create-invite = Gast einladen
@@ -250,6 +251,7 @@ moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
 moderationbar-button-debriefing = Nachbesprechung
 moderationbar-button-talking-stick-tooltip = Redestab
+moderationbar-aria-label = Moderationsbar
 
 mute-participants-tab-title = Teilnehmer stummschalten
 mute-participants-button-all = Alle

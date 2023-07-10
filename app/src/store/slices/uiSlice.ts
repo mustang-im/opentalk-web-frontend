@@ -16,6 +16,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
 import { Started as PollStartedInterface } from '../../api/types/incoming/poll';
+import { ModerationTabKey } from '../../config/moderationTabs';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { hangUp } from '../commonActions';
 import { leave, breakoutLeft } from './participantsSlice';
@@ -46,7 +47,7 @@ interface UIState {
   isCurrentWhiteboardHighlighted?: boolean;
   isCurrentProtocolHighlighted?: boolean;
   isCoffeeBreakOpen: boolean;
-  activeTab: string;
+  activeTab: ModerationTabKey;
   isFullscreenMode: boolean;
 }
 
@@ -69,7 +70,7 @@ const initialState: UIState = {
   isCurrentWhiteboardHighlighted: undefined,
   isCurrentProtocolHighlighted: undefined,
   isCoffeeBreakOpen: false,
-  activeTab: 'tab-home',
+  activeTab: ModerationTabKey.Home,
   isFullscreenMode: false,
 };
 
@@ -125,8 +126,8 @@ export const uiSlice = createSlice({
     setCoffeeBreakOpen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
       state.isCoffeeBreakOpen = isOpenFlag;
     },
-    setActiveTab(state, { payload: activeTab }: PayloadAction<string>) {
-      state.activeTab = activeTab;
+    setActiveTab(state, { payload: tabKey }: PayloadAction<ModerationTabKey>) {
+      state.activeTab = tabKey;
     },
     toggledFullScreenMode(state) {
       state.isFullscreenMode = !state.isFullscreenMode;

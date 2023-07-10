@@ -4,7 +4,7 @@
 import { Badge, styled } from '@mui/material';
 import { HomeIcon } from '@opentalk/common';
 
-import { ModerationTabKeys } from '../../config/moderationTabs';
+import { ModerationTabKey } from '../../config/moderationTabs';
 import { useAppSelector } from '../../hooks';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../store/slices/chatSlice';
 import { selectActiveTab } from '../../store/slices/uiSlice';
@@ -21,7 +21,7 @@ const HomeIconComponent = () => {
   const unreadGlobalMessageCount = useAppSelector(selectUnreadGlobalMessageCount);
   const unreadPersonalMessageCount = useAppSelector(selectUnreadPersonalMessageCount);
   const showUnreadBadge =
-    activeTab !== ModerationTabKeys.Home && unreadGlobalMessageCount + unreadPersonalMessageCount > 0;
+    activeTab !== ModerationTabKey.Home && unreadGlobalMessageCount + unreadPersonalMessageCount > 0;
 
   return (
     <>

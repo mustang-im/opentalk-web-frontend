@@ -23,7 +23,6 @@ import {
   TimerStyle,
 } from '@opentalk/common';
 import React, { Suspense } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
 import DebriefingTab from '../components/DebriefingTab';
@@ -47,7 +46,7 @@ const ResetHandraisesTab = React.lazy(() => import('../components/ResetHandraise
 const TimerTab = React.lazy(() => import('../components/TimerTab'));
 const WhiteboardTab = React.lazy(() => import('../components/WhiteboardTab'));
 
-export enum ModerationTabKeys {
+export enum ModerationTabKey {
   Home = 'tab-home',
   MuteUsers = 'tab-mute-users',
   ResetHandraises = 'tab-reset-handraises',
@@ -60,17 +59,30 @@ export enum ModerationTabKeys {
   Protocol = 'tab-protocol',
   AddUser = 'tab-add-user',
   TalkingStick = 'tab-talking-stick',
+  Debriefing = 'tab-debriefing',
+  Wollknaul = 'tab-wollknaul',
+  SpeakerQueue = 'tab-speaker-queue',
+  WheelOfNames = 'tab-wheel-of-names',
+  Divider = 'tab-divider',
 }
 
 export interface Tab {
+  /**
+   * Unique identifier for each rendered tab
+   */
+  key: ModerationTabKey;
   icon?: React.ReactElement;
-  divider: boolean;
   component?: React.ReactNode;
   tooltipTranslationKey?: string;
+  /**
+   * Key that links it to enabled feature
+   */
   featureKey?: FeaturesKeys;
+  /**
+   * Links to module enabled by the backend
+   */
   moduleKey?: BackendModules;
-  static?: boolean;
-  key: string;
+  divider?: boolean;
   disabled?: boolean;
   titleKey?: string;
 }
@@ -82,7 +94,6 @@ export const currentRoomMode = (): RoomMode | undefined => {
 export const tabs: Array<Tab> = [
   {
     icon: <HomeIconComponent />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <MenuTabs />
@@ -90,11 +101,10 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-home-tooltip',
     featureKey: FeaturesKeys.Home,
-    key: ModerationTabKeys.Home,
+    key: ModerationTabKey.Home,
   },
   {
     icon: <MuteAllIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <MuteParticipantsTab />
@@ -102,12 +112,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-mute-tooltip',
     featureKey: FeaturesKeys.MuteUsers,
-    key: ModerationTabKeys.MuteUsers,
+    key: ModerationTabKey.MuteUsers,
     titleKey: 'mute-participants-tab-title',
   },
   {
     icon: <RaiseHandOffIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <ResetHandraisesTab />
@@ -115,12 +124,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-reset-handraises-tooltip',
     featureKey: FeaturesKeys.ResetHandraises,
-    key: ModerationTabKeys.ResetHandraises,
+    key: ModerationTabKey.ResetHandraises,
     titleKey: 'reset-handraises-tab-title',
   },
   {
     icon: <DebriefingIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <DebriefingTab />
@@ -128,16 +136,15 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-debriefing',
     featureKey: FeaturesKeys.Debriefing,
-    key: FeaturesKeys.Debriefing,
+    key: ModerationTabKey.Debriefing,
     titleKey: 'debriefing-tab-title',
   },
   {
+    key: ModerationTabKey.Divider,
     divider: true,
-    key: uuidv4(),
   },
   {
     icon: <BreakroomsIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <BreakoutRoomTab />
@@ -145,12 +152,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-breakout-tooltip',
     moduleKey: BackendModules.Breakout,
-    key: ModerationTabKeys.Breakout,
+    key: ModerationTabKey.Breakout,
     titleKey: 'breakout-room-tab-title',
   },
   {
     icon: <WhiteboardIcon />,
-    divider: false,
     tooltipTranslationKey: 'moderationbar-button-whiteboard-tooltip',
     component: (
       <Suspense fallback={<SuspenseLoading />}>
@@ -158,12 +164,11 @@ export const tabs: Array<Tab> = [
       </Suspense>
     ),
     moduleKey: BackendModules.Whiteboard,
-    key: ModerationTabKeys.Whiteboard,
+    key: ModerationTabKey.Whiteboard,
     titleKey: 'whiteboard-tab-title',
   },
   {
     icon: <PollIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <PollTab />
@@ -171,12 +176,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-poll-tooltip',
     moduleKey: BackendModules.Polls,
-    key: ModerationTabKeys.Polls,
+    key: ModerationTabKey.Polls,
     titleKey: 'poll-tab-title',
   },
   {
     icon: <LegalBallotIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <LegalVote currentRoomMode={currentRoomMode} />
@@ -184,12 +188,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-ballot-tooltip',
     moduleKey: BackendModules.LegalVote,
-    key: ModerationTabKeys.LegalVote,
+    key: ModerationTabKey.LegalVote,
     titleKey: 'legal-vote-tab-title',
   },
   {
     icon: <TalkingStickIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <TalkingStickTabPanel />
@@ -197,12 +200,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-talking-stick-tooltip',
     moduleKey: BackendModules.Automod,
-    key: ModerationTabKeys.TalkingStick,
+    key: ModerationTabKey.TalkingStick,
     titleKey: 'talking-stick-tab-title',
   },
   {
     icon: <TimerIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <TimerTab timerStyle={TimerStyle.Normal} />
@@ -210,12 +212,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-timer-tooltip',
     moduleKey: BackendModules.Timer,
-    key: ModerationTabKeys.Timer,
+    key: ModerationTabKey.Timer,
     titleKey: 'timer-tab-title',
   },
   {
     icon: <CoffeeBreakIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <TimerTab timerStyle={TimerStyle.CoffeeBreak} />
@@ -223,12 +224,11 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-coffee-break-tooltip',
     moduleKey: BackendModules.Timer,
-    key: ModerationTabKeys.CoffeeBreak,
+    key: ModerationTabKey.CoffeeBreak,
     titleKey: 'coffee-break-tab-title',
   },
   {
     icon: <ProtocolIcon />,
-    divider: false,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
         <ProtocolTab />
@@ -236,36 +236,32 @@ export const tabs: Array<Tab> = [
     ),
     tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
     moduleKey: BackendModules.Protocol,
-    key: ModerationTabKeys.Protocol,
+    key: ModerationTabKey.Protocol,
     titleKey: 'protocol-tab-title',
   },
   {
     icon: <AddUserIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Add User</Typography>,
     tooltipTranslationKey: 'moderationbar-button-add-user-tooltip',
     featureKey: FeaturesKeys.AddUser,
-    key: ModerationTabKeys.AddUser,
+    key: ModerationTabKey.AddUser,
   },
   {
     icon: <WoolBallIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Wollknaul</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wollknaul-tooltip',
-    key: 'Wollknaul',
+    key: ModerationTabKey.Wollknaul,
   },
   {
     icon: <SpeakerQueueIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Speaker Queue</Typography>,
     tooltipTranslationKey: 'moderationbar-button-speaker-queue-tooltip',
-    key: 'Speaker Queue',
+    key: ModerationTabKey.SpeakerQueue,
   },
   {
     icon: <WheelOfNamesIcon />,
-    divider: false,
     component: <Typography variant={'body2'}>Wheel Of Names</Typography>,
     tooltipTranslationKey: 'moderationbar-button-wheel-tooltip',
-    key: 'Wheel Of Names',
+    key: ModerationTabKey.WheelOfNames,
   },
 ];

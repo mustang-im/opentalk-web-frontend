@@ -75,13 +75,15 @@ export enum MenuTab {
 }
 
 const MenuTabs = () => {
-  const [currentTab, setCurrentTab] = useState<MenuTab>();
   const { t } = useTranslation();
   const chatConversationState = useAppSelector(selectChatConversationState);
   const unreadGlobalMessageCount = useAppSelector(selectUnreadGlobalMessageCount);
   const unreadPersonalMessageCount = useAppSelector(selectUnreadPersonalMessageCount);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
   const currentRoomMode = useAppSelector(selectCurrentRoomMode);
+  const [currentTab, setCurrentTab] = useState<MenuTab>(
+    currentRoomMode === RoomMode.TalkingStick ? MenuTab.People : MenuTab.Chat
+  );
 
   useEffect(() => {
     if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
@@ -92,8 +94,6 @@ const MenuTabs = () => {
   useEffect(() => {
     if (currentRoomMode === RoomMode.TalkingStick) {
       setCurrentTab(MenuTab.People);
-    } else {
-      setCurrentTab(MenuTab.Chat);
     }
   }, [currentRoomMode]);
 

@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Tab as MuiTab, Tabs as MuiTabs, styled, Tooltip, Divider, Button } from '@mui/material';
+import { Tab as MuiTab, Tabs as MuiTabs, styled, Tooltip, Divider, Button, Box } from '@mui/material';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Tab as TabProps } from '../../config/moderationTabs';
+import { ModerationTabKey, Tab as TabProps } from '../../config/moderationTabs';
 
 const Tabs = styled(MuiTabs)(({ theme }) => ({
   //todo align a proper background color from theme (for now nothing fit)
@@ -71,17 +71,17 @@ const ToolbarDivider = styled(Divider)(({ theme }) => ({
 }));
 
 export type ModerationSideToolbarProps = {
-  onSelect: (tabIndex: number) => void;
-  selectedTabs: TabProps[];
-  value: number;
+  onSelect: (tabKey: ModerationTabKey) => void;
+  displayedTabs: TabProps[];
+  activeTab: ModerationTabKey;
 };
 
-const ModerationSideToolbar = ({ onSelect, selectedTabs, value }: ModerationSideToolbarProps) => {
+const ModerationSideToolbar = ({ onSelect, displayedTabs, activeTab }: ModerationSideToolbarProps) => {
   const { t } = useTranslation();
 
   const handleChange = useCallback(
-    (_event: React.SyntheticEvent<Element, Event>, tabIndex: number) => {
-      onSelect(tabIndex);
+    (_event: React.SyntheticEvent<Element, Event>, tabKey: ModerationTabKey) => {
+      onSelect(tabKey);
     },
     [onSelect]
   );
@@ -91,18 +91,28 @@ const ModerationSideToolbar = ({ onSelect, selectedTabs, value }: ModerationSide
   };
 
   const renderTabs = () =>
-    selectedTabs.map((tab) =>
+    displayedTabs.map((tab) =>
       tab.divider ? (
-        <Tab key={tab.key} label="" icon={<ToolbarDivider />} disabled />
+        <Tab key={tab.key} id={tab.key} value={tab.key} icon={<ToolbarDivider />} disabled aria-hidden />
       ) : (
-        <Tooltip key={tab.key} placement="right" title={renderTooltipTitle(tab)}>
-          <Tab icon={tab.icon} component={Button} disabled={tab.disabled} />
-        </Tooltip>
+        <Tab
+          key={tab.key}
+          icon={
+            <Tooltip placement="right" title={renderTooltipTitle(tab)}>
+              <Box component={'span'}>{tab.icon}</Box>
+            </Tooltip>
+          }
+          component={Button}
+          id={tab.key}
+          value={tab.key}
+          disabled={tab.disabled}
+          aria-controls={`tabpanel-${tab.key}`}
+        />
       )
     );
 
   return (
-    <Tabs value={value} onChange={handleChange} orientation="vertical">
+    <Tabs value={activeTab} onChange={handleChange} orientation="vertical" aria-label={t('moderationbar-aria-label')}>
       {renderTabs()}
     </Tabs>
   );
