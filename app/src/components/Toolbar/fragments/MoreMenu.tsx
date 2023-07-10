@@ -250,6 +250,13 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
       },
       icon: <ErrorIcon />,
     },
+    {
+      label: 'Test Glitchtip Integration',
+      action: function glitchtipTriggerFunction() {
+        throw new Error('Hello Glitchtip');
+      },
+      icon: <ErrorIcon />,
+    },
   ];
 
   const renderMenuItems = (menuEntries: Array<MenuEntry>) => (

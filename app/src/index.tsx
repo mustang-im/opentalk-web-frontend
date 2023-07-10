@@ -8,6 +8,7 @@ import 'webrtc-adapter';
 
 import App from './App';
 import './banner';
+import './glitchtip';
 import './i18n';
 import SplashScreenPage from './pages/SplashScreenPage';
 import reportWebVitals from './reportWebVitals';

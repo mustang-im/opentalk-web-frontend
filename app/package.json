@@ -41,6 +41,7 @@
     "@opentalk/react-redux-appauth": "workspace:*",
     "@opentalk/rest-api-rtk-query": "workspace:*",
     "@reduxjs/toolkit": "^1.8.5",
+    "@sentry/browser": "^7.60.0",
     "bowser": "^2.11.0",
     "camelcase-keys": "^7.0.2",
     "context-filter-polyfill": "^0.2.4",
@@ -74,6 +75,7 @@
   "devDependencies": {
     "@babel/core": "^7.19.1",
     "@craco/craco": "^6.4.5",
+    "@sentry/cli": "^2.19.4",
     "@storybook/addon-a11y": "^6.5.12",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",

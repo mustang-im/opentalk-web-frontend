@@ -56,6 +56,8 @@ window.config = {
   },
   features: ${ACTIVE_FEATURES},
   videoBackgrounds: ${VIDEO_BACKGROUNDS:-${DEFAULT_VIDEO_BACKGROUNDS}},
-  maxVideoBandwidth: ${MAX_VIDEO_BANDWIDTH:-600000}
+  maxVideoBandwidth: ${MAX_VIDEO_BANDWIDTH:-600000},
+  glitchtipDsn: "${SENTRY_DSN}",
+  glitchtipRelease: "$(cat /usr/share/nginx/html/FRONTEND_VERSION)",
 }
 EOF
