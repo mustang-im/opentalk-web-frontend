@@ -45,10 +45,16 @@ export default class ConnectionStats {
           let remoteReport;
           if (report.remoteId) {
             remoteReport = reports.get(report.remoteId) as RTCRemoteOutboundRtpStreamStats;
-            if (remoteReport?.type !== 'remote-outbound-rtp') {
-              throw new Error(`RTCStats expected remote report`);
-            }
           }
+
+          if (remoteReport && remoteReport.type !== 'remote-outbound-rtp') {
+            console.warn(`broken RTCStats remote report ${report.remoteId} for "inbound-rtp"`, remoteReport, report);
+            for (const [id, report] of reports) {
+              console.debug(`report id ${id}`, report);
+            }
+            throw new Error(`RTCStats expected remote report got type '${remoteReport?.type}'`);
+          }
+
           const inbound = this.inbound[id];
           if (inbound === undefined) {
             this.inbound[id] = new InboundStreamState(report, remoteReport);
@@ -73,8 +79,12 @@ export default class ConnectionStats {
           let remoteReport;
           if (report.remoteId) {
             remoteReport = reports.get(report.remoteId) as RTCRemoteInboundRtpStreamStats;
-            if (remoteReport?.type !== 'remote-inbound-rtp') {
-              throw new Error(`RTCStats expected remote report`);
+            if (remoteReport && remoteReport.type !== 'remote-inbound-rtp') {
+              console.warn(`broken RTCStats remote report ${report.remoteId} for "outbound-rtp"`, remoteReport, report);
+              for (const [id, report] of reports) {
+                console.debug(`report id ${id}`, report);
+              }
+              throw new Error(`RTCStats expected remote report got type '${remoteReport.type}'`);
             }
           }
           const outbound = this.outbound[id];

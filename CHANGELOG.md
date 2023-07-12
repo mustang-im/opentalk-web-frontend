@@ -15,8 +15,9 @@
 - Fix tests failing after moving accountManagementUrl (!1005)
 - Extend hot reload functionality for packages (!966)
 - Use single snackbar provider (!994)
-- Upgrade test packages to remove unmaintained packaged (!1006).
+- Upgrade test packages to remove unmaintained packaged (!1006)
 - Improve sidebar tab definition, types and accessibility (!997)
+- Fix WebRTC stats error in Safari for missing remote report (!1014)
 
 ### New Features
 
