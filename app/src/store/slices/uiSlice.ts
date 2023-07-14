@@ -26,7 +26,7 @@ import { leave, breakoutLeft } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
-import { startedTimer } from './timerSlice';
+import { startedTimer, stoppedTimer } from './timerSlice';
 import { setWhiteboardAvailable } from './whiteboardSlice';
 
 export interface IChatConversationState {
@@ -49,7 +49,7 @@ interface UIState {
   chatSearchValue: string;
   isCurrentWhiteboardHighlighted?: boolean;
   isCurrentProtocolHighlighted?: boolean;
-  isCoffeeBreakOpen: boolean;
+  isCoffeeBreakFullscreen: boolean;
   activeTab: ModerationTabKey;
   isFullscreenMode: boolean;
 }
@@ -72,7 +72,7 @@ const initialState: UIState = {
   chatSearchValue: '',
   isCurrentWhiteboardHighlighted: undefined,
   isCurrentProtocolHighlighted: undefined,
-  isCoffeeBreakOpen: false,
+  isCoffeeBreakFullscreen: false,
   activeTab: ModerationTabKey.Home,
   isFullscreenMode: false,
 };
@@ -126,8 +126,8 @@ export const uiSlice = createSlice({
     setProtocolHighlight(state, { payload: highlight }: PayloadAction<boolean>) {
       state.isCurrentProtocolHighlighted = highlight;
     },
-    setCoffeeBreakOpen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
-      state.isCoffeeBreakOpen = isOpenFlag;
+    setCoffeeBreakFullscreen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
+      state.isCoffeeBreakFullscreen = isOpenFlag;
     },
     setActiveTab(state, { payload: tabKey }: PayloadAction<ModerationTabKey>) {
       state.activeTab = tabKey;
@@ -179,12 +179,17 @@ export const uiSlice = createSlice({
     });
     builder.addCase(startedTimer, (state, { payload }) => {
       if (payload.style === TimerStyle.CoffeeBreak) {
-        state.isCoffeeBreakOpen = true;
+        state.isCoffeeBreakFullscreen = true;
+      }
+    });
+    builder.addCase(stoppedTimer, (state) => {
+      if (state.isCoffeeBreakFullscreen) {
+        state.isCoffeeBreakFullscreen = false;
       }
     });
     builder.addCase(joinSuccess, (state, { payload: { timer } }) => {
       if (timer?.style === TimerStyle.CoffeeBreak) {
-        state.isCoffeeBreakOpen = true;
+        state.isCoffeeBreakFullscreen = true;
       }
     });
     builder.addCase(removed, (state, { payload }: PayloadAction<MediaDescriptor>) => {
@@ -210,7 +215,7 @@ export const {
   toggleDebugMode,
   setChatSearchValue,
   setProtocolHighlight,
-  setCoffeeBreakOpen,
+  setCoffeeBreakFullscreen,
   setActiveTab,
   toggledFullScreenMode,
   pinnedRemoteScreenshare,
@@ -232,7 +237,7 @@ export const selectDebugMode = (state: RootState) => state.ui.debugMode;
 export const selectChatSearchValue = (state: RootState) => state.ui.chatSearchValue;
 export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.ui.isCurrentWhiteboardHighlighted;
 export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui.isCurrentProtocolHighlighted;
-export const selectIsCoffeeBreakOpen = (state: RootState) => state.ui.isCoffeeBreakOpen;
+export const selectIsCoffeeBreakFullscreen = (state: RootState) => state.ui.isCoffeeBreakFullscreen;
 export const selectActiveTab = (state: RootState) => state.ui.activeTab;
 export const selectIsFullscreenMode = (state: RootState) => state.ui.isFullscreenMode;
 

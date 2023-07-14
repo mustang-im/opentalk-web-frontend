@@ -219,7 +219,9 @@ export const roomSlice = createSlice({
       }
     });
     builder.addCase(stoppedTimer, (state) => {
-      state.currentMode = undefined;
+      if (state.currentMode === RoomMode.CoffeeBreak) {
+        state.currentMode = undefined;
+      }
     });
     builder.addCase(automodStore.started, (state, { payload: { selectionStrategy } }) => {
       if (selectionStrategy === AutomodSelectionStrategy.Playlist) {
