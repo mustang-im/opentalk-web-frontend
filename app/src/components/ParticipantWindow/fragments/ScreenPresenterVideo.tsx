@@ -49,10 +49,11 @@ interface ScreenPresenterVideoProps {
   togglePin: () => void;
   changeVideoPosition: () => void;
   isThumbnail?: boolean;
+  mediaRef: string;
 }
 
 const ScreenPresenterVideo = React.forwardRef<HTMLDivElement, ScreenPresenterVideoProps>(
-  ({ participantId, isVideoPinned, togglePin, videoPosition, changeVideoPosition, isThumbnail }, ref) => {
+  ({ participantId, isVideoPinned, togglePin, videoPosition, changeVideoPosition, isThumbnail, mediaRef }, ref) => {
     const videoDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
     const { active, limit } = useAppSelector(selectSubscriberStateById(videoDescriptor, 'video'));
     const [mouseOver, setMouseOver] = useState<boolean>(false);
@@ -76,7 +77,11 @@ const ScreenPresenterVideo = React.forwardRef<HTMLDivElement, ScreenPresenterVid
             changeVideoPosition={changeVideoPosition}
           />
         )}
-        {showVideo ? <RemoteVideo descriptor={videoDescriptor} /> : <AvatarContainer participantId={participantId} />}
+        {showVideo ? (
+          <RemoteVideo descriptor={videoDescriptor} mediaRef={mediaRef} />
+        ) : (
+          <AvatarContainer participantId={participantId} />
+        )}
       </SharedPresenterVideo>
     );
   }

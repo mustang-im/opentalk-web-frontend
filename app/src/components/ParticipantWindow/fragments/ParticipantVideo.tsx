@@ -26,9 +26,10 @@ interface ParticipantVideoProps {
   participantId: ParticipantId;
   presenterVideoIsActive?: boolean;
   isThumbnail?: boolean;
+  mediaRef: string;
 }
 
-const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }: ParticipantVideoProps) => {
+const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail, mediaRef }: ParticipantVideoProps) => {
   const videoDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
   const screenDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Screen }), [participantId]);
 
@@ -79,7 +80,7 @@ const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }
     }
     return (
       <Container onMouseMove={displayPresenterVideo} data-testid="participantSreenShareVideo" ref={containerRef}>
-        <RemoteVideo descriptor={screenDescriptor} />
+        <RemoteVideo descriptor={screenDescriptor} mediaRef={mediaRef} />
         <Slide direction={slideDirection} in={isVisible} mountOnEnter container={containerRef.current}>
           <ScreenPresenterVideo
             participantId={participantId}
@@ -88,6 +89,7 @@ const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }
             videoPosition={presenterVideoPosition}
             changeVideoPosition={movePresenterVideo}
             isThumbnail={isThumbnail}
+            mediaRef={`${mediaRef}-screen`}
           />
         </Slide>
       </Container>
@@ -98,7 +100,7 @@ const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }
     if (videoSubscriber?.error) {
       return mediaFailedError;
     }
-    return <RemoteVideo descriptor={videoDescriptor} />;
+    return <RemoteVideo descriptor={videoDescriptor} mediaRef={mediaRef} />;
   }
 
   return <AvatarContainer participantId={participantId} />;

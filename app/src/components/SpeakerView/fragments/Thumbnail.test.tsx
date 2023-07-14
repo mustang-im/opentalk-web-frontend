@@ -17,7 +17,7 @@ describe('Thumbnail', () => {
     const ids = store.getState().participants.ids;
     const participantId = ids[0] as ParticipantId;
 
-    await render(<Thumbnail participantId={participantId} width={0} />, store);
+    await render(<Thumbnail participantId={participantId} width={0} index={0} />, store);
 
     // Initial ThumbnailContainer appears
     expect(screen.getByTestId(`thumbsVideo-${participantId}`)).toBeInTheDocument();

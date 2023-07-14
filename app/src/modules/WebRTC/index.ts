@@ -37,14 +37,19 @@ export const getMediaStream = (descriptor: MediaDescriptor) => {
   if (currentConferenceRoom === undefined) {
     throw new Error('can not requestVideoQuality form conferenceContext');
   }
+  console.debug('getMediaStream', descriptor);
   return currentConferenceRoom.webRtc.getMediaStream(descriptor);
 };
 
-export const requestVideoQuality = (descriptor: MediaDescriptor, quality: VideoSetting) => {
+export const requestVideoQuality = (descriptor: MediaDescriptor, quality: VideoSetting, mediaRef: string) => {
   if (currentConferenceRoom === undefined) {
+    if (quality === VideoSetting.Off) {
+      return;
+    }
     throw new Error('can not requestVideoQuality form conferenceContext');
   }
-  return currentConferenceRoom.webRtc.requestQuality(descriptor, quality);
+  console.debug('requestVideoQuality', descriptor, quality, mediaRef);
+  currentConferenceRoom.webRtc.requestQuality(descriptor, quality, mediaRef);
 };
 
 export const shutdownConferenceContext = () => {

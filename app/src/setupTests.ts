@@ -124,8 +124,7 @@ jest.mock('./modules/WebRTC', () => {
   const { idFromDescriptor, descriptorFromId, MediaStreamState } = jest.requireActual('./modules/WebRTC/WebRTC');
   return {
     __esModule: true,
-    getMediaStream: () => Promise.resolve({}),
-    requestVideoQuality: () => Promise.resolve(),
+    getMediaStream: () => ({ getTracks: () => [] }),
     idFromDescriptor,
     descriptorFromId,
     MediaStreamState,

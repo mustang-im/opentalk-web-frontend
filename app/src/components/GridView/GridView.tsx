@@ -90,7 +90,7 @@ const GridView = () => {
         data-testid="cinemaCell"
         isActiveSpeaker={participant.id === selectedSpeakerId && slicedParticipants.length >= 2}
       >
-        <ParticipantWindow key={participant.id} participantId={participant.id} />
+        <ParticipantWindow key={participant.id} participantId={participant.id} mediaRef={`grid-${index}`} />
       </CinemaCell>
     </Slide>
   ));

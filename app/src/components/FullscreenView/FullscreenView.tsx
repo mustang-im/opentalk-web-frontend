@@ -73,7 +73,13 @@ const FullscreenView = () => {
       return null;
     }
 
-    return <ParticipantWindow activePresenter={isActiveOverlay} participantId={selectedParticipant.id} />;
+    return (
+      <ParticipantWindow
+        activePresenter={isActiveOverlay}
+        participantId={selectedParticipant.id}
+        mediaRef={`fullscreen`}
+      />
+    );
   }, [selectedParticipant, isActiveOverlay]);
 
   const toggleLocalVideoPin = () => setIsLocalVideoPinned((prevState) => !prevState);
