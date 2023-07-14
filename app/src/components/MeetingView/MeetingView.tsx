@@ -14,7 +14,7 @@ import DebugPanel from '../DebugPanel';
 import HotKeys from '../HotKeys';
 import LocalVideo from '../LocalVideo';
 import RemoteAudioStreams from '../RemoteAudioStreams';
-import Timer from '../Timer';
+import NormalTimerPopover from '../TimerPopover';
 import Toolbar from '../Toolbar';
 import InnerLayout from './InnerLayout';
 
@@ -80,7 +80,7 @@ const MeetingView = () => {
 
         {enableAudio && <RemoteAudioStreams />}
 
-        {!isCoffeeBreakFullscreen && <Timer anchorEl={anchorEl} />}
+        {!isCoffeeBreakFullscreen && <NormalTimerPopover anchorEl={anchorEl} />}
 
         <HotKeys />
 

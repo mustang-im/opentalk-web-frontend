@@ -5,9 +5,9 @@ import { styled, Typography, Popover as MuiPopover, Box } from '@mui/material';
 import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../hooks';
-import { selectTimerRunning } from '../../store/slices/timerSlice';
-import TimerNormalCounter from '../TimerTab/fragments/TimerNormalCounter';
+import { useAppSelector } from '../../../hooks';
+import { selectTimerRunning } from '../../../store/slices/timerSlice';
+import TimerNormalCounter from '../../TimerTab/fragments/TimerNormalCounter';
 
 const Popover = styled(MuiPopover)(({ theme }) => ({
   pointerEvents: 'none',

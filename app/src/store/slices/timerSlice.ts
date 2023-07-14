@@ -47,6 +47,11 @@ export const timerSlice = createSlice({
   reducers: {
     resetTimerState: () => initialState,
     startedTimer: (state, { payload }: PayloadAction<TimerStarted>) => {
+      // state = {
+      //   ...payload,
+      //   running: true,
+      //   participantsReady: []
+      // };
       state.startedAt = payload.startedAt;
       state.endsAt = payload.endsAt;
       state.timerId = payload.timerId;
@@ -71,6 +76,7 @@ export const timerSlice = createSlice({
       state.style = undefined;
       state.totalDuration = undefined;
       state.remainingTime = undefined;
+      // participantsReady: [],
     },
     updateParticipantsReady: (state, { payload }: PayloadAction<ReadyToContinue>) => {
       if (payload.status === true && !state.participantsReady.includes(payload.participantId)) {
@@ -88,6 +94,11 @@ export const timerSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(joinSuccess, (state, { payload: { timer } }) => {
       if (timer) {
+        // state = {
+        //   ...timer,
+        //   running: true,
+        //   participantsReady: []
+        // };
         state.endsAt = timer.endsAt;
         state.kind = timer.kind;
         state.readyCheckEnabled = timer.readyCheckEnabled;
