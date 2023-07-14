@@ -9,7 +9,7 @@ import { useAppSelector } from '../../hooks';
 import { useTimer } from '../../hooks';
 import { selectDebugMode, selectIsCoffeeBreakFullscreen } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
-import { CoffeeBreakView } from '../CoffeeBreakLayer/fragments/CoffeeBreakAnnounce';
+import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
 import DebugPanel from '../DebugPanel';
 import HotKeys from '../HotKeys';
 import LocalVideo from '../LocalVideo';

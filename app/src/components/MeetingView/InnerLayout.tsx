@@ -10,7 +10,7 @@ import { selectRoomConnectionState, ConnectionState } from '../../store/slices/r
 import { selectIsCoffeeBreakFullscreen, selectVotePollIdToShow } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import Cinema from '../Cinema';
-import { CoffeeBreakView } from '../CoffeeBreakLayer/fragments/CoffeeBreakAnnounce';
+import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
 import MeetingHeader from '../MeetingHeader/index';
 import MeetingSidebar from '../MeetingSidebar/index';
 import VoteResultContainer from '../VoteResult/VoteResultContainer';
@@ -53,7 +53,7 @@ const InnerLayout = () => {
   const renderMeetingContent = () => {
     //If the coffee break cover is open we replace the main area of the meeting with it
     if (isCoffeeBreakFullscreen && isModerator) {
-      return <CoffeeBreakView />;
+      return <CoffeeBreakView roundBorders />;
     }
 
     return (

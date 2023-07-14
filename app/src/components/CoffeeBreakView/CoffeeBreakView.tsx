@@ -8,12 +8,12 @@ import { CoffeeBreakIcon as CoffeeBreakIconDefault, setHotkeysEnabled } from '@o
 import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { readyToContinue } from '../../../api/types/outgoing/timer';
-import { ReactComponent as LogoIconDefault } from '../../../assets/images/logo.svg';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { selectCoffeeBreakTimerId, selectTimerRunning } from '../../../store/slices/timerSlice';
-import { selectIsCoffeeBreakFullscreen, setCoffeeBreakFullscreen } from '../../../store/slices/uiSlice';
-import CoffeeBreakTimer from './CoffeeBreakTimer';
+import { readyToContinue } from '../../api/types/outgoing/timer';
+import { ReactComponent as LogoIconDefault } from '../../assets/images/logo.svg';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { selectCoffeeBreakTimerId, selectTimerRunning } from '../../store/slices/timerSlice';
+import { selectIsCoffeeBreakFullscreen, setCoffeeBreakFullscreen } from '../../store/slices/uiSlice';
+import CoffeeBreakTimer from './fragments/CoffeeBreakTimer';
 
 const BackgroundCover = styled(Box)({
   background: `url('/assets/background.svg') no-repeat`,
@@ -21,7 +21,9 @@ const BackgroundCover = styled(Box)({
   gridRow: 'span 2',
 });
 
-const InnerContainer = styled(Box)({
+const InnerContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'roundBorders',
+})<{ roundBorders?: boolean }>(({ theme, roundBorders }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr',
   gridTemplateRows: '0fr 2fr',
@@ -34,7 +36,8 @@ const InnerContainer = styled(Box)({
   backgroundColor: `rgba(0, 22, 35, 0.5)`,
   overflow: 'auto',
   padding: 50,
-});
+  borderRadius: roundBorders ? theme.borderRadius.medium : undefined,
+}));
 
 const LogoIcon = styled(LogoIconDefault)(({ theme }) => ({
   height: '2rem',
@@ -57,11 +60,11 @@ const Content = styled(Box)({
   gap: '2rem',
 });
 
-export interface CoffeeBreakAnnounceProps {
-  handleClose: () => void;
+interface CoffeeBreakViewProps {
+  roundBorders?: boolean;
 }
 
-export const CoffeeBreakView = memo(() => {
+export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isTimerRunning = useAppSelector(selectTimerRunning);
@@ -81,7 +84,7 @@ export const CoffeeBreakView = memo(() => {
 
   return (
     <BackgroundCover>
-      <InnerContainer>
+      <InnerContainer roundBorders={roundBorders}>
         <LogoIcon />
 
         <Content>
