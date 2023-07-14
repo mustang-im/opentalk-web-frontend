@@ -42,18 +42,22 @@ const lightPalette: PaletteOptions = {
   error: {
     main: '#F1554C',
     contrastText: '#FFF',
+    dark: '#D32F2F',
   },
   warning: {
     main: '#FF9300',
     contrastText: '#FFF',
+    dark: '#FF9800',
   },
   info: {
     main: '#239EB1',
     contrastText: '#FFF',
+    dark: '#2196F3',
   },
   success: {
     main: '#3ABD9F',
     contrastText: '#FFF',
+    dark: '#43A047',
   },
   text: {
     primary: '#20434F',
@@ -76,6 +80,34 @@ const lightPalette: PaletteOptions = {
     background: avatarBg,
     colorTable: avatarColorTable,
   },
+  notistack: {
+    error: {
+      backgroundColor: '#D32F2F',
+      color: '#FFF',
+    },
+    success: {
+      backgroundColor: '#43A047',
+      color: '#FFF',
+    },
+    warning: {
+      backgroundColor: '#FF9800',
+      color: '#FFF',
+    },
+    info: {
+      backgroundColor: '#2196F3',
+      color: '#FFF',
+    },
+    primary: {
+      backgroundColor: '#D1E545',
+      color: '#17313A',
+      hovered: '#B0C327',
+    },
+    secondary: {
+      backgroundColor: '#17313A',
+      color: '#FFF',
+      hovered: '#0E1F25',
+    },
+  },
 };
 
 const darkPalette: PaletteOptions = {
@@ -96,18 +128,22 @@ const darkPalette: PaletteOptions = {
   error: {
     main: '#F1554C',
     contrastText: '#FFF',
+    dark: '#D32F2F',
   },
   warning: {
     main: '#FF9300',
     contrastText: '#FFF',
+    dark: '#FF9800',
   },
   info: {
     main: '#239EB1',
     contrastText: '#FFF',
+    dark: '#2196F3',
   },
   success: {
     main: '#3ABD9F',
     contrastText: '#FFF',
+    dark: '#43A047',
   },
   text: {
     primary: '#FFF',
@@ -129,6 +165,34 @@ const darkPalette: PaletteOptions = {
   avatar: {
     background: avatarBg,
     colorTable: avatarColorTable,
+  },
+  notistack: {
+    error: {
+      backgroundColor: '#D32F2F',
+      color: '#FFF',
+    },
+    success: {
+      backgroundColor: '#43A047',
+      color: '#FFF',
+    },
+    warning: {
+      backgroundColor: '#FF9800',
+      color: '#FFF',
+    },
+    info: {
+      backgroundColor: '#2196F3',
+      color: '#FFF',
+    },
+    primary: {
+      backgroundColor: '#D1E545',
+      color: '#17313A',
+      hovered: '#B0C327',
+    },
+    secondary: {
+      backgroundColor: '#17313A',
+      color: '#FFF',
+      hovered: '#0E1F25',
+    },
   },
 };
 

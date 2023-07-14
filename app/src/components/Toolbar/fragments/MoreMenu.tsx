@@ -181,6 +181,19 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
 
   const devMenuItems = [
     {
+      label: 'Show Binary Action',
+      action: () =>
+        notifications.binaryAction('Hello World', {
+          primaryBtnText: 'Primary',
+          secondaryBtnText: 'Secondary',
+          onPrimary: () => alert('Primary button clicked'),
+          onSecondary: () => alert('Secondary button clicked'),
+          persist: true,
+          type: 'error',
+        }),
+      icon: <ErrorIcon />,
+    },
+    {
       label: 'Show Test Error',
       action: () => notifications.error(`Test error context: ${new Error('Test Error')}`),
       icon: <ErrorIcon />,

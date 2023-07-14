@@ -43,6 +43,21 @@ type AvatarPalette = {
   colorTable: Array<string>;
 };
 
+type NotificationVariant = {
+  backgroundColor: string;
+  color: string;
+  hovered?: string;
+};
+
+type NotistackPalette = {
+  error: NotificationVariant;
+  warning: NotificationVariant;
+  info: NotificationVariant;
+  success: NotificationVariant;
+  primary: NotificationVariant;
+  secondary: NotificationVariant;
+};
+
 declare module '@mui/material/styles/createPalette' {
   interface TypeBackground {
     overlay?: string;
@@ -60,6 +75,7 @@ declare module '@mui/material/styles/createPalette' {
   interface PaletteOptions {
     outline?: string;
     avatar?: AvatarPalette;
+    notistack?: NotistackPalette;
   }
 
   interface PaletteColor {
