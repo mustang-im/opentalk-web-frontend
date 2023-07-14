@@ -4,15 +4,37 @@
 import { Button, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { CoffeeBreakIcon as CoffeeBreakIconDefault, TimerStyle } from '@opentalk/common';
-import { memo } from 'react';
+import { CoffeeBreakIcon as CoffeeBreakIconDefault, setHotkeysEnabled } from '@opentalk/common';
+import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { readyToContinue } from '../../../api/types/outgoing/timer';
 import { ReactComponent as LogoIconDefault } from '../../../assets/images/logo.svg';
-import { useAppSelector } from '../../../hooks';
-import { selectTimerRunning, selectTimerStyle } from '../../../store/slices/timerSlice';
-import { selectIsCoffeeBreakOpen } from '../../../store/slices/uiSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { selectCoffeeBreakTimerId, selectTimerRunning } from '../../../store/slices/timerSlice';
+import { selectIsCoffeeBreakFullscreen, setCoffeeBreakFullscreen } from '../../../store/slices/uiSlice';
 import CoffeeBreakTimer from './CoffeeBreakTimer';
+
+const BackgroundCover = styled(Box)({
+  background: `url('/assets/background.svg') no-repeat`,
+  backgroundSize: 'cover',
+  gridRow: 'span 2',
+});
+
+const InnerContainer = styled(Box)({
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  gridTemplateRows: '0fr 2fr',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100%',
+  width: '100%',
+  backdropFilter: 'blur(100px)',
+  WebkitBackdropFilter: 'blur(100px)',
+  backgroundColor: `rgba(0, 22, 35, 0.5)`,
+  overflow: 'auto',
+  padding: 50,
+});
 
 const LogoIcon = styled(LogoIconDefault)(({ theme }) => ({
   height: '2rem',
@@ -39,27 +61,41 @@ export interface CoffeeBreakAnnounceProps {
   handleClose: () => void;
 }
 
-export const CoffeeBreakAnnounce = memo(({ handleClose }: CoffeeBreakAnnounceProps) => {
+export const CoffeeBreakView = memo(() => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const isTimerRunning = useAppSelector(selectTimerRunning);
-  const timerStyle = useAppSelector(selectTimerStyle);
-  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakOpen);
+  const coffeeBreakTimerId = useAppSelector(selectCoffeeBreakTimerId);
+  const isCoffeeBreakFullscreen = useAppSelector(selectIsCoffeeBreakFullscreen);
+
+  const handleClose = () => {
+    dispatch(setCoffeeBreakFullscreen(false));
+    if (coffeeBreakTimerId) {
+      dispatch(readyToContinue.action({ timerId: coffeeBreakTimerId, status: true }));
+    }
+  };
+
+  useEffect(() => {
+    dispatch(setHotkeysEnabled(!isCoffeeBreakFullscreen));
+  }, [isCoffeeBreakFullscreen]);
 
   return (
-    <>
-      <LogoIcon />
+    <BackgroundCover>
+      <InnerContainer>
+        <LogoIcon />
 
-      <Content>
-        {isTimerRunning && isCoffeeBreakOpen && <CoffeeBreakIcon />}
+        <Content>
+          <CoffeeBreakIcon />
 
-        <Typography variant="h3" component="h2">
-          {isTimerRunning && isCoffeeBreakOpen ? t('coffee-break-layer-title') : t('coffee-break-stopped-title')}
-        </Typography>
+          <Typography variant="h3">
+            {isTimerRunning ? t('coffee-break-layer-title') : t('coffee-break-stopped-title')}
+          </Typography>
 
-        {isTimerRunning && timerStyle === TimerStyle.CoffeeBreak && <CoffeeBreakTimer />}
+          <CoffeeBreakTimer />
 
-        <Button onClick={handleClose}>{t('coffee-break-layer-button')}</Button>
-      </Content>
-    </>
+          <Button onClick={handleClose}>{t('coffee-break-layer-button')}</Button>
+        </Content>
+      </InnerContainer>
+    </BackgroundCover>
   );
 });

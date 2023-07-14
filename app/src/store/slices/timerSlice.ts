@@ -3,13 +3,14 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { ParticipantId, Timestamp, TimerKind, TimerStyle, joinSuccess } from '@opentalk/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { intervalToDuration } from 'date-fns';
 
 import { RootState } from '../';
-import { TimerStarted, ReadyToContinue, TimerStopKind, TimerStopped } from '../../api/types/incoming/timer';
+import { TimerStarted, ReadyToContinue } from '../../api/types/incoming/timer';
 
-interface RealTime {
-  format: string;
+interface RemainingTime {
   duration: Duration;
+  durationString: string;
 }
 
 interface State {
@@ -17,38 +18,34 @@ interface State {
   timerId?: string;
   endsAt?: Timestamp;
   participantsReady: Array<ParticipantId>;
-  readyCheckEnabled: boolean;
+  readyCheckEnabled?: boolean;
   title?: string;
   running: boolean;
-  message?: 'started' | 'stopped';
   kind?: TimerKind;
   style?: TimerStyle;
-  realTime?: RealTime;
-  initialTime?: RealTime;
-  kindStopTimer?: TimerStopKind;
+  remainingTime?: RemainingTime;
+  totalDuration?: Duration;
 }
 
-const initialState = {
+const initialState: State = {
   startedAt: undefined,
   timerId: undefined,
   endsAt: undefined,
   participantsReady: [],
-  readyCheckEnabled: false,
+  readyCheckEnabled: undefined,
   title: undefined,
   running: false,
   kind: undefined,
   style: undefined,
-  message: undefined,
-  realTime: undefined,
-  initialTime: undefined,
-  kindStopTimer: undefined,
+  remainingTime: undefined,
+  totalDuration: undefined,
 };
 
 export const timerSlice = createSlice({
   name: 'timer',
-  initialState: initialState as State,
+  initialState: initialState,
   reducers: {
-    setInitialStateTimer: () => initialState,
+    resetTimerState: () => initialState,
     startedTimer: (state, { payload }: PayloadAction<TimerStarted>) => {
       state.startedAt = payload.startedAt;
       state.endsAt = payload.endsAt;
@@ -56,14 +53,24 @@ export const timerSlice = createSlice({
       state.readyCheckEnabled = payload.readyCheckEnabled;
       state.title = payload.title;
       state.running = true;
-      state.message = payload.message;
       state.kind = payload.kind;
       state.style = payload.style;
+      state.totalDuration = intervalToDuration({
+        start: new Date(payload.startedAt),
+        end: new Date(payload.endsAt),
+      });
     },
-    stoppedTimer: (state, { payload }: PayloadAction<TimerStopped>) => {
+    stoppedTimer: (state) => {
+      state.startedAt = undefined;
+      state.endsAt = undefined;
+      state.timerId = undefined;
+      state.readyCheckEnabled = undefined;
+      state.title = undefined;
       state.running = false;
-      state.message = payload.message;
-      state.kindStopTimer = payload.kind;
+      state.kind = undefined;
+      state.style = undefined;
+      state.totalDuration = undefined;
+      state.remainingTime = undefined;
     },
     updateParticipantsReady: (state, { payload }: PayloadAction<ReadyToContinue>) => {
       if (payload.status === true && !state.participantsReady.includes(payload.participantId)) {
@@ -74,11 +81,8 @@ export const timerSlice = createSlice({
         state.participantsReady = state.participantsReady.filter((item) => item !== payload.participantId);
       }
     },
-    setRealTime: (state, action) => {
-      state.realTime = action.payload as RealTime;
-    },
-    setInitialTime: (state, action) => {
-      state.initialTime = action.payload as RealTime;
+    updateRemainingTime: (state, { payload }: PayloadAction<RemainingTime>) => {
+      state.remainingTime = payload;
     },
   },
   extraReducers: (builder) => {
@@ -90,21 +94,14 @@ export const timerSlice = createSlice({
         state.startedAt = timer.startedAt;
         state.style = timer.style;
         state.timerId = timer.timerId;
-        state.message = 'started';
         state.running = true;
       }
     });
   },
 });
 
-export const {
-  startedTimer,
-  stoppedTimer,
-  updateParticipantsReady,
-  setRealTime,
-  setInitialTime,
-  setInitialStateTimer,
-} = timerSlice.actions;
+export const { startedTimer, stoppedTimer, updateParticipantsReady, updateRemainingTime, resetTimerState } =
+  timerSlice.actions;
 
 export const actions = timerSlice.actions;
 
@@ -117,9 +114,9 @@ export const selectTimerTitle = (state: RootState) => state.timer.title;
 export const selectTimerRunning = (state: RootState) => state.timer.running;
 export const selectTimerKind = (state: RootState) => state.timer.kind;
 export const selectTimerStyle = (state: RootState) => state.timer.style;
-export const selectInitialTime = (state: RootState) => state.timer.initialTime;
-export const selectRealTime = (state: RootState) => state.timer.realTime;
-export const selectTimerMessage = (state: RootState) => state.timer.message;
-export const selectTimerStopKind = (state: RootState) => state.timer.kindStopTimer;
+export const selectTotalDuration = (state: RootState) => state.timer.totalDuration;
+export const selectRemainingTime = (state: RootState) => state.timer.remainingTime;
+export const selectCoffeeBreakTimerId = (state: RootState) =>
+  state.timer.style === TimerStyle.CoffeeBreak ? state.timer.timerId : undefined;
 
 export default timerSlice.reducer;

@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Typography, Popover as MuiPopover } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,10 +10,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
   selectParticipantsReady,
   selectReadyCheckEnabled,
-  selectTimerStartedAt,
   selectTimerId,
   selectTimerTitle,
-  selectTimerRunning,
 } from '../../store/slices/timerSlice';
 import { selectOurUuid } from '../../store/slices/userSlice';
 import TimerNormalCounter from '../TimerTab/fragments/TimerNormalCounter';
@@ -34,22 +31,20 @@ const TimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
   const userId = useAppSelector(selectOurUuid);
   const timerId = useAppSelector(selectTimerId);
   const timerTitle = useAppSelector(selectTimerTitle);
-  const timerRunning = useAppSelector(selectTimerRunning);
-  const timerStartTime = useAppSelector(selectTimerStartedAt);
   const hasReadyCheckEnabled = useAppSelector(selectReadyCheckEnabled);
   const participantsAreReady = useAppSelector(selectParticipantsReady);
-  const isUserReady = participantsAreReady.includes(userId as ParticipantId);
+  const isUserReady = userId && participantsAreReady.includes(userId);
 
   const handleDone = useCallback(() => {
-    if (timerStartTime && timerId) {
+    if (timerId) {
       dispatch(readyToContinue.action({ timerId, status: !isUserReady }));
     }
-  }, [timerStartTime, timerId, isUserReady]);
+  }, [timerId, isUserReady]);
 
   return (
     <Popover
       anchorEl={anchorEl}
-      open={timerRunning}
+      open={Boolean(timerId)}
       hideBackdrop
       anchorOrigin={{
         vertical: 'top',

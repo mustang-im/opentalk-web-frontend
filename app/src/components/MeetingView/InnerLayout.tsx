@@ -2,18 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, CircularProgress } from '@mui/material';
-import { ParticipantId, TimerStyle } from '@opentalk/common';
 import { legalVoteStore } from '@opentalk/components';
 
 import { useAppSelector } from '../../hooks';
 import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../store/slices/pollSlice';
 import { selectRoomConnectionState, ConnectionState } from '../../store/slices/roomSlice';
-import { selectParticipantsReady, selectTimerRunning, selectTimerStyle } from '../../store/slices/timerSlice';
-import { selectVotePollIdToShow } from '../../store/slices/uiSlice';
-import { selectOurUuid } from '../../store/slices/userSlice';
+import { selectIsCoffeeBreakFullscreen, selectVotePollIdToShow } from '../../store/slices/uiSlice';
+import { selectIsModerator } from '../../store/slices/userSlice';
 import Cinema from '../Cinema';
-import CoffeeBreakLayer from '../CoffeeBreakLayer';
-import { CoffeeBreakRequesters } from '../CoffeeBreakLayer/CoffeeBreakLayer';
+import { CoffeeBreakView } from '../CoffeeBreakLayer/fragments/CoffeeBreakAnnounce';
 import MeetingHeader from '../MeetingHeader/index';
 import MeetingSidebar from '../MeetingSidebar/index';
 import VoteResultContainer from '../VoteResult/VoteResultContainer';
@@ -49,39 +46,42 @@ const InnerLayout = () => {
   const currentShownPollVoteId = useAppSelector(selectCurrentShownPollVoteId);
   const votePollIdToShow = useAppSelector(selectVotePollIdToShow);
   const connectionState = useAppSelector(selectRoomConnectionState);
-  const timerStyle = useAppSelector(selectTimerStyle);
-  const timerRunning = useAppSelector(selectTimerRunning);
-  const userId = useAppSelector(selectOurUuid);
-  const participantsAreReady = useAppSelector(selectParticipantsReady);
-  const isUserReady = participantsAreReady.includes(userId as ParticipantId);
 
-  if (timerStyle === TimerStyle.CoffeeBreak && timerRunning && !isUserReady) {
+  const isCoffeeBreakFullscreen = useAppSelector(selectIsCoffeeBreakFullscreen);
+  const isModerator = useAppSelector(selectIsModerator);
+
+  const renderMeetingContent = () => {
+    //If the coffee break cover is open we replace the main area of the meeting with it
+    if (isCoffeeBreakFullscreen && isModerator) {
+      return <CoffeeBreakView />;
+    }
+
     return (
-      <InnerContainer>
-        <MeetingSidebar />
-        <CoffeeBreakLayer requester={CoffeeBreakRequesters.LayerInside} />
-      </InnerContainer>
+      <>
+        <MeetingHeader />
+        {connectionState === ConnectionState.Leaving || connectionState === ConnectionState.Starting ? (
+          <CircularProgressBar />
+        ) : (
+          <>
+            <Cinema />
+            {votePollIdToShow && <VoteResultContainer legalVoteId={votePollIdToShow} />}
+            {!votePollIdToShow && currentVoteId && showVoteResultContainer && (
+              <VoteResultContainer legalVoteId={currentVoteId} />
+            )}
+            {!votePollIdToShow && currentShownPollVoteId && showPollResultContainer && (
+              <VoteResultContainer legalVoteId={currentShownPollVoteId} />
+            )}
+          </>
+        )}
+      </>
     );
-  }
+  };
 
   return (
     <InnerContainer>
       <MeetingSidebar />
-      <MeetingHeader />
-      {connectionState === ConnectionState.Leaving || connectionState === ConnectionState.Starting ? (
-        <CircularProgressBar />
-      ) : (
-        <>
-          <Cinema />
-          {votePollIdToShow && <VoteResultContainer legalVoteId={votePollIdToShow} />}
-          {!votePollIdToShow && currentVoteId && showVoteResultContainer && (
-            <VoteResultContainer legalVoteId={currentVoteId} />
-          )}
-          {!votePollIdToShow && currentShownPollVoteId && showPollResultContainer && (
-            <VoteResultContainer legalVoteId={currentShownPollVoteId} />
-          )}
-        </>
-      )}
+
+      {renderMeetingContent()}
     </InnerContainer>
   );
 };

@@ -24,6 +24,7 @@ import {
   joinSuccess,
   AutomodSelectionStrategy,
   createStackedMessages,
+  TimerStyle,
 } from '@opentalk/common';
 import {
   AutomodEventType,
@@ -114,6 +115,7 @@ import {
   sharedFolder,
 } from './types/incoming';
 import { Role } from './types/incoming/control';
+import { TimerStopKind } from './types/incoming/timer';
 import { Action as OutgoingActionType, automod } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
@@ -837,14 +839,35 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
  * @param {AppDispatch} dispatch - this is the dispatch function from the redux store.
  * @param {timer.Message} data Message content
  */
-const handleTimerMessage = (dispatch: AppDispatch, data: timer.Message) => {
+const handleTimerMessage = (dispatch: AppDispatch, data: timer.Message, state: RootState) => {
   switch (data.message) {
     case 'started':
+      if (data.style === TimerStyle.CoffeeBreak) {
+        localMediaContext.reconfigure({ audio: false, video: false });
+      }
       dispatch(startedTimer(data));
       break;
-    case 'stopped':
-      dispatch(stoppedTimer(data));
+    case 'stopped': {
+      const timerStyle = state.timer.style;
+      if (timerStyle === TimerStyle.Normal) {
+        switch (data.kind) {
+          case TimerStopKind.Expired:
+            notifications.info(i18next.t('timer-notification-ran-out'));
+            break;
+          case TimerStopKind.ByModerator:
+            notifications.info(i18next.t('timer-notification-stopped'));
+            break;
+          case TimerStopKind.CreatorLeft:
+          default:
+            break;
+        }
+      }
+      if (timerStyle === TimerStyle.CoffeeBreak) {
+        notifications.info(i18next.t('coffee-break-notification'));
+      }
+      dispatch(stoppedTimer());
       break;
+    }
     case 'updated_ready_status':
       dispatch(updateParticipantsReady(data));
       break;
@@ -996,7 +1019,7 @@ const onMessage =
         handleChatMessage(dispatch, message.payload, message.timestamp, getState());
         break;
       case 'timer':
-        handleTimerMessage(dispatch, message.payload);
+        handleTimerMessage(dispatch, message.payload, getState());
         break;
       case 'whiteboard':
         handleWhiteboardMessage(dispatch, message.payload);

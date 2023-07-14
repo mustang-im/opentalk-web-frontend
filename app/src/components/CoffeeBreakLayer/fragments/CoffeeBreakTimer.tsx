@@ -6,7 +6,7 @@ import { isNumber } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
-import { selectInitialTime, selectRealTime } from '../../../store/slices/timerSlice';
+import { selectTotalDuration, selectRemainingTime } from '../../../store/slices/timerSlice';
 
 const TimerTypography = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'isRed',
@@ -20,41 +20,41 @@ const TimerTypography = styled(Typography, {
 }));
 
 const CoffeeBreakTimer = () => {
-  const realTime = useAppSelector(selectRealTime);
-  const initialTime = useAppSelector(selectInitialTime);
-  const [isRed, setIsRed] = useState(false);
+  const remainingTime = useAppSelector(selectRemainingTime);
+  const totalDuration = useAppSelector(selectTotalDuration);
+  const [isTimerRed, setIsTimerRed] = useState(false);
 
   useEffect(() => {
-    if (!initialTime || !realTime) {
+    if (!totalDuration || !remainingTime) {
       return;
     }
 
-    if (!isNumber(initialTime.duration.minutes) || !isNumber(realTime.duration.minutes)) {
+    if (!isNumber(totalDuration.minutes) || !isNumber(remainingTime.duration.minutes)) {
       return;
     }
 
-    const initialMinute = initialTime.duration.minutes + 1;
-    let redTimerStartMinute;
-    if (initialMinute <= 5) {
-      redTimerStartMinute = 0;
-    } else if (initialMinute <= 15) {
-      redTimerStartMinute = 2;
+    const initialMinuteValue = totalDuration.minutes;
+    let timerTurnsRedOnMinute;
+    if (initialMinuteValue <= 5) {
+      timerTurnsRedOnMinute = 0;
+    } else if (initialMinuteValue <= 15) {
+      timerTurnsRedOnMinute = 2;
     } else {
-      redTimerStartMinute = 4;
+      timerTurnsRedOnMinute = 4;
     }
 
-    if (realTime.duration.minutes <= redTimerStartMinute) {
-      setIsRed(true);
+    if (remainingTime.duration.minutes <= timerTurnsRedOnMinute) {
+      setIsTimerRed(true);
     }
 
     return () => {
-      setIsRed(false);
+      setIsTimerRed(false);
     };
-  }, [initialTime, realTime]);
+  }, [totalDuration, remainingTime]);
 
   return (
-    <TimerTypography isRed={isRed ? 'active' : ''} component="div">
-      {realTime?.format}
+    <TimerTypography isRed={isTimerRed ? 'active' : ''} component="div">
+      {remainingTime?.durationString}
     </TimerTypography>
   );
 };

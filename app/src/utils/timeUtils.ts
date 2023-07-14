@@ -18,9 +18,9 @@ export const getIntervalToDurationString = (interval: Interval) => {
   });
 };
 
-export const getDuration = (interval: Interval) => ({
-  format: getIntervalToDurationString(interval),
+export const getRemainingTimeForInterval = (interval: Interval) => ({
   duration: intervalToDuration(interval),
+  durationString: getIntervalToDurationString(interval),
 });
 
 export const sleep = (ms: number) => {

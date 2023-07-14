@@ -7,8 +7,9 @@ import { useRef, useState, useEffect } from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { useTimer } from '../../hooks';
-import { selectDebugMode, selectIsCoffeeBreakOpen } from '../../store/slices/uiSlice';
+import { selectDebugMode, selectIsCoffeeBreakFullscreen } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
+import { CoffeeBreakView } from '../CoffeeBreakLayer/fragments/CoffeeBreakAnnounce';
 import DebugPanel from '../DebugPanel';
 import HotKeys from '../HotKeys';
 import LocalVideo from '../LocalVideo';
@@ -53,11 +54,12 @@ const MeetingView = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallPortraitScreen = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
   const debugMode = useAppSelector(selectDebugMode);
-  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakOpen);
+  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakFullscreen);
   const isModerator = useAppSelector(selectIsModerator);
   const containerRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const enableAudio = isModerator || !isCoffeeBreakOpen;
+  const isCoffeeBreakFullscreen = useAppSelector(selectIsCoffeeBreakFullscreen);
 
   useTimer();
 
@@ -66,30 +68,39 @@ const MeetingView = () => {
     return () => setAnchorEl(null);
   }, [containerRef]);
 
-  return (
-    <Container ref={containerRef}>
-      {debugMode && <DebugPanel />}
+  const renderContent = () => {
+    //If the coffee break cover is open then we replace the entirety of the content with it
+    if (isCoffeeBreakFullscreen && !isModerator) {
+      return <CoffeeBreakView />;
+    }
 
-      {enableAudio && <RemoteAudioStreams />}
+    return (
+      <>
+        {debugMode && <DebugPanel />}
 
-      <Timer anchorEl={anchorEl} />
+        {enableAudio && <RemoteAudioStreams />}
 
-      <HotKeys />
+        {!isCoffeeBreakFullscreen && <Timer anchorEl={anchorEl} />}
 
-      <InnerLayout />
+        <HotKeys />
 
-      {(isSmallScreen || isSmallPortraitScreen) && (
-        <>
-          <LocalVideoWrapper>
-            <LocalVideo />
-          </LocalVideoWrapper>
-          <ToolbarWrapper>
-            <Toolbar />
-          </ToolbarWrapper>
-        </>
-      )}
-    </Container>
-  );
+        <InnerLayout />
+
+        {(isSmallScreen || isSmallPortraitScreen) && (
+          <>
+            <LocalVideoWrapper>
+              <LocalVideo />
+            </LocalVideoWrapper>
+            <ToolbarWrapper>
+              <Toolbar />
+            </ToolbarWrapper>
+          </>
+        )}
+      </>
+    );
+  };
+
+  return <Container ref={containerRef}>{renderContent()}</Container>;
 };
 
 export default MeetingView;

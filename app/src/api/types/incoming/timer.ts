@@ -21,7 +21,11 @@ export interface TimerStarted {
   style?: TimerStyle;
 }
 
-export type TimerStopKind = 'by_moderator' | 'expired' | 'creator_left';
+export enum TimerStopKind {
+  ByModerator = 'by_moderator',
+  Expired = 'expired',
+  CreatorLeft = 'creator_left',
+}
 
 export interface TimerStopped {
   message: 'stopped';
