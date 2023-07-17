@@ -14,7 +14,7 @@ interface SideTabPanelProps {
 }
 
 const TabTitle = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 0),
+  paddingBottom: theme.spacing(2),
   fontSize: '1.25rem',
 }));
 
@@ -22,12 +22,7 @@ const TabContainer = styled('div')({
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
-  maxHeight: 'calc(100vh - 19em)',
-  overflow: 'auto',
-  // buttons shall take the whole width of the tab
-  '.MuiButton-root': {
-    flexGrow: 1,
-  },
+  overflow: 'hidden',
 });
 
 const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, hidden, tabTitle }, ref) => {
@@ -43,8 +38,9 @@ const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, 
       flexDirection={'column'}
       maxWidth={'100%'}
       maxHeight={'100%'}
+      overflow="hidden"
     >
-      <TabTitle>{tabTitle}</TabTitle>
+      {tabTitle && <TabTitle>{tabTitle}</TabTitle>}
       {!hidden && <TabContainer>{children}</TabContainer>}
     </Box>
   );

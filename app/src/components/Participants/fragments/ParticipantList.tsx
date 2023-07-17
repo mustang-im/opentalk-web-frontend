@@ -10,7 +10,8 @@ import {
   Typography,
   FormControlLabel as MuiFormControlLabel,
   Switch,
-  ListItem,
+  Box,
+  Stack,
 } from '@mui/material';
 import { ArrowDownIcon, Participant } from '@opentalk/common';
 import React from 'react';
@@ -24,13 +25,6 @@ import {
 import { selectShowParticipantGroups, setSortByGroups } from '../../../store/slices/uiSlice';
 import ParticipantListItem from './ParticipantListItem';
 
-const ListContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  maxHeight: 'calc(100vh - 25em)',
-  overflow: 'auto',
-});
-
 const CustomList = styled(List)({
   flex: '1 1 auto',
   overflowY: 'auto',
@@ -39,7 +33,6 @@ const CustomList = styled(List)({
 });
 
 const Accordion = styled(MuiAccordion)({
-  margin: '0 !important',
   backgroundColor: 'transparent',
 });
 
@@ -49,9 +42,6 @@ const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
   flexDirection: 'row-reverse',
   maxHeight: '2rem !important',
   minHeight: '2rem !important',
-  '& .MuiAccordionSummary-content.Mui-expanded': {
-    marginLeft: theme.spacing(1),
-  },
   '& .MuiAccordionSummary-content': {
     marginLeft: theme.spacing(1),
     justifyContent: 'space-between',
@@ -120,8 +110,8 @@ const ParticipantList = () => {
   };
 
   return (
-    <ListContainer>
-      <ListItem sx={{ px: 0 }}>
+    <Stack spacing={1} flex={1} overflow="hidden">
+      <Box display="flex" justifyContent="space-between">
         <FormControlLabel
           control={
             <Switch
@@ -138,9 +128,11 @@ const ParticipantList = () => {
           }
           labelPlacement="start"
         />
-      </ListItem>
-      {groupParticipantsEnabled ? renderAccordions() : renderParticipantList(allParticipants)}
-    </ListContainer>
+      </Box>
+      <Box flex={1} overflow="auto">
+        {groupParticipantsEnabled ? renderAccordions() : renderParticipantList(allParticipants)}
+      </Box>
+    </Stack>
   );
 };
 

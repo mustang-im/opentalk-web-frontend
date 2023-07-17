@@ -298,7 +298,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         anchorEl={anchorEl}
         open={open}
         onClose={onClose}
-        disablePortal
         data-testid="moreMenu"
       >
         <MenuTitleContainer direction="row" spacing={2}>

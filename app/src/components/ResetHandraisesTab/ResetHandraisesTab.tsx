@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 import { Participant } from '@opentalk/common';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,13 +21,7 @@ const ResetHandraisesTab = () => {
     dispatch(resetRaisedHands.action());
   }, [dispatch]);
 
-  return (
-    <Grid container>
-      <Grid item xs={12} display="flex">
-        <Button onClick={resetAllHandraises}>{t('reset-handraises-button')}</Button>
-      </Grid>
-    </Grid>
-  );
+  return <Button onClick={resetAllHandraises}>{t('reset-handraises-button')}</Button>;
 };
 
 export default ResetHandraisesTab;

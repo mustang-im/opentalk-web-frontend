@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, FormHelperText, Button, Grid } from '@mui/material';
+import { styled, FormHelperText, Button, Box } from '@mui/material';
 import { Seconds } from '@opentalk/common';
 import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon, Participant } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
@@ -34,6 +34,7 @@ type Expanded = string | false;
 
 const Form = styled('form')({
   flex: 1,
+  overflow: 'hidden',
 });
 
 class HandleSubmit extends React.Component<{ handleNext: () => void; formik: FormikProps<FormikValues> }> {
@@ -102,7 +103,7 @@ const CreateRoomsForm = () => {
     () => [
       {
         component: (formik) => (
-          <>
+          <Box overflow="auto" height="100%">
             <AccordionItem
               onChange={handleChange(AccordionOptions.Rooms, formik)}
               option={AccordionOptions.Rooms}
@@ -121,38 +122,8 @@ const CreateRoomsForm = () => {
             >
               <CreateByParticipantsForm formName={AccordionOptions.Participants} handleNext={handleNext} />
             </AccordionItem>
-            {/*
-            todo add if the information about groups and moderators is available
-
-            <AccordionItem
-            onChange={handleChange(AccordionOptions.Groups, formik)}
-            option={AccordionOptions.Groups}
-            expanded={expanded === AccordionOptions.Groups}
-            summaryText={t('breakout-room-tab-by-groups')}
-            summaryIcon={<GroupsIcon />}
-          >
-            <CreateByGroupsForm
-              formName={AccordionOptions.Groups}
-              formik={formik}
-              handleNext={handleNextRef.current!}
-            />
-          </AccordionItem>
-          <AccordionItem
-            onChange={handleChange(AccordionOptions.Moderators, formik)}
-            option={AccordionOptions.Moderators}
-            expanded={expanded === AccordionOptions.Moderators}
-            summaryText={t('breakout-room-tab-by-moderators')}
-            summaryIcon={<ModeratorIcon />}
-          >
-            <CreateByModeratorsForm
-              formName={AccordionOptions.Moderators}
-              formik={formik}
-              handleNext={handleNextRef.current!}
-            />
-          </AccordionItem>
-            */}
             {formik.errors.expanded && <FormHelperText error>{t(formik.errors.expanded as string)}</FormHelperText>}
-          </>
+          </Box>
         ),
         validationSchema: validationSchema(),
       },
@@ -162,8 +133,8 @@ const CreateRoomsForm = () => {
           return formState.distribution ? (
             <HandleSubmit handleNext={handleNextRef.current as () => void} formik={formik} />
           ) : (
-            <Grid container spacing={1} direction={'column'}>
-              <Grid item xs>
+            <Box display="flex" flexDirection="column" flex={1} height="100%" gap={1}>
+              <Box>
                 <Button
                   variant={'text'}
                   size={'small'}
@@ -172,15 +143,15 @@ const CreateRoomsForm = () => {
                 >
                   {t('user-selection-button-back')}
                 </Button>
-              </Grid>
-              <Grid item xs>
+              </Box>
+              <Box overflow="hidden" flex={1}>
                 <ParticipantsSelector
                   onSubmit={handleNextRef.current as () => void}
                   formName={formik.values.expanded}
                   name={`${formik.values.expanded}.assignments`}
                 />
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           );
         },
       },

@@ -17,10 +17,10 @@ import { useAppSelector } from '../../../hooks';
 import { ChatProps, selectUnreadPersonalMessageCountByTarget } from '../../../store/slices/chatSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 
-const ListItemContainer = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+const CustomListItemButton = styled(ListItemButton)(({ theme }) => ({
   '&:hover': {
-    background: theme.palette.secondary.light,
+    background: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
   },
 }));
 
@@ -30,7 +30,7 @@ const ListItemAvatar = styled(MuiListItemAvatar)(({ theme }) => ({
 }));
 
 const TimeTypography = styled(Typography)({
-  color: '#7b9ca9',
+  opacity: 0.7,
 });
 
 interface IScopedChatItemProps {
@@ -59,7 +59,7 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   const renderPrimaryText = () => (
     <Grid container direction={'row'} spacing={1}>
       <Grid item zeroMinWidth xs>
-        <Typography fontWeight={fontWeight} variant={'body1'} color={'textPrimary'} noWrap translate="no">
+        <Typography fontWeight={fontWeight} variant={'body1'} noWrap translate="no">
           {getDisplayName()}
         </Typography>
       </Grid>
@@ -78,14 +78,12 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   );
 
   return (
-    <ListItemContainer>
-      <ListItemButton onClick={() => onClick(chat.id)} disableGutters>
-        <ListItemAvatar>
-          <ParticipantAvatar src={participant?.avatarUrl}>{getDisplayName()}</ParticipantAvatar>
-        </ListItemAvatar>
-        <ListItemText primary={renderPrimaryText()} secondary={renderSecondaryText()} />
-      </ListItemButton>
-    </ListItemContainer>
+    <CustomListItemButton onClick={() => onClick(chat.id)}>
+      <ListItemAvatar>
+        <ParticipantAvatar src={participant?.avatarUrl}>{getDisplayName()}</ParticipantAvatar>
+      </ListItemAvatar>
+      <ListItemText primary={renderPrimaryText()} secondary={renderSecondaryText()} />
+    </CustomListItemButton>
   );
 };
 

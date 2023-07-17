@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, FormHelperText, Grid, styled, Typography } from '@mui/material';
+import { Box, Button, FormHelperText, styled, Typography } from '@mui/material';
 import { Participant } from '@opentalk/common';
 import { useField, useFormikContext } from 'formik';
 import i18n from 'i18next';
@@ -226,13 +226,22 @@ const ParticipantsSelector = ({ name, formName, onSubmit }: IParticipantsSelecto
   };
 
   return (
-    <Grid container spacing={1} direction={'column'}>
-      <Grid item>{renderRooms()}</Grid>
-      <Grid item>{meta.error || (error && <FormHelperText error>{meta.error || error}</FormHelperText>)}</Grid>
-      <Grid item>
+    <Box display="flex" flexDirection="column" gap={1} height="100%" data-testid="participant-selector">
+      <Box flex={1} height="100%" overflow="hidden">
+        <Box overflow="auto" height="100%">
+          {renderRooms()}
+        </Box>
+      </Box>
+      {meta.error ||
+        (error && (
+          <Box>
+            <FormHelperText error>{meta.error || error}</FormHelperText>
+          </Box>
+        ))}
+      <Box>
         <Button onClick={customSubmit}>{t('breakout-room-create-button')}</Button>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
 

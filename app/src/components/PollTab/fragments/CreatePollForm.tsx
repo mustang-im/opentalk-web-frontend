@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Grid, styled, Switch, Typography, Tooltip } from '@mui/material';
+import { Button, styled, Switch, Typography, Tooltip, Box } from '@mui/material';
 import { Seconds, BackIcon, notifications, RoomMode } from '@opentalk/common';
 import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { FormikValues, Formik } from 'formik';
@@ -32,18 +32,13 @@ const defaultInitialValues: PollFormValues = {
   live: false,
 };
 
-const GridContainer = styled(Grid)({
-  flex: 1,
-  maxWidth: '100%',
-});
-
-const Form = styled('form')({
+const Form = styled('form')(({ theme }) => ({
   display: 'flex',
+  flexDirection: 'column',
   flex: 1,
-});
-
-const Title = styled(Typography)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
+  overflow: 'hidden',
+  width: '100%',
+  gap: theme.spacing(1), // Spacing between form fields and buttons
 }));
 
 const validationSchema = yup.object({
@@ -104,73 +99,61 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
     >
       {(formik) => (
         <Form onSubmit={formik.handleSubmit}>
-          <GridContainer container alignContent={'space-between'}>
-            <Grid item zeroMinWidth>
-              <Grid container>
-                <Grid item>
-                  <Button variant={'text'} onClick={onClose} startIcon={<BackIcon />}>
-                    {t('poll-button-back')}
-                  </Button>
-                  <Title variant={'h2'}>
-                    {isEditing ? t('poll-header-title-update') : t('poll-header-title-create')}
-                  </Title>
-                </Grid>
-                <Grid item xs={12} zeroMinWidth>
-                  <Grid container spacing={1}>
-                    <Grid item xs={12}>
-                      <DurationField
-                        {...formikDurationFieldProps('duration', formik)}
-                        durationOptions={[1, 2, 5, 'custom']}
-                        ButtonProps={{
-                          size: 'small',
-                        }}
-                        min={1}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <CommonFormItem
-                        {...formikSwitchProps('live', formik)}
-                        control={
-                          <Tooltip title={`${t('poll-form-switch-live-tooltip')}`}>
-                            <Switch color="primary" />
-                          </Tooltip>
-                        }
-                        label={t('poll-form-switch-live')}
-                        labelPlacement="start"
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        {...formikProps('topic', formik)}
-                        placeholder={t('poll-input-topic-placeholder')}
-                        fullWidth
-                        minRows={4}
-                        maxRows={6}
-                        multiline
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <AnswersFormElement name={'choices'} />
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs mt={2}>
-              <Grid container justifyContent={'space-between'} spacing={2}>
-                <Grid item xs={6} display="flex">
-                  <Button type="button" onClick={() => saveFormValues(formik.values)}>
-                    {t('poll-form-button-save')}
-                  </Button>
-                </Grid>
-                <Grid item xs={6} display="flex">
-                  <Button disabled={isCoffeeBreakActive} type="submit">
-                    {t('poll-form-button-submit')}
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </GridContainer>
+          <Box display="flex" flexDirection="column">
+            <Box marginBottom={1}>
+              <Button variant={'text'} onClick={onClose} startIcon={<BackIcon />}>
+                {t('poll-button-back')}
+              </Button>
+            </Box>
+            <Typography variant={'h2'}>
+              {isEditing ? t('poll-header-title-update') : t('poll-header-title-create')}
+            </Typography>
+          </Box>
+          <Box flex={1} overflow="auto">
+            <Box display="flex" flexDirection="column">
+              <Box marginBottom={1}>
+                <DurationField
+                  {...formikDurationFieldProps('duration', formik)}
+                  durationOptions={[1, 2, 5, 'custom']}
+                  min={1}
+                />
+              </Box>
+              <Box marginBottom={1}>
+                <CommonFormItem
+                  {...formikSwitchProps('live', formik)}
+                  control={
+                    <Tooltip title={`${t('poll-form-switch-live-tooltip')}`}>
+                      <Switch color="primary" />
+                    </Tooltip>
+                  }
+                  label={t('poll-form-switch-live')}
+                  labelPlacement="start"
+                />
+              </Box>
+              <Box marginBottom={1}>
+                <TextField
+                  {...formikProps('topic', formik)}
+                  placeholder={t('poll-input-topic-placeholder')}
+                  fullWidth
+                  minRows={4}
+                  maxRows={6}
+                  multiline
+                />
+              </Box>
+              <Box marginBottom={1}>
+                <AnswersFormElement name={'choices'} />
+              </Box>
+            </Box>
+          </Box>
+
+          <Box display="flex" justifyContent="space-between" gap={2}>
+            <Button type="button" onClick={() => saveFormValues(formik.values)} fullWidth>
+              {t('poll-form-button-save')}
+            </Button>
+            <Button disabled={isCoffeeBreakActive} type="submit" fullWidth>
+              {t('poll-form-button-submit')}
+            </Button>
+          </Box>
         </Form>
       )}
     </Formik>

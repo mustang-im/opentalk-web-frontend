@@ -47,7 +47,7 @@ const UserList = () => {
   };
 
   return (
-    <Stack spacing={2} overflow="hidden">
+    <Stack spacing={1} overflow="hidden">
       <Typography variant="h2">{t('global-participants')}</Typography>
       <List>{renderUsers()}</List>
     </Stack>

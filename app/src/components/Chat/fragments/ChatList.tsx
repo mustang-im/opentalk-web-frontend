@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, List, ListItem, styled, Typography } from '@mui/material';
+import { Box, List, ListItem, styled, Typography, Stack } from '@mui/material';
 import { ParticipantId, TargetId, ChatScope, ChatMessage as ChatMessageType } from '@opentalk/common';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,13 +14,14 @@ import { selectChatSearchValue } from '../../../store/slices/uiSlice';
 import ChatMessage from './ChatMessage';
 import NoSearchResult from './NoSearchResult';
 
-const ChatOrderedList = styled(List)(({ theme }) => ({
+const ChatOrderedList = styled(List)<{ empty: boolean }>(({ theme, empty }) => ({
   flex: '1 1 auto',
   overflowY: 'auto',
   height: 0,
   textAlign: 'left',
   width: '100%',
   paddingRight: theme.spacing(1),
+  display: empty ? 'none' : 'block',
 }));
 
 type ChatListProps = {
@@ -69,33 +70,31 @@ const ChatList = ({ scope, targetId, onReset }: ChatListProps) => {
 
   if (combinedMessageAndEvents.length > 0) {
     return (
-      <ChatOrderedList data-testid={'combined-messages'}>
+      <>
         {chatSearchValue && searchedMessages.length === 0 && <NoSearchResult onReset={onReset} />}
-        {searchedMessages.map((chatMessage) => (
-          <ListItem key={chatMessage.id} disableGutters>
-            <ChatMessage message={chatMessage} />
-          </ListItem>
-        ))}
-        <div ref={scrollRef} />
-      </ChatOrderedList>
+        <ChatOrderedList data-testid={'combined-messages'} empty={searchedMessages.length === 0}>
+          {searchedMessages.map((chatMessage) => (
+            <ListItem key={chatMessage.id} disableGutters>
+              <ChatMessage message={chatMessage} />
+            </ListItem>
+          ))}
+          <div ref={scrollRef} />
+        </ChatOrderedList>
+      </>
     );
   }
+
   return (
-    <Box
-      display={'inline-flex'}
-      flex={1}
-      justifyContent={'center'}
-      alignItems={'center'}
-      flexDirection={'column'}
-      data-testid={'no-messages'}
-    >
-      <Box mb={2}>
-        <EncryptedMessagesImage width={'7.5em'} height={'7.5em'} />
-      </Box>
-      <Typography align={'center'} variant={'body2'}>
-        {t('encrypted-messages')}
-      </Typography>
-    </Box>
+    <Stack flex={1} overflow="hidden" justifyContent="center">
+      <Stack data-testid={'no-messages'} alignItems="center" overflow="auto" spacing={2}>
+        <Box>
+          <EncryptedMessagesImage width={'7em'} height={'7em'} />
+        </Box>
+        <Typography align={'center'} variant={'body2'}>
+          {t('encrypted-messages')}
+        </Typography>
+      </Stack>
+    </Stack>
   );
 };
 
