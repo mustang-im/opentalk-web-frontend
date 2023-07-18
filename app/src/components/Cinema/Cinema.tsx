@@ -7,7 +7,7 @@ import { FullScreen as ReactFullScreen } from 'react-full-screen';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
-import { selectParticipantsLayout } from '../../store/slices/uiSlice';
+import { selectCinemaLayout } from '../../store/slices/uiSlice';
 import FullscreenView from '../FullscreenView/index';
 import GridView from '../GridView';
 import ProtocolView from '../ProtocolView';
@@ -25,7 +25,7 @@ const Container = styled(MuiContainer)({
 });
 
 const Cinema = () => {
-  const userLayout = useAppSelector(selectParticipantsLayout);
+  const userLayout = useAppSelector(selectCinemaLayout);
   const fullscreenHandle = useFullscreenContext();
 
   const renderView = () => {

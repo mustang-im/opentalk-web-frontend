@@ -92,7 +92,7 @@ import {
   joinBlocked,
 } from '../store/slices/roomSlice';
 import { startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
-import { participantsLayoutSet } from '../store/slices/uiSlice';
+import { updatedCinemaLayout } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import showConsentNotification from '../utils/showConsentNotification';
@@ -207,7 +207,7 @@ const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
   const subscriberLimitHandler = (limit: QualityLimit) => dispatch(subscriberLimit(limit));
   console.debug('init webRTC context');
 
-  webRtc.addEventListener('unpublished', removeHandler);
+  webRtc.addEventListener('removed', removeHandler);
   webRtc.addEventListener('subscriberchanged', updateHandler);
   webRtc.addEventListener('statsupdated', statsHandler);
   webRtc.addEventListener('subscriberclosed', closeHandler);
@@ -332,7 +332,7 @@ const handleControlMessage = (
           msg: i18next.t('whiteboard-new-whiteboard-message'),
           variant: 'info',
           actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
-          onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Whiteboard)),
+          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Whiteboard)),
         });
       }
 
@@ -797,7 +797,7 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
           ),
           variant: 'info',
           actionBtnText: i18next.t('protocol-new-protocol-message-button'),
-          onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Protocol)),
+          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
         });
       }
       dispatch(setProtocolWriteUrl(data.url));
@@ -810,7 +810,7 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
           ),
           variant: 'info',
           actionBtnText: i18next.t('protocol-new-protocol-message-button'),
-          onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Protocol)),
+          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
         });
       }
       dispatch(setProtocolReadUrl(data.url));
@@ -867,7 +867,7 @@ const handleWhiteboardMessage = (dispatch: AppDispatch, data: whiteboard.Message
         msg: i18next.t('whiteboard-new-whiteboard-message'),
         variant: 'info',
         actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
-        onAction: () => dispatch(participantsLayoutSet(LayoutOptions.Whiteboard)),
+        onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Whiteboard)),
       });
 
       break;

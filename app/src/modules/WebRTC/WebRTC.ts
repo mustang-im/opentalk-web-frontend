@@ -60,8 +60,8 @@ export type WebRtcContextEvent = {
   statsupdated: Record<MediaId, StatsEvent>;
   subscriberLimit: QualityLimit;
   upstreamLimit: VideoSetting;
-  // A 'unpublished' event is sent when a participant stops publishing e.g. when leaving the conference.
-  unpublished: MediaDescriptor;
+  // 'removed' event is sent when a participant stops publishing e.g. when leaving the conference.
+  removed: MediaDescriptor;
 };
 
 export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
@@ -438,27 +438,44 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
 
   public unsubscribe(descriptor: MediaDescriptor) {
     const mediaId = idFromDescriptor(descriptor);
-    this.eventEmitter.emit('unpublished', descriptor);
+    const subscriber = this.subscribers.get(mediaId);
+    if (subscriber === undefined) {
+      console.error(`unsubscribe: subscriber ${mediaId} not found`);
+      return;
+    }
+
+    if (subscriber.action !== undefined) {
+      console.error(`unsubscribe: will not close subscriber ${mediaId} while connecting`);
+      return;
+    }
+    subscriber.connection?.close();
+    this.eventEmitter.emit('removed', descriptor);
+    subscriber.connection = undefined;
+    this.subscribers.delete(mediaId);
+  }
+
+  public removeSubscriber(descriptor: MediaDescriptor) {
+    const mediaId = idFromDescriptor(descriptor);
     const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
       return;
     }
-    subscriber.connection?.close();
-    subscriber.connection = undefined;
+
+    if (subscriber.action !== undefined) {
+      console.warn(`removing subscriber ${mediaId} need to wait for connection process`, subscriber);
+      subscriber.action.finally(() => this.unsubscribe(descriptor));
+      return;
+    }
+
+    this.unsubscribe(descriptor);
   }
 
-  public unsubscribeParticipant(id: ParticipantId) {
+  public removeParticipant(id: ParticipantId) {
     const videoDescriptor = { participantId: id, mediaType: MediaSessionType.Video };
     const screenDescriptor = { participantId: id, mediaType: MediaSessionType.Screen };
 
-    const videoConnection = this.subscribers.get(idFromDescriptor(videoDescriptor));
-    if (videoConnection) {
-      this.unsubscribe(videoDescriptor);
-    }
-    const screenConnection = this.subscribers.get(idFromDescriptor(screenDescriptor));
-    if (screenConnection) {
-      this.unsubscribe(screenDescriptor);
-    }
+    this.removeSubscriber(videoDescriptor);
+    this.removeSubscriber(screenDescriptor);
   }
 
   public async createPublisher(descriptor: MediaDescriptor, stream: MediaStream, quality: VideoSetting) {

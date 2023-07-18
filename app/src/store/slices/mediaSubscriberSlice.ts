@@ -2,9 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { MediaSessionType, VideoSetting } from '@opentalk/common';
-import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createEntityAdapter,
+  createSlice,
+  PayloadAction,
+  createListenerMiddleware,
+  TypedStartListening,
+} from '@reduxjs/toolkit';
 
-import { RootState } from '..';
+import { RootState, AppDispatch } from '..';
 import { media } from '../../api/types/incoming';
 import {
   idFromDescriptor,
@@ -16,6 +22,7 @@ import {
 import { SubscriberState } from '../../modules/WebRTC/SubscriberConnection';
 import { hangUp } from '../commonActions';
 import { leave } from './participantsSlice';
+import { pinnedRemoteScreenshare } from './uiSlice';
 
 interface State extends SubscriberConfig {
   subscriberState: SubscriberState;
@@ -113,5 +120,28 @@ export const selectIsSubscriberOnlineByDescriptor = (descriptor: MediaDescriptor
 };
 
 export const actions = mediaSubscriberSlice.actions;
+
+// By design `updated` signal can be fired not only on starting screenshare or video, but also on change of media quality.
+// We want to pin the latest screenshare only in case, the other user started it.
+// Therefore we need to know, if subscriber, which fired `updated` already exists.
+// As crossslice state access is not supported and is an anti-pattern, we use the listener middleware technique.
+export const mediaSubscriberMiddleware = createListenerMiddleware();
+type AppStartListening = TypedStartListening<RootState, AppDispatch>;
+
+const startAppListening = mediaSubscriberMiddleware.startListening as AppStartListening;
+startAppListening({
+  actionCreator: updated,
+  effect: (action, listenerApi) => {
+    if (action.payload.mediaType === MediaSessionType.Screen) {
+      const id = idFromDescriptor(action.payload);
+      const subscriber = mediaSubscriberAdapter
+        .getSelectors()
+        .selectById(listenerApi.getOriginalState().subscribers, id);
+      if (!subscriber) {
+        listenerApi.dispatch(pinnedRemoteScreenshare(action.payload.participantId));
+      }
+    }
+  },
+});
 
 export default mediaSubscriberSlice.reducer;

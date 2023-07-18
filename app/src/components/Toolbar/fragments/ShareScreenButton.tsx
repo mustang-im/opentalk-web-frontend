@@ -33,7 +33,10 @@ const BlurScreenButton = () => {
     <ToolbarButton
       onClick={() => {
         if (!isLoadingMedia && isModeratorOrPresenter) {
-          mediaContext.trySetScreenShare(!screenSharing);
+          // this promise must be awaited, oterwise Safari will not allow screenshare
+          mediaContext.trySetScreenShare(!screenSharing).catch(() => {
+            console.error('failed to start screenshare');
+          });
         }
       }}
       tooltipTitle={tooltipText}

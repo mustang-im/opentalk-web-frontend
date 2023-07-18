@@ -233,19 +233,19 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
         if (message.media?.video !== undefined) {
           this.webRtc.updateMedia({ ...videoDescriptor, ...message.media.video });
         } else {
-          this.webRtc.unsubscribe(videoDescriptor);
+          this.webRtc.removeSubscriber(videoDescriptor);
         }
 
         if (message.media?.screen !== undefined) {
           this.webRtc.updateMedia({ ...screenDescriptor, ...message.media.screen });
         } else {
-          this.webRtc.unsubscribe(screenDescriptor);
+          this.webRtc.removeSubscriber(screenDescriptor);
         }
 
         break;
       }
       case 'left': {
-        this.webRtc.unsubscribeParticipant(message.id);
+        this.webRtc.removeParticipant(message.id);
         break;
       }
     }

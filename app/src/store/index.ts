@@ -17,7 +17,7 @@ import configReducer from './slices/configSlice';
 import connectionStatsReducer from './slices/connectionStatsSlice';
 import eventReducer from './slices/eventSlice';
 import mediaReducer from './slices/mediaSlice';
-import subscribersReducer from './slices/mediaSubscriberSlice';
+import subscribersReducer, { mediaSubscriberMiddleware } from './slices/mediaSubscriberSlice';
 import moderationReducer from './slices/moderationSlice';
 import participantsReducer from './slices/participantsSlice';
 import pollReducer from './slices/pollSlice';
@@ -32,7 +32,12 @@ import uiReducer from './slices/uiSlice';
 import userReducer from './slices/userSlice';
 import whiteboardReducer from './slices/whiteboardSlice';
 
-const middleware: Array<Middleware> = [apiMiddleware, restApi.middleware, rtkQueryErrorLoggerMiddlware];
+const middleware: Array<Middleware> = [
+  apiMiddleware,
+  restApi.middleware,
+  rtkQueryErrorLoggerMiddlware,
+  mediaSubscriberMiddleware.middleware,
+];
 
 const logger = () => (next: Dispatch) => (action: AnyAction) => {
   if (!action.type.startsWith('stats/statsUpdated')) {

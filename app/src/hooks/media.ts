@@ -14,6 +14,7 @@ export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' |
   const [media, setMediaStream] = useState<
     { stream?: MediaStream; process?: Promise<void>; descriptor: MediaDescriptor } | undefined
   >(undefined);
+  const [isAborted, setAborted] = useState(false);
   const [qualityTarget, setQualityTarget] = useState<VideoSetting>(VideoSetting.Off);
   const releaseHandler = useRef<(() => void) | undefined>();
   const qualityMax = useAppSelector(selectQualityCap);
@@ -72,7 +73,9 @@ export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' |
           observedTrack.removeEventListener('ended', endedListener);
         };
         observedTrack.addEventListener('ended', endedListener);
-        setMediaStream({ stream, descriptor });
+        if (!isAborted) {
+          setMediaStream({ stream, descriptor });
+        }
       })
       .catch((e) => {
         console.error(`Subscription for participant ${descriptor.participantId} failed: ${e}`);
@@ -88,5 +91,10 @@ export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' |
   // detach on unmount
   useEffect(() => release, [release]);
 
-  return { stream: media?.stream, setQualityTarget };
+  // parent component can prevent state update after unmounting (e.g. on promise subscription)
+  const cleanup = () => {
+    setAborted(true);
+  };
+
+  return { stream: media?.stream, setQualityTarget, cleanup };
 };

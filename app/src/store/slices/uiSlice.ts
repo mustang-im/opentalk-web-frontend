@@ -10,6 +10,7 @@ import {
   ChatScope,
   TimerStyle,
   joinSuccess,
+  MediaSessionType,
 } from '@opentalk/common';
 import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -18,7 +19,9 @@ import { RootState } from '../';
 import { Started as PollStartedInterface } from '../../api/types/incoming/poll';
 import { ModerationTabKey } from '../../config/moderationTabs';
 import LayoutOptions from '../../enums/LayoutOptions';
+import { MediaDescriptor } from '../../modules/WebRTC';
 import { hangUp } from '../commonActions';
+import { removed } from './mediaSubscriberSlice';
 import { leave, breakoutLeft } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
@@ -36,7 +39,7 @@ interface UIState {
   showParticipantGroups: boolean;
   participantsSearchValue: string;
   chatConversationState: IChatConversationState;
-  participantsLayout: LayoutOptions;
+  cinemaLayout: LayoutOptions;
   paginationPage: number;
   pinnedParticipantId?: ParticipantId;
   localVideoMirroringEnabled: boolean;
@@ -59,7 +62,7 @@ const initialState: UIState = {
     scope: undefined,
     targetId: undefined,
   },
-  participantsLayout: LayoutOptions.Grid,
+  cinemaLayout: LayoutOptions.Grid,
   paginationPage: 1,
   pinnedParticipantId: undefined,
   localVideoMirroringEnabled: true,
@@ -90,8 +93,8 @@ export const uiSlice = createSlice({
     chatConversationStateSet: (state, action: PayloadAction<IChatConversationState>) => {
       state.chatConversationState = action.payload;
     },
-    participantsLayoutSet: (state, action: PayloadAction<LayoutOptions>) => {
-      state.participantsLayout = action.payload;
+    updatedCinemaLayout: (state, action: PayloadAction<LayoutOptions>) => {
+      state.cinemaLayout = action.payload;
       if (action.payload === LayoutOptions.Whiteboard && state.isCurrentWhiteboardHighlighted) {
         state.isCurrentWhiteboardHighlighted = false;
       }
@@ -132,6 +135,10 @@ export const uiSlice = createSlice({
     toggledFullScreenMode(state) {
       state.isFullscreenMode = !state.isFullscreenMode;
     },
+    pinnedRemoteScreenshare(state, { payload: id }: PayloadAction<ParticipantId>) {
+      state.pinnedParticipantId = id;
+      state.cinemaLayout = LayoutOptions.Speaker;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(leave, (state, { payload: { id } }: PayloadAction<{ id: ParticipantId }>) => {
@@ -149,7 +156,7 @@ export const uiSlice = createSlice({
     });
     builder.addCase(connectionClosed, (state) => {
       state.chatConversationState = initialState.chatConversationState;
-      state.participantsLayout = initialState.participantsLayout;
+      state.cinemaLayout = initialState.cinemaLayout;
       state.participantsSortOption = initialState.participantsSortOption;
       state.pinnedParticipantId = initialState.pinnedParticipantId;
       state.paginationPage = initialState.paginationPage;
@@ -180,6 +187,12 @@ export const uiSlice = createSlice({
         state.isCoffeeBreakOpen = true;
       }
     });
+    builder.addCase(removed, (state, { payload }: PayloadAction<MediaDescriptor>) => {
+      // unpin, if screensharing was stopped by the pinned participant
+      if (payload.mediaType === MediaSessionType.Screen && payload.participantId === state.pinnedParticipantId) {
+        state.pinnedParticipantId = undefined;
+      }
+    });
   },
 });
 
@@ -188,7 +201,7 @@ export const {
   setSortByGroups,
   setParticipantsSearchValue,
   chatConversationStateSet,
-  participantsLayoutSet,
+  updatedCinemaLayout,
   paginationPageSet,
   pinnedParticipantIdSet,
   mirroredVideoSet,
@@ -200,6 +213,7 @@ export const {
   setCoffeeBreakOpen,
   setActiveTab,
   toggledFullScreenMode,
+  pinnedRemoteScreenshare,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -207,7 +221,7 @@ export const actions = uiSlice.actions;
 export const selectParticipantsSortOption = (state: RootState) => state.ui.participantsSortOption;
 export const selectShowParticipantGroups = (state: RootState) => state.ui.showParticipantGroups;
 export const selectParticipantsSearchValue = (state: RootState) => state.ui.participantsSearchValue;
-export const selectParticipantsLayout = (state: RootState) => state.ui.participantsLayout;
+export const selectCinemaLayout = (state: RootState) => state.ui.cinemaLayout;
 export const selectChatConversationState = (state: RootState) => state.ui.chatConversationState;
 export const selectPaginationPageState = (state: RootState) => state.ui.paginationPage;
 export const selectPinnedParticipantId = (state: RootState) => state.ui.pinnedParticipantId;

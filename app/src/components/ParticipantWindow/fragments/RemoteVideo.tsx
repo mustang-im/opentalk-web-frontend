@@ -32,10 +32,14 @@ type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
 };
 
 const RemoteVideo = ({ descriptor }: IRemoteVideoProps) => {
-  const { stream, setQualityTarget } = useRemoteMedia(descriptor, 'video');
+  const { stream, setQualityTarget, cleanup } = useRemoteMedia(descriptor, 'video');
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
+
+  useEffect(() => {
+    return cleanup;
+  }, []);
 
   useEffect(() => {
     if (videoRef.current !== null && stream !== undefined) {
@@ -75,6 +79,7 @@ const RemoteVideo = ({ descriptor }: IRemoteVideoProps) => {
         setQualityTarget(VideoSetting.Medium);
         break;
     }
+    // return cleanup;
   }, [setQualityTarget, size, stream]);
 
   useEffect(() => {

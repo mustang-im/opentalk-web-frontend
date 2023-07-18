@@ -13,11 +13,7 @@ import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectStatsPacketLossByDescriptor } from '../../../store/slices/connectionStatsSlice';
 import { selectIsSubscriberOnlineByDescriptor } from '../../../store/slices/mediaSubscriberSlice';
 import { selectParticipantName } from '../../../store/slices/participantsSlice';
-import {
-  pinnedParticipantIdSet,
-  selectParticipantsLayout,
-  selectPinnedParticipantId,
-} from '../../../store/slices/uiSlice';
+import { pinnedParticipantIdSet, selectCinemaLayout, selectPinnedParticipantId } from '../../../store/slices/uiSlice';
 import BrokenSubscriberIndicator from './BrokenSubscriberIndicator';
 import Statistics from './Statistics';
 
@@ -76,7 +72,7 @@ interface VideoOverlayProps {
 }
 
 const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
-  const userLayout = useAppSelector(selectParticipantsLayout);
+  const userLayout = useAppSelector(selectCinemaLayout);
   const dispatch = useAppDispatch();
   const mediaDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
   const isOnline = useAppSelector(selectIsSubscriberOnlineByDescriptor(mediaDescriptor));

@@ -10,8 +10,12 @@ import { useRemoteMedia } from '../../hooks/media';
 import { MediaDescriptor } from '../../modules/WebRTC';
 
 const RemoteAudio = ({ descriptor }: { descriptor: MediaDescriptor }) => {
-  const { stream, setQualityTarget } = useRemoteMedia(descriptor, 'audio');
+  const { stream, setQualityTarget, cleanup } = useRemoteMedia(descriptor, 'audio');
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    return cleanup;
+  }, []);
 
   useEffect(() => {
     setQualityTarget(VideoSetting.Off);
