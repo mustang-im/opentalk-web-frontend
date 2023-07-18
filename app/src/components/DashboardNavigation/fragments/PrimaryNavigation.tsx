@@ -1,27 +1,25 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  Button,
-  Collapse,
-  List as MuiList,
-  ListItem as MuiListItem,
-  ListItemText,
-  styled,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { List as MuiList, ListItem as MuiListItem, styled, useMediaQuery, useTheme } from '@mui/material';
 import { FeedbackIcon, HelpIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
 import { useAuth } from '@opentalk/react-redux-appauth';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../hooks';
-import { selectAccountManagementUrl, selectHelpdeskUrl, selectUserSurveyUrl } from '../../../store/slices/configSlice';
+import {
+  selectAccountManagementUrl,
+  selectDataProtectionUrl,
+  selectHelpdeskUrl,
+  selectImprintUrl,
+  selectUserSurveyUrl,
+} from '../../../store/slices/configSlice';
 import FeedbackDialog from '../../FeedbackDialog/FeedbackDialog';
 import { PrimaryRoute } from '../DashboardNavigation';
 import CollapseRow from './CollapseRow';
+import PrimaryNavigationEntry from './PrimaryNavigationEntry';
+import PrimaryNavigationList, { FilterMode } from './PrimaryNavigationList';
 import ProfileChip from './ProfileChip';
 
 const Container = styled('div')(({ theme }) => ({
@@ -34,7 +32,7 @@ const Container = styled('div')(({ theme }) => ({
   transition: 'all 300ms ease-out',
 }));
 
-const ListItem = styled(MuiListItem, {
+export const ListItem = styled(MuiListItem, {
   shouldForwardProp: (prop) => prop !== 'isSubmenuOpen',
 })<{ isSubmenuOpen?: boolean }>(({ theme, isSubmenuOpen }) => ({
   padding: 0,
@@ -139,10 +137,11 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const helpdeskUrl = useAppSelector(selectHelpdeskUrl);
   const userSurveyEnabled = useAppSelector(selectUserSurveyUrl);
   const accountManagementUrl = useAppSelector(selectAccountManagementUrl);
+  const imprintUrl = useAppSelector(selectImprintUrl);
+  const dataProtectionUrl = useAppSelector(selectDataProtectionUrl);
   const auth = useAuth();
 
   const logout = useCallback(async () => {
@@ -151,39 +150,7 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
     }
   }, [auth]);
 
-  const handleNavigation = (event: React.MouseEvent, hasSubmenu: boolean, path: string) => {
-    if (hasSubmenu) {
-      event.preventDefault();
-      navigate(`/dashboard/${path}`);
-      return;
-    }
-    // if menu doesn't contain child close it on mobile
-    if (!isDesktop) {
-      setActiveNavbar(false);
-    }
-  };
-
   const toggleFeedbackModal = () => setShowFeedbackModal((prevState) => !prevState);
-
-  const renderNavItems = () =>
-    routes.map(({ path, name, icon, childRoutes }) => {
-      const hasSubmenu = childRoutes ? childRoutes.length > 0 : false;
-      return (
-        <ListItem key={path} isSubmenuOpen={path.includes(submenu) && hasSubmenu}>
-          <NavLink
-            onClick={(event) => handleNavigation(event, hasSubmenu, path)}
-            to={path}
-            data-testid={`PrimaryNavItem`}
-            className={path.includes(submenu) ? 'active-link' : ''}
-          >
-            {icon}
-            <Collapse orientation="horizontal" in={!collapsedBar}>
-              <ListItemText>{t(name)}</ListItemText>
-            </Collapse>
-          </NavLink>
-        </ListItem>
-      );
-    });
 
   return (
     <Container data-testid={'PrimaryNavigation'}>
@@ -193,50 +160,66 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
         </ChipContainer>
       )}
       <List>
-        {renderNavItems()}
+        <PrimaryNavigationList
+          submenu={submenu}
+          routes={routes}
+          setActiveNavbar={setActiveNavbar}
+          filter={{ value: 'legal', mode: FilterMode.Exclude }}
+          collapsedBar={collapsedBar}
+        />
         {accountManagementUrl && (
-          <ListItem>
-            <Button href={accountManagementUrl} role="button" disableRipple disabled={auth.isLoading}>
-              <SettingsIcon />
-              <Collapse orientation="horizontal" in={!collapsedBar}>
-                <ListItemText>{t('dashboard-account-management')}</ListItemText>
-              </Collapse>
-            </Button>
-          </ListItem>
+          <PrimaryNavigationEntry
+            href={accountManagementUrl}
+            disabled={auth.isLoading}
+            Icon={<SettingsIcon />}
+            collapsedBar={collapsedBar}
+            label={t('dashboard-account-management')}
+          />
+        )}
+
+        {(imprintUrl || dataProtectionUrl) && (
+          <PrimaryNavigationList
+            submenu={submenu}
+            routes={routes}
+            setActiveNavbar={setActiveNavbar}
+            filter={{ value: 'legal', mode: FilterMode.Include }}
+            collapsedBar={collapsedBar}
+          />
         )}
         {helpdeskUrl && (
-          <ListItem isSubmenuOpen={false} role="button">
-            <Button href={helpdeskUrl} disableRipple target="_blank">
-              <HelpIcon />
-              <Collapse orientation="horizontal" in={!collapsedBar}>
-                <ListItemText>{t('help-button')}</ListItemText>
-              </Collapse>
-            </Button>
-          </ListItem>
+          <PrimaryNavigationEntry
+            href={helpdeskUrl}
+            target="_blank"
+            disabled={auth.isLoading}
+            Icon={<HelpIcon />}
+            collapsedBar={collapsedBar}
+            label={t('help-button')}
+            isSubmenuOpen={false}
+          />
         )}
         {userSurveyEnabled && (
           <>
-            <ListItem isSubmenuOpen={false}>
-              <Button onClick={toggleFeedbackModal} disableRipple>
-                <FeedbackIcon />
-                <Collapse orientation="horizontal" in={!collapsedBar}>
-                  <ListItemText>{t('feedback-button')}</ListItemText>
-                </Collapse>
-              </Button>
-            </ListItem>
+            <PrimaryNavigationEntry
+              onClick={toggleFeedbackModal}
+              Icon={<FeedbackIcon />}
+              collapsedBar={collapsedBar}
+              label={t('feedback-button')}
+              isSubmenuOpen={false}
+            />
             <FeedbackDialog open={showFeedbackModal} onClose={toggleFeedbackModal} />
           </>
         )}
-        <ListItem>
-          <Button onClick={logout} role="button" disableRipple disabled={auth.isLoading}>
-            <SignOutIcon />
-            <Collapse orientation="horizontal" in={!collapsedBar}>
-              <ListItemText>{t('dashboard-settings-logout')}</ListItemText>
-            </Collapse>
-          </Button>
-        </ListItem>
-      </List>
 
+        <PrimaryNavigationEntry
+          href={''}
+          onClick={logout}
+          Icon={<SignOutIcon />}
+          collapsedBar={collapsedBar}
+          label={t('dashboard-settings-logout')}
+          isSubmenuOpen={false}
+          disabled={auth.isLoading}
+        />
+      </List>
       <CollapseRow collapsed={collapsedBar} onChange={setcollapsedBar} />
     </Container>
   );

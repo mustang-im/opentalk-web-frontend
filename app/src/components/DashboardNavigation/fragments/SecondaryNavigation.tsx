@@ -14,9 +14,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
+import { useAppSelector } from '../../../hooks';
+import { selectDataProtectionUrl, selectImprintUrl } from '../../../store/slices/configSlice';
 import { SecondaryRoute } from '../DashboardNavigation';
 
 interface NavigationProps {
+  label: string;
   routes: Array<SecondaryRoute> | undefined;
   submenu: string | undefined;
   setActiveNavbar: (value: boolean) => void;
@@ -79,27 +82,53 @@ const NavItem = styled(NavLink)(({ theme }) => ({
   },
 }));
 
-const SecondaryNavigation = ({ routes, submenu, setActiveNavbar }: NavigationProps) => {
+const SecondaryNavigation = ({ label, routes, submenu, setActiveNavbar }: NavigationProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  const imprintUrl = useAppSelector(selectImprintUrl);
+  const dataProtectionUrl = useAppSelector(selectDataProtectionUrl);
 
-  const handleNavigation = () => {
+  const handleNavigation = (path: string) => {
+    switch (path) {
+      case 'imprint':
+        window.open(imprintUrl, '_blank');
+        break;
+      case 'data-protection':
+        window.open(dataProtectionUrl, '_blank');
+        break;
+    }
     if (!isDesktop) {
       setActiveNavbar(false);
     }
   };
 
+  const showSubmenuEntry = (path: string) => {
+    if (path === 'imprint') {
+      return Boolean(imprintUrl);
+    }
+    if (path === 'data-protection') {
+      return Boolean(dataProtectionUrl);
+    }
+    return true;
+  };
+
   const NavItems = () => (
     <List>
       {routes &&
-        routes.map(({ path, name }) => (
-          <ListItem key={path}>
-            <NavItem to={`${submenu}/${path}`} onClick={handleNavigation} data-testid={`SecondaryNavItem`}>
-              <ListItemText>{t(name)}</ListItemText>
-            </NavItem>
-          </ListItem>
-        ))}
+        routes
+          .filter((route) => showSubmenuEntry(route.path))
+          .map(({ path, name }) => (
+            <ListItem key={path}>
+              <NavItem
+                to={`${submenu}/${path}`}
+                onClick={() => handleNavigation(path)}
+                data-testid={`SecondaryNavItem`}
+              >
+                <ListItemText>{t(name)}</ListItemText>
+              </NavItem>
+            </ListItem>
+          ))}
     </List>
   );
 
@@ -107,7 +136,7 @@ const SecondaryNavigation = ({ routes, submenu, setActiveNavbar }: NavigationPro
     <Container data-testid={'SecondaryNavigation'}>
       {isDesktop && (
         <Typography variant={'h1'} variantMapping={{ h1: 'h2' }} color={'secondary'} ml={4} mr={4}>
-          {t('dashboard-settings')}
+          {t(label)}
         </Typography>
       )}
       <NavItems />

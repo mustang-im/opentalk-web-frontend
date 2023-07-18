@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon } from '@opentalk/common';
+import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon } from '@opentalk/common';
 import React, { useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
@@ -114,6 +114,24 @@ const getRoutes = (useProviderSettings: boolean) => {
     };
     routes.push(communityUsers);
   }
+
+  const legalLinks = {
+    icon: <LegalLinksIcon />,
+    path: 'legal',
+    name: 'dashboard-legal',
+    childRoutes: [
+      {
+        path: 'imprint',
+        name: 'dashboard-legal-imprint',
+      },
+      {
+        path: 'data-protection',
+        name: 'dashboard-legal-data-protection',
+      },
+    ],
+  };
+  routes.push(legalLinks);
+
   return routes;
 };
 

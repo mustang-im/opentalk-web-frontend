@@ -143,6 +143,14 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
         ],
       },
       {
+        path: 'legal',
+        element: <></>,
+        children: [
+          { path: 'imprint', element: <></> },
+          { path: 'data-protection', element: <></> },
+        ],
+      },
+      {
         path: 'meetings',
         children: [
           { element: <EventsOverviewPage />, index: true },

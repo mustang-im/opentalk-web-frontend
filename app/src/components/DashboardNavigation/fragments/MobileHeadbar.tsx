@@ -69,6 +69,10 @@ const MobileHeadbar = ({ activeNavbar, toggleNavbar, path }: HeadbarProps) => {
       explicitPage = 'settings';
     }
 
+    if (currentPage.includes('legal')) {
+      explicitPage = 'legal';
+    }
+
     return t(`dashboard-${explicitPage}`);
   };
 
