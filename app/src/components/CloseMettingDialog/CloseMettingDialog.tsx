@@ -58,7 +58,7 @@ export const CloseMettingDialog = ({ open, onClose }: CloseMettingDialogProps) =
   }, [t, navigate, hangUpHandler, dispatch, roomId]);
 
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth disablePortal>
+    <Dialog open={open} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
 
       <Box position="absolute" top={0} right={0}>
