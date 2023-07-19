@@ -5,8 +5,8 @@ import { styled, Typography } from '@mui/material';
 import { isNumber } from 'lodash';
 import { useEffect, useState } from 'react';
 
-import { useAppSelector } from '../../../hooks';
-import { selectTotalDuration, selectRemainingTime } from '../../../store/slices/timerSlice';
+import { useAppSelector, useRemainingDurationOfTimer } from '../../../hooks';
+import { selectTotalDuration } from '../../../store/slices/timerSlice';
 
 const TimerTypography = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'isRed',
@@ -20,7 +20,7 @@ const TimerTypography = styled(Typography, {
 }));
 
 const CoffeeBreakTimer = () => {
-  const remainingTime = useAppSelector(selectRemainingTime);
+  const remainingTime = useRemainingDurationOfTimer();
   const totalDuration = useAppSelector(selectTotalDuration);
   const [isTimerRed, setIsTimerRed] = useState(false);
 
@@ -35,6 +35,7 @@ const CoffeeBreakTimer = () => {
 
     const initialMinuteValue = totalDuration.minutes;
     let timerTurnsRedOnMinute;
+    //Based on the initial duration selected we turn the timer red to signal approaching end at different points. Numbers are a product decision.
     if (initialMinuteValue <= 5) {
       timerTurnsRedOnMinute = 0;
     } else if (initialMinuteValue <= 15) {

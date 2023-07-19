@@ -11,18 +11,15 @@ import NormalTimerPopover from './fragments/NormalTimerPopover';
 const TimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
   const timerStyle = useAppSelector(selectTimerStyle);
 
-  const renderTimer = () => {
-    switch (timerStyle) {
-      case TimerStyle.CoffeeBreak:
-        return <CoffeeBreakPopover anchorEl={anchorEl} />;
-      case TimerStyle.Normal:
-        return <NormalTimerPopover anchorEl={anchorEl} />;
-      default:
-        return null;
-    }
-  };
+  if (!timerStyle) {
+    return null;
+  }
 
-  return renderTimer();
+  return timerStyle === TimerStyle.CoffeeBreak ? (
+    <CoffeeBreakPopover anchorEl={anchorEl} />
+  ) : (
+    <NormalTimerPopover anchorEl={anchorEl} />
+  );
 };
 
 export default TimerPopover;

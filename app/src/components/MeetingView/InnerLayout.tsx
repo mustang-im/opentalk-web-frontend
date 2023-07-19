@@ -7,7 +7,7 @@ import { legalVoteStore } from '@opentalk/components';
 import { useAppSelector } from '../../hooks';
 import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../store/slices/pollSlice';
 import { selectRoomConnectionState, ConnectionState } from '../../store/slices/roomSlice';
-import { selectIsCoffeeBreakFullscreen, selectVotePollIdToShow } from '../../store/slices/uiSlice';
+import { selectShowCoffeeBreakCurtain, selectVotePollIdToShow } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import Cinema from '../Cinema';
 import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
@@ -47,41 +47,34 @@ const InnerLayout = () => {
   const votePollIdToShow = useAppSelector(selectVotePollIdToShow);
   const connectionState = useAppSelector(selectRoomConnectionState);
 
-  const isCoffeeBreakFullscreen = useAppSelector(selectIsCoffeeBreakFullscreen);
+  const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
   const isModerator = useAppSelector(selectIsModerator);
-
-  const renderMeetingContent = () => {
-    //If the coffee break cover is open we replace the main area of the meeting with it
-    if (isCoffeeBreakFullscreen && isModerator) {
-      return <CoffeeBreakView roundBorders />;
-    }
-
-    return (
-      <>
-        <MeetingHeader />
-        {connectionState === ConnectionState.Leaving || connectionState === ConnectionState.Starting ? (
-          <CircularProgressBar />
-        ) : (
-          <>
-            <Cinema />
-            {votePollIdToShow && <VoteResultContainer legalVoteId={votePollIdToShow} />}
-            {!votePollIdToShow && currentVoteId && showVoteResultContainer && (
-              <VoteResultContainer legalVoteId={currentVoteId} />
-            )}
-            {!votePollIdToShow && currentShownPollVoteId && showPollResultContainer && (
-              <VoteResultContainer legalVoteId={currentShownPollVoteId} />
-            )}
-          </>
-        )}
-      </>
-    );
-  };
 
   return (
     <InnerContainer>
       <MeetingSidebar />
 
-      {renderMeetingContent()}
+      {showCoffeeBreakCurtain && isModerator ? (
+        <CoffeeBreakView roundBorders />
+      ) : (
+        <>
+          <MeetingHeader />
+          {connectionState === ConnectionState.Leaving || connectionState === ConnectionState.Starting ? (
+            <CircularProgressBar />
+          ) : (
+            <>
+              <Cinema />
+              {votePollIdToShow && <VoteResultContainer legalVoteId={votePollIdToShow} />}
+              {!votePollIdToShow && currentVoteId && showVoteResultContainer && (
+                <VoteResultContainer legalVoteId={currentVoteId} />
+              )}
+              {!votePollIdToShow && currentShownPollVoteId && showPollResultContainer && (
+                <VoteResultContainer legalVoteId={currentShownPollVoteId} />
+              )}
+            </>
+          )}
+        </>
+      )}
     </InnerContainer>
   );
 };

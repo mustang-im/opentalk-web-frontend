@@ -12,7 +12,7 @@ import { readyToContinue } from '../../api/types/outgoing/timer';
 import { ReactComponent as LogoIconDefault } from '../../assets/images/logo.svg';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCoffeeBreakTimerId, selectTimerRunning } from '../../store/slices/timerSlice';
-import { selectIsCoffeeBreakFullscreen, setCoffeeBreakFullscreen } from '../../store/slices/uiSlice';
+import { selectShowCoffeeBreakCurtain, setCoffeeBreakFullscreen } from '../../store/slices/uiSlice';
 import CoffeeBreakTimer from './fragments/CoffeeBreakTimer';
 
 const BackgroundCover = styled(Box)({
@@ -69,7 +69,7 @@ export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => 
   const dispatch = useAppDispatch();
   const isTimerRunning = useAppSelector(selectTimerRunning);
   const coffeeBreakTimerId = useAppSelector(selectCoffeeBreakTimerId);
-  const isCoffeeBreakFullscreen = useAppSelector(selectIsCoffeeBreakFullscreen);
+  const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
   const handleClose = () => {
     dispatch(setCoffeeBreakFullscreen(false));
@@ -79,8 +79,8 @@ export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => 
   };
 
   useEffect(() => {
-    dispatch(setHotkeysEnabled(!isCoffeeBreakFullscreen));
-  }, [isCoffeeBreakFullscreen]);
+    dispatch(setHotkeysEnabled(!showCoffeeBreakCurtain));
+  }, [showCoffeeBreakCurtain]);
 
   return (
     <BackgroundCover>

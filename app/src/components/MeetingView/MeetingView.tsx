@@ -6,15 +6,14 @@ import { useTheme } from '@mui/material/styles';
 import { useRef, useState, useEffect } from 'react';
 
 import { useAppSelector } from '../../hooks';
-import { useTimer } from '../../hooks';
-import { selectDebugMode, selectIsCoffeeBreakFullscreen } from '../../store/slices/uiSlice';
+import { selectDebugMode, selectShowCoffeeBreakCurtain } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
 import DebugPanel from '../DebugPanel';
 import HotKeys from '../HotKeys';
 import LocalVideo from '../LocalVideo';
 import RemoteAudioStreams from '../RemoteAudioStreams';
-import NormalTimerPopover from '../TimerPopover';
+import TimerPopover from '../TimerPopover';
 import Toolbar from '../Toolbar';
 import InnerLayout from './InnerLayout';
 
@@ -54,53 +53,48 @@ const MeetingView = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallPortraitScreen = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
   const debugMode = useAppSelector(selectDebugMode);
-  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakFullscreen);
+  const isCoffeeBreakOpen = useAppSelector(selectShowCoffeeBreakCurtain);
   const isModerator = useAppSelector(selectIsModerator);
   const containerRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const enableAudio = isModerator || !isCoffeeBreakOpen;
-  const isCoffeeBreakFullscreen = useAppSelector(selectIsCoffeeBreakFullscreen);
-
-  useTimer();
+  const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
   useEffect(() => {
     setAnchorEl(containerRef.current);
     return () => setAnchorEl(null);
   }, [containerRef]);
 
-  const renderContent = () => {
-    //If the coffee break cover is open then we replace the entirety of the content with it
-    if (isCoffeeBreakFullscreen && !isModerator) {
-      return <CoffeeBreakView />;
-    }
+  return (
+    <Container ref={containerRef}>
+      {showCoffeeBreakCurtain && !isModerator ? (
+        <CoffeeBreakView />
+      ) : (
+        <>
+          {debugMode && <DebugPanel />}
 
-    return (
-      <>
-        {debugMode && <DebugPanel />}
+          {enableAudio && <RemoteAudioStreams />}
 
-        {enableAudio && <RemoteAudioStreams />}
+          {!showCoffeeBreakCurtain && <TimerPopover anchorEl={anchorEl} />}
 
-        {!isCoffeeBreakFullscreen && <NormalTimerPopover anchorEl={anchorEl} />}
+          <HotKeys />
 
-        <HotKeys />
+          <InnerLayout />
 
-        <InnerLayout />
-
-        {(isSmallScreen || isSmallPortraitScreen) && (
-          <>
-            <LocalVideoWrapper>
-              <LocalVideo />
-            </LocalVideoWrapper>
-            <ToolbarWrapper>
-              <Toolbar />
-            </ToolbarWrapper>
-          </>
-        )}
-      </>
-    );
-  };
-
-  return <Container ref={containerRef}>{renderContent()}</Container>;
+          {(isSmallScreen || isSmallPortraitScreen) && (
+            <>
+              <LocalVideoWrapper>
+                <LocalVideo />
+              </LocalVideoWrapper>
+              <ToolbarWrapper>
+                <Toolbar />
+              </ToolbarWrapper>
+            </>
+          )}
+        </>
+      )}
+    </Container>
+  );
 };
 
 export default MeetingView;

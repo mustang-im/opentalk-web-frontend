@@ -4,8 +4,7 @@
 import { Box, styled, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../../hooks';
-import { selectRemainingTime } from '../../../store/slices/timerSlice';
+import { useGetRemainingDurationOfTimer } from '../../../hooks';
 import { TimerCounterProps } from './TimerTypes';
 
 const Content = styled(Box)<TimerCounterProps>(({ alignItems = 'initial' }) => ({
@@ -17,12 +16,12 @@ const Content = styled(Box)<TimerCounterProps>(({ alignItems = 'initial' }) => (
 
 const TimerCoffeeBreakCounter = ({ alignItems }: TimerCounterProps) => {
   const { t } = useTranslation();
-  const realTime = useAppSelector(selectRemainingTime);
+  const remainingTime = useGetRemainingDurationOfTimer();
 
   return (
     <Content alignItems={alignItems}>
       <Typography variant="caption">{t(`coffee-break-title-counter`)}</Typography>
-      <Typography>{realTime?.durationString}</Typography>
+      <Typography>{remainingTime?.durationString}</Typography>
     </Content>
   );
 };

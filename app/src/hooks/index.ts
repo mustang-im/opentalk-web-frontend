@@ -8,7 +8,7 @@ import { AppDispatch, RootState } from '../store';
 export { useDisplayName } from './ui';
 export * from './time';
 export { default as useTabs } from './useTabs';
-export { default as useTimer } from './useTimer';
+export { default as useRemainingDurationOfTimer } from './useRemainingDurationOfTimer';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();

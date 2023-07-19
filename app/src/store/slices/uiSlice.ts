@@ -49,7 +49,7 @@ interface UIState {
   chatSearchValue: string;
   isCurrentWhiteboardHighlighted?: boolean;
   isCurrentProtocolHighlighted?: boolean;
-  isCoffeeBreakFullscreen: boolean;
+  showCoffeeBreakCurtain: boolean;
   activeTab: ModerationTabKey;
   isFullscreenMode: boolean;
 }
@@ -72,7 +72,7 @@ const initialState: UIState = {
   chatSearchValue: '',
   isCurrentWhiteboardHighlighted: undefined,
   isCurrentProtocolHighlighted: undefined,
-  isCoffeeBreakFullscreen: false,
+  showCoffeeBreakCurtain: false,
   activeTab: ModerationTabKey.Home,
   isFullscreenMode: false,
 };
@@ -127,7 +127,7 @@ export const uiSlice = createSlice({
       state.isCurrentProtocolHighlighted = highlight;
     },
     setCoffeeBreakFullscreen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
-      state.isCoffeeBreakFullscreen = isOpenFlag;
+      state.showCoffeeBreakCurtain = isOpenFlag;
     },
     setActiveTab(state, { payload: tabKey }: PayloadAction<ModerationTabKey>) {
       state.activeTab = tabKey;
@@ -179,17 +179,17 @@ export const uiSlice = createSlice({
     });
     builder.addCase(startedTimer, (state, { payload }) => {
       if (payload.style === TimerStyle.CoffeeBreak) {
-        state.isCoffeeBreakFullscreen = true;
+        state.showCoffeeBreakCurtain = true;
       }
     });
     builder.addCase(stoppedTimer, (state) => {
-      if (state.isCoffeeBreakFullscreen) {
-        state.isCoffeeBreakFullscreen = false;
+      if (state.showCoffeeBreakCurtain) {
+        state.showCoffeeBreakCurtain = false;
       }
     });
     builder.addCase(joinSuccess, (state, { payload: { timer } }) => {
       if (timer?.style === TimerStyle.CoffeeBreak) {
-        state.isCoffeeBreakFullscreen = true;
+        state.showCoffeeBreakCurtain = true;
       }
     });
     builder.addCase(removed, (state, { payload }: PayloadAction<MediaDescriptor>) => {
@@ -237,7 +237,7 @@ export const selectDebugMode = (state: RootState) => state.ui.debugMode;
 export const selectChatSearchValue = (state: RootState) => state.ui.chatSearchValue;
 export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.ui.isCurrentWhiteboardHighlighted;
 export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui.isCurrentProtocolHighlighted;
-export const selectIsCoffeeBreakFullscreen = (state: RootState) => state.ui.isCoffeeBreakFullscreen;
+export const selectShowCoffeeBreakCurtain = (state: RootState) => state.ui.showCoffeeBreakCurtain;
 export const selectActiveTab = (state: RootState) => state.ui.activeTab;
 export const selectIsFullscreenMode = (state: RootState) => state.ui.isFullscreenMode;
 

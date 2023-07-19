@@ -27,7 +27,7 @@ import roomReducer from './slices/roomSlice';
 import sharedFolderReducer from './slices/sharedFolderSlice';
 import slotReducer from './slices/slotSlice';
 import speedMeterReducer from './slices/speedMeterSlice';
-import timerReducer from './slices/timerSlice';
+import timerReducer, { timerMiddleware } from './slices/timerSlice';
 import uiReducer from './slices/uiSlice';
 import userReducer from './slices/userSlice';
 import whiteboardReducer from './slices/whiteboardSlice';
@@ -37,6 +37,7 @@ const middleware: Array<Middleware> = [
   restApi.middleware,
   rtkQueryErrorLoggerMiddlware,
   mediaSubscriberMiddleware.middleware,
+  timerMiddleware.middleware,
 ];
 
 const logger = () => (next: Dispatch) => (action: AnyAction) => {
