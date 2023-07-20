@@ -9,8 +9,10 @@ import { BaseEventEmitter } from '../EventListener';
 import { ConferenceRoom } from '../WebRTC';
 import { PublisherConnection } from '../WebRTC/PublisherConnection';
 import { BackgroundBlur, BackgroundConfig } from './BackgroundBlur';
-import LevelNode from './LevelNode';
-import { DeviceId, getConstraints, isAudioContextSuported } from './MediaUtils';
+import { LevelNode } from './LevelNode';
+import { DeviceId, getConstraints } from './MediaUtils';
+import { SpeechDetectionNode } from './SpeechDetectionNode';
+import { getVoiceFilter } from './VoiceFilter';
 
 interface MediaConfig {
   audio: boolean;
@@ -24,7 +26,12 @@ export type LocalMediaEvent = {
   deviceChanged: { deviceId: DeviceId; kind: 'audio' | 'video' };
   backgroundChanged: BackgroundConfig;
   stateChanged: { kind: 'audio' | 'video'; enabled: boolean };
+  isUserSpeaking: boolean;
 };
+
+// Currently we use the level node to update the animation of the audio indicator
+// We agree, that 30 Hz would be enough. Therefore (1 / 30 Hz ) = 33 ms
+const ANIMATION_UPDATE_TIME = 33; // ms
 
 /**
  * The LocalMedia manages the local audio and video device.
@@ -88,35 +95,49 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
    */
   public readonly outputMediaStream = new MediaStream([blackTrack(), silentTrack()]);
 
-  private readonly levelContext: Promise<{
-    audioContext: AudioContext; // with worklet loaded;
-    levelNode: LevelNode;
-  }>;
+  private _audioContext?: Promise<AudioContext> = undefined; // with worklets loaded;
+
+  private sourceNode?: MediaStreamAudioSourceNode;
+  private levelNode?: LevelNode;
+  private speechDetectionNode?: SpeechDetectionNode;
+
+  public async loadAudioWorkletContext() {
+    if (this._audioContext !== undefined) {
+      const ctx = await this._audioContext;
+      await ctx.resume();
+      return ctx;
+    }
+    if (!window.AudioContext && !window.webkitAudioContext) {
+      throw new Error('AudioContext is not supported');
+    }
+    // This may create a suspended context and warn in Chrome
+    const audioContext = new AudioContext({
+      latencyHint: 'interactive',
+    });
+
+    if (!audioContext.audioWorklet) {
+      throw new Error('AudioContext has no Worklet support');
+    }
+
+    this._audioContext = Promise.all([
+      LevelNode.loadWorklet(audioContext),
+      SpeechDetectionNode.loadWorklet(audioContext),
+    ]).then(() => {
+      return audioContext;
+    });
+
+    return this._audioContext;
+  }
 
   /**
    * @returns {Promise<LevelNode>} - The AudioNode for the level meter of the audio input.
    */
-  public async getLevelNode() {
-    return (await this.levelContext).levelNode;
+  public getAudioLevel() {
+    return this.levelNode?.level;
   }
-
-  private sourceNode?: MediaStreamAudioSourceNode;
 
   private constructor() {
     super();
-
-    this.levelContext = (async () => {
-      if (!isAudioContextSuported) {
-        throw new Error('AudioContext is not supported');
-      }
-      // This may create a suspended context and warn in Chrome
-      const context = new AudioContext({
-        latencyHint: 'interactive',
-      });
-      await LevelNode.loadWorklet(context);
-      const levelNode = new LevelNode(context, 25);
-      return { levelNode, audioContext: context };
-    })();
   }
 
   /*
@@ -160,8 +181,8 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
       const oldTrack = this.outputMediaStream.getTracks().find((t) => t.kind === 'audio');
       oldTrack?.stop();
     }
-    const { audioContext } = await this.levelContext;
-    if (audioContext.state === 'running') {
+    const audioContext = await this._audioContext;
+    if (audioContext?.state === 'running') {
       await audioContext.suspend();
     }
   }
@@ -211,7 +232,6 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
     this.conference.addEventListener('shutdown', this.shutdownHandler);
 
     if (this.isAudioEnabled() || this.isVideoEnabled()) {
-      console.debug('publish video on startup');
       await this.publishStream();
     }
   };
@@ -226,9 +246,12 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
     this.connection = undefined;
     this.conference?.removeEventListener('shutdown', this.shutdownHandler);
     this.conference = undefined;
+    this.levelNode?.close();
+    this.levelNode = undefined;
+    this.speechDetectionNode?.close();
+    this.levelNode = undefined;
 
-    const closeLevelNode = this.levelContext.then(({ levelNode }) => levelNode.close());
-    await Promise.allSettled([this.haltVideo(), this.haltAudio(), closeLevelNode])
+    await Promise.allSettled([this.haltVideo(), this.haltAudio()])
       .catch((e) => console.error('failed to release media devices:', e))
       .finally(() => {
         this._deviceTracks.forEach((t) => {
@@ -237,6 +260,8 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
         });
         this._deviceTracks = [];
       });
+    this._audioContext?.then((ctx) => ctx.close());
+    this._audioContext = undefined;
   }
 
   private registerDeviceTracks(tracks: Array<MediaStreamTrack>) {
@@ -300,15 +325,44 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
     }
   };
 
+  /*
+   *
+   * Here we construct audio graph for processing audio signal,
+   * which is coming from the local media (own microphone).
+   *
+   * Vu meter uses unfiltered signal, to measure level, peak and clip.
+   * In contrast speech detection relies on the voice filter.
+   *      ____________       _____________       _____________
+   *     |            |     |             |     |             | --> level
+   * --> | Microphone | --> | Source Node | *-> | LevelNode   | --> peak
+   *     |____________|     |_____________| |   |_____________| --> clip
+   *                                        |    _____________       _____________________
+   *                                        |   |             |     |                     |
+   *                                         -->| VoiceFilter | --->| SpeechDetectionNode | ---> speechDetected
+   *                                            |_____________|     |_____________________|
+   *
+   *
+   *
+   */
   private async handleAudioChanged(audioTrack: MediaStreamTrack) {
     this.sourceNode?.disconnect();
     this.sourceNode = undefined;
+    this.levelNode?.disconnect();
+    this.levelNode = undefined;
+    this.speechDetectionNode?.disconnect();
+    this.speechDetectionNode = undefined;
 
-    const { levelNode, audioContext } = await this.levelContext;
-    await audioContext.resume();
-
+    const audioContext = await this.loadAudioWorkletContext();
     this.sourceNode = audioContext.createMediaStreamSource(new MediaStream([audioTrack]));
-    this.sourceNode.connect(levelNode);
+    const voiceFilter = getVoiceFilter(audioContext);
+    this.levelNode = new LevelNode(audioContext, ANIMATION_UPDATE_TIME);
+    this.speechDetectionNode = new SpeechDetectionNode(audioContext, (isUserSpeaking) =>
+      this.eventEmitter.emit('isUserSpeaking', isUserSpeaking)
+    );
+
+    this.sourceNode.connect(this.levelNode);
+    this.sourceNode.connect(voiceFilter);
+    voiceFilter.connect(this.speechDetectionNode);
 
     await this.replaceTrack(audioTrack);
   }
@@ -483,14 +537,6 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
       });
 
       this.connection?.trackUpdated();
-      {
-        //TODO: remove when the LevelNode stops working bug is found
-        const { levelNode, audioContext } = await this.levelContext;
-        if (audioContext.state !== 'running' && audio) {
-          console.error(`levelNodeState: ${audioContext.state}`, levelNode, audioContext, audioContext.state);
-          await audioContext.resume();
-        }
-      }
     }
 
     if (video !== this.isVideoEnabled()) {

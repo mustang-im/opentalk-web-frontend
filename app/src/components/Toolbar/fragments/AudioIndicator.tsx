@@ -4,9 +4,11 @@
 import { styled } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import React, { useRef, useEffect, useCallback, useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
-import K3KBrowserSupport from '../../../modules/BrowserSupport';
+import BrowserSupport from '../../../modules/BrowserSupport';
 import { SignalLevel } from '../../../modules/Media/LevelNode';
+import { selectIsUserSpeaking } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';
 
 const IndicatorContainer = styled('div')({
@@ -17,7 +19,7 @@ const IndicatorContainer = styled('div')({
   borderRadius: 'inherit',
 });
 
-const maxLevel = -0; // dB
+const maxLevel = 0; // dB
 const minLevel = -65; // dB
 const fullCircle = 2 * Math.PI;
 const startAngle = fullCircle * (2 / 12); // start at 5 o'clock
@@ -80,13 +82,14 @@ interface AudioIndicatorProps {
 const AudioIndicator = ({ shape }: AudioIndicatorProps) => {
   const theme = useTheme();
   const mediaContext = useMediaContext();
+  const isUserSpeaking = useSelector(selectIsUserSpeaking);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const needsClearCanvasHack = useMemo(() => K3KBrowserSupport.isSafari(), []);
+  const needsClearCanvasHack = useMemo(() => BrowserSupport.isSafari(), []);
 
   const [{ width, height }, setDimensions] = useState({ width: 2 * lineWidth, height: 2 * lineWidth });
 
@@ -107,11 +110,14 @@ const AudioIndicator = ({ shape }: AudioIndicatorProps) => {
   }, []);
 
   const render = useCallback(() => {
-    if (mediaContext.levelNode === undefined) {
-      return;
-    }
     const ctx = canvasRef.current?.getContext('2d') || null;
     if (ctx === null) {
+      return;
+    }
+
+    const signalLevel = mediaContext.getAudioLevel();
+
+    if (signalLevel === undefined) {
       return;
     }
     if (needsClearCanvasHack) {
@@ -121,11 +127,19 @@ const AudioIndicator = ({ shape }: AudioIndicatorProps) => {
     }
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    const { peak, level, clip } = mediaContext.levelNode.level;
+    const { peak, level, clip } = signalLevel;
+
     const peakScaled = (Math.max(peak, minLevel) - minLevel) / (maxLevel - minLevel);
     const levelScaled = (Math.max(level, minLevel) - minLevel) / (maxLevel - minLevel);
 
-    const barColor = clip ? theme.palette.error.main : theme.palette.primary.dark;
+    let barColor;
+    if (clip) {
+      barColor = theme.palette.error.main;
+    } else if (isUserSpeaking) {
+      barColor = theme.palette.primary.dark;
+    } else {
+      barColor = theme.palette.text.disabled;
+    }
     const peakColor = theme.palette.secondary.main;
 
     if (shape === 'circle') {
@@ -135,7 +149,7 @@ const AudioIndicator = ({ shape }: AudioIndicatorProps) => {
     }
 
     animationRef.current = requestAnimationFrame(render);
-  }, [mediaContext.levelNode, theme, shape, needsClearCanvasHack]);
+  }, [mediaContext.getAudioLevel, isUserSpeaking, theme, shape, needsClearCanvasHack]);
 
   useEffect(() => {
     render();

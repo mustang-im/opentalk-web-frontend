@@ -15,8 +15,8 @@ class LevelProcessor extends AudioWorkletProcessor {
     super();
     this._level = 0;
     this._peak = 0;
-    this._updateIntervalInMS = options.processorOptions.updateIntervalInMS;
-    this._nextUpdateFrame = this._updateIntervalInMS;
+    this._updateIntervalInMS = options.processorOptions.updateIntervalInMS;  // during this period of time, the worklet processes the signal
+    this._nextUpdateFrame = this._updateIntervalInMS;                        // afterwards it updates the main thread (app) with new output        
     this._clip = false;
     this._closed = false;
 
@@ -37,18 +37,18 @@ class LevelProcessor extends AudioWorkletProcessor {
     // connected then zero channels will be passed in.
     if (input.length > 0) {
       const samples = input[0];
-      let max_level = 0;
+      let maxLevel = 0;
 
       for (let i = 0; i < samples.length; ++i) {
         const level = Math.abs(samples[i]);
-        if (max_level < level) {
-          max_level = level;
+        if (maxLevel < level) {
+          maxLevel = level;
         }
       }
 
-      this._clip = this._clip || max_level > CLIP_THRESHOLD;
-      this._level = Math.max(max_level, this._level);
-      this._peak = Math.max(max_level, this._peak);
+      this._clip = this._clip || maxLevel > CLIP_THRESHOLD;
+      this._level = Math.max(maxLevel, this._level);
+      this._peak = Math.max(maxLevel, this._peak);
 
       this._nextUpdateFrame -= samples.length;
       if (this._nextUpdateFrame < 0) {

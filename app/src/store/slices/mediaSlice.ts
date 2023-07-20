@@ -32,6 +32,7 @@ interface MediaState {
   upstreamLimit: VideoSetting;
   requestMuteNotification?: MuteNotification;
   inProgress: boolean;
+  isUserSpeaking: boolean;
 }
 
 const initialState: MediaState = {
@@ -45,6 +46,7 @@ const initialState: MediaState = {
   qualityCap: VideoSetting.High,
   upstreamLimit: VideoSetting.High,
   inProgress: false,
+  isUserSpeaking: false,
 };
 
 export const mediaSlice = createSlice({
@@ -71,6 +73,9 @@ export const mediaSlice = createSlice({
     },
     setFocusedSpeaker: (state, { payload: { id } }: PayloadAction<{ id: ParticipantId; timestamp?: Timestamp }>) => {
       state.focusedSpeaker = id;
+    },
+    setSpeakerActivity: (state, { payload }: PayloadAction<boolean>) => {
+      state.isUserSpeaking = payload;
     },
     setQualityCap: (state, action: PayloadAction<VideoSetting>) => {
       state.qualityCap = action.payload;
@@ -109,6 +114,7 @@ export const {
   setBackgroundEffects,
   setScreenShare,
   setFocusedSpeaker,
+  setSpeakerActivity,
   setQualityCap,
   setUpstreamLimit,
   requestMute,
@@ -123,6 +129,7 @@ export const selectVideoBackgroundEffects = (state: RootState) => state.media.vi
 export const selectAudioDeviceId = (state: RootState) => state.media.audioDevice;
 export const selectVideoDeviceId = (state: RootState) => state.media.videoDevice;
 export const selectFocusedSpeaker = (state: RootState) => state.media.focusedSpeaker;
+export const selectIsUserSpeaking = (state: RootState) => state.media.isUserSpeaking;
 export const selectQualityCap = (state: RootState) => state.media.qualityCap;
 export const selectUpstreamLimit = (state: RootState) => state.media.upstreamLimit;
 export const selectNotification = (state: RootState) => state.media.requestMuteNotification;

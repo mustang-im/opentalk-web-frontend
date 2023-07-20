@@ -86,6 +86,7 @@ const mockLocalMedia = (jest: typeof globalThis.jest) => {
     reconfigure: () => Promise.resolve(), //jest.fn(() => Promise.resolve()),
     requestPermission: () => Promise.resolve(), //jest.fn().mockResolvedValue(undefined),
     getLevelNode: () => Promise.resolve(undefined), // jest.fn().mockResolvedValue(undefined),
+    getSpeechDetectionNode: () => Promise.resolve(undefined),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
   });
