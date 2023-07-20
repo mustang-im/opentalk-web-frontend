@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Stack, Typography } from '@mui/material';
-import { notifications, SnackbarKey, SnackbarMessage } from '@opentalk/common';
+import { Button, Stack, Typography, Box, styled } from '@mui/material';
+import { notifications, SnackbarKey, SnackbarMessage, SnackbarContent } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 
@@ -26,6 +26,12 @@ interface IJoinNotificationProps {
   snackbarKey: SnackbarKey;
   countdown?: CountDown;
 }
+
+const StyledSnackbarContent = styled(SnackbarContent)(({ theme }) => ({
+  background: theme.palette.info.dark,
+  padding: theme.spacing(1, 2),
+  borderRadius: theme.borderRadius.medium,
+}));
 
 const BreakoutRoomNotification = React.forwardRef<HTMLDivElement, IJoinNotificationProps>(
   ({ message, actions, iconComponent: Icon, countdown, snackbarKey }, ref) => {
@@ -51,16 +57,20 @@ const BreakoutRoomNotification = React.forwardRef<HTMLDivElement, IJoinNotificat
       ));
 
     return (
-      <div className="SnackbarItem-variantInfo SnackbarContent-root" ref={ref}>
-        <Stack direction="row" spacing={2} className="SnackbarItem-message">
-          <Icon width="2rem" height="2rem" />
-          <Typography>{message}</Typography>
+      <StyledSnackbarContent ref={ref} role="alert">
+        <Stack spacing={1}>
+          <Box display="flex" alignItems="center">
+            <Icon width="2rem" height="2rem" />
+            <Typography ml={2}>{message}</Typography>
+          </Box>
+          <Box display="flex" pl={6}>
+            {renderActions()}
+            {!isEmpty(countdown) && (
+              <Countdown duration={countdown?.duration} onCountdownEnds={handleCountdownEnds} ml={1.5} />
+            )}
+          </Box>
         </Stack>
-        <Stack direction="row" spacing={2} className="SnackbarItem-action">
-          {renderActions()}
-          {!isEmpty(countdown) && <Countdown duration={countdown?.duration} onCountdownEnds={handleCountdownEnds} />}
-        </Stack>
-      </div>
+      </StyledSnackbarContent>
     );
   }
 );
