@@ -11,8 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { readyToContinue } from '../../api/types/outgoing/timer';
 import { ReactComponent as LogoIconDefault } from '../../assets/images/logo.svg';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectCoffeeBreakTimerId, selectTimerRunning } from '../../store/slices/timerSlice';
-import { selectShowCoffeeBreakCurtain, setCoffeeBreakFullscreen } from '../../store/slices/uiSlice';
+import { selectCoffeeBreakTimerId, selectTimerActive } from '../../store/slices/timerSlice';
+import { selectShowCoffeeBreakCurtain, setCoffeeBreakCurtainOpen } from '../../store/slices/uiSlice';
 import CoffeeBreakTimer from './fragments/CoffeeBreakTimer';
 
 const BackgroundCover = styled(Box)({
@@ -67,12 +67,12 @@ interface CoffeeBreakViewProps {
 export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const isTimerRunning = useAppSelector(selectTimerRunning);
+  const isTimerActive = useAppSelector(selectTimerActive);
   const coffeeBreakTimerId = useAppSelector(selectCoffeeBreakTimerId);
   const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
   const handleClose = () => {
-    dispatch(setCoffeeBreakFullscreen(false));
+    dispatch(setCoffeeBreakCurtainOpen(false));
     if (coffeeBreakTimerId) {
       dispatch(readyToContinue.action({ timerId: coffeeBreakTimerId, status: true }));
     }
@@ -91,7 +91,7 @@ export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => 
           <CoffeeBreakIcon />
 
           <Typography variant="h3">
-            {isTimerRunning ? t('coffee-break-layer-title') : t('coffee-break-stopped-title')}
+            {isTimerActive ? t('coffee-break-layer-title') : t('coffee-break-stopped-title')}
           </Typography>
 
           <CoffeeBreakTimer />

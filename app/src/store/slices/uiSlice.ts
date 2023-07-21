@@ -126,7 +126,7 @@ export const uiSlice = createSlice({
     setProtocolHighlight(state, { payload: highlight }: PayloadAction<boolean>) {
       state.isCurrentProtocolHighlighted = highlight;
     },
-    setCoffeeBreakFullscreen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
+    setCoffeeBreakCurtainOpen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
       state.showCoffeeBreakCurtain = isOpenFlag;
     },
     setActiveTab(state, { payload: tabKey }: PayloadAction<ModerationTabKey>) {
@@ -215,7 +215,7 @@ export const {
   toggleDebugMode,
   setChatSearchValue,
   setProtocolHighlight,
-  setCoffeeBreakFullscreen,
+  setCoffeeBreakCurtainOpen,
   setActiveTab,
   toggledFullScreenMode,
   pinnedRemoteScreenshare,

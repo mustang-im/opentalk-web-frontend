@@ -7,7 +7,7 @@ import { intervalToDuration } from 'date-fns';
 import i18next from 'i18next';
 
 import { AppDispatch, RootState } from '../';
-import { TimerStarted, ReadyToContinue, TimerStopKind, TimerStopped } from '../../api/types/incoming/timer';
+import { TimerStarted, ReadyToContinue, TimerStopReason, TimerStopped } from '../../api/types/incoming/timer';
 import localMediaContext from '../../modules/Media/LocalMedia';
 
 interface State {
@@ -17,11 +17,10 @@ interface State {
   participantsReady: Array<ParticipantId>;
   readyCheckEnabled?: boolean;
   title?: string;
-  running: boolean;
   kind?: TimerKind;
   style?: TimerStyle;
   totalDuration?: Duration;
-  stopTimerKind?: TimerStopKind;
+  timerStopReason?: TimerStopReason;
 }
 
 const initialState: State = {
@@ -31,11 +30,10 @@ const initialState: State = {
   participantsReady: [],
   readyCheckEnabled: undefined,
   title: undefined,
-  running: false,
   kind: undefined,
   style: undefined,
   totalDuration: undefined,
-  stopTimerKind: undefined,
+  timerStopReason: undefined,
 };
 
 export const timerSlice = createSlice({
@@ -49,7 +47,6 @@ export const timerSlice = createSlice({
       state.endsAt = payload.endsAt;
       state.readyCheckEnabled = payload.readyCheckEnabled;
       state.title = payload.title;
-      state.running = true;
       state.kind = payload.kind;
       state.style = payload.style;
       if (payload.endsAt) {
@@ -58,7 +55,7 @@ export const timerSlice = createSlice({
           end: new Date(payload.endsAt),
         });
       }
-      state.stopTimerKind = undefined;
+      state.timerStopReason = undefined;
     },
     stoppedTimer: (state, { payload }: PayloadAction<TimerStopped>) => {
       state.timerId = undefined;
@@ -66,12 +63,11 @@ export const timerSlice = createSlice({
       state.endsAt = undefined;
       state.readyCheckEnabled = undefined;
       state.title = undefined;
-      state.running = false;
       state.kind = undefined;
       state.style = undefined;
       state.totalDuration = undefined;
       state.participantsReady = [];
-      state.stopTimerKind = payload.kind;
+      state.timerStopReason = payload.kind;
     },
     updateParticipantsReady: (state, { payload }: PayloadAction<ReadyToContinue>) => {
       if (payload.status === true && !state.participantsReady.includes(payload.participantId)) {
@@ -89,7 +85,6 @@ export const timerSlice = createSlice({
         state.timerId = timer.timerId;
         state.startedAt = timer.startedAt;
         state.endsAt = timer.endsAt;
-        state.running = true;
         state.kind = timer.kind;
         state.readyCheckEnabled = timer.readyCheckEnabled;
         state.style = timer.style;
@@ -99,7 +94,7 @@ export const timerSlice = createSlice({
             end: new Date(timer.endsAt),
           });
         }
-        state.stopTimerKind = undefined;
+        state.timerStopReason = undefined;
       }
     });
   },
@@ -115,7 +110,7 @@ export const selectTimerEndsAt = (state: RootState) => state.timer.endsAt;
 export const selectParticipantsReady = (state: RootState) => state.timer.participantsReady;
 export const selectReadyCheckEnabled = (state: RootState) => state.timer.readyCheckEnabled;
 export const selectTimerTitle = (state: RootState) => state.timer.title;
-export const selectTimerRunning = (state: RootState) => state.timer.running;
+export const selectTimerActive = (state: RootState) => state.timer.startedAt && !state.timer.timerStopReason;
 export const selectTimerKind = (state: RootState) => state.timer.kind;
 export const selectTimerStyle = (state: RootState) => state.timer.style;
 export const selectTotalDuration = (state: RootState) => state.timer.totalDuration;
@@ -148,13 +143,13 @@ startAppListening({
     const timerStyle = listenerApi.getOriginalState().timer.style;
     if (timerStyle === TimerStyle.Normal) {
       switch (action.payload.kind) {
-        case TimerStopKind.Expired:
+        case TimerStopReason.Expired:
           notifications.info(i18next.t('timer-notification-ran-out'));
           break;
-        case TimerStopKind.ByModerator:
+        case TimerStopReason.ByModerator:
           notifications.info(i18next.t('timer-notification-stopped'));
           break;
-        case TimerStopKind.CreatorLeft:
+        case TimerStopReason.CreatorLeft:
         default:
           break;
       }

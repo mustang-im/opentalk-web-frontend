@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Typography, Popover as MuiPopover } from '@mui/material';
+import { TimerStyle } from '@opentalk/common';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +15,7 @@ import {
   selectTimerTitle,
 } from '../../../store/slices/timerSlice';
 import { selectOurUuid } from '../../../store/slices/userSlice';
-import TimerNormalCounter from '../../TimerTab/fragments/TimerNormalCounter';
+import TimerDuration from '../../TimerTab/fragments/TimerDuration';
 
 const Popover = styled(MuiPopover)(({ theme }) => ({
   pointerEvents: 'none',
@@ -55,7 +56,7 @@ const NormalTimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
       <Stack spacing={2}>
         <Typography variant="h1">{t('timer-popover-title')}</Typography>
         {timerTitle && <Typography variant="h2">{timerTitle}</Typography>}
-        <TimerNormalCounter />
+        <TimerDuration style={TimerStyle.Normal} />
         {hasReadyCheckEnabled && (
           <Button onClick={handleDone} color={isUserReady ? 'secondary' : 'primary'}>
             {t(`timer-popover-button-${isUserReady ? 'not-' : ''}done`)}

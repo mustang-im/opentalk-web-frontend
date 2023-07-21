@@ -4,14 +4,18 @@
 import { TimerStyle } from '@opentalk/common';
 
 import { useAppSelector } from '../../hooks';
-import { selectTimerRunning } from '../../store/slices/timerSlice';
+import { selectTimerActive } from '../../store/slices/timerSlice';
+import ActiveTimerOverview from './fragments/ActiveTimerOverview';
 import CreateTimerForm from './fragments/CreateTimerForm';
-import TimerOverview from './fragments/TimerOverview';
 
 const TimerTab = ({ timerStyle }: { timerStyle: TimerStyle }) => {
-  const timerDidStart = useAppSelector(selectTimerRunning);
+  const isTimerRunning = useAppSelector(selectTimerActive);
 
-  return !timerDidStart ? <CreateTimerForm {...{ timerStyle }} /> : <TimerOverview {...{ timerStyle }} />;
+  return !isTimerRunning ? (
+    <CreateTimerForm timerStyle={timerStyle} />
+  ) : (
+    <ActiveTimerOverview timerStyle={timerStyle} />
+  );
 };
 
 export default TimerTab;
