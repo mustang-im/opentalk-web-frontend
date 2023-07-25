@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
+import { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
+import { BaseQueryFn, FetchArgs } from '@reduxjs/toolkit/query';
 import snakeCaseKeys from 'snakecase-keys';
 
 import {
@@ -18,7 +20,6 @@ import { CursorPaginated, DateTime } from '../types';
 import { UpdateEventPayload, RescheduleEventPayload, EventId, EventInstanceId } from '../types/event';
 import { toCursorPaginated } from '../utils';
 import { CursorPaginationParams } from './common';
-import { EndpointBuilder } from './helper';
 
 export interface EventQueryParams {
   /**
@@ -49,13 +50,13 @@ export interface TimeRangeQueryParams {
 }
 
 export const addEventsEndpoints = <
-  RoomEndpointBuilder extends EndpointBuilder<
+  EventsEndpointBuilder extends EndpointBuilder<
     BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, Record<string, unknown>, FetchBaseQueryMeta>,
     Tags,
     'api'
   >
 >(
-  builder: RoomEndpointBuilder
+  builder: EventsEndpointBuilder
 ) => ({
   /**
    * Fetches all available Events

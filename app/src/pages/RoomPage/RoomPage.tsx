@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { BreakoutRoomId, RoomId } from '@opentalk/common';
+import { selectIsAuthed } from '@opentalk/react-redux-appauth';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -10,7 +11,7 @@ import LobbyView from '../../components/LobbyView';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { startRoom } from '../../store/commonActions';
 import { ConnectionState, selectInviteId, selectRoomConnectionState } from '../../store/slices/roomSlice';
-import { selectDisplayName, selectIsAuthenticated } from '../../store/slices/userSlice';
+import { selectDisplayName } from '../../store/slices/userSlice';
 
 const MeetingView = React.lazy(() => import('../../components/MeetingView'));
 const WaitingView = React.lazy(() => import('../../components/WaitingView'));
@@ -23,7 +24,7 @@ const RoomPage = () => {
   };
 
   const inviteCode = useAppSelector(selectInviteId);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAuthenticated = useAppSelector(selectIsAuthed);
   const displayName = useAppSelector(selectDisplayName);
   const connectionState = useAppSelector(selectRoomConnectionState);
 
