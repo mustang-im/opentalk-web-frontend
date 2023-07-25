@@ -597,6 +597,10 @@ dashboard-settings-audio = Audio
 dashboard-settings-accessibility = Zugänglichkeit
 dashboard-settings-logout = Abmelden
 dashboard-account-management = Accountverwaltung
+dashboard-legal = Rechtliches
+dashboard-legal-imprint = Impressum
+dashboard-legal-data-protection = Datenschutzhinweise
+
 dashboard-FAQ = faq
 dashboard-close-navbar= Navigation schließen
 dashboard-open-navbar = Navigation aufklappen
