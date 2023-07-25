@@ -607,6 +607,7 @@ dashboard-open-navbar = Navigation aufklappen
 dashboard-join-meeting = Nehmen Sie an der Besprechung teil
 
 dashboard-settings-general-notification-save-success = Deine Einstellungen wurden erfolgreich gespeichert.
+dashboard-settings-general-notification-save-error = Deine Einstellungen konnten nicht übernommen werden. 
 dashboard-settings-general-language = Sprache
 dashboard-settings-general-appearance = Erscheinungsbild
 dashboard-settings-general-notifications = Benachrichtigungen

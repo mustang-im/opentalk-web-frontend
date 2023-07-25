@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Fix error handling on update displayname in dashboard (!1026)
 - Remove settings if provided by a service provider (!1000)
 - Add missing names to toolbar buttons (!988)
 - Change tariff to plan in english translation (!1004)

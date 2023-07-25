@@ -27,9 +27,15 @@ const ProfileNameForm = () => {
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      await updateMe(values);
-      notifications.success(t('dashboard-settings-general-notification-save-success'));
+    onSubmit: (values) => {
+      updateMe(values)
+        .unwrap()
+        .then(() => {
+          notifications.success(t('dashboard-settings-general-notification-save-success'));
+        })
+        .catch(() => {
+          notifications.error(t('dashboard-settings-general-notification-save-error'));
+        });
     },
   });
 
