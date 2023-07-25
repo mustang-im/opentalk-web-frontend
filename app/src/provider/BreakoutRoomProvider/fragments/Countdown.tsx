@@ -1,20 +1,20 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, BoxProps, CircularProgress, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import { useCountdown } from '../../../hooks';
 
 const DURATION = 120;
 
-interface CountdownProps {
+interface CountdownProps extends BoxProps {
   started?: number;
   duration?: number;
   onCountdownEnds?: () => void;
 }
 
-const Countdown = ({ started = Date.now(), duration, onCountdownEnds }: CountdownProps) => {
+const Countdown = ({ started = Date.now(), duration, onCountdownEnds, ...rest }: CountdownProps) => {
   const [actionCalled, setActionCalled] = useState(false);
   const countdownDuration = duration ? duration : DURATION;
   const { remainingTime, elapsedTime } = useCountdown({
@@ -33,7 +33,7 @@ const Countdown = ({ started = Date.now(), duration, onCountdownEnds }: Countdow
   const progress = 100 - (elapsedTime / countdownDuration) * 100;
 
   return (
-    <Box position="relative" display="inline-flex" alignContent="center">
+    <Box position="relative" display="inline-flex" alignContent="center" {...rest}>
       <CircularProgress variant="determinate" value={progress} />
       <Box
         top={0}
