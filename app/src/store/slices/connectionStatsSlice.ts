@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createEntityAdapter, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
   descriptorFromId,
@@ -58,25 +58,30 @@ export const { statsUpdated } = connectionStatsSlice.actions;
 
 export const connectionStatsSelectors = connectionStatsAdapter.getSelectors<RootState>((state) => state.stats);
 
+const selectStatsByIdRaw = (descriptor: MediaDescriptor) => (state: RootState) =>
+  connectionStatsSelectors.selectById(state, idFromDescriptor(descriptor));
+
 // returns temporarily the last inbound report entry to ensure legacy code is working as expected
-export const selectStatsById = (descriptor: MediaDescriptor) => (state: RootState) => {
-  const reports = connectionStatsSelectors.selectById(state, idFromDescriptor(descriptor))?.reports;
-  if (reports !== undefined && reports.length > 0) {
-    const { inbound, connection } = reports[reports.length - 1];
-    if (inbound && connection) {
-      return { mediaStream: inbound, connection };
+export const selectStatsById = (descriptor: MediaDescriptor) => {
+  const sel = selectStatsByIdRaw(descriptor);
+  return createSelector(sel, (stats) => {
+    const reports = stats?.reports;
+    if (reports !== undefined && reports.length > 0) {
+      const { inbound, connection } = reports[reports.length - 1];
+      if (inbound && connection) {
+        return { mediaStream: inbound, connection };
+      }
     }
-  }
-  return undefined;
+    return undefined;
+  });
 };
 
-export const selectStatsPacketLossByDescriptor = (descriptor: MediaDescriptor) => (state: RootState) => {
-  const reports = connectionStatsSelectors.selectById(state, idFromDescriptor(descriptor))?.reports;
-  if (reports !== undefined && reports.length > 0) {
-    const packetLoss = reports[reports.length - 1]?.connection?.packetLoss;
+export const selectStatsPacketLossByDescriptor = (descriptor: MediaDescriptor) => {
+  const sel = selectStatsById(descriptor);
+  return createSelector(sel, (report) => {
+    const packetLoss = report?.connection?.packetLoss;
     return packetLoss !== undefined && packetLoss > PACKET_LOSS_THRESHOLD;
-  }
-  return false;
+  });
 };
 
 export const selectStats = (state: RootState) => {
