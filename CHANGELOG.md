@@ -37,6 +37,7 @@
 - Optimized lobby field wording (!1028)
 - Notification for own message in group chat is no longer shown. (!1029)
 - Fix hotkeys not working as expected (!1040)
+- Fix timer countdown for the moderator (!1031)
 
 ### New Features
 

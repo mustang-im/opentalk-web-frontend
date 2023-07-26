@@ -18,7 +18,6 @@ import {
   PollId,
   LegalVoteId,
   CloseIcon,
-  ClockIcon,
   useDateFormat,
   Choice,
   ChoiceResult,
@@ -323,14 +322,11 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
               />
               {currentLegalVote && <Box>{formattedTime}</Box>}
               {currentLegalVote && currentLegalVote.duration && currentLegalVote.startTime && (
-                <Box display="flex" alignItems="center" gap={1}>
-                  <ClockIcon sx={{ width: '1rem', verticalAlign: 'middle' }} />
-                  <LegalVoteCountdown
-                    duration={currentLegalVote.duration}
-                    startTime={currentLegalVote.startTime}
-                    active={currentLegalVote.state === 'active'}
-                  />
-                </Box>
+                <LegalVoteCountdown
+                  duration={currentLegalVote.duration}
+                  startTime={currentLegalVote.startTime}
+                  active={currentLegalVote.state === 'active'}
+                />
               )}
             </Box>
             <IconButton onClick={closeResultWindow} aria-label="close-vote-results">
