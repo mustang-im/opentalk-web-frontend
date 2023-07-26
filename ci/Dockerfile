@@ -23,11 +23,15 @@ COPY packages/react-redux-appauth/tsconfig.json ./packages/react-redux-appauth/t
 COPY packages/common/package.json ./packages/common/package.json
 COPY packages/common/tsconfig.json ./packages/common/tsconfig.json
 
-RUN apk add git
+RUN apk add git jq
 RUN yarn install
 COPY app ./app
 COPY packages ./packages
 RUN yarn $BUILD_TYPE
+
+RUN jq -r '.version' ./app/package.json > /app/dist/FRONTEND_VERSION
+
+RUN /app/node_modules/.bin/sentry-cli sourcemaps inject /app/dist/
 
 FROM nginx:alpine
 COPY --from=Build /app/dist /usr/share/nginx/html
@@ -38,7 +42,6 @@ ENV BASE_URL=http://localhost:3000
 ENV OIDC_ISSUER=localhost:8080
 ENV OIDC_CLIENT_ID=Frontend
 
-
-COPY ./ci/entrypoint.sh /docker-entrypoint.d/40-configure-k3k-app.sh
-RUN chmod +x /docker-entrypoint.d/40-configure-k3k-app.sh
+COPY ./ci/entrypoint.sh /docker-entrypoint.d/40-configure-app.sh
+RUN chmod +x /docker-entrypoint.d/40-configure-app.sh
 COPY ./ci/nginx.conf /etc/nginx/conf.d/default.conf

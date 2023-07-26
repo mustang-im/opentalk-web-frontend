@@ -115,6 +115,8 @@ export interface ConfigState {
   imprintUrl?: string;
   dataProtectionUrl?: string;
   version?: `v${string}`;
+  glitchtipDsn?: string;
+  glitchtipRelease?: string;
 }
 /**
  * Initial Configuration.
@@ -174,6 +176,8 @@ export const initialState: ConfigState = {
     quotas: {},
     enabledModules: [],
   },
+  glitchtipDsn: undefined,
+  glitchtipRelease: undefined,
 };
 
 export const configSlice = createSlice({

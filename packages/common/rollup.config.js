@@ -22,10 +22,12 @@ module.exports = [
       {
         file: path.resolve(dist, "cjs", "index.development.js"),
         format: "cjs",
+        sourcemap: true,
       },
       {
         file: path.resolve(dist, "esm", "index.development.js"),
         format: "esm",
+        sourcemap: true,
       },
     ],
     plugins: [
@@ -44,10 +46,12 @@ module.exports = [
       {
         file: path.resolve(dist, "cjs", "index.production.js"),
         format: "cjs",
+        sourcemap: true,
       },
       {
         file: path.resolve(dist, "esm", "index.production.js"),
         format: "esm",
+        sourcemap: true,
       },
     ],
     plugins: [

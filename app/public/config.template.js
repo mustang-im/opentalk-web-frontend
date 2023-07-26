@@ -47,5 +47,7 @@ window.config = {
   },
   videoBackgrounds: '${VIDEO_BACKGROUNDS}',
   maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}',
-  version: '${PRODUCT_VERSION}'
+  version: '${PRODUCT_VERSION}',
+  glitchtipDsn: '${SENTRY_DSN}',
+  glitchtipRelease: "${SENTRY_RELEASE}"
 };
