@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { render, screen, createStore } from '../../utils/testUtils';
+import { render, screen, configureStore } from '../../utils/testUtils';
 import NameTile from './NameTile';
 
 describe('render <NameTile />', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
   const displayName = 'Test User Name';
 
   test('render NameTile component with audio on', async () => {

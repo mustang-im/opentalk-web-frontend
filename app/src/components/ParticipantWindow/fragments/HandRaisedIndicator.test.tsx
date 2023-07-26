@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { render, screen, mockedParticipant, createStore } from '../../../utils/testUtils';
+import { render, screen, mockedParticipant, configureStore } from '../../../utils/testUtils';
 import HandRaisedIndicator from './HandRaisedIndicator';
 
 const participant1 = mockedParticipant(1);
 const participantHandUp = { ...mockedParticipant(2), handIsUp: true };
 
-const { store } = createStore({
+const { store } = configureStore({
   initialState: {
     participants: {
       ids: [participant1.id, participantHandUp.id],

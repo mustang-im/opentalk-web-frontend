@@ -1,10 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { createMockEvent } from '../../../utils/eventTestUtils';
-import { createStore, render, screen } from '../../../utils/testUtils';
+import { configureStore, render, screen } from '../../../utils/testUtils';
 import Home from './Home';
 
 const useGetEventsQuery = () => {
@@ -34,14 +32,14 @@ jest.mock('../../../templates/DashboardTemplate', () => ({
 
 describe('Dashboard HomePage', () => {
   test('page will not crash', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<Home />, store);
 
     expect(screen.getByText('dashboard-meeting-card-title-next-meetings')).toBeInTheDocument();
   });
 
   test('it will render 4 upcoming events', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<Home />, store);
 
     expect(screen.getAllByText('dashboard-home-created-by')).toHaveLength(4);
@@ -49,7 +47,7 @@ describe('Dashboard HomePage', () => {
 
   // documented out because MUI <Hidden> will not working well with jest in v5
   xtest('new meeting button is rendered', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<Home />, store);
 
     expect(screen.getByText('dashboard-meeting-card-button-new-meeting')).toBeInTheDocument();

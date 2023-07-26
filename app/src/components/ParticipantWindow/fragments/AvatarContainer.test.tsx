@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { getInitials } from '../../../utils/stringUtils';
-import { createStore, render, screen } from '../../../utils/testUtils';
+import { configureStore, render, screen } from '../../../utils/testUtils';
 import { AvatarContainer } from './AvatarContainer';
 
 describe('render <AvatarContainer />', () => {
   const displayName = 'Test User Name';
   const initials = getInitials(displayName, 3);
-  const { store } = createStore();
+  const { store } = configureStore();
 
   test('should render AvatarContainer component with initial', async () => {
     await render(<AvatarContainer>{displayName}</AvatarContainer>, store);

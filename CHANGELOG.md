@@ -25,6 +25,7 @@
 
 ### New Features
 
+- Add copy meeting link and guest link to dashboard meeting 3-dot menue (!1033)
 - Display and pin remote sharedscreen automatically(!998)
 - Add legal entry to the dashboard (!1020)
 - Add a new call_in field to the room field of events (!999)

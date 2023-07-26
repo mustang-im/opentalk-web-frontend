@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import TextField from '../../commonComponents/TextField/index';
-import { render, screen, createStore } from '../../utils/testUtils';
+import { render, screen, configureStore } from '../../utils/testUtils';
 import SelfTest from './SelfTest';
 
 describe('SelfTest', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
 
   test('render SelfTest component without crashing', async () => {
     await render(

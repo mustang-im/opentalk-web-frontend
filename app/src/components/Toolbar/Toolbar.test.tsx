@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Role } from '../../api/types/incoming/control';
-import { render, screen, createStore } from '../../utils/testUtils';
+import { render, screen, configureStore } from '../../utils/testUtils';
 import Toolbar from './Toolbar';
 
 jest.mock('../Toolbar/fragments/EndCallButton', () => {
@@ -14,7 +14,7 @@ jest.mock('../Toolbar/fragments/EndCallButton', () => {
 
 describe('render <Toolbar />', () => {
   test('render full-layout Toolbar component for modarator', () => {
-    const { store } = createStore({
+    const { store } = configureStore({
       initialState: {
         user: { loggedIn: true, role: Role.Moderator },
       },
@@ -30,7 +30,7 @@ describe('render <Toolbar />', () => {
   });
 
   test('render full-layout Toolbar component for normal user', () => {
-    const { store } = createStore({
+    const { store } = configureStore({
       initialState: {
         user: { loggedIn: true, role: Role.User },
       },

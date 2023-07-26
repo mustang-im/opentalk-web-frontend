@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import React from 'react';
 
-import { render, screen, createStore, fireEvent } from '../../utils/testUtils';
+import { render, screen, configureStore, fireEvent } from '../../utils/testUtils';
 import NumberInput from './NumberInput';
 
 const inputProps: {
@@ -17,7 +17,7 @@ const inputProps: {
 describe('custom number input', () => {
   const mockOnChange = jest.fn();
   test('render all elements', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
 
     expect(screen.getByDisplayValue('2')).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe('custom number input', () => {
   });
 
   test('change input value', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
     expect(screen.getByDisplayValue('2')).toBeInTheDocument();
 
@@ -38,7 +38,7 @@ describe('custom number input', () => {
   });
 
   test('exceed max input value', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
 
     expect(screen.getByDisplayValue('2')).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe('custom number input', () => {
   });
 
   test('fall below min input value', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
 
     expect(screen.getByDisplayValue('2')).toBeInTheDocument();
@@ -65,7 +65,7 @@ describe('custom number input', () => {
   });
 
   test('buttons clicked', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
 
     expect(screen.getByDisplayValue('2')).toBeInTheDocument();
@@ -84,7 +84,7 @@ describe('custom number input', () => {
   });
 
   test('exceed min button click', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
 
     expect(screen.getByDisplayValue('2')).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe('custom number input', () => {
   });
 
   test('exceed max button click', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
 
     expect(screen.getByDisplayValue('2')).toBeInTheDocument();

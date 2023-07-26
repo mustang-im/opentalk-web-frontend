@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import DateFnsAdapter from '@date-io/date-fns';
 
-import { render, screen, createStore } from '../../../utils/testUtils';
+import { render, screen, configureStore } from '../../../utils/testUtils';
 import CustomDateTimePicker from './CustomDateTimePicker';
 
 const date = new Date();
@@ -27,7 +27,7 @@ const dateTimePickerProps = {
 };
 
 describe('render <CustomDateTimePicker />', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
 
   test('render CustomDateTimePicker component', async () => {
     await render(<CustomDateTimePicker {...dateTimePickerProps} />, store);

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import React from 'react';
 
-import { createStore, render, screen } from '../../utils/testUtils';
+import { configureStore, render, screen } from '../../utils/testUtils';
 import CloseMettingDialog, { CloseMettingDialogProps } from './CloseMettingDialog';
 
 const dialogProps: CloseMettingDialogProps = {
@@ -12,7 +12,7 @@ const dialogProps: CloseMettingDialogProps = {
 };
 
 describe('CloseMettingDialog', () => {
-  const { store /*, dispatch */ } = createStore();
+  const { store /*, dispatch */ } = configureStore();
 
   test('dialog with flag open={false}, should not render', async () => {
     await render(<CloseMettingDialog {...dialogProps} open={false} />, store);

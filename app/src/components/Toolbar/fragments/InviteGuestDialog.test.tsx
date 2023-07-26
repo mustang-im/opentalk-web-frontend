@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { render, screen, createStore } from '../../../utils/testUtils';
+import { render, screen, configureStore } from '../../../utils/testUtils';
 import InviteGuestDialog from './InviteGuestDialog';
 
 describe('<InviteGuestDialog />', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
 
   test('render InviteGuestDialog component when flag open is true', async () => {
     await render(<InviteGuestDialog open />, store);

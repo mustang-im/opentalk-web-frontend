@@ -6,19 +6,15 @@ import { BackIcon, CopyIcon, notifications } from '@opentalk/common';
 import { Event, isEvent, FindUserResponse } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
 import { merge } from 'lodash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
-import {
-  useCreateEventInviteMutation,
-  useDeleteEventMutation,
-  useGetMeTariffQuery,
-  useLazyGetRoomInvitesQuery,
-} from '../../api/rest';
+import { useCreateEventInviteMutation, useDeleteEventMutation, useGetMeTariffQuery } from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
 import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
+import { createPermanentGuestLink } from '../../hooks/createPermanentGuestLink';
 import { selectBaseUrl, selectFeatures } from '../../store/slices/configSlice';
 import { EmailUser } from '../SelectParticipants/SelectParticipants';
 
@@ -37,15 +33,6 @@ const InviteToMeeting = ({
   invitationsSent,
   showOnlyLinkFields,
 }: InviteToMeetingProps) => {
-  const [
-    getRoomInvites,
-    {
-      data: invites,
-      isSuccess: isGetInvitesSuccess,
-      isLoading: isGetInvitesLoading,
-      isUninitialized: isGetInvitesUninitialized,
-    },
-  ] = useLazyGetRoomInvitesQuery();
   const [creatEventInvitation, { isLoading: sendingInvitation, isSuccess, status, isError }] =
     useCreateEventInviteMutation();
 
@@ -68,18 +55,12 @@ const InviteToMeeting = ({
   const userTariffLimit = tariff?.quotas.roomParticipantLimit;
 
   const roomUrl = useMemo(() => new URL(`/room/${existingEvent?.room.id}`, baseUrl), [baseUrl, existingEvent]);
-  const createGuestLink = useCallback((inviteCode: string) => new URL(`/invite/${inviteCode}`, baseUrl), [baseUrl]);
 
   const roomSharedFolderUrl = existingEvent.sharedFolder?.readWrite?.url;
   const roomSharedFolderPassword = existingEvent.sharedFolder?.readWrite?.password;
 
   const callInDetails = existingEvent.room.callIn;
-
-  useEffect(() => {
-    if (existingEvent) {
-      getRoomInvites({ roomId: existingEvent.room.id });
-    }
-  }, [existingEvent, getRoomInvites]);
+  const inviteUrl = createPermanentGuestLink(existingEvent?.room.id);
 
   const sendInvitations = useCallback(async () => {
     const allInvites = selectedUsers.map((selectedUser) => {
@@ -102,29 +83,6 @@ const InviteToMeeting = ({
   }, [t, selectedUsers, existingEvent, creatEventInvitation, invitationsSent, isError]);
 
   const sipLink = callInDetails ? `${callInDetails.tel},,${callInDetails.id},,${callInDetails.password}` : undefined;
-
-  //TODO: Add a way to generate a new permanent link if none are present (button inside the input)
-  const inviteUrl = useMemo(() => {
-    if (isGetInvitesUninitialized || isGetInvitesLoading) return undefined;
-
-    if (!isGetInvitesSuccess || invites === undefined || invites.length === 0) {
-      console.error('No invite found for room ', existingEvent.room.id);
-      return undefined;
-    }
-    const permanentInvite = invites.find((invite) => invite.expiration === null && invite.active);
-    if (permanentInvite === undefined) {
-      console.error('No permanent invite found for room ', existingEvent.room.id);
-      return undefined;
-    }
-    return createGuestLink(permanentInvite.inviteCode);
-  }, [
-    isGetInvitesUninitialized,
-    isGetInvitesLoading,
-    isGetInvitesSuccess,
-    invites,
-    createGuestLink,
-    existingEvent.room.id,
-  ]);
 
   const roomPassword = existingEvent?.room?.password?.trim() || undefined;
 

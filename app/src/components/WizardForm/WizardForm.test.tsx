@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createStore, render, screen, fireEvent, waitFor, cleanup } from '../../utils/testUtils';
+import { configureStore, render, screen, fireEvent, waitFor, cleanup } from '../../utils/testUtils';
 import WizardForm from './WizardForm';
 
 describe('Testing wizzard form', () => {
@@ -12,7 +12,7 @@ describe('Testing wizzard form', () => {
   const initialValues = { firstName: '', email: '', designation: '' };
 
   afterAll(() => cleanup());
-  const { store } = createStore();
+  const { store } = configureStore();
   test('should render without crashing', async () => {
     await render(<WizardForm steps={steps} onSubmit={onSubmit} initialValues={initialValues} />, store);
     expect(screen.getByText('Step 1')).toBeInTheDocument();

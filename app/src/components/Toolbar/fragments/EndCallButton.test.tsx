@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { UserId } from '@opentalk/rest-api-rtk-query';
 
-import { render, screen, createStore, fireEvent } from '../../../utils/testUtils';
+import { render, screen, configureStore, fireEvent } from '../../../utils/testUtils';
 import EndCallButton from './EndCallButton';
 
 jest.mock('../../../api/rest', () => ({
@@ -22,7 +22,7 @@ jest.mock('../../../api/rest', () => ({
   }),
 }));
 describe('<EndCallButton />', () => {
-  const { store /*, dispatch */ } = createStore();
+  const { store /*, dispatch */ } = configureStore();
   beforeEach(() => {
     jest.clearAllMocks();
   });
