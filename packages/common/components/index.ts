@@ -6,7 +6,7 @@ import CommonFormItem from './CommonFormItem';
 import { DurationField, DurationValueOptions } from './DurationField';
 import FormWrapper from './FormWrapper';
 import IconButton from './IconButton';
-import ParticipantAvatar from './ParticipantAvatar';
+import { ParticipantAvatar, setLibravatarOptions } from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
 import SortPopoverMenu from './SortPopoverMenu';
 import TextField from './TextField';
@@ -32,6 +32,7 @@ export {
   DurationField,
   FormWrapper,
   ParticipantAvatar,
+  setLibravatarOptions,
   TextField,
   ToolbarMenuUtils,
   IconButton,

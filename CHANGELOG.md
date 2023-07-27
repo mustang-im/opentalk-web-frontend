@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Fix functionality to set avatar default image (!1034)
 - Remove extra space from url in MeetinPopover.tsx (!1050)
 - Get rid of login popup and remove redux-persist (!1030)
 - Fix error handling on update displayname in dashboard (!1026)

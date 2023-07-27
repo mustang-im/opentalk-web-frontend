@@ -49,5 +49,6 @@ window.config = {
   maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}',
   version: '${PRODUCT_VERSION}',
   glitchtipDsn: '${SENTRY_DSN}',
-  glitchtipRelease: "${SENTRY_RELEASE}"
+  glitchtipRelease: "${SENTRY_RELEASE}",
+  libravatarDefaultImage: 'robohash'
 };

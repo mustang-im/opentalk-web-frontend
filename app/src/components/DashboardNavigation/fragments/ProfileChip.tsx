@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Collapse, Typography, Button } from '@mui/material';
-import { ParticipantAvatar } from '@opentalk/common';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useGetMeQuery } from '../../../api/rest';
+import ProfilePicture from '../../ProfilePicture/ProfilePicture';
 
 interface ChipProps {
   collapsed: boolean;
@@ -35,9 +35,7 @@ const ProfileChip = ({ collapsed, withLabel }: ChipProps) => {
         },
       }}
     >
-      <ParticipantAvatar src={data?.avatarUrl} translate="no">
-        {displayName}
-      </ParticipantAvatar>
+      <ProfilePicture />
       {withLabel && (
         <Collapse orientation="horizontal" in={!collapsed}>
           <Typography noWrap translate="no">
