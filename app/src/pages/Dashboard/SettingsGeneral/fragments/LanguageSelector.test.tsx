@@ -4,7 +4,7 @@
 import { cleanup, waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { render, screen, createStore, fireEvent } from '../../../../utils/testUtils';
+import { render, screen, configureStore, fireEvent } from '../../../../utils/testUtils';
 import LanguageSelector from './LanguageSelector';
 
 const mockUpdateMe = jest.fn();
@@ -26,7 +26,7 @@ jest.mock('../../../../api/rest', () => ({
 }));
 
 describe('LanguageSelector component', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
   afterEach(() => cleanup());
   test('render component without crashing', async () => {
     await render(<LanguageSelector />, store);

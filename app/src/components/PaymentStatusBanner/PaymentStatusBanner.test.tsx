@@ -5,7 +5,7 @@
 import userEvent from '@testing-library/user-event';
 
 import { useGetMeQuery } from '../../api/rest';
-import { createStore, render, screen } from '../../utils/testUtils';
+import { configureStore, render, screen } from '../../utils/testUtils';
 import PaymentStatusBanner from './PaymentStatusBanner';
 
 jest.mock('../../api/rest', () => ({
@@ -21,7 +21,7 @@ jest.mock('../../api/rest', () => ({
 const mockUseGetMeQuery = useGetMeQuery as jest.Mock;
 
 const ACCOUNT_MANAGEMENT_URL = 'account.management.url';
-const { store } = createStore({
+const { store } = configureStore({
   initialState: {
     config: { provider: { accountManagementUrl: ACCOUNT_MANAGEMENT_URL } },
   },

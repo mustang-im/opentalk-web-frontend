@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { cleanup, waitFor } from '@testing-library/react';
 
-import { render, screen, createStore, fireEvent } from '../../utils/testUtils';
+import { render, screen, configureStore, fireEvent } from '../../utils/testUtils';
 import FullscreenView from './FullscreenView';
 
 const mockExitCall = jest.fn();
@@ -17,7 +17,7 @@ jest.mock('react-full-screen', () => ({
 
 describe('FullscreenView', () => {
   afterEach(() => cleanup());
-  const { store } = createStore();
+  const { store } = configureStore();
 
   test('render without crashing', async () => {
     await render(<FullscreenView />, store);

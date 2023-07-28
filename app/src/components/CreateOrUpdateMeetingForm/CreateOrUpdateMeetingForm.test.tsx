@@ -6,7 +6,7 @@ import { fireEvent } from '@testing-library/react';
 import { formatRFC3339 } from 'date-fns';
 import React from 'react';
 
-import { createStore, render, screen, cleanup, waitFor, eventMockedData } from '../../utils/testUtils';
+import { configureStore, render, screen, cleanup, waitFor, eventMockedData } from '../../utils/testUtils';
 import CreateOrUpdateMeetingForm from './CreateOrUpdateMeetingForm';
 
 const mockOnForwardButtonClick = jest.fn();
@@ -71,13 +71,13 @@ describe('Dashboard CreateOrUpdateMeetingForm', () => {
   afterEach(() => cleanup());
 
   test('page will not crash', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<CreateOrUpdateMeetingForm onForwardButtonClick={mockOnForwardButtonClick} />, store);
     expect(screen.getByText('dashboard-meeting-textfield-title')).toBeInTheDocument();
   });
 
   test('updateEvent will be called with the right payload', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<CreateOrUpdateMeetingForm existingEvent={mockEvent} />, store);
 
     const submitButton = screen.getByRole('button', { name: 'global-save-changes' });

@@ -4,7 +4,7 @@
 import { cleanup, waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { render, screen, createStore, fireEvent } from '../../../../utils/testUtils';
+import { render, screen, configureStore, fireEvent } from '../../../../utils/testUtils';
 import ThemeSelector from './ThemeSelector';
 
 const mockUpdateMe = jest.fn();
@@ -20,7 +20,7 @@ jest.mock('../../../../api/rest', () => ({
 }));
 
 describe('ThemeSelector component', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
   afterEach(() => cleanup());
   test('render component without crashing', async () => {
     await render(<ThemeSelector />, store);

@@ -16,6 +16,9 @@ import {
   useUnmarkFavoriteEventMutation,
 } from '../../../api/rest';
 import IconButton from '../../../commonComponents/IconButton';
+import { useAppSelector } from '../../../hooks';
+import { createPermanentGuestLink } from '../../../hooks/createPermanentGuestLink';
+import { selectBaseUrl } from '../../../store/slices/configSlice';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
 import ConfirmDialog from '../../ConfirmDialog';
 import { MeetingCardFragmentProps } from '../MeetingCard';
@@ -61,6 +64,8 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
   const isFirstTryToDeleteSharedFolder = useRef(true);
+  const baseUrl = useAppSelector(selectBaseUrl);
+  const inviteUrl = createPermanentGuestLink(roomId);
 
   const openPopupMenu = (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
     stopPropagation(mouseEvent);
@@ -79,6 +84,22 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   const viewMeetingDetails = () => {
     navigate(`/dashboard/meetings/${eventId}`, { state: { ...getReferrerRouterState(window.location) } });
   };
+
+  const copyMeetingLink = () => {
+    setAnchorEl(undefined);
+    const link = `${baseUrl}/room/${roomId}`;
+    navigator.clipboard.writeText(link);
+    notifications.success(t('global-copy-link-success'));
+  };
+
+  const copyGuestLink = () => {
+    setAnchorEl(undefined);
+    if (inviteUrl) {
+      navigator.clipboard.writeText(inviteUrl.toString());
+      notifications.success(t('global-copy-link-success'));
+    }
+  };
+
   const handleClose = () => {
     setAnchorEl(undefined);
   };
@@ -173,6 +194,14 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
       i18nKey: 'dashboard-meeting-card-popover-details',
       action: viewMeetingDetails,
     },
+    {
+      i18nKey: 'dashboard-meeting-card-popover-copy-link',
+      action: copyMeetingLink,
+    },
+    {
+      i18nKey: 'dashboard-meeting-card-popover-copy-guest-link',
+      action: copyGuestLink,
+    },
   ];
 
   const creatorMeetingOptionItems: IMeetingCardOptionItem[] = [
@@ -183,11 +212,18 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
 
   const options = isMeetingCreator ? creatorMeetingOptionItems : meetingOptionItems;
   const renderMenuOptionItems = () =>
-    options.map((option) => (
-      <MenuItem disabled={option.disabled} key={option.i18nKey} onClick={option.action} aria-label={t(option.i18nKey)}>
-        {t(option.i18nKey)}
-      </MenuItem>
-    ));
+    options
+      .filter((option) => (option.action === copyGuestLink && inviteUrl) || option.action !== copyGuestLink)
+      .map((option) => (
+        <MenuItem
+          disabled={option.disabled}
+          key={option.i18nKey}
+          onClick={option.action}
+          aria-label={t(option.i18nKey)}
+        >
+          {t(option.i18nKey)}
+        </MenuItem>
+      ));
 
   return (
     <Stack flexDirection={'row'}>
@@ -232,7 +268,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
       <Button
         color="secondary"
         variant={highlighted ? 'contained' : 'outlined'}
-        to={`/room/${roomId}`}
+        to={`/room/ ${roomId} `}
         component={NavLink}
         target="_blank"
         onMouseDown={stopPropagation}

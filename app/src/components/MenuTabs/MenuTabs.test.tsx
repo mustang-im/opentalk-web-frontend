@@ -3,11 +3,11 @@
 // SPDX-License-Identifier: EUPL-1.2
 import React from 'react';
 
-import { render, screen, fireEvent, createStore, waitFor } from '../../utils/testUtils';
+import { render, screen, fireEvent, configureStore, waitFor } from '../../utils/testUtils';
 import MenuTabs from './MenuTabs';
 
 describe('MenuTabs Component', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
 
   test('render MenuTabs component without crashing and initialy Chat Tab is selected', async () => {
     await render(<MenuTabs />, store);

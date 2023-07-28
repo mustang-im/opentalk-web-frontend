@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { render, screen, createStore, fireEvent } from '../../../utils/testUtils';
+import { render, screen, configureStore, fireEvent } from '../../../utils/testUtils';
 import MenuButton from './MoreButton';
 
 describe('<MoreButton />', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
 
   test('render MoreMenuButton component', async () => {
     await render(<MenuButton />, store);

@@ -31,7 +31,7 @@ import {
   TimelessEvent,
 } from '@opentalk/rest-api-rtk-query';
 import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
-import { createStore as createStoreTlk } from '@reduxjs/toolkit';
+import { createStore as createStoreTlk, configureStore as configureStoreTlk } from '@reduxjs/toolkit';
 import { act, render as rtlRender, RenderOptions } from '@testing-library/react';
 import fs from 'fs';
 import i18n from 'i18next';
@@ -84,6 +84,15 @@ export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | 
   store.dispatch = dispatch;
 
   return { store, dispatch };
+};
+
+export const configureStore = (options?: ConfigureStoreOptions['preloadedState'] | undefined) => {
+  const store = configureStoreTlk({
+    reducer: combineReducers({ ...appReducers }),
+    preloadedState: options?.initialState && { ...options.initialState },
+  });
+
+  return { store };
 };
 
 export * from '@testing-library/react';

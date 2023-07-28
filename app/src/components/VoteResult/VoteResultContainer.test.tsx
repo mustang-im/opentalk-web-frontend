@@ -4,7 +4,16 @@
 import { LegalVoteId } from '@opentalk/common';
 import { LegalVoteType } from '@opentalk/components';
 
-import { render, screen, createStore, cleanup, fireEvent, waitFor, mockedParticipant } from '../../utils/testUtils';
+import {
+  render,
+  screen,
+  configureStore,
+  createStore,
+  cleanup,
+  fireEvent,
+  waitFor,
+  mockedParticipant,
+} from '../../utils/testUtils';
 import VoteResultContainer from './VoteResultContainer';
 
 const testId = 'vote_testid_$)(*&%*';
@@ -71,7 +80,7 @@ describe('VoteResultContainer', () => {
   });
 
   test('render VoteResultContainer component without crashing', async () => {
-    const { store } = createStore({
+    const { store } = configureStore({
       initialState: {
         legalVote: {
           activeVote: testId,
@@ -102,7 +111,7 @@ describe('VoteResultContainer', () => {
   });
 
   test('render VoteResultContainer component without crashing with enableAbstain = false, should not display checkboxAbstain', async () => {
-    const { store } = createStore({
+    const { store } = configureStore({
       initialState: {
         legalVote: {
           activeVote: testId,
@@ -204,7 +213,7 @@ describe('VoteResultContainer', () => {
   });
 
   test("if user didn't vote, legal-vote-success message should not be rendered", async () => {
-    const { store } = createStore({
+    const { store } = configureStore({
       initialState: {
         legalVote: {
           activeVote: testId,
@@ -229,7 +238,7 @@ describe('VoteResultContainer', () => {
   });
 
   test('if user is not in the allowedParticipants array, should see info title and checkboxes are disabled so he can not vote', async () => {
-    const { store } = createStore({
+    const { store } = configureStore({
       initialState: {
         legalVote: {
           activeVote: testId,

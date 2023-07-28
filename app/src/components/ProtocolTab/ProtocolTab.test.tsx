@@ -4,11 +4,11 @@
 import { ParticipantId } from '@opentalk/common';
 import * as React from 'react';
 
-import { render, createStore, screen, fireEvent, cleanup } from '../../utils/testUtils';
+import { render, configureStore, screen, fireEvent, cleanup } from '../../utils/testUtils';
 import ProtocolTab, { ProtocolParticipant } from './ProtocolTab';
 
 describe('ProtocolTab component tests', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
 
   const initialUserValue: ProtocolParticipant[] = [
     {

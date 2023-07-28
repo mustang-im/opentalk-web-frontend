@@ -6,7 +6,7 @@ import { cleanup } from '@testing-library/react';
 import React from 'react';
 
 import { ReactComponent as BreakoutRoomIcon } from '../../../assets/images/subroom-illustration.svg';
-import { fireEvent, render, screen, createStore, waitFor } from '../../../utils/testUtils';
+import { fireEvent, render, screen, configureStore, waitFor } from '../../../utils/testUtils';
 import BreakoutRoomNotification, { Action } from './BreakoutRoomNotification';
 
 const actionFn = jest.fn();
@@ -27,7 +27,7 @@ const MESSAGE = 'testMessage';
 describe('BreakoutRoomNotification', () => {
   afterEach(() => cleanup());
   test('render all items', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(
       <BreakoutRoomNotification
         snackbarKey={SNACKBAR_KEY}
@@ -45,7 +45,7 @@ describe('BreakoutRoomNotification', () => {
   });
 
   test('action called once', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(
       <BreakoutRoomNotification
         snackbarKey={SNACKBAR_KEY}
@@ -68,7 +68,7 @@ describe('BreakoutRoomNotification', () => {
   });
 
   test('close after click on an action', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(
       <BreakoutRoomNotification
         snackbarKey={SNACKBAR_KEY}

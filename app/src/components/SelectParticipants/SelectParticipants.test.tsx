@@ -7,7 +7,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { EventInvite } from '../../../../packages/rtk-rest-api/src/types/eventInvite';
-import { cleanup, createStore, render, screen } from '../../utils/testUtils';
+import { cleanup, configureStore, render, screen } from '../../utils/testUtils';
 import SelectParticipants from './SelectParticipants';
 
 const mockOnChange = jest.fn();
@@ -65,7 +65,7 @@ const invitees: Array<EventInvite> = [
 ];
 
 describe('SelectParticipants', () => {
-  const { store } = createStore();
+  const { store } = configureStore();
 
   afterEach(() => cleanup());
 

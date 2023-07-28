@@ -4,7 +4,7 @@
 import { waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { createStore, fireEvent, render, screen } from '../../../../utils/testUtils';
+import { configureStore, fireEvent, render, screen } from '../../../../utils/testUtils';
 import ProfileNameForm from './ProfileNameForm';
 
 const mockUpdateMe = jest.fn();
@@ -35,14 +35,14 @@ describe('ProfileNameForm', () => {
   });
 
   test('page will not crash', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
     expect(screen.getByText('dashboard-settings-profile-name')).toBeInTheDocument();
   });
 
   test('empty displayName will show error', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
     expect(screen.queryByText('dashboard-settings-profile-input-required')).not.toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('ProfileNameForm', () => {
   });
 
   test('click on submit button will trigger updateMe', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
     expect(mockUpdateMe).toHaveBeenCalledTimes(0);
@@ -70,7 +70,7 @@ describe('ProfileNameForm', () => {
   });
 
   test('click on submit button will not trigger updateMe on invalid form input', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
     expect(mockUpdateMe).toHaveBeenCalledTimes(0);
@@ -86,7 +86,7 @@ describe('ProfileNameForm', () => {
   });
 
   test('successful triggers a notification', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
     const submitButton = screen.getByText('dashboard-settings-profile-button-save');
@@ -102,7 +102,7 @@ describe('ProfileNameForm', () => {
       unwrap: () => Promise.reject(),
     });
 
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
     const submitButton = screen.getByText('dashboard-settings-profile-button-save');

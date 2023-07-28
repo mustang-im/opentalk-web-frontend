@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { FormControlLabel, Radio } from '@mui/material';
 
-import { render, screen, createStore, fireEvent } from '../../utils/testUtils';
+import { render, screen, configureStore, fireEvent } from '../../utils/testUtils';
 import RadioGroup from './RadioGroup';
 
 const radioButtons = ['one', 'two', 'three'];
@@ -18,7 +18,7 @@ describe('render RadioGroup component', () => {
 
 describe('render RadioGroup component with buttons', () => {
   test('render all elements', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(
       <RadioGroup>
         {radioButtons.map((value) => (
@@ -43,7 +43,7 @@ describe('render RadioGroup component with buttons', () => {
 describe('testing clikc on radio button', () => {
   const mockOnChange = jest.fn();
   test('render all elements', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(
       <RadioGroup onChange={mockOnChange}>
         {radioButtons.map((value) => (

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import React from 'react';
 
-import { createStore, render, screen } from '../../../utils/testUtils';
+import { configureStore, render, screen } from '../../../utils/testUtils';
 import SettingsAccountPage from './SettingsAccountPage';
 
 jest.mock('../../../api/rest', () => ({
@@ -17,7 +17,7 @@ jest.mock('../../../api/rest', () => ({
 
 describe('SettingsAccountPage', () => {
   test('page will not crash', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<SettingsAccountPage />, store);
 
     expect(screen.getByText('dashboard-settings-account-title')).toBeInTheDocument();

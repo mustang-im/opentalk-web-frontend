@@ -640,6 +640,8 @@ dashboard-meeting-card-popover-add = Add to favorites
 dashboard-meeting-card-popover-remove = Remove from favorites
 dashboard-meeting-card-popover-delete = Delete
 dashboard-meeting-card-popover-details = Details
+dashboard-meeting-card-popover-copy-link = Copy Meeting-Link
+dashboard-meeting-card-popover-copy-guest-link = Copy Guest-Link
 
 dashboard-meeting-card-delete-dialog-title = Please confirm
 dashboard-meeting-card-delete-dialog-message = Do you really want to delete the meeting {$subject} ?

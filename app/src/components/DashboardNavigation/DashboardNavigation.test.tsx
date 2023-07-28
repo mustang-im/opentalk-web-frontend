@@ -6,7 +6,7 @@ import React from 'react';
 import { setTimeout } from 'timers';
 
 import DashboardNavigation from '.';
-import { screen, render, fireEvent, createStore } from '../../utils/testUtils';
+import { screen, render, fireEvent, configureStore } from '../../utils/testUtils';
 
 const routes = [
   {
@@ -86,7 +86,7 @@ jest.mock('../../api/rest', () => ({
 }));
 
 describe('dashboard navigation', () => {
-  const { store } = createStore({
+  const { store } = configureStore({
     initialState: {
       config: {
         oidcConfig: {

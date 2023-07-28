@@ -4,7 +4,7 @@
 import { DateTime } from '@opentalk/rest-api-rtk-query';
 import React from 'react';
 
-import { createStore, render, screen, cleanup, eventMockedData } from '../../../utils/testUtils';
+import { configureStore, render, screen, cleanup, eventMockedData } from '../../../utils/testUtils';
 import EventsPage, { filterByTimePeriod } from './EventsOverviewPage';
 import { TimeFilter } from './fragments/EventsPageHeader';
 
@@ -36,13 +36,13 @@ jest.mock('../../../templates/DashboardTemplate', () => ({
 describe('Dashboard EventsPage', () => {
   afterEach(() => cleanup());
   test('page will not crash', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<EventsPage />, store);
     expect(screen.getByText('dashboard-events-my-meetings')).toBeInTheDocument();
   });
 
   test('it will render 1 Accordion', async () => {
-    const { store } = createStore();
+    const { store } = configureStore();
     await render(<EventsPage />, store);
 
     expect(screen.getByTestId('EventAccordion')).toBeInTheDocument();

@@ -4,7 +4,7 @@
 import React from 'react';
 
 import { Role } from '../../api/types/incoming/control';
-import { render, screen, fireEvent, waitFor, cleanup, createStore } from '../../utils/testUtils';
+import { render, screen, fireEvent, waitFor, cleanup, configureStore } from '../../utils/testUtils';
 import LobbyView from './LobbyView';
 
 jest.mock('../../api/rest', () => ({
@@ -18,7 +18,7 @@ jest.mock('../../api/rest', () => ({
 }));
 
 describe('LobbyForm', () => {
-  const { store /*, dispatch*/ } = createStore({
+  const { store /*, dispatch*/ } = configureStore({
     initialState: {
       auth: { isAuthed: true },
       user: { loggedIdToken: 'DUMMY', role: Role.User },
@@ -47,7 +47,7 @@ describe('LobbyForm', () => {
   });
 
   test('submit button is disabled if user is not logged in', async () => {
-    const { store } = createStore({
+    const { store } = configureStore({
       initialState: {
         user: { loggedIn: false, role: Role.User },
       },
