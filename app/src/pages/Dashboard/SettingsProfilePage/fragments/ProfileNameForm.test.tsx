@@ -28,6 +28,12 @@ jest.mock('../../../../api/rest', () => ({
 }));
 
 describe('ProfileNameForm', () => {
+  beforeEach(() => {
+    mockUpdateMe.mockReturnValue({
+      unwrap: () => Promise.resolve(),
+    });
+  });
+
   test('page will not crash', async () => {
     const { store } = createStore();
     await render(<ProfileNameForm />, store);
@@ -88,6 +94,22 @@ describe('ProfileNameForm', () => {
 
     await waitFor(() => {
       expect(screen.getByText('dashboard-settings-general-notification-save-success')).toBeInTheDocument();
+    });
+  });
+
+  test('triggers error notification on failure', async () => {
+    mockUpdateMe.mockReturnValueOnce({
+      unwrap: () => Promise.reject(),
+    });
+
+    const { store } = createStore();
+    await render(<ProfileNameForm />, store);
+
+    const submitButton = screen.getByText('dashboard-settings-profile-button-save');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('dashboard-settings-general-notification-save-error')).toBeInTheDocument();
     });
   });
 });
