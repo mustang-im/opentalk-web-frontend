@@ -27,7 +27,10 @@ window.config = {
   helpdeskUrl: "${HELPDESK_URL}",
   imprintUrl: "${IMPRINT_URL}",
   dataProtectionUrl: "${DATA_PROTECTION_URL}",
-  accountManagementUrl: "${ACCOUNT_MANAGEMENT_URL}",
+  provider: {
+    active: false,
+    accountManagementUrl: "${ACCOUNT_MANAGEMENT_URL}",
+  },
   version: "${PRODUCT_VERSION}",
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
   beta: {

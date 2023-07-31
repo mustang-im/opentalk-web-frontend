@@ -42,8 +42,8 @@ window.config = {
     sharedFolder: false,
   },
   provider: {
-	active: false, // indicates if we are are in the provider context
-	accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
+    active: false, // indicates if we are are in the provider context
+    accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
   },
   videoBackgrounds: '${VIDEO_BACKGROUNDS}',
   maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}',
