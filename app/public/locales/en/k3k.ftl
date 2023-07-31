@@ -657,6 +657,7 @@ dashboard-create-meeting-dialog-cancel = Cancel
 
 dashboard-direct-meeting-title = Who do you want to invite to your meeting?
 dashboard-direct-meeting-label-select-participants = Invite participants - A maximum of {maxParticipants} participants are admitted to the meeting, incl. you as moderator.
+dashboard-direct-meeting-label-select-participants-fallback = Invite participants
 dashboard-direct-meeting-button-cancel = Cancel
 dashboard-direct-meeting-button-open-room = Open Video Room
 dashboard-direct-meeting-button-send-invitations = Send Invitations
