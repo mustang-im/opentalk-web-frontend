@@ -2,9 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Chip, CircularProgress, InputAdornment, Stack, Typography } from '@mui/material';
-import { CloseIcon, CopyIcon, ParticipantAvatar, SearchIcon } from '@opentalk/common';
-import { setLibravatarOptions } from '@opentalk/common';
-import { Email, FindUserResponse, EventInvite } from '@opentalk/rest-api-rtk-query';
+import { CloseIcon, CopyIcon, ParticipantAvatar, SearchIcon, setLibravatarOptions } from '@opentalk/common';
+import { Email, FindUserResponse, EventInvite, User } from '@opentalk/rest-api-rtk-query';
 import { differenceBy, debounce } from 'lodash';
 import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +24,7 @@ type SelectParticipantsProps = {
   invitees?: Array<EventInvite>;
   resetSelected?: boolean;
   onChange: (selected: Array<FindUserResponse | EmailUser>) => void;
+  onRevokeUserInvite: (invitee: User) => void;
 };
 
 const Container = ({ children, title, testId }: { children: React.ReactNode; title: string; testId?: string }) => (
@@ -42,6 +42,7 @@ const SelectParticipants = ({
   placeholder,
   invitees = [],
   resetSelected,
+  onRevokeUserInvite,
 }: SelectParticipantsProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
@@ -214,6 +215,8 @@ const SelectParticipants = ({
             key={`${invitee.email}-invitees`}
             label={renderUserData(invitee)}
             avatar={<ParticipantAvatar src={getAvatarSrc(invitee.avatarUrl)} />}
+            deleteIcon={<CloseIcon data-testid={'InvitedParticipants-deleteButton'} />}
+            onDelete={() => onRevokeUserInvite(invitee)}
           />
         ))}
       </Container>

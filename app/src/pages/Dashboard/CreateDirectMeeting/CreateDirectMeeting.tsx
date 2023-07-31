@@ -74,6 +74,7 @@ const CreateDirectMeeting = () => {
         existingEvent={updatedEvent ?? event}
         directMeeting
         invitationsSent={() => getEvent({ eventId: event.id, inviteesMax: 10 })}
+        refreshEvent={() => getEvent({ eventId: event.id, inviteesMax: 10 })}
       />
     </Container>
   );

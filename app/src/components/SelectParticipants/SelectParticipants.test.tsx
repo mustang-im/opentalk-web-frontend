@@ -70,7 +70,7 @@ describe('SelectParticipants', () => {
   afterEach(() => cleanup());
 
   test('will render', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} />, store);
+    await render(<SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} />, store);
 
     expect(screen.getByTestId('SelectParticipants')).toBeInTheDocument();
     expect(screen.queryByTestId('InvitedParticipants')).not.toBeInTheDocument();
@@ -78,7 +78,7 @@ describe('SelectParticipants', () => {
   });
 
   test('renders all filteredUsers', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} />, store);
+    await render(<SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} />, store);
 
     const input = screen.getByTestId('InputSearchUsers');
     await fireEvent.change(input, { target: { value: 'test' } });
@@ -88,7 +88,10 @@ describe('SelectParticipants', () => {
   });
 
   test('with prop invitees available, should render invited participant list', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} invitees={invitees} />, store);
+    await render(
+      <SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} invitees={invitees} />,
+      store
+    );
 
     expect(screen.getByText('dashboard-select-participants-label-invited')).toBeInTheDocument();
     expect(screen.getByTestId('InvitedParticipants')).toBeInTheDocument();
@@ -97,7 +100,7 @@ describe('SelectParticipants', () => {
   });
 
   test('click on suggested participant will move him to added list', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} />, store);
+    await render(<SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} />, store);
 
     const input = screen.getByTestId('InputSearchUsers');
     await fireEvent.change(input, { target: { value: 'test' } });
@@ -117,7 +120,10 @@ describe('SelectParticipants', () => {
   });
 
   test('click on delete will move the user back to the suggested list', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} invitees={invitees} />, store);
+    await render(
+      <SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} invitees={invitees} />,
+      store
+    );
 
     const input = screen.getByTestId('InputSearchUsers');
     await fireEvent.change(input, { target: { value: 'test' } });

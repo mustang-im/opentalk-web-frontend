@@ -10,7 +10,12 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useCreateEventInviteMutation, useDeleteEventMutation, useGetMeTariffQuery } from '../../api/rest';
+import {
+  useCreateEventInviteMutation,
+  useDeleteEventMutation,
+  useRevokeEventUserInviteMutation,
+  useGetMeTariffQuery,
+} from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
 import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
@@ -24,6 +29,7 @@ interface InviteToMeetingProps {
   invitationsSent?: () => void;
   onBackButtonClick?: () => void;
   showOnlyLinkFields?: boolean;
+  refreshEvent?: () => void;
 }
 
 const InviteToMeeting = ({
@@ -32,6 +38,7 @@ const InviteToMeeting = ({
   directMeeting,
   invitationsSent,
   showOnlyLinkFields,
+  refreshEvent,
 }: InviteToMeetingProps) => {
   const [creatEventInvitation, { isLoading: sendingInvitation, isSuccess, status, isError }] =
     useCreateEventInviteMutation();
@@ -61,6 +68,8 @@ const InviteToMeeting = ({
 
   const callInDetails = existingEvent.room.callIn;
   const inviteUrl = createPermanentGuestLink(existingEvent?.room.id);
+
+  const [revokeInvite] = useRevokeEventUserInviteMutation();
 
   const sendInvitations = useCallback(async () => {
     const allInvites = selectedUsers.map((selectedUser) => {
@@ -336,6 +345,17 @@ const InviteToMeeting = ({
                 onChange={(selected) => setSelectedUser(selected)}
                 invitees={existingEvent?.invitees}
                 resetSelected={isSuccess && status === QueryStatus.fulfilled}
+                onRevokeUserInvite={(invitee) => {
+                  revokeInvite({ eventId: existingEvent.id, userId: invitee.id })
+                    .then(() => {
+                      if (typeof refreshEvent === 'function') {
+                        refreshEvent();
+                      }
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                }}
               />
             )}
           </Grid>

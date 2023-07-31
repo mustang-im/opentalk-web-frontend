@@ -159,6 +159,7 @@ export const {
   useUpdateEventMutation,
   useAcceptEventInviteMutation,
   useDeclineEventInviteMutation,
+  useRevokeEventUserInviteMutation,
   useGetRoomQuery,
   useGetRoomInvitesQuery,
   useGetRoomAssetsQuery,
