@@ -45,6 +45,7 @@
 - Glitchtip integration (!1016)
 - Control talking stick with the shortcut (!1013)
 - Add ability to revoke event invitation from invited participant. (!1035)
+- Add safari warning notification (!1041)
 
 ## 1.5.x
 

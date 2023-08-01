@@ -2,7 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { notificationAction } from '@opentalk/common';
+import { differenceInMonths } from 'date-fns';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Provider as StoreProvider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -16,10 +19,13 @@ import ErrorConfigPage from './pages/ErrorConfigPage';
 import store from './store';
 import { checkConfigError } from './utils/configUtils';
 
+const SAFARI_NOTIFICATION_KEY = 'safari-warning-notification';
+
 const App = () => {
   const signature = browser.getBrowserSignature();
   const [isConfirmed, setBrowserConfirmed] = useState(isBrowserConfirmed());
   const hasConfigError = checkConfigError();
+  const { t } = useTranslation();
 
   if (hasConfigError) return <ErrorConfigPage />;
 
@@ -27,6 +33,27 @@ const App = () => {
     localStorage.setItem('browser-confirmed', signature);
     setBrowserConfirmed(true);
   }, []);
+
+  useEffect(() => {
+    const isSafari = browser.isSafari();
+    if (isSafari) {
+      const safariNotificationLastSeenTimestamp = localStorage.getItem(SAFARI_NOTIFICATION_KEY);
+      const now = new Date();
+      const lastSeenDate = safariNotificationLastSeenTimestamp
+        ? new Date(safariNotificationLastSeenTimestamp)
+        : undefined;
+      const showNotification = !lastSeenDate || differenceInMonths(now, lastSeenDate) > 0;
+      if (showNotification) {
+        notificationAction({
+          msg: t('safari-warning-notification'),
+          variant: 'warning',
+          cancelBtnText: t('global-close'),
+          persist: true,
+          onCancel: () => localStorage.setItem(SAFARI_NOTIFICATION_KEY, now.toISOString()),
+        });
+      }
+    }
+  }, [t]);
 
   if (!isConfirmed) {
     return (

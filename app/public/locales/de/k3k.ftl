@@ -521,6 +521,8 @@ wrong-browser-dialog-title = Ihr Browser wird nur teilweise unterstützt.
 wrong-browser-dialog-message = Bitte verwenden Sie die letzte Version von Chrome, Firefox oder Safari. Sollten Sie weitere Schwierigkeiten haben, überprüfen Sie ob Ihr Browser im Kompatibilität-oder Inkognitomodus läuft. Deaktivieren Sie diese und versuchen es noch einmal hier.
 wrong-browser-dialog-ok = Verstanden
 
+safari-warning-notification = OpenTalk ist für Safari noch nicht optimiert. Wir empfehlen derzeit Chrome, Brave, Edge oder Firefox.
+
 error-config-title = Konfiguration ist nicht korrekt
 error-config-message = Es konnte keine valide Konfiguration geladen werden. Bitte kontaktieren sie ihren Administrator.
 error-system-unavailable = Das System ist zur Zeit nicht erreichbar, bitte versuchen sie es später nochmal.
