@@ -34,6 +34,7 @@
 - "You are next" notification in the talking stick no longer auto close (!1027)
 - Optimized lobby field wording (!1028)
 - Notification for own message in group chat is no longer shown. (!1029)
+- Fix hotkeys not working as expected (!1040)
 
 ### New Features
 
