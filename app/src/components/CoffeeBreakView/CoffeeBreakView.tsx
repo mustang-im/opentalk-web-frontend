@@ -4,15 +4,15 @@
 import { Button, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { CoffeeBreakIcon as CoffeeBreakIconDefault, setHotkeysEnabled } from '@opentalk/common';
-import { memo, useEffect } from 'react';
+import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '@opentalk/common';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { readyToContinue } from '../../api/types/outgoing/timer';
 import { ReactComponent as LogoIconDefault } from '../../assets/images/logo.svg';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCoffeeBreakTimerId, selectTimerActive } from '../../store/slices/timerSlice';
-import { selectShowCoffeeBreakCurtain, setCoffeeBreakCurtainOpen } from '../../store/slices/uiSlice';
+import { setCoffeeBreakCurtainOpenFlag } from '../../store/slices/uiSlice';
 import CoffeeBreakTimer from './fragments/CoffeeBreakTimer';
 
 const BackgroundCover = styled(Box)({
@@ -69,18 +69,13 @@ export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => 
   const dispatch = useAppDispatch();
   const isTimerActive = useAppSelector(selectTimerActive);
   const coffeeBreakTimerId = useAppSelector(selectCoffeeBreakTimerId);
-  const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
   const handleClose = () => {
-    dispatch(setCoffeeBreakCurtainOpen(false));
+    dispatch(setCoffeeBreakCurtainOpenFlag(false));
     if (coffeeBreakTimerId) {
       dispatch(readyToContinue.action({ timerId: coffeeBreakTimerId, status: true }));
     }
   };
-
-  useEffect(() => {
-    dispatch(setHotkeysEnabled(!showCoffeeBreakCurtain));
-  }, [showCoffeeBreakCurtain]);
 
   return (
     <BackgroundCover>
