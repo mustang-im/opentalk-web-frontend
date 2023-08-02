@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Get rid of login popup and remove redux-persist (!1030)
 - Fix error handling on update displayname in dashboard (!1026)
 - Remove settings if provided by a service provider (!1000)
 - Add missing names to toolbar buttons (!988)
