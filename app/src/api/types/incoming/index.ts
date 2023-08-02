@@ -11,6 +11,7 @@ import ModerationMessage from './moderation';
 import PollMessage from './poll';
 import ProtocolMessage from './protocol';
 import RecordingMessage from './recording';
+import SharedFolderMessage from './sharedFolder';
 import TimerMessage from './timer';
 import WhiteboardMessage from './whiteboard';
 
@@ -24,6 +25,7 @@ export * as timer from './timer';
 export * as whiteboard from './whiteboard';
 export * as media from './media';
 export * as recording from './recording';
+export * as sharedFolder from './sharedFolder';
 
 export type Message =
   | AutomodEvent
@@ -37,4 +39,5 @@ export type Message =
   | ProtocolMessage
   | TimerMessage
   | WhiteboardMessage
-  | RecordingMessage;
+  | RecordingMessage
+  | SharedFolderMessage;
