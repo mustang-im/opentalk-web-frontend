@@ -172,8 +172,7 @@ publish:common:
 check:commit-pipeline:
   stage: deploy
   rules:
-    - if: $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
-          $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
     - apk add --no-cache curl jq
     - SRC_BRANCH=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
@@ -192,8 +191,7 @@ check:commit-pipeline:
 deploy:review-app:
   stage: deploy
   rules:
-    - if: $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
-          $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   image: alpine/helm:3.10.2
   tags:
     - kubernetes
