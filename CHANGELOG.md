@@ -22,6 +22,7 @@
 
 ### Stability Improvements
 
+- Make pipeline fail on failed tests in packages (!1049)
 - Unable to enter the meeting - user gets redirected to Dashbaord (!1053)
 - Fix tests in common package (!1007)
 - Update the semver package to >=7.5.2 (!1002)
