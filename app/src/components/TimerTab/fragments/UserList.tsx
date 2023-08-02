@@ -46,6 +46,10 @@ const UserList = () => {
     });
   };
 
+  if (participants.length <= 0) {
+    return null;
+  }
+
   return (
     <Stack spacing={1} overflow="hidden">
       <Typography variant="h2">{t('global-participants')}</Typography>

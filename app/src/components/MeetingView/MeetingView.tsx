@@ -6,14 +6,14 @@ import { useTheme } from '@mui/material/styles';
 import { useRef, useState, useEffect } from 'react';
 
 import { useAppSelector } from '../../hooks';
-import { useTimer } from '../../hooks';
-import { selectDebugMode, selectIsCoffeeBreakOpen } from '../../store/slices/uiSlice';
+import { selectDebugMode, selectShowCoffeeBreakCurtain } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
+import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
 import DebugPanel from '../DebugPanel';
 import HotKeys from '../HotKeys';
 import LocalVideo from '../LocalVideo';
 import RemoteAudioStreams from '../RemoteAudioStreams';
-import Timer from '../Timer';
+import TimerPopover from '../TimerPopover';
 import Toolbar from '../Toolbar';
 import InnerLayout from './InnerLayout';
 
@@ -53,13 +53,12 @@ const MeetingView = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const isSmallPortraitScreen = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
   const debugMode = useAppSelector(selectDebugMode);
-  const isCoffeeBreakOpen = useAppSelector(selectIsCoffeeBreakOpen);
+  const isCoffeeBreakOpen = useAppSelector(selectShowCoffeeBreakCurtain);
   const isModerator = useAppSelector(selectIsModerator);
   const containerRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const enableAudio = isModerator || !isCoffeeBreakOpen;
-
-  useTimer();
+  const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
   useEffect(() => {
     setAnchorEl(containerRef.current);
@@ -68,24 +67,30 @@ const MeetingView = () => {
 
   return (
     <Container ref={containerRef}>
-      {debugMode && <DebugPanel />}
-
-      {enableAudio && <RemoteAudioStreams />}
-
-      <Timer anchorEl={anchorEl} />
-
-      <HotKeys />
-
-      <InnerLayout />
-
-      {(isSmallScreen || isSmallPortraitScreen) && (
+      {showCoffeeBreakCurtain && !isModerator ? (
+        <CoffeeBreakView />
+      ) : (
         <>
-          <LocalVideoWrapper>
-            <LocalVideo />
-          </LocalVideoWrapper>
-          <ToolbarWrapper>
-            <Toolbar />
-          </ToolbarWrapper>
+          {debugMode && <DebugPanel />}
+
+          {enableAudio && <RemoteAudioStreams />}
+
+          {!showCoffeeBreakCurtain && <TimerPopover anchorEl={anchorEl} />}
+
+          <HotKeys />
+
+          <InnerLayout />
+
+          {(isSmallScreen || isSmallPortraitScreen) && (
+            <>
+              <LocalVideoWrapper>
+                <LocalVideo />
+              </LocalVideoWrapper>
+              <ToolbarWrapper>
+                <Toolbar />
+              </ToolbarWrapper>
+            </>
+          )}
         </>
       )}
     </Container>

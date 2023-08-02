@@ -9,7 +9,8 @@ import { ModerationTabKey, Tab, tabs as initialTabs } from '../config/moderation
 import { selectFeatures } from '../store/slices/configSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
-import { setActiveTab } from '../store/slices/uiSlice';
+import { selectActiveTab, setActiveTab } from '../store/slices/uiSlice';
+import { selectIsModerator } from '../store/slices/userSlice';
 import { useEnabledModules } from './enabledModules';
 
 const useTabs = () => {
@@ -18,6 +19,8 @@ const useTabs = () => {
   const enabledModules = useEnabledModules();
   const timerStyle = useAppSelector(selectTimerStyle);
   const currentRoomMode = useAppSelector(selectCurrentRoomMode);
+  const isModerator = useAppSelector(selectIsModerator);
+  const activeTab = useAppSelector(selectActiveTab);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -52,6 +55,14 @@ const useTabs = () => {
 
     const isTimerCoffee = timerStyle === TimerStyle.CoffeeBreak;
     const isTimerNormal = timerStyle === TimerStyle.Normal;
+
+    //Forced redirection for other moderators than the one starting a timer to avoid them being on a disabled tab.
+    if (currentRoomMode === RoomMode.CoffeeBreak && isModerator && activeTab === ModerationTabKey.Timer) {
+      dispatch(setActiveTab(ModerationTabKey.Home));
+    }
+    if (isTimerNormal && isModerator && activeTab === ModerationTabKey.CoffeeBreak) {
+      dispatch(setActiveTab(ModerationTabKey.Home));
+    }
 
     return setTabs((tabs) =>
       tabs.map((tab) => {

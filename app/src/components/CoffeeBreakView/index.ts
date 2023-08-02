@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import Timer from './Timer';
+import { CoffeeBreakView } from './CoffeeBreakView';
 
-export default Timer;
+export default CoffeeBreakView;

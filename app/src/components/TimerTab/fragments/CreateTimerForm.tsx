@@ -12,15 +12,14 @@ import {
 } from '@opentalk/common';
 import { DurationValueOptions } from '@opentalk/common';
 import { FormikValues, useFormik } from 'formik';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { startTimer } from '../../../api/types/outgoing/timer';
 import { TextField } from '../../../commonComponents';
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { selectTimerRunning } from '../../../store/slices/timerSlice';
+import { useAppDispatch } from '../../../hooks';
 
 const Container = styled(Stack)({
   display: 'flex',
@@ -73,7 +72,6 @@ const getTimerState = (timerStyle: TimerStyle, t: TFunction<'translation', undef
 const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const isTimerRunning = useAppSelector(selectTimerRunning);
 
   const { texts, durationOptions, defaultValue, min } = useMemo(() => getTimerState(timerStyle, t), [timerStyle, t]);
 
@@ -108,28 +106,6 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
     },
   });
 
-  useEffect(() => {
-    if (defaultValue) {
-      formik.setValues({ ...formik.values, duration: defaultValue });
-    }
-  }, [defaultValue]);
-
-  const cleanForm = useCallback(() => {
-    const { setErrors, setTouched, resetForm } = formik;
-    setErrors({});
-    setTouched({});
-    resetForm();
-  }, []);
-
-  useEffect(() => {
-    if (isTimerRunning) {
-      cleanForm();
-    }
-    return () => {
-      cleanForm();
-    };
-  }, [isTimerRunning]);
-
   const handleSubmit = () => {
     formik.handleSubmit();
   };
@@ -163,7 +139,7 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
         )}
       </Stack>
 
-      <SubmitButton onClick={handleSubmit}>{texts?.button}</SubmitButton>
+      <SubmitButton onClick={handleSubmit}>{texts.button}</SubmitButton>
     </Container>
   );
 };

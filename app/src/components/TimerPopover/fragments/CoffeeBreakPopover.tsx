@@ -3,11 +3,12 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Typography, Popover as MuiPopover, Box } from '@mui/material';
 import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '@opentalk/common';
+import { TimerStyle } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../hooks';
-import { selectTimerRunning } from '../../store/slices/timerSlice';
-import TimerNormalCounter from '../TimerTab/fragments/TimerNormalCounter';
+import { useAppSelector } from '../../../hooks';
+import { selectTimerActive } from '../../../store/slices/timerSlice';
+import TimerDuration from '../../TimerTab/fragments/TimerDuration';
 
 const Popover = styled(MuiPopover)(({ theme }) => ({
   pointerEvents: 'none',
@@ -33,12 +34,12 @@ const CoffeeBreakIcon = styled(CoffeeBreakIconDefault)(({ theme }) => ({
 
 const CoffeeBreakPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
   const { t } = useTranslation();
-  const timerRunning = useAppSelector(selectTimerRunning);
+  const timerActive = useAppSelector(selectTimerActive);
 
   return (
     <Popover
       anchorEl={anchorEl}
-      open={timerRunning}
+      open={Boolean(timerActive)}
       hideBackdrop
       anchorOrigin={{
         vertical: 'top',
@@ -53,7 +54,7 @@ const CoffeeBreakPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
 
         <CoffeeBreakIcon />
 
-        <TimerNormalCounter alignItems="center" />
+        <TimerDuration alignItems="center" style={TimerStyle.CoffeeBreak} />
       </Content>
     </Popover>
   );
