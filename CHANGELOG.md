@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Remove extra space from url in MeetinPopover.tsx (!1050)
 - Get rid of login popup and remove redux-persist (!1030)
 - Fix error handling on update displayname in dashboard (!1026)
 - Fix unhandled shared folder update message (!1010)

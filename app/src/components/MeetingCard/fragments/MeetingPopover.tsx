@@ -268,7 +268,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
       <Button
         color="secondary"
         variant={highlighted ? 'contained' : 'outlined'}
-        to={`/room/ ${roomId} `}
+        to={`/room/${roomId}`}
         component={NavLink}
         target="_blank"
         onMouseDown={stopPropagation}
