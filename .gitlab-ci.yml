@@ -169,63 +169,63 @@ publish:common:
         already been published, so no new version has been published."
       fi
 
-check:commit-pipeline:
-  stage: deploy
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  before_script:
-    - apk add --no-cache curl jq
-    - SRC_BRANCH=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
-    - URL="$CI_API_V4_URL/projects/$CI_MERGE_REQUEST_SOURCE_PROJECT_ID/pipelines?ref=$SRC_BRANCH"
-  script:
-    - |
-      STATUS=$(curl --header "PRIVATE-TOKEN: $CI_READ_API_TOKEN" --url "$URL" | jq -r '.[0].status')
+# check:commit-pipeline:
+#   stage: deploy
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+#   before_script:
+#     - apk add --no-cache curl jq
+#     - SRC_BRANCH=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+#     - URL="$CI_API_V4_URL/projects/$CI_MERGE_REQUEST_SOURCE_PROJECT_ID/pipelines?ref=$SRC_BRANCH"
+#   script:
+#     - |
+#       STATUS=$(curl --header "PRIVATE-TOKEN: $CI_READ_API_TOKEN" --url "$URL" | jq -r '.[0].status')
 
-      if [[ "$STATUS" == "success" ]]; then
-        exit 0
-      else
-        echo "The last commit pipeline failed"
-        exit 1
-      fi
+#       if [[ "$STATUS" == "success" ]]; then
+#         exit 0
+#       else
+#         echo "The last commit pipeline failed"
+#         exit 1
+#       fi
 
-deploy:review-app:
-  stage: deploy
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  image: alpine/helm:3.10.2
-  tags:
-    - kubernetes
-  needs:
-    - job: check:commit-pipeline
-  before_script:
-    - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN}
-      opentalk https://git.opentalk.dev/api/v4/projects/218/packages/helm/stable
-  script:
-    - helm upgrade --version 0.1.0 --install frontend-$CI_MERGE_REQUEST_IID opentalk/ot-web-frontend-helm
-      --set image.repository=$CI_REGISTRY/$CI_MERGE_REQUEST_SOURCE_PROJECT_PATH
-      --set image.tag=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
-      --set ingress.tls[0].secretName=frontend-$CI_MERGE_REQUEST_IID-tls
-      --set ot_frontend_url=www.$CI_MERGE_REQUEST_IID.review-latest.kube.opentalk.run
-      --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
-      --set ot_backend_url=controller.review-latest.kube.opentalk.run
-      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
-      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
-      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
-      -n review-latest --create-namespace
-    - echo "https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run"
+# deploy:review-app:
+#   stage: deploy
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+#   image: alpine/helm:3.10.2
+#   tags:
+#     - kubernetes
+#   needs:
+#     - job: check:commit-pipeline
+#   before_script:
+#     - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN}
+#       opentalk https://git.opentalk.dev/api/v4/projects/218/packages/helm/stable
+#   script:
+#     - helm upgrade --version 0.1.0 --install frontend-$CI_MERGE_REQUEST_IID opentalk/ot-web-frontend-helm
+#       --set image.repository=$CI_REGISTRY/$CI_MERGE_REQUEST_SOURCE_PROJECT_PATH
+#       --set image.tag=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+#       --set ingress.tls[0].secretName=frontend-$CI_MERGE_REQUEST_IID-tls
+#       --set ot_frontend_url=www.$CI_MERGE_REQUEST_IID.review-latest.kube.opentalk.run
+#       --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
+#       --set ot_backend_url=controller.review-latest.kube.opentalk.run
+#       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
+#       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
+#       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
+#       -n review-latest --create-namespace
+#     - echo "https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run"
 
-destroy:review-app:
-  stage: destroy
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
-          $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
-          $CI_PIPELINE_SOURCE == 'push'
-  allow_failure: true
-  image:
-    name: alpine/helm:3.10.2
-    entrypoint: ['']
-  tags:
-    - kubernetes
-  script:
-    - merge_id=$(echo $CI_COMMIT_MESSAGE| awk -F! '{print $2}')
-    - helm uninstall frontend-$merge_id -n review-latest
+# destroy:review-app:
+#   stage: destroy
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+#           $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
+#           $CI_PIPELINE_SOURCE == 'push'
+#   allow_failure: true
+#   image:
+#     name: alpine/helm:3.10.2
+#     entrypoint: ['']
+#   tags:
+#     - kubernetes
+#   script:
+#     - merge_id=$(echo $CI_COMMIT_MESSAGE| awk -F! '{print $2}')
+#     - helm uninstall frontend-$merge_id -n review-latest
