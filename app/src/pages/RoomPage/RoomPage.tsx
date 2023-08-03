@@ -29,7 +29,7 @@ const RoomPage = () => {
   const connectionState = useAppSelector(selectRoomConnectionState);
 
   const renderRoom = useMemo(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !inviteCode) {
       console.warn('meeting page - not logged in - redirect');
       return <LobbyView />;
     }

@@ -21,6 +21,7 @@ import {
   EventDetailsPage,
 } from '../pages/Dashboard';
 import RoomPage from '../pages/RoomPage';
+import { selectInviteId } from '../store/slices/roomSlice';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
 import LobbyTemplate from '../templates/LobbyTemplate';
@@ -73,17 +74,19 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const { signIn } = useAuth();
   const isAuthenticated = useAppSelector(selectIsAuthed);
   const isAuthLoading = useAppSelector(selectIsLoading);
+  const inviteCode = useAppSelector(selectInviteId);
 
   useEffect(() => {
-    if (!isAuthenticated && !isAuthLoading) {
+    if (!isAuthenticated && !isAuthLoading && !inviteCode) {
       const timeout = setTimeout(() => {
+        localStorage.setItem('redirect-uri', window.location.pathname);
         signIn();
       }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
       return () => clearTimeout(timeout);
     }
   }, [isAuthenticated, isAuthLoading]);
 
-  if (isAuthenticated) {
+  if (isAuthenticated || inviteCode) {
     if (children !== undefined) {
       return <>{children}</>;
     }

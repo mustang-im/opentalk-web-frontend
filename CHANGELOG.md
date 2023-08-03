@@ -17,6 +17,7 @@
 
 ### Stability Improvements
 
+- Unable to enter the meeting - user gets redirected to Dashbaord (!1053)
 - Fix tests in common package (!1007)
 - Update the semver package to >=7.5.2 (!1002)
 - Fix tests failing after moving accountManagementUrl (!1005)
