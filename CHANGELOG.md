@@ -41,6 +41,7 @@
 ### New Features
 
 - Implement experimental client-side voice detection (!1023)
+- Disable editing of display name depending on configuration flag (!1056)
 - Add copy meeting link and guest link to dashboard meeting 3-dot menue (!1033)
 - Display and pin remote sharedscreen automatically(!998)
 - Add legal entry to the dashboard (!1020)

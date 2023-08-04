@@ -45,6 +45,7 @@ export interface Config {
   userSurveyUrl?: string;
   userSurveyApiKey?: string;
   errorReportAddress: string;
+  disallowCustomDisplayName?: boolean;
   beta: Beta;
   oidcConfig?: {
     clientId?: string;
@@ -86,6 +87,7 @@ export interface ConfigState {
   userSurveyApiKey?: string;
   beta: Beta;
   errorReportAddress: string;
+  disallowCustomDisplayName?: boolean;
   oidcConfig: {
     clientId: string;
     redirectPath: string;
@@ -137,6 +139,7 @@ export const initialState: ConfigState = {
   userSurveyUrl: 'https://p01nc.heinlein-video.de:11443/api/v0/opentalk/store',
   userSurveyApiKey: 'opentalk_TG5ePw5k_2YZjs6j5qPdjAVUTKf2ux4a',
   errorReportAddress: 'report@opentalk.eu',
+  disallowCustomDisplayName: false,
   beta: {
     isBeta: true,
   },
@@ -217,6 +220,7 @@ export const selectUserSurveyUrl = (state: RootState) => state.config.userSurvey
 export const selectIsBetaRelease = (state: RootState) => state.config.beta.isBeta;
 export const selectBetaBadgeUrl = (state: RootState) => state.config.beta.badgeUrl;
 export const selectErrorReportEmail = (state: RootState) => state.config.errorReportAddress;
+export const selectDisallowCustomDisplayName = (state: RootState) => state.config.disallowCustomDisplayName;
 export const selectChangePassword = (state: RootState) => state.config.changePassword;
 export const selectEnabledModules = (state: RootState) => state.config.tariff.enabledModules;
 export const selectAccountManagementUrl = (state: RootState) => state.config.provider.accountManagementUrl;

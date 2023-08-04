@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Container, IconButton, InputAdornment, Stack } from '@mui/material';
+import { Button, Container, IconButton, InputAdornment, Stack, styled } from '@mui/material';
 import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
@@ -14,7 +14,11 @@ import { ApiErrorWithBody, StartRoomError, useGetMeQuery } from '../../api/rest'
 import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { startRoom } from '../../store/commonActions';
-import { selectFeatures, selectShowmprintContainer } from '../../store/slices/configSlice';
+import {
+  selectDisallowCustomDisplayName,
+  selectFeatures,
+  selectShowmprintContainer,
+} from '../../store/slices/configSlice';
 import {
   ConnectionState,
   selectInviteId,
@@ -23,9 +27,17 @@ import {
 } from '../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../store/slices/userSlice';
 import { formikProps } from '../../utils/formikUtils';
+import { ContitionalToolTip } from '../ConditionalToolTip/ContitionalToolTip';
 import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider';
 import SelfTest from '../SelfTest';
+
+const CustomTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiInputBase-input.Mui-disabled': {
+    WebkitTextFillColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.contrastText,
+  },
+}));
 
 const LobbyView: FC = () => {
   const dispatch = useAppDispatch();
@@ -33,7 +45,6 @@ const LobbyView: FC = () => {
   const { t } = useTranslation();
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
   const [showPassword, setShowPassword] = useState(false);
-
   const [joinError, setJoinError] = useState<string | undefined>();
   const { roomId, breakoutRoomId } = useParams<'roomId' | 'breakoutRoomId'>() as {
     roomId: RoomId;
@@ -46,6 +57,9 @@ const LobbyView: FC = () => {
   const navigate = useNavigate();
   const passwordRequired = useAppSelector(selectPasswordRequired);
   const showImprintContainer = useAppSelector(selectShowmprintContainer);
+  const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
+  const disableDisplayNameField = disallowCustomDisplayName && !inviteCode;
+  const initialDisplayName = data?.displayName || '';
 
   const enterRoom = useCallback(
     async (displayName: string, password: string) => {
@@ -118,6 +132,9 @@ const LobbyView: FC = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (isLoggedIn || inviteCode !== undefined) {
+        if (disableDisplayNameField) {
+          return enterRoom(initialDisplayName, values.password);
+        }
         return enterRoom(values.name, values.password);
       }
     },
@@ -147,12 +164,20 @@ const LobbyView: FC = () => {
               }
             >
               <Stack direction={'row'} spacing={1}>
-                <TextField
-                  {...formikProps('name', formik)}
-                  color={'secondary'}
-                  placeholder={t('joinform-enter-name')}
-                  autoComplete="user-name"
+                <ContitionalToolTip
+                  showToolTip={Boolean(disableDisplayNameField)}
+                  title={t('joinform-display-name-field-disabled-tooltip')}
+                  children={
+                    <CustomTextField
+                      {...formikProps('name', formik)}
+                      color={'secondary'}
+                      placeholder={t('joinform-enter-name')}
+                      autoComplete="user-name"
+                      disabled={disableDisplayNameField}
+                    />
+                  }
                 />
+
                 {passwordRequired && (
                   <TextField
                     {...formikProps('password', formik)}

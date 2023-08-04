@@ -4,18 +4,20 @@
 import { Button, Grid, Typography } from '@mui/material';
 import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
 import TextField from '../../../../commonComponents/TextField';
+import { useAppSelector } from '../../../../hooks';
+import { selectDisallowCustomDisplayName } from '../../../../store/slices/configSlice';
 import { formikProps } from '../../../../utils/formikUtils';
 
 const ProfileNameForm = () => {
   const { t } = useTranslation();
   const { data } = useGetMeQuery();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
+  const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
 
   const validationSchema = yup.object({
     displayName: yup.string().trim().required(t('dashboard-settings-profile-input-required')),
@@ -49,14 +51,14 @@ const ProfileNameForm = () => {
         </Grid>
         <Grid item container spacing={1} direction={'column'}>
           <Grid item>
-            <TextField {...formikProps('displayName', formik)} fullWidth />
+            <TextField disabled={disallowCustomDisplayName} {...formikProps('displayName', formik)} fullWidth />
           </Grid>
           <Grid item>
             <Typography variant={'caption'}>{t('dashboard-settings-profile-input-hint')}</Typography>
           </Grid>
         </Grid>
         <Grid item>
-          <Button type={'submit'} disabled={isLoading}>
+          <Button type={'submit'} disabled={isLoading || disallowCustomDisplayName}>
             {t('dashboard-settings-profile-button-save')}
           </Button>
         </Grid>
