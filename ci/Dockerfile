@@ -24,7 +24,7 @@ COPY packages/common/package.json ./packages/common/package.json
 COPY packages/common/tsconfig.json ./packages/common/tsconfig.json
 
 RUN apk add git jq
-RUN yarn install
+RUN yarn install --silent
 COPY app ./app
 COPY packages ./packages
 RUN yarn $BUILD_TYPE
