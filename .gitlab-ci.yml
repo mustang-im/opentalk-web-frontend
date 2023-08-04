@@ -11,7 +11,7 @@ stages:
   - test
   - build
   - deploy
-  - destroy
+  - cleanup
 
 lint:prettier+eslint:
   stage: lint
@@ -24,6 +24,8 @@ lint:prettier+eslint:
 
 lint:yaml:
   stage: lint
+  rules:
+    - when: on_success
   image: archlinux:latest
   before_script:
     - pacman -Syy --noconfirm yamllint
@@ -31,6 +33,8 @@ lint:yaml:
 
 lint:compliance:
   stage: lint
+  rules:
+    - when: on_success
   before_script:
     - apk add git
     - yarn install
@@ -39,6 +43,8 @@ lint:compliance:
 
 lint:licensing:
   stage: lint
+  rules:
+    - when: on_success
   image:
     name: fsfe/reuse:latest
     entrypoint: ['']
@@ -47,12 +53,16 @@ lint:licensing:
 
 lint:audit:
   stage: lint
+  rules:
+    - when: on_success
   script:
     - yarn npm audit --environment production -RA
   allow_failure: true
 
 test:build:
   stage: test
+  rules:
+    - when: on_success
   before_script:
     - apk add git
     - yarn install
@@ -61,23 +71,27 @@ test:build:
     - yarn build
 
 build:container:
-  variables:
-    IMAGE_DESTIANTION_ARGS: --no-push
   rules:
+    # set variable for push to main
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
-        IMAGE_DESTIANTION_ARGS: --destination $CI_REGISTRY_IMAGE:latest
-    - if: $CI_COMMIT_TAG != null
+        IMAGE_DESTINATION_ARGS: --destination $CI_REGISTRY_IMAGE:latest
+    # set variable for release tags
+    - if: $CI_COMMIT_TAG
       variables:
-        IMAGE_DESTIANTION_ARGS: >
+        IMAGE_DESTINATION_ARGS: >
           --destination $CI_REGISTRY_IMAGE:latest
           --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
-    - if: >
-        $CI_PROJECT_ROOT_NAMESPACE != 'opentalk' &&
-        $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH &&
-        $CI_COMMIT_BRANCH != null
+    # set variable for MR event
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       variables:
-        IMAGE_DESTIANTION_ARGS: --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+        IMAGE_DESTINATION_ARGS: --destination $CI_REGISTRY_IMAGE:$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    # set variable for forked pipeline
+    - if: $CI_PROJECT_ROOT_NAMESPACE != 'opentalk' &&
+          $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH &&
+          $CI_COMMIT_BRANCH != null
+      variables:
+        IMAGE_DESTINATION_ARGS: --no-push
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -93,13 +107,14 @@ build:container:
       --registry-mirror=mirror.gcr.io
       --context $CI_PROJECT_DIR
       --dockerfile $CI_PROJECT_DIR/ci/Dockerfile
-      $IMAGE_DESTIANTION_ARGS
+      $IMAGE_DESTINATION_ARGS
       --force
 
 build:container-profiling:
+  # todo - check when profiling should be build
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_TAG != null
+    - if: $CI_COMMIT_TAG
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -123,8 +138,8 @@ build:container-profiling:
 publish:common:
   stage: deploy
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_ROOT_NAMESPACE == 'opentalk'
-    - if: $CI_COMMIT_TAG != null
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' && $CI_COMMIT_TAG != null
+    - when: on_success
       changes:
         - packages/common/**/*
   before_script:
@@ -169,63 +184,56 @@ publish:common:
         already been published, so no new version has been published."
       fi
 
-# check:commit-pipeline:
-#   stage: deploy
-#   rules:
-#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#   before_script:
-#     - apk add --no-cache curl jq
-#     - SRC_BRANCH=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
-#     - URL="$CI_API_V4_URL/projects/$CI_MERGE_REQUEST_SOURCE_PROJECT_ID/pipelines?ref=$SRC_BRANCH"
-#   script:
-#     - |
-#       STATUS=$(curl --header "PRIVATE-TOKEN: $CI_READ_API_TOKEN" --url "$URL" | jq -r '.[0].status')
+deploy:review-app:
+  stage: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  image: alpine/helm:3.10.2
+  tags:
+    - kubernetes
+  before_script:
+    - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN}
+      opentalk https://git.opentalk.dev/api/v4/projects/218/packages/helm/stable
+  script:
+    - helm upgrade --version 0.1.0 --install frontend-$CI_MERGE_REQUEST_IID opentalk/ot-web-frontend-helm
+      --set image.repository=$CI_REGISTRY/$CI_MERGE_REQUEST_SOURCE_PROJECT_PATH
+      --set image.tag=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+      --set ingress.tls[0].secretName=frontend-$CI_MERGE_REQUEST_IID-tls
+      --set ot_frontend_url=www.$CI_MERGE_REQUEST_IID.review-latest.kube.opentalk.run
+      --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
+      --set ot_backend_url=controller.review-latest.kube.opentalk.run
+      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
+      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
+      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
+      -n review-latest --create-namespace
+    - echo "https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run"
 
-#       if [[ "$STATUS" == "success" ]]; then
-#         exit 0
-#       else
-#         echo "The last commit pipeline failed"
-#         exit 1
-#       fi
+cleanup:review-app:
+  stage: cleanup
+  rules:
+    - if: $CI_MERGE_REQUEST_EVENT_TYPE == 'merge_result'
+  allow_failure: true
+  image:
+    name: alpine/helm:3.10.2
+    entrypoint: ['']
+  tags:
+    - kubernetes
+  script:
+    - merge_id=$(echo $CI_COMMIT_MESSAGE| awk -F! '{print $2}')
+    - helm uninstall frontend-$merge_id -n review-latest
 
-# deploy:review-app:
-#   stage: deploy
-#   rules:
-#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#   image: alpine/helm:3.10.2
-#   tags:
-#     - kubernetes
-#   needs:
-#     - job: check:commit-pipeline
-#   before_script:
-#     - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN}
-#       opentalk https://git.opentalk.dev/api/v4/projects/218/packages/helm/stable
-#   script:
-#     - helm upgrade --version 0.1.0 --install frontend-$CI_MERGE_REQUEST_IID opentalk/ot-web-frontend-helm
-#       --set image.repository=$CI_REGISTRY/$CI_MERGE_REQUEST_SOURCE_PROJECT_PATH
-#       --set image.tag=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
-#       --set ingress.tls[0].secretName=frontend-$CI_MERGE_REQUEST_IID-tls
-#       --set ot_frontend_url=www.$CI_MERGE_REQUEST_IID.review-latest.kube.opentalk.run
-#       --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
-#       --set ot_backend_url=controller.review-latest.kube.opentalk.run
-#       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
-#       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
-#       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
-#       -n review-latest --create-namespace
-#     - echo "https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run"
+cleanup:container-image:
+  stage: cleanup
+  rules:
+    - if: $CI_MERGE_REQUEST_EVENT_TYPE == 'merge_result'
+  allow_failure: true
+  script:
+    - |
+      SCOPE = "repository:${CI_REGISTRY_IMAGE}:delete"
 
-# destroy:review-app:
-#   stage: destroy
-#   rules:
-#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
-#           $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
-#           $CI_PIPELINE_SOURCE == 'push'
-#   allow_failure: true
-#   image:
-#     name: alpine/helm:3.10.2
-#     entrypoint: ['']
-#   tags:
-#     - kubernetes
-#   script:
-#     - merge_id=$(echo $CI_COMMIT_MESSAGE| awk -F! '{print $2}')
-#     - helm uninstall frontend-$merge_id -n review-latest
+      TOKEN = `curl --request GET --user "${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD}" \
+              "${CI_SERVER_URL}/jwt/auth?service=container_registry&scope=${SCOPE}" |jq -r .token`
+
+      curl --request DELETE --header "Authorization: Bearer ${TOKEN}" \
+        --header "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+        "https://${CI_REGISTRY}/v2/${CI_REGISTRY_IMAGE}/tags/reference/${CI_COMMIT_SHORT_SHA}"
