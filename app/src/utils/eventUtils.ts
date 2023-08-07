@@ -11,7 +11,7 @@ import {
   isTimelessEvent,
   RecurringEvent,
 } from '@opentalk/rest-api-rtk-query';
-import { addMonths, isAfter } from 'date-fns';
+import { addMonths, isAfter, subMonths } from 'date-fns';
 import _ from 'lodash';
 
 import { TimePerspectiveFilter } from '../pages/Dashboard/EventsOverviewPage/EventsOverviewPage';
@@ -42,10 +42,16 @@ export const getExpandedEvents = (
         );
 
         const maxConsideredMonths = maxMonths ? maxMonths : DEFAULT_MONTHS_CONSIDERED;
-        const startDateByFilter = filter === TimePerspectiveFilter.Future ? new Date() : startDate;
-        const end = addMonths(startDateByFilter, maxConsideredMonths);
 
-        const timeline = rule.between(startDateByFilter, end, true);
+        // If timePerspective is in the future, start date is today and end date is ${maxConsideredMonths} from today
+        // if timePerspective is in the past, start date is calculated by substracting ${maxConsideredMonths} from today and adding today as end date
+        const recurrenceInterval =
+          filter === TimePerspectiveFilter.Future
+            ? { start: new Date(), end: addMonths(new Date(), maxConsideredMonths) }
+            : { start: subMonths(new Date(), maxConsideredMonths), end: startDate };
+
+        const timeline = rule.between(recurrenceInterval.start, recurrenceInterval.end, true);
+
         const firstIsoDate = firstDateIsoString ? new Date(firstDateIsoString) : undefined;
         const firstDateTime = filter === TimePerspectiveFilter.Future ? new Date() : firstIsoDate;
 
