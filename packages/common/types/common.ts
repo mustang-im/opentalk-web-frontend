@@ -147,11 +147,11 @@ export enum WaitingState {
   Approved = 'approved',
 }
 
-export type DefaultAvatarImage = '404' | 'mm' | 'monsterid' | 'wavatar' | 'retro' | 'robohash' | 'pagan';
+export type LibravatarDefaultImage = '404' | 'mm' | 'monsterid' | 'wavatar' | 'retro' | 'robohash' | 'pagan';
 
 export enum RoomMode {
   CoffeeBreak = 'coffee-break',
-  TalkingStick = 'talking-stick'
+  TalkingStick = 'talking-stick',
 }
 
 export enum KickScope {

@@ -24,6 +24,7 @@ import {
   joinSuccess,
   AutomodSelectionStrategy,
   createStackedMessages,
+  setLibravatarOptions,
 } from '@opentalk/common';
 import {
   AutomodEventType,
@@ -57,6 +58,7 @@ import { AppDispatch, RootState } from '../store';
 import { hangUp, login, startRoom } from '../store/commonActions';
 import * as breakoutStore from '../store/slices/breakoutSlice';
 import { clearGlobalChat, received as chatReceived, setChatSettings } from '../store/slices/chatSlice';
+import { selectLibravatarDefaultImage } from '../store/slices/configSlice';
 import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectionStatsSlice';
 import * as mediaStore from '../store/slices/mediaSlice';
 import { setFocusedSpeaker, setUpstreamLimit } from '../store/slices/mediaSlice';
@@ -157,6 +159,7 @@ const mapProtocolToProtocolAccess = (protocol?: ProtocolState) => {
 };
 
 const mapToUiParticipant = (
+  state: RootState,
   { id, control, media, protocol }: BackendParticipant,
   breakoutRoomId: BreakoutRoomId | null,
   waitingState: WaitingState
@@ -164,7 +167,7 @@ const mapToUiParticipant = (
   id,
   groups: [],
   displayName: control.displayName,
-  avatarUrl: control.avatarUrl,
+  avatarUrl: setLibravatarOptions(control.avatarUrl, { defaultImage: selectLibravatarDefaultImage(state) }),
   handIsUp: control.handIsUp,
   joinedAt: control.joinedAt,
   leftAt: control.leftAt,
@@ -179,13 +182,14 @@ const mapToUiParticipant = (
 });
 
 const mapBreakoutToUiParticipant = (
+  state: RootState,
   { breakoutRoom, id, displayName, avatarUrl, participationKind, leftAt }: ParticipantInOtherRoom,
   joinTime: string
 ): Participant => ({
   id,
   groups: [],
   displayName,
-  avatarUrl,
+  avatarUrl: setLibravatarOptions(avatarUrl, { defaultImage: selectLibravatarDefaultImage(state) }),
   handIsUp: false,
   joinedAt: joinTime,
   leftAt: leftAt,
@@ -265,13 +269,15 @@ const handleControlMessage = (
 
       let participants: Participant[];
       participants = data.participants.map((participant) =>
-        mapToUiParticipant(participant, data.breakout?.current || null, WaitingState.Joined)
+        mapToUiParticipant(state, participant, data.breakout?.current || null, WaitingState.Joined)
       );
 
       if (data.moderation?.waitingRoomEnabled) {
         participants = data.moderation.waitingRoomParticipants
           //TODO the backend should provide a waitingState: 'waiting' | 'approved', change when implemented
-          .map((participant) => mapToUiParticipant(participant, data.breakout?.current || null, WaitingState.Waiting))
+          .map((participant) =>
+            mapToUiParticipant(state, participant, data.breakout?.current || null, WaitingState.Waiting)
+          )
           .concat(participants);
       }
 
@@ -281,7 +287,7 @@ const handleControlMessage = (
 
       if (data.breakout !== undefined) {
         participants = data.breakout.participants
-          .map((participant) => mapBreakoutToUiParticipant(participant, timestamp))
+          .map((participant) => mapBreakoutToUiParticipant(state, participant, timestamp))
           .concat(participants);
       }
 
@@ -290,7 +296,7 @@ const handleControlMessage = (
       dispatch(
         joinSuccess({
           participantId: data.id,
-          avatarUrl: data.avatarUrl,
+          avatarUrl: setLibravatarOptions(data.avatarUrl, { defaultImage: selectLibravatarDefaultImage(state) }),
           role: data.role,
           chat: {
             enabled: data.chat.enabled,
@@ -372,7 +378,7 @@ const handleControlMessage = (
     case 'joined': {
       dispatch(
         participantsJoin({
-          participant: mapToUiParticipant(data, conference.roomCredentials.breakoutRoomId, WaitingState.Joined),
+          participant: mapToUiParticipant(state, data, conference.roomCredentials.breakoutRoomId, WaitingState.Joined),
         })
       );
 
@@ -506,7 +512,12 @@ const handleMediaMessage = async (
  * @param {breakout.Message} data message content
  * @param {Timestamp} timestamp from backend of the current message
  */
-const handleBreakoutMessage = (dispatch: AppDispatch, data: breakout.Message, timestamp: Timestamp) => {
+const handleBreakoutMessage = (
+  dispatch: AppDispatch,
+  state: RootState,
+  data: breakout.Message,
+  timestamp: Timestamp
+) => {
   switch (data.message) {
     case 'started':
       dispatch(breakoutStore.started(data));
@@ -518,12 +529,18 @@ const handleBreakoutMessage = (dispatch: AppDispatch, data: breakout.Message, ti
       dispatch(breakoutStore.expired());
       break;
     case 'joined':
-      dispatch(
-        breakoutJoined({
-          data,
-          timestamp,
-        })
-      );
+      {
+        const modifiedData = {
+          ...data,
+          avatarUrl: setLibravatarOptions(data.avatarUrl, { defaultImage: selectLibravatarDefaultImage(state) }),
+        };
+        dispatch(
+          breakoutJoined({
+            data: modifiedData,
+            timestamp,
+          })
+        );
+      }
       break;
     case 'left':
       dispatch(breakoutLeft({ id: data.id, timestamp }));
@@ -736,7 +753,18 @@ const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message
       dispatch(disableWaitingRoom());
       break;
     case 'joined_waiting_room':
-      dispatch(waitingRoomJoined(data));
+      {
+        const modifiedData = {
+          ...data,
+          control: {
+            ...data.control,
+            avatarUrl: setLibravatarOptions(data.control.avatarUrl, {
+              defaultImage: selectLibravatarDefaultImage(state),
+            }),
+          },
+        };
+        dispatch(waitingRoomJoined(modifiedData));
+      }
       break;
     case 'left_waiting_room':
       dispatch(waitingRoomLeft(data.id));
@@ -970,7 +998,7 @@ const onMessage =
         handleControlMessage(dispatch, getState(), conference, message.payload, message.timestamp);
         break;
       case 'breakout':
-        handleBreakoutMessage(dispatch, message.payload, message.timestamp);
+        handleBreakoutMessage(dispatch, getState(), message.payload, message.timestamp);
         break;
       case 'media':
         handleMediaMessage(dispatch, message.payload, getState(), message.timestamp).catch((e) => {

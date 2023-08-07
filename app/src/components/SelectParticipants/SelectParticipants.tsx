@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Chip, CircularProgress, InputAdornment, Stack, Typography } from '@mui/material';
 import { CloseIcon, CopyIcon, ParticipantAvatar, SearchIcon } from '@opentalk/common';
+import { setLibravatarOptions } from '@opentalk/common';
 import { Email, FindUserResponse, EventInvite } from '@opentalk/rest-api-rtk-query';
 import { differenceBy, debounce } from 'lodash';
 import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
@@ -11,6 +12,8 @@ import * as Yup from 'yup';
 
 import { useGetMeQuery, useLazyFindUsersQuery } from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
+import { useAppSelector } from '../../hooks';
+import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 
 export type EmailUser = {
   email: Email;
@@ -40,9 +43,11 @@ const SelectParticipants = ({
   invitees = [],
   resetSelected,
 }: SelectParticipantsProps) => {
+  const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [selectedUsers, setSelectedUsers] = useState<Array<FindUserResponse | EmailUser>>([]);
-  const { t } = useTranslation();
+  const avatarDefaultImage = useAppSelector(selectLibravatarDefaultImage);
+
   const { myId } = useGetMeQuery(undefined, {
     selectFromResult: ({ data }) => ({
       myId: data?.email,
@@ -67,6 +72,10 @@ const SelectParticipants = ({
     setSearchValue(inputValue);
     debounceFindUsers(inputValue);
   }, []);
+
+  const getAvatarSrc = (url: string | undefined) => {
+    return setLibravatarOptions(url, { defaultImage: avatarDefaultImage });
+  };
 
   useEffect(() => {
     onChange(selectedUsers);
@@ -136,7 +145,9 @@ const SelectParticipants = ({
             alignItems={'center'}
             sx={{ cursor: 'pointer' }}
           >
-            <ParticipantAvatar src={user.avatarUrl}>{`${user.firstname} ${user.lastname}`}</ParticipantAvatar>
+            <ParticipantAvatar
+              src={getAvatarSrc(user.avatarUrl)}
+            >{`${user.firstname} ${user.lastname}`}</ParticipantAvatar>
             {renderUserData(user)}
           </Stack>
         ))}
@@ -182,7 +193,7 @@ const SelectParticipants = ({
             }
             avatar={
               'firstname' in selectedUser ? (
-                <ParticipantAvatar src={selectedUser.avatarUrl} />
+                <ParticipantAvatar src={getAvatarSrc(selectedUser.avatarUrl)} />
               ) : (
                 <ParticipantAvatar specialCharacter="@" />
               )
@@ -202,7 +213,7 @@ const SelectParticipants = ({
           <Chip
             key={`${invitee.email}-invitees`}
             label={renderUserData(invitee)}
-            avatar={<ParticipantAvatar src={invitee.avatarUrl} />}
+            avatar={<ParticipantAvatar src={getAvatarSrc(invitee.avatarUrl)} />}
           />
         ))}
       </Container>

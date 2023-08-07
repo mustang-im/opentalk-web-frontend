@@ -8,7 +8,6 @@ import React, { ReactNode } from 'react';
 import { automod, legalVote } from '../../api/types/outgoing';
 import { useAppSelector } from '../../hooks';
 import { selectCombinedUserFirstAndParticipantsInConference, selectVotingUsers } from '../../store/selectors';
-import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 
 interface EnterpriseProviderProps {
   children: React.ReactNode | ReactNode[];
@@ -19,7 +18,6 @@ interface EnterpriseProviderProps {
 // community components don't need the additional providers
 const EnterpriseProvider = ({ children, moduleKey }: EnterpriseProviderProps) => {
   const votingUsers = useAppSelector(selectVotingUsers);
-  const libravatarDefaultImage = useAppSelector(selectLibravatarDefaultImage);
   //We want to have the user that will trigger auto moderation features as first in the list
   const configurationParticipants = useAppSelector(selectCombinedUserFirstAndParticipantsInConference);
 
@@ -30,7 +28,6 @@ const EnterpriseProvider = ({ children, moduleKey }: EnterpriseProviderProps) =>
           apiMessages={legalVote.actions}
           votingUsers={votingUsers}
           setHotkeysEnabled={setHotkeysEnabled}
-          libravatarDefaultImage={libravatarDefaultImage}
         >
           {children}
         </LegalVoteProvider>
