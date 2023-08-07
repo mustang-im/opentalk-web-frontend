@@ -113,6 +113,7 @@ const EditEventsPage = () => {
           existingEvent={event}
           onBackButtonClick={() => setActiveStep(0)}
           invitationsSent={() => getEvent(eventQuery)}
+          refreshEvent={() => getEvent(eventQuery)}
         />
       )}
     </Container>

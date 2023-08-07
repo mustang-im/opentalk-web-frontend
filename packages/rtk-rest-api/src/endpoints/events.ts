@@ -15,6 +15,7 @@ import {
   Tags,
   Tag,
   CreateEventInvitePayload,
+  UserId,
 } from '../types';
 import { CursorPaginated, DateTime } from '../types';
 import { UpdateEventPayload, RescheduleEventPayload, EventId, EventInstanceId } from '../types/event';
@@ -194,6 +195,15 @@ export const addEventsEndpoints = <
       url: `events/${eventId}/invites`,
       method: 'POST',
       body: snakeCaseKeys(payload),
+    }),
+  }),
+  /**
+   * Delete/revoke an invite to an event for a specified user
+   */
+  revokeEventUserInvite: builder.mutation<unknown, { eventId: EventId; userId: UserId }>({
+    query: ({ eventId, userId }) => ({
+      url: `events/${eventId}/invites/${userId}`,
+      method: 'DELETE',
     }),
   }),
   /**

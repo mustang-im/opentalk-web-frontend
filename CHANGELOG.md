@@ -38,6 +38,7 @@
 - Hide dial-in option when no call-in info is sent (!1001)
 - Glitchtip integration (!1016)
 - Control talking stick with the shortcut (!1013)
+- Add ability to revoke event invitation from invited participant. (!1035)
 
 ## 1.5.x
 
