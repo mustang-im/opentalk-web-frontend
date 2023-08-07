@@ -13,13 +13,21 @@ import {
   EventInfo,
   timerStarted,
   timerStopped,
+  notifications,
 } from '@opentalk/common';
 import { automodStore } from '@opentalk/components';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  createListenerMiddleware,
+  AnyAction,
+  ListenerEffectAPI,
+} from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
-import { RootState } from '../';
+import { AppDispatch, RootState } from '../';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
 import { hangUp, startRoom } from '../commonActions';
 
@@ -29,13 +37,28 @@ interface InviteState extends FetchRequestState {
   inviteCode?: InviteCode;
 }
 
+/**
+ * ### State Machine Graph
+ * - Initial -> Setup
+ * - Setup -> Starting
+ * - Starting -> Blocked
+ * - Starting -> Waiting ->ReadyToEnter -> Online
+ * - Starting -> Failed
+ * - Starting -> Online
+ * - Online -> Failed
+ * - Online -> Leaving
+ * - Leaving -> Failed
+ * - Leaving -> Left
+ * - Failed -> Starting
+ * - Failed -> Left
+ * - Left -> Starting
+ */
 export enum ConnectionState {
   Initial = 'initial',
   Setup = 'setup',
   Starting = 'starting',
   Waiting = 'waiting',
   Online = 'online',
-  Reconnecting = 'reconnecting',
   Leaving = 'leaving',
   Left = 'left',
   Failed = 'failed',
@@ -56,6 +79,7 @@ interface RoomState {
   participantLimit: number;
   currentMode?: RoomMode;
   eventInfo?: EventInfo;
+  reconnectTimerId: ReturnType<typeof setTimeout> | null;
 }
 
 export interface InviteRoomVerifyResponse {
@@ -80,6 +104,7 @@ const initialState: RoomState = {
   serverTimeOffset: 0,
   passwordRequired: false,
   participantLimit: 0,
+  reconnectTimerId: null,
 };
 
 export const fetchRoomByInviteId = createAsyncThunk<
@@ -88,6 +113,7 @@ export const fetchRoomByInviteId = createAsyncThunk<
   { state: RootState; rejectValue: FetchRequestError }
 >('room/fetchRoomByInviteId', async (inviteCode, thunkApi) => {
   const { getState, rejectWithValue } = thunkApi;
+
   const verifyUrl = new URL('v1/invite/verify', getControllerBaseUrl(getState().config));
 
   try {
@@ -124,7 +150,7 @@ export const roomSlice = createSlice({
       state.error = reason;
     },
     connectionClosed: (state, { payload: { errorCode } }: PayloadAction<{ errorCode?: number }>) => {
-      state.connectionState = errorCode ? ConnectionState.Reconnecting : ConnectionState.Leaving;
+      state.connectionState = errorCode ? ConnectionState.Failed : ConnectionState.Leaving;
       state.error = `websocket_error_${errorCode}`;
     },
     enteredWaitingRoom: (state) => {
@@ -138,6 +164,16 @@ export const roomSlice = createSlice({
     },
     disableWaitingRoom: (state) => {
       state.waitingRoomEnabled = false;
+    },
+    updatedReconnectTimerId: (state, { payload: { reconnectTimerId } }) => {
+      state.reconnectTimerId = reconnectTimerId;
+    },
+    abortedReconnection: (state) => {
+      if (state.reconnectTimerId) {
+        clearTimeout(state.reconnectTimerId);
+      }
+      state.reconnectTimerId = null;
+      state.connectionState = ConnectionState.Left;
     },
   },
   extraReducers: (builder) => {
@@ -158,7 +194,6 @@ export const roomSlice = createSlice({
         error: payload,
         loading: false,
       };
-      state.connectionState = ConnectionState.Failed;
     });
     builder.addCase(
       startRoom.pending,
@@ -210,7 +245,7 @@ export const roomSlice = createSlice({
       state.connectionState = ConnectionState.Left;
     });
     builder.addCase(hangUp.rejected, (state) => {
-      state.connectionState = ConnectionState.Failed;
+      state.connectionState = ConnectionState.Left;
     });
     builder.addCase(timerStarted, (state, { payload }) => {
       if (payload.style === TimerStyle.CoffeeBreak) {
@@ -243,6 +278,8 @@ export const {
   readyToEnter,
   enableWaitingRoom,
   disableWaitingRoom,
+  updatedReconnectTimerId,
+  abortedReconnection,
 } = actions;
 
 export const selectRoomPassword = (state: RootState) => state.room.password;
@@ -257,3 +294,58 @@ export const selectCurrentRoomMode = (state: RootState) => state.room.currentMod
 export const selectEventInfo = (state: RootState) => state.room.eventInfo;
 
 export default roomSlice.reducer;
+
+export const roomMiddleware = createListenerMiddleware<RootState, AppDispatch>();
+
+function reconnect(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
+  const RECONNECT_DELAY = 5000; //ms
+  const state = listenerApi.getState();
+  const { roomId } = state.room;
+  const { inviteCode } = state.room.invite;
+  const { displayName } = state.user;
+  const { assignment: breakoutRoomId } = state.breakout;
+
+  if (state.room.reconnectTimerId) {
+    clearTimeout(state.room.reconnectTimerId);
+  }
+
+  if (roomId) {
+    const reconnectTimerId = setTimeout(() => {
+      listenerApi.dispatch(
+        startRoom({
+          roomId,
+          breakoutRoomId: breakoutRoomId || null,
+          displayName,
+          inviteCode,
+        })
+      );
+    }, RECONNECT_DELAY);
+
+    listenerApi.dispatch(updatedReconnectTimerId({ reconnectTimerId }));
+  }
+}
+
+roomMiddleware.startListening({
+  type: 'room/start/rejected',
+  effect: (_action: AnyAction, listenerApi: ListenerEffectAPI<RootState, AppDispatch>) => reconnect(listenerApi),
+});
+
+type ConnectionClosedAction = Partial<ReturnType<typeof connectionClosed>> & AnyAction;
+roomMiddleware.startListening({
+  type: 'room/connectionClosed',
+  effect: (action: ConnectionClosedAction, listenerApi: ListenerEffectAPI<RootState, AppDispatch>) => {
+    if (action.payload?.errorCode) {
+      return reconnect(listenerApi);
+    }
+  },
+});
+
+roomMiddleware.startListening({
+  type: 'room/hangup/rejected',
+  // TODO: Find a way to increase guard type and step away from AnyAction.
+  effect: (action: AnyAction) => {
+    if (action.error) {
+      notifications.error(action.error.message);
+    }
+  },
+});

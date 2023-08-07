@@ -863,3 +863,6 @@ data-protection-label = Data protection
 
 version-label = Product version - {$version}
 dev-version = (preview)
+
+reconnection-loop-dialogbox-title = Reconnecting to the room
+reconnection-loop-abort-button = Abort

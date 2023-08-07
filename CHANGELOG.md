@@ -35,9 +35,10 @@
 - Fix rerendering issue with chat and participant tab (!1032)
 - "You are next" notification in the talking stick no longer auto close (!1027)
 - Optimized lobby field wording (!1028)
-- Notification for own message in group chat is no longer shown. (!1029)
+- Notification for own message in group chat is no longer shown (!1029)
 - Fix hotkeys not working as expected (!1040)
 - Fix timer countdown for the moderator (!1031)
+- Automatic reconnection attempt every 5 seconds when connection breaks (!1059)
 
 ### New Features
 
