@@ -8,6 +8,12 @@ export enum TimerKind {
   Countdown = 'countdown',
 }
 
+export enum TimerStopKind {
+  ByModerator = 'by_moderator',
+  Expired = 'expired',
+  CreatorLeft = 'creator_left',
+}
+
 export enum TimerStyle {
   CoffeeBreak = 'coffee-break',
   Normal = 'normal',

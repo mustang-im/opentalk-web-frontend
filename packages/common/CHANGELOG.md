@@ -1,3 +1,9 @@
+## 1.0.20
+
+### Stability Improvements
+
+- Add extra reducers to control hotkeys state (!1039)
+
 ## 1.0.18
 
 ### New Features

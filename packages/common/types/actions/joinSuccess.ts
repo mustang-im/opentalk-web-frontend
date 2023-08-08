@@ -5,7 +5,7 @@ import { InitialAutomod } from '../automod';
 import { InitialBreakout } from '../breakout';
 import { ChatMessage, InitialChat } from '../chat';
 import { BackendParticipant, GroupId, ParticipantId, ParticipantMediaState, Role, Timestamp } from '../common';
-import { TimerState } from '../control';
+import { TimerState } from '../timer';
 import { EventInfo } from '../eventInfo';
 import { Participant } from '../participant';
 import { InitialPoll } from '../poll';
