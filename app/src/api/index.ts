@@ -28,6 +28,7 @@ import {
   timerStopped,
   setLibravatarOptions,
 } from '@opentalk/common';
+import { ParticipantId } from '@opentalk/common';
 import {
   AutomodEventType,
   LegalVoteMessageType,
@@ -264,6 +265,9 @@ const handleControlMessage = (
 ) => {
   switch (data.message) {
     case 'join_success': {
+      const participantsReady = data.participants
+        .filter((participant) => participant.timer && participant.timer.readyStatus === true)
+        .map((participant) => participant.id as ParticipantId);
       const { groupIds, messages: groupMessages } = transformChatHistory(data.chat.groupsHistory);
       const groups = groupIds;
       let roomHistory = data.chat.roomHistory as ChatMessage[];
@@ -294,7 +298,6 @@ const handleControlMessage = (
       }
 
       const serverTimeOffset = new Date(timestamp).getTime() - new Date().getTime();
-
       dispatch(
         joinSuccess({
           participantId: data.id,
@@ -318,6 +321,7 @@ const handleControlMessage = (
           serverTimeOffset,
           tariff: data.tariff,
           timer: data.timer,
+          participantsReady: participantsReady,
           sharedFolder: data.sharedFolder,
           eventInfo: data.eventInfo,
         })

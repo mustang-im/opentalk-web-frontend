@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Seconds } from '../utils';
+import { TimerState } from './timer';
 
 export type ParticipantId = string & { readonly __tag: unique symbol };
 export type GroupId = string & { readonly __tag: unique symbol };
@@ -112,12 +113,15 @@ export type ParticipantMediaState = PresenterRoleState & {
   video?: MediaSessionState;
 };
 
+type TimerIsReady = Pick<TimerState, 'readyStatus'>
+
 export interface BackendParticipant {
   id: ParticipantId;
   // Core fields are present in any case
   control: IParticipantControl;
   protocol?: ProtocolState;
   media: ParticipantMediaState;
+  timer?: TimerIsReady;
 }
 
 export interface CommonPoll {

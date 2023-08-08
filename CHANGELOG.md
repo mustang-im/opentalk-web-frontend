@@ -4,6 +4,7 @@
 
 - Fix guest link generation in the dashboard (!1066)
 - Fix: future meetings displayed in past tabs (!1057)
+- Fix participants timer state in moderators timer tab (!1404)
 - Fix functionality to set avatar default image (!1034)
 - Remove extra space from url in MeetinPopover.tsx (!1050)
 - Add missing documentation for ACCOUNT_MANAGEMENT_URL (!1036)

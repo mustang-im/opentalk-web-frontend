@@ -64,7 +64,7 @@ export const timerSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(joinSuccess, (state, { payload: { timer } }) => {
+    builder.addCase(joinSuccess, (state, { payload: { participantId, participantsReady, timer } }) => {
       if (timer) {
         state.timerId = timer.timerId;
         state.startedAt = timer.startedAt;
@@ -72,6 +72,10 @@ export const timerSlice = createSlice({
         state.kind = timer.kind;
         state.readyCheckEnabled = timer.readyCheckEnabled;
         state.style = timer.style;
+        state.participantsReady = participantsReady;
+        if (timer.readyStatus === true) {
+          state.participantsReady.push(participantId);
+        }
         if (timer.endsAt) {
           state.totalDuration = intervalToDuration({
             start: new Date(timer.startedAt),
