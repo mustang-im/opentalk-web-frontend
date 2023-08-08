@@ -628,7 +628,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
           key: nextId,
           msg: i18next.t('talking-stick-next-announcement'),
           variant: 'warning',
-          persist: true
+          persist: true,
         });
       }
       if (data.speaker === state.user.uuid && state.automod.speakerState === 'inactive') {
@@ -935,7 +935,7 @@ const handleChatMessage = (dispatch: AppDispatch, data: chat.ChatMessage, timest
         data.target = data.source;
         notifications.info(i18next.t('chat-new-private-message'));
       }
-      if (chatMessage.scope === ChatScope.Group) {
+      if (chatMessage.scope === ChatScope.Group && data.source !== state.user.uuid) {
         notifications.info(i18next.t('chat-new-group-message'));
       }
       dispatch(chatReceived({ timestamp, ...data }));
