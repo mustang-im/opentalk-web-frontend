@@ -628,6 +628,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
           key: nextId,
           msg: i18next.t('talking-stick-next-announcement'),
           variant: 'warning',
+          persist: true
         });
       }
       if (data.speaker === state.user.uuid && state.automod.speakerState === 'inactive') {
