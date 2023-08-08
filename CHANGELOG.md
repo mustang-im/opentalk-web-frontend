@@ -32,6 +32,7 @@
 - Rework most timer/coffee break related components and slices (!1018)
 - Fix rerendering issue with chat and participant tab (!1032)
 - "You are next" notification in the talking stick no longer auto close (!1027)
+- Optimized lobby field wording (!1028)
 
 ### New Features
 
