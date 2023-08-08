@@ -339,7 +339,7 @@ const InviteToMeeting = ({
                 label={
                   userTariffLimit
                     ? t('dashboard-direct-meeting-label-select-participants', { maxParticipants: userTariffLimit })
-                    : undefined
+                    : t('dashboard-direct-meeting-label-select-participants-fallback')
                 }
                 placeholder={t('dashboard-select-participants-textfield-placeholder')}
                 onChange={(selected) => setSelectedUser(selected)}
