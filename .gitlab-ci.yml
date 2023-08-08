@@ -139,7 +139,8 @@ build:container-profiling:
 publish:common:
   stage: deploy
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' && $CI_COMMIT_TAG != null
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_ROOT_NAMESPACE == 'opentalk'
+    - if: $CI_COMMIT_TAG != null
       changes:
         - packages/common/**/*
   before_script:
