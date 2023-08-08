@@ -30,6 +30,7 @@
 - Improve sidebar tab definition, types and accessibility (!997)
 - Fix WebRTC stats error in Safari for missing remote report (!1014)
 - Rework most timer/coffee break related components and slices (!1018)
+- Fix rerendering issue with chat and participant tab (!1032)
 
 ### New Features
 

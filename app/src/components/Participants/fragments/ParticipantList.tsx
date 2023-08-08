@@ -73,7 +73,7 @@ const FormControlLabel = styled(MuiFormControlLabel)({
 const ParticipantList = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const groupsParticipants = useAppSelector(selectAllGroupParticipantsSortedAndFiltered, () => false);
+  const groupsParticipants = useAppSelector(selectAllGroupParticipantsSortedAndFiltered);
   const allParticipants = useAppSelector(selectAllParticipantsSortedAndFiltered);
   const groupParticipantsEnabled = useAppSelector(selectShowParticipantGroups);
 

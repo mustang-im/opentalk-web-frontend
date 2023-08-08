@@ -244,20 +244,25 @@ export const selectSlicedParticipants = (page: number, maxParticipants: number) 
   });
 
 export const selectParticipantById = (id: EntityId) => (state: RootState) => participantSelectors.selectById(state, id);
-export const selectParticipantsIds = (state: RootState) => participantSelectors.selectIds(state);
 export const selectParticipants = (state: RootState) => participantSelectors.selectEntities(state);
 export const selectParticipantsTotal = createSelector(
   selectAllOnlineParticipants,
   (participants) => participants.length + 1
 );
 
-export const selectParticipantAvatarUrl = (id: EntityId) => (state: RootState) =>
-  participantSelectors.selectById(state, id)?.avatarUrl;
+export const selectParticipantAvatarUrl = (id: EntityId) => {
+  const sel = selectParticipantById(id);
+  return createSelector(sel, (participant) => participant?.avatarUrl);
+};
 
-export const selectParticipantName = (id: EntityId) => (state: RootState) =>
-  participantSelectors.selectById(state, id)?.displayName;
+export const selectParticipantName = (id: EntityId) => {
+  const sel = selectParticipantById(id);
+  return createSelector(sel, (participant) => participant?.displayName);
+};
 
-export const selectParticipationKind = (id: EntityId) => (state: RootState) =>
-  participantSelectors.selectById(state, id)?.participationKind;
+export const selectParticipationKind = (id: EntityId) => {
+  const sel = selectParticipantById(id);
+  return createSelector(sel, (participant) => participant?.participationKind);
+};
 
 export default participantsSlice.reducer;
