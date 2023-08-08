@@ -59,6 +59,7 @@ frontend                                                                        
 | FEATURE_SHARED_FOLDER           | no       | false                              | enable the shared folder feature |
 | IMPRINT_URL             | no      |                                                   | The URL to the imprint page |
 | DATA_PROTECTION_URL             | no      |                                                   | The URL to the data protection page |
+| ACCOUNT_MANAGEMENT_URL             | no      |                                                   | The account management url for use the dashboard menu, if provider.active is true |
 
 ## Use yarn to build a local version
 
@@ -80,6 +81,12 @@ window.config = {
     beta: {
       isBeta: '${IS_BETA_RELEASE:-true}', // show Badge
       badgeUrl: "${BETA_BADGE_URL}" // add a link to the Badge
+    },
+    provider: {
+      // indicates if we are are in the provider context
+	    active: false, 
+      // The account management url for the dashboard menu, if active is true
+	    accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
     },
     // defaultImage for the Avatar, possible values: '404', 'mm', 'monsterid', 'wavatar', 'retro', 'robohash', 'pagan',
     "libravatarDefaultImage": 'robohash',
