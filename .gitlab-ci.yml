@@ -15,6 +15,8 @@ stages:
 
 lint:prettier+eslint:
   stage: lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
     - apk add git
     - yarn install
@@ -24,9 +26,9 @@ lint:prettier+eslint:
 
 lint:yaml:
   stage: lint
-  rules:
-    - when: on_success
   image: archlinux:latest
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
     - pacman -Syy --noconfirm yamllint
   script: yamllint .
@@ -34,7 +36,7 @@ lint:yaml:
 lint:compliance:
   stage: lint
   rules:
-    - when: on_success
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
     - apk add git
     - yarn install
@@ -43,18 +45,18 @@ lint:compliance:
 
 lint:licensing:
   stage: lint
-  rules:
-    - when: on_success
   image:
     name: fsfe/reuse:latest
     entrypoint: ['']
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   script:
     - reuse lint
 
 lint:audit:
   stage: lint
   rules:
-    - when: on_success
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   script:
     - yarn npm audit --environment production -RA
   allow_failure: true
@@ -62,7 +64,9 @@ lint:audit:
 test:build:
   stage: test
   rules:
-    - when: on_success
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
   before_script:
     - apk add git
     - yarn install
@@ -71,6 +75,10 @@ test:build:
     - yarn build
 
 build:container:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
   rules:
     # set variable for push to main
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -87,16 +95,12 @@ build:container:
       variables:
         IMAGE_DESTINATION_ARGS: >
           --destination ${CI_REGISTRY_IMAGE}:${CI_MERGE_REQUEST_IID}_${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-    # set variable for forked pipeline
-    - if: $CI_PROJECT_ROOT_NAMESPACE != 'opentalk' &&
-          $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH &&
-          $CI_COMMIT_BRANCH != null
-      variables:
-        IMAGE_DESTINATION_ARGS: --no-push
-  stage: build
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: ['']
+    # set variable for forked pipeline (commented out to get rid of pipelines in forked repos)
+    # - if: $CI_PROJECT_ROOT_NAMESPACE != 'opentalk' &&
+    #      $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH &&
+    #      $CI_COMMIT_BRANCH != null
+    #  variables:
+    #    IMAGE_DESTINATION_ARGS: --no-push
   script:
     - mkdir -p /kaniko/.docker
     - >
@@ -112,14 +116,14 @@ build:container:
       --force
 
 build:container-profiling:
-  # todo - check when profiling should be build
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_TAG
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: ['']
+  # todo - check when profiling should be build
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
   script:
     - mkdir -p /kaniko/.docker
     - >
