@@ -6,21 +6,24 @@ import { BackIcon, CopyIcon, notifications } from '@opentalk/common';
 import { Event, isEvent, FindUserResponse } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
 import { merge } from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
+  useLazyGetRoomInvitesQuery,
   useCreateEventInviteMutation,
   useDeleteEventMutation,
   useRevokeEventUserInviteMutation,
   useGetMeTariffQuery,
+  useLazyGetMeQuery,
+  useCreateRoomInviteMutation,
 } from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
 import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
-import { createPermanentGuestLink } from '../../hooks/createPermanentGuestLink';
 import { selectBaseUrl, selectFeatures } from '../../store/slices/configSlice';
+import { composeInviteUrl } from '../../utils/apiUtils';
 import { EmailUser } from '../SelectParticipants/SelectParticipants';
 
 interface InviteToMeetingProps {
@@ -67,7 +70,50 @@ const InviteToMeeting = ({
   const roomSharedFolderPassword = existingEvent.sharedFolder?.readWrite?.password;
 
   const callInDetails = existingEvent.room.callIn;
-  const inviteUrl = createPermanentGuestLink(existingEvent?.room.id);
+
+  const [getRoomInvites] = useLazyGetRoomInvitesQuery();
+
+  const [createRoomInvite] = useCreateRoomInviteMutation();
+  const [getMe] = useLazyGetMeQuery();
+
+  const [permanentGuestLink, setPermanentGuestLink] = useState<URL>();
+
+  /*    
+        Fetch permanent guest link for the meeting.
+        If there is no permanent guest link -> we assume, that the meeting has just been created.
+        Therefore send request to the controller to create a permanent link.
+        As an additional guard, we check, that we are the creator of the meeting.
+        In the future, all the moderators of the meeting shall be able to create guest links. Similarly as it is done in InviteGuestDialog
+
+        DISCLAIMER: because of the way tags are setup even with this structure you will see a get -> post -> get request on creating a meeting.
+                    It should not impact since we use only the data from the post request and the get request happens in the background.
+                    If it is a problem feel free to look into the tag setup for 'packages/rtk-rest-api/src/endpoints/rooms.ts' createRoomInvite and getRoomInvites.
+  */
+  const fetchPermanentGuestLink = useCallback(async () => {
+    const invites = await getRoomInvites({ roomId: existingEvent.room.id }).unwrap();
+    if (invites) {
+      const foundInvite = invites.find((invite) => invite.active && invite.expiration === null);
+      if (foundInvite) {
+        return composeInviteUrl(baseUrl, foundInvite.inviteCode);
+      }
+    }
+
+    const userMe = await getMe().unwrap();
+    if (userMe.id === existingEvent.createdBy.id) {
+      const createdInvite = await createRoomInvite({ id: existingEvent.room.id }).unwrap();
+      return composeInviteUrl(baseUrl, createdInvite.inviteCode);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPermanentGuestLink().then((url) => {
+      if (url) {
+        setPermanentGuestLink(url);
+      } else {
+        notifications.error(t('global-copy-permanent-guest-link-error'));
+      }
+    });
+  }, []);
 
   const [revokeInvite] = useRevokeEventUserInviteMutation();
 
@@ -123,8 +169,8 @@ const InviteToMeeting = ({
   }, [t, sipLink]);
 
   const copyGuestLinkToClipboard = useCallback(() => {
-    if (inviteUrl !== undefined) {
-      navigator.clipboard.writeText(inviteUrl.toString()).then(() => {
+    if (permanentGuestLink !== undefined) {
+      navigator.clipboard.writeText(permanentGuestLink.toString()).then(() => {
         setGuestLinkCopied(true);
         setRoomLinkCopied(false);
         setSipLinkCopied(false);
@@ -134,7 +180,7 @@ const InviteToMeeting = ({
         notifications.success(t('global-copy-link-success'));
       });
     }
-  }, [t, inviteUrl]);
+  }, [t, permanentGuestLink]);
 
   const copyRoomPasswordToClipboard = useCallback(() => {
     if (roomPassword !== undefined) {
@@ -242,7 +288,7 @@ const InviteToMeeting = ({
               label={t('dashboard-direct-meeting-invitation-guest-link-field-label')}
               disabled
               checked={isGuestLinkCopied || undefined}
-              value={inviteUrl || '-'}
+              value={permanentGuestLink || '-'}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -250,7 +296,7 @@ const InviteToMeeting = ({
                     onClick={copyGuestLinkToClipboard}
                     onMouseDown={copyGuestLinkToClipboard}
                     edge="end"
-                    disabled={inviteUrl === undefined}
+                    disabled={permanentGuestLink === undefined}
                   >
                     <CopyIcon />
                   </IconButton>

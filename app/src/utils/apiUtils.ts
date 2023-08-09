@@ -23,6 +23,10 @@ export const getSignalingUrl = ({ insecure, controller }: ConfigState) => {
   return new URL(`${insecure ? 'ws' : 'wss'}://${addEndingSlash(controller)}signaling`);
 };
 
+export const composeInviteUrl = (baseUrl: string, inviteCode: string) => {
+  return new URL(`invite/${inviteCode}`, baseUrl);
+};
+
 const fetchWrapper = (
   url: RequestInfo | URL,
   data: RequestInit = { method: 'GET' },

@@ -9,8 +9,15 @@ import snakecaseKeys from 'snakecase-keys';
 
 import { PublicRoom, PrivateRoom, UpdateRoomPayload, CreateRoomPayload, Tags, Tag } from '../types';
 import { RoomId } from '../types';
-import { AssetId, RoomAssets, RoomSipConfigResponse, UpdateRoomSipConfigPayload } from '../types/room';
-import { CreateInvitePayload, Invite, Invites } from '../types/roomInvite';
+import {
+  AssetId,
+  RoomAssets,
+  RoomSipConfigResponse,
+  UpdateRoomSipConfigPayload,
+  CreateRoomInvitePayload,
+  RoomInvite,
+  RoomInvites,
+} from '../types/room';
 import { PagedPaginationParams } from './common';
 
 export const addRoomEndpoints = <
@@ -83,7 +90,7 @@ export const addRoomEndpoints = <
   /**
    * Create an inviteId for a room
    */
-  createRoomInvite: builder.mutation<Invite, { id: RoomId } & CreateInvitePayload>({
+  createRoomInvite: builder.mutation<RoomInvite, { id: RoomId } & CreateRoomInvitePayload>({
     query: ({ id, ...payload }) => ({
       url: `rooms/${id}/invites`,
       method: 'POST',
@@ -97,7 +104,7 @@ export const addRoomEndpoints = <
   /**
    * get all invites for a room
    */
-  getRoomInvites: builder.query<Invites, { roomId: RoomId }>({
+  getRoomInvites: builder.query<RoomInvites, { roomId: RoomId }>({
     query: ({ roomId }) => `rooms/${roomId}/invites`,
     providesTags: (result) =>
       result

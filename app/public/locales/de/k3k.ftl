@@ -565,6 +565,7 @@ global-beta = Beta
 global-me = Ich
 global-create-link-success = Der Link wurde erfolgreich erstellt
 global-copy-link-success = Der Link wurde erfolgreich kopiert
+global-copy-permanent-guest-link-error = Es wurde noch keinen permanenten Gast-Link für dieses Meeting erstellt! Bitte, öffnen Sie den "Teilnehmer" Einstellungen von diesem Meeting und kopieren Sie den Gast-Link von dort aus.
 global-password-link-success = Das Passwort wurde erfolgreich kopiert
 global-dial-in-link-success = Die Telefoneinwahl wurde in die Zwischenablage kopiert
 global-textfield-max-characters = {$remainingCharacters} Zeichen übrig
