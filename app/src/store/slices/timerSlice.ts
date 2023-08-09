@@ -1,13 +1,23 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, Timestamp, TimerKind, TimerStyle, joinSuccess, notifications } from '@opentalk/common';
+import {
+  ParticipantId,
+  Timestamp,
+  TimerKind,
+  TimerStopKind,
+  TimerStyle,
+  joinSuccess,
+  notifications,
+  timerStarted,
+  timerStopped,
+} from '@opentalk/common';
 import { createListenerMiddleware, createSlice, PayloadAction, TypedStartListening } from '@reduxjs/toolkit';
 import { intervalToDuration } from 'date-fns';
 import i18next from 'i18next';
 
 import { AppDispatch, RootState } from '../';
-import { TimerStarted, ReadyToContinue, TimerStopReason, TimerStopped } from '../../api/types/incoming/timer';
+import { ReadyToContinue } from '../../api/types/incoming/timer';
 import localMediaContext from '../../modules/Media/LocalMedia';
 
 interface State {
@@ -20,7 +30,7 @@ interface State {
   kind?: TimerKind;
   style?: TimerStyle;
   totalDuration?: Duration;
-  timerStopReason?: TimerStopReason;
+  timerStopKind?: TimerStopKind;
 }
 
 const initialState: State = {
@@ -33,7 +43,7 @@ const initialState: State = {
   kind: undefined,
   style: undefined,
   totalDuration: undefined,
-  timerStopReason: undefined,
+  timerStopKind: undefined,
 };
 
 export const timerSlice = createSlice({
@@ -41,41 +51,15 @@ export const timerSlice = createSlice({
   initialState: initialState,
   reducers: {
     resetTimerState: () => initialState,
-    startedTimer: (state, { payload }: PayloadAction<TimerStarted>) => {
-      state.timerId = payload.timerId;
-      state.startedAt = payload.startedAt;
-      state.endsAt = payload.endsAt;
-      state.readyCheckEnabled = payload.readyCheckEnabled;
-      state.title = payload.title;
-      state.kind = payload.kind;
-      state.style = payload.style;
-      if (payload.endsAt) {
-        state.totalDuration = intervalToDuration({
-          start: new Date(payload.startedAt),
-          end: new Date(payload.endsAt),
-        });
-      }
-      state.timerStopReason = undefined;
-    },
-    stoppedTimer: (state, { payload }: PayloadAction<TimerStopped>) => {
-      state.timerId = undefined;
-      state.startedAt = undefined;
-      state.endsAt = undefined;
-      state.readyCheckEnabled = undefined;
-      state.title = undefined;
-      state.kind = undefined;
-      state.style = undefined;
-      state.totalDuration = undefined;
-      state.participantsReady = [];
-      state.timerStopReason = payload.kind;
-    },
     updateParticipantsReady: (state, { payload }: PayloadAction<ReadyToContinue>) => {
       if (payload.status === true && !state.participantsReady.includes(payload.participantId)) {
         state.participantsReady.push(payload.participantId);
         return;
       }
       if (payload.status === false) {
-        state.participantsReady = state.participantsReady.filter((item) => item !== payload.participantId);
+        state.participantsReady = state.participantsReady.filter(
+          (item: ParticipantId) => item !== payload.participantId
+        );
       }
     },
   },
@@ -94,13 +78,41 @@ export const timerSlice = createSlice({
             end: new Date(timer.endsAt),
           });
         }
-        state.timerStopReason = undefined;
+        state.timerStopKind = undefined;
       }
+    });
+    builder.addCase(timerStarted, (state, { payload }) => {
+      state.timerId = payload.timerId;
+      state.startedAt = payload.startedAt;
+      state.endsAt = payload.endsAt;
+      state.readyCheckEnabled = payload.readyCheckEnabled;
+      state.title = payload.title;
+      state.kind = payload.kind;
+      state.style = payload.style;
+      if (payload.endsAt) {
+        state.totalDuration = intervalToDuration({
+          start: new Date(payload.startedAt),
+          end: new Date(payload.endsAt),
+        });
+      }
+      state.timerStopKind = undefined;
+    });
+    builder.addCase(timerStopped, (state, { payload }) => {
+      state.timerId = undefined;
+      state.startedAt = undefined;
+      state.endsAt = undefined;
+      state.readyCheckEnabled = undefined;
+      state.title = undefined;
+      state.kind = undefined;
+      state.style = undefined;
+      state.totalDuration = undefined;
+      state.participantsReady = [];
+      state.timerStopKind = payload.kind;
     });
   },
 });
 
-export const { startedTimer, stoppedTimer, updateParticipantsReady, resetTimerState } = timerSlice.actions;
+export const { updateParticipantsReady, resetTimerState } = timerSlice.actions;
 
 export const actions = timerSlice.actions;
 
@@ -110,7 +122,7 @@ export const selectTimerEndsAt = (state: RootState) => state.timer.endsAt;
 export const selectParticipantsReady = (state: RootState) => state.timer.participantsReady;
 export const selectReadyCheckEnabled = (state: RootState) => state.timer.readyCheckEnabled;
 export const selectTimerTitle = (state: RootState) => state.timer.title;
-export const selectTimerActive = (state: RootState) => state.timer.startedAt && !state.timer.timerStopReason;
+export const selectTimerActive = (state: RootState) => state.timer.startedAt && !state.timer.timerStopKind;
 export const selectTimerKind = (state: RootState) => state.timer.kind;
 export const selectTimerStyle = (state: RootState) => state.timer.style;
 export const selectTotalDuration = (state: RootState) => state.timer.totalDuration;
@@ -125,7 +137,7 @@ type AppStartListening = TypedStartListening<RootState, AppDispatch>;
 const startAppListening = timerMiddleware.startListening as AppStartListening;
 
 startAppListening({
-  actionCreator: startedTimer,
+  actionCreator: timerStarted,
   effect: (action, listenerApi) => {
     const mediaState = listenerApi.getOriginalState().media;
 
@@ -138,18 +150,18 @@ startAppListening({
 });
 
 startAppListening({
-  actionCreator: stoppedTimer,
+  actionCreator: timerStopped,
   effect: (action, listenerApi) => {
     const timerStyle = listenerApi.getOriginalState().timer.style;
     if (timerStyle === TimerStyle.Normal) {
       switch (action.payload.kind) {
-        case TimerStopReason.Expired:
+        case TimerStopKind.Expired:
           notifications.info(i18next.t('timer-notification-ran-out'));
           break;
-        case TimerStopReason.ByModerator:
+        case TimerStopKind.ByModerator:
           notifications.info(i18next.t('timer-notification-stopped'));
           break;
-        case TimerStopReason.CreatorLeft:
+        case TimerStopKind.CreatorLeft:
         default:
           break;
       }

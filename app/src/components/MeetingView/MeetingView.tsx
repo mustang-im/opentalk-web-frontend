@@ -6,11 +6,11 @@ import { useTheme } from '@mui/material/styles';
 import { useRef, useState, useEffect } from 'react';
 
 import { useAppSelector } from '../../hooks';
+import useGlobalConferenceHotkeys from '../../hooks/useGlobalConferenceHotkeys';
 import { selectDebugMode, selectShowCoffeeBreakCurtain } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
 import DebugPanel from '../DebugPanel';
-import HotKeys from '../HotKeys';
 import LocalVideo from '../LocalVideo';
 import RemoteAudioStreams from '../RemoteAudioStreams';
 import TimerPopover from '../TimerPopover';
@@ -60,6 +60,8 @@ const MeetingView = () => {
   const enableAudio = isModerator || !isCoffeeBreakOpen;
   const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
+  useGlobalConferenceHotkeys();
+
   useEffect(() => {
     setAnchorEl(containerRef.current);
     return () => setAnchorEl(null);
@@ -76,8 +78,6 @@ const MeetingView = () => {
           {enableAudio && <RemoteAudioStreams />}
 
           {!showCoffeeBreakCurtain && <TimerPopover anchorEl={anchorEl} />}
-
-          <HotKeys />
 
           <InnerLayout />
 

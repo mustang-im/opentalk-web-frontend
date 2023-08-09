@@ -24,6 +24,8 @@ import {
   joinSuccess,
   AutomodSelectionStrategy,
   createStackedMessages,
+  timerStarted,
+  timerStopped,
   setLibravatarOptions,
 } from '@opentalk/common';
 import {
@@ -94,7 +96,7 @@ import {
   joinBlocked,
 } from '../store/slices/roomSlice';
 import { sharedFolderUpdated } from '../store/slices/sharedFolderSlice';
-import { startedTimer, stoppedTimer, updateParticipantsReady } from '../store/slices/timerSlice';
+import { updateParticipantsReady } from '../store/slices/timerSlice';
 import { updatedCinemaLayout } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
@@ -869,10 +871,10 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
 const handleTimerMessage = (dispatch: AppDispatch, data: timer.Message) => {
   switch (data.message) {
     case 'started':
-      dispatch(startedTimer(data));
+      dispatch(timerStarted(data));
       break;
     case 'stopped':
-      dispatch(stoppedTimer(data));
+      dispatch(timerStopped(data));
       break;
     case 'updated_ready_status':
       dispatch(updateParticipantsReady(data));

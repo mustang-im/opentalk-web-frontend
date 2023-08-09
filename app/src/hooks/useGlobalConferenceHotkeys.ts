@@ -7,16 +7,16 @@ import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { automod } from '../../api/types/outgoing';
-import { useAppSelector } from '../../hooks';
-import { useFullscreenContext } from '../../provider/FullscreenProvider';
-import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../../store/slices/mediaSlice';
-import { selectCurrentRoomMode } from '../../store/slices/roomSlice';
-import { useMediaContext } from '../MediaProvider';
+import { useAppSelector } from '.';
+import { automod } from '../api/types/outgoing';
+import { useMediaContext } from '../components/MediaProvider';
+import { useFullscreenContext } from '../provider/FullscreenProvider';
+import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../store/slices/mediaSlice';
+import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 
 export const HOTKEYS = ['v', 'm', 'f'];
 
-const HotKeys = () => {
+const useGlobalConferenceHotkeys = () => {
   const mediaContext = useMediaContext();
   const fullscreenContext = useFullscreenContext();
   const hotkeysEnabled = useAppSelector(selectHotkeysEnabled);
@@ -162,8 +162,6 @@ const HotKeys = () => {
       window.removeEventListener('keyup', debouncedHandleKeypress);
     };
   }, [handleKeyPress]);
-
-  return null;
 };
 
-export default HotKeys;
+export default useGlobalConferenceHotkeys;

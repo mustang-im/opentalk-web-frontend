@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendModules, setHotkeysEnabled } from '@opentalk/common';
+import { BackendModules } from '@opentalk/common';
 import { LegalVoteProvider, AutomodProvider } from '@opentalk/components';
 import React, { ReactNode } from 'react';
 
@@ -24,11 +24,7 @@ const EnterpriseProvider = ({ children, moduleKey }: EnterpriseProviderProps) =>
   switch (moduleKey) {
     case BackendModules.LegalVote:
       return (
-        <LegalVoteProvider
-          apiMessages={legalVote.actions}
-          votingUsers={votingUsers}
-          setHotkeysEnabled={setHotkeysEnabled}
-        >
+        <LegalVoteProvider apiMessages={legalVote.actions} votingUsers={votingUsers}>
           {children}
         </LegalVoteProvider>
       );

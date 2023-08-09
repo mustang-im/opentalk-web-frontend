@@ -11,6 +11,8 @@ import {
   RoomMode,
   AutomodSelectionStrategy,
   EventInfo,
+  timerStarted,
+  timerStopped,
 } from '@opentalk/common';
 import { automodStore } from '@opentalk/components';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -20,7 +22,6 @@ import convertToSnakeCase from 'snakecase-keys';
 import { RootState } from '../';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
 import { hangUp, startRoom } from '../commonActions';
-import { startedTimer, stoppedTimer } from './timerSlice';
 
 interface InviteState extends FetchRequestState {
   active?: boolean;
@@ -211,14 +212,14 @@ export const roomSlice = createSlice({
     builder.addCase(hangUp.rejected, (state) => {
       state.connectionState = ConnectionState.Failed;
     });
-    builder.addCase(startedTimer, (state, { payload }) => {
+    builder.addCase(timerStarted, (state, { payload }) => {
       if (payload.style === TimerStyle.CoffeeBreak) {
         state.currentMode = RoomMode.CoffeeBreak;
       } else {
         state.currentMode = undefined;
       }
     });
-    builder.addCase(stoppedTimer, (state) => {
+    builder.addCase(timerStopped, (state) => {
       if (state.currentMode === RoomMode.CoffeeBreak) {
         state.currentMode = undefined;
       }

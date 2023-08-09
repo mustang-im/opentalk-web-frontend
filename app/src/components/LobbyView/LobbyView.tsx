@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, IconButton, InputAdornment, Stack } from '@mui/material';
-import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon, setHotkeysEnabled } from '@opentalk/common';
+import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { FC, useCallback, useState } from 'react';
@@ -64,7 +64,6 @@ const LobbyView: FC = () => {
         })
       )
         .unwrap()
-        .then(() => dispatch(setHotkeysEnabled(true)))
         .catch((e) => {
           if ('code' in e) {
             const error = e as ApiErrorWithBody<StartRoomError>;

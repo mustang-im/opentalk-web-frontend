@@ -11,6 +11,8 @@ import {
   TimerStyle,
   joinSuccess,
   MediaSessionType,
+  timerStarted,
+  timerStopped,
 } from '@opentalk/common';
 import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -26,7 +28,6 @@ import { leave, breakoutLeft } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
-import { startedTimer, stoppedTimer } from './timerSlice';
 import { setWhiteboardAvailable } from './whiteboardSlice';
 
 export interface IChatConversationState {
@@ -126,7 +127,7 @@ export const uiSlice = createSlice({
     setProtocolHighlight(state, { payload: highlight }: PayloadAction<boolean>) {
       state.isCurrentProtocolHighlighted = highlight;
     },
-    setCoffeeBreakCurtainOpen(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
+    setCoffeeBreakCurtainOpenFlag(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
       state.showCoffeeBreakCurtain = isOpenFlag;
     },
     setActiveTab(state, { payload: tabKey }: PayloadAction<ModerationTabKey>) {
@@ -177,12 +178,12 @@ export const uiSlice = createSlice({
     builder.addCase(PollStarted, (state, { payload: vote }: PayloadAction<PollStartedInterface>) => {
       state.votesPollIdToShow = vote.id;
     });
-    builder.addCase(startedTimer, (state, { payload }) => {
+    builder.addCase(timerStarted, (state, { payload }) => {
       if (payload.style === TimerStyle.CoffeeBreak) {
         state.showCoffeeBreakCurtain = true;
       }
     });
-    builder.addCase(stoppedTimer, (state) => {
+    builder.addCase(timerStopped, (state) => {
       if (state.showCoffeeBreakCurtain) {
         state.showCoffeeBreakCurtain = false;
       }
@@ -215,7 +216,7 @@ export const {
   toggleDebugMode,
   setChatSearchValue,
   setProtocolHighlight,
-  setCoffeeBreakCurtainOpen,
+  setCoffeeBreakCurtainOpenFlag,
   setActiveTab,
   toggledFullScreenMode,
   pinnedRemoteScreenshare,
