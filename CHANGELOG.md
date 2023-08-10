@@ -17,6 +17,7 @@
 - Fixed overflowing layout issues in all features (!1011)
 - Fix broken breakout room notification (!1024)
 - Reverted missing label for invite participates when tariff is not applied (!1037)
+- Fix german "Hintergrundfilter" translation (!1038)
 
 ### Stability Improvements
 
