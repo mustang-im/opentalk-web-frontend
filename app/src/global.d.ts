@@ -10,6 +10,7 @@ export {};
 declare global {
   interface Window {
     config: ConfigState;
+    showReportDialog: (options?: Sentry.ReportDialogOptions | undefined, hub?: Sentry.Hub | undefined) => void;
     webkitAudioContext: typeof AudioContext;
     i18n: i18n;
     debugKillSignaling: () => void;

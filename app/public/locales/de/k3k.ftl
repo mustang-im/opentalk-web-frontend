@@ -868,3 +868,15 @@ dev-version = (Vorschau)
 
 reconnection-loop-dialogbox-title = Verbindung wird erneut aufgebaut
 reconnection-loop-abort-button = Abbrechen
+
+glitchtip-crash-report-title = Oh, es sieht so aus, als hätten wir ein Problem.
+glitchtip-crash-report-subtitle = Unser Team wird benachrichtigt.
+glitchtip-crash-report-subtitle2 = Wenn Sie helfen möchten, erzählen Sie uns, was passiert ist.
+glitchtip-crash-report-labelName = Name
+glitchtip-crash-report-labelEmail = Email
+glitchtip-crash-report-labelComments = Was ist passiert? ( Schritt für Schritt, gern in kurzen Stichpunkten formuliert. )
+glitchtip-crash-report-labelClose = Schliessen
+glitchtip-crash-report-labelSubmit = Senden
+glitchtip-crash-report-errorGeneric = Beim Absenden Ihres Berichts ist ein unbekannter Fehler aufgetreten. Bitte versuchen Sie es erneut.
+glitchtip-crash-report-errorFormEntry = Einige Felder waren ungültig. Bitte korrigieren Sie die Fehler und versuchen Sie es erneut.
+glitchtip-crash-report-successMessage = Ihr Bericht wurde gesendet. Vielen Dank!

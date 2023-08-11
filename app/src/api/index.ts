@@ -101,6 +101,7 @@ import { updateParticipantsReady } from '../store/slices/timerSlice';
 import { updatedCinemaLayout } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
+import { initSentryReportWithUser } from '../utils/glitchtipUtils';
 import showConsentNotification from '../utils/showConsentNotification';
 import showRecordingStoppedNotification from '../utils/showRecordingStoppedNotification';
 import { restApi } from './rest';
@@ -1090,6 +1091,9 @@ export const apiMiddleware: Middleware = ({
             i18n.language !== user.data?.language &&
             user.data?.language.length > 0 &&
             i18n.changeLanguage(user.data?.language);
+          if (user.data) {
+            initSentryReportWithUser({ name: user.data.displayName, email: user.data.email, lang: user.data.language });
+          }
         });
       })
       .addCase(

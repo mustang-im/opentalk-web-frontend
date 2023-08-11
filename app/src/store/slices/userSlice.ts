@@ -13,12 +13,14 @@ import {
 } from '@opentalk/common';
 import { logged_out } from '@opentalk/react-redux-appauth';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import i18next from 'i18next';
 
 import { RootState } from '../';
 import { Role } from '../../api/types/incoming/control';
 import { sendChatMessage } from '../../api/types/outgoing/chat';
 import { lowerHand, raiseHand } from '../../api/types/outgoing/control';
-import { startRoom, login } from '../commonActions';
+import { initSentryReportWithUser } from '../../utils/glitchtipUtils';
+import { login, startRoom } from '../commonActions';
 import { setAudioEnable, setFocusedSpeaker, setScreenShare, setVideoEnable } from './mediaSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
@@ -83,6 +85,9 @@ export const userSlice = createSlice({
         }
       ) => {
         state.displayName = displayName;
+        if (state.role === Role.Guest) {
+          initSentryReportWithUser({ name: state.displayName, lang: i18next.language });
+        }
       }
     );
     builder.addCase(joinSuccess, (state, { payload: { isPresenter, avatarUrl, role, participantId, groups } }) => {

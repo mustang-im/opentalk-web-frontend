@@ -8,9 +8,11 @@ Sentry.init({
   enabled: Boolean(window.config.glitchtipDsn),
   release: window.config.glitchtipRelease,
   beforeSend: (event) => {
-    Sentry.showReportDialog({
-      eventId: event.event_id,
-    });
+    if (window.showReportDialog) {
+      window.showReportDialog(event);
+    } else {
+      Sentry.showReportDialog(event);
+    }
     return event;
   },
 });
