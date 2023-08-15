@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { VideoSetting, notifications } from '@opentalk/common';
+import { notifications, VideoSetting } from '@opentalk/common';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '.';
 import { getMediaStream, MediaDescriptor, requestVideoQuality } from '../modules/WebRTC';
 import { selectQualityCap } from '../store/slices/mediaSlice';
-import { selectSubscriberById } from '../store/slices/mediaSubscriberSlice';
+import { selectSubscriberStateById } from '../store/slices/mediaSubscriberSlice';
 
 export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' | 'audio') => {
   const [media, setMediaStream] = useState<
@@ -18,7 +18,7 @@ export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' |
   const [qualityTarget, setQualityTarget] = useState<VideoSetting>(VideoSetting.Off);
   const releaseHandler = useRef<(() => void) | undefined>();
   const qualityMax = useAppSelector(selectQualityCap);
-  const subscriber = useAppSelector(selectSubscriberById(descriptor));
+  const subscriber = useAppSelector(selectSubscriberStateById(descriptor, mediaKind));
 
   const qualityCap = descriptor.mediaType === 'screen' ? Math.max(qualityMax, VideoSetting.Low) : qualityMax;
   const quality = Math.min(qualityCap, qualityTarget);
@@ -56,7 +56,7 @@ export const useRemoteMedia = (descriptor: MediaDescriptor, mediaKind: 'video' |
     if (media?.descriptor === descriptor && (media?.process || media?.stream)) {
       return;
     }
-    if (subscriber === undefined || subscriber[mediaKind] === undefined) {
+    if (!subscriber.active) {
       return;
     }
 

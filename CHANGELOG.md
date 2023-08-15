@@ -21,6 +21,7 @@
 
 ### Stability Improvements
 
+- Cleanup video components (!1067)
 - Make pipeline fail on failed tests in packages (!1049)
 - Unable to enter the meeting - user gets redirected to Dashbaord (!1053)
 - Fix tests in common package (!1007)

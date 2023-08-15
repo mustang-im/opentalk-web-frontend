@@ -3,12 +3,12 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Slide, Stack, styled, Tooltip } from '@mui/material';
 import { MediaSessionType, ParticipantId, VideoSetting, WarningIcon } from '@opentalk/common';
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
-import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
 import { AvatarContainer } from './AvatarContainer';
 import RemoteVideo from './RemoteVideo';
 import ScreenPresenterVideo from './ScreenPresenterVideo';
@@ -24,25 +24,19 @@ export type PresenterVideoPosition = 'bottomLeft' | 'upperRight' | 'bottomRight'
 
 interface ParticipantVideoProps {
   participantId: ParticipantId;
-  fullscreenMode?: boolean;
   presenterVideoIsActive?: boolean;
   isThumbnail?: boolean;
 }
 
-const ParticipantVideo = ({
-  participantId,
-  fullscreenMode,
-  presenterVideoIsActive,
-  isThumbnail,
-}: ParticipantVideoProps) => {
+const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }: ParticipantVideoProps) => {
   const videoDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
   const screenDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Screen }), [participantId]);
 
-  const videoSubscriber = useAppSelector(selectSubscriberById(videoDescriptor));
-  const screenSubscriber = useAppSelector(selectSubscriberById(screenDescriptor));
+  const videoSubscriber = useAppSelector(selectSubscriberStateById(videoDescriptor, 'video'));
+  const screenSubscriber = useAppSelector(selectSubscriberStateById(screenDescriptor, 'video'));
   const qualityCap = useAppSelector(selectQualityCap);
 
-  const containerRef = React.useRef(null);
+  const containerRef = useRef(null);
   const [isVideoPinned, setIsVideoPinned] = useState<boolean>(false);
   const [showPresenterVideo, setShowPresenterVideo] = useState<boolean>(!!presenterVideoIsActive);
 
@@ -55,15 +49,13 @@ const ParticipantVideo = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!fullscreenMode) {
-      const timer = setTimeout(() => setShowPresenterVideo(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showPresenterVideo, fullscreenMode]);
+    const timer = setTimeout(() => setShowPresenterVideo(false), 5000);
+    return () => clearTimeout(timer);
+  }, [showPresenterVideo]);
 
   const displayPresenterVideo = useCallback(() => {
-    !presenterVideoIsActive && !fullscreenMode && setShowPresenterVideo(true);
-  }, [fullscreenMode, presenterVideoIsActive]);
+    !presenterVideoIsActive && setShowPresenterVideo(true);
+  }, [presenterVideoIsActive]);
 
   const handleToggle = () => setIsVideoPinned((videoPinned) => !videoPinned);
 
@@ -81,7 +73,7 @@ const ParticipantVideo = ({
     </Tooltip>
   );
 
-  if (screenSubscriber?.video && screenSubscriber?.limit !== VideoSetting.Off) {
+  if (screenSubscriber?.active && screenSubscriber?.limit !== VideoSetting.Off) {
     if (screenSubscriber?.error) {
       return mediaFailedError;
     }
@@ -90,7 +82,6 @@ const ParticipantVideo = ({
         <RemoteVideo descriptor={screenDescriptor} />
         <Slide direction={slideDirection} in={isVisible} mountOnEnter container={containerRef.current}>
           <ScreenPresenterVideo
-            isFullscreenMode={fullscreenMode}
             participantId={participantId}
             isVideoPinned={isVideoPinned}
             togglePin={handleToggle}
@@ -103,7 +94,7 @@ const ParticipantVideo = ({
     );
   }
 
-  if (videoSubscriber?.video && qualityCap !== VideoSetting.Off && videoSubscriber?.limit !== VideoSetting.Off) {
+  if (videoSubscriber?.active && qualityCap !== VideoSetting.Off && videoSubscriber?.limit !== VideoSetting.Off) {
     if (videoSubscriber?.error) {
       return mediaFailedError;
     }
