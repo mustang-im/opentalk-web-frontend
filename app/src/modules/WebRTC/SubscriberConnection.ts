@@ -190,6 +190,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       track.removeEventListener('mute', updateStateHandler);
       track.removeEventListener('unmute', updateStateHandler);
       track.removeEventListener('ended', endedHandler);
+      updateStateHandler();
     };
     track.addEventListener('ended', endedHandler);
   }
