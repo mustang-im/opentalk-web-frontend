@@ -187,5 +187,3 @@ export const setAudioOutputDevice = async (deviceId: DeviceId): Promise<void> =>
   await featureDetectionAudioEl.setSinkId(deviceId);
   console.log(`Audio output device set to ${deviceId}`);
 };
-
-export const isAudioContextSuported = window.AudioContext || window.webkitAudioContext ? true : false;

@@ -8,7 +8,7 @@ import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState
 import { useAppDispatch } from '../../hooks';
 import browser from '../../modules/BrowserSupport';
 import { BackgroundConfig } from '../../modules/Media/BackgroundBlur';
-import LevelNode from '../../modules/Media/LevelNode';
+import { SignalLevel } from '../../modules/Media/LevelNode';
 import localMediaContext, { LocalMedia } from '../../modules/Media/LocalMedia';
 import localScreenContext from '../../modules/Media/LocalScreen';
 import { DeviceId, getConstraints } from '../../modules/Media/MediaUtils';
@@ -20,6 +20,7 @@ import {
   setMediaChangeInProgress,
   setQualityCap,
   setScreenShare,
+  setSpeakerActivity,
   setVideoEnable,
 } from '../../store/slices/mediaSlice';
 
@@ -46,7 +47,7 @@ export interface MediaContextValue {
   setMaxQuality: (qualityCap: VideoSetting) => void;
   outgoingMediaStream: MediaStream;
   outgoingScreenStream: MediaStream;
-  levelNode: LevelNode | undefined;
+  getAudioLevel: () => SignalLevel | undefined;
 }
 
 const MediaContext = React.createContext<MediaContextValue | null>(null);
@@ -62,7 +63,6 @@ enum HandledErrorType {
 }
 
 export const MediaProvider = ({ children }: MediaProviderProps) => {
-  const [levelNode, setLevelNode] = useState<LevelNode | undefined>();
   const [devices, setDevices] = useState<MediaDeviceInfo[] | undefined>();
 
   const [defaultAudioDevice, setDefaultAudioDevice] = useState<DeviceId | undefined>();
@@ -83,6 +83,10 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
     [devices]
   );
 
+  const getAudioLevel = useCallback(() => {
+    return localMediaContext.getAudioLevel();
+  }, []);
+
   //TODO: move to LocalMedia
   useEffect(() => {
     const deviceChangeHandler = () => {
@@ -96,14 +100,8 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
     navigator.mediaDevices.addEventListener('devicechange', deviceChangeHandler);
     deviceChangeHandler();
 
-    localMediaContext
-      .getLevelNode()
-      .then(setLevelNode)
-      .catch((e) => console.error('Failed to load Worklet for LevelNode', e));
-
     return () => {
       navigator.mediaDevices.removeEventListener('devicechange', deviceChangeHandler);
-      setLevelNode(undefined);
     };
   }, []);
 
@@ -132,17 +130,23 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
 
     const backgroundChangedHandler = (backgroundConfig: BackgroundConfig) =>
       dispatch(setBackgroundEffects(backgroundConfig));
+
+    const speakerActivityHandler = (isUserSpeaking: boolean) => {
+      dispatch(setSpeakerActivity(isUserSpeaking));
+    };
     const screenShareStoppedHandler = () => dispatch(setScreenShare(false));
 
     localMediaContext.addEventListener('stateChanged', mediaStateHandler);
     localMediaContext.addEventListener('deviceChanged', mediaDeviceHandler);
     localMediaContext.addEventListener('backgroundChanged', backgroundChangedHandler);
+    localMediaContext.addEventListener('isUserSpeaking', speakerActivityHandler);
     localScreenContext.addEventListener('stopped', screenShareStoppedHandler);
 
     return () => {
       localMediaContext.removeEventListener('stateChanged', mediaStateHandler);
       localMediaContext.removeEventListener('deviceChanged', mediaDeviceHandler);
       localMediaContext.removeEventListener('backgroundChanged', backgroundChangedHandler);
+      localMediaContext.removeEventListener('isUserSpeaking', speakerActivityHandler);
       localScreenContext.removeEventListener('stopped', screenShareStoppedHandler);
     };
   }, [dispatch]);
@@ -150,7 +154,7 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
   const permissionDeniedObserver: <T>(result: Promise<T>) => Promise<T> = useCallback(
     (result) => {
       dispatch(setMediaChangeInProgress(true));
-      return result
+      result
         .then((inner) => {
           setPermissionDenied(false);
           return inner;
@@ -159,9 +163,9 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
           if (e.name === 'NotAllowedError') {
             setPermissionDenied(true);
           }
-          throw e;
         })
         .finally(() => dispatch(setMediaChangeInProgress(false)));
+      return result;
     },
     [dispatch]
   );
@@ -365,7 +369,7 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
         setMaxQuality,
         outgoingMediaStream: localMediaContext.outputMediaStream,
         outgoingScreenStream: localScreenContext.stream,
-        levelNode,
+        getAudioLevel,
       }}
     >
       {memoedChildren}

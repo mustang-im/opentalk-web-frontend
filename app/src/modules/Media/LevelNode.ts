@@ -4,40 +4,46 @@
 
 // see https://webaudio.github.io/web-audio-api/#vu-meter-mode
 
+// The LevelNode is the underpinning for a Volume unit meter (VU meter) widget
+// see https://en.wikipedia.org/wiki/VU_meter
+
 export interface SignalLevel {
   level: number;
   peak: number;
   clip: boolean;
 }
 
-const UPDATE_INTERVAL_60HZ = 16.67; //ms -> 60 Hz
+// Currently we use the level node only to update the animation of the audio indicator
+// Therefore the standard value would be (1 / 60 Hz ) = 16.67 ms
+const DEFAULT_UPDATE_INTERVAL = 16.67; //ms
 
-class LevelNode extends AudioWorkletNode {
+export class LevelNode extends AudioWorkletNode {
   private _updateIntervalInMS;
   private _level: SignalLevel = { level: -Infinity, peak: -Infinity, clip: false };
 
   static async loadWorklet(context: AudioContext) {
-    await context.audioWorklet.addModule('/workers/vumeter-processor.js');
+    await context.audioWorklet.addModule('/workers/level-processor.js');
   }
 
   /**
    * Create a LevelNode
    *
    * @param context The parent AudioContext
-   * @param updateIntervalInMS update interval in milliseconds; must be above 0
+   * @param updateIntervalInMS how often the worklet shall update the main thread, in ms
+   *
    */
-  constructor(context: AudioContext, updateIntervalInMS: number = UPDATE_INTERVAL_60HZ) {
+  constructor(context: AudioContext, updateIntervalInMS: number = DEFAULT_UPDATE_INTERVAL) {
     super(context, 'level-processor', {
       numberOfInputs: 1,
       numberOfOutputs: 0,
       channelCount: 1,
       processorOptions: {
-        updateIntervalInMS: updateIntervalInMS,
+        updateIntervalInMS,
       },
     });
 
     if (updateIntervalInMS <= 0) {
-      throw new Error('updateInterval out of range');
+      throw new Error('update interval must be a positive number');
     }
     this._updateIntervalInMS = updateIntervalInMS;
 
@@ -63,5 +69,3 @@ class LevelNode extends AudioWorkletNode {
     return this._level;
   }
 }
-
-export default LevelNode;
