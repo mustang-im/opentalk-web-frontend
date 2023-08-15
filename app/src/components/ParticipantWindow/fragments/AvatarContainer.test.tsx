@@ -2,23 +2,24 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { getInitials } from '../../../utils/stringUtils';
-import { configureStore, render, screen } from '../../../utils/testUtils';
+import { mockedParticipant, mockStore, render, screen } from '../../../utils/testUtils';
 import { AvatarContainer } from './AvatarContainer';
 
 describe('render <AvatarContainer />', () => {
-  const displayName = 'Test User Name';
-  const initials = getInitials(displayName, 3);
-  const { store } = configureStore();
+  const participant = mockedParticipant(0);
+  const initials = getInitials(participant.displayName, 3);
 
   test('should render AvatarContainer component with initial', async () => {
-    await render(<AvatarContainer>{displayName}</AvatarContainer>, store);
+    const { store } = mockStore(1);
+    await render(<AvatarContainer participantId={participant.id} />, store);
     expect(screen.getByTestId('avatarContainer')).toBeInTheDocument();
     expect(screen.getByTestId('participantAvatar')).toBeInTheDocument();
     expect(screen.getByText(initials)).toBeInTheDocument();
   });
 
   test('render with isSipParticipant flag should not render initials', async () => {
-    await render(<AvatarContainer isSipParticipant>{displayName}</AvatarContainer>, store);
+    const { store } = mockStore(1, { sip: true });
+    await render(<AvatarContainer participantId={participant.id} />, store);
     expect(screen.getByTestId('avatarContainer')).toBeInTheDocument();
     expect(screen.getByTestId('participantAvatar')).toBeInTheDocument();
     expect(screen.queryByTestId('avatarIcon')).not.toBeInTheDocument();

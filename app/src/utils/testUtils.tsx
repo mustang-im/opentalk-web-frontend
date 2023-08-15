@@ -158,9 +158,11 @@ export const jwtVariables = {
   @returns mocked redux store for testing
 */
 
-export const mockStore = (participantCount: number, options?: { video?: boolean; screen?: boolean }) => {
+export const mockStore = (participantCount: number, options?: { video?: boolean; screen?: boolean; sip?: boolean }) => {
   const participantsIds = range(participantCount);
-  const participants = participantsIds.map((index) => mockedParticipant(index));
+  const participants = participantsIds.map((index) =>
+    mockedParticipant(index, options?.sip ? ParticipationKind.Sip : undefined)
+  );
 
   const subscribers: Array<SubscriberConfig & SubscriberStateChanged> = [];
   if (options?.video) {
@@ -214,7 +216,7 @@ export const mockStore = (participantCount: number, options?: { video?: boolean;
   });
 };
 
-export const mockedParticipant = (index: number): Participant => ({
+export const mockedParticipant = (index: number, kind: ParticipationKind = ParticipationKind.User): Participant => ({
   id: `00000000-e6b4-4759-00${index}` as ParticipantId,
   displayName: `Test User Randy Mock${index}`,
   handIsUp: false,
@@ -223,7 +225,7 @@ export const mockedParticipant = (index: number): Participant => ({
   leftAt: null,
   breakoutRoomId: null,
   groups: [],
-  participationKind: ParticipationKind.User,
+  participationKind: kind,
   lastActive: '2022-03-23T12:32:30Z',
   waitingState: WaitingState.Joined,
   protocolAccess: ProtocolAccess.None,

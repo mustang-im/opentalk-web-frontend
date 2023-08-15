@@ -2,18 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Slide, Stack, styled, Tooltip } from '@mui/material';
-import { MediaSessionType, ParticipantId, ParticipationKind, VideoSetting, WarningIcon } from '@opentalk/common';
+import { MediaSessionType, ParticipantId, VideoSetting, WarningIcon } from '@opentalk/common';
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
 import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
-import {
-  selectParticipantAvatarUrl,
-  selectParticipantName,
-  selectParticipationKind,
-} from '../../../store/slices/participantsSlice';
 import { AvatarContainer } from './AvatarContainer';
 import RemoteVideo from './RemoteVideo';
 import ScreenPresenterVideo from './ScreenPresenterVideo';
@@ -45,9 +40,6 @@ const ParticipantVideo = ({
 
   const videoSubscriber = useAppSelector(selectSubscriberById(videoDescriptor));
   const screenSubscriber = useAppSelector(selectSubscriberById(screenDescriptor));
-  const displayName = useAppSelector(selectParticipantName(participantId));
-  const avatarUrl = useAppSelector(selectParticipantAvatarUrl(participantId));
-  const participationKind = useAppSelector(selectParticipationKind(participantId));
   const qualityCap = useAppSelector(selectQualityCap);
 
   const containerRef = React.useRef(null);
@@ -59,7 +51,6 @@ const ParticipantVideo = ({
 
   const slideDirection = presenterVideoPosition === 'upperRight' ? 'down' : 'up';
   const isVisible = isVideoPinned || presenterVideoIsActive || showPresenterVideo;
-  const isSipParticipant = participationKind === ParticipationKind.Sip;
 
   const { t } = useTranslation();
 
@@ -119,11 +110,7 @@ const ParticipantVideo = ({
     return <RemoteVideo descriptor={videoDescriptor} />;
   }
 
-  return (
-    <AvatarContainer avatarUrl={avatarUrl} isSipParticipant={isSipParticipant}>
-      {displayName || ''}
-    </AvatarContainer>
-  );
+  return <AvatarContainer participantId={participantId} />;
 };
 
 export default ParticipantVideo;

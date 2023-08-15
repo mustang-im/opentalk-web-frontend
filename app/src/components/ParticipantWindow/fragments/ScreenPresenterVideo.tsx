@@ -64,7 +64,6 @@ const ScreenPresenterVideo = React.forwardRef<HTMLDivElement, ScreenPresenterVid
     const videoDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
     const videoSubscriber = useAppSelector(selectSubscriberById(videoDescriptor));
     const displayName = useAppSelector(selectParticipantName(participantId));
-    const avatarUrl = useAppSelector(selectParticipantAvatarUrl(participantId));
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     const qualityCap = useAppSelector(selectQualityCap);
 
@@ -90,7 +89,7 @@ const ScreenPresenterVideo = React.forwardRef<HTMLDivElement, ScreenPresenterVid
         {videoSubscriber?.video && videoSubscriber?.limit !== VideoSetting.Off && qualityCap !== VideoSetting.Off ? (
           <RemoteVideo descriptor={videoDescriptor} />
         ) : (
-          <AvatarContainer avatarUrl={avatarUrl}>{displayName || ''}</AvatarContainer>
+          <AvatarContainer participantId={participantId} />
         )}
         {isFullscreenMode && (
           <NameTile displayName={displayName || ''} audioOn={!!videoSubscriber?.audio} className="positionBottom" />
