@@ -38,6 +38,7 @@ joinform-access-denied = Access denied: You were not invited to this meeting.
 field-error-required ="{$fieldName}" is a required field
 joinform-banned-from-room = You were banned from this meeting.
 joinform-room-not-found = Room not found.
+joinform-display-name-field-disabled-tooltip = Editing disabled according to organisational policy.
 
 room-loading-setup = <title>Configuring connection...</title>
 room-loading-starting = <title>Connecting to room...</title>

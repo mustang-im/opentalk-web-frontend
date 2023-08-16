@@ -38,6 +38,7 @@ window.config = {
     badgeUrl: "${BETA_BADGE_URL}"
   },
   libravatarDefaultImage: "${LIBRAVATAR_DEFAULT_IMAGE:-robohash}",
+  disallowCustomDisplayName: "${DISALLOW_CUSTOM_DISPLAY_NAME:-false}",
   oidcConfig: {
     authority: "${OIDC_ISSUER}",
     clientId: "${OIDC_CLIENT_ID:-Frontend}",

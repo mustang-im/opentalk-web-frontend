@@ -12,6 +12,7 @@ window.config = {
   userSurveyUrl: '${USER_SURVEY_URL}',
   userSurveyApiKey: '${USER_SURVEY_API_KEY}',
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
+  disallowCustomDisplayName: '${DISALLOW_CUSTOM_DISPLAY_NAME}',
   beta: {
     isBeta: '${IS_BETA_RELEASE:-true}',
     badgeUrl: "${BETA_BADGE_URL}"

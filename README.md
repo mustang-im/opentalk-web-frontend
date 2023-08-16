@@ -60,6 +60,7 @@ frontend                                                                        
 | IMPRINT_URL             | no      |                                                   | The URL to the imprint page |
 | DATA_PROTECTION_URL             | no      |                                                   | The URL to the data protection page |
 | ACCOUNT_MANAGEMENT_URL             | no      |                                                   | The account management url for use the dashboard menu, if provider.active is true |
+| DISALLOW_CUSTOM_DISPLAY_NAME  | no  | false                                             | Disable editing of display name in profile and lobby page |
 
 ## Use yarn to build a local version
 
@@ -90,6 +91,8 @@ window.config = {
     },
     // defaultImage for the Avatar, possible values: '404', 'mm', 'monsterid', 'wavatar', 'retro', 'robohash', 'pagan',
     "libravatarDefaultImage": 'robohash',
+    // disable edditing the display name field in the dashboard profile and lobby page
+    disallowCustomDisplayName: '${DISALLOW_CUSTOM_DISPLAY_NAME}',
     // OIDC Config
     "oidcConfig": {
         // Authority URL (used for discovery using AUTHORITY/.well-known/openid-configuration)
