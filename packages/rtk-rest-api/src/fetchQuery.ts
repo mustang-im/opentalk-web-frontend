@@ -121,7 +121,7 @@ function fetchQuery({
     const argObject = typeof arg == 'string' ? { url: arg } : arg;
     const {
       method = 'GET' as const,
-      headers = new Headers(),
+      headers = new Headers({}),
       body = undefined,
       params = undefined,
       responseHandler = 'json' as const,

@@ -2,16 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { BreakoutRoomId, RoomId } from '@opentalk/common';
-import { selectIsAuthed } from '@opentalk/react-redux-appauth';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import RoomLoadingView from '../../commonComponents/RoomLoadingView';
 import LobbyView from '../../components/LobbyView';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { startRoom } from '../../store/commonActions';
 import { ConnectionState, selectInviteId, selectRoomConnectionState } from '../../store/slices/roomSlice';
-import { selectDisplayName } from '../../store/slices/userSlice';
+import { selectDisplayName, selectIsAuthenticated } from '../../store/slices/userSlice';
+import RoomLoadingView from './fragments/RoomLoadingView';
 
 const MeetingView = React.lazy(() => import('../../components/MeetingView'));
 const WaitingView = React.lazy(() => import('../../components/WaitingView'));
@@ -24,7 +22,7 @@ const RoomPage = () => {
   };
 
   const inviteCode = useAppSelector(selectInviteId);
-  const isAuthenticated = useAppSelector(selectIsAuthed);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const displayName = useAppSelector(selectDisplayName);
   const connectionState = useAppSelector(selectRoomConnectionState);
 
@@ -34,45 +32,23 @@ const RoomPage = () => {
       return <LobbyView />;
     }
     switch (connectionState) {
+      // Regular state machine flow
+      case ConnectionState.Initial:
       case ConnectionState.Setup:
-        // try to reconnect
-        dispatch(
-          startRoom({
-            roomId,
-            breakoutRoomId: breakoutRoomId || null,
-            displayName,
-            inviteCode,
-          })
-        ).catch((e) => {
-          console.error('meeting page - connecting - auth error', e);
-          //TODO error notification
-        });
-        return <RoomLoadingView />;
+        return <LobbyView />;
       case ConnectionState.Starting:
         return <RoomLoadingView />;
       case ConnectionState.Online:
       case ConnectionState.Leaving:
         return <MeetingView />;
+      case ConnectionState.Left:
+        return <LobbyView />;
+      case ConnectionState.Failed:
+        return <RoomLoadingView />;
+      // Exception states
       case ConnectionState.ReadyToEnter:
       case ConnectionState.Waiting:
         return <WaitingView />;
-      case ConnectionState.Initial:
-      case ConnectionState.Left:
-        return <LobbyView />;
-      case ConnectionState.Reconnecting:
-        dispatch(
-          startRoom({
-            roomId,
-            breakoutRoomId: breakoutRoomId || null,
-            displayName,
-            inviteCode,
-          })
-        ).catch((e) => {
-          console.error('meeting page - reconnecting error', e);
-        });
-        return <RoomLoadingView />;
-      case ConnectionState.Failed:
-        return <LobbyView />;
       case ConnectionState.Blocked:
         return <RoomLoadingView />;
       default:

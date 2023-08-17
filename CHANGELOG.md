@@ -5,7 +5,6 @@
 - Fix: future meetings displayed in past tabs (!1057)
 - Fix functionality to set avatar default image (!1034)
 - Remove extra space from url in MeetinPopover.tsx (!1050)
-- Get rid of login popup and remove redux-persist (!1030)
 - Add missing documentation for ACCOUNT_MANAGEMENT_URL (!1036)
 - Fix error handling on update displayname in dashboard (!1026)
 - Fix unhandled shared folder update message (!1010)
@@ -36,9 +35,10 @@
 - Fix rerendering issue with chat and participant tab (!1032)
 - "You are next" notification in the talking stick no longer auto close (!1027)
 - Optimized lobby field wording (!1028)
-- Notification for own message in group chat is no longer shown. (!1029)
+- Notification for own message in group chat is no longer shown (!1029)
 - Fix hotkeys not working as expected (!1040)
 - Fix timer countdown for the moderator (!1031)
+- Automatic reconnection attempt every 5 seconds when connection breaks (!1059)
 
 ### New Features
 

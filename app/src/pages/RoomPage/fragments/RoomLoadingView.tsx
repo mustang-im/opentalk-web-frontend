@@ -5,8 +5,9 @@ import { Container as MuiContainer, Stack, styled, CircularProgress, Typography 
 import { useMemo } from 'react';
 import { Trans } from 'react-i18next';
 
-import { useAppSelector } from '../hooks';
-import { ConnectionState, selectRoomConnectionState } from '../store/slices/roomSlice';
+import { ReconnectionDialog } from '../../../components/ReconnectionDialog';
+import { useAppSelector } from '../../../hooks';
+import { ConnectionState, selectRoomConnectionState } from '../../../store/slices/roomSlice';
 
 const Container = styled(MuiContainer)(({ theme }) => ({
   display: 'flex',
@@ -36,8 +37,6 @@ const RoomLoadingView = () => {
         return 'room-loading-setup';
       case ConnectionState.Starting:
         return 'room-loading-starting';
-      case ConnectionState.Reconnecting:
-        return 'room-loading-reconnect';
       case ConnectionState.Blocked:
         return 'room-loading-blocked';
       default:
@@ -48,14 +47,20 @@ const RoomLoadingView = () => {
   return (
     <Container>
       <Stack spacing={2} alignItems="center">
-        <CircularProgress color={'primary'} size={'8rem'} />
-        <Trans
-          i18nKey={connectionStateKey}
-          components={{
-            title: <Title variant="h4" />,
-            bodyText: <Text variant="h1" />,
-          }}
-        />
+        {connectionState === ConnectionState.Failed ? (
+          <ReconnectionDialog />
+        ) : (
+          <>
+            <CircularProgress color={'primary'} size={'8rem'} />
+            <Trans
+              i18nKey={connectionStateKey}
+              components={{
+                title: <Title variant="h4" />,
+                bodyText: <Text variant="h1" />,
+              }}
+            />
+          </>
+        )}
       </Stack>
     </Container>
   );

@@ -105,11 +105,11 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
     }
     switch (e.code) {
       case 1000:
-      case 1001:
         // normal disconnect
         this.eventEmitter.emit('connectionstatechange', 'closed');
         break;
 
+      case 1001: // Either the server or client will become unavailable.
       case 1005: // No status / debug disconnect
       case 1006: // Abnormal closure
       case 1007: // Unsupported payload

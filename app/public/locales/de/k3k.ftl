@@ -863,3 +863,6 @@ data-protection-label = Datenschutz
 
 version-label = Produktversion - {$version}
 dev-version = (Vorschau)
+
+reconnection-loop-dialogbox-title = Verbindung wird erneut aufgebaut
+reconnection-loop-abort-button = Abbrechen

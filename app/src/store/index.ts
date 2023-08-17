@@ -23,7 +23,7 @@ import participantsReducer from './slices/participantsSlice';
 import pollReducer from './slices/pollSlice';
 import protocolReducer from './slices/protocolSlice';
 import recordingReducer from './slices/recordingSlice';
-import roomReducer from './slices/roomSlice';
+import roomReducer, { roomMiddleware } from './slices/roomSlice';
 import sharedFolderReducer from './slices/sharedFolderSlice';
 import slotReducer from './slices/slotSlice';
 import speedMeterReducer from './slices/speedMeterSlice';
@@ -38,6 +38,7 @@ const middleware: Array<Middleware> = [
   rtkQueryErrorLoggerMiddlware,
   mediaSubscriberMiddleware.middleware,
   timerMiddleware.middleware,
+  roomMiddleware.middleware,
 ];
 
 const logger = () => (next: Dispatch) => (action: AnyAction) => {
