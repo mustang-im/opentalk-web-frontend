@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FetchRequestError, ParticipantId, RoomId } from '@opentalk/common';
-import { auth_error, EventTypeError } from '@opentalk/react-redux-appauth';
+import { FetchRequestError, notifications, ParticipantId, RoomId } from '@opentalk/common';
+import { logged_out } from '@opentalk/react-redux-appauth';
 import { fetchQuery, createOpenTalkApiWithReactHooks } from '@opentalk/rest-api-rtk-query';
 import { createAsyncThunk, isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
@@ -105,34 +105,16 @@ const baseQuery = fetchQuery({
   },
 });
 
-const baseQueryWithReauth: ReturnType<typeof fetchQuery> = async (args, api, extraOptions) => {
-  const result = await baseQuery(args, api, extraOptions);
-  return result;
-};
-
-export const restApi = createOpenTalkApiWithReactHooks(baseQueryWithReauth);
+export const restApi = createOpenTalkApiWithReactHooks(baseQuery);
 
 export const rtkQueryErrorLoggerMiddlware: Middleware =
   ({ dispatch }) =>
   (next) =>
   (action) => {
-    // If rtk query get rejected dispatch auth error
-    if (isRejectedWithValue(action)) {
-      if (action.payload.status === 401) {
-        dispatch(
-          auth_error({
-            name: EventTypeError.SessionExpired,
-            message: `${i18next.t('error-session-expired-message')}`,
-          })
-        );
-      } else if (action.payload.status >= 500) {
-        dispatch(
-          auth_error({
-            name: EventTypeError.SystemCurrentlyUnavailable,
-            message: `${i18next.t('error-system-currently-unavailable')}`,
-          })
-        );
-      }
+    // If rtk query get rejected with 401 error, user will be logged out with notification error
+    if (isRejectedWithValue(action) && (action.payload.status === 401 || action.payload.status >= 500)) {
+      dispatch(logged_out());
+      notifications.error(i18next.t('error-system-currently-unavailable'));
     }
     return next(action);
   };

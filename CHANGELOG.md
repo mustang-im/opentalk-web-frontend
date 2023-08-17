@@ -5,7 +5,6 @@
 - Fix: future meetings displayed in past tabs (!1057)
 - Fix functionality to set avatar default image (!1034)
 - Remove extra space from url in MeetinPopover.tsx (!1050)
-- Get rid of login popup and remove redux-persist (!1030)
 - Add missing documentation for ACCOUNT_MANAGEMENT_URL (!1036)
 - Fix error handling on update displayname in dashboard (!1026)
 - Fix unhandled shared folder update message (!1010)
