@@ -225,37 +225,13 @@ cleanup:review-app:
     entrypoint: ['']
   tags:
     - kubernetes
+  before_script:
+    - apk add --update curl && rm -rf /var/cache/apk/*
+    - apk add jq
   script:
-    - helm uninstall frontend-$CI_MERGE_REQUEST_IID -n review-latest
-
-# todo delete specific container when MR is merged
-# cleanup:container-image:
-#  stage: cleanup
-#  image: docker:dind
-#  variables:
-#    IMAGE_TAG: ${CI_MERGE_REQUEST_IID}_${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-#  rules:
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
-#           $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
-#           $CI_PIPELINE_SOURCE == 'push'
-#  allow_failure: true
-#  before_script:
-#    - apk add --update curl && rm -rf /var/cache/apk/*
-#    - apk add jq
-#  script:
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#    - docker rmi $CI_REGISTRY_IMAGE:${IMAGE_TAG} || true
-#    - |
-#      SCOPE="repository:${CI_REGISTRY_IMAGE}:delete"
-#      echo $CI_REGISTRY_USER
-#      echo $CI_REGISTRY_IMAGE
-#      echo $CI_REGISTRY
-#      echo $IMAGE_TAG
-#      TOKEN=`curl --request GET --user "${CI_REGISTRY_USER}:${CI_JOB_TOKEN}" \
-#              "${CI_SERVER_URL}/jwt/auth?service=container_registry&scope=${SCOPE}" | jq -r .token`
-#
-#      curl --request DELETE --header "Authorization: Bearer ${TOKEN}" \
-#        --header "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-#        "https://${CI_REGISTRY}/v2/${CI_REGISTRY_IMAGE}/tags/reference/${IMAGE_TAG}"
-#  services:
-#    - docker:dind
+    - API_MR_URL="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests"
+    - |
+      MERGE_REQUEST_IID=`curl --header "PRIVATE-TOKEN: ${READ_API_TOKEN}" "${API_MR_URL}?scope=all&state=merged" | \
+            jq --arg COMMIT_SHA $CI_COMMIT_SHA '.[] | select(.merge_commit_sha == $COMMIT_SHA).iid'`
+    - echo $MERGE_REQUEST_IID
+    - helm uninstall frontend-$MERGE_REQUEST_IID -n review-latest
