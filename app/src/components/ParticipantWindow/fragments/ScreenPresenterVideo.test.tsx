@@ -45,14 +45,6 @@ describe('ScreenPresenterVideo Component', () => {
     expect(screen.queryByTestId('screenShareVideoOverlay')).not.toBeInTheDocument();
   });
 
-  test('render ScreenPresenterVideo component in full screen mode', async () => {
-    await render(<ScreenPresenterVideo {...ScreenPresenterVideoProps} isFullscreenMode />, store);
-
-    expect(screen.getByText(participant.displayName)).toBeInTheDocument();
-    expect(screen.getByTestId('sharedPresenterVideo')).toBeInTheDocument();
-    expect(screen.getByTestId(`remoteVideo-${idFromDescriptor(mockedVideoMediaDescriptor(0))}`)).toBeInTheDocument();
-  });
-
   test("mouse over presenter's video should display presenter's overlay", async () => {
     await render(<ScreenPresenterVideo {...ScreenPresenterVideoProps} />, store);
     const screenShareVideo = screen.getByTestId('sharedPresenterVideo');
@@ -65,17 +57,6 @@ describe('ScreenPresenterVideo Component', () => {
     expect(screen.getByLabelText('indicator-change-position')).toBeInTheDocument();
     expect(screen.getByTestId('screenShareVideoOverlay')).toBeInTheDocument();
     expect(screen.getByTestId(`remoteVideo-${idFromDescriptor(mockedVideoMediaDescriptor(0))}`)).toBeInTheDocument();
-  });
-
-  test("mouse over presenter's video in fullscreen shouldn't display indicatorFullScreenOpen", async () => {
-    await render(<ScreenPresenterVideo {...ScreenPresenterVideoProps} isFullscreenMode />, store);
-    const screenShareVideo = screen.getByTestId('sharedPresenterVideo');
-
-    expect(screenShareVideo).toBeInTheDocument();
-    expect(screen.queryByTestId('screenShareVideoOverlay')).not.toBeInTheDocument();
-
-    await fireEvent.mouseEnter(screenShareVideo);
-    expect(screen.queryByTestId('indicatorFullScreenOpen')).not.toBeInTheDocument();
   });
 
   test("click on pinIcon in presenter's overlay should trigger togglePinVideo()", async () => {

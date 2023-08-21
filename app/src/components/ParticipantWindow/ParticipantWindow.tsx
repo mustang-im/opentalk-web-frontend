@@ -9,7 +9,7 @@ import { useMemo, useState } from 'react';
 import NameTile from '../../commonComponents/NameTile/NameTile';
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../provider/FullscreenProvider';
-import { selectSubscriberById } from '../../store/slices/mediaSubscriberSlice';
+import { selectSubscriberStateById } from '../../store/slices/mediaSubscriberSlice';
 import { selectParticipantName } from '../../store/slices/participantsSlice';
 import HandRaisedIndicator from './fragments/HandRaisedIndicator';
 import ParticipantVideo from './fragments/ParticipantVideo';
@@ -58,9 +58,19 @@ const ParticipantWindow = ({
     () => ({ participantId: participantId, mediaType: MediaSessionType.Video }),
     [participantId]
   );
-  const videoSubscriber = useAppSelector(selectSubscriberById(videoDescriptor));
+  const { active: audioActive } = useAppSelector(selectSubscriberStateById(videoDescriptor, 'audio'));
 
   const handleDisplayOverlay = (show: boolean) => !alwaysShowOverlay && setActiveOverlay(show);
+
+  const videoTile = useMemo(() => {
+    return (
+      <ParticipantVideo
+        participantId={participantId}
+        presenterVideoIsActive={activePresenter}
+        isThumbnail={isThumbnail}
+      />
+    );
+  }, [participantId, activePresenter, isThumbnail]);
 
   return (
     <Container
@@ -68,14 +78,10 @@ const ParticipantWindow = ({
       onMouseLeave={() => handleDisplayOverlay(false)}
       data-testid="ParticipantWindow"
     >
-      <ParticipantVideo
-        participantId={participantId}
-        presenterVideoIsActive={activePresenter}
-        isThumbnail={isThumbnail}
-      />
+      {videoTile}
       <VideoOverlay participantId={participantId} active={activeOverlay && !fullscreenHandle.active} />
       {!fullscreenHandle.active && (
-        <NameTile audioOn={!!videoSubscriber?.audio} displayName={displayName || ''} className="positionBottom" />
+        <NameTile audioOn={audioActive} displayName={displayName || ''} className="positionBottom" />
       )}
       <HandRaisedBox>
         <HandRaisedIndicator participantId={participantId} />

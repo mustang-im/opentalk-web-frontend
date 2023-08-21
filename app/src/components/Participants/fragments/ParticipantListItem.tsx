@@ -35,7 +35,7 @@ import { banParticipant, kickParticipant, enableWaitingRoom } from '../../../api
 import IconButton from '../../../commonComponents/IconButton';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
-import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
@@ -126,18 +126,24 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
   const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
 
-  const subscriberVideo = useAppSelector(
-    selectSubscriberById({
-      participantId: participant.id,
-      mediaType: MediaSessionType.Video,
-    })
+  const { active: audioActive } = useAppSelector(
+    selectSubscriberStateById(
+      {
+        participantId: participant.id,
+        mediaType: MediaSessionType.Video,
+      },
+      'audio'
+    )
   );
 
-  const subscriberScreen = useAppSelector(
-    selectSubscriberById({
-      participantId: participant.id,
-      mediaType: MediaSessionType.Screen,
-    })
+  const { active: screenShareActive } = useAppSelector(
+    selectSubscriberStateById(
+      {
+        participantId: participant.id,
+        mediaType: MediaSessionType.Screen,
+      },
+      'video'
+    )
   );
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -234,11 +240,9 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
 
   const renderIcon = useCallback(() => {
     const isParticipantMe = participant.id === ownId;
-    const isParticipantScreenShareEnabled = subscriberScreen?.video || false;
-    const isParticipantAudioEnabled = subscriberVideo?.audio || false;
 
-    const isScreenShareEnabled = isParticipantMe ? ownScreenShareEnabled : isParticipantScreenShareEnabled;
-    const isAudioEnabled = isParticipantMe ? ownAudioEnabled : isParticipantAudioEnabled;
+    const isScreenShareEnabled = isParticipantMe ? ownScreenShareEnabled : screenShareActive;
+    const isAudioEnabled = isParticipantMe ? ownAudioEnabled : audioActive;
 
     if (participant.handIsUp) {
       return <RaiseHandOnIcon />;
@@ -248,7 +252,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
       return isSipParticipant ? <PhoneIcon /> : <MicOnIcon />;
     }
     return isSipParticipant ? <PhoneOffIconStyled /> : <MicOffIconStyled />;
-  }, [participant, subscriberVideo, subscriberScreen, ownAudioEnabled, ownScreenShareEnabled]);
+  }, [participant, audioActive, screenShareActive, ownAudioEnabled, ownScreenShareEnabled]);
 
   const renderMenu = () => (
     <>

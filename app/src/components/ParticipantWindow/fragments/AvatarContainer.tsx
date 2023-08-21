@@ -2,8 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Grid } from '@mui/material';
-import { ParticipantAvatar } from '@opentalk/common';
-import React from 'react';
+import { ParticipantAvatar, ParticipantId, ParticipationKind } from '@opentalk/common';
+
+import { useAppSelector } from '../../../hooks';
+import {
+  selectParticipantAvatarUrl,
+  selectParticipantName,
+  selectParticipationKind,
+} from '../../../store/slices/participantsSlice';
 
 const Container = styled(Grid)({
   transition: 'all 300ms linear',
@@ -18,22 +24,26 @@ const Avatar = styled(ParticipantAvatar)(({ theme }) => ({
 }));
 
 interface AvatarContainerProps {
-  children: string;
-  avatarUrl?: string;
-  isSipParticipant?: boolean;
+  participantId: ParticipantId;
 }
 
-export const AvatarContainer = ({ avatarUrl, children, isSipParticipant = false }: AvatarContainerProps) => (
-  <Container
-    container
-    flexDirection={'column'}
-    justifyContent={'center'}
-    alignItems={'center'}
-    flexWrap={'nowrap'}
-    data-testid="avatarContainer"
-  >
-    <Avatar src={avatarUrl} isSipParticipant={isSipParticipant}>
-      {children}
-    </Avatar>
-  </Container>
-);
+export const AvatarContainer = ({ participantId }: AvatarContainerProps) => {
+  const displayName = useAppSelector(selectParticipantName(participantId));
+  const avatarUrl = useAppSelector(selectParticipantAvatarUrl(participantId));
+  const participationKind = useAppSelector(selectParticipationKind(participantId));
+
+  return (
+    <Container
+      container
+      flexDirection={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      flexWrap={'nowrap'}
+      data-testid="avatarContainer"
+    >
+      <Avatar src={avatarUrl} isSipParticipant={participationKind === ParticipationKind.Sip}>
+        {displayName || ''}
+      </Avatar>
+    </Container>
+  );
+};

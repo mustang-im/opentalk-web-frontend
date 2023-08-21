@@ -8,6 +8,7 @@ import {
   PayloadAction,
   createListenerMiddleware,
   TypedStartListening,
+  createSelector,
 } from '@reduxjs/toolkit';
 
 import { RootState, AppDispatch } from '..';
@@ -105,18 +106,54 @@ export const mediaSubscriberSlice = createSlice({
 export const { updated, mediaUpdated, closed, removed, limit, failed } = mediaSubscriberSlice.actions;
 
 export const mediaSubscribersSelectors = mediaSubscriberAdapter.getSelectors<RootState>((state) => state.subscribers);
-export const selectUnmutedSubscribers = (state: RootState) =>
-  mediaSubscribersSelectors
-    .selectAll(state)
-    .filter(({ audio, mediaType }) => audio && mediaType === MediaSessionType.Video);
 export const selectAllSubscribers = (state: RootState) => mediaSubscribersSelectors.selectAll(state);
+export const selectUnmutedSubscribers = createSelector(selectAllSubscribers, (subscribers) =>
+  subscribers.filter(({ audio, mediaType }) => audio && mediaType === MediaSessionType.Video)
+);
+
 export const selectSubscriberById = (descriptor: MediaDescriptor) => (state: RootState) =>
   mediaSubscribersSelectors.selectById(state, idFromDescriptor(descriptor));
 
-export const selectIsSubscriberOnlineByDescriptor = (descriptor: MediaDescriptor) => (state: RootState) => {
-  const subscriber = mediaSubscribersSelectors.selectById(state, idFromDescriptor(descriptor));
-  const mediaConnectionState = subscriber?.subscriberState?.connection;
-  return mediaConnectionState !== undefined && mediaConnectionState !== 'new' && mediaConnectionState !== 'closed';
+export const selectSubscriberLiveById = (descriptor: MediaDescriptor, kind: 'audio' | 'video') => {
+  const sel = selectSubscriberById(descriptor);
+  return createSelector(sel, (subscriber: State | undefined): boolean => {
+    if (subscriber === undefined) {
+      return false;
+    }
+    return kind === 'video' ? subscriber.subscriberState.videoRunning : subscriber.subscriberState.audioRunning;
+  });
+};
+
+export const selectSubscriberStateById = (descriptor: MediaDescriptor, kind: 'audio' | 'video') => {
+  const sel = selectSubscriberById(descriptor);
+  return createSelector(
+    sel,
+    (
+      subscriber: State | undefined
+    ): {
+      active: boolean;
+      error: undefined | media.MediaError;
+      limit: VideoSetting;
+    } => {
+      if (subscriber === undefined) {
+        return { active: false, error: undefined, limit: VideoSetting.High };
+      }
+
+      return {
+        active: kind === 'video' ? subscriber.video && subscriber.limit !== VideoSetting.Off : subscriber.audio,
+        limit: subscriber.limit,
+        error: subscriber.error,
+      };
+    }
+  );
+};
+
+export const selectIsSubscriberOnlineByDescriptor = (descriptor: MediaDescriptor) => {
+  const sel = selectSubscriberById(descriptor);
+  return createSelector(sel, (subscriber) => {
+    const mediaConnectionState = subscriber?.subscriberState?.connection;
+    return mediaConnectionState !== undefined && mediaConnectionState !== 'new' && mediaConnectionState !== 'closed';
+  });
 };
 
 export const actions = mediaSubscriberSlice.actions;
