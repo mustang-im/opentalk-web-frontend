@@ -6,7 +6,7 @@ import { notifications } from '@opentalk/common';
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreateEventMutation, useCreateRoomInviteMutation, useLazyGetEventQuery } from '../../../api/rest';
+import { useCreateEventMutation, useLazyGetEventQuery } from '../../../api/rest';
 import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting';
 
 const Container = styled(Box)(({ theme }) => ({
@@ -20,7 +20,6 @@ const Container = styled(Box)(({ theme }) => ({
 
 const CreateDirectMeeting = () => {
   const [createEvent, { data: event, isLoading: createEventIsLoading, error }] = useCreateEventMutation();
-  const [createRoomInvite, { isLoading: createRoomInviteIsLoading }] = useCreateRoomInviteMutation();
   const { t } = useTranslation();
   const [getEvent, { data: updatedEvent, isLoading: getEventLoading, error: getEventError }] = useLazyGetEventQuery();
 
@@ -30,7 +29,7 @@ const CreateDirectMeeting = () => {
     const creationMinutes = creationDate.getMinutes().toString().padStart(2, '0');
 
     try {
-      const event = await createEvent({
+      await createEvent({
         title: `Ad-hoc Meeting ${creationHours}:${creationMinutes}`,
         description: '',
         isTimeIndependent: true,
@@ -38,11 +37,10 @@ const CreateDirectMeeting = () => {
         recurrencePattern: [],
         isAdhoc: true,
       }).unwrap();
-      await createRoomInvite({ id: event.room.id }).unwrap();
     } catch (err) {
       notifications.error(t('dashboard-meeting-notification-error'));
     }
-  }, [createEvent, createRoomInvite, t]);
+  }, [createEvent, t]);
 
   useEffect(() => {
     handleCreateRoom();
@@ -63,7 +61,7 @@ const CreateDirectMeeting = () => {
     </Stack>
   );
 
-  if (!event || createEventIsLoading || createRoomInviteIsLoading || error) {
+  if (!event || createEventIsLoading || error) {
     return renderLoading();
   }
 

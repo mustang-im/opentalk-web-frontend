@@ -29,6 +29,7 @@ import {
   RoomId,
   UserId,
   TimelessEvent,
+  RoomInvite,
 } from '@opentalk/rest-api-rtk-query';
 import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
 import { createStore as createStoreTlk, configureStore as configureStoreTlk } from '@reduxjs/toolkit';
@@ -275,3 +276,32 @@ export const eventMockedData: TimelessEvent = {
   updatedAt: '2022-04-06T13:57:38.793602Z' as DateTime,
   isAdhoc: false,
 };
+
+export const mockedExpiringDateRoomInvite: RoomInvite = {
+  inviteCode: 'string',
+  created: '2019-08-24T14:15:22Z' as DateTime,
+  createdBy: {
+    id: '497f6eca-6276-4993-bfeb-53cbbbba6f08' as UserId,
+    email: 'user@example.com' as Email,
+    title: 'string',
+    firstname: 'string',
+    lastname: 'string',
+    displayName: 'string',
+    avatarUrl: 'string',
+  },
+  updated: '2022-04-06T13:57:38.793602Z' as DateTime,
+  updatedBy: {
+    id: '497f6eca-6276-4993-bfeb-53cbbbba6f08' as UserId,
+    email: 'user@example.com' as Email,
+    title: 'string',
+    firstname: 'string',
+    lastname: 'string',
+    displayName: 'string',
+    avatarUrl: 'string',
+  },
+  room: '2fa2a266-7d97-4147-8f17-1e57105c70ea',
+  active: true,
+  expiration: '2022-04-06T13:57:38.793602Z' as DateTime,
+};
+
+export const mockedPermanentRoomInvite: RoomInvite = { ...mockedExpiringDateRoomInvite, expiration: null };

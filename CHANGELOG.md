@@ -2,6 +2,7 @@
 
 ### UI/UX Fixes
 
+- Fix guest link generation in the dashboard (!1066)
 - Fix: future meetings displayed in past tabs (!1057)
 - Fix functionality to set avatar default image (!1034)
 - Remove extra space from url in MeetinPopover.tsx (!1050)

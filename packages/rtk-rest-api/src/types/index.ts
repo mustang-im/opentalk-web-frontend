@@ -26,6 +26,7 @@ export type {
   UpdateRoomPayload,
   CreateRoomPayload,
   RoomAssets,
+  RoomInvite,
 } from './room';
 export type { EventInvite, CreateEventInvitePayload } from './eventInvite';
 export {

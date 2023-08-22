@@ -5,15 +5,23 @@ import { RoomId } from '@opentalk/rest-api-rtk-query';
 import { fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { createStore, render, screen, cleanup, eventMockedData } from '../../../utils/testUtils';
+import {
+  createStore,
+  render,
+  screen,
+  cleanup,
+  eventMockedData,
+  mockedPermanentRoomInvite,
+} from '../../../utils/testUtils';
 import CreateDirectMeeting from './CreateDirectMeeting';
 
 const mockCreateEvent = () => ({
   unwrap: jest.fn().mockResolvedValue(createMockEvent()),
 });
-
 const mockCreateEventInvite = jest.fn();
-const mockCreateRoomInvite = jest.fn();
+const mockCreateRoomInvite = () => ({
+  unwrap: jest.fn().mockResolvedValue(createMockedPermanentRoomInvites()),
+});
 const mockCreateSipConfig = jest.fn();
 
 const ROOM_ID = 'ROOM_ID' as RoomId;
@@ -27,6 +35,13 @@ const createMockEvent = () => ({
     id: ROOM_ID,
   },
 });
+
+const createMockedPermanentRoomInvites = () => [
+  {
+    ...mockedPermanentRoomInvite,
+    inviteCode: INVITE_CODE,
+  },
+];
 
 jest.mock('../../../api/rest', () => ({
   ...jest.requireActual('../../../api/rest'),
@@ -63,6 +78,14 @@ jest.mock('../../../api/rest', () => ({
         },
       ],
       isSuccess: true,
+    },
+  ],
+  useCreateRoomInviteMutation: () => [
+    mockCreateRoomInvite,
+    {
+      isLoading: false,
+      isSuccess: true,
+      status: 'uninitialized',
     },
   ],
   useGetMeTariffQuery: () => [
@@ -123,7 +146,7 @@ describe('Dashboard CreateDirectMeeting', () => {
     expect(mockWriteText).toHaveBeenCalledWith(INVITE_LINK);
   });
 
-  test('click on copy guest invite icon will copy the guest link', async () => {
+  test('click on copy guest invite icon will copy the guest link, if link exists', async () => {
     const mockWriteText = jest.fn((value) => Promise.resolve(value));
     Object.defineProperty(navigator, 'clipboard', {
       writable: true,

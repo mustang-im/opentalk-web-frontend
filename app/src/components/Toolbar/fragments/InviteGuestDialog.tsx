@@ -28,6 +28,7 @@ import { FormWrapper } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
 import { selectRoomId } from '../../../store/slices/roomSlice';
+import { composeInviteUrl } from '../../../utils/apiUtils';
 import CustomDateTimePicker from './CustomDateTimePicker';
 
 const theme = createOpenTalkTheme();
@@ -64,7 +65,7 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   const baseUrl = useAppSelector(selectBaseUrl);
   const roomId = useAppSelector(selectRoomId);
   const [createGuestLink, { data, reset, isSuccess }] = useCreateRoomInviteMutation();
-  const inviteLink = isSuccess && data ? `${baseUrl}/invite/${data.inviteCode}` : null;
+  const inviteUrl = isSuccess && data ? composeInviteUrl(baseUrl, data.inviteCode) : null;
 
   const endOfToday = dateFns.endOfDay(new Date());
   const minDate = dateFns.addMinutes(new Date(), 5);
@@ -99,16 +100,17 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
       expiration: expirationDate ? (expirationDate.toISOString() as DateTime) : undefined,
     })
       .unwrap()
-      .catch((e) => {
-        console.error(`failed to fetch invite. RoomId: ${id}, ExpirationDate: ${expirationDate}`, JSON.stringify(e));
-        notifications.error(t('error-general'));
+      .catch(() => {
+        notifications.error(t('global-copy-permanent-guest-link-error'));
       });
   };
 
   const copyToClipboard = () => {
-    if (inviteLink) {
-      navigator.clipboard.writeText(inviteLink);
+    if (inviteUrl) {
+      navigator.clipboard.writeText(inviteUrl.toString());
       notifications.success(t('global-copy-link-success'));
+    } else {
+      notifications.error(t('global-copy-permanent-guest-link-error'));
     }
   };
 
@@ -117,11 +119,11 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
       <InviteDialogTitle id="dialog-invite-guest-title" onClose={onClose}>
         {t('dialog-invite-guest-title')}
       </InviteDialogTitle>
-      {inviteLink ? (
+      {inviteUrl ? (
         <Stack>
           <DialogContent>
             <Typography style={{ color: theme.palette.secondary.dark }} gutterBottom>
-              {inviteLink}
+              {inviteUrl.toString()}
             </Typography>
           </DialogContent>
           <DialogActions>

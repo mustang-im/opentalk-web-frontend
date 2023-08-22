@@ -86,3 +86,20 @@ export interface RoomAsset {
 }
 
 export type RoomAssets = Array<RoomAsset>;
+
+export type RoomInvite = {
+  inviteCode: string;
+  room: string;
+  active: boolean;
+  expiration: DateTime | null;
+  created: DateTime;
+  createdBy: User;
+  updated: DateTime;
+  updatedBy: User;
+};
+
+export type RoomInvites = Array<RoomInvite>;
+
+export type CreateRoomInvitePayload = {
+  expiration?: DateTime;
+};

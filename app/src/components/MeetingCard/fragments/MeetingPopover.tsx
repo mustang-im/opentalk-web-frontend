@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
+  useLazyGetRoomInvitesQuery,
   useDeclineEventInviteMutation,
   useDeleteEventMutation,
   useDeleteEventSharedFolderMutation,
@@ -17,8 +18,8 @@ import {
 } from '../../../api/rest';
 import IconButton from '../../../commonComponents/IconButton';
 import { useAppSelector } from '../../../hooks';
-import { createPermanentGuestLink } from '../../../hooks/createPermanentGuestLink';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
+import { composeInviteUrl } from '../../../utils/apiUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
 import ConfirmDialog from '../../ConfirmDialog';
 import { MeetingCardFragmentProps } from '../MeetingCard';
@@ -65,7 +66,8 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
   const isFirstTryToDeleteSharedFolder = useRef(true);
   const baseUrl = useAppSelector(selectBaseUrl);
-  const inviteUrl = createPermanentGuestLink(roomId);
+
+  const [getRoomInvites, { data: invites, isLoading: isGetInvitesLoading }] = useLazyGetRoomInvitesQuery();
 
   const openPopupMenu = (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
     stopPropagation(mouseEvent);
@@ -85,18 +87,30 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
     navigate(`/dashboard/meetings/${eventId}`, { state: { ...getReferrerRouterState(window.location) } });
   };
 
-  const copyMeetingLink = () => {
+  const copyMeetingLink = (): void => {
     setAnchorEl(undefined);
     const link = `${baseUrl}/room/${roomId}`;
     navigator.clipboard.writeText(link);
     notifications.success(t('global-copy-link-success'));
   };
 
-  const copyGuestLink = () => {
-    setAnchorEl(undefined);
-    if (inviteUrl) {
-      navigator.clipboard.writeText(inviteUrl.toString());
-      notifications.success(t('global-copy-link-success'));
+  const getGuestLink = async () => {
+    if (roomId) {
+      try {
+        const invitesList = invites ? invites : await getRoomInvites({ roomId }).unwrap();
+        const permanentInvite = invitesList.find((invite) => invite.active && invite.expiration === null);
+
+        if (permanentInvite) {
+          const inviteURLString = composeInviteUrl(baseUrl, permanentInvite.inviteCode).toString();
+          navigator.clipboard.writeText(inviteURLString);
+          notifications.success(t('global-copy-link-success'));
+          setAnchorEl(undefined);
+        } else {
+          notifications.error(t('global-copy-permanent-guest-link-error'), { persist: true });
+        }
+      } catch (error) {
+        notifications.error(t('global-copy-permanent-guest-link-error'));
+      }
     }
   };
 
@@ -198,32 +212,28 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
       i18nKey: 'dashboard-meeting-card-popover-copy-link',
       action: copyMeetingLink,
     },
-    {
-      i18nKey: 'dashboard-meeting-card-popover-copy-guest-link',
-      action: copyGuestLink,
-    },
   ];
 
   const creatorMeetingOptionItems: IMeetingCardOptionItem[] = [
     { i18nKey: 'dashboard-meeting-card-popover-update', action: updateMeeting },
     ...meetingOptionItems,
+    //At this time requests for invites will only be available to creators in the dashboard - extended to moderator later
+    {
+      i18nKey: 'dashboard-meeting-card-popover-copy-guest-link',
+      action: getGuestLink,
+      //Prevents doing multiple requests while loading
+      disabled: isGetInvitesLoading,
+    },
     { i18nKey: 'dashboard-meeting-card-popover-delete', action: showDialog },
   ];
 
   const options = isMeetingCreator ? creatorMeetingOptionItems : meetingOptionItems;
   const renderMenuOptionItems = () =>
-    options
-      .filter((option) => (option.action === copyGuestLink && inviteUrl) || option.action !== copyGuestLink)
-      .map((option) => (
-        <MenuItem
-          disabled={option.disabled}
-          key={option.i18nKey}
-          onClick={option.action}
-          aria-label={t(option.i18nKey)}
-        >
-          {t(option.i18nKey)}
-        </MenuItem>
-      ));
+    options.map((option) => (
+      <MenuItem disabled={option.disabled} key={option.i18nKey} onClick={option.action} aria-label={t(option.i18nKey)}>
+        {t(option.i18nKey)}
+      </MenuItem>
+    ));
 
   return (
     <Stack flexDirection={'row'}>

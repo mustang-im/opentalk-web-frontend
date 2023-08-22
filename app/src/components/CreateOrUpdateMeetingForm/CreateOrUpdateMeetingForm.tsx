@@ -49,7 +49,6 @@ import * as yup from 'yup';
 
 import {
   useCreateEventMutation,
-  useCreateRoomInviteMutation,
   useLazyGetEventsQuery,
   useUpdateEventMutation,
   useCreateEventSharedFolderMutation,
@@ -99,7 +98,6 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const [createSharedFolder] = useCreateEventSharedFolderMutation();
   const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
 
-  const [createRoomInvite] = useCreateRoomInviteMutation();
   const navigate = useNavigate();
 
   const [overlappingEvent, setOverlappingEvent] = useState<SingleEvent>();
@@ -333,7 +331,6 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
         return;
       }
 
-      await createRoomInvite({ id: event.current.room.id }).unwrap();
       notifications.success(t('dashboard-meeting-notification-success-create', { event: event.current.title }));
       navigate(`/dashboard/meetings/update/${event.current.id}/1`, {
         state: { ...getReferrerRouterState(window.location) },
