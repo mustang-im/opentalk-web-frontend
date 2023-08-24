@@ -14,7 +14,7 @@ import { selectChatSearchValue } from '../../../store/slices/uiSlice';
 import ChatMessage from './ChatMessage';
 import NoSearchResult from './NoSearchResult';
 
-const ChatOrderedList = styled(List)<{ empty: boolean }>(({ theme, empty }) => ({
+const ChatOrderedList = styled(List)<{ empty?: boolean }>(({ theme, empty }) => ({
   flex: '1 1 auto',
   overflowY: 'auto',
   height: 0,
@@ -72,7 +72,7 @@ const ChatList = ({ scope, targetId, onReset }: ChatListProps) => {
     return (
       <>
         {chatSearchValue && searchedMessages.length === 0 && <NoSearchResult onReset={onReset} />}
-        <ChatOrderedList data-testid={'combined-messages'} empty={searchedMessages.length === 0}>
+        <ChatOrderedList data-testid={'combined-messages'} empty={searchedMessages.length === 0 || undefined}>
           {searchedMessages.map((chatMessage) => (
             <ListItem key={chatMessage.id} disableGutters>
               <ChatMessage message={chatMessage} />
