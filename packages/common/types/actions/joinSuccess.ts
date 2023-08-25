@@ -46,6 +46,7 @@ export interface JoinSuccessInternalState {
   timer?: TimerState;
   sharedFolder: SharedFolderData;
   eventInfo?: EventInfo;
+  participantsReady: ParticipantId[],
 }
 
 export interface JoinSuccessIncoming {

@@ -24,6 +24,7 @@ export interface TimerState {
   kind: TimerKind;
   readyCheckEnabled: boolean;
   startedAt: Timestamp;
+  readyStatus: boolean;
   style: TimerStyle;
   timerId: string;
 }
