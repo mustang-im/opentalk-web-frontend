@@ -109,7 +109,7 @@ export class LocalScreen extends BaseEventEmitter<LocalScreenEvent> {
   public release() {
     this.connection?.close();
     this.connection = undefined;
-    this.stream.getVideoTracks().forEach((t) => {
+    this.stream.getTracks().forEach((t) => {
       t.removeEventListener('ended', this.stoppedHandler);
       this.stream.removeTrack(t);
       t.stop();
