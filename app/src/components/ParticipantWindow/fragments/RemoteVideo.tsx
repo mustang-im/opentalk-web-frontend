@@ -5,15 +5,17 @@
 /*  Since we probably won't be able to provide a real time transcription for videos as of now, media-has-caption will be disabled for now.*/
 
 /* eslint-disable jsx-a11y/media-has-caption */
-import { CircularProgress, Grid, styled } from '@mui/material';
-import { VideoSetting } from '@opentalk/common';
+import { CircularProgress, Grid, Stack, styled, Tooltip } from '@mui/material';
+import { VideoSetting, WarningIcon } from '@opentalk/common';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useRef, VideoHTMLAttributes } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { useRemoteMedia } from '../../../hooks/media';
 import { idFromDescriptor, MediaDescriptor, requestVideoQuality } from '../../../modules/WebRTC';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
+import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
 
 const Container = styled(Grid)({
   width: '100%',
@@ -36,6 +38,9 @@ type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
 
 const RemoteVideo = ({ descriptor, mediaRef }: IRemoteVideoProps) => {
   const qualityMax = useAppSelector(selectQualityCap);
+  const { error } = useAppSelector(selectSubscriberStateById(descriptor, 'video'));
+  const { t } = useTranslation();
+
   const stream = useRemoteMedia(descriptor, 'video');
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -103,6 +108,16 @@ const RemoteVideo = ({ descriptor, mediaRef }: IRemoteVideoProps) => {
       requestQuality(VideoSetting.Off);
     };
   }, [handleResize]);
+
+  if (error) {
+    return (
+      <Tooltip title={t('media-subscription-failed') || ''}>
+        <Stack>
+          <WarningIcon />
+        </Stack>
+      </Tooltip>
+    );
+  }
 
   return (
     <Container

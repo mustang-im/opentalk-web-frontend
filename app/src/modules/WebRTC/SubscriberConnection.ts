@@ -114,7 +114,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       console.warn('reconnect timer is already set');
       return;
     }
-    console.debug(`Set reconnect timer for subscriber connection ${this.descriptor}`);
+    console.debug(`Set reconnect timer for subscriber connection`, this.descriptor);
     this.reconnectTimerHandle = setTimeout(this.iceRestart.bind(this), RECOVERY_TIMEOUT);
   }
   private stopReconnectTimer() {
@@ -128,8 +128,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private checkMediaCondition() {
     const hasBrokenTrack =
       (this.mediaConfig.audio && !this.subscriberState.audioRunning) ||
-      (this.mediaConfig.video && !this.subscriberState.videoRunning);
-
+      (this.mediaConfig.video && this.currentQuality !== VideoSetting.Off && !this.subscriberState.videoRunning);
     if (this.isActive() && hasBrokenTrack) {
       this.setReconnectTimer();
     } else {

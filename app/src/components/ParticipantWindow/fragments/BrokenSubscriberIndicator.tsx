@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { CameraOnIcon, ConnectionGoodIcon, MicOnIcon } from '@opentalk/common';
+import { CameraOnIcon, ConnectionGoodIcon, MediaSessionType, MicOnIcon, VideoSetting } from '@opentalk/common';
 import React, { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { MediaDescriptor } from '../../../modules/WebRTC';
-import { selectSubscriberById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectQualityCap } from '../../../store/slices/mediaSlice';
+import { selectSubscriberById, selectSubscriberHasVideoById } from '../../../store/slices/mediaSubscriberSlice';
 import { FailureBadge } from './FailureBadge';
 
 type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
@@ -18,8 +19,11 @@ const BrokenSubscriberIndicator = ({ descriptor }: IRemoteVideoProps) => {
   const subscriber = useAppSelector(selectSubscriberById(descriptor));
   const { t } = useTranslation();
   const subscriberState = subscriber?.subscriberState;
+  const qualityCap = useAppSelector(selectQualityCap);
+  const hasVideo = useAppSelector(selectSubscriberHasVideoById(descriptor));
+  const expectVideo = hasVideo && (descriptor.mediaType === MediaSessionType.Screen || qualityCap !== VideoSetting.Off);
 
-  if (subscriber === undefined || !(subscriber.audio || subscriber.video)) {
+  if (subscriber === undefined || !(subscriber.audio || expectVideo)) {
     return null;
   }
 
@@ -32,7 +36,7 @@ const BrokenSubscriberIndicator = ({ descriptor }: IRemoteVideoProps) => {
   }
 
   const audioBroken = subscriber.audio && !subscriberState.audioRunning;
-  const videoBroken = subscriber.video && !subscriberState.videoRunning;
+  const videoBroken = expectVideo && !subscriberState.videoRunning;
 
   if (!audioBroken && !videoBroken) {
     return null;

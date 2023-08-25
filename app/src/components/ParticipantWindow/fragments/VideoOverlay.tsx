@@ -2,9 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, styled, IconButton } from '@mui/material';
-import { MediaSessionType, ParticipantId } from '@opentalk/common';
-import { PinIcon, FullscreenViewIcon } from '@opentalk/common';
-import React, { MouseEventHandler, useCallback, useMemo } from 'react';
+import { PinIcon, FullscreenViewIcon, ParticipantId, MediaSessionType } from '@opentalk/common';
+import { MouseEventHandler, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
@@ -74,9 +73,14 @@ interface VideoOverlayProps {
 const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
   const userLayout = useAppSelector(selectCinemaLayout);
   const dispatch = useAppDispatch();
-  const mediaDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
-  const isOnline = useAppSelector(selectIsSubscriberOnlineByDescriptor(mediaDescriptor));
-  const hasPacketLoss = useAppSelector(selectStatsPacketLossByDescriptor(mediaDescriptor));
+  const screenDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Screen }), [participantId]);
+  const videoDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
+
+  const hasScreen = useAppSelector(selectIsSubscriberOnlineByDescriptor(screenDescriptor));
+  const hasVideo = useAppSelector(selectIsSubscriberOnlineByDescriptor(videoDescriptor));
+  const descriptor = hasScreen ? screenDescriptor : videoDescriptor;
+  const isOnline = hasScreen || hasVideo;
+  const hasPacketLoss = useAppSelector(selectStatsPacketLossByDescriptor(descriptor));
   const displayName = useAppSelector(selectParticipantName(participantId));
   const pinnedParticipantId = useAppSelector(selectPinnedParticipantId);
   const { t } = useTranslation();
@@ -98,12 +102,12 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
 
   const getOverlayButtons = () => (
     <IndicatorContainer item>
-      {isOnline && (active || hasPacketLoss) && <Statistics descriptor={mediaDescriptor} />}
+      {isOnline && (active || hasPacketLoss) && <Statistics descriptor={descriptor} />}
       {active && (
         <>
           {userLayout === LayoutOptions.Speaker && (
             <OverlayIconButton
-              color={pinnedParticipantId === participantId ? 'primary' : 'secondary'}
+              color={pinnedParticipantId === descriptor.participantId ? 'primary' : 'secondary'}
               onClick={togglePin}
               translate="no"
               aria-label={t(`indicator-pinned`, {
@@ -118,7 +122,7 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
           </OverlayIconButton>
         </>
       )}
-      <BrokenSubscriberIndicator descriptor={mediaDescriptor} />
+      <BrokenSubscriberIndicator descriptor={descriptor} />
     </IndicatorContainer>
   );
 

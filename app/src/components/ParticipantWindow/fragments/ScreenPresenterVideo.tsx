@@ -7,7 +7,7 @@ import React, { useState, useMemo } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
-import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectSubscriberHasVideoById } from '../../../store/slices/mediaSubscriberSlice';
 import { AvatarContainer } from './AvatarContainer';
 import { PresenterVideoPosition } from './ParticipantVideo';
 import { PresenterOverlay } from './PresenterOverlay';
@@ -55,10 +55,18 @@ interface ScreenPresenterVideoProps {
 const ScreenPresenterVideo = React.forwardRef<HTMLDivElement, ScreenPresenterVideoProps>(
   ({ participantId, isVideoPinned, togglePin, videoPosition, changeVideoPosition, isThumbnail, mediaRef }, ref) => {
     const videoDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
-    const { active, limit } = useAppSelector(selectSubscriberStateById(videoDescriptor, 'video'));
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     const qualityCap = useAppSelector(selectQualityCap);
-    const showVideo = active && limit !== VideoSetting.Off && qualityCap !== VideoSetting.Off;
+    const hasVideo = useAppSelector(selectSubscriberHasVideoById(videoDescriptor));
+    const showVideo = hasVideo && qualityCap !== VideoSetting.Off;
+
+    const videoTile = useMemo(() => {
+      return showVideo ? (
+        <RemoteVideo descriptor={videoDescriptor} mediaRef={mediaRef} />
+      ) : (
+        <AvatarContainer participantId={videoDescriptor.participantId} />
+      );
+    }, [showVideo, videoDescriptor, mediaRef]);
 
     return (
       <SharedPresenterVideo
@@ -77,11 +85,7 @@ const ScreenPresenterVideo = React.forwardRef<HTMLDivElement, ScreenPresenterVid
             changeVideoPosition={changeVideoPosition}
           />
         )}
-        {showVideo ? (
-          <RemoteVideo descriptor={videoDescriptor} mediaRef={mediaRef} />
-        ) : (
-          <AvatarContainer participantId={participantId} />
-        )}
+        {videoTile}
       </SharedPresenterVideo>
     );
   }
