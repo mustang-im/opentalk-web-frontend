@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Tooltip, ThemeProvider } from '@mui/material';
 import { ArrowDownIcon } from '@opentalk/common';
-import React, { MouseEvent, ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import IconButton from '../../../commonComponents/IconButton';
@@ -20,7 +20,7 @@ const ButtonContainer = styled('div')(({ theme }) => ({
 }));
 
 const ToolbarIconButton = styled(IconButton, {
-  shouldForwardProp: (prop) => !['isActive', 'isLobby'].includes(prop as string),
+  shouldForwardProp: (prop) => prop !== 'isActive' && prop !== 'isLobby',
 })<IButtonProps>(({ theme, isActive, isLobby }) => ({
   cursor: 'pointer',
   position: 'relative',
@@ -28,6 +28,15 @@ const ToolbarIconButton = styled(IconButton, {
   minWidth: 0,
   width: '2.5rem',
   height: '2.08rem',
+  '& .MuiSvgIcon-root': {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.4rem',
+    },
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: '3.25rem',
+    height: '2.704rem',
+  },
   ...(isActive && {
     background: theme.palette.secondary.lightest,
     '& svg': {
@@ -46,7 +55,7 @@ const ToolbarIconButton = styled(IconButton, {
 }));
 
 const ToggleButton = styled(IconButton, {
-  shouldForwardProp: (prop) => !['isActive', 'isLobby'].includes(prop as string),
+  shouldForwardProp: (prop) => prop !== 'isActive' && prop !== 'isLobby',
 })<IButtonProps>(({ theme, isActive, isLobby }) => ({
   backgroundColor: isActive ? theme.palette.text.secondary : theme.palette.secondary.main,
   padding: theme.spacing(0.4),
@@ -54,6 +63,11 @@ const ToggleButton = styled(IconButton, {
   position: 'absolute',
   bottom: '-0.25em',
   right: '-0.25em',
+  '& .MuiSvgIcon-root': {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.3rem',
+    },
+  },
   '& svg': {
     fill: isActive ? theme.palette.secondary.light : theme.palette.text.secondary,
     width: '0.5em',
@@ -64,6 +78,11 @@ const ToggleButton = styled(IconButton, {
     '& svg': {
       fill: isActive ? theme.palette.secondary.lightest : theme.palette.secondary.light,
     },
+  },
+  [theme.breakpoints.down('sm')]: {
+    right: '-0.65em',
+    width: '1.3em',
+    height: '1.3em',
   },
   ...(isLobby && {
     padding: theme.spacing(0.625),

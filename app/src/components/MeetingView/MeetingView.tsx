@@ -44,6 +44,9 @@ const ToolbarWrapper = styled(Box)(({ theme }) => ({
 const LocalVideoWrapper = styled(Box)(({ theme }) => ({
   position: 'fixed',
   bottom: 65,
+  [theme.breakpoints.down('sm')]: {
+    bottom: 87,
+  },
   width: 100,
   zIndex: theme.zIndex.mobileStepper,
 }));
