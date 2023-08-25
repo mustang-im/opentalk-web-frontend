@@ -49,7 +49,9 @@ const SpeakerWindow = ({ speakerWindowWidth, speakerWindowHeight }: SpeakerViewP
 
   return (
     <Container width={width} height={height} data-testid="SpeakerWindow1">
-      {currentSpeakerId && <ParticipantWindow participantId={currentSpeakerId} alwaysShowOverlay />}
+      {currentSpeakerId && (
+        <ParticipantWindow participantId={currentSpeakerId} alwaysShowOverlay mediaRef={`speaker-main`} />
+      )}
     </Container>
   );
 };

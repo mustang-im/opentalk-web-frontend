@@ -1,14 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Slide, Stack, styled, Tooltip } from '@mui/material';
-import { MediaSessionType, ParticipantId, VideoSetting, WarningIcon } from '@opentalk/common';
+import { Slide, styled } from '@mui/material';
+import { MediaSessionType, ParticipantId, VideoSetting } from '@opentalk/common';
 import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
-import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectSubscriberHasVideoById } from '../../../store/slices/mediaSubscriberSlice';
 import { AvatarContainer } from './AvatarContainer';
 import RemoteVideo from './RemoteVideo';
 import ScreenPresenterVideo from './ScreenPresenterVideo';
@@ -26,15 +25,17 @@ interface ParticipantVideoProps {
   participantId: ParticipantId;
   presenterVideoIsActive?: boolean;
   isThumbnail?: boolean;
+  mediaRef: string;
 }
 
-const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }: ParticipantVideoProps) => {
+const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail, mediaRef }: ParticipantVideoProps) => {
   const videoDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Video }), [participantId]);
   const screenDescriptor = useMemo(() => ({ participantId, mediaType: MediaSessionType.Screen }), [participantId]);
 
-  const videoSubscriber = useAppSelector(selectSubscriberStateById(videoDescriptor, 'video'));
-  const screenSubscriber = useAppSelector(selectSubscriberStateById(screenDescriptor, 'video'));
   const qualityCap = useAppSelector(selectQualityCap);
+  const hasCameraVideo = useAppSelector(selectSubscriberHasVideoById(videoDescriptor));
+  const showCamera = hasCameraVideo && qualityCap !== VideoSetting.Off;
+  const hasScreenVideo = useAppSelector(selectSubscriberHasVideoById(screenDescriptor));
 
   const containerRef = useRef(null);
   const [isVideoPinned, setIsVideoPinned] = useState<boolean>(false);
@@ -45,8 +46,6 @@ const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }
 
   const slideDirection = presenterVideoPosition === 'upperRight' ? 'down' : 'up';
   const isVisible = isVideoPinned || presenterVideoIsActive || showPresenterVideo;
-
-  const { t } = useTranslation();
 
   useEffect(() => {
     const timer = setTimeout(() => setShowPresenterVideo(false), 5000);
@@ -65,21 +64,10 @@ const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }
     setPresenterVideoPosition(positionsArray[nextIndex]);
   };
 
-  const mediaFailedError = (
-    <Tooltip title={t('media-subscription-failed') || ''}>
-      <Stack>
-        <WarningIcon />
-      </Stack>
-    </Tooltip>
-  );
-
-  if (screenSubscriber?.active && screenSubscriber?.limit !== VideoSetting.Off) {
-    if (screenSubscriber?.error) {
-      return mediaFailedError;
-    }
+  if (hasScreenVideo) {
     return (
       <Container onMouseMove={displayPresenterVideo} data-testid="participantSreenShareVideo" ref={containerRef}>
-        <RemoteVideo descriptor={screenDescriptor} />
+        <RemoteVideo descriptor={screenDescriptor} mediaRef={mediaRef} />
         <Slide direction={slideDirection} in={isVisible} mountOnEnter container={containerRef.current}>
           <ScreenPresenterVideo
             participantId={participantId}
@@ -88,17 +76,15 @@ const ParticipantVideo = ({ participantId, presenterVideoIsActive, isThumbnail }
             videoPosition={presenterVideoPosition}
             changeVideoPosition={movePresenterVideo}
             isThumbnail={isThumbnail}
+            mediaRef={`${mediaRef}-screen`}
           />
         </Slide>
       </Container>
     );
   }
 
-  if (videoSubscriber?.active && qualityCap !== VideoSetting.Off && videoSubscriber?.limit !== VideoSetting.Off) {
-    if (videoSubscriber?.error) {
-      return mediaFailedError;
-    }
-    return <RemoteVideo descriptor={videoDescriptor} />;
+  if (showCamera) {
+    return <RemoteVideo descriptor={videoDescriptor} mediaRef={mediaRef} />;
   }
 
   return <AvatarContainer participantId={participantId} />;

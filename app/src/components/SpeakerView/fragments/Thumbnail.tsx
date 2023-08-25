@@ -27,7 +27,15 @@ const ThumbnailContainer = styled('div')<{ width: number }>(({ width, theme }) =
   },
 }));
 
-export const Thumbnail = ({ participantId, width }: { participantId: ParticipantId; width: number }) => {
+export const Thumbnail = ({
+  participantId,
+  width,
+  index,
+}: {
+  participantId: ParticipantId;
+  width: number;
+  index: number;
+}) => {
   const pinnedParticipantId = useAppSelector(selectPinnedParticipantId);
   const dispatch = useAppDispatch();
 
@@ -38,7 +46,7 @@ export const Thumbnail = ({ participantId, width }: { participantId: Participant
 
   return (
     <ThumbnailContainer onClick={togglePin} width={width} data-testid={`thumbsVideo-${participantId}`}>
-      <ParticipantWindow participantId={participantId} isThumbnail={true} />
+      <ParticipantWindow participantId={participantId} isThumbnail={true} mediaRef={`thumb-${index}`} />
     </ThumbnailContainer>
   );
 };

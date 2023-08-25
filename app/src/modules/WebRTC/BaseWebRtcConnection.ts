@@ -38,7 +38,7 @@ export abstract class BaseWebRtcConnection extends BaseEventEmitter<ConnectionEv
 
   protected abstract configureQuality(quality: VideoSetting): void;
 
-  private updateQuality() {
+  public updateQuality() {
     const quality = Math.min(this.qualityTarget, this.qualityLimit);
     if (this.currentQuality === quality) {
       return;

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { MediaSessionState, MediaSessionType, VideoSetting } from '@opentalk/common';
 import { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types';
-import { debounce, isEqual, max, some } from 'lodash';
+import { debounce, isEqual, some } from 'lodash';
 
 import { BandwidthController } from './BandwidthController';
 import { BaseWebRtcConnection } from './BaseWebRtcConnection';
@@ -25,7 +25,6 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private mediaConfig: MediaSessionState;
   private stream: MediaStream | undefined;
   private subscriberState: SubscriberState = { audioRunning: false, videoRunning: false, connection: 'new' };
-  private qualityTargetCount: Array<number> = [];
 
   private readyHandlers: (({ stream, reason }: { stream?: MediaStream; reason?: string }) => void)[] = [];
 
@@ -37,7 +36,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private reconnectTimerHandle?: TimeoutId;
   private closeTimerHandle?: TimeoutId;
 
-  private readonly updateQualityTarget: () => void;
+  public readonly updateQualityTarget: (target: VideoSetting) => void;
 
   constructor(iceServers: RTCIceServer[], subscriberConfig: SubscriberConfig, signaling: MediaSignaling) {
     // quality setting needs to match the default setting of the backend
@@ -115,7 +114,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       console.warn('reconnect timer is already set');
       return;
     }
-    console.debug(`Set reconnect timer for subscriber connection ${this.descriptor}`);
+    console.debug(`Set reconnect timer for subscriber connection`, this.descriptor);
     this.reconnectTimerHandle = setTimeout(this.iceRestart.bind(this), RECOVERY_TIMEOUT);
   }
   private stopReconnectTimer() {
@@ -129,8 +128,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private checkMediaCondition() {
     const hasBrokenTrack =
       (this.mediaConfig.audio && !this.subscriberState.audioRunning) ||
-      (this.mediaConfig.video && !this.subscriberState.videoRunning);
-
+      (this.mediaConfig.video && this.currentQuality !== VideoSetting.Off && !this.subscriberState.videoRunning);
     if (this.isActive() && hasBrokenTrack) {
       this.setReconnectTimer();
     } else {
@@ -238,7 +236,7 @@ export class SubscriberConnection extends BaseWebRtcConnection {
     } else {
       this.stream = event.streams[0];
       this.stream.getTracks().forEach((track) => this.addTrackHandler(track));
-      this.updateQualityTarget();
+      this.updateQuality();
       this.readyHandlers.forEach((handler) => handler({ stream: this.stream }));
       this.readyHandlers = []; // clear when successful
     }
@@ -248,53 +246,15 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   /**
    * @returns {Promise<MediaStream>} That resolves once the first track is available on the MediaStream.
    */
-  public getMediaStream = () =>
-    new Promise<MediaStream>((resolve, reject) => {
-      if (this.stream) {
-        resolve(this.stream);
-      } else {
-        this.readyHandlers.push(({ stream, reason }) => {
-          stream ? resolve(stream) : reject(reason);
-        });
-      }
-    });
+  public getMediaStream = () => this.stream;
 
-  private _updateQualityTarget = () => {
-    const settings = this.qualityTargetCount.map((count, setting) => (count > 0 ? setting : VideoSetting.Off));
-    let maxQuality = max(settings);
-    if (maxQuality === undefined) {
-      maxQuality = VideoSetting.Off;
-    }
-
-    this.setQualityTarget(maxQuality);
+  private _updateQualityTarget = (target: VideoSetting) => {
+    this.setQualityTarget(target);
     this.updateCloseTimer();
   };
 
   public isActive() {
     return this.mediaConfig.audio || (this.mediaConfig.video && this.currentQuality !== VideoSetting.Off);
-  }
-
-  private releaseCallback = (target: VideoSetting) => () => {
-    const count = this.qualityTargetCount[target];
-    if (count === undefined || count < 1) {
-      console.error('release qualityTarget when none is reserved');
-      return;
-    }
-    this.qualityTargetCount[target] = count - 1;
-    this.updateQualityTarget();
-  };
-
-  public requestQuality(target: VideoSetting): (() => void) | undefined {
-    if (target === VideoSetting.Off) {
-      // no need to reserve
-      return undefined;
-    }
-
-    const count = this.qualityTargetCount[target] || 0;
-    this.qualityTargetCount[target] = count + 1;
-    this.updateQualityTarget();
-
-    return this.releaseCallback(target);
   }
 
   private async answerOffer(sdp: string) {

@@ -70,6 +70,8 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
   private readonly signaling: MediaSignaling;
   private readonly turnProvider: TurnProvider;
 
+  private readonly reservations: Map<string, { mediaId: MediaId; target: VideoSetting }> = new Map();
+
   /*
   This map hold the state of all known subscribers
   `connection` is set, when it is initiated until then
@@ -316,28 +318,75 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
    *
    * @param descriptor
    */
-  public async getMediaStream(descriptor: MediaDescriptor): Promise<MediaStream> {
+  public getMediaStream(descriptor: MediaDescriptor): MediaStream {
     const mediaId = idFromDescriptor(descriptor);
     const subscriber = this.subscribers.get(mediaId);
     if (subscriber === undefined) {
       throw new Error(`subscriber media (handle: ${mediaId}) not available`);
     }
 
-    const connection = subscriber.connection || (await (subscriber.action || this.createSubscriber(mediaId)));
+    if (subscriber.connection === undefined || subscriber.action !== undefined) {
+      throw new Error(`subscriber media (handle: ${mediaId}) is not yet connected`);
+    }
 
-    return connection.getMediaStream();
+    const stream = subscriber.connection.getMediaStream();
+
+    if (stream === undefined) {
+      throw new Error(`subscriber media (handle: ${mediaId}) is not yet ready - observe audioRunning / videoRunning`);
+    }
+
+    return stream;
   }
 
-  public async requestQuality(descriptor: MediaDescriptor, target: VideoSetting): Promise<(() => void) | undefined> {
+  public requestQuality(descriptor: MediaDescriptor, target: VideoSetting, mediaRef: string) {
+    const lastReservation = this.reservations.get(mediaRef);
     const mediaId = idFromDescriptor(descriptor);
+
+    if (lastReservation?.mediaId === mediaId && lastReservation.target === target) {
+      console.debug(`skip request for same target ${mediaRef} ${target} ${mediaId}`);
+      return;
+    }
+
+    if (lastReservation && lastReservation.mediaId !== mediaId) {
+      const oldSubscriber = this.subscribers.get(lastReservation.mediaId);
+      if (oldSubscriber !== undefined) {
+        oldSubscriber.connection?.updateQualityTarget(VideoSetting.Off);
+      }
+    }
+
     const subscriber = this.subscribers.get(mediaId);
+
+    if (target === VideoSetting.Off) {
+      this.reservations.delete(mediaRef);
+    } else {
+      this.reservations.set(mediaRef, { mediaId, target });
+    }
+
     if (subscriber === undefined) {
+      if (target === VideoSetting.Off) {
+        return;
+      }
       throw new Error(`subscriber media (handle: ${idFromDescriptor(descriptor)}) not available`);
     }
 
-    const connection = subscriber.connection || (await (subscriber.action || this.createSubscriber(mediaId)));
+    if (subscriber.connection) {
+      subscriber.connection.updateQualityTarget(this.currentTarget(mediaId));
+      return;
+    }
 
-    return connection.requestQuality(target);
+    if (!subscriber.action && target !== VideoSetting.Off) {
+      this.createSubscriber(mediaId).catch((e) => console.error('createSubscriber failed', e));
+    }
+  }
+
+  private currentTarget(mediaId: MediaId) {
+    let maxReservation = { target: VideoSetting.Off };
+    for (const reservation of this.reservations.values()) {
+      if (reservation.mediaId === mediaId && maxReservation.target < reservation.target) {
+        maxReservation = reservation;
+      }
+    }
+    return maxReservation.target;
   }
 
   private async createSubscriber(mediaId: MediaId): Promise<SubscriberConnection> {
@@ -392,6 +441,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
       connection.addEventListener('subscriberstatechanged', changeHandler);
       connection.addEventListener('qualityLimit', limitHandler);
 
+      connection.updateQualityTarget(this.currentTarget(mediaId));
       return connection;
     })().finally(() => {
       const subscriber = this.subscribers.get(mediaId);

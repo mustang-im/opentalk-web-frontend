@@ -8,7 +8,7 @@ import RemoteVideo from './RemoteVideo';
 describe('RemoteVideo', () => {
   const { store } = mockStore(1, { video: true });
   test('render without crashing', async () => {
-    await render(<RemoteVideo descriptor={mockedVideoMediaDescriptor(0)} />, store);
+    await render(<RemoteVideo descriptor={mockedVideoMediaDescriptor(0)} mediaRef="test" />, store);
     expect(screen.getByTestId(`remoteVideo-${idFromDescriptor(mockedVideoMediaDescriptor(0))}`)).toBeInTheDocument();
   });
 });

@@ -42,6 +42,7 @@ interface ParticipantWindowProps {
   activePresenter?: boolean;
   alwaysShowOverlay?: boolean;
   isThumbnail?: boolean;
+  mediaRef: string;
 }
 
 const ParticipantWindow = ({
@@ -49,6 +50,7 @@ const ParticipantWindow = ({
   activePresenter,
   alwaysShowOverlay,
   isThumbnail,
+  mediaRef,
 }: ParticipantWindowProps) => {
   const fullscreenHandle = useFullscreenContext();
   const displayName = useAppSelector(selectParticipantName(participantId));
@@ -68,9 +70,10 @@ const ParticipantWindow = ({
         participantId={participantId}
         presenterVideoIsActive={activePresenter}
         isThumbnail={isThumbnail}
+        mediaRef={mediaRef}
       />
     );
-  }, [participantId, activePresenter, isThumbnail]);
+  }, [participantId, activePresenter, isThumbnail, mediaRef]);
 
   return (
     <Container

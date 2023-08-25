@@ -53,8 +53,8 @@ const ThumbsRow = ({ thumbWidth, thumbsPerWindow }: ThumbsProps) => {
       {firstParticipantIndex > 0 && (
         <IconSlideButton direction="left" aria-label="navigate-to-left" onClick={slideLeft} />
       )}
-      {visibleParticipantIds.map((participantId) => (
-        <Thumbnail width={thumbWidth} key={participantId} participantId={participantId} />
+      {visibleParticipantIds.map((participantId, index) => (
+        <Thumbnail width={thumbWidth} key={participantId} participantId={participantId} index={index} />
       ))}
       {endIndex < participants.length && (
         <IconSlideButton direction="right" aria-label="navigate-to-right" onClick={slideRight} />

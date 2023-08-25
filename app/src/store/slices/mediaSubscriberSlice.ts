@@ -124,6 +124,16 @@ export const selectSubscriberLiveById = (descriptor: MediaDescriptor, kind: 'aud
   });
 };
 
+export const selectSubscriberHasVideoById = (descriptor: MediaDescriptor) => {
+  const sel = selectSubscriberById(descriptor);
+  return createSelector(sel, (subscriber: State | undefined): boolean => {
+    if (subscriber === undefined) {
+      return false;
+    }
+    return subscriber.video && subscriber.limit !== VideoSetting.Off;
+  });
+};
+
 export const selectSubscriberStateById = (descriptor: MediaDescriptor, kind: 'audio' | 'video') => {
   const sel = selectSubscriberById(descriptor);
   return createSelector(
