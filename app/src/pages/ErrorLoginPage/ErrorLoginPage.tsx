@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Container as MuiContainer, CssBaseline, Stack, styled, ThemeProvider, useTheme } from '@mui/material';
 import { WarningIcon } from '@opentalk/common';
+import { EventTypeError, useAuth } from '@opentalk/react-redux-appauth';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,11 +34,13 @@ interface ErrorLoginProps {
   error: Error;
 }
 
+const ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT = 2500;
+
 const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
-  const [displayLogin, setDisplayLogin] = useState<boolean>(false);
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { signOut } = useAuth();
 
   useEffect(() => {
     dispatch(hangUp());
@@ -45,8 +48,10 @@ const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
 
   const errorDetails = useMemo(() => {
     switch (error.name) {
-      case 'error_session_expired':
-        setDisplayLogin(true);
+      case EventTypeError.SessionExpired:
+        setTimeout(() => {
+          signOut();
+        }, ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT);
         return {
           name: t('error-session-expired'),
           message: t('error-session-expired-message'),
@@ -72,7 +77,6 @@ const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
           <Stack spacing={8} alignItems="center">
             <WarningIcon fill={theme.palette.common.white} sx={{ width: '6rem', height: '6rem' }} />
             {errorDetails && <Error title={errorDetails.name} description={errorDetails.message} />}
-            {displayLogin && <LoginButton />}
             <StyledLogoIcon />
           </Stack>
         </Container>

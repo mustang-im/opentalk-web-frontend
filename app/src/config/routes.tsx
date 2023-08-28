@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Typography } from '@mui/material';
-import { AuthCallback } from '@opentalk/react-redux-appauth';
+import { AuthCallback, selectIsAuthed, selectIsLoading, useAuth } from '@opentalk/react-redux-appauth';
 import i18next from 'i18next';
 import React, { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -69,15 +69,29 @@ const Redirect = ({ to }: { to: To }) => {
   return null;
 };
 
+const WAIT_FOR_REDIRECT_BEFORE_SIGNIN = 500; //ms
+
 const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const { signIn } = useAuth();
+  const isAuthenticated = useAppSelector(selectIsAuthed);
+  const isAuthLoading = useAppSelector(selectIsLoading);
+
+  useEffect(() => {
+    if (!isAuthenticated && !isAuthLoading) {
+      const timeout = setTimeout(() => {
+        localStorage.setItem('redirect-uri', window.location.pathname);
+        signIn();
+      }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
+      return () => clearTimeout(timeout);
+    }
+  }, [isAuthenticated, isAuthLoading]);
   if (isAuthenticated) {
     if (children !== undefined) {
       return <>{children}</>;
     }
     return <Outlet />;
   }
-  return <LoginPopup />;
+  return null;
 };
 
 type CreateRoutes = (redirectUri: string, popUpRedirect: string) => RouteObject[];
