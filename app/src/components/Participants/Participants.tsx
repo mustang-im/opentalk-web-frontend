@@ -5,14 +5,11 @@ import { Stack } from '@mui/material';
 import { automodStore, TalkingStickParticipantList } from '@opentalk/components';
 import React from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { selectTalkingStickParticipants } from '../../store/selectors';
-import { setParticipantsSearchValue } from '../../store/slices/uiSlice';
-import SearchTextField from '../SearchTextField';
-import ParticipantList from './fragments/ParticipantList';
+import ParticipantsContainer from './fragments/ParticipantsContainer';
 
 const Participants = () => {
-  const dispatch = useAppDispatch();
   const isAutomodActive = useAppSelector(automodStore.selectAutomodActiveState);
   const talkingStickParticipants = useAppSelector(selectTalkingStickParticipants);
 
@@ -21,10 +18,7 @@ const Participants = () => {
       {isAutomodActive ? (
         <TalkingStickParticipantList participants={talkingStickParticipants} />
       ) : (
-        <>
-          <SearchTextField onSearch={(v) => dispatch(setParticipantsSearchValue(v))} fullWidth showSort />
-          <ParticipantList />
-        </>
+        <ParticipantsContainer />
       )}
     </Stack>
   );
