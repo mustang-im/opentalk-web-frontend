@@ -70,6 +70,10 @@ const FormControlLabel = styled(MuiFormControlLabel)({
   justifyContent: 'space-between',
 });
 
+/**
+ * 
+ * @deprecated
+ */
 const ParticipantList = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
