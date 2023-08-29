@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, InputAdornment } from '@mui/material';
 import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu, setHotkeysEnabled } from '@opentalk/common';
-import React, { useRef, useState } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import TextField from '../../commonComponents/TextField';
@@ -14,6 +14,7 @@ interface SearchFieldProps {
   onSearch: (search: string) => void;
   fullWidth?: boolean;
   showSort?: boolean;
+  searchValue?: string;
 }
 
 export const items: SortItem[] = [
@@ -43,18 +44,16 @@ export const items: SortItem[] = [
   },
 ];
 
-const SearchTextField = ({ onSearch, fullWidth, showSort }: SearchFieldProps) => {
+const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: SearchFieldProps) => {
   const id = 'sort-search-participants';
   const { t } = useTranslation();
   const anchorEl = useRef(null);
-  const [search, setSearch] = useState<string>('');
   const [expanded, setExpanded] = useState<boolean>(false);
   const sortType = useAppSelector(selectParticipantsSortOption);
   const dispatch = useAppDispatch();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(event.target.value);
-    setSearch(event.target.value);
   };
 
   const handleClick = () => {
@@ -68,7 +67,7 @@ const SearchTextField = ({ onSearch, fullWidth, showSort }: SearchFieldProps) =>
   return (
     <TextField
       fullWidth={fullWidth}
-      value={search}
+      value={searchValue}
       onChange={handleSearchChange}
       size={'small'}
       onFocus={() => {
@@ -115,4 +114,4 @@ const SearchTextField = ({ onSearch, fullWidth, showSort }: SearchFieldProps) =>
   );
 };
 
-export default SearchTextField;
+export default memo(SearchTextField);
