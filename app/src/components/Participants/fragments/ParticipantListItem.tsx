@@ -7,7 +7,7 @@ import {
   ListItemAvatar as MuiListItemAvatar,
   ListItemText as MuiListItemText,
   Typography,
-  Grid,
+  Box,
   Badge,
 } from '@mui/material';
 import {
@@ -82,14 +82,15 @@ const PhoneOffIconStyled = styled(TelephoneStrokeIcon)({
   opacity: '0.5',
 });
 
-const ListItemText = styled(MuiListItemText)({
+const ListItemText = styled(MuiListItemText)(({ theme }) => ({
+  padding: theme.spacing(0, 1),
   '& p': {
     fontWeight: 400,
     lineHeight: 1,
   },
-});
+}));
 
-const IconsContainer = styled(Grid)({
+const IconsContainer = styled(Box)({
   alignItems: 'center',
   display: 'flex',
   '& svg': {
@@ -314,32 +315,29 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
 
   return (
     <ListItem>
-      <Grid container spacing={2} direction={'row'} wrap={'nowrap'}>
-        <Grid item>
-          <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
-        </Grid>
-        <Grid item xs zeroMinWidth>
-          <ListItemText
-            primary={
-              <Typography variant={'body1'} noWrap translate="no">
-                {participant?.displayName}
-              </Typography>
-            }
-            secondary={
-              <JoinedText variant={'caption'} translate="no">
-                {getContextText()}
-              </JoinedText>
-            }
-          />
-        </Grid>
-        {participant.id !== ownId && <Grid item>{renderMenu()}</Grid>}
+      <Box display='flex' flexWrap='nowrap' alignItems='center' width='100%'>
+        <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
+        <ListItemText
+          primary={
+            <Typography variant={'body1'} noWrap translate="no" mb={0.5}>
+              {participant?.displayName}
+            </Typography>
+          }
+          secondary={
+            <JoinedText variant={'caption'} translate="no">
+              {getContextText()}
+            </JoinedText>
+          }
+        />
+
+        {participant.id !== ownId && renderMenu()}
         {isProtocolEditor(participant) && (
-          <IconsContainer item>
+          <IconsContainer>
             <ProtocolIcon />
           </IconsContainer>
         )}
-        <IconsContainer item>{renderIcon()}</IconsContainer>
-      </Grid>
+        <IconsContainer>{renderIcon()}</IconsContainer>
+      </Box>
     </ListItem>
   );
 };
