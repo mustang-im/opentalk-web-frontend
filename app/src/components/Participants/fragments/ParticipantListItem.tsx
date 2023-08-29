@@ -25,7 +25,7 @@ import {
   TelephoneStrokeIcon,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Role } from '../../../api/types/incoming/control';
@@ -342,4 +342,4 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   );
 };
 
-export default ParticipantListItem;
+export default memo(ParticipantListItem);
