@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, memo } from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { useHotkeys } from '../../hooks/useHotkeys';
@@ -32,6 +32,11 @@ const Container = styled('div')(({ theme }) => ({
   },
 }));
 
+const CachedDebugPanel = memo(DebugPanel);
+const CachedRemoteAudioStreams = memo(RemoteAudioStreams);
+const CachedTimerPopover = memo(TimerPopover);
+const CachedInnerLayout = memo(InnerLayout);
+
 const MeetingView = () => {
   const debugMode = useAppSelector(selectDebugMode);
   const isCoffeeBreakOpen = useAppSelector(selectShowCoffeeBreakCurtain);
@@ -54,13 +59,13 @@ const MeetingView = () => {
         <CoffeeBreakView />
       ) : (
         <>
-          {debugMode && <DebugPanel />}
+          {debugMode && <CachedDebugPanel />}
 
-          {enableAudio && <RemoteAudioStreams />}
+          {enableAudio && <CachedRemoteAudioStreams />}
 
-          {!showCoffeeBreakCurtain && <TimerPopover anchorEl={anchorEl} />}
+          {!showCoffeeBreakCurtain && <CachedTimerPopover anchorEl={anchorEl} />}
 
-          <InnerLayout />
+          <CachedInnerLayout />
         </>
       )}
     </Container>

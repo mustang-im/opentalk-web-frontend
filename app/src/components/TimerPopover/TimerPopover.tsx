@@ -6,7 +6,6 @@ import { useAppSelector } from '../../hooks';
 import { selectTimerStyle } from '../../store/slices/timerSlice';
 import CoffeeBreakPopover from './fragments/CoffeeBreakPopover';
 import NormalTimerPopover from './fragments/NormalTimerPopover';
-import { memo } from 'react';
 
 const TimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
   const timerStyle = useAppSelector(selectTimerStyle);

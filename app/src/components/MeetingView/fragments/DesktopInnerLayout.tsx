@@ -9,11 +9,11 @@ import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../../sto
 import { selectRoomConnectionState, ConnectionState } from '../../../store/slices/roomSlice';
 import { selectShowCoffeeBreakCurtain, selectVotePollIdToShow } from '../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../store/slices/userSlice';
+import Cinema from './Cinema';
 import { CoffeeBreakView } from '../../CoffeeBreakView/CoffeeBreakView';
 import MeetingHeader from '../../MeetingHeader';
 import MeetingSidebar from '../../MeetingSidebar/index';
 import VoteResultContainer from '../../VoteResult/VoteResultContainer';
-import Cinema from './Cinema';
 
 const InnerContainer = styled('div')(({ theme }) => ({
   display: 'grid',
