@@ -10,6 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectShowParticipantGroups, setSortByGroups } from '../../../store/slices/uiSlice';
+import { memo } from 'react';
 
 const FormControlLabel = styled(MuiFormControlLabel)({
   marginLeft: 0,
@@ -42,4 +43,4 @@ const ParticipantGroupByForm = () => {
    )
 }
 
-export default ParticipantGroupByForm;
+export default memo(ParticipantGroupByForm);

@@ -11,10 +11,10 @@ import { FC } from 'react';
 import ParticipantListItem from './ParticipantListItem';
 
 const CustomList = styled(List)({
-  flex: '1 1 auto',
   overflowY: 'auto',
   textAlign: 'left',
   width: '100%',
+  height: '100%'
 });
 
 interface ParticipantSimpleListProps extends ListProps {

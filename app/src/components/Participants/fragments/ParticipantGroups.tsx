@@ -6,51 +6,31 @@ import { useAppSelector } from "../../../hooks";
 import { selectAllGroupParticipantsSortedAndFiltered } from "../../../store/selectors";
 import { 
    styled,
-   Accordion as MuiAccordion,
-   AccordionSummary as MuiAccordionSummary,
-   AccordionDetails as MuiAccordionDetails,
    Typography,
    Stack,
-   StackProps
+   StackProps,
+   Box,
+   Button
 } from '@mui/material';
 import ParticipantSimpleList from "./ParticipantSimpleList";
+import { Fragment, useState } from 'react';
 
-const Accordion = styled(MuiAccordion)({
-  backgroundColor: 'transparent',
-});
-
-const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
-  margin: 0,
-  padding: 0,
-  flexDirection: 'row-reverse',
-  maxHeight: '2rem !important',
-  minHeight: '2rem !important',
-  '& .MuiAccordionSummary-content': {
-    marginLeft: theme.spacing(1),
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  '& .MuiIconButton-edgeEnd': {
-    marginRight: 0,
-  },
-  '& svg': {
-    width: '0.75rem',
-    color: 'white',
-  },
-}));
-
-const AccordionDetails = styled(MuiAccordionDetails)({
-  flex: 1,
-  flexDirection: 'column',
-  padding: 0,
-  backgroundColor: 'transparent',
-});
+const AccordionButton = styled(Button)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'flex-start',
+  padding: theme.spacing(0.5),
+}))
 
 const ParticipantGroups = (props: StackProps) => {
+   const [expandedGroupId, setExpandedGroupId] = useState<string>('');
    const groupsParticipants = useAppSelector(selectAllGroupParticipantsSortedAndFiltered);
 
    if (groupsParticipants.size === 0) {
       return null;
+   }
+
+   const toggle = (groupId: string) => {
+      setExpandedGroupId((currentGroupId) => currentGroupId === groupId ? '' : groupId);
    }
 
    const Groups = Array.from(groupsParticipants).reduce((accordions, [groupId, participants]) => {
@@ -58,21 +38,40 @@ const ParticipantGroups = (props: StackProps) => {
          return accordions;
       }
 
+      const isExpanded = groupId === expandedGroupId;
+
       accordions.push(
-         <Accordion key={groupId} defaultExpanded={true} elevation={0}>
-            <AccordionSummary id={groupId} aria-controls={groupId} expandIcon={<ArrowDownIcon />}>
+         <Fragment key={groupId}>
+            <AccordionButton
+               type="button"
+               variant="text"
+               color="inherit"
+               fullWidth
+               aria-controls={groupId}
+               aria-expanded={isExpanded}
+               onClick={() => toggle(groupId)}
+               focusRipple={true}
+            >
+               <ArrowDownIcon
+                  sx={{
+                     width: '0.6em',
+                     transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
+                     transition: 'transform 0.3s ease-in',
+                     marginRight: 1,
+                  }}
+               />
                <Typography variant={'caption'}>{groupId}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
+            </AccordionButton>
+            <Box id={groupId} overflow="hidden" flex={isExpanded ? 1 : 0}>
                <ParticipantSimpleList participants={participants} />
-            </AccordionDetails>
-         </Accordion>
+            </Box>
+         </Fragment>
       );
 
       return accordions;
    }, [] as JSX.Element[]);
 
-   return <Stack overflow="auto" {...props}>{Groups}</Stack>;
+   return <Stack overflow="hidden" {...props}>{Groups}</Stack>;
 }
 
 export default ParticipantGroups;
