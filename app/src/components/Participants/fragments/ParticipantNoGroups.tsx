@@ -1,20 +1,18 @@
-import { useMemo } from "react";
-import { useAppSelector } from "../../../hooks";
-import { selectAllParticipantsSortedAndFiltered } from "../../../store/selectors";
-import ParticipantSimpleList from "./ParticipantSimpleList";
+import { useMemo } from 'react';
+
+import { useAppSelector } from '../../../hooks';
+import { selectAllParticipantsSortedAndFiltered } from '../../../store/selectors';
+import ParticipantSimpleList from './ParticipantSimpleList';
 
 const ParticipantNoGroups = () => {
-   const participants = useAppSelector(selectAllParticipantsSortedAndFiltered);
-   const participantIds = participants.map(p => p.id);
+  const participants = useAppSelector(selectAllParticipantsSortedAndFiltered);
+  const participantIds = participants.map((p) => p.id);
 
-   const cachedParticipants = useMemo(() => {
-      return participants;
-   }, [participantIds.toString()]);
+  const cachedParticipants = useMemo(() => {
+    return participants;
+  }, [participantIds.toString()]);
 
-   return (
-      <ParticipantSimpleList participants={cachedParticipants} />
-   )
-
-}
+  return <ParticipantSimpleList participants={cachedParticipants} />;
+};
 
 export default ParticipantNoGroups;
