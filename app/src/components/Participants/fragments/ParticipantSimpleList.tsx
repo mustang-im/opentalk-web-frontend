@@ -6,9 +6,11 @@ import {
    ListProps,
    styled,
 } from '@mui/material';
-import { Participant } from '@opentalk/common';
 import { FC } from 'react';
 import ParticipantListItem from './ParticipantListItem';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList } from 'react-window';
+import { Participant } from '@opentalk/common';
 
 const CustomList = styled(List)({
   overflowY: 'auto',
@@ -22,11 +24,29 @@ interface ParticipantSimpleListProps extends ListProps {
 }
 
 const ParticipantSimpleList: FC<ParticipantSimpleListProps> = ({ participants, ...props }) => {
+   const root = document.querySelector(':root');
+   const DEFAULT_FONT_SIZE = 16; // "The default font size in all browsers tends to be approximately 16 pixels."
+   
    return (
       <CustomList {...props}>
-         {participants.map((participant) => (
-            <ParticipantListItem key={participant.id} participant={participant} />
-         ))}
+         <AutoSizer>
+            {({ height, width }: { height: number, width: number }) => {
+               const rootFontSize = root ? parseFloat(window.getComputedStyle(root, null).getPropertyValue('font-size')) : DEFAULT_FONT_SIZE;
+               const ITEM_SIZE_SCALE = 3.75; // On 16px base, 60px height is proper height for list item, therefore we got the scale of 3.75
+
+               return (
+                  <FixedSizeList
+                     height={height}
+                     width={width}
+                     itemSize={rootFontSize * ITEM_SIZE_SCALE}
+                     itemCount={participants.length}
+                     itemData={participants}
+                  >
+                     {ParticipantListItem}
+                  </FixedSizeList>
+               );
+            }}
+         </AutoSizer>
       </CustomList>
    )
 }

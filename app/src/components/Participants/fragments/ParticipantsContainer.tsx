@@ -2,13 +2,14 @@ import SearchTextField from "../../SearchTextField";
 import ParticipantGroupByForm from "./ParticipantGroupByForm";
 import ParticipantGroups from "./ParticipantGroups";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { selectShowParticipantGroups, setParticipantsSearchValue } from "../../../store/slices/uiSlice";
+import { selectParticipantsSearchValue, selectShowParticipantGroups, setParticipantsSearchValue } from "../../../store/slices/uiSlice";
 import ParticipantNoGroups from "./ParticipantNoGroups";
 import { memo, useCallback } from "react";
 
 const ParticipantsContainer = () => {
    const dispatch = useAppDispatch();
    const groupParticipantsEnabled = useAppSelector(selectShowParticipantGroups);
+   const searchValue = useAppSelector(selectParticipantsSearchValue);
 
    const dispatchNextSearchValue = useCallback((nextSearchValue: string) => {
       dispatch(setParticipantsSearchValue(nextSearchValue));
@@ -16,7 +17,7 @@ const ParticipantsContainer = () => {
 
    return (
       <>
-         <SearchTextField onSearch={dispatchNextSearchValue} fullWidth showSort />
+         <SearchTextField searchValue={searchValue} onSearch={dispatchNextSearchValue} fullWidth showSort />
          <ParticipantGroupByForm />
          {groupParticipantsEnabled ? <ParticipantGroups flex={1} /> : <ParticipantNoGroups />}
       </>

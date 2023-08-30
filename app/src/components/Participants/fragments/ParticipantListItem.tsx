@@ -25,7 +25,7 @@ import {
   TelephoneStrokeIcon,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
-import React, { memo, useCallback, useState } from 'react';
+import React, { CSSProperties, memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Role } from '../../../api/types/incoming/control';
@@ -104,10 +104,13 @@ const JoinedText = styled(Typography)(({ theme }) => ({
 }));
 
 type ParticipantRowProps = {
-  participant: Participant;
+  data: Participant[];
+  index: number;
+  style: CSSProperties;
 };
 
-const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
+const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
+  const participant = data[index];
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const sortType = useAppSelector(selectParticipantsSortOption);
   const isModerator = useAppSelector(selectIsModerator);
@@ -314,7 +317,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   }, [participant.role]);
 
   return (
-    <ListItem>
+    <ListItem style={style}>
       <Box display='flex' flexWrap='nowrap' alignItems='center' width='100%'>
         <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
         <ListItemText
