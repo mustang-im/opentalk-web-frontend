@@ -127,14 +127,14 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
   const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
 
-  const { active: audioActive } = useAppSelector(
-    selectSubscriberStateById(
-      {
-        participantId: participant.id,
-        mediaType: MediaSessionType.Video,
-      },
-      'audio'
-    )
+    const { active: audioActive } = useAppSelector(
+      selectSubscriberStateById(
+        {
+          participantId: participant.id,
+          mediaType: MediaSessionType.Video,
+        },
+        'audio'
+      )
   );
 
   const { active: screenShareActive } = useAppSelector(
@@ -146,7 +146,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
       'video'
     )
   );
-
+  
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -253,7 +253,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
       return isSipParticipant ? <PhoneIcon /> : <MicOnIcon />;
     }
     return isSipParticipant ? <PhoneOffIconStyled /> : <MicOffIconStyled />;
-  }, [participant, audioActive, screenShareActive, ownAudioEnabled, ownScreenShareEnabled]);
+  }, [participant.handIsUp, participant.id, isSipParticipant, audioActive, screenShareActive, ownAudioEnabled, ownScreenShareEnabled]);
 
   const renderMenu = () => (
     <>
