@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
 import { memo, useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
