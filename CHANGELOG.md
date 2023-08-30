@@ -23,6 +23,7 @@
 
 ### Stability Improvements
 
+- Trigger media reconnect when 'connectionstate' is failed (#1489)
 - Rework media stream quality reservation (!1019)
 - Cleanup video components (!1067)
 - Make pipeline fail on failed tests in packages (!1049)

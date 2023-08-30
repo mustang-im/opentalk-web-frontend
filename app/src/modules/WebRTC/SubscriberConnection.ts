@@ -8,7 +8,7 @@ import { debounce, isEqual, some } from 'lodash';
 import { BandwidthController } from './BandwidthController';
 import { BaseWebRtcConnection } from './BaseWebRtcConnection';
 import { MediaSignaling } from './MediaSignaling';
-import { STATS_INTERVAL, SubscriberConfig } from './WebRTC';
+import { idFromDescriptor, STATS_INTERVAL, SubscriberConfig } from './WebRTC';
 import { PACKET_LOSS_THRESHOLD } from './index';
 
 const QUALITY_DEBOUNCE_TIME = 500; //ms
@@ -87,6 +87,17 @@ export class SubscriberConnection extends BaseWebRtcConnection {
           this.updateState();
       }
     });
+
+    this.peerConnection.addEventListener('connectionstatechange', () => {
+      const state = this.peerConnection.connectionState;
+      switch (state) {
+        case 'failed':
+          this.iceRestart();
+          console.warn(`Subscriber connection ${state}`);
+          break;
+      }
+    });
+
     this.peerConnection.addEventListener('track', (event) => this.onTrackHandler(event));
     this.signaling.requestOffer(subscriberConfig);
 
@@ -104,7 +115,11 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   }
 
   private iceRestart() {
-    console.info(`Issue an ICE restart on subscriber connection ${this.descriptor}`);
+    if (this.expectRestart) {
+      console.debug(`Skip duplicate ICE restart on subscriber connection ${idFromDescriptor(this.descriptor)}`);
+      return;
+    }
+    console.info(`Issue an ICE restart on subscriber connection ${idFromDescriptor(this.descriptor)}`);
     this.expectRestart = true;
     this.signaling.resubscribe(this.descriptor);
     this.stopReconnectTimer();
@@ -114,12 +129,12 @@ export class SubscriberConnection extends BaseWebRtcConnection {
       console.warn('reconnect timer is already set');
       return;
     }
-    console.debug(`Set reconnect timer for subscriber connection`, this.descriptor);
+    console.debug(`Set reconnect timer for subscriber connection ${idFromDescriptor(this.descriptor)}`);
     this.reconnectTimerHandle = setTimeout(this.iceRestart.bind(this), RECOVERY_TIMEOUT);
   }
   private stopReconnectTimer() {
     if (this.reconnectTimerHandle) {
-      console.debug('clear reconnect timer');
+      console.debug(`clear reconnect timer  ${idFromDescriptor(this.descriptor)}`);
       clearTimeout(this.reconnectTimerHandle);
       this.reconnectTimerHandle = undefined;
     }
