@@ -122,7 +122,7 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
     config: ConfigState,
     resumptionToken?: string
   ): Promise<{ conferenceContext: ConferenceRoom; resumption: string }> {
-    console.debug('create room', roomCredentials, resumptionToken);
+    console.debug('connect to room', roomCredentials, resumptionToken);
     const { ticket, resumption } = await startRoom(roomCredentials, config, resumptionToken);
     const signaling = new SignalingSocket(getSignalingUrl(config), ticket);
     const conferenceContext = new ConferenceRoom(roomCredentials, signaling, config);
@@ -286,29 +286,6 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
     this.eventEmitter.emit('message', message);
   };
 
-  /*
-const RECONNECTION_DELAY_IN_SECONDS = 5;
-private async reconnect() {
-const delay = (interval: number) => new Promise<void>((resolve) => setTimeout(resolve, interval));
-if (this.roomCredentials === undefined) {
-  throw new Error('No room credentials available');
-}
-const roomCredentials = this.roomCredentials;
-try {
-  const ticket = await dispatch(startRoom(roomCredentials));
-  await this.connect(ticket);
-} catch (e: any) {
-  await delay(RECONNECTION_DELAY_IN_SECONDS * 1000);
-  if (this.roomCredentials === undefined) {
-    throw new Error('No room credentials available');
-  }
-  const ticket = await fetchSignalingTicket(roomCredentials);
-  await this.connect(ticket);
-}
-console.debug('signaling reconnect finished');
-}
-
-*/
   private signalingStateHandler = async (state: SignalingState) => {
     switch (state) {
       case 'connected':

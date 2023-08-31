@@ -214,7 +214,6 @@ const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
   const mediaChangeHandler = (mediaChange: SubscriberStateChanged) => dispatch(subscriberMediaUpdated(mediaChange));
   const upstreamLimitHandler = (limit: VideoSetting) => dispatch(setUpstreamLimit(limit));
   const subscriberLimitHandler = (limit: QualityLimit) => dispatch(subscriberLimit(limit));
-  console.debug('init webRTC context');
 
   webRtc.addEventListener('removed', removeHandler);
   webRtc.addEventListener('subscriberchanged', updateHandler);
