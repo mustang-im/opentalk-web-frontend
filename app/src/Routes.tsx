@@ -19,7 +19,7 @@ const Routes = () => {
   const isAuthError = useAppSelector<Error | undefined>(selectAuthError);
 
   const renderRoutes = useMemo(() => {
-    return isAuthError ? <ErrorLoginPage error={isAuthError} /> : routes;
+    return isAuthError ? <ErrorLoginPage error={isAuthError} redirectUrl={window.location.pathname} /> : routes;
   }, [isAuthError, routes]);
 
   return (

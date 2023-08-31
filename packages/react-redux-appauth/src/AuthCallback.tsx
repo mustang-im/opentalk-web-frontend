@@ -39,9 +39,8 @@ export const AuthCallback: React.FC<AuthCallbackProps> = ({
         .signinCallback()
         .then(() => {
           if (!isPopup && !isSilent) {
-            const redirectUri = localStorage.getItem('redirect-uri');
+            const redirectUri = sessionStorage.getItem('redirect-uri');
             if (redirectUri) {
-              localStorage.removeItem('redirect-uri');
               history.push(redirectUri);
             } else {
               history.push(defaultRedirect);

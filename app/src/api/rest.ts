@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FetchRequestError, notifications, ParticipantId, RoomId } from '@opentalk/common';
-import { auth_error, EventTypeError, logged_out } from '@opentalk/react-redux-appauth';
+import { FetchRequestError, ParticipantId, RoomId } from '@opentalk/common';
+import { auth_error, EventTypeError } from '@opentalk/react-redux-appauth';
 import { fetchQuery, createOpenTalkApiWithReactHooks } from '@opentalk/rest-api-rtk-query';
 import { createAsyncThunk, isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';

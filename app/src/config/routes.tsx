@@ -2,13 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Typography } from '@mui/material';
-import { AuthCallback, selectIsAuthed, selectIsLoading, useAuth } from '@opentalk/react-redux-appauth';
+import { AuthCallback, selectAuthError, selectIsAuthed, selectIsLoading, useAuth } from '@opentalk/react-redux-appauth';
 import i18next from 'i18next';
 import React, { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
 
-import LoginPopup from '../components/LoginPopup';
 import { useAppSelector } from '../hooks';
 import {
   SettingsProfilePage,
@@ -22,7 +21,6 @@ import {
   EventDetailsPage,
 } from '../pages/Dashboard';
 import RoomPage from '../pages/RoomPage';
-import { selectIsAuthenticated } from '../store/slices/userSlice';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
 import LobbyTemplate from '../templates/LobbyTemplate';
@@ -75,16 +73,16 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const { signIn } = useAuth();
   const isAuthenticated = useAppSelector(selectIsAuthed);
   const isAuthLoading = useAppSelector(selectIsLoading);
+  const isAuthError = useAppSelector(selectAuthError);
 
   useEffect(() => {
-    if (!isAuthenticated && !isAuthLoading) {
+    if (!isAuthenticated && !isAuthLoading && !isAuthError) {
       const timeout = setTimeout(() => {
-        localStorage.setItem('redirect-uri', window.location.pathname);
         signIn();
       }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
       return () => clearTimeout(timeout);
     }
-  }, [isAuthenticated, isAuthLoading]);
+  }, [isAuthenticated, isAuthLoading, isAuthError]);
   if (isAuthenticated) {
     if (children !== undefined) {
       return <>{children}</>;

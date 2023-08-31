@@ -4,13 +4,12 @@
 import { Container as MuiContainer, CssBaseline, Stack, styled, ThemeProvider, useTheme } from '@mui/material';
 import { WarningIcon } from '@opentalk/common';
 import { EventTypeError, useAuth } from '@opentalk/react-redux-appauth';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import { createOpenTalkTheme } from '../../assets/themes/opentalk';
 import Error from '../../commonComponents/Error';
-import LoginButton from '../../components/LoginPopup/fragments/LoginButton';
 import { useAppDispatch } from '../../hooks';
 import { hangUp } from '../../store/commonActions';
 import LobbyTemplate from '../../templates/LobbyTemplate';
@@ -32,11 +31,12 @@ const Container = styled(MuiContainer)(({ theme }) => ({
 
 interface ErrorLoginProps {
   error: Error;
+  redirectUrl: string;
 }
 
 const ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT = 2500;
 
-const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
+const ErrorLoginPage = ({ error, redirectUrl }: ErrorLoginProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -50,6 +50,7 @@ const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
     switch (error.name) {
       case EventTypeError.SessionExpired:
         setTimeout(() => {
+          sessionStorage.setItem('redirect-uri', redirectUrl);
           signOut();
         }, ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT);
         return {
