@@ -4,7 +4,7 @@
 
 ---
 default:
-  image: node:18-alpine
+  image: node:20-alpine
 
 stages:
   - lint
@@ -18,7 +18,7 @@ lint:prettier+eslint:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
-    - apk add git
+    - apk add --no-cache git
     - yarn install
   script:
     - yarn lint --no-inline-config --max-warnings 0
@@ -26,11 +26,10 @@ lint:prettier+eslint:
 
 lint:yaml:
   stage: lint
-  image: archlinux:latest
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
-    - pacman -Syy --noconfirm yamllint
+    - apk add --no-cache yamllint
   script: yamllint .
 
 lint:compliance:
@@ -38,7 +37,7 @@ lint:compliance:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
-    - apk add git
+    - apk add --no-cache git
     - yarn install
   script:
     - yarn dlx licensee --production --errors-only
@@ -68,7 +67,7 @@ test:build:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_TAG
   before_script:
-    - apk add git
+    - apk add --no-cache git
     - yarn install
   script:
     - yarn test
@@ -148,7 +147,7 @@ publish:common:
       changes:
         - packages/common/**/*
   before_script:
-    - apk add git
+    - apk add --no-cache git
     - yarn install
   script:
     - yarn build
@@ -226,8 +225,8 @@ cleanup:review-app:
   tags:
     - kubernetes
   before_script:
-    - apk add --update curl && rm -rf /var/cache/apk/*
-    - apk add jq
+    - apk add --no-cache --update curl
+    - apk add --no-cache jq
   script:
     - API_MR_URL="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests"
     - |
