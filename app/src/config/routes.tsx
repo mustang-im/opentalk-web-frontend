@@ -21,6 +21,7 @@ import {
   EventDetailsPage,
 } from '../pages/Dashboard';
 import RoomPage from '../pages/RoomPage';
+import { selectIsGuest } from '../store/slices/userSlice';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
 import LobbyTemplate from '../templates/LobbyTemplate';
@@ -74,16 +75,21 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const isAuthenticated = useAppSelector(selectIsAuthed);
   const isAuthLoading = useAppSelector(selectIsLoading);
   const isAuthError = useAppSelector(selectAuthError);
+  const isGuestUser = useAppSelector(selectIsGuest);
 
   useEffect(() => {
-    if (!isAuthenticated && !isAuthLoading && !isAuthError) {
-      const timeout = setTimeout(() => {
-        signIn();
+    if (!isAuthenticated && !isAuthLoading && !isAuthError && !isGuestUser) {
+      const timeout = setTimeout(async () => {
+        const redirectUrl = sessionStorage.getItem('redirect-uri');
+        if (!redirectUrl || redirectUrl === '/auth/popup_callback') {
+          sessionStorage.setItem('redirect-uri', window.location.pathname);
+        }
+        await signIn();
       }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
       return () => clearTimeout(timeout);
     }
-  }, [isAuthenticated, isAuthLoading, isAuthError]);
-  if (isAuthenticated) {
+  }, [isAuthenticated, isAuthLoading, isAuthError, isGuestUser]);
+  if (isAuthenticated || isGuestUser) {
     if (children !== undefined) {
       return <>{children}</>;
     }

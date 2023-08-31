@@ -220,7 +220,7 @@ export interface AuthPostMessage {
 }
 
 export enum EventTypeError {
-  SessionExpired = 'error_session_expired',
-  OidcConfiguration = 'error_oidc_configuration',
+  SessionExpired = 'error-session-expired',
+  OidcConfiguration = 'error-oidc-configuration',
   SystemCurrentlyUnavailable = 'error-system-currently-unavailable',
 }

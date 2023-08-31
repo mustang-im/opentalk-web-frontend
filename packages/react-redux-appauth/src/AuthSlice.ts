@@ -53,6 +53,7 @@ export const authSlice = createSlice({
       state.isLoading = true;
     },
     auth_error: (state, action: PayloadAction<Error>) => {
+      state.isAuthed = false;
       state.authError = action.payload;
     },
     loaded: (state) => {
@@ -68,6 +69,7 @@ export const authSlice = createSlice({
       _.merge(state, action.payload);
       state.isAuthed = true;
       state.isLoading = false;
+      state.authError = undefined;
       // TODO unused - never read:
       //localStorage.setItem('auth', JSON.stringify(action.payload));
       localStorage.setItem('access_token', action.payload.access_token);

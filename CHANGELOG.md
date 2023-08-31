@@ -12,6 +12,7 @@
 
 ### UI/UX Fixes
 
+- Remove the redundant login screen - fixed redirect (!1079)
 - Change the naming for votings in accordance with the municipal code ([#1424](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1424))
 - Fix guest link generation in the dashboard (!1066)
 - Fix: future meetings displayed in past tabs (!1057)

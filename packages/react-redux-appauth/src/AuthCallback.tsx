@@ -28,13 +28,12 @@ export const AuthCallback: React.FC<AuthCallbackProps> = ({
   isPopup = false,
   isSilent = false,
 }) => {
-  const isLoading = useSelector(selectIsLoading);
   const auth = useAuth();
   const [showError, setShowError] = useState<boolean>(false);
 
-  // Check if we have something in localStorage redirect to that.
+  // Check if we have something in sessionStorage and redirect to that.
   useEffect(() => {
-    if (!isLoading) {
+    if (!auth.isLoading) {
       auth
         .signinCallback()
         .then(() => {
@@ -52,7 +51,7 @@ export const AuthCallback: React.FC<AuthCallbackProps> = ({
           setShowError(true);
         });
     }
-  }, [isLoading, isPopup]);
+  }, [isPopup, auth]);
 
   if (showError && onError !== undefined) {
     return <>{onError()}</>;

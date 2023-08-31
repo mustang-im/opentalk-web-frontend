@@ -16,10 +16,10 @@ const Routes = () => {
   const oidcConfig = useAppSelector(selectOidcConfig);
   const isBetaRelease = useAppSelector(selectIsBetaRelease);
   const routes = useRoutes(routeArray(oidcConfig.redirectPath, oidcConfig.popupRedirectPath));
-  const isAuthError = useAppSelector<Error | undefined>(selectAuthError);
+  const isAuthError = useAppSelector(selectAuthError);
 
   const renderRoutes = useMemo(() => {
-    return isAuthError ? <ErrorLoginPage error={isAuthError} redirectUrl={window.location.pathname} /> : routes;
+    return isAuthError ? <ErrorLoginPage error={isAuthError} /> : routes;
   }, [isAuthError, routes]);
 
   return (

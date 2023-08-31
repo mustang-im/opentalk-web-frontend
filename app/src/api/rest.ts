@@ -6,7 +6,6 @@ import { auth_error, EventTypeError } from '@opentalk/react-redux-appauth';
 import { fetchQuery, createOpenTalkApiWithReactHooks } from '@opentalk/rest-api-rtk-query';
 import { createAsyncThunk, isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
-import i18next from 'i18next';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { RootState } from '../store';
@@ -117,19 +116,22 @@ export const rtkQueryErrorLoggerMiddlware: Middleware =
         dispatch(
           auth_error({
             name: EventTypeError.SessionExpired,
-            message: `${i18next.t('error-session-expired-message')}`,
+            message: `${EventTypeError.SessionExpired}-message`,
           })
         );
+        return;
       } else if (action.payload.status >= 500) {
         dispatch(
           auth_error({
             name: EventTypeError.SystemCurrentlyUnavailable,
-            message: `${i18next.t('error-system-currently-unavailable')}`,
+            message: `${EventTypeError.SystemCurrentlyUnavailable}-message`,
           })
         );
+        return;
       }
+    } else {
+      return next(action);
     }
-    return next(action);
   };
 
 // Re-export the most common api hooks

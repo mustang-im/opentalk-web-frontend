@@ -148,7 +148,7 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
             dispatch(
               auth_error({
                 name: EventTypeError.OidcConfiguration,
-                message: 'Incorrect OIDC configuration',
+                message: `${EventTypeError.OidcConfiguration}-message`,
               }),
             );
           }
@@ -201,7 +201,7 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
           dispatch(
             auth_error({
               name: EventTypeError.SessionExpired,
-              message: `Session Expired`,
+              message: `${EventTypeError.SessionExpired}-message`,
             }),
           );
           break;
