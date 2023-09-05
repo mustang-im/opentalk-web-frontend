@@ -40,6 +40,7 @@ const ParticipantSimpleList: FC<ParticipantSimpleListProps> = ({ participants, .
               itemSize={rootFontSize * ITEM_SIZE_SCALE}
               itemCount={participants.length}
               itemData={participants}
+              overscanCount={4}
             >
               {ParticipantListItem}
             </FixedSizeList>

@@ -123,13 +123,6 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const ownScreenShareEnabled = useAppSelector(selectShareScreenEnabled);
   const userProtocolAccess = useAppSelector(selectUserProtocolAccess);
 
-  const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
-  const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
-  const lastActiveTimestamp = new Date(participant?.lastActive ?? new Date());
-  const formattedLastActiveTime = useDateFormat(lastActiveTimestamp, 'time');
-  const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
-  const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
-
   const { active: audioActive } = useAppSelector(
     selectSubscriberStateById(
       {
@@ -271,23 +264,32 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
       <IconButton aria-label="open participant more menu" onClick={handleClick}>
         <MoreIcon className={'more-icon'} />
       </IconButton>
-      <MenuPopover
-        open={open}
+      {open && <MenuPopover
+        open={true}
         setAnchorEl={setAnchorEl}
         anchorEl={anchorEl}
         options={isModerator ? moderatorMenuOptionItems : participantMenuOptionItems}
-      />
+      />}
     </>
   );
 
   const getContextText = () => {
     switch (sortType) {
-      case SortOption.RaisedHandFirst:
+      case SortOption.RaisedHandFirst: {
+        const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
+        const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
         return t('participant-hand-raise-text', { handUpdated: formattedHandUpTime });
-      case SortOption.LastActive:
+      }
+      case SortOption.LastActive: {
+        const lastActiveTimestamp = new Date(participant?.lastActive ?? new Date());
+        const formattedLastActiveTime = useDateFormat(lastActiveTimestamp, 'time');
         return t('participant-last-active-text', { lastActive: formattedLastActiveTime });
-      default:
+      }
+      default: {
+        const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
+        const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
         return t('participant-joined-text', { joinedTime: formattedJoinedTime });
+      }
     }
   };
 
