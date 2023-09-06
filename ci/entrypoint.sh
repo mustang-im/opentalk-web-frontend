@@ -31,7 +31,10 @@ window.config = {
     active: false,
     accountManagementUrl: "${ACCOUNT_MANAGEMENT_URL}",
   },
-  version: "${PRODUCT_VERSION}",
+  version: {
+    product: "${PRODUCT_VERSION}",
+    frontend: "$(cat /usr/share/nginx/html/FRONTEND_VERSION)"
+  },
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
   beta: {
     isBeta: ${IS_BETA_RELEASE:-true},
@@ -61,7 +64,8 @@ window.config = {
   features: ${ACTIVE_FEATURES},
   videoBackgrounds: ${VIDEO_BACKGROUNDS:-${DEFAULT_VIDEO_BACKGROUNDS}},
   maxVideoBandwidth: ${MAX_VIDEO_BANDWIDTH:-600000},
-  glitchtipDsn: "${SENTRY_DSN}",
-  glitchtipRelease: "$(cat /usr/share/nginx/html/FRONTEND_VERSION)",
+  glitchtip: {
+    dsn: "${SENTRY_DSN}",
+  },
 }
 EOF
