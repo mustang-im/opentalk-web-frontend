@@ -56,6 +56,7 @@
 
 ### New Features
 
+- Show voting results of live vote even the participant has not yet voted or saved (!1425)
 - Implement experimental client-side voice detection (!1023)
 - Disable editing of display name depending on configuration flag (!1056)
 - Add copy meeting link and guest link to dashboard meeting 3-dot menue (!1033)
