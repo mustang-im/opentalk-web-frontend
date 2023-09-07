@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, IconButton, InputAdornment, Stack, styled } from '@mui/material';
-import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon } from '@opentalk/common';
+import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon, notificationPersistent } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { FC, useCallback, useState } from 'react';
@@ -45,7 +45,6 @@ const LobbyView: FC = () => {
   const { t } = useTranslation();
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
   const [showPassword, setShowPassword] = useState(false);
-  const [joinError, setJoinError] = useState<string | undefined>();
   const { roomId, breakoutRoomId } = useParams<'roomId' | 'breakoutRoomId'>() as {
     roomId: RoomId;
     breakoutRoomId?: BreakoutRoomId;
@@ -93,7 +92,8 @@ const LobbyView: FC = () => {
                 break;
               case StartRoomError.WrongRoomPassword:
               case StartRoomError.InvalidCredentials:
-                setJoinError('joinform-wrong-room-password');
+                notificationPersistent({ msg: t('joinform-wrong-room-password'), variant: 'error' });
+                navigate(`/room/${roomId}`);
                 break;
               case StartRoomError.NotFound:
                 notifications.error(t('joinform-room-not-found'));
@@ -113,7 +113,7 @@ const LobbyView: FC = () => {
           }
         });
     },
-    [dispatch, navigate, t, breakoutRoomId, roomId, inviteCode, joinWithoutMedia, mediaContext]
+    [navigate, t, breakoutRoomId, roomId, inviteCode, joinWithoutMedia, mediaContext]
   );
 
   const validationSchema = yup.object({
@@ -177,7 +177,6 @@ const LobbyView: FC = () => {
                     />
                   }
                 />
-
                 {passwordRequired && (
                   <TextField
                     {...formikProps('password', formik)}
@@ -196,8 +195,6 @@ const LobbyView: FC = () => {
                         </IconButton>
                       </InputAdornment>
                     }
-                    error={Boolean(joinError)}
-                    helperText={joinError ? t(joinError) : ''}
                   />
                 )}
               </Stack>

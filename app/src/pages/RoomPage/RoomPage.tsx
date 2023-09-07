@@ -35,6 +35,7 @@ const RoomPage = () => {
       // Regular state machine flow
       case ConnectionState.Initial:
       case ConnectionState.Setup:
+      case ConnectionState.FailedCredentials:
         return <LobbyView />;
       case ConnectionState.Starting:
         return <RoomLoadingView />;
