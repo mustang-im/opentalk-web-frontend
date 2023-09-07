@@ -25,7 +25,7 @@ import {
   TelephoneStrokeIcon,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
-import React, { CSSProperties, memo, useCallback, useState } from 'react';
+import React, { CSSProperties, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Role } from '../../../api/types/incoming/control';
@@ -264,12 +264,14 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
       <IconButton aria-label="open participant more menu" onClick={handleClick}>
         <MoreIcon className={'more-icon'} />
       </IconButton>
-      {open && <MenuPopover
-        open={true}
-        setAnchorEl={setAnchorEl}
-        anchorEl={anchorEl}
-        options={isModerator ? moderatorMenuOptionItems : participantMenuOptionItems}
-      />}
+      {open && (
+        <MenuPopover
+          open={true}
+          setAnchorEl={setAnchorEl}
+          anchorEl={anchorEl}
+          options={isModerator ? moderatorMenuOptionItems : participantMenuOptionItems}
+        />
+      )}
     </>
   );
 
@@ -355,4 +357,4 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   );
 };
 
-export default memo(ParticipantListItem);
+export default ParticipantListItem;

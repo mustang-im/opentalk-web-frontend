@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, InputAdornment } from '@mui/material';
 import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu, setHotkeysEnabled } from '@opentalk/common';
-import React, { memo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import TextField from '../../commonComponents/TextField';
@@ -114,4 +114,4 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
   );
 };
 
-export default memo(SearchTextField);
+export default SearchTextField;

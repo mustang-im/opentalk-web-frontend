@@ -14,6 +14,8 @@ import ParticipantGroupByForm from './ParticipantGroupByForm';
 import ParticipantGroups from './ParticipantGroups';
 import ParticipantNoGroups from './ParticipantNoGroups';
 
+const CachedSearchTextField = memo(SearchTextField);
+
 const ParticipantsContainer = () => {
   const dispatch = useAppDispatch();
   const groupParticipantsEnabled = useAppSelector(selectShowParticipantGroups);
@@ -25,7 +27,7 @@ const ParticipantsContainer = () => {
 
   return (
     <>
-      <SearchTextField searchValue={searchValue} onSearch={dispatchNextSearchValue} fullWidth showSort />
+      <CachedSearchTextField searchValue={searchValue} onSearch={dispatchNextSearchValue} fullWidth showSort />
       <ParticipantGroupByForm />
       {groupParticipantsEnabled ? <ParticipantGroups flex={1} /> : <ParticipantNoGroups />}
     </>
