@@ -89,6 +89,17 @@ export type ToolbarButtonProps = {
   isLobby?: boolean;
 };
 
+// We have to bend the standard keyboard accessibility for the toolbar buttons.
+// `Space` key shall be ignored for the microphone button, otherwise it collides
+// with the push-to-talk feature.
+// To make the whole toolbar consistent, we block `Space` key for all toolbar buttons.
+// https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344#note_64774
+const ignoreSpaceKey = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+  if (event.key === ' ') {
+    event.preventDefault();
+  }
+};
+
 const ToolbarButton = ({
   children,
   onClick,
@@ -113,6 +124,8 @@ const ToolbarButton = ({
           disabled={disabled || undefined}
           aria-label={tooltipTitle}
           onClick={(event) => onClick(event)}
+          onKeyUp={ignoreSpaceKey}
+          onKeyDown={ignoreSpaceKey}
           isLobby={isLobby}
           {...props}
         >
@@ -129,6 +142,8 @@ const ToolbarButton = ({
             aria-label={contextTitle}
             aria-controls={contextMenuId}
             aria-expanded={contextMenuExpanded}
+            onKeyUp={ignoreSpaceKey}
+            onKeyDown={ignoreSpaceKey}
           >
             <ArrowDownIcon />
           </ToggleButton>

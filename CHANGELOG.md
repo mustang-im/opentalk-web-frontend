@@ -9,6 +9,9 @@
 - Remove the redundant login screen - fixed redirect ([#1360, #1463](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1360, https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1463))
 ### Bug Fixes
 
+- Fix push-to-talk functionality([#1344]
+(https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344))
+
 ## 1.6.0
 
 ### UI/UX Fixes
