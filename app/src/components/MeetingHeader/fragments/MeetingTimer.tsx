@@ -28,7 +28,7 @@ const MeetingTimer = () => {
   }, [getDuration, meetingTime]);
 
   return (
-    <Typography variant={'body2'} minWidth="4em">
+    <Typography align="center" variant={'body2'} minWidth="4em">
       {meetingTime}
     </Typography>
   );
