@@ -37,7 +37,6 @@ import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import IconButton from '../../commonComponents/IconButton';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectCurrentBreakoutRoom } from '../../store/slices/breakoutSlice';
 import {
   selectAllOnlineParticipants,
   selectAllParticipantsInWaitingRoom,
@@ -47,7 +46,6 @@ import {
 import { Poll, selectAllPollVotes } from '../../store/slices/pollSlice';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
 import { selectRecordingState } from '../../store/slices/recordingSlice';
-import { selectEventInfo } from '../../store/slices/roomSlice';
 import {
   selectSharedFolderPassword,
   selectSharedFolderUrl,
@@ -230,8 +228,6 @@ const MeetingHeader = () => {
   const sharedFolderUrl = useAppSelector(selectSharedFolderUrl);
   const sharedFolderPassword = useAppSelector(selectSharedFolderPassword);
   const isSharedFolderAvailable = useAppSelector(selectIsSharedFolderAvailable);
-  const currentBreakoutRoom = useAppSelector(selectCurrentBreakoutRoom);
-  const roomInfo = useAppSelector(selectEventInfo);
 
   const showDebugDialog = () => {
     if (clickTimer.current) {
@@ -517,24 +513,12 @@ const MeetingHeader = () => {
     }
   };
 
-  const getRoomTitle = () => {
-    let roomTitle;
-    if (currentBreakoutRoom && currentBreakoutRoom.name) {
-      roomTitle = currentBreakoutRoom.name;
-    } else if (roomInfo && roomInfo.title) {
-      roomTitle = roomInfo.title;
-    }
-    return roomTitle;
-  };
-
   return (
     <Content>
       <ContentItem>{logoImage()}</ContentItem>
       <ContentItem lgOrder={2}>
         <HeaderCenterContainer>
-          <HeaderItem>
-            <RoomTitle title={getRoomTitle()} />
-          </HeaderItem>
+          <RoomTitle />
           <LayoutSelection resetHTMLElements={resetHTMLElements} />
           {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
             <HeaderItem>

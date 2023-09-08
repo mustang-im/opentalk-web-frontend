@@ -3,13 +3,23 @@
 // SPDX-License-Identifier: EUPL-1.2
 import userEvent from '@testing-library/user-event';
 
-import { screen, render } from '../../../utils/testUtils';
+import { screen, render, createStore } from '../../../utils/testUtils';
 import RoomTitle, { ROOM_TITLE_MAX_LENGTH } from './RoomTitle';
 
 describe('Room title', () => {
   test('shall display the whole name in the title and in the tooltip', async () => {
     const allowedLengthName = 'a'.repeat(ROOM_TITLE_MAX_LENGTH);
-    await render(<RoomTitle title={allowedLengthName} />);
+    const createdStore = createStore({
+      initialState: {
+        room: {
+          eventInfo: {
+            title: allowedLengthName,
+          },
+        },
+      },
+    });
+
+    await render(<RoomTitle />, createdStore.store);
 
     expect(screen.getByText(allowedLengthName)).toBeInTheDocument();
 
@@ -21,7 +31,17 @@ describe('Room title', () => {
 
   test('shall dispaly dots after exceeding max length in the title and whole name in the tooltip', async () => {
     const exceedingMaxLengthName = 'a'.repeat(ROOM_TITLE_MAX_LENGTH + 1);
-    await render(<RoomTitle title={exceedingMaxLengthName} />);
+    const createdStore = createStore({
+      initialState: {
+        room: {
+          eventInfo: {
+            title: exceedingMaxLengthName,
+          },
+        },
+      },
+    });
+
+    await render(<RoomTitle />, createdStore.store);
 
     expect(screen.queryByText(exceedingMaxLengthName)).not.toBeInTheDocument();
     expect(screen.getByText(/.../i)).toBeInTheDocument();
@@ -33,7 +53,14 @@ describe('Room title', () => {
   });
 
   test('shall display fallback title in case room title is undefined', async () => {
-    await render(<RoomTitle title={undefined} />);
+    const createdStore = createStore({
+      initialState: {
+        room: {
+          eventInfo: undefined,
+        },
+      },
+    });
+    await render(<RoomTitle />, createdStore.store);
 
     expect(screen.getByText('fallback-room-title')).toBeInTheDocument();
 
