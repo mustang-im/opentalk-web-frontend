@@ -21,9 +21,6 @@ import {
 import { keyframes } from '@mui/system';
 import {
   DurationIcon as DefaultDurationIcon,
-  SpeakerViewIcon,
-  GridViewIcon,
-  FullscreenViewIcon,
   SpeakerQueueIcon,
   PollIcon as DefaultPollIcon,
   LegalBallotIcon,
@@ -40,7 +37,6 @@ import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import IconButton from '../../commonComponents/IconButton';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useFullscreenContext } from '../../provider/FullscreenProvider';
 import { selectCurrentBreakoutRoom } from '../../store/slices/breakoutSlice';
 import {
   selectAllOnlineParticipants,
@@ -59,7 +55,6 @@ import {
   selectIsSharedFolderOpened,
   sharedFolderOpened,
 } from '../../store/slices/sharedFolderSlice';
-import { toggledFullScreenMode } from '../../store/slices/uiSlice';
 import {
   updatedCinemaLayout,
   selectCinemaLayout,
@@ -74,6 +69,7 @@ import { selectIsModerator } from '../../store/slices/userSlice';
 import { selectIsWhiteboardAvailable } from '../../store/slices/whiteboardSlice';
 import { MAX_GRID_TILES } from '../GridView/GridView';
 import { Vote } from '../VoteResult/VoteResultContainer';
+import LayoutSelection from './fragments/LayoutSelection';
 import MeetingTimer from './fragments/MeetingTimer';
 import RoomTitle from './fragments/RoomTitle';
 import SecureConnectionField from './fragments/SecureConnectionField';
@@ -102,21 +98,6 @@ const WaitingParticipantList = styled(List)(({ theme }) => ({
   borderRadius: '0.1rem',
   background: theme.palette.background.video,
 }));
-
-const PopperContainer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'space-between',
-  padding: theme.spacing(0.5, 1),
-  borderRadius: '0.1rem',
-  background: theme.palette.background.video,
-}));
-
-const ViewPopperContainer = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-});
 
 const HeaderItem = styled('div')<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
   background: highlighted ? theme.palette.primary.main : theme.palette.background.video,
@@ -211,11 +192,6 @@ const CustomMenuItem = styled(MenuItem)(() => ({
   },
 }));
 
-const ViewDropdownIcon = styled(ListItemIcon)(({ theme }) => ({
-  fontSize: theme.typography.pxToRem(16),
-  minWidth: 35,
-}));
-
 const DurationIcon = styled(DefaultDurationIcon)(() => ({
   width: '0.6em',
 }));
@@ -226,7 +202,6 @@ const PollIcon = styled(DefaultPollIcon)(() => ({
 
 const MeetingHeader = () => {
   const [sharedFolderEl, setSharedFolderEl] = useState<null | HTMLElement>(null);
-  const [viewEl, setViewEl] = useState<null | HTMLElement>(null);
   const [waitingEl, setWaitingEl] = useState<null | HTMLElement>(null);
   const [areAllApproved, setApproveAll] = useState<boolean>(false);
   const { t } = useTranslation();
@@ -249,7 +224,6 @@ const MeetingHeader = () => {
   const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const recording = useAppSelector(selectRecordingState);
   const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
-  const fullscreenHandle = useFullscreenContext();
   const [clickCount, setClickCount] = useState(0);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
   const isSharedFolderOpened = useAppSelector(selectIsSharedFolderOpened);
@@ -304,42 +278,17 @@ const MeetingHeader = () => {
     setSharedFolderEl(sharedFolderEl ? null : event.currentTarget);
   };
 
-  const toggleViewPopper = (event: React.MouseEvent<HTMLElement>) => {
-    setViewEl(viewEl ? null : event.currentTarget);
-  };
-
   const resetHTMLElements = () => {
-    setViewEl(null);
     setWaitingEl(null);
     setSharedFolderEl(null);
   };
 
-  const handleSelectedView = async (layout: LayoutOptions) => {
+  const handleSelectedView = (layout: LayoutOptions) => {
     resetHTMLElements();
     dispatch(updatedCinemaLayout(layout));
   };
 
-  const openFullscreenView = useCallback(async () => {
-    resetHTMLElements();
-    await fullscreenHandle.enter();
-    dispatch(toggledFullScreenMode());
-  }, [fullscreenHandle]);
-
   const renderSecurityIcon = () => window.location.protocol === 'https:' && <SecureConnectionField />;
-
-  const renderViewIcon = () => {
-    switch (selectedLayout) {
-      case LayoutOptions.Grid:
-        return <GridViewIcon />;
-      case LayoutOptions.Protocol:
-        return <Typography noWrap>{t('protocol-hide')}</Typography>;
-      case LayoutOptions.Whiteboard:
-        return <Typography noWrap>{t('whiteboard-hide')}</Typography>;
-      case LayoutOptions.Speaker:
-      default:
-        return <SpeakerViewIcon />;
-    }
-  };
 
   const renderRecordingIcon = () => {
     if (!recording) {
@@ -352,69 +301,6 @@ const MeetingHeader = () => {
       </RecordingIconContainer>
     );
   };
-
-  const isViewPopoverOpen = Boolean(viewEl);
-  const ViewPopper = (
-    <ViewPopperContainer>
-      <IconButton
-        id="view-popover-menu-button"
-        aria-expanded={isViewPopoverOpen ? 'true' : undefined}
-        aria-haspopup="true"
-        aria-controls={isViewPopoverOpen ? 'view-popover-menu' : undefined}
-        aria-label={t('conference-view-trigger-button')}
-        onClick={(event) =>
-          [LayoutOptions.Protocol, LayoutOptions.Whiteboard].includes(selectedLayout)
-            ? handleSelectedView(LayoutOptions.Grid)
-            : toggleViewPopper(event)
-        }
-      >
-        {renderViewIcon()}
-      </IconButton>
-      <Popover
-        open={isViewPopoverOpen}
-        anchorEl={viewEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={resetHTMLElements}
-        role={undefined}
-      >
-        <PopperContainer>
-          <MenuList id="view-popover-menu" autoFocusItem={isViewPopoverOpen} aria-labelledby="view-popover-menu-button">
-            <MenuItem
-              sx={(theme) => ({ padding: theme.spacing(1) })}
-              onClick={() => handleSelectedView(LayoutOptions.Grid)}
-            >
-              <ViewDropdownIcon aria-hidden={true}>
-                <GridViewIcon sx={{ fontSize: 'inherit' }} />
-              </ViewDropdownIcon>
-              {t('conference-view-grid')}
-            </MenuItem>
-            <MenuItem
-              sx={(theme) => ({ padding: theme.spacing(1) })}
-              onClick={() => handleSelectedView(LayoutOptions.Speaker)}
-            >
-              <ViewDropdownIcon aria-hidden={true}>
-                <SpeakerViewIcon sx={{ fontSize: 'inherit' }} />
-              </ViewDropdownIcon>
-              {t('conference-view-speaker')}
-            </MenuItem>
-            <MenuItem sx={(theme) => ({ padding: theme.spacing(1) })} onClick={openFullscreenView}>
-              <ViewDropdownIcon aria-hidden={true}>
-                <FullscreenViewIcon sx={{ fontSize: 'inherit' }} />
-              </ViewDropdownIcon>
-              {t('conference-view-fullscreen')}
-            </MenuItem>
-          </MenuList>
-        </PopperContainer>
-      </Popover>
-    </ViewPopperContainer>
-  );
 
   const toggleWaitingPopper = (event: React.MouseEvent<HTMLElement>) => {
     setWaitingEl(waitingEl ? null : event.currentTarget);
@@ -649,7 +535,7 @@ const MeetingHeader = () => {
           <HeaderItem>
             <RoomTitle title={getRoomTitle()} />
           </HeaderItem>
-          <HeaderItem>{ViewPopper}</HeaderItem>
+          <LayoutSelection resetHTMLElements={resetHTMLElements} />
           {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
             <HeaderItem>
               <HeaderPagination
