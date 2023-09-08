@@ -65,6 +65,7 @@ declare module '@mui/material/styles/createPalette' {
     video?: string;
     secondaryOverlay?: string;
     voteResult?: string;
+    light?: string;
   }
 
   interface Palette {
