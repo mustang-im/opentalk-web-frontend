@@ -41,6 +41,7 @@ import InviteIcon from './InviteIcon';
 import LegalBallotIcon from './LegalBallotIcon';
 import LegalLinksIcon from './LegalLinksIcon';
 import LockedIcon from './LockedIcon';
+import LogoSmallIcon from './LogoSmallIcon';
 import MeetingsIcon from './MeetingsIcon';
 import MicOffIcon from './MicOffIcon';
 import MicOnIcon from './MicOnIcon';
@@ -167,4 +168,5 @@ export {
   WoolBallIcon,
   TelephoneStrokeIcon,
   MyAccountIcon,
+  LogoSmallIcon,
 };
