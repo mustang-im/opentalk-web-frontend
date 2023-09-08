@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Theme, useMediaQuery, Box } from '@mui/material';
+import { styled, Theme, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useRef, useState, useEffect } from 'react';
 
@@ -11,11 +11,12 @@ import { selectDebugMode, selectShowCoffeeBreakCurtain } from '../../store/slice
 import { selectIsModerator } from '../../store/slices/userSlice';
 import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
 import DebugPanel from '../DebugPanel';
-import LocalVideo from '../LocalVideo';
+import MobileMeetingHeader from '../MobileMeetingHeader/MobileMeetingHeader';
 import RemoteAudioStreams from '../RemoteAudioStreams';
 import TimerPopover from '../TimerPopover';
 import Toolbar from '../Toolbar';
 import InnerLayout from './InnerLayout';
+import MobileLayout from './MobileLayout';
 
 const Container = styled('div')(({ theme }) => ({
   background: theme.palette.background.overlay,
@@ -28,27 +29,11 @@ const Container = styled('div')(({ theme }) => ({
     paddingLeft: 0,
     paddingRight: 0,
   },
-}));
-
-const ToolbarWrapper = styled(Box)(({ theme }) => ({
-  position: 'fixed',
-  bottom: 0,
-  zIndex: theme.zIndex.mobileStepper,
-  backgroundColor: theme.palette.background.paper,
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const LocalVideoWrapper = styled(Box)(({ theme }) => ({
-  position: 'fixed',
-  bottom: 65,
   [theme.breakpoints.down('sm')]: {
-    bottom: 87,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
-  width: 100,
-  zIndex: theme.zIndex.mobileStepper,
 }));
 
 const MeetingView = () => {
@@ -82,17 +67,14 @@ const MeetingView = () => {
 
           {!showCoffeeBreakCurtain && <TimerPopover anchorEl={anchorEl} />}
 
-          <InnerLayout />
-
-          {(isSmallScreen || isSmallPortraitScreen) && (
+          {isSmallScreen || isSmallPortraitScreen ? (
             <>
-              <LocalVideoWrapper>
-                <LocalVideo />
-              </LocalVideoWrapper>
-              <ToolbarWrapper>
-                <Toolbar />
-              </ToolbarWrapper>
+              <MobileMeetingHeader />
+              <MobileLayout />
+              <Toolbar />
             </>
+          ) : (
+            <InnerLayout />
           )}
         </>
       )}
