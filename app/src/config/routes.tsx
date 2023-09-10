@@ -75,10 +75,10 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const isAuthenticated = useAppSelector(selectIsAuthed);
   const isAuthLoading = useAppSelector(selectIsLoading);
   const isAuthError = useAppSelector(selectAuthError);
-  const isGuestUser = useAppSelector(selectIsGuest);
+  const isGuest = useAppSelector(selectIsGuest);
 
   useEffect(() => {
-    if (!isAuthenticated && !isAuthLoading && !isAuthError && !isGuestUser) {
+    if (!isAuthenticated && !isAuthLoading && !isAuthError && !isGuest) {
       const timeout = setTimeout(async () => {
         const redirectUrl = sessionStorage.getItem('redirect-uri');
         if (!redirectUrl || redirectUrl === '/auth/popup_callback') {
@@ -88,8 +88,9 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
       }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
       return () => clearTimeout(timeout);
     }
-  }, [isAuthenticated, isAuthLoading, isAuthError, isGuestUser]);
-  if (isAuthenticated || isGuestUser) {
+  }, [isAuthenticated, isAuthLoading, isAuthError, isGuest]);
+
+  if (isAuthenticated || isGuest) {
     if (children !== undefined) {
       return <>{children}</>;
     }

@@ -1,7 +1,5 @@
-import { selectIsLoading } from './AuthSlice';
 import { useAuth } from './useAuth';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 interface StubHistory {
   push(uri: string): void;

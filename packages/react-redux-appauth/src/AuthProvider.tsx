@@ -207,6 +207,9 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
           break;
         case EventType.EXPIRED:
           isMountedRef.current && dispatch(expired());
+          break;
+        default:
+          break;
       }
     };
     await adapter.fetchServiceConfiguration();

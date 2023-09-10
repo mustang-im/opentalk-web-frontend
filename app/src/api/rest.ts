@@ -124,7 +124,7 @@ export const rtkQueryErrorLoggerMiddlware: Middleware =
         dispatch(
           auth_error({
             name: EventTypeError.SystemCurrentlyUnavailable,
-            message: `${EventTypeError.SystemCurrentlyUnavailable}-message`,
+            message: EventTypeError.SystemCurrentlyUnavailable,
           })
         );
         return;
