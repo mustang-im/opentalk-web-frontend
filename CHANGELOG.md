@@ -1,5 +1,13 @@
 ## Unreleased
 
+### New Features
+
+### Improvements to the user experience
+
+### Bug Fixes
+
+## 1.6.0
+
 ### UI/UX Fixes
 
 - Fix guest link generation in the dashboard (!1066)
@@ -59,7 +67,7 @@
 - Add ability to revoke event invitation from invited participant. (!1035)
 - Add safari warning notification (!1041)
 
-## 1.5.x
+## 1.5.0
 
 ### UI/UX Fixes
 
