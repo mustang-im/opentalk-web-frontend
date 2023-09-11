@@ -14,10 +14,10 @@ const FormControlLabel = styled(MuiFormControlLabel)({
   justifyContent: 'space-between',
 });
 
-const ParticipantGroupByForm = () => {
+const ParticipantGroupingForm = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const groupParticipantsEnabled = useAppSelector(selectShowParticipantGroups);
+  const participantGroupingEnabled = useAppSelector(selectShowParticipantGroups);
 
   return (
     <FormControlLabel
@@ -25,16 +25,16 @@ const ParticipantGroupByForm = () => {
         <Switch
           color="primary"
           onChange={(_, checked) => dispatch(setSortByGroups(checked))}
-          value={groupParticipantsEnabled}
-          checked={groupParticipantsEnabled}
+          value={participantGroupingEnabled}
+          checked={participantGroupingEnabled}
         />
       }
       label={
-        <Typography variant="body2">{t(groupParticipantsEnabled ? 'sort-groups-on' : 'sort-groups-off')}</Typography>
+        <Typography variant="body2">{t(participantGroupingEnabled ? 'sort-groups-on' : 'sort-groups-off')}</Typography>
       }
       labelPlacement="start"
     />
   );
 };
 
-export default memo(ParticipantGroupByForm);
+export default memo(ParticipantGroupingForm);

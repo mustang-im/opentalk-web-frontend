@@ -6,7 +6,7 @@ import { ArrowDownIcon } from '@opentalk/common';
 import { Fragment, useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
-import { selectAllGroupParticipantsSortedAndFiltered } from '../../../store/selectors';
+import { selectParticipantGroupsSortedAndFiltered } from '../../../store/selectors';
 import ParticipantSimpleList from './ParticipantSimpleList';
 
 const AccordionButton = styled(Button)(({ theme }) => ({
@@ -17,9 +17,9 @@ const AccordionButton = styled(Button)(({ theme }) => ({
 
 const ParticipantGroups = (props: StackProps) => {
   const [expandedGroupId, setExpandedGroupId] = useState<string>('');
-  const groupsParticipants = useAppSelector(selectAllGroupParticipantsSortedAndFiltered);
+  const participantGroups = useAppSelector(selectParticipantGroupsSortedAndFiltered);
 
-  if (groupsParticipants.size === 0) {
+  if (participantGroups.size === 0) {
     return null;
   }
 
@@ -27,7 +27,7 @@ const ParticipantGroups = (props: StackProps) => {
     setExpandedGroupId((currentGroupId) => (currentGroupId === groupId ? '' : groupId));
   };
 
-  const Groups = Array.from(groupsParticipants).reduce((accordions, [groupId, participants]) => {
+  const Groups = Array.from(participantGroups).reduce((accordions, [groupId, participants]) => {
     if (participants.length === 0) {
       return accordions;
     }

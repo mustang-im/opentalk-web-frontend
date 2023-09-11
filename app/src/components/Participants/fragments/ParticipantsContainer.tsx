@@ -10,7 +10,7 @@ import {
   setParticipantsSearchValue,
 } from '../../../store/slices/uiSlice';
 import SearchTextField from '../../SearchTextField';
-import ParticipantGroupByForm from './ParticipantGroupByForm';
+import ParticipantGroupingForm from './ParticipantGroupingForm';
 import ParticipantGroups from './ParticipantGroups';
 import ParticipantNoGroups from './ParticipantNoGroups';
 
@@ -28,7 +28,7 @@ const ParticipantsContainer = () => {
   return (
     <>
       <CachedSearchTextField searchValue={searchValue} onSearch={dispatchNextSearchValue} fullWidth showSort />
-      <ParticipantGroupByForm />
+      <ParticipantGroupingForm />
       {groupParticipantsEnabled ? <ParticipantGroups flex={1} /> : <ParticipantNoGroups />}
     </>
   );
