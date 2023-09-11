@@ -39,6 +39,7 @@ import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriber
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
+import { selectHandUp } from '../../../store/slices/moderationSlice';
 
 const Avatar = styled(ParticipantAvatar)({
   width: '2.25rem',
@@ -122,6 +123,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const ownAudioEnabled = useAppSelector(selectAudioEnabled);
   const ownScreenShareEnabled = useAppSelector(selectShareScreenEnabled);
   const userProtocolAccess = useAppSelector(selectUserProtocolAccess);
+  const ownHandRaised = useAppSelector(selectHandUp);
 
   const { active: audioActive } = useAppSelector(
     selectSubscriberStateById(
@@ -237,11 +239,11 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
 
   const renderIcon = useCallback(() => {
     const isParticipantMe = participant.id === ownId;
-
+    const isHandRaised = isParticipantMe ? ownHandRaised : participant.handIsUp;
     const isScreenShareEnabled = isParticipantMe ? ownScreenShareEnabled : screenShareActive;
     const isAudioEnabled = isParticipantMe ? ownAudioEnabled : audioActive;
 
-    if (participant.handIsUp) {
+    if (isHandRaised) {
       return <RaiseHandOnIcon />;
     } else if (isScreenShareEnabled) {
       return <ShareScreenOnIcon />;
