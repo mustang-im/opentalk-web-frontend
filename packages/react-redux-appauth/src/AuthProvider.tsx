@@ -238,15 +238,11 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
       <AuthContext.Provider
         value={{
           signinCallback: signInCallback,
-          signIn: async (args: AuthProviderSignInProps = {}): Promise<void> => {
-            await signIn(args);
-          },
+          signIn,
           signInPopup: async (): Promise<void> => {
             await signInPopupHooks();
           },
-          signOut: async () => {
-            await signOut();
-          },
+          signOut,
           signOutRedirect: async (
             args: AuthProviderSignOutProps = {},
           ): Promise<void> => {

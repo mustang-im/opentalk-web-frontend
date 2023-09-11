@@ -25,6 +25,7 @@ import { selectIsGuest } from '../store/slices/userSlice';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
 import LobbyTemplate from '../templates/LobbyTemplate';
+import { sessionStorageItems } from './storage';
 
 const InvitePage = React.lazy(() => import('../pages/InvitePage'));
 
@@ -76,19 +77,20 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const isAuthLoading = useAppSelector(selectIsLoading);
   const isAuthError = useAppSelector(selectAuthError);
   const isGuest = useAppSelector(selectIsGuest);
+  const startLogin = !isAuthenticated && !isAuthLoading && !isAuthError && !isGuest;
 
   useEffect(() => {
-    if (!isAuthenticated && !isAuthLoading && !isAuthError && !isGuest) {
+    if (startLogin) {
       const timeout = setTimeout(async () => {
-        const redirectUrl = sessionStorage.getItem('redirect-uri');
+        const redirectUrl = sessionStorage.getItem(sessionStorageItems.redirectUri);
         if (!redirectUrl || redirectUrl === '/auth/popup_callback') {
-          sessionStorage.setItem('redirect-uri', window.location.pathname);
+          sessionStorage.setItem(sessionStorageItems.redirectUri, window.location.pathname);
         }
         await signIn();
       }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
       return () => clearTimeout(timeout);
     }
-  }, [isAuthenticated, isAuthLoading, isAuthError, isGuest]);
+  }, [startLogin]);
 
   if (isAuthenticated || isGuest) {
     if (children !== undefined) {

@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import { createOpenTalkTheme } from '../../assets/themes/opentalk';
 import Error from '../../commonComponents/Error';
+import { sessionStorageItems } from '../../config/storage';
 import { useAppDispatch } from '../../hooks';
 import { hangUp } from '../../store/commonActions';
 import LobbyTemplate from '../../templates/LobbyTemplate';
@@ -49,7 +50,7 @@ const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
     if (error.name === EventTypeError.SessionExpired) {
       setTimeout(() => {
         (async () => {
-          sessionStorage.setItem('redirect-uri', window.location.pathname);
+          sessionStorage.setItem(sessionStorageItems.redirectUri, window.location.pathname);
           await signOut();
         })();
       }, ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT);
