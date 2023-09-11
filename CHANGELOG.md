@@ -16,6 +16,7 @@
 - Fix: [Lobby] no feedback for wrong password ([1440](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1440))
 - Increase size of toolbar buttons for mobile user ([#1460](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1460))
 - Customize glitchtip user feedback dialog labels ([#1452](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1452))
+- Improved loading time of the participant list with over 100 participants in the room. [#1487](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1487)
 
 ### Bug Fixes
 
