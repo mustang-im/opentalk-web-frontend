@@ -137,6 +137,18 @@ export const participantsSlice = createSlice({
         changes: { waitingState: WaitingState.Approved },
       });
     },
+    approveAll: (state) => {
+      const participantSelectors = participantAdapter.getSelectors();
+      const participants = participantSelectors.selectAll(state);
+      participants.forEach((participant) => {
+        if (participant.waitingState === WaitingState.Waiting) {
+          participantAdapter.updateOne(state, {
+            id: participant.id,
+            changes: { waitingState: WaitingState.Approved },
+          });
+        }
+      });
+    },
     update: (
       state,
       {
@@ -195,8 +207,17 @@ export const participantsSlice = createSlice({
   },
 });
 
-export const { join, leave, update, breakoutJoined, breakoutLeft, waitingRoomJoined, waitingRoomLeft, approveToEnter } =
-  participantsSlice.actions;
+export const {
+  join,
+  leave,
+  update,
+  breakoutJoined,
+  breakoutLeft,
+  waitingRoomJoined,
+  waitingRoomLeft,
+  approveToEnter,
+  approveAll,
+} = participantsSlice.actions;
 export const actions = participantsSlice.actions;
 
 export const participantSelectors = participantAdapter.getSelectors<RootState>((state) => state.participants);
@@ -213,7 +234,7 @@ export const selectParticipantsWaitingCount = createSelector(
 );
 
 export const selectNotApprovedParticipants = createSelector(selectAllParticipantsInWaitingRoom, (participants) =>
-  participants.find((participant) => participant.waitingState === WaitingState.Waiting)
+  participants.filter((participant) => participant.waitingState === WaitingState.Waiting)
 );
 
 export const selectAllOnlineParticipantsInConference = createSelector(selectAllParticipants, (participants) =>
