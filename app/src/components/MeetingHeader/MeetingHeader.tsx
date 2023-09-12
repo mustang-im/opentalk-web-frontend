@@ -1,35 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  Box,
-  Popover,
-  styled,
-  Pagination,
-  Typography,
-  Stack,
-  Button,
-  Menu,
-  MenuList,
-  MenuItem,
-  Badge,
-  Chip as MuiChip,
-  List,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import { keyframes } from '@mui/system';
-import {
-  DurationIcon as DefaultDurationIcon,
-  SpeakerQueueIcon,
-  PollIcon as DefaultPollIcon,
-  LegalBallotIcon,
-  WhiteboardIcon,
-  RecordingsIcon,
-  ProtocolIcon,
-  SharedFolderIcon,
-} from '@opentalk/common';
-import { legalVoteStore, LegalVoteType } from '@opentalk/components';
+import { Popover, styled, Pagination, MenuItem } from '@mui/material';
+import { WhiteboardIcon, ProtocolIcon, SharedFolderIcon } from '@opentalk/common';
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,15 +10,8 @@ import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import IconButton from '../../commonComponents/IconButton';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import {
-  selectAllOnlineParticipants,
-  selectAllParticipantsInWaitingRoom,
-  selectNotApprovedParticipants,
-  selectParticipantsWaitingCount,
-} from '../../store/slices/participantsSlice';
-import { Poll, selectAllPollVotes } from '../../store/slices/pollSlice';
+import { selectAllOnlineParticipants } from '../../store/slices/participantsSlice';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
-import { selectRecordingState } from '../../store/slices/recordingSlice';
 import {
   selectSharedFolderPassword,
   selectSharedFolderUrl,
@@ -58,44 +24,15 @@ import {
   selectCinemaLayout,
   paginationPageSet,
   selectPaginationPageState,
-  setVotePollIdToShow,
   toggleDebugMode,
   selectIsCurrentProtocolHighlighted,
 } from '../../store/slices/uiSlice';
 import { selectIsCurrentWhiteboardHighlighted } from '../../store/slices/uiSlice';
-import { selectIsModerator } from '../../store/slices/userSlice';
 import { selectIsWhiteboardAvailable } from '../../store/slices/whiteboardSlice';
 import { MAX_GRID_TILES } from '../GridView/GridView';
-import { Vote } from '../VoteResult/VoteResultContainer';
 import LayoutSelection from './fragments/LayoutSelection';
-import MeetingTimer from './fragments/MeetingTimer';
+import MeetingTimerSection from './fragments/MeetingTimerSection';
 import RoomTitle from './fragments/RoomTitle';
-import SecureConnectionField from './fragments/SecureConnectionField';
-import WaitingParticipantItem from './fragments/WaitingParticipantsItem';
-
-const blink = keyframes`from { opacity: 1; } to { opacity: 0.3; }`;
-
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    color: theme.palette.secondary.contrastText,
-    background: theme.palette.primary.main,
-    animation: `${blink} 1s ease alternate`,
-    animationIterationCount: 'infinite',
-  },
-}));
-
-const WaitingParticipantList = styled(List)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  height: '100%',
-  maxHeight: 200,
-  overflowX: 'hidden',
-  overflowY: 'scroll',
-  alignItems: 'space-between',
-  padding: theme.spacing(1, 1),
-  borderRadius: '0.1rem',
-  background: theme.palette.background.video,
-}));
 
 const HeaderItem = styled('div')<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
   background: highlighted ? theme.palette.primary.main : theme.palette.background.video,
@@ -136,18 +73,6 @@ const HeaderCenterContainer = styled('div')(({ theme }) => ({
   height: '100%',
 }));
 
-const RightHeaderItem = styled(HeaderItem)(({ theme }) => ({
-  display: 'inline-flex',
-  alignItems: 'center',
-  padding: theme.spacing(0.5, 0),
-  '& > :nth-of-type(1)': {
-    marginLeft: theme.spacing(1),
-  },
-  '& > :last-child': {
-    marginRight: theme.spacing(1),
-  },
-}));
-
 const Content = styled('div')(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
@@ -162,65 +87,17 @@ const ContentItem = styled('div')<{ lgOrder?: number }>(({ theme, lgOrder }) => 
   },
 }));
 
-const RecordingIconContainer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  marginLeft: theme.spacing(1),
-  '& > svg': {
-    fill: theme.palette.error.light,
-  },
-}));
-
-const Chip = styled(MuiChip)(({ theme }) => ({
-  marginLeft: theme.spacing(1),
-  marginRight: 0,
-  borderRadius: 0,
-  borderColor: 'transparent',
-  '& .MuiChip-label': {
-    paddingRight: 0,
-    '&:first-letter': {
-      textTransform: 'capitalize',
-    },
-  },
-}));
-
-const CustomMenuItem = styled(MenuItem)(() => ({
-  '&:hover': {
-    cursor: 'pointer',
-  },
-}));
-
-const DurationIcon = styled(DefaultDurationIcon)(() => ({
-  width: '0.6em',
-}));
-
-const PollIcon = styled(DefaultPollIcon)(() => ({
-  width: '0.6em',
-}));
-
 const MeetingHeader = () => {
   const [sharedFolderEl, setSharedFolderEl] = useState<null | HTMLElement>(null);
-  const [waitingEl, setWaitingEl] = useState<null | HTMLElement>(null);
-  const [areAllApproved, setApproveAll] = useState<boolean>(false);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const selectedLayout = useAppSelector(selectCinemaLayout);
   const participants = useAppSelector(selectAllOnlineParticipants);
   const selectedPage = useAppSelector(selectPaginationPageState);
   const protocolUrl = useAppSelector(selectProtocolUrl);
-  const participantsInWaitingRoom = useAppSelector(selectAllParticipantsInWaitingRoom);
-  const participantsInWaitingRoomCount = useAppSelector(selectParticipantsWaitingCount);
-  const participantsNotApproved = useAppSelector(selectNotApprovedParticipants);
-  const isModerator = useAppSelector(selectIsModerator);
-  const votes = useAppSelector(legalVoteStore.selectAllVotes);
-  const polls = useAppSelector(selectAllPollVotes);
-  const hasVotesOrPolls = votes.length + polls.length > 0;
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | SVGSVGElement | null>(null);
   const isWhiteboardAvailable = useAppSelector(selectIsWhiteboardAvailable);
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
   const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
-  const recording = useAppSelector(selectRecordingState);
   const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
   const [clickCount, setClickCount] = useState(0);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
@@ -248,12 +125,6 @@ const MeetingHeader = () => {
     }
   }, [dispatch, clickCount]);
 
-  useEffect(() => {
-    if (participantsInWaitingRoomCount === 0) {
-      setWaitingEl(null);
-    }
-  }, [participantsNotApproved, participantsInWaitingRoomCount]);
-
   const logoImage = () => <Logo width={'12.8997em'} height={'2.072em'} onClick={showDebugDialog} fill={'white'} />;
 
   const pageCount = useMemo(() => {
@@ -270,90 +141,12 @@ const MeetingHeader = () => {
     dispatch(paginationPageSet(page));
   };
 
-  const toggleSharedFolderPopper = (event: React.MouseEvent<HTMLElement>) => {
-    setSharedFolderEl(sharedFolderEl ? null : event.currentTarget);
-  };
-
-  const resetHTMLElements = () => {
-    setWaitingEl(null);
-    setSharedFolderEl(null);
+  const toggleSharedFolderPopover = (event?: React.MouseEvent<HTMLElement>) => {
+    setSharedFolderEl(event ? event.currentTarget : null);
   };
 
   const handleSelectedView = (layout: LayoutOptions) => {
-    resetHTMLElements();
     dispatch(updatedCinemaLayout(layout));
-  };
-
-  const renderSecurityIcon = () => window.location.protocol === 'https:' && <SecureConnectionField />;
-
-  const renderRecordingIcon = () => {
-    if (!recording) {
-      return null;
-    }
-
-    return (
-      <RecordingIconContainer>
-        <RecordingsIcon aria-label={t('recording-active-label')} />
-      </RecordingIconContainer>
-    );
-  };
-
-  const toggleWaitingPopper = (event: React.MouseEvent<HTMLElement>) => {
-    setWaitingEl(waitingEl ? null : event.currentTarget);
-  };
-
-  const waitingRoomPopper = () => {
-    if (participantsInWaitingRoomCount > 0 && isModerator) {
-      return (
-        <StyledBadge
-          badgeContent={participantsInWaitingRoomCount}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <HeaderItem>
-            <IconButton aria-describedby={'view-select'} onClick={toggleWaitingPopper}>
-              <SpeakerQueueIcon />
-            </IconButton>
-            <Popover
-              open={Boolean(waitingEl)}
-              anchorEl={waitingEl}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              onClose={resetHTMLElements}
-              disablePortal
-            >
-              <WaitingParticipantList
-                subheader={
-                  <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-                    <Typography variant="body2">{t('waiting-room-participant-label')}</Typography>
-                    <Button variant="text" disabled={!participantsNotApproved} onClick={() => setApproveAll(true)}>
-                      {t('approve-all-participants-from-waiting')}
-                    </Button>
-                  </Stack>
-                }
-              >
-                {participantsInWaitingRoom.map((participant) => (
-                  <WaitingParticipantItem
-                    key={participant.id}
-                    participant={participant}
-                    approveAllWaiting={areAllApproved}
-                    handleApproveAll={() => setApproveAll(false)}
-                  />
-                ))}
-              </WaitingParticipantList>
-            </Popover>
-          </HeaderItem>
-        </StyledBadge>
-      );
-    }
   };
 
   const handleProtocolClick = useCallback(() => {
@@ -375,7 +168,7 @@ const MeetingHeader = () => {
   const renderSharedFolderIcon = () => {
     return (
       <HeaderItem highlighted={!isSharedFolderOpened}>
-        <IconButton aria-describedby={'view-select'} onClick={toggleSharedFolderPopper}>
+        <IconButton aria-describedby={'view-select'} onClick={toggleSharedFolderPopover}>
           <SharedFolderIcon />
         </IconButton>
         <Popover
@@ -389,7 +182,7 @@ const MeetingHeader = () => {
             vertical: 'top',
             horizontal: 'center',
           }}
-          onClose={resetHTMLElements}
+          onClose={() => setSharedFolderEl(null)}
           disablePortal
         >
           {sharedFolderUrl && (
@@ -397,7 +190,7 @@ const MeetingHeader = () => {
               onClick={() => {
                 dispatch(sharedFolderOpened());
                 window.open(sharedFolderUrl, 'sharedFolder');
-                resetHTMLElements();
+                toggleSharedFolderPopover();
               }}
             >
               {t('shared-folder-open-label')}
@@ -407,7 +200,7 @@ const MeetingHeader = () => {
             <MenuItem
               onClick={() => {
                 navigator.clipboard.writeText(sharedFolderPassword);
-                resetHTMLElements();
+                toggleSharedFolderPopover();
               }}
             >
               {t('shared-folder-password-label')}
@@ -432,94 +225,13 @@ const MeetingHeader = () => {
     </HeaderItem>
   );
 
-  const openVotePoll = useCallback(
-    (item: LegalVoteType | Poll) => {
-      dispatch(setVotePollIdToShow(item.id));
-    },
-    [dispatch]
-  );
-
-  const renderLiveLabel = useCallback(
-    (item: Vote | Poll) => {
-      if ('live' in item) {
-        return `${item.live ? t('votes-poll-overview-live-label') : t('votes-poll-overview-not-live-label')}`;
-      }
-      return '';
-    },
-    [t]
-  );
-
-  const getMenuItem = useCallback(
-    (item: LegalVoteType | Poll) => {
-      const label = Object.hasOwn(item, 'name') ? (item as LegalVoteType).name : (item as Poll).topic;
-
-      return (
-        <CustomMenuItem key={item.id} onClick={() => openVotePoll(item)}>
-          <ListItemIcon>{Object.hasOwn(item, 'choices') ? <PollIcon /> : <LegalBallotIcon />}</ListItemIcon>
-          <ListItemText sx={{ whiteSpace: 'normal' }}>{`${label}`}</ListItemText>
-          <Chip
-            size="medium"
-            label={t(`global-state-${item.state}`)}
-            color={item?.state === 'active' ? 'success' : 'error'}
-            variant="filled"
-            clickable={false}
-          />
-        </CustomMenuItem>
-      );
-    },
-    [openVotePoll, renderLiveLabel]
-  );
-
-  const renderVotesPollsPopover = () => {
-    if (!hasVotesOrPolls) {
-      return <></>;
-    }
-    return (
-      <Menu
-        open={Boolean(anchorEl)}
-        onClose={() => {
-          setAnchorEl(null);
-        }}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <MenuList sx={{ maxWidth: 300 }}>
-          <Stack p={2}>
-            <Typography variant={'h2'} align={'center'}>
-              {t('votes-poll-overview-title')}
-            </Typography>
-          </Stack>
-          {votes.map((vote: LegalVoteType) => {
-            return getMenuItem(vote);
-          })}
-          {polls.map((poll: Poll) => {
-            return getMenuItem(poll);
-          })}
-        </MenuList>
-      </Menu>
-    );
-  };
-
-  const showDialog = () => {
-    if (menuRef && menuRef.current) {
-      setAnchorEl(menuRef.current);
-    }
-  };
-
   return (
     <Content>
       <ContentItem>{logoImage()}</ContentItem>
       <ContentItem lgOrder={2}>
         <HeaderCenterContainer>
           <RoomTitle />
-          <LayoutSelection resetHTMLElements={resetHTMLElements} />
+          <LayoutSelection />
           {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
             <HeaderItem>
               <HeaderPagination
@@ -546,19 +258,7 @@ const MeetingHeader = () => {
         </HeaderCenterContainer>
       </ContentItem>
       <ContentItem>
-        <Box justifyContent={'end'} height={'100%'} display={'flex'} gap={1}>
-          {waitingRoomPopper()}
-          <RightHeaderItem ref={menuRef}>
-            <Stack spacing={1} direction={'row'}>
-              {hasVotesOrPolls && <PollIcon fontSize={'medium'} onClick={showDialog} />}
-              <DurationIcon />
-            </Stack>
-            <MeetingTimer aria-label="current time" />
-            {renderSecurityIcon()}
-          </RightHeaderItem>
-          {renderRecordingIcon()}
-        </Box>
-        {renderVotesPollsPopover()}
+        <MeetingTimerSection />
       </ContentItem>
     </Content>
   );
