@@ -303,12 +303,12 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
     }
   };
 
-  const showTableHint = () => {
-    if (isLiveVote) {
+  const isTableHintVisible = () => {
+    if (isLiveVote || currentLegalVote === undefined || currentLegalVote.votingRecord === undefined || !allowedToVote) {
       return false;
     }
-    const hasResults = Object.keys(currentLegalVote?.votingRecord || {}).length > 0;
-    return Boolean(!showResults && currentLegalVote && allowedToVote && hasResults);
+    const hasResults = Object.keys(currentLegalVote.votingRecord).length > 0;
+    return hasResults;
   };
 
   const showResultTable = (isLiveVote || showResults) && currentLegalVote && allowedToVote;
@@ -374,7 +374,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
             <VoteResultDate
               date={new Date(currentLegalVote?.votedAt)}
               state={currentLegalVote.state}
-              showTableHint={showTableHint()}
+              showTableHint={isTableHintVisible()}
               showResultsHandler={showResultsHandler}
             />
           </Grid>
