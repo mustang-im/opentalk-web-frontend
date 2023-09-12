@@ -36,10 +36,10 @@ import IconButton from '../../../commonComponents/IconButton';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectHandUp } from '../../../store/slices/moderationSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
-import { selectHandUp } from '../../../store/slices/moderationSlice';
 
 const Avatar = styled(ParticipantAvatar)({
   width: '2.25rem',
@@ -259,6 +259,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
     screenShareActive,
     ownAudioEnabled,
     ownScreenShareEnabled,
+    ownHandRaised,
   ]);
 
   const renderMenu = () => (
