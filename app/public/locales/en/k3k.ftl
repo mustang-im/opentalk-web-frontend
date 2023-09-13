@@ -360,7 +360,7 @@ legal-vote-no-results = No votes placed
 
 legal-vote-form-kind = Voting Type
 legal-vote-roll_call = Roll Call
-legal-vote-live_roll_call = Roll Call - Live
+legal-vote-live_roll_call = Roll Call - by name
 legal-vote-pseudonymous = Hidden Vote
 
 legal-vote-success-clipboard-message = You voted {{vote}}

@@ -360,7 +360,7 @@ legal-vote-no-results = Keine Stimmen abgegeben
 
 legal-vote-form-kind = Abstimmungstyp
 legal-vote-roll_call = Offene Abstimmung
-legal-vote-live_roll_call = Offene Abstimmung - live
+legal-vote-live_roll_call = Offene Abstimmung - namentlich
 legal-vote-pseudonymous = Geheime Abstimmung
 
 legal-vote-success-clipboard-message = Du hast mit {{vote}} abgestimmt
