@@ -115,6 +115,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const startTime = new Date(currentLegalVote?.startTime ?? new Date());
   const formattedTime = useDateFormat(startTime, 'time');
   const [showResults, setShowResults] = useState(false);
+  const isLiveVote = currentLegalVote?.kind === 'live_roll_call';
 
   const closeResultWindow = () => {
     dispatch(closePollResultWindow());
@@ -302,10 +303,15 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
     }
   };
 
-  const showTableHint =
-    !showResults && currentLegalVote && allowedToVote && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0
-      ? true
-      : false;
+  const isTableHintVisible = () => {
+    if (isLiveVote || currentLegalVote === undefined || currentLegalVote.votingRecord === undefined || !allowedToVote) {
+      return false;
+    }
+    const hasResults = Object.keys(currentLegalVote.votingRecord).length > 0;
+    return hasResults;
+  };
+
+  const showResultTable = (isLiveVote || showResults) && currentLegalVote && allowedToVote;
 
   return (
     <MainContainer maxWidth="sm">
@@ -368,7 +374,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
             <VoteResultDate
               date={new Date(currentLegalVote?.votedAt)}
               state={currentLegalVote.state}
-              showTableHint={showTableHint}
+              showTableHint={isTableHintVisible()}
               showResultsHandler={showResultsHandler}
             />
           </Grid>
@@ -384,14 +390,11 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
           </Grid>
         )}
 
-        {showResults &&
-          currentLegalVote &&
-          allowedToVote &&
-          Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
-            <Grid ref={resultsRef} item xs={12}>
-              <VoteResultTable scrollToResults={scrollToResults} voteId={currentLegalVote.id} />
-            </Grid>
-          )}
+        {showResultTable && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
+          <Grid ref={resultsRef} item xs={12}>
+            <VoteResultTable scrollToResults={scrollToResults} voteId={currentLegalVote.id} />
+          </Grid>
+        )}
       </Grid>
     </MainContainer>
   );

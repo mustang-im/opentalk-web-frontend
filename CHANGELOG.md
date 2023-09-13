@@ -2,6 +2,8 @@
 
 ### New Features
 
+- Show voting results of live vote even the participant has not yet voted or saved ([#1425](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1425))
+
 ### Improvements to the user experience
 
 ### Bug Fixes
