@@ -18,7 +18,7 @@ import { RootState } from '../';
 import { Role } from '../../api/types/incoming/control';
 import { sendChatMessage } from '../../api/types/outgoing/chat';
 import { lowerHand, raiseHand } from '../../api/types/outgoing/control';
-import { login, startRoom } from '../commonActions';
+import { startRoom, login } from '../commonActions';
 import { setAudioEnable, setFocusedSpeaker, setScreenShare, setVideoEnable } from './mediaSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
@@ -66,6 +66,12 @@ export const userSlice = createSlice({
     builder.addCase(fetchRoomByInviteId.fulfilled, (state) => {
       state.role = Role.Guest;
     });
+    builder.addCase(login.fulfilled, (state, { meta }) => {
+      state.loggedIdToken = meta.arg;
+    });
+    builder.addCase(login.rejected, (state) => {
+      state.loggedIdToken = undefined;
+    });
     builder.addCase(
       startRoom.pending,
       (
@@ -91,12 +97,6 @@ export const userSlice = createSlice({
     builder.addCase(connectionClosed, (state) => {
       state.uuid = null;
       state.joinedAt = undefined;
-    });
-    builder.addCase(login.fulfilled, (state, { meta }) => {
-      state.loggedIdToken = meta.arg;
-    });
-    builder.addCase(login.rejected, (state) => {
-      state.loggedIdToken = undefined;
     });
     builder.addCase(logged_out, () => initialState);
 
@@ -152,6 +152,7 @@ export const selectIsAuthenticated = createSelector(
   (state) => state.loggedIdToken !== undefined || state.role === Role.Guest
 );
 export const selectIsModerator = createSelector(userState, (state) => state.role === Role.Moderator);
+export const selectIsGuest = createSelector(userState, (state) => state.role === Role.Guest);
 
 export const selectUserAsPartialParticipant = createSelector(
   userState,

@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Remove the redundant login screen - fixed redirect ([#1360, #1463](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1360, https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1463))
 ### Bug Fixes
 
 ## 1.6.0

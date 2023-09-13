@@ -9,6 +9,7 @@ import {
   AuthProviderProps,
   AuthProviderSignInProps,
   AuthProviderSignOutProps,
+  EventTypeError,
 } from './AuthInterface';
 import {
   expired,
@@ -23,9 +24,6 @@ import {
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 
-export enum EventTypeError {
-  SESSION_EXPIRED = 'session expired',
-}
 /**
  * @private
  * @hidden
@@ -146,11 +144,11 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
         })
         .catch((e) => {
           dispatch(loaded());
-          if (e.message === 'error_oidc_configuration') {
+          if (e.message === EventTypeError.OidcConfiguration) {
             dispatch(
               auth_error({
-                name: 'error_oidc_configuration',
-                message: 'Incorrect OIDC configuration',
+                name: EventTypeError.OidcConfiguration,
+                message: `${EventTypeError.OidcConfiguration}-message`,
               }),
             );
           }
@@ -202,13 +200,16 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
         case EventType.REFRESH_ERROR:
           dispatch(
             auth_error({
-              name: `error_session_expired`,
-              message: `Session Expired`,
+              name: EventTypeError.SessionExpired,
+              message: `${EventTypeError.SessionExpired}-message`,
             }),
           );
           break;
         case EventType.EXPIRED:
           isMountedRef.current && dispatch(expired());
+          break;
+        default:
+          break;
       }
     };
     await adapter.fetchServiceConfiguration();
@@ -216,6 +217,17 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
 
     return () => adapter.removeHandler(updateState);
   }, [adapter, dispatch]);
+
+  const signIn = async (args?: AuthProviderSignInProps): Promise<void> => {
+    await adapter.maybeFetchServiceConfiguration();
+    return adapter.signInRedirect(args);
+  };
+
+  const signOut = async (args: AuthProviderSignOutProps = {}) => {
+    await adapter.maybeFetchServiceConfiguration();
+    adapter.signOut(args);
+    await signOutHooks();
+  };
 
   useEffect(() => {
     registerHandler();
@@ -226,18 +238,11 @@ const AuthProviderContext: FC<AuthProviderProps> = ({
       <AuthContext.Provider
         value={{
           signinCallback: signInCallback,
-          signIn: async (args: AuthProviderSignInProps = {}): Promise<void> => {
-            await adapter.maybeFetchServiceConfiguration();
-            return adapter.signInRedirect(args);
-          },
+          signIn,
           signInPopup: async (): Promise<void> => {
             await signInPopupHooks();
           },
-          signOut: async (args: AuthProviderSignOutProps = {}) => {
-            await adapter.maybeFetchServiceConfiguration();
-            adapter.signOut(args);
-            await signOutHooks();
-          },
+          signOut,
           signOutRedirect: async (
             args: AuthProviderSignOutProps = {},
           ): Promise<void> => {

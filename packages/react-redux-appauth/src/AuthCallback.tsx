@@ -1,7 +1,5 @@
-import { selectIsLoading } from './AuthSlice';
 import { useAuth } from './useAuth';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 interface StubHistory {
   push(uri: string): void;
@@ -28,20 +26,18 @@ export const AuthCallback: React.FC<AuthCallbackProps> = ({
   isPopup = false,
   isSilent = false,
 }) => {
-  const isLoading = useSelector(selectIsLoading);
   const auth = useAuth();
   const [showError, setShowError] = useState<boolean>(false);
 
-  // Check if we have something in localStorage redirect to that.
+  // Check if we have something in sessionStorage and redirect to that.
   useEffect(() => {
-    if (!isLoading) {
+    if (!auth.isLoading) {
       auth
         .signinCallback()
         .then(() => {
           if (!isPopup && !isSilent) {
-            const redirectUri = localStorage.getItem('redirect-uri');
+            const redirectUri = sessionStorage.getItem('redirect-uri');
             if (redirectUri) {
-              localStorage.removeItem('redirect-uri');
               history.push(redirectUri);
             } else {
               history.push(defaultRedirect);
@@ -53,7 +49,7 @@ export const AuthCallback: React.FC<AuthCallbackProps> = ({
           setShowError(true);
         });
     }
-  }, [isLoading, isPopup]);
+  }, [isPopup, auth]);
 
   if (showError && onError !== undefined) {
     return <>{onError()}</>;

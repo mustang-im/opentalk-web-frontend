@@ -218,3 +218,9 @@ export interface AuthPostMessage {
   response: AuthorizationResponse | null;
   error: AuthorizationError | null;
 }
+
+export enum EventTypeError {
+  SessionExpired = 'error-session-expired',
+  OidcConfiguration = 'error-oidc-configuration',
+  SystemCurrentlyUnavailable = 'error-system-currently-unavailable',
+}

@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FetchRequestError, notifications, ParticipantId, RoomId } from '@opentalk/common';
-import { logged_out } from '@opentalk/react-redux-appauth';
+import { FetchRequestError, ParticipantId, RoomId } from '@opentalk/common';
+import { auth_error, EventTypeError } from '@opentalk/react-redux-appauth';
 import { fetchQuery, createOpenTalkApiWithReactHooks } from '@opentalk/rest-api-rtk-query';
 import { createAsyncThunk, isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
-import i18next from 'i18next';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { RootState } from '../store';
@@ -111,12 +110,28 @@ export const rtkQueryErrorLoggerMiddlware: Middleware =
   ({ dispatch }) =>
   (next) =>
   (action) => {
-    // If rtk query get rejected with 401 error, user will be logged out with notification error
-    if (isRejectedWithValue(action) && (action.payload.status === 401 || action.payload.status >= 500)) {
-      dispatch(logged_out());
-      notifications.error(i18next.t('error-system-currently-unavailable'));
+    // If rtk query get rejected dispatch auth error
+    if (isRejectedWithValue(action)) {
+      if (action.payload.status === 401) {
+        dispatch(
+          auth_error({
+            name: EventTypeError.SessionExpired,
+            message: `${EventTypeError.SessionExpired}-message`,
+          })
+        );
+        return;
+      } else if (action.payload.status >= 500) {
+        dispatch(
+          auth_error({
+            name: EventTypeError.SystemCurrentlyUnavailable,
+            message: EventTypeError.SystemCurrentlyUnavailable,
+          })
+        );
+        return;
+      }
+    } else {
+      return next(action);
     }
-    return next(action);
   };
 
 // Re-export the most common api hooks

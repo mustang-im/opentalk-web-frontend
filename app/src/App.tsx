@@ -13,13 +13,12 @@ import Provider from './Provider';
 import Routes from './Routes';
 import { createOpenTalkTheme } from './assets/themes/opentalk';
 import ConfirmBrowserDialog, { isBrowserConfirmed } from './components/ConfirmBrowserDialog/ConfirmBrowserDialog';
+import { localStorageItems } from './config/storage';
 import AppErrorBoundary from './errorBoundaries/AppErrorBoundary';
 import browser from './modules/BrowserSupport';
 import ErrorConfigPage from './pages/ErrorConfigPage';
 import store from './store';
 import { checkConfigError } from './utils/configUtils';
-
-const SAFARI_NOTIFICATION_KEY = 'safari-warning-notification';
 
 const App = () => {
   const signature = browser.getBrowserSignature();
@@ -30,14 +29,14 @@ const App = () => {
   if (hasConfigError) return <ErrorConfigPage />;
 
   const handleClick = useCallback(() => {
-    localStorage.setItem('browser-confirmed', signature);
+    localStorage.setItem(localStorageItems.browserConfirmed, signature);
     setBrowserConfirmed(true);
   }, []);
 
   useEffect(() => {
     const isSafari = browser.isSafari();
     if (isSafari) {
-      const safariNotificationLastSeenTimestamp = localStorage.getItem(SAFARI_NOTIFICATION_KEY);
+      const safariNotificationLastSeenTimestamp = localStorage.getItem(localStorageItems.safariNotificationKey);
       const now = new Date();
       const lastSeenDate = safariNotificationLastSeenTimestamp
         ? new Date(safariNotificationLastSeenTimestamp)
@@ -49,7 +48,7 @@ const App = () => {
           variant: 'warning',
           cancelBtnText: t('global-close'),
           persist: true,
-          onCancel: () => localStorage.setItem(SAFARI_NOTIFICATION_KEY, now.toISOString()),
+          onCancel: () => localStorage.setItem(localStorageItems.safariNotificationKey, now.toISOString()),
         });
       }
     }

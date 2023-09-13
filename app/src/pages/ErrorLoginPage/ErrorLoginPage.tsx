@@ -3,13 +3,14 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Container as MuiContainer, CssBaseline, Stack, styled, ThemeProvider, useTheme } from '@mui/material';
 import { WarningIcon } from '@opentalk/common';
-import React, { useEffect, useMemo, useState } from 'react';
+import { EventTypeError, useAuth } from '@opentalk/react-redux-appauth';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import { createOpenTalkTheme } from '../../assets/themes/opentalk';
 import Error from '../../commonComponents/Error';
-import LoginButton from '../../components/LoginPopup/fragments/LoginButton';
+import { sessionStorageItems } from '../../config/storage';
 import { useAppDispatch } from '../../hooks';
 import { hangUp } from '../../store/commonActions';
 import LobbyTemplate from '../../templates/LobbyTemplate';
@@ -33,36 +34,28 @@ interface ErrorLoginProps {
   error: Error;
 }
 
+const ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT = 2500;
+
 const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
-  const [displayLogin, setDisplayLogin] = useState<boolean>(false);
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { signOut } = useAuth();
 
   useEffect(() => {
     dispatch(hangUp());
   }, [dispatch]);
 
-  const errorDetails = useMemo(() => {
-    switch (error.name) {
-      case 'error_session_expired':
-        setDisplayLogin(true);
-        return {
-          name: t('error-session-expired'),
-          message: t('error-session-expired-message'),
-        };
-      case 'error_oidc_configuration':
-        return {
-          name: t('error-oidc-configuration'),
-          message: t('error-oidc-configuration-message'),
-        };
-      default:
-        console.error('unknown login error:', error);
-        return {
-          name: t('error-general'),
-        };
+  useEffect(() => {
+    if (error.name === EventTypeError.SessionExpired) {
+      setTimeout(() => {
+        (async () => {
+          sessionStorage.setItem(sessionStorageItems.redirectUri, window.location.pathname);
+          await signOut();
+        })();
+      }, ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT);
     }
-  }, [error, t]);
+  }, [error]);
 
   return (
     <ThemeProvider theme={createOpenTalkTheme()}>
@@ -71,8 +64,7 @@ const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
         <Container>
           <Stack spacing={8} alignItems="center">
             <WarningIcon fill={theme.palette.common.white} sx={{ width: '6rem', height: '6rem' }} />
-            {errorDetails && <Error title={errorDetails.name} description={errorDetails.message} />}
-            {displayLogin && <LoginButton />}
+            {error && <Error title={t(`${error.name}`)} description={t(`${error.message}`)} />}
             <StyledLogoIcon />
           </Stack>
         </Container>

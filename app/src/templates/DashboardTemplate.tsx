@@ -15,11 +15,11 @@ import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon } f
 import React, { useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import { useGetMeQuery } from '../api/rest';
 import { ReactComponent as Logo } from '../assets/images/logoGradient.svg';
 import DashboardNavigation, { PrimaryRoute } from '../components/DashboardNavigation';
 import { useAppSelector } from '../hooks';
 import { selectIsProviderActive } from '../store/slices/configSlice';
+import { selectIsLoggedIn } from '../store/slices/userSlice';
 
 const DashboardLogo = styled(Logo)({
   gridArea: 'Logo',
@@ -137,12 +137,12 @@ const getRoutes = (useProviderSettings: boolean) => {
 
 const DashboardTemplate = () => {
   const [header, setHeader] = useState<React.ReactNode>();
-  const { isLoading } = useGetMeQuery();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const isProviderActive = useAppSelector(selectIsProviderActive);
 
-  if (isLoading) {
+  if (!isLoggedIn) {
     return (
       <Container maxWidth={false} disableGutters>
         <Stack direction={{ xs: 'column', md: 'row' }} height={'100%'}>
