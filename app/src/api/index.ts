@@ -272,18 +272,26 @@ const handleControlMessage = (
       let roomHistory = data.chat.roomHistory as ChatMessage[];
       roomHistory = roomHistory.concat(groupMessages);
 
-      let participants: Participant[];
-      participants = data.participants.map((participant) =>
+      let joinedParticipants: Participant[];
+      joinedParticipants = data.participants.map((participant) =>
         mapToUiParticipant(state, participant, data.breakout?.current || null, WaitingState.Joined)
       );
 
-      if (data.moderation?.waitingRoomEnabled) {
-        participants = data.moderation.waitingRoomParticipants
+      if (data.moderation?.waitingRoomEnabled && data.moderation.waitingRoomParticipants.length > 0) {
+        // There can be a situation, that some participants are in both arrays (e.g. after Debriefing)
+        // Therefore we should give priority to the waiting room, and remove them from the joined participants array
+        const waitingParticipants = data.moderation.waitingRoomParticipants.map((waitingParticipant) => {
+          const duplicateParticipantIndex = joinedParticipants.findIndex(
+            (participant: Participant) => participant.id === waitingParticipant.id
+          );
+          if (duplicateParticipantIndex > -1) {
+            joinedParticipants.splice(duplicateParticipantIndex, 1);
+          }
           //TODO the backend should provide a waitingState: 'waiting' | 'approved', change when implemented
-          .map((participant) =>
-            mapToUiParticipant(state, participant, data.breakout?.current || null, WaitingState.Waiting)
-          )
-          .concat(participants);
+          return mapToUiParticipant(state, waitingParticipant, data.breakout?.current || null, WaitingState.Waiting);
+        });
+
+        joinedParticipants = joinedParticipants.concat(waitingParticipants);
       }
 
       if (data.recording?.state === 'recording') {
@@ -291,9 +299,9 @@ const handleControlMessage = (
       }
 
       if (data.breakout !== undefined) {
-        participants = data.breakout.participants
+        joinedParticipants = data.breakout.participants
           .map((participant) => mapBreakoutToUiParticipant(state, participant, timestamp))
-          .concat(participants);
+          .concat(joinedParticipants);
       }
 
       const serverTimeOffset = new Date(timestamp).getTime() - new Date().getTime();
@@ -313,7 +321,7 @@ const handleControlMessage = (
           automod: data.automod,
           breakout: data.breakout,
           polls: data.polls,
-          participants,
+          participants: joinedParticipants,
           moderation: data.moderation,
           isPresenter: data.media?.isPresenter,
           recording: data.recording,
@@ -362,7 +370,7 @@ const handleControlMessage = (
 
       // Notify moderator, in case he took the last position of the room and now it's full
       if (data.role === Role.Moderator) {
-        const onlineParticipants = participants.filter((participant) => {
+        const onlineParticipants = joinedParticipants.filter((participant) => {
           const hasNotLeft = participant.leftAt === null;
           const isInRoom = participant.waitingState === WaitingState.Joined;
           const isInTheSameBreakoutRoom = data.breakout?.current
