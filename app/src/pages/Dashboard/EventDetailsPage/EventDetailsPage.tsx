@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Box, Button, Stack, Typography } from '@mui/material';
+import { styled, Box, Button, Stack, Typography, useTheme } from '@mui/material';
 import { notifications, ParticipantAvatar } from '@opentalk/common';
 import { EventId, InviteStatus, User } from '@opentalk/rest-api-rtk-query';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
@@ -48,6 +48,7 @@ const EventDetailsPage = () => {
   const isMeetingCreator = me?.id === event?.createdBy.id;
   const { data: tariff } = useGetRoomTariffQuery(event?.room.id ?? skipToken);
   const roomParticipantLimit = tariff?.quotas.roomParticipantLimit;
+  const theme = useTheme();
 
   if (isLoading || !event) return <SuspenseLoading />;
 
@@ -138,7 +139,12 @@ const EventDetailsPage = () => {
   };
 
   return (
-    <Stack justifyContent={'space-between'} height={'100%'}>
+    <Stack
+      justifyContent={'space-between'}
+      height={'100%'}
+      overflow="auto"
+      style={{ paddingRight: theme.spacing(5), marginRight: theme.spacing(-5) }}
+    >
       <Stack>
         <Stack mb={4}>
           <Typography variant={'h1'}>{event.title}</Typography>
