@@ -8,10 +8,11 @@
 
 - Remove the redundant login screen - fixed redirect ([#1360, #1463](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1360, https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1463))
 - Fix: [Lobby] no feedback for wrong password ([1440](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1440))
+
 ### Bug Fixes
 
-- Fix push-to-talk functionality([#1344]
-(https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344))
+- Fix push-to-talk functionality ([#1344](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344))
+- Fix handling with disallow custom display name ([!1089](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1089))
 
 ## 1.6.0
 
