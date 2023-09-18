@@ -28,6 +28,7 @@ import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { AppDispatch, RootState } from '../';
+import { StartRoomError } from '../../api/rest';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
 import { hangUp, startRoom } from '../commonActions';
 
@@ -44,6 +45,7 @@ interface InviteState extends FetchRequestState {
  * - Starting -> Blocked
  * - Starting -> Waiting ->ReadyToEnter -> Online
  * - Starting -> Failed
+ * - Starting -> Failed-credentials
  * - Starting -> Online
  * - Online -> Failed
  * - Online -> Leaving
@@ -62,6 +64,7 @@ export enum ConnectionState {
   Leaving = 'leaving',
   Left = 'left',
   Failed = 'failed',
+  FailedCredentials = 'failed-credentials',
   Blocked = 'blocked',
   ReadyToEnter = 'ready-to-enter',
 }
@@ -218,7 +221,11 @@ export const roomSlice = createSlice({
       if ('code' in payload.error) {
         state.error = payload.error.code;
       }
-      state.connectionState = ConnectionState.Failed;
+      if (state.error === StartRoomError.WrongRoomPassword) {
+        state.connectionState = ConnectionState.FailedCredentials;
+      } else {
+        state.connectionState = ConnectionState.Failed;
+      }
     });
     builder.addCase(joinSuccess, (state, { payload }) => {
       state.currentMode = undefined;
@@ -304,6 +311,10 @@ function reconnect(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
   const { inviteCode } = state.room.invite;
   const { displayName } = state.user;
   const { assignment: breakoutRoomId } = state.breakout;
+
+  if (state.room.error === StartRoomError.WrongRoomPassword) {
+    return;
+  }
 
   if (state.room.reconnectTimerId) {
     clearTimeout(state.room.reconnectTimerId);

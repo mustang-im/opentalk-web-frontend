@@ -4,7 +4,9 @@
 import { Button, Container, IconButton, InputAdornment, Stack, styled } from '@mui/material';
 import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
+import { closeSnackbar, enqueueSnackbar, SnackbarKey } from '@opentalk/common';
 import { useFormik } from 'formik';
+import i18next from 'i18next';
 import { FC, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -39,13 +41,21 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
+let wrongPasswordSnackBarKey: SnackbarKey | undefined = undefined;
+
+const showWrongPasswordNotification = () => {
+  wrongPasswordSnackBarKey = enqueueSnackbar(`${i18next.t('joinform-wrong-room-password')}`, {
+    variant: 'error',
+    persist: true,
+  });
+};
+
 const LobbyView: FC = () => {
   const dispatch = useAppDispatch();
   const mediaContext = useMediaContext();
   const { t } = useTranslation();
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
   const [showPassword, setShowPassword] = useState(false);
-  const [joinError, setJoinError] = useState<string | undefined>();
   const { roomId, breakoutRoomId } = useParams<'roomId' | 'breakoutRoomId'>() as {
     roomId: RoomId;
     breakoutRoomId?: BreakoutRoomId;
@@ -78,6 +88,11 @@ const LobbyView: FC = () => {
         })
       )
         .unwrap()
+        .then(() => {
+          if (wrongPasswordSnackBarKey) {
+            closeSnackbar(wrongPasswordSnackBarKey);
+          }
+        })
         .catch((e) => {
           if ('code' in e) {
             const error = e as ApiErrorWithBody<StartRoomError>;
@@ -93,7 +108,8 @@ const LobbyView: FC = () => {
                 break;
               case StartRoomError.WrongRoomPassword:
               case StartRoomError.InvalidCredentials:
-                setJoinError('joinform-wrong-room-password');
+                showWrongPasswordNotification();
+                navigate(`/room/${roomId}`);
                 break;
               case StartRoomError.NotFound:
                 notifications.error(t('joinform-room-not-found'));
@@ -113,7 +129,7 @@ const LobbyView: FC = () => {
           }
         });
     },
-    [dispatch, navigate, t, breakoutRoomId, roomId, inviteCode, joinWithoutMedia, mediaContext]
+    [navigate, t, breakoutRoomId, roomId, inviteCode, joinWithoutMedia, mediaContext]
   );
 
   const validationSchema = yup.object({
@@ -177,7 +193,6 @@ const LobbyView: FC = () => {
                     />
                   }
                 />
-
                 {passwordRequired && (
                   <TextField
                     {...formikProps('password', formik)}
@@ -196,8 +211,6 @@ const LobbyView: FC = () => {
                         </IconButton>
                       </InputAdornment>
                     }
-                    error={Boolean(joinError)}
-                    helperText={joinError ? t(joinError) : ''}
                   />
                 )}
               </Stack>
