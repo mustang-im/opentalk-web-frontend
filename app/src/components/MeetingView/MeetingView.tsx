@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import { useRef, useState, useEffect } from 'react';
 
 import { useAppSelector } from '../../hooks';
-import useGlobalConferenceHotkeys from '../../hooks/useGlobalConferenceHotkeys';
+import { useHotkeys } from '../../hooks/useHotkeys';
 import { selectDebugMode, selectShowCoffeeBreakCurtain } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
@@ -60,7 +60,7 @@ const MeetingView = () => {
   const enableAudio = isModerator || !isCoffeeBreakOpen;
   const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
-  useGlobalConferenceHotkeys();
+  useHotkeys();
 
   useEffect(() => {
     setAnchorEl(containerRef.current);
