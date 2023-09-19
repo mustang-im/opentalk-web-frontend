@@ -46,8 +46,9 @@ const App = () => {
         notificationAction({
           msg: t('safari-warning-notification'),
           variant: 'warning',
-          cancelBtnText: t('global-close'),
+          cancelBtnText: t('global-ok'),
           persist: true,
+          key: localStorageItems.safariNotificationKey,
           onCancel: () => localStorage.setItem(localStorageItems.safariNotificationKey, now.toISOString()),
         });
       }
