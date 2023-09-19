@@ -41,7 +41,14 @@ const ScrollableBox = styled(Box)({
   overflow: 'auto',
 });
 
-const WaitingParticipantsList = () => {
+interface WaitingParticipantsListProps {
+  /**
+   * Passed when used inside popover for accessibility
+   */
+  id?: string;
+}
+
+const WaitingParticipantsList = ({ id }: WaitingParticipantsListProps) => {
   const { t } = useTranslation();
   const participantsInWaitingRoom = useAppSelector(selectAllParticipantsInWaitingRoom);
   const participantsNotApproved = useAppSelector(selectNotApprovedParticipants);
@@ -57,7 +64,7 @@ const WaitingParticipantsList = () => {
   };
 
   return (
-    <List>
+    <List id={id}>
       <Subheader>
         <Typography variant="body2">{t('waiting-room-participant-label')}</Typography>
         <Button variant="text" disabled={participantsNotApproved.length === 0} onClick={handleApproveAll} focusRipple>

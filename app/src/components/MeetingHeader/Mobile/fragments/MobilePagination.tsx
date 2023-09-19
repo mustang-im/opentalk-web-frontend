@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Popover, Stack, styled } from '@mui/material';
-import { useMemo, useEffect, useState, MouseEvent } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 
 import LayoutOptions from '../../../../enums/LayoutOptions';
 import { useAppSelector, useAppDispatch } from '../../../../hooks';
@@ -22,6 +22,7 @@ const Container = styled(Stack, {
   width: '100%',
   height: 'auto',
   visibility: isVisible ? 'visible' : 'hidden',
+
   '& .MuiPopover-paper': {
     marginTop: '0.7rem',
     background: theme.palette.background.defaultGradient,
@@ -43,7 +44,9 @@ const MobilePagination = () => {
   const participants = useAppSelector(selectAllOnlineParticipants);
   const selectedPage = useAppSelector(selectPaginationPageState);
   const selectedLayout = useAppSelector(selectCinemaLayout);
-  const [paginationElement, setPaginationElement] = useState<HTMLElement | null>(null);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+  const isPopoverOpen = Boolean(anchorElement);
+
   const pageCount = useMemo(() => {
     return Math.ceil(participants.length / MAX_GRID_TILES_MOBILE);
   }, [participants]);
@@ -55,11 +58,7 @@ const MobilePagination = () => {
 
   const handleChangePage = (page: number) => {
     dispatch(setPaginationPage(page));
-    setPaginationElement(null);
-  };
-
-  const openPopover = (event: MouseEvent<HTMLElement>) => {
-    setPaginationElement(paginationElement ? null : event.currentTarget);
+    setAnchorElement(null);
   };
 
   const paginationPopover = [];
@@ -74,11 +73,16 @@ const MobilePagination = () => {
     <Container isVisible={false}>{null}</Container>
   ) : (
     <Container isVisible={pageCount > 1}>
-      {/* need aria controls/labels for this button */}
-      <PageIndex index={selectedPage} highlighted handleClick={(event) => openPopover(event)} />
+      <PageIndex
+        aria-controls="page-selection-popover"
+        aria-expanded={isPopoverOpen ? 'true' : undefined}
+        index={selectedPage}
+        highlighted
+        handleClick={(event) => setAnchorElement(event.currentTarget)}
+      />
       <Popover
-        open={Boolean(paginationElement)}
-        anchorEl={paginationElement}
+        open={Boolean(anchorElement)}
+        anchorEl={anchorElement}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center',
@@ -87,10 +91,10 @@ const MobilePagination = () => {
           vertical: 'top',
           horizontal: 'center',
         }}
-        onClose={() => setPaginationElement(null)}
+        onClose={() => setAnchorElement(null)}
         disablePortal
       >
-        <PopoverContainer>{paginationPopover}</PopoverContainer>
+        <PopoverContainer id="page-selection-popover">{paginationPopover}</PopoverContainer>
       </Popover>
     </Container>
   );

@@ -60,7 +60,7 @@ const WaitingParticipantItem = ({ participant }: ParticipantRowProps) => {
     switch (participant.waitingState) {
       case WaitingState.Waiting:
         return (
-          <Button variant="text" onClick={handleAccept}>
+          <Button variant="text" onClick={handleAccept} focusRipple>
             {t('participant-menu-accept-participant')}
           </Button>
         );

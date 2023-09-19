@@ -28,6 +28,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const WaitingParticipantsPopover = () => {
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
+  const isPopoverOpen = Boolean(anchorElement);
+
   const participantsInWaitingRoomCount = useAppSelector(selectParticipantsWaitingCount);
 
   return participantsInWaitingRoomCount === 0 ? (
@@ -40,7 +42,11 @@ const WaitingParticipantsPopover = () => {
         horizontal: 'left',
       }}
     >
-      <WaitingListButton aria-describedby={'view-select'} onClick={(event) => setAnchorElement(event.currentTarget)}>
+      <WaitingListButton
+        aria-controls="waiting-list-popover"
+        aria-expanded={isPopoverOpen ? 'true' : undefined}
+        onClick={(event) => setAnchorElement(event.currentTarget)}
+      >
         <SpeakerQueueIcon />
       </WaitingListButton>
       <Popover
@@ -57,7 +63,7 @@ const WaitingParticipantsPopover = () => {
         onClose={() => setAnchorElement(null)}
         disablePortal
       >
-        <WaitingParticipantsList />
+        <WaitingParticipantsList id="waiting-list-popover" />
       </Popover>
     </StyledBadge>
   );
