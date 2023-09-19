@@ -4,9 +4,9 @@
 import { Stack, styled } from '@mui/material';
 import { LogoSmallIcon } from '@opentalk/common';
 
-import LayoutSelection from '../MeetingHeader/fragments/LayoutSelection';
-import MeetingTimer from '../MeetingHeader/fragments/MeetingTimer';
-import RoomTitle from '../MeetingHeader/fragments/RoomTitle';
+import LayoutSelection from '../fragments/LayoutSelection';
+import MeetingTimer from '../fragments/MeetingTimer';
+import RoomTitle from '../fragments/RoomTitle';
 import MobilePagination from './fragments/MobilePagination';
 
 const HeaderContainer = styled(Stack)(({ theme }) => ({
@@ -25,15 +25,6 @@ const Logo = styled(LogoSmallIcon)(({ theme }) => ({
   padding: '0.5rem',
 }));
 
-//TODO: Remove last HeaderItem and keep styling internal in components for more precise control. Make background style reusable?
-const HeaderItem = styled(Stack)(({ theme }) => ({
-  background: theme.palette.background.video,
-  borderRadius: '0.25rem',
-  justifyContent: 'center',
-  alignItems: 'center',
-  '& .MuiIconButton-root .MuiSvgIcon-root': {},
-}));
-
 const MobileMeetingHeader = () => {
   return (
     <HeaderContainer>
@@ -41,9 +32,7 @@ const MobileMeetingHeader = () => {
       <RoomTitle />
       <LayoutSelection />
       <MobilePagination />
-      <HeaderItem>
-        <MeetingTimer />
-      </HeaderItem>
+      <MeetingTimer />
     </HeaderContainer>
   );
 };

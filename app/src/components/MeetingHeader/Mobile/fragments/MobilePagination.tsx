@@ -4,10 +4,10 @@
 import { Popover, Stack, styled } from '@mui/material';
 import { useMemo, useEffect, useState, MouseEvent } from 'react';
 
-import LayoutOptions from '../../../enums/LayoutOptions';
-import { useAppSelector, useAppDispatch } from '../../../hooks';
-import { selectAllOnlineParticipants } from '../../../store/slices/participantsSlice';
-import { paginationPageSet, selectCinemaLayout, selectPaginationPageState } from '../../../store/slices/uiSlice';
+import LayoutOptions from '../../../../enums/LayoutOptions';
+import { useAppSelector, useAppDispatch } from '../../../../hooks';
+import { selectAllOnlineParticipants } from '../../../../store/slices/participantsSlice';
+import { setPaginationPage, selectCinemaLayout, selectPaginationPageState } from '../../../../store/slices/uiSlice';
 import PageIndex from './PageIndex';
 
 const MAX_GRID_TILES_MOBILE = 9;
@@ -49,12 +49,12 @@ const MobilePagination = () => {
   }, [participants]);
   useEffect(() => {
     if (selectedPage > pageCount || selectedPage === 0) {
-      dispatch(paginationPageSet(pageCount));
+      dispatch(setPaginationPage(pageCount));
     }
   }, [selectedPage, pageCount, dispatch]);
 
   const handleChangePage = (page: number) => {
-    dispatch(paginationPageSet(page));
+    dispatch(setPaginationPage(page));
     setPaginationElement(null);
   };
 
