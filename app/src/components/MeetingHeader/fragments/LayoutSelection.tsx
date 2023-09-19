@@ -46,21 +46,17 @@ const LayoutSelection = () => {
   const fullscreenHandle = useFullscreenContext();
   const selectedLayout = useAppSelector(selectCinemaLayout);
   const { t } = useTranslation();
-  const [viewEl, setViewEl] = useState<HTMLElement | null>(null);
-  const isViewPopoverOpen = Boolean(viewEl);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+  const isViewPopoverOpen = Boolean(anchorElement);
 
   const openFullscreenView = useCallback(async () => {
-    toggleLayoutSelectionPopover();
+    setAnchorElement(null);
     await fullscreenHandle.enter();
     dispatch(toggledFullScreenMode());
   }, [fullscreenHandle]);
 
-  const toggleLayoutSelectionPopover = (event?: React.MouseEvent<HTMLElement>) => {
-    setViewEl(event ? event.currentTarget : null);
-  };
-
   const handleSelectedView = (layout: LayoutOptions) => {
-    toggleLayoutSelectionPopover();
+    setAnchorElement(null);
     dispatch(updatedCinemaLayout(layout));
   };
 
@@ -88,14 +84,14 @@ const LayoutSelection = () => {
         onClick={(event) =>
           [LayoutOptions.Protocol, LayoutOptions.Whiteboard].includes(selectedLayout)
             ? handleSelectedView(LayoutOptions.Grid)
-            : toggleLayoutSelectionPopover(event)
+            : setAnchorElement(event.currentTarget)
         }
       >
         {ViewIcon}
       </IconButton>
       <Popover
         open={isViewPopoverOpen}
-        anchorEl={viewEl}
+        anchorEl={anchorElement}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
@@ -104,13 +100,10 @@ const LayoutSelection = () => {
           vertical: 'top',
           horizontal: 'left',
         }}
-        onClose={() => toggleLayoutSelectionPopover()}
+        onClose={() => setAnchorElement(null)}
         disablePortal
       >
-        <PopoverContainer
-          id="view-popover-menu"
-          autoFocusItem={isViewPopoverOpen}
-        >
+        <PopoverContainer id="view-popover-menu" autoFocusItem={isViewPopoverOpen}>
           <MenuItem onClick={() => handleSelectedView(LayoutOptions.Grid)}>
             <ListItemIcon aria-hidden={true}>
               <GridViewIcon />

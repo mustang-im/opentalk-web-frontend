@@ -27,12 +27,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const WaitingParticipantsPopover = () => {
-  const [waitingEl, setWaitingEl] = useState<null | HTMLElement>(null);
+  const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
   const participantsInWaitingRoomCount = useAppSelector(selectParticipantsWaitingCount);
-
-  const toggleWaitingPopper = (event: React.MouseEvent<HTMLElement>) => {
-    setWaitingEl(waitingEl ? null : event.currentTarget);
-  };
 
   return participantsInWaitingRoomCount === 0 ? (
     <>{null}</>
@@ -44,12 +40,12 @@ const WaitingParticipantsPopover = () => {
         horizontal: 'left',
       }}
     >
-      <WaitingListButton aria-describedby={'view-select'} onClick={toggleWaitingPopper}>
+      <WaitingListButton aria-describedby={'view-select'} onClick={(event) => setAnchorElement(event.currentTarget)}>
         <SpeakerQueueIcon />
       </WaitingListButton>
       <Popover
-        open={Boolean(waitingEl)}
-        anchorEl={waitingEl}
+        open={Boolean(anchorElement)}
+        anchorEl={anchorElement}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center',
@@ -58,7 +54,7 @@ const WaitingParticipantsPopover = () => {
           vertical: 'top',
           horizontal: 'center',
         }}
-        onClose={() => setWaitingEl(null)}
+        onClose={() => setAnchorElement(null)}
         disablePortal
       >
         <WaitingParticipantsList />
