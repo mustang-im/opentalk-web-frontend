@@ -4,28 +4,29 @@
 import { CircularProgress, Stack, styled } from '@mui/material';
 import { legalVoteStore } from '@opentalk/components';
 
-import { useAppSelector } from '../../hooks';
-import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../store/slices/pollSlice';
-import { ConnectionState, selectRoomConnectionState } from '../../store/slices/roomSlice';
-import { selectVotePollIdToShow } from '../../store/slices/uiSlice';
-import Cinema from '../Cinema';
-import VoteResultContainer from '../VoteResult/VoteResultContainer';
+import { useAppSelector } from '../../../hooks';
+import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../../store/slices/pollSlice';
+import { ConnectionState, selectRoomConnectionState } from '../../../store/slices/roomSlice';
+import { selectVotePollIdToShow } from '../../../store/slices/uiSlice';
+import VoteResultContainer from '../../VoteResult/VoteResultContainer';
+import Cinema from '../fragments/Cinema';
 
 const Container = styled(Stack)(() => ({
-  display: 'flex',
   justifyContent: 'space-between',
-  overflow: 'scroll',
+  overflow: 'auto',
+  height: '100%',
 }));
 
 const InnerContainer = styled(Stack)(({ theme }) => ({
-  margin: theme.spacing(1, 0.7),
+  padding: theme.spacing(1, 0.7),
+  height: '100%',
 }));
 
 const CircularProgressBar = styled(CircularProgress)({
   margin: 'auto',
 });
 
-const MobileLayout = () => {
+const MobileCinemaContainer = () => {
   const currentVoteId = useAppSelector(legalVoteStore.selectCurrentShownVoteId);
   const showVoteResultContainer = useAppSelector(legalVoteStore.selectShowLegalVoteWindow);
   const showPollResultContainer = useAppSelector(selectShowPollWindow);
@@ -33,7 +34,6 @@ const MobileLayout = () => {
   const votePollIdToShow = useAppSelector(selectVotePollIdToShow);
   const connectionState = useAppSelector(selectRoomConnectionState);
 
-  //TODO: To be changed as part of Cinema mobile restructuring. Add moderator mobile view for Coffee break curtain? (non full screen coffee break)
   return (
     <Container>
       {connectionState === ConnectionState.Leaving || connectionState === ConnectionState.Starting ? (
@@ -54,4 +54,4 @@ const MobileLayout = () => {
   );
 };
 
-export default MobileLayout;
+export default MobileCinemaContainer;

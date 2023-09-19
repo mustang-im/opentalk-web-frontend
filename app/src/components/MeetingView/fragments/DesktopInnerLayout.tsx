@@ -4,16 +4,16 @@
 import { styled, CircularProgress } from '@mui/material';
 import { legalVoteStore } from '@opentalk/components';
 
-import { useAppSelector } from '../../hooks';
-import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../store/slices/pollSlice';
-import { selectRoomConnectionState, ConnectionState } from '../../store/slices/roomSlice';
-import { selectShowCoffeeBreakCurtain, selectVotePollIdToShow } from '../../store/slices/uiSlice';
-import { selectIsModerator } from '../../store/slices/userSlice';
-import Cinema from '../Cinema';
-import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
-import MeetingHeader from '../MeetingHeader/index';
-import MeetingSidebar from '../MeetingSidebar/index';
-import VoteResultContainer from '../VoteResult/VoteResultContainer';
+import { useAppSelector } from '../../../hooks';
+import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../../store/slices/pollSlice';
+import { selectRoomConnectionState, ConnectionState } from '../../../store/slices/roomSlice';
+import { selectShowCoffeeBreakCurtain, selectVotePollIdToShow } from '../../../store/slices/uiSlice';
+import { selectIsModerator } from '../../../store/slices/userSlice';
+import { CoffeeBreakView } from '../../CoffeeBreakView/CoffeeBreakView';
+import MeetingHeader from '../../MeetingHeader';
+import MeetingSidebar from '../../MeetingSidebar/index';
+import VoteResultContainer from '../../VoteResult/VoteResultContainer';
+import Cinema from './Cinema';
 
 const InnerContainer = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -23,23 +23,13 @@ const InnerContainer = styled('div')(({ theme }) => ({
   gap: theme.spacing(2),
   minHeight: 0,
   gridTemplate: 'auto 1fr / auto 1fr',
-  [theme.breakpoints.down('sm')]: {
-    gridTemplate: 'unset',
-    gridTemplateRows: 'max-content',
-    paddingBottom: theme.spacing(10),
-  },
-  [`${theme.breakpoints.down('md')} and (orientation: landscape)`]: {
-    gridTemplate: 'unset',
-    gridTemplateRows: 'max-content',
-    paddingBottom: theme.spacing(10),
-  },
 }));
 
 const CircularProgressBar = styled(CircularProgress)({
   margin: 'auto',
 });
 
-const InnerLayout = () => {
+const DesktopInnerLayout = () => {
   const currentVoteId = useAppSelector(legalVoteStore.selectCurrentShownVoteId);
   const showVoteResultContainer = useAppSelector(legalVoteStore.selectShowLegalVoteWindow);
   const showPollResultContainer = useAppSelector(selectShowPollWindow);
@@ -79,4 +69,4 @@ const InnerLayout = () => {
   );
 };
 
-export default InnerLayout;
+export default DesktopInnerLayout;

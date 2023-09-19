@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Theme, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material';
 import { useRef, useState, useEffect } from 'react';
 
 import { useAppSelector } from '../../hooks';
@@ -11,12 +10,9 @@ import { selectDebugMode, selectShowCoffeeBreakCurtain } from '../../store/slice
 import { selectIsModerator } from '../../store/slices/userSlice';
 import { CoffeeBreakView } from '../CoffeeBreakView/CoffeeBreakView';
 import DebugPanel from '../DebugPanel';
-import MobileMeetingHeader from '../MobileMeetingHeader/MobileMeetingHeader';
 import RemoteAudioStreams from '../RemoteAudioStreams';
 import TimerPopover from '../TimerPopover';
-import Toolbar from '../Toolbar';
-import InnerLayout from './InnerLayout';
-import MobileLayout from './MobileLayout';
+import InnerLayout from './fragments/InnerLayout';
 
 const Container = styled('div')(({ theme }) => ({
   background: theme.palette.background.overlay,
@@ -37,9 +33,6 @@ const Container = styled('div')(({ theme }) => ({
 }));
 
 const MeetingView = () => {
-  const theme: Theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const isSmallPortraitScreen = useMediaQuery(`${theme.breakpoints.down('md')} and (orientation: landscape)`);
   const debugMode = useAppSelector(selectDebugMode);
   const isCoffeeBreakOpen = useAppSelector(selectShowCoffeeBreakCurtain);
   const isModerator = useAppSelector(selectIsModerator);
@@ -67,15 +60,7 @@ const MeetingView = () => {
 
           {!showCoffeeBreakCurtain && <TimerPopover anchorEl={anchorEl} />}
 
-          {isSmallScreen || isSmallPortraitScreen ? (
-            <>
-              <MobileMeetingHeader />
-              <MobileLayout />
-              <Toolbar />
-            </>
-          ) : (
-            <InnerLayout />
-          )}
+          <InnerLayout />
         </>
       )}
     </Container>
