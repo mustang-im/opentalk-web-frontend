@@ -137,7 +137,7 @@ export const participantsSlice = createSlice({
         changes: { waitingState: WaitingState.Approved },
       });
     },
-    approveAll: (state) => {
+    approvedAll: (state) => {
       const participantSelectors = participantAdapter.getSelectors();
       const participants = participantSelectors.selectAll(state);
       participants.forEach((participant) => {
@@ -216,7 +216,7 @@ export const {
   waitingRoomJoined,
   waitingRoomLeft,
   approveToEnter,
-  approveAll,
+  approvedAll,
 } = participantsSlice.actions;
 export const actions = participantsSlice.actions;
 

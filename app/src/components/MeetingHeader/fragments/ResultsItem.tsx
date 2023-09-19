@@ -36,14 +36,14 @@ interface ResultsItemProps {
 const ResultsItem = ({ item }: ResultsItemProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const openVotePoll = (item: LegalVoteType | Poll) => {
+  const openItem = (item: LegalVoteType | Poll) => {
     dispatch(setVotePollIdToShow(item.id));
   };
 
   const label = Object.hasOwn(item, 'name') ? (item as LegalVoteType).name : (item as Poll).topic;
 
   return (
-    <CustomMenuItem key={item.id} onClick={() => openVotePoll(item)}>
+    <CustomMenuItem key={item.id} onClick={() => openItem(item)}>
       <ListItemIcon>{Object.hasOwn(item, 'choices') ? <PollIcon /> : <LegalBallotIcon />}</ListItemIcon>
       <ListItemText sx={{ whiteSpace: 'normal' }}>{`${label}`}</ListItemText>
       <Chip

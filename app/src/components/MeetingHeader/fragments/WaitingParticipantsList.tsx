@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import {
-  approveAll,
+  approvedAll,
   selectAllParticipantsInWaitingRoom,
   selectNotApprovedParticipants,
 } from '../../../store/slices/participantsSlice';

@@ -36,7 +36,7 @@ const RecordingsIcon = styled(DefaultRecordingsIcon)(({ theme }) => ({
   fill: theme.palette.error.light,
 }));
 
-const MeetingTimerSection = () => {
+const MeetingUtilsSection = () => {
   const isModerator = useAppSelector(selectIsModerator);
   const recording = useAppSelector(selectRecordingState);
   const { t } = useTranslation();
@@ -57,4 +57,4 @@ const MeetingTimerSection = () => {
   );
 };
 
-export default MeetingTimerSection;
+export default MeetingUtilsSection;
