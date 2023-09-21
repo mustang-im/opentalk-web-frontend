@@ -125,7 +125,7 @@ jest.mock('./modules/WebRTC', () => {
   return {
     __esModule: true,
     getMediaStream: () => ({ getTracks: () => [] }),
-    requestQuality: () => {
+    requestVideoQuality: () => {
       return;
     },
     idFromDescriptor,

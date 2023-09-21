@@ -11,7 +11,7 @@ import { selectIsModerator, selectIsPresenter } from '../../../store/slices/user
 import { useMediaContext } from '../../MediaProvider';
 import ToolbarButton from './ToolbarButton';
 
-const BlurScreenButton = () => {
+const ShareScreenButton = () => {
   const { t } = useTranslation();
   const mediaContext = useMediaContext();
   const isPresenter = useAppSelector(selectIsPresenter);
@@ -49,4 +49,4 @@ const BlurScreenButton = () => {
   );
 };
 
-export default BlurScreenButton;
+export default ShareScreenButton;
