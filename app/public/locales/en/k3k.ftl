@@ -693,6 +693,7 @@ dashboard-events-filter-by-invites = Only show invites
 dashboard-events-filter-by-favorites = Only show favorites
 dashboard-events-search = Search
 dashboard-events-note-limited-view = Note: You have recurring meetings in your list, therefore we have limited the temporal view.
+dashboard-adhoc-meeting-attention = Attention: This is an adhoc meeting, it will be automatically deleted after 24h and not shown in the dashboard.
 
 dashbooard-event-accept-invitation-notification = Invite accepted for meeting {meetingTitle}
 dashbooard-event-decline-invitation-notification = Invite declined for meeting {meetingTitle}

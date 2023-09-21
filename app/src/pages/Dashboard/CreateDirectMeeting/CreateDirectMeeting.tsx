@@ -18,6 +18,11 @@ const Container = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+const AttentionMessageTypography = styled(Typography)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(14),
+  padding: theme.spacing(2, 0),
+}));
+
 const CreateDirectMeeting = () => {
   const [createEvent, { data: event, isLoading: createEventIsLoading, error }] = useCreateEventMutation();
   const { t } = useTranslation();
@@ -67,7 +72,10 @@ const CreateDirectMeeting = () => {
 
   return (
     <Container>
-      <Typography variant={'h1'}>{t('dashboard-direct-meeting-title')}</Typography>
+      <Stack>
+        <Typography variant={'h1'}>{t('dashboard-direct-meeting-title')}</Typography>
+        <AttentionMessageTypography>{t('dashboard-adhoc-meeting-attention')}</AttentionMessageTypography>
+      </Stack>
       <InviteToMeeting
         existingEvent={updatedEvent ?? event}
         directMeeting

@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import { useGetMeQuery, useGetRoomQuery } from '../../../api/rest';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { hangUp } from '../../../store/commonActions';
+import { selectEventInfo } from '../../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../../store/slices/userSlice';
 import CloseMettingDialog from '../../CloseMettingDialog';
 import ToolbarButton from './ToolbarButton';
@@ -27,6 +28,7 @@ const EndCallButton = () => {
 
   const [isConfirmDialogVisible, showConfirmDialog] = useState(false);
   const isMeetingCreator = me?.id && roomData?.createdBy?.id ? me.id === roomData.createdBy?.id : false;
+  const eventInfo = useAppSelector(selectEventInfo);
 
   const StyledEndCallButton = styled(ToolbarButton)(({ theme }) => ({
     svg: {
@@ -44,17 +46,19 @@ const EndCallButton = () => {
 
   const onClose = useCallback(() => showConfirmDialog(false), [showConfirmDialog]);
 
+  const handleEndCall = () => {
+    if (isMeetingCreator && !eventInfo?.isAdhoc) {
+      showConfirmDialog(true);
+    } else {
+      hangUpHandler();
+    }
+  };
+
   return (
     <>
       <StyledEndCallButton
         tooltipTitle={t('toolbar-button-end-call-tooltip-title')}
-        onClick={() => {
-          if (isMeetingCreator) {
-            showConfirmDialog(true);
-          } else {
-            hangUpHandler();
-          }
-        }}
+        onClick={handleEndCall}
         active={false}
         data-testid="toolbarEndCallButton"
       >
