@@ -20,6 +20,7 @@ import {
   formikMinimalProps,
   formikProps,
   formikDateTimePickerProps,
+  FormWrapper,
 } from '@opentalk/common';
 import {
   CreateEventPayload,
@@ -29,19 +30,10 @@ import {
   DateTime,
   SingleEvent,
 } from '@opentalk/rest-api-rtk-query';
-import {
-  addDays,
-  addMinutes,
-  areIntervalsOverlapping,
-  format,
-  formatRFC3339,
-  Interval,
-  isBefore,
-  isEqual,
-} from 'date-fns';
+import { addDays, addMinutes, areIntervalsOverlapping, format, formatRFC3339, Interval } from 'date-fns';
 import { useFormik } from 'formik';
 import { FormikValues } from 'formik/dist/types';
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -54,15 +46,14 @@ import {
   useCreateEventSharedFolderMutation,
   useDeleteEventSharedFolderMutation,
 } from '../../api/rest';
-import { FormWrapper, LimitedTextField, Select } from '../../commonComponents';
+import { LimitedTextField, Select } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { selectFeatures } from '../../store/slices/configSlice';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
-import roundToNearest30 from '../../utils/roundToNearest30';
 import roundToUpper30 from '../../utils/roundToUpper30';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
+import DateTimePicker from '../DateTimePicker';
 import EventConflictDialog from './fragment/EventConflictDialog';
-import TimePickers from './fragment/TimePickers';
 
 interface CreateOrUpdateMeetingFormProps {
   existingEvent?: Event;
@@ -85,7 +76,6 @@ const Form = styled('form')({
 });
 
 const DEFAULT_MINUTES_DIFFERENCE = 30;
-const GAP = 5;
 const MAX_CHARACTERS_TITLE = 255;
 const MAX_CHARACTERS_PASSWORD = 255;
 const MAX_CHARACTERS_DESCRIPTION = 4096;
@@ -261,6 +251,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       endDate: roundToUpper30(date).toISOString(),
     }));
     await formik.validateField('startDate');
+    await formik.validateField('endDate');
   };
 
   const onChangeEndDate = async (endDate: Date | null) => {
@@ -276,15 +267,6 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       return;
     }
 
-    const startDate = new Date(get(formik.values, 'startDate', ''));
-    if ((endDate && isBefore(endDate, startDate)) || (endDate && isEqual(startDate, endDate))) {
-      endDate.setMinutes(endDate.getMinutes() - (DEFAULT_MINUTES_DIFFERENCE + GAP)); // correct end date by substracting 30m + gap (to cover the case when dates are equals and help rounding latter on)
-      let newStartDate = roundToNearest30(new Date(endDate.setMinutes(endDate.getMinutes() - GAP))); // round to nearest30 - gap to apply 5 min diff
-      if (isBefore(newStartDate, new Date()) || isEqual(newStartDate, new Date())) {
-        newStartDate = new Date();
-        await formik.setFieldValue('startDate', newStartDate.toISOString());
-      }
-    }
     await formik.setFieldValue('endDate', endDate.toISOString());
     await formik.validateField('endDate');
   };
@@ -542,16 +524,23 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             <Grid container columnSpacing={{ xs: 2, sm: 5 }}>
               <Grid item xs={12} sm={6}>
                 <FormWrapper label={t('dashboard-meeting-date-from')} fullWidth>
-                  <TimePickers
-                    {...formikDateTimePickerProps('startDate', { ...formik, handleChange: onChangeStartDate as never })}
-                  />
+                  <Stack spacing={2}>
+                    <DateTimePicker
+                      {...formikDateTimePickerProps('startDate', {
+                        ...formik,
+                        handleChange: onChangeStartDate as never,
+                      })}
+                    />
+                  </Stack>
                 </FormWrapper>
               </Grid>
               <Grid item xs={12} sm={6} mt={{ xs: 2, sm: 0 }}>
                 <FormWrapper label={t('dashboard-meeting-date-to')} fullWidth>
-                  <TimePickers
-                    {...formikDateTimePickerProps('endDate', { ...formik, handleChange: onChangeEndDate as never })}
-                  />
+                  <Stack spacing={2}>
+                    <DateTimePicker
+                      {...formikDateTimePickerProps('endDate', { ...formik, handleChange: onChangeEndDate as never })}
+                    />
+                  </Stack>
                 </FormWrapper>
               </Grid>
 

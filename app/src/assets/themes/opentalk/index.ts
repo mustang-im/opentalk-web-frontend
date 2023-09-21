@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { PaletteMode } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 import closeSvg from '@opentalk/common/assets/icons/source/close.svg';
 import doneSvg from '@opentalk/common/assets/icons/source/done.svg';
 
@@ -624,6 +625,36 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
             padding: theme.spacing(0, 3, 3, 3),
             '&> :not(:first-of-type)': {
               marginLeft: theme.spacing(3),
+            },
+          }),
+        },
+      },
+      MuiDateTimePickerToolbar: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            '& .MuiTypography-root': {
+              color: theme.palette.text.primary,
+            },
+          }),
+        },
+      },
+      MuiDateTimePickerTabs: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            '& .MuiTab-root': {
+              color: theme.palette.secondary.main,
+              '&.Mui-selected': {
+                color: theme.palette.primary.main,
+              },
+            },
+          }),
+        },
+      },
+      MuiClock: {
+        styleOverrides: {
+          wrapper: ({ theme }) => ({
+            '& .MuiClockNumber-root': {
+              color: theme.palette.text.primary,
             },
           }),
         },

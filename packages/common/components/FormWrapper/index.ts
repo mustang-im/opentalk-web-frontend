@@ -1,6 +1,5 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import FormWrapper from './FormWrapper';
-
-export default FormWrapper;
+export { FormWrapper } from './FormWrapper';
+export type { FormProps } from './FormWrapper';

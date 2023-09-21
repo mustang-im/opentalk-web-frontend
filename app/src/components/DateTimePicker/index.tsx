@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import FormWrapper from './FormWrapper';
+import DateTimePicker from './DateTimePicker';
 
-export default FormWrapper;
+export default DateTimePicker;

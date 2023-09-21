@@ -26,7 +26,7 @@ const InputLabel = styled(MuiInputLabel)({
   transform: 'unset',
 });
 
-function FormWrapper({
+export const FormWrapper = ({
   error = false,
   label,
   helperText,
@@ -34,7 +34,7 @@ function FormWrapper({
   children,
   stacked,
   inline,
-}: FormWrapperProps) {
+}: FormWrapperProps) => {
   const content = (
     <>
       {label && <span>{label}</span>}
@@ -58,6 +58,4 @@ function FormWrapper({
       </InputLabel>
     </FormControl>
   );
-}
-
-export default FormWrapper;
+};
