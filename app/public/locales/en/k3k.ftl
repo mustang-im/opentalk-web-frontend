@@ -681,7 +681,7 @@ dashboard-direct-meeting-copy-link-aria-label = Copy Room link
 dashboard-direct-meeting-copy-guest-link-aria-label = Copy Room link for guests
 dashboard-direct-meeting-copy-password-aria-label = Copy Room password
 
-dashboard-select-participants-textfield-placeholder = Type name or email...
+dashboard-select-participants-textfield-placeholder = Type name or email address ... ( min. 3 characters )
 dashboard-select-participants-label-added = Added
 dashboard-select-participants-label-suggestions = Suggestions
 dashboard-select-participants-label-search = Find participants
