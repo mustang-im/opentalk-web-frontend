@@ -442,8 +442,8 @@ secure-connection-message = This connection is encrypted and safe.
 participant-joined-text = Joined {$joinedTime}
 participant-hand-raise-text = Hand raised {$handUpdated}
 participant-last-active-text = Last Active {$lastActive}
-participant-joined-event = joined the call
-participant-left-event = left the call
+participant-joined-event = joined the call at {$time}
+participant-left-event = left the call at {$time}
 
 poll-overview-button-create-poll = Create new poll
 poll-tab-title = Polls

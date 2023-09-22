@@ -54,7 +54,7 @@ describe('Chat component', () => {
           displayName: 'Test',
           groups: [],
           handIsUp: false,
-          joinedAt: '',
+          joinedAt: '2023-09-22T12:15:00.000000000Z',
           leftAt: null,
           handUpdatedAt: '',
           breakoutRoomId: null,
@@ -82,7 +82,7 @@ describe('Chat component', () => {
     dispatch(
       leave({
         id: '123' as ParticipantId,
-        timestamp: '',
+        timestamp: '2023-09-22T12:15:00.000000000Z',
       })
     );
 

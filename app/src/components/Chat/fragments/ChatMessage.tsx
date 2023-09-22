@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Stack, styled, Typography, useTheme } from '@mui/material';
-import { ModeratorIcon, useDateFormat, ChatMessage as IChatMessage, ParticipantAvatar } from '@opentalk/common';
+import { ModeratorIcon, useDateFormat, ChatMessage as ChatMessageType, ParticipantAvatar } from '@opentalk/common';
+import { format } from 'date-fns';
 import Linkify from 'linkify-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Role } from '../../../api/types/incoming/control';
@@ -56,17 +57,17 @@ const Avatar = styled(ParticipantAvatar)({
   fontSize: '0.75rem',
 });
 
-const getSender = (message: IChatMessage | RoomEvent) => (state: RootState) => {
+const getSender = (message: ChatMessageType | RoomEvent) => (state: RootState) => {
   return isEventMessage(message)
     ? selectParticipantById(message?.target)(state)
     : selectParticipantById(message?.source)(state);
 };
 
-interface IChatMessageProps {
-  message: IChatMessage | RoomEvent;
+interface ChatMessageProps {
+  message: ChatMessageType | RoomEvent;
 }
 
-const ChatMessage = ({ message }: IChatMessageProps) => {
+const ChatMessage = ({ message }: ChatMessageProps) => {
   const sender = useAppSelector(getSender(message));
   const ourUuid = useAppSelector(selectOurUuid);
   const ownDisplayName = useAppSelector(selectDisplayName);
@@ -129,6 +130,11 @@ const ChatMessage = ({ message }: IChatMessageProps) => {
     },
   };
 
+  const getTimeStringFromTimestamp = (message: RoomEvent) => {
+    const date = Date.parse(message.timestamp);
+    return format(date, 'HH:mm');
+  };
+
   if (isEventMessage(message)) {
     switch (message.event) {
       case 'chat_enabled':
@@ -140,14 +146,15 @@ const ChatMessage = ({ message }: IChatMessageProps) => {
             </EventMessageTypography>
           </EventTypography>
         );
-      default:
+      case 'left':
+      case 'joined':
         return (
           <EventTypography variant={'body2'} data-testid={'user-event-message'}>
             <EventNameTypography variant={'caption'} translate="no">
               {sender?.displayName}
             </EventNameTypography>
             <EventMessageTypography variant={'caption'}>
-              {t(`participant-${message.event}-event`)}
+              {t(`participant-${message.event}-event`, { time: getTimeStringFromTimestamp(message) })}
             </EventMessageTypography>
           </EventTypography>
         );
