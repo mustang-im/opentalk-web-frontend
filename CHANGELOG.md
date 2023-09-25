@@ -12,6 +12,7 @@
 
 ### Bug Fixes
 
+- Fix waiting participants, which rejoined after debriefing([#1262](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1262))
 - Fix push-to-talk functionality ([#1344](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344))
 - Fix handling with disallow custom display name ([!1089](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1089))
 
