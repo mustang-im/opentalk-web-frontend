@@ -659,6 +659,13 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
           }),
         },
       },
+      MuiAutocomplete: {
+        styleOverrides: {
+          noOptions: ({ theme }) => ({
+            color: theme.palette.text.primary,
+          }),
+        },
+      },
     },
     typography: (palette) => ({
       allVariants: {

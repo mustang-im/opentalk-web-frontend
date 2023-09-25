@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { UserId, Email, InviteStatus } from '@opentalk/rest-api-rtk-query';
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, waitFor, within } from '@testing-library/react';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -67,32 +67,33 @@ const invitees: Array<EventInvite> = [
 describe('SelectParticipants', () => {
   const { store } = configureStore();
 
-  afterEach(() => cleanup());
-
-  test('will render', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} />, store);
-
-    expect(screen.getByTestId('SelectParticipants')).toBeInTheDocument();
-    expect(screen.queryByTestId('InvitedParticipants')).not.toBeInTheDocument();
-    expect(screen.queryByText('dashboard-select-participants-label-invited')).not.toBeInTheDocument();
+  beforeEach(async () => {
+    await render(
+      <SelectParticipants label="Test" onChange={mockOnChange} onRevokeUserInvite={jest.fn()} invitees={invitees} />,
+      store
+    );
   });
 
-  test('renders all filteredUsers', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} />, store);
+  afterEach(() => cleanup());
 
-    const input = screen.getByTestId('InputSearchUsers');
+  test('will render without errors', async () => {
+    expect(screen.getByTestId('SelectParticipants')).toBeInTheDocument();
+  });
+
+  test('sends API request after delay when typed more than 3 characters.', async () => {
+    const autocomplete = screen.getByTestId('SelectParticipants');
+    const input = await within(autocomplete).findByLabelText('Test');
+
     await fireEvent.change(input, { target: { value: 'test' } });
-
-    expect(screen.getAllByTestId('SuggestedParticipant').length).toEqual(1);
-    expect(screen.getByText('dashboard-select-participants-label-suggestions')).toBeInTheDocument();
+    waitFor(
+      () => {
+        expect(mockFindLazyUsersQuery).toBeCalled();
+      },
+      { timeout: 500 }
+    );
   });
 
   test('with prop invitees available, should render invited participant list', async () => {
-    await render(
-      <SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} invitees={invitees} />,
-      store
-    );
-
     expect(screen.getByText('dashboard-select-participants-label-invited')).toBeInTheDocument();
     expect(screen.getByTestId('InvitedParticipants')).toBeInTheDocument();
     expect(screen.getByText('Invited Test User 1')).toBeInTheDocument();
@@ -100,45 +101,36 @@ describe('SelectParticipants', () => {
   });
 
   test('click on suggested participant will move him to added list', async () => {
-    await render(<SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} />, store);
-
-    const input = screen.getByTestId('InputSearchUsers');
-    await fireEvent.change(input, { target: { value: 'test' } });
-
-    const suggestedParticipant = screen.getByTestId('SuggestedParticipant');
-
+    const autocomplete = screen.getByTestId('SelectParticipants');
+    const input = await within(autocomplete).findByLabelText('Test');
     expect(screen.queryByTestId('SelectedParticipant')).not.toBeInTheDocument();
-    expect(screen.queryByText('dashboard-select-participants-label-added')).not.toBeInTheDocument();
-
-    fireEvent.click(suggestedParticipant);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('SelectedParticipant').length).toEqual(1);
-    });
-    expect(mockOnChange).toHaveBeenCalledTimes(2);
-    expect(screen.getByText('dashboard-select-participants-label-added')).toBeInTheDocument();
+    await fireEvent.change(input, { target: { value: 'test' } });
+    waitFor(
+      async () => {
+        const listbox = screen.getByRole('listbox');
+        const firstOption = await within(listbox).findByRole('option');
+        await fireEvent.click(firstOption);
+        expect(screen.findByTestId('SelectedParticipant')).not.toBeEmptyDOMElement();
+      },
+      { timeout: 500 }
+    );
   });
 
   test('click on delete will move the user back to the suggested list', async () => {
-    await render(
-      <SelectParticipants onChange={mockOnChange} onRevokeUserInvite={jest.fn()} invitees={invitees} />,
-      store
-    );
-
-    const input = screen.getByTestId('InputSearchUsers');
+    const autocomplete = screen.getByTestId('SelectParticipants');
+    const input = await within(autocomplete).findByLabelText('Test');
     await fireEvent.change(input, { target: { value: 'test' } });
-
-    const suggestedParticipant = screen.getByTestId('SuggestedParticipant');
-    await fireEvent.click(suggestedParticipant);
-
-    expect(screen.queryByTestId('SuggestedParticipant')).not.toBeInTheDocument();
-
-    const deleteButton = screen.getByTestId('SelectedParticipants-deleteButton');
-    await fireEvent.click(deleteButton);
-
-    expect(screen.queryByText('dashboard-select-participants-label-added')).not.toBeInTheDocument();
-
-    expect(screen.queryAllByTestId('SelectedParticipant').length).toEqual(0);
-    expect(mockOnChange).toHaveBeenCalledTimes(3);
+    waitFor(
+      async () => {
+        const listbox = screen.getByRole('listbox');
+        const firstOption = await within(listbox).findByRole('option');
+        await fireEvent.click(firstOption);
+        const selectedContainer = await screen.findByTestId('SelectedParticipant');
+        const firstChipDeleteButton = await within(selectedContainer).findByTestId('SelectedParticipants-deleteButton');
+        await fireEvent.click(firstChipDeleteButton);
+        expect(screen.queryByTestId('SelectedParticipant')).not.toBeInTheDocument();
+      },
+      { timeout: 500 }
+    );
   });
 });
