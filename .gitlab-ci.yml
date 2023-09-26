@@ -199,7 +199,7 @@ deploy:review-app:
     - helm repo add --username gitlab-ci-token --password ${CI_JOB_TOKEN}
       opentalk https://git.opentalk.dev/api/v4/projects/218/packages/helm/stable
   script:
-    - helm uninstall frontend-$MERGE_REQUEST_IID -n review-latest || true
+    - helm uninstall frontend-$CI_MERGE_REQUEST_IID -n review-latest || true
     - helm upgrade --version 0.1.0 --install --force frontend-$CI_MERGE_REQUEST_IID opentalk/ot-web-frontend-helm
       --set image.repository=$CI_REGISTRY_IMAGE
       --set image.tag=${CI_MERGE_REQUEST_IID}_${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
