@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack, styled } from '@mui/material';
-import { LogoSmallIcon } from '@opentalk/common';
 
 import LayoutSelection from '../fragments/LayoutSelection';
 import MeetingTimer from '../fragments/MeetingTimer';
 import RoomTitle from '../fragments/RoomTitle';
+import Drawer from './fragments/Drawer';
 import MobilePagination from './fragments/MobilePagination';
 
 const HeaderContainer = styled(Stack)(({ theme }) => ({
@@ -17,18 +17,10 @@ const HeaderContainer = styled(Stack)(({ theme }) => ({
   marginInline: '0.5rem',
 }));
 
-const Logo = styled(LogoSmallIcon)(({ theme }) => ({
-  background: theme.palette.background.video,
-  borderRadius: '0.25rem',
-  width: '100%',
-  height: 'auto',
-  padding: '0.5rem',
-}));
-
 const MobileMeetingHeader = () => {
   return (
     <HeaderContainer>
-      <Logo />
+      <Drawer />
       <RoomTitle />
       <LayoutSelection />
       <MobilePagination />
