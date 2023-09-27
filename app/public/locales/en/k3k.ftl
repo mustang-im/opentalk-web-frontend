@@ -584,6 +584,7 @@ global-anonymous = Anonymous
 global-start-now = Start now
 global-clear = Clear
 global-close = Close
+global-ok = Ok
 
 dashboard-home = Home
 dashboard-meetings = Meetings
