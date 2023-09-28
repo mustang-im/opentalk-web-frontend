@@ -868,3 +868,15 @@ dev-version = (preview)
 
 reconnection-loop-dialogbox-title = Reconnecting to the room
 reconnection-loop-abort-button = Abort
+
+glitchtip-crash-report-title=  Oh, it looks like we're having issues.
+glitchtip-crash-report-subtitle = Our team has been notified.
+glitchtip-crash-report-subtitle2 = If you’d like to help, tell us what happened below.
+glitchtip-crash-report-labelName = Name
+glitchtip-crash-report-labelEmail = Email
+glitchtip-crash-report-labelComments = What happened?
+glitchtip-crash-report-labelClose = Close
+glitchtip-crash-report-labelSubmit = Submit
+glitchtip-crash-report-errorGeneric = An unknown error occurred while submitting your report. Please try again.
+glitchtip-crash-report-errorFormEntry = Some fields were invalid. Please correct the errors and try again.
+glitchtip-crash-report-successMessage = Your feedback has been sent. Thank you!      
