@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { NamespacedIncoming } from '@opentalk/common';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
@@ -26,11 +27,18 @@ export type SignalingConnectionEvent = {
   message: IncomingMessage;
 };
 
+type EchoMessage = NamespacedIncoming<{ message: 'ping' }, 'echo'>;
+
+const HEARTBEAT_INTERVAL = 3000; //ms
+const HEARTBEAT_TIMEOUT = 1000;
 export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> {
   private readonly url: URL;
   private readonly socket;
 
   private _debugReconnect = false;
+
+  private heartbeatIntervalId?: NodeJS.Timer;
+  private closeSignalingTimeoutId?: NodeJS.Timer;
 
   constructor(url: URL, ticket: string) {
     super();
@@ -44,7 +52,7 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
     this.socket = new WebSocket(this.url, [`ticket#${ticket}`, `opentalk-signaling-json-v${API_VERSION}`]);
     this.socket.onopen = this.onConnected;
     this.socket.onmessage = (ev) => {
-      const message: IncomingMessage = convertToCamelCase(JSON.parse(ev.data), {
+      const message: IncomingMessage | EchoMessage = convertToCamelCase(JSON.parse(ev.data), {
         // We exclude votingRecord, lastSeenTimestamp* because they contain id that must not be converted to the camel case
         // as we can no longer map them to the participants.
         stopPaths: [
@@ -54,6 +62,11 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
         ],
         deep: true,
       });
+      // Server responded on our message heartbeat -> connection is still alive
+      if (message.namespace === 'echo') {
+        this.resetCloseSignalingTimeout();
+        return;
+      }
       this.eventEmitter.emit('message', message);
     };
     this.socket.onclose = this.onClose;
@@ -65,7 +78,27 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
 
   private onConnected = () => {
     this.eventEmitter.emit('connectionstatechange', 'connected');
+    this.heartbeatIntervalId = setInterval(() => this.initiateSignalingHeartbeat(), HEARTBEAT_INTERVAL);
   };
+
+  private resetCloseSignalingTimeout() {
+    if (this.closeSignalingTimeoutId) {
+      clearTimeout(this.closeSignalingTimeoutId);
+    }
+  }
+
+  private initiateSignalingHeartbeat() {
+    if (this.isOpen()) {
+      this.socket.send(JSON.stringify({ namespace: 'echo', payload: { action: 'ping' } }));
+    }
+
+    this.closeSignalingTimeoutId = setTimeout(() => {
+      this.socket.close();
+      // We need to emit the connectionstatechange here, because in contrary
+      // websocket will wait for 30sec before dispatching onClose event
+      this.eventEmitter.emit('connectionstatechange', 'disconnected');
+    }, HEARTBEAT_TIMEOUT);
+  }
 
   public sendMessage(message: OutgoingMessage) {
     let convertedMessage: OutgoingMessage;
@@ -94,6 +127,8 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
   // For closure status codes see: https://www.rfc-editor.org/rfc/rfc6455.html#section-7.4.1
   private onClose = (e: CloseEvent) => {
     console.debug(`signaling socket closed with ${e.code}: ${e.reason}`);
+    clearInterval(this.heartbeatIntervalId);
+    clearTimeout(this.closeSignalingTimeoutId);
     this.socket.onmessage = null;
     this.socket.onclose = null;
 
@@ -103,6 +138,7 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
       this.eventEmitter.emit('connectionstatechange', 'disconnected');
       return;
     }
+
     switch (e.code) {
       case 1000:
         // normal disconnect
@@ -115,6 +151,10 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
       case 1007: // Unsupported payload
       case 1012: // Server restart
       case 1013: // Try again later
+        console.warn(`Connection Lost: Signaling websocket closed with reason ${e.code}: ${e.reason}`);
+        this.eventEmitter.emit('connectionstatechange', 'disconnected');
+        break;
+      case 4999: // custom error code when heartbeat is failing (can't reach a signaling response)
         console.warn(`Connection Lost: Signaling websocket closed with reason ${e.code}: ${e.reason}`);
         this.eventEmitter.emit('connectionstatechange', 'disconnected');
         break;

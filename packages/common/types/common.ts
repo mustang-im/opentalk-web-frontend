@@ -87,7 +87,8 @@ export type Namespaces =
   | 'timer'
   | 'recording'
   | 'whiteboard'
-  | 'shared_folder';
+  | 'shared_folder'
+  | 'echo';
 
 export interface Namespaced<P = void, T extends string = Namespaces> {
   namespace: T;
@@ -113,7 +114,7 @@ export type ParticipantMediaState = PresenterRoleState & {
   video?: MediaSessionState;
 };
 
-type TimerIsReady = Pick<TimerState, 'readyStatus'>
+type TimerIsReady = Pick<TimerState, 'readyStatus'>;
 
 export interface BackendParticipant {
   id: ParticipantId;
