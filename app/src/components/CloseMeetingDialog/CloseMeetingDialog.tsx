@@ -29,6 +29,7 @@ import { deleteRoomMetaData } from '../../store/slices/internalSlice';
 export interface CloseMeetingDialogProps {
   open: boolean;
   onClose: () => void;
+  container: HTMLElement | null;
 }
 
 export const CloseMeetingDialog = ({ open, onClose }: CloseMeetingDialogProps) => {

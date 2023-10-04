@@ -70,7 +70,9 @@ const EndCallButton = () => {
         <EndCallIcon color="error" />
       </StyledEndCallButton>
 
-      {isConfirmDialogVisible && <CloseMeetingDialog open={isConfirmDialogVisible} onClose={onClose} />}
+      {isConfirmDialogVisible && (
+        <CloseMeetingDialog open={isConfirmDialogVisible} onClose={onClose} container={fullscreenContext.rootElement} />
+      )}
     </>
   );
 };
