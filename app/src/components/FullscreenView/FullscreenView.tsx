@@ -52,7 +52,7 @@ const IconButton = styled(MuiIconButton)(({ theme }) => ({
 const FullscreenView = () => {
   const fullscreenHandle = useFullscreenContext();
   const { t } = useTranslation();
-  const [isActiveOverlay, setIsActiveOverlay] = useState<boolean>(false);
+  const [hasVisibleControls, setVisibleControls] = useState<boolean>(false);
   const [isLocalVideoPinned, setIsLocalVideoPinned] = useState<boolean>(false);
 
   const fullscreenSpeakerId = fullscreenHandle.fullscreenParticipantID;
@@ -60,13 +60,16 @@ const FullscreenView = () => {
   const participants = useAppSelector(selectAllOnlineParticipants);
   const usedParticipantId = fullscreenSpeakerId || selectedSpeakerId;
   const selectedParticipant = participants.find((p) => p.id === usedParticipantId) || participants[0];
+  const isActive = fullscreenHandle.hasActiveOverlay || hasVisibleControls;
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsActiveOverlay(false), 5000);
-    return () => clearTimeout(timer);
-  }, [isActiveOverlay]);
+    if (hasVisibleControls) {
+      const timer = setTimeout(() => setVisibleControls(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [hasVisibleControls]);
 
   const screenVideo = useMemo(() => {
     if (selectedParticipant === undefined) {
@@ -74,13 +77,9 @@ const FullscreenView = () => {
     }
 
     return (
-      <ParticipantWindow
-        activePresenter={isActiveOverlay}
-        participantId={selectedParticipant.id}
-        mediaRef={`fullscreen`}
-      />
+      <ParticipantWindow activePresenter={isActive} participantId={selectedParticipant.id} mediaRef={`fullscreen`} />
     );
-  }, [selectedParticipant, isActiveOverlay]);
+  }, [selectedParticipant, isActive]);
 
   const toggleLocalVideoPin = () => setIsLocalVideoPinned((prevState) => !prevState);
 
@@ -91,20 +90,21 @@ const FullscreenView = () => {
 
   return (
     <Container
-      onMouseMove={() => setIsActiveOverlay(true)}
-      onMouseLeave={() => setIsActiveOverlay(false)}
+      ref={(containerElement: HTMLDivElement | null) => fullscreenHandle.setRootElement(containerElement)}
+      onMouseMove={() => setVisibleControls(true)}
+      onMouseLeave={() => setVisibleControls(false)}
       id="fullscreen-container"
       data-testid="fullscreen"
     >
       <IconButton aria-label={t('indicator-fullscreen-close')} onClick={handleCloseFullscreen} color="secondary">
         <CloseIcon />
       </IconButton>
-      <Slide direction="down" in={isLocalVideoPinned || isActiveOverlay} mountOnEnter>
+      <Slide direction="down" in={isLocalVideoPinned || isActive} mountOnEnter>
         <LocalVideoContainer data-testid="fullscreenLocalVideo">
           <LocalVideo fullscreenMode togglePinVideo={toggleLocalVideoPin} isVideoPinned={isLocalVideoPinned} />
         </LocalVideoContainer>
       </Slide>
-      <Slide direction="up" in={isActiveOverlay} mountOnEnter unmountOnExit>
+      <Slide direction="up" in={isActive} mountOnEnter unmountOnExit>
         <ToolbarWrapper>
           <Toolbar layout="fullscreen" />
         </ToolbarWrapper>

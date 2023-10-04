@@ -5,6 +5,7 @@ import { MoreIcon } from '@opentalk/common';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import MoreMenu from './MoreMenu';
 import ToolbarButton from './ToolbarButton';
 
@@ -12,8 +13,15 @@ const MenuButton = () => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
-  const closeMenu = () => setShowMenu(false);
-  const openMenu = () => setShowMenu(true);
+  const fullscreenContext = useFullscreenContext();
+  const closeMenu = () => {
+    fullscreenContext.setHasActiveOverlay(false);
+    setShowMenu(false);
+  };
+  const openMenu = () => {
+    fullscreenContext.setHasActiveOverlay(true);
+    setShowMenu(true);
+  };
 
   return (
     <div ref={menuRef}>

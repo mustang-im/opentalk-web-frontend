@@ -4,9 +4,9 @@
 import React from 'react';
 
 import { configureStore, render, screen } from '../../utils/testUtils';
-import CloseMettingDialog, { CloseMettingDialogProps } from './CloseMettingDialog';
+import CloseMettingDialog, { CloseMeetingDialogProps } from './CloseMeetingDialog';
 
-const dialogProps: CloseMettingDialogProps = {
+const dialogProps: CloseMeetingDialogProps = {
   open: true,
   onClose: jest.fn(),
 };

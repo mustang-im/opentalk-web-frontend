@@ -10,10 +10,11 @@ import { useParams } from 'react-router-dom';
 
 import { useGetMeQuery, useGetRoomQuery } from '../../../api/rest';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { hangUp } from '../../../store/commonActions';
 import { selectEventInfo } from '../../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../../store/slices/userSlice';
-import CloseMettingDialog from '../../CloseMettingDialog';
+import CloseMeetingDialog from '../../CloseMeetingDialog';
 import ToolbarButton from './ToolbarButton';
 
 const EndCallButton = () => {
@@ -29,6 +30,7 @@ const EndCallButton = () => {
   const [isConfirmDialogVisible, showConfirmDialog] = useState(false);
   const isMeetingCreator = me?.id && roomData?.createdBy?.id ? me.id === roomData.createdBy?.id : false;
   const eventInfo = useAppSelector(selectEventInfo);
+  const fullscreenContext = useFullscreenContext();
 
   const StyledEndCallButton = styled(ToolbarButton)(({ theme }) => ({
     svg: {
@@ -44,11 +46,15 @@ const EndCallButton = () => {
 
   const hangUpHandler = useCallback(() => dispatch(hangUp()), [dispatch]);
 
-  const onClose = useCallback(() => showConfirmDialog(false), [showConfirmDialog]);
+  const onClose = useCallback(() => {
+    fullscreenContext.setHasActiveOverlay(false);
+    showConfirmDialog(false);
+  }, [showConfirmDialog]);
 
   const handleEndCall = () => {
     if (isMeetingCreator && !eventInfo?.isAdhoc) {
       showConfirmDialog(true);
+      fullscreenContext.setHasActiveOverlay(true);
     } else {
       hangUpHandler();
     }
@@ -65,7 +71,7 @@ const EndCallButton = () => {
         <EndCallIcon color="error" />
       </StyledEndCallButton>
 
-      {isConfirmDialogVisible && <CloseMettingDialog open={isConfirmDialogVisible} onClose={onClose} />}
+      {isConfirmDialogVisible && <CloseMeetingDialog open={isConfirmDialogVisible} onClose={onClose} />}
     </>
   );
 };
