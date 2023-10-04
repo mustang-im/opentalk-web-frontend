@@ -47,7 +47,6 @@ const EndCallButton = () => {
   const hangUpHandler = useCallback(() => dispatch(hangUp()), [dispatch]);
 
   const onClose = useCallback(() => {
-    fullscreenContext.setHasActiveOverlay(false);
     showConfirmDialog(false);
   }, [showConfirmDialog]);
 

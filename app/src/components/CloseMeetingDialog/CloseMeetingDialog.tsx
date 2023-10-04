@@ -17,7 +17,7 @@ import {
 import { CloseIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -59,6 +59,14 @@ export const CloseMeetingDialog = ({ open, onClose }: CloseMeetingDialogProps) =
   }, [t, navigate, hangUpHandler, dispatch, roomId]);
 
   const fullscreenHandler = useFullscreenContext();
+
+  useEffect(() => {
+    fullscreenHandler.setHasActiveOverlay(true);
+
+    return () => {
+      fullscreenHandler.setHasActiveOverlay(false);
+    };
+  }, []);
 
   return (
     <Dialog open={open} maxWidth="sm" fullWidth container={fullscreenHandler.rootElement}>
