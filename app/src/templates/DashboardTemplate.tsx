@@ -28,7 +28,6 @@ const DashboardLogo = styled(Logo)({
 });
 
 const Main = styled('main')(({ theme }) => ({
-  maxWidth: 1500,
   height: '100%',
   flex: 1,
   padding: theme.spacing(3, 5),
