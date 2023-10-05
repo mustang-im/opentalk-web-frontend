@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { notifications, useDateFormat, Participant, WaitingState, ParticipantAvatar } from '@opentalk/common';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
@@ -40,11 +40,9 @@ const JoinedText = styled(Typography)(({ theme }) => ({
 
 type ParticipantRowProps = {
   participant: Participant;
-  approveAllWaiting?: boolean;
-  handleApproveAll?: () => void;
 };
 
-const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveAll }: ParticipantRowProps) => {
+const WaitingParticipantItem = ({ participant }: ParticipantRowProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const timestamp = new Date(participant?.joinedAt) ?? Date.now;
@@ -58,20 +56,11 @@ const WaitingParticipantItem = ({ participant, approveAllWaiting, handleApproveA
     }
   }, [dispatch, participant, t]);
 
-  useEffect(() => {
-    if (approveAllWaiting) {
-      handleAccept();
-      if (handleApproveAll) {
-        handleApproveAll();
-      }
-    }
-  }, [approveAllWaiting, handleAccept, handleApproveAll]);
-
   const ParticipantWaitingState = useMemo(() => {
     switch (participant.waitingState) {
       case WaitingState.Waiting:
         return (
-          <Button variant="text" onClick={handleAccept}>
+          <Button variant="text" onClick={handleAccept} focusRipple>
             {t('participant-menu-accept-participant')}
           </Button>
         );

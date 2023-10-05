@@ -25,11 +25,12 @@ const MainContainer = styled('div')(({ theme }) => ({
     gap: theme.spacing(1.25),
   },
   [theme.breakpoints.down('sm')]: {
-    gap: theme.spacing(),
-    width: '90%',
+    gap: theme.spacing(1),
+    background: theme.palette.background.paper,
   },
   [`${theme.breakpoints.down('md')} and (orientation: landscape)`]: {
-    gap: theme.spacing(1.7),
+    gap: theme.spacing(1),
+    background: theme.palette.background.paper,
   },
 }));
 

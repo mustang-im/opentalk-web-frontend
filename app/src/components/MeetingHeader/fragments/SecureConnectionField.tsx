@@ -8,8 +8,10 @@ import { useTranslation } from 'react-i18next';
 
 const SecureIconSmall = styled(DefaultSecureIcon)(({ theme }) => ({
   color: theme.palette.primary.main,
-  width: '1em',
-  height: '1em',
+  //Overrides parent fontsize
+  '&.MuiSvgIcon-root': {
+    fontSize: theme.typography.pxToRem(24),
+  },
 }));
 
 const SecureIconBig = styled(DefaultSecureIcon)(({ theme }) => ({

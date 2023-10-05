@@ -103,7 +103,7 @@ export const uiSlice = createSlice({
         state.isCurrentProtocolHighlighted = false;
       }
     },
-    paginationPageSet: (state, action: PayloadAction<number>) => {
+    setPaginationPage: (state, action: PayloadAction<number>) => {
       state.paginationPage = action.payload;
     },
     pinnedParticipantIdSet: (state, { payload }: PayloadAction<ParticipantId | undefined>) => {
@@ -208,7 +208,7 @@ export const {
   setParticipantsSearchValue,
   chatConversationStateSet,
   updatedCinemaLayout,
-  paginationPageSet,
+  setPaginationPage,
   pinnedParticipantIdSet,
   mirroredVideoSet,
   setShowPollVoteResultWindow,

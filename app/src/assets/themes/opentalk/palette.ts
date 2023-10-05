@@ -72,6 +72,7 @@ const lightPalette: PaletteOptions = {
     video: '#01010166',
     secondaryOverlay: '#20434f66',
     voteResult: '#385865',
+    light: '#475b5f',
   },
   action: {
     hover: '#20434F14',
@@ -158,6 +159,7 @@ const darkPalette: PaletteOptions = {
     video: '#01010166',
     secondaryOverlay: '#20434f66',
     voteResult: '#385865',
+    light: '#475b5f',
   },
   action: {
     hover: '#20434F14',

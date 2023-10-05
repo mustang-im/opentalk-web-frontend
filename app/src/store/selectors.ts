@@ -13,7 +13,7 @@ import {
   ChatScope,
   FilterableParticipant,
 } from '@opentalk/common';
-import { automodStore } from '@opentalk/components';
+import { automodStore, legalVoteStore } from '@opentalk/components';
 import { createSelector } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
 import _, { intersection } from 'lodash';
@@ -31,6 +31,7 @@ import {
   selectAllOnlineParticipantsInConference,
   selectAllParticipants,
 } from './slices/participantsSlice';
+import { selectAllPollVotes } from './slices/pollSlice';
 import { selectParticipantsReady } from './slices/timerSlice';
 import {
   selectParticipantsSearchValue,
@@ -238,5 +239,13 @@ export const selectTalkingStickParticipants = createSelector(
     });
 
     return participantsInTalkingStick;
+  }
+);
+
+export const selectPollsAndVotingsCount = createSelector(
+  legalVoteStore.selectAllVotes,
+  selectAllPollVotes,
+  (votings, polls) => {
+    return votings.length + polls.length;
   }
 );

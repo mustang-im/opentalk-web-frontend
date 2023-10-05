@@ -4,15 +4,15 @@
 import { styled, Container as MuiContainer } from '@mui/material';
 import { FullScreen as ReactFullScreen } from 'react-full-screen';
 
-import LayoutOptions from '../../enums/LayoutOptions';
-import { useAppSelector } from '../../hooks';
-import { useFullscreenContext } from '../../provider/FullscreenProvider';
-import { selectCinemaLayout } from '../../store/slices/uiSlice';
-import FullscreenView from '../FullscreenView/index';
-import GridView from '../GridView';
-import ProtocolView from '../ProtocolView';
-import SpeakerView from '../SpeakerView';
-import WhiteboardView from '../Whiteboard';
+import LayoutOptions from '../../../enums/LayoutOptions';
+import { useAppSelector } from '../../../hooks';
+import { useFullscreenContext } from '../../../provider/FullscreenProvider';
+import { selectCinemaLayout } from '../../../store/slices/uiSlice';
+import FullscreenView from '../../FullscreenView';
+import GridView from '../../GridView';
+import ProtocolView from '../../ProtocolView';
+import SpeakerView from '../../SpeakerView';
+import WhiteboardView from '../../Whiteboard';
 
 const FullScreen = styled(ReactFullScreen)({
   width: '100%',
