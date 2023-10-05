@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Remove the dialog from adhoc meetings at the end ([#1113](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1113))
 - Safari: change CtA for browser notification ([#1485](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1485))
 - Change wording for inviting field ([#1533](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1533))
 - Change wording of dashboard password field ([#1527](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1527))

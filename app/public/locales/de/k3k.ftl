@@ -693,6 +693,7 @@ dashboard-events-filter-by-invites = Nur Einladungen anzeigen
 dashboard-events-filter-by-favorites = Nur Favoriten anzeigen
 dashboard-events-search = Suchen
 dashboard-events-note-limited-view = Hinweis: Sie haben wiederkehrende Meetings in Ihrer Liste, wir haben die Ansicht zeitlich eingeschränkt.
+dashboard-adhoc-meeting-attention = Hinweis: Dies ist ein Adhoc meeting, diese werden nach 24h automatisch gelöscht und sind im Dashboard nicht sichtbar.
 
 dashbooard-event-accept-invitation-notification = Einladung für das Meeting {meetingTitle} akzeptiert
 dashbooard-event-decline-invitation-notification = Einladung für das Meeting {meetingTitle} abgelehnt
