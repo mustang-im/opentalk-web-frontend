@@ -92,7 +92,7 @@ export const notifications = {
     enqueueSnackbar(msg, options);
   },
   binaryAction: (
-    message: string, 
+    message: string,
     options: OptionsObject<"binaryAction"> & {
       type?: 'info' | 'warning' | 'error' | 'success';
       primaryBtnText?: string;
