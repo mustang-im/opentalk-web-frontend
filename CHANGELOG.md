@@ -11,6 +11,7 @@
 - Change wording for inviting field ([#1533](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1533))
 - Change wording of dashboard password field ([#1527](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1527))
 - Change allow button color in recording consent dialog ([#1508](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1508))
+- Add time to join/leaving event in chat list ([#1510](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1510))
 - Remove the redundant login screen - fixed redirect ([#1360, #1463](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1360, https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1463))
 - Fix: [Lobby] no feedback for wrong password ([1440](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1440))
 - Increase size of toolbar buttons for mobile user ([#1460](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1460))

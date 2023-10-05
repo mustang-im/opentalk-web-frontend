@@ -442,8 +442,8 @@ secure-connection-message = Diese Verbindung ist verschlüsselt und sicher.
 participant-joined-text = Beigetreten {$joinedTime}
 participant-hand-raise-text = Hand gehoben {$handUpdated}
 participant-last-active-text = Letzte Aktivität {$lastActive}
-participant-joined-event = ist dem Meeting beigetreten
-participant-left-event = hat das Meeting verlassen
+participant-joined-event = ist dem Meeting um {$time} beigetreten
+participant-left-event = hat das Meeting um {$time} verlassen
 
 poll-overview-button-create-poll = Umfrage erstellen
 poll-tab-title = Umfragen
