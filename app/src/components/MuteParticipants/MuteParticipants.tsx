@@ -72,7 +72,7 @@ const MuteParticipants = () => {
           {t('mute-participants-button-selected')}
         </Button>
       </Box>
-      <SearchTextField onSearch={(v) => handleSearchChange(v)} fullWidth />
+      <SearchTextField searchValue={search} onSearch={handleSearchChange} fullWidth />
       <Box overflow="auto">
         <MuteParticipantsList participantsList={participantsList} onCheck={handleSelectParticipant} />
       </Box>

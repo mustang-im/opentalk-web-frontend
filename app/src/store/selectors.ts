@@ -177,7 +177,7 @@ const sortAndFilterParticipants = (participants: Participant[], sortOption: Sort
   return filterParticipants(sortParticipants(participants, sortOption), searchValue);
 };
 
-export const selectAllGroupParticipantsSortedAndFiltered = createSelector(
+export const selectParticipantGroupsSortedAndFiltered = createSelector(
   [selectAllGroupParticipants, selectParticipantsSortOption, selectParticipantsSearchValue],
   (groups, sortOption, searchValue) => {
     const groupDictionary = new Map<GroupId, Array<Participant>>();

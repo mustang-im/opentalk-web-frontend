@@ -7,7 +7,7 @@ import {
   ListItemAvatar as MuiListItemAvatar,
   ListItemText as MuiListItemText,
   Typography,
-  Grid,
+  Box,
   Badge,
 } from '@mui/material';
 import {
@@ -25,7 +25,7 @@ import {
   TelephoneStrokeIcon,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
-import React, { useCallback, useState } from 'react';
+import React, { CSSProperties, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Role } from '../../../api/types/incoming/control';
@@ -36,6 +36,7 @@ import IconButton from '../../../commonComponents/IconButton';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
+import { selectHandUp } from '../../../store/slices/moderationSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
@@ -82,14 +83,15 @@ const PhoneOffIconStyled = styled(TelephoneStrokeIcon)({
   opacity: '0.5',
 });
 
-const ListItemText = styled(MuiListItemText)({
+const ListItemText = styled(MuiListItemText)(({ theme }) => ({
+  padding: theme.spacing(0, 1),
   '& p': {
     fontWeight: 400,
     lineHeight: 1,
   },
-});
+}));
 
-const IconsContainer = styled(Grid)({
+const IconsContainer = styled(Box)({
   alignItems: 'center',
   display: 'flex',
   '& svg': {
@@ -103,10 +105,13 @@ const JoinedText = styled(Typography)(({ theme }) => ({
 }));
 
 type ParticipantRowProps = {
-  participant: Participant;
+  data: Participant[];
+  index: number;
+  style: CSSProperties;
 };
 
-const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
+const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
+  const participant = data[index];
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const sortType = useAppSelector(selectParticipantsSortOption);
   const isModerator = useAppSelector(selectIsModerator);
@@ -118,13 +123,7 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   const ownAudioEnabled = useAppSelector(selectAudioEnabled);
   const ownScreenShareEnabled = useAppSelector(selectShareScreenEnabled);
   const userProtocolAccess = useAppSelector(selectUserProtocolAccess);
-
-  const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
-  const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
-  const lastActiveTimestamp = new Date(participant?.lastActive ?? new Date());
-  const formattedLastActiveTime = useDateFormat(lastActiveTimestamp, 'time');
-  const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
-  const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
+  const ownHandRaised = useAppSelector(selectHandUp);
 
   const { active: audioActive } = useAppSelector(
     selectSubscriberStateById(
@@ -240,11 +239,11 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
 
   const renderIcon = useCallback(() => {
     const isParticipantMe = participant.id === ownId;
-
+    const isHandRaised = isParticipantMe ? ownHandRaised : participant.handIsUp;
     const isScreenShareEnabled = isParticipantMe ? ownScreenShareEnabled : screenShareActive;
     const isAudioEnabled = isParticipantMe ? ownAudioEnabled : audioActive;
 
-    if (participant.handIsUp) {
+    if (isHandRaised) {
       return <RaiseHandOnIcon />;
     } else if (isScreenShareEnabled) {
       return <ShareScreenOnIcon />;
@@ -252,30 +251,50 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
       return isSipParticipant ? <PhoneIcon /> : <MicOnIcon />;
     }
     return isSipParticipant ? <PhoneOffIconStyled /> : <MicOffIconStyled />;
-  }, [participant, audioActive, screenShareActive, ownAudioEnabled, ownScreenShareEnabled]);
+  }, [
+    participant.handIsUp,
+    participant.id,
+    isSipParticipant,
+    audioActive,
+    screenShareActive,
+    ownAudioEnabled,
+    ownScreenShareEnabled,
+    ownHandRaised,
+  ]);
 
   const renderMenu = () => (
     <>
       <IconButton aria-label="open participant more menu" onClick={handleClick}>
         <MoreIcon className={'more-icon'} />
       </IconButton>
-      <MenuPopover
-        open={open}
-        setAnchorEl={setAnchorEl}
-        anchorEl={anchorEl}
-        options={isModerator ? moderatorMenuOptionItems : participantMenuOptionItems}
-      />
+      {open && (
+        <MenuPopover
+          open={true}
+          setAnchorEl={setAnchorEl}
+          anchorEl={anchorEl}
+          options={isModerator ? moderatorMenuOptionItems : participantMenuOptionItems}
+        />
+      )}
     </>
   );
 
   const getContextText = () => {
     switch (sortType) {
-      case SortOption.RaisedHandFirst:
+      case SortOption.RaisedHandFirst: {
+        const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
+        const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
         return t('participant-hand-raise-text', { handUpdated: formattedHandUpTime });
-      case SortOption.LastActive:
+      }
+      case SortOption.LastActive: {
+        const lastActiveTimestamp = new Date(participant?.lastActive ?? new Date());
+        const formattedLastActiveTime = useDateFormat(lastActiveTimestamp, 'time');
         return t('participant-last-active-text', { lastActive: formattedLastActiveTime });
-      default:
+      }
+      default: {
+        const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
+        const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
         return t('participant-joined-text', { joinedTime: formattedJoinedTime });
+      }
     }
   };
 
@@ -313,33 +332,30 @@ const ParticipantListItem = ({ participant }: ParticipantRowProps) => {
   }, [participant.role]);
 
   return (
-    <ListItem>
-      <Grid container spacing={2} direction={'row'} wrap={'nowrap'}>
-        <Grid item>
-          <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
-        </Grid>
-        <Grid item xs zeroMinWidth>
-          <ListItemText
-            primary={
-              <Typography variant={'body1'} noWrap translate="no">
-                {participant?.displayName}
-              </Typography>
-            }
-            secondary={
-              <JoinedText variant={'caption'} translate="no">
-                {getContextText()}
-              </JoinedText>
-            }
-          />
-        </Grid>
-        {participant.id !== ownId && <Grid item>{renderMenu()}</Grid>}
+    <ListItem style={style}>
+      <Box display="flex" flexWrap="nowrap" alignItems="center" width="100%">
+        <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
+        <ListItemText
+          primary={
+            <Typography variant={'body1'} noWrap translate="no" mb={0.5}>
+              {participant?.displayName}
+            </Typography>
+          }
+          secondary={
+            <JoinedText variant={'caption'} translate="no">
+              {getContextText()}
+            </JoinedText>
+          }
+        />
+
+        {participant.id !== ownId && renderMenu()}
         {isProtocolEditor(participant) && (
-          <IconsContainer item>
+          <IconsContainer>
             <ProtocolIcon />
           </IconsContainer>
         )}
-        <IconsContainer item>{renderIcon()}</IconsContainer>
-      </Grid>
+        <IconsContainer>{renderIcon()}</IconsContainer>
+      </Box>
     </ListItem>
   );
 };

@@ -31,9 +31,7 @@ describe('SearchTextField', () => {
     expect(searchInput).toHaveValue('');
 
     fireEvent.change(searchInput, { target: { value: 'testing...' } });
-    await waitFor(() => {
-      expect(searchInput).toHaveValue('testing...');
-    });
+    expect(mockOnSearch).toBeCalledWith('testing...');
     expect(mockOnSearch).toBeCalledTimes(1);
   });
 
