@@ -10,7 +10,7 @@ import { FixedSizeList } from 'react-window';
 import ParticipantListItem from './ParticipantListItem';
 
 const CustomList = styled(List)({
-  overflowY: 'auto',
+  overflow: 'hidden',
   textAlign: 'left',
   width: '100%',
   height: '100%',
