@@ -42,13 +42,13 @@ const Provider = ({ children }: ProviderProps) => {
       >
         <ThemeProvider theme={inRoom ? createOpenTalkTheme('dark') : createOpenTalkTheme()}>
           <CssBaseline />
-          <SnackbarProvider>
-            <BreakoutRoomProvider>
-              <MediaProvider>
-                <FullscreenProvider>{children}</FullscreenProvider>
-              </MediaProvider>
-            </BreakoutRoomProvider>
-          </SnackbarProvider>
+          <BreakoutRoomProvider>
+            <MediaProvider>
+              <FullscreenProvider>
+                <SnackbarProvider>{children}</SnackbarProvider>
+              </FullscreenProvider>
+            </MediaProvider>
+          </BreakoutRoomProvider>
         </ThemeProvider>
       </AuthProvider>
     </StyledEngineProvider>
