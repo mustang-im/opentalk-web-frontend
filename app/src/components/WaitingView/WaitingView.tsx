@@ -2,13 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, Typography, useTheme } from '@mui/material';
+import { RoomId } from '@opentalk/rest-api-rtk-query';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useGetRoomEventInfoQuery } from '../../api/rest';
 import { enterRoom } from '../../api/types/outgoing/control';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectFeatures, selectShowmprintContainer } from '../../store/slices/configSlice';
-import { selectRoomConnectionState, ConnectionState } from '../../store/slices/roomSlice';
+import { selectRoomConnectionState, ConnectionState, selectInviteId, selectRoomId } from '../../store/slices/roomSlice';
 import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider/MediaProvider';
 import SelfTest from '../SelfTest';
@@ -21,6 +23,9 @@ const WaitingView = () => {
   const mediaContext = useMediaContext();
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
   const showImprintContainer = useAppSelector(selectShowmprintContainer);
+  const inviteCode = useAppSelector(selectInviteId);
+  const roomId = useAppSelector(selectRoomId);
+  const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId as RoomId, inviteCode }, { skip: !roomId });
 
   const readyToEnter = connectionState === ConnectionState.ReadyToEnter;
 
@@ -41,6 +46,7 @@ const WaitingView = () => {
               {readyToEnter ? t('joinform-enter-now') : t('joinform-waiting-room-enter')}
             </Button>
           }
+          title={roomData?.title}
         >
           <Typography
             variant="body1"

@@ -33,8 +33,6 @@ const App = () => {
     setBrowserConfirmed(true);
   }, []);
 
-  console.log('changes');
-
   useEffect(() => {
     const isSafari = browser.isSafari();
     if (isSafari) {

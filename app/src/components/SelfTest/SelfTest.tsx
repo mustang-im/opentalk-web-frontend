@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Container as MuiContainer, Grid, Stack, styled, Typography } from '@mui/material';
+import { useTheme } from '@mui/styles';
 import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -56,31 +57,43 @@ const MonitorContainer = styled(Stack)(({ theme }) => ({
     color: theme.palette.secondary.contrastText,
   },
 }));
-
 interface SelftestProps {
   children: ReactNode;
   actionButton?: ReactNode;
+  title?: string;
 }
 
-const SelfTest = ({ children, actionButton }: SelftestProps) => {
+const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
   const videoEnabled = useAppSelector(selectVideoEnabled);
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
   const { t } = useTranslation();
+  const theme = useTheme();
 
   return (
     <SelfTestContainer>
       <SpeedTestContainer>
         <SpeedTest />
       </SpeedTestContainer>
+
       <MonitorContainer>
         {videoEnabled ? (
           <LocalVideo noRoundedCorners hideUserName />
         ) : (
           <>
+            {title && (
+              <Typography
+                variant="h2"
+                textAlign={'center'}
+                color={theme.palette.common.white}
+                marginBottom={theme.spacing(5)}
+              >
+                {t('joinform-room-title', { title })}
+              </Typography>
+            )}
             <Typography variant="h1" textAlign={'center'} fontSize={'2.9rem'} lineHeight={'2.9rem'} mb={2}>
               {t('selftest-header')}
             </Typography>
-            <Typography variant="body1" textAlign={'center'} fontSize={'1.37rem'}>
+            <Typography textAlign={'center'} fontSize={'1.37rem'}>
               {joinWithoutMedia ? t('selftest-body-do-test') : t('selftest-body')}
             </Typography>
           </>

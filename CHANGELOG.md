@@ -7,6 +7,7 @@
 
 ### Improvements to the user experience
 
+- Show Meeting Title in lobby & waiting room ([#1398](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1398))
 - Improve date time picker behaviour ([#1046], (https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1046))
 - Remove the dialog from adhoc meetings at the end ([#1113](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1113))
 - Safari: change CtA for browser notification ([#1485](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1485))

@@ -39,6 +39,7 @@ field-error-required = "{$fieldName}" ist ein Pflichtfeld
 joinform-banned-from-room = Sie wurden permanent vom diesen Meeting ausgeschlossen.
 joinform-room-not-found = Raum nicht gefunden.
 joinform-display-name-field-disabled-tooltip = Editieren gem. Organisationspolice nicht möglich.
+joinform-room-title = Einladung zum OpenTalk-Meeting - "{$title}"
 
 room-loading-setup = <title>Verbindung wird konfiguriert...</title>
 room-loading-starting = <title>Verbindung wird aufgebaut...</title>

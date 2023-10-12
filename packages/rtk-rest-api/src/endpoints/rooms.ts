@@ -7,8 +7,7 @@ import { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/q
 import { BaseQueryFn, FetchArgs } from '@reduxjs/toolkit/query';
 import snakecaseKeys from 'snakecase-keys';
 
-import { PublicRoom, PrivateRoom, UpdateRoomPayload, CreateRoomPayload, Tags, Tag } from '../types';
-import { RoomId } from '../types';
+import { PublicRoom, PrivateRoom, UpdateRoomPayload, CreateRoomPayload, Tags, Tag, Event } from '../types';
 import {
   AssetId,
   RoomAssets,
@@ -17,6 +16,8 @@ import {
   CreateRoomInvitePayload,
   RoomInvite,
   RoomInvites,
+  RoomId,
+  RoomEventInfo,
 } from '../types/room';
 import { PagedPaginationParams } from './common';
 
@@ -43,6 +44,20 @@ export const addRoomEndpoints = <
   getRoomTariff: builder.query<Tariff, RoomId>({
     query: (id) => `rooms/${id}/tariff`,
     providesTags: (result) => (result ? [{ type: Tag.Tariff, id: result.id }] : []),
+  }),
+  getRoomEventInfo: builder.query<Event, RoomEventInfo>({
+    query: ({ id, inviteCode }) => {
+      const queryPayload: FetchArgs = {
+        url: `rooms/${id}/event`,
+      };
+      if (inviteCode) {
+        queryPayload.headers = {
+          authorization: `InviteCode ${inviteCode}`,
+        };
+      }
+      return queryPayload;
+    },
+    providesTags: (result) => (result ? [{ type: Tag.Room, id: result.id }] : []),
   }),
   createRoom: builder.mutation<PrivateRoom, CreateRoomPayload>({
     query: (payload) => ({

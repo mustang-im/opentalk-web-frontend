@@ -165,4 +165,5 @@ export const {
   useLazyGetRoomInvitesQuery,
   useCreateEventSharedFolderMutation,
   useDeleteEventSharedFolderMutation,
+  useGetRoomEventInfoQuery,
 } = restApi;
