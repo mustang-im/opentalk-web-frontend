@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBase, InputBaseProps, TextFieldProps } from '@mui/material';
 import { setHotkeysEnabled } from '@opentalk/common';
+import { FormWrapper, FormProps } from '@opentalk/common';
 import React, { useCallback } from 'react';
 
 import { useAppDispatch } from '../../hooks';
-import FormWrapper, { FormProps } from '../FormWrapper/FormWrapper';
 
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 

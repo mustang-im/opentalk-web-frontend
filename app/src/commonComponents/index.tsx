@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { CommonTextField } from './CommonTextField';
-import FormWrapper from './FormWrapper/FormWrapper';
 import LimitedTextField from './LimitedTextField/LimitedTextField';
 import NameTile from './NameTile/NameTile';
 import NumberInput from './NumberInput/NumberInput';
@@ -11,4 +10,4 @@ import Rating from './Rating/Rating';
 import Select from './Select/Select';
 import TextField from './TextField/TextField';
 
-export { CommonTextField, FormWrapper, NameTile, NumberInput, RadioGroup, Rating, Select, TextField, LimitedTextField };
+export { CommonTextField, NameTile, NumberInput, RadioGroup, Rating, Select, TextField, LimitedTextField };

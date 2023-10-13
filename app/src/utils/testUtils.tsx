@@ -1,10 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import DateFnsUtils from '@date-io/date-fns';
 import '@emotion/styled';
-import { LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { ThemeProvider } from '@mui/material';
 import '@mui/material';
 import '@mui/styles';
@@ -102,37 +99,33 @@ export const render = async (ui: React.ReactElement, store?: Store, options?: Re
   function Wrapper({ children }: { children: React.ReactElement }): React.ReactElement {
     if (store === undefined) {
       return (
-        <LocalizationProvider dateAdapter={AdapterDateFns} utils={DateFnsUtils}>
-          <ThemeProvider theme={createOpenTalkTheme()}>
-            <I18nextProvider i18n={i18n}>
-              <SnackbarProvider>{children}</SnackbarProvider>
-            </I18nextProvider>
-          </ThemeProvider>
-        </LocalizationProvider>
+        <ThemeProvider theme={createOpenTalkTheme()}>
+          <I18nextProvider i18n={i18n}>
+            <SnackbarProvider>{children}</SnackbarProvider>
+          </I18nextProvider>
+        </ThemeProvider>
       );
     }
     return (
       <ThemeProvider theme={createOpenTalkTheme()}>
         <Provider store={store}>
           <MemoryRouter>
-            <LocalizationProvider dateAdapter={AdapterDateFns} utils={DateFnsUtils}>
-              <AuthProvider
-                store={store}
-                authority="http://OP"
-                clientId="Frontend"
-                redirectUri="http://void"
-                signOutRedirectUri="http://void"
-                scope="void"
-              >
-                <I18nextProvider i18n={i18n}>
-                  <SnackbarProvider>
-                    <MediaProvider>
-                      <FullscreenProvider>{children}</FullscreenProvider>
-                    </MediaProvider>
-                  </SnackbarProvider>
-                </I18nextProvider>
-              </AuthProvider>
-            </LocalizationProvider>
+            <AuthProvider
+              store={store}
+              authority="http://OP"
+              clientId="Frontend"
+              redirectUri="http://void"
+              signOutRedirectUri="http://void"
+              scope="void"
+            >
+              <I18nextProvider i18n={i18n}>
+                <SnackbarProvider>
+                  <MediaProvider>
+                    <FullscreenProvider>{children}</FullscreenProvider>
+                  </MediaProvider>
+                </SnackbarProvider>
+              </I18nextProvider>
+            </AuthProvider>
           </MemoryRouter>
         </Provider>
       </ThemeProvider>

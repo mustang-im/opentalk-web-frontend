@@ -3,10 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBase, Select as MuiSelect, SelectProps as MuiSelectProps } from '@mui/material';
 import { ArrowDownIcon } from '@opentalk/common';
+import { FormWrapper, FormProps } from '@opentalk/common';
 import React from 'react';
-
-import FormWrapper from '../FormWrapper';
-import { FormProps } from '../FormWrapper/FormWrapper';
 
 type SelectProps = MuiSelectProps & FormProps;
 

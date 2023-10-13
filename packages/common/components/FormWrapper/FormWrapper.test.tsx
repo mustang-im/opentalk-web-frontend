@@ -4,7 +4,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import FormWrapper from './FormWrapper';
+import { FormWrapper } from './FormWrapper';
 
 describe('FormWrapper Component', () => {
   const formWrapperTestProps = {

@@ -15,7 +15,7 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { CloseIcon, MeetingsIcon, notifications } from '@opentalk/common';
+import { CloseIcon, notifications, formikDateTimePickerProps, FormWrapper } from '@opentalk/common';
 import { DateTime, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -24,12 +24,11 @@ import * as yup from 'yup';
 
 import { useCreateRoomInviteMutation } from '../../../api/rest';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
-import { FormWrapper } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
 import { selectRoomId } from '../../../store/slices/roomSlice';
 import { composeInviteUrl } from '../../../utils/apiUtils';
-import CustomDateTimePicker from './CustomDateTimePicker';
+import DateTimePicker from '../../DateTimePicker';
 
 const theme = createOpenTalkTheme();
 
@@ -68,10 +67,10 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   const inviteUrl = isSuccess && data ? composeInviteUrl(baseUrl, data.inviteCode) : null;
 
   const endOfToday = dateFns.endOfDay(new Date());
-  const minDate = dateFns.addMinutes(new Date(), 5);
+  const minTimeDate = dateFns.addMinutes(new Date(), 5);
 
   const validationSchema = yup.object({
-    expirationDate: yup.date().nullable().min(minDate, t('dialog-invite-guest-expiration-date-error')),
+    expirationDate: yup.date().nullable().min(minTimeDate, t('dialog-invite-guest-expiration-date-error')),
   });
 
   const formik = useFormik({
@@ -105,6 +104,10 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
       });
   };
 
+  const onChangeExpirationDate = (expirationDate: Date | null) => {
+    formik.setFieldValue('expirationDate', expirationDate);
+  };
+
   const copyToClipboard = () => {
     if (inviteUrl) {
       navigator.clipboard.writeText(inviteUrl.toString());
@@ -115,7 +118,7 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   };
 
   return (
-    <Dialog {...props} fullWidth maxWidth={'xs'} PaperComponent={Paper} aria-labelledby="dialog-invite-guest-title">
+    <Dialog {...props} fullWidth PaperComponent={Paper} aria-labelledby="dialog-invite-guest-title">
       <InviteDialogTitle id="dialog-invite-guest-title" onClose={onClose}>
         {t('dialog-invite-guest-title')}
       </InviteDialogTitle>
@@ -135,25 +138,18 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
       ) : (
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
-            <FormWrapper
-              label={t('dialog-invite-guest-expiration-date')}
-              error={Boolean(formik.errors.expirationDate)}
-              helperText={formik.errors.expirationDate ? t(`${formik.errors.expirationDate}`) : ''}
-              stacked
-            >
-              <CustomDateTimePicker
+            <FormWrapper label={t('dialog-invite-guest-expiration-date')} stacked fullWidth>
+              <DateTimePicker
+                {...formikDateTimePickerProps('expirationDate', {
+                  ...formik,
+                  handleChange: onChangeExpirationDate as never,
+                })}
                 ampm={false}
+                value={formik.values.expirationDate ? formik.values.expirationDate.toString() : ''}
                 clearable
-                disablePast
-                clearText={t('dialog-invite-guest-no-expiration')}
-                inputFormat="dd.MM.yyyy HH:mm"
-                mask="__.__.____ __:__"
-                value={formik.values.expirationDate}
-                onChange={(selectedDate: Date | null) => formik.setFieldValue('expirationDate', selectedDate)}
-                allowSameDateSelection
-                dateRangeIcon={<MeetingsIcon />}
+                clearButtonLabel={t('dialog-invite-guest-no-expiration')}
                 placeholder={t('dialog-invite-guest-no-expiration')}
-                minDateTime={minDate}
+                minTimeDate={minTimeDate}
               />
             </FormWrapper>
           </DialogContent>

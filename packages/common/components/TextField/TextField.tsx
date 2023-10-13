@@ -4,9 +4,9 @@
 import { InputBase, InputBaseProps, TextFieldProps } from '@mui/material';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { setHotkeysEnabled } from '../../store';
 
-import FormWrapper, { FormProps } from '../FormWrapper/FormWrapper';
+import { setHotkeysEnabled } from '../../store';
+import { FormWrapper, FormProps } from '../FormWrapper/FormWrapper';
 
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 

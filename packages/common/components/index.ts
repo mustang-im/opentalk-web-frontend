@@ -4,7 +4,7 @@
 import AccordionItem from './AccordionItem';
 import CommonFormItem from './CommonFormItem';
 import { DurationField, DurationValueOptions } from './DurationField';
-import FormWrapper from './FormWrapper';
+import { FormWrapper, FormProps } from './FormWrapper';
 import IconButton from './IconButton';
 import { ParticipantAvatar, setLibravatarOptions } from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
@@ -40,4 +40,4 @@ export {
   Toggle,
 };
 
-export type { DurationValueOptions };
+export type { DurationValueOptions, FormProps };

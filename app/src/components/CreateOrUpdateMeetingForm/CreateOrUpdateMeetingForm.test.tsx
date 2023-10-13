@@ -53,20 +53,6 @@ jest.mock('../../api/rest', () => ({
   ],
 }));
 
-jest.mock('@mui/x-date-pickers/internals/components/icons', () => {
-  const icons = {
-    __esModule: true,
-  };
-
-  const handler = {
-    get: function (_: unknown, prop: string) {
-      return () => <div className={`mock_${prop}Icon`} />;
-    },
-  };
-
-  return new Proxy(icons, handler);
-});
-
 describe('Dashboard CreateOrUpdateMeetingForm', () => {
   afterEach(() => cleanup());
 

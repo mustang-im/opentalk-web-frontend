@@ -2,9 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Rating as MuiRating, RatingProps, styled } from '@mui/material';
+import { FormWrapper, FormProps } from '@opentalk/common';
 import React from 'react';
-
-import FormWrapper, { FormProps } from '../FormWrapper/FormWrapper';
 
 const Rating = React.forwardRef<HTMLInputElement, RatingProps & FormProps>(
   ({ label, error, helperText, ...props }, ref) => {

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBaseProps, TextFieldProps, Typography, styled } from '@mui/material';
+import { FormWrapper, FormProps } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FormWrapper, { FormProps } from '../FormWrapper/FormWrapper';
 import { ObservedInput } from '../TextField/TextField';
 
 type ComposedTextFieldProps = TextFieldProps &
