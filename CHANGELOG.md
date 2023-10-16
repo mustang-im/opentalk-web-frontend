@@ -67,6 +67,7 @@
 
 ### Bug Fixes
 
+- Fix meeting layout after hangup action in fullscreen mode ([#1032](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1032))
 - Fix participant button appearance on meeting edit page to look clickable ([#1457](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1457))
 - Fix Password notification don't disappear ([#1591](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1591))
 - Updating @babel/traverse to 7.23.2 ([#1569](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1569))

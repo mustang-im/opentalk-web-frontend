@@ -13,4 +13,12 @@ module.exports = {
   extends: [
     'plugin:jsx-a11y/recommended',
   ],
+  overrides: [
+    {
+      "files": ["**/FullscreenView.test.tsx"],
+      "rules": {
+        "no-var": "off"
+      }
+    }
+  ]
 };

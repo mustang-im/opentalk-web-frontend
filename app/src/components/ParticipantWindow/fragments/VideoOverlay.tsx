@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectStatsPacketLossByDescriptor } from '../../../store/slices/connectionStatsSlice';
 import { selectIsSubscriberOnlineByDescriptor } from '../../../store/slices/mediaSubscriberSlice';
 import { selectParticipantName } from '../../../store/slices/participantsSlice';
@@ -95,7 +95,7 @@ const VideoOverlay = ({ participantId, active }: VideoOverlayProps) => {
   const openFullScreenView: MouseEventHandler = useCallback(
     (e) => {
       e.stopPropagation();
-      fullscreenHandle.enter(participantId).catch((e) => console.error('failed to enter fullscreen mode:', e));
+      fullscreenHandle.enter(participantId);
     },
     [fullscreenHandle, participantId]
   );

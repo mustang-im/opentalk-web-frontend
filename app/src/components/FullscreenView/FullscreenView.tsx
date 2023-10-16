@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { useFullscreenContext } from '../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { selectCombinedSpeakerId } from '../../store/selectors';
 import { selectAllOnlineParticipants } from '../../store/slices/participantsSlice';
 import { toggledFullScreenMode } from '../../store/slices/uiSlice';
@@ -83,8 +83,8 @@ const FullscreenView = () => {
 
   const toggleLocalVideoPin = () => setIsLocalVideoPinned((prevState) => !prevState);
 
-  const handleCloseFullscreen = async () => {
-    await fullscreenHandle.exit();
+  const handleCloseFullscreen = () => {
+    fullscreenHandle.exit();
     dispatch(toggledFullScreenMode());
   };
 

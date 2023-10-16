@@ -42,7 +42,7 @@ import { sendStartRecordingSignal, sendStopRecordingSignal } from '../../../api/
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useEnabledModules } from '../../../hooks/enabledModules';
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
 import { selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
 import { selectRecordingId, selectRecordingState } from '../../../store/slices/recordingSlice';

@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks';
-import { useFullscreenContext } from '../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { hangUp } from '../../store/commonActions';
 import { deleteRoomMetaData } from '../../store/slices/internalSlice';
 

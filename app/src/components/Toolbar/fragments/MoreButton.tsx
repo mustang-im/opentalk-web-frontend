@@ -5,7 +5,7 @@ import { MoreIcon } from '@opentalk/common';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import MoreMenu from './MoreMenu';
 import ToolbarButton from './ToolbarButton';
 

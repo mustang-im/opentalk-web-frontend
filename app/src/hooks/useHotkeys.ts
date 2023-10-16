@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '.';
 import { automod } from '../api/types/outgoing';
 import { useMediaContext } from '../components/MediaProvider';
-import { useFullscreenContext } from '../provider/FullscreenProvider';
+import { useFullscreenContext } from '../hooks/useFullscreenContext';
 import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../store/slices/mediaSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 
@@ -95,12 +95,8 @@ export const useHotkeys = () => {
     }
   };
 
-  const toggleFullscreenView = useCallback(async () => {
-    if (fullscreenContext.active) {
-      await fullscreenContext.exit();
-    } else {
-      await fullscreenContext.enter();
-    }
+  const toggleFullscreenView = useCallback(() => {
+    fullscreenContext[fullscreenContext.active ? 'exit' : 'enter']();
   }, [fullscreenContext]);
 
   const handleKeyPress = useCallback(
