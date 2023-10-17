@@ -22,6 +22,7 @@
 
 ### Bug Fixes
 
+- Updating @babel/traverse to 7.23.2 ([#1569](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1569))
 - Implementing ping-pong control protocol with the server to check the websocket connection. ([#1554](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1554))
 - Fix waiting participants, which rejoined after debriefing([#1262](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1262))
 - Fix push-to-talk functionality ([#1344](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344))
