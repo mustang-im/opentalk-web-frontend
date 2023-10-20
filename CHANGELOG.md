@@ -29,6 +29,7 @@
 - Fix push-to-talk functionality ([#1344](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344))
 - Fix handling with disallow custom display name ([!1089](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1089))
 - Fix overflowing details on the meeting details page ([#1144](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1144))
+- Fix popovers in the fullscreen mode for three dot menu and hang up confirmation. ([#1535](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1535))
 
 ### Stability Improvements
 

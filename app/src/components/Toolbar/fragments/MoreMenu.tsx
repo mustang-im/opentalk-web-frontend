@@ -42,6 +42,7 @@ import { sendStartRecordingSignal, sendStopRecordingSignal } from '../../../api/
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useEnabledModules } from '../../../hooks/enabledModules';
+import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
 import { selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
 import { selectRecordingId, selectRecordingState } from '../../../store/slices/recordingSlice';
@@ -72,6 +73,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const recordingId = useAppSelector(selectRecordingId);
   const enabledModules = useEnabledModules();
   const hasRecordingFeatureOn = enabledModules.has(BackendModules.Recording);
+  const fullscreenHandle = useFullscreenContext();
 
   const toggleWaitingRoomItem = isWaitingRoomActive
     ? {
@@ -306,6 +308,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         open={open}
         onClose={onClose}
         data-testid="moreMenu"
+        container={fullscreenHandle.rootElement}
       >
         <MenuTitleContainer direction="row" spacing={2}>
           <Box display="flex" alignItems="center">

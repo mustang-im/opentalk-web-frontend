@@ -22,15 +22,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks';
+import { useFullscreenContext } from '../../provider/FullscreenProvider';
 import { hangUp } from '../../store/commonActions';
 import { deleteRoomMetaData } from '../../store/slices/internalSlice';
 
-export interface CloseMettingDialogProps {
+export interface CloseMeetingDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
-export const CloseMettingDialog = ({ open, onClose }: CloseMettingDialogProps) => {
+export const CloseMeetingDialog = ({ open, onClose }: CloseMeetingDialogProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -57,8 +58,10 @@ export const CloseMettingDialog = ({ open, onClose }: CloseMettingDialogProps) =
     }
   }, [t, navigate, hangUpHandler, dispatch, roomId]);
 
+  const fullscreenHandler = useFullscreenContext();
+
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth>
+    <Dialog open={open} maxWidth="sm" fullWidth container={fullscreenHandler.rootElement}>
       <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
 
       <Box position="absolute" top={0} right={0}>
@@ -104,4 +107,4 @@ export const CloseMettingDialog = ({ open, onClose }: CloseMettingDialogProps) =
   );
 };
 
-export default CloseMettingDialog;
+export default CloseMeetingDialog;

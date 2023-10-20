@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import ConfirmDialog, { CloseMettingDialogProps } from './CloseMettingDialog';
+import ConfirmDialog, { CloseMeetingDialogProps } from './CloseMeetingDialog';
 
-export type { CloseMettingDialogProps };
+export type { CloseMeetingDialogProps };
 export default ConfirmDialog;
