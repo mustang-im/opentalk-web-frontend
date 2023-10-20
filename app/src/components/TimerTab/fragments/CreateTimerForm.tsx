@@ -112,7 +112,7 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
 
   return (
     <Container>
-      <Stack spacing={2}>
+      <Stack spacing={2} mb={2}>
         <Typography>{t('global-duration')}</Typography>
         <DurationField
           {...formikDurationFieldProps('duration', formik, defaultValue)}

@@ -9,12 +9,15 @@ import { FixedSizeList } from 'react-window';
 
 import ParticipantListItem from './ParticipantListItem';
 
-const CustomList = styled(List)({
+const CustomList = styled(List)(({ theme }) => ({
   overflow: 'hidden',
   textAlign: 'left',
   width: '100%',
   height: '100%',
-});
+  [theme.breakpoints.down('sm')]: {
+    minHeight: '40vh',
+  },
+}));
 
 interface ParticipantSimpleListProps extends ListProps {
   participants: Participant[];
