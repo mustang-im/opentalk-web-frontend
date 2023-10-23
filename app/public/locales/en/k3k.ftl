@@ -841,7 +841,8 @@ recording-active-label = Recording active
 
 recording-accept = Accept
 recording-decline = Decline
-recording-stopped-message = <messageContent>The Recording has ended. The corresponding file is located in the dashboard under the <messageLink>meeting-details</messageLink>.</messageContent>
+recording-stopped-message = The recording has ended.
+recording-stopped-message-with-link = <messageContent>The recording has ended. The corresponding file is located in the dashboard under the <messageLink>meeting-details</messageLink>.</messageContent>
 
 emoji-category-smileys_people = Smileys & People
 emoji-category-animals_nature = Animals & Nature
