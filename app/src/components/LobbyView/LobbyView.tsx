@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, IconButton, InputAdornment, Stack, styled } from '@mui/material';
-import { BreakoutRoomId, RoomId, HiddenIcon, VisibleIcon } from '@opentalk/common';
+import { BreakoutRoomId, HiddenIcon, VisibleIcon, RoomId } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { closeSnackbar, enqueueSnackbar, SnackbarKey } from '@opentalk/common';
 import { useFormik } from 'formik';
@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { ApiErrorWithBody, StartRoomError, useGetMeQuery } from '../../api/rest';
+import { ApiErrorWithBody, StartRoomError, useGetMeQuery, useGetRoomEventInfoQuery } from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { startRoom } from '../../store/commonActions';
@@ -68,6 +68,7 @@ const LobbyView: FC = () => {
   const passwordRequired = useAppSelector(selectPasswordRequired);
   const showImprintContainer = useAppSelector(selectShowmprintContainer);
   const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
+  const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId, inviteCode }, { skip: !roomId });
   const disableDisplayNameField = disallowCustomDisplayName && !inviteCode;
   const initialDisplayName = data?.displayName || '';
 
@@ -178,6 +179,7 @@ const LobbyView: FC = () => {
                   {t('joinform-enter-now')}
                 </Button>
               }
+              title={roomData?.title}
             >
               <Stack direction={'row'} spacing={1}>
                 <ContitionalToolTip

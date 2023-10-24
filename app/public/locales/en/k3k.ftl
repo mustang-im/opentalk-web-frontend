@@ -39,6 +39,7 @@ field-error-required ="{$fieldName}" is a required field
 joinform-banned-from-room = You were banned from this meeting.
 joinform-room-not-found = Room not found.
 joinform-display-name-field-disabled-tooltip = Editing disabled according to organisational policy.
+joinform-room-title = OpenTalk Meeting Invitation - "{$title}"
 
 room-loading-setup = <title>Configuring connection...</title>
 room-loading-starting = <title>Connecting to room...</title>
@@ -880,4 +881,4 @@ glitchtip-crash-report-labelClose = Close
 glitchtip-crash-report-labelSubmit = Submit
 glitchtip-crash-report-errorGeneric = An unknown error occurred while submitting your report. Please try again.
 glitchtip-crash-report-errorFormEntry = Some fields were invalid. Please correct the errors and try again.
-glitchtip-crash-report-successMessage = Your feedback has been sent. Thank you!      
+glitchtip-crash-report-successMessage = Your feedback has been sent. Thank you!
