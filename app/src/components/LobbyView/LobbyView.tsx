@@ -44,9 +44,11 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 let wrongPasswordSnackBarKey: SnackbarKey | undefined = undefined;
 
 const showWrongPasswordNotification = () => {
+  if (wrongPasswordSnackBarKey) return;
   wrongPasswordSnackBarKey = enqueueSnackbar(`${i18next.t('joinform-wrong-room-password')}`, {
     variant: 'error',
     persist: true,
+    onClose: () => (wrongPasswordSnackBarKey = undefined),
   });
 };
 
@@ -92,6 +94,7 @@ const LobbyView: FC = () => {
         .then(() => {
           if (wrongPasswordSnackBarKey) {
             closeSnackbar(wrongPasswordSnackBarKey);
+            wrongPasswordSnackBarKey = undefined;
           }
         })
         .catch((e) => {
