@@ -53,6 +53,8 @@
 - Customize Glitchtip user feedback dialog labels ([#1452](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1452))
 - Improved loading time of the participant list with over 100 participants in the room. ([#1487](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1487))
 - Improve performance while scrolling both long personal, group or global chats. ([#1422](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1422))
+- Enhanced behavior of the room participant selection ([#1500](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1500))
+- Unauthorized users can no longer open meeting details page where they are not invited ([#1540](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1540))
 
 ### Bug Fixes
 

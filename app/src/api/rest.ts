@@ -120,6 +120,12 @@ export const rtkQueryErrorLoggerMiddlware: Middleware =
           })
         );
         return;
+      } else if (action.payload.status === 403) {
+        // Warning: This can be potentially dangereous as we don't know
+        // what pandora's box we are openning, before hand this middleware
+        // couldn't even finish up on 403 as it would come to this sopt and be
+        // left unhandled as next callback was never called.
+        return next(action);
       } else if (action.payload.status >= 500) {
         dispatch(
           auth_error({

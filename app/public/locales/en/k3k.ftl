@@ -20,6 +20,7 @@ signaling-subscription-failed = The connection to a participant failed.
 media-subscription-failed = No connection to the participant
 
 error-system-currently-unavailable = The system is currently unavailable, please try again later.
+error-unauthorized = Unfortunately you do not have access, please contact the meeting moderator.
 
 login-form-title = Login
 login-form-body = Please log in to continue.

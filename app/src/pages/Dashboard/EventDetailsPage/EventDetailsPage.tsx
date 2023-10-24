@@ -7,6 +7,7 @@ import { EventId, InviteStatus, User } from '@opentalk/rest-api-rtk-query';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   useGetEventQuery,
@@ -43,14 +44,23 @@ const EventDetailsPage = () => {
   const [declineEventInvitation] = useDeclineEventInviteMutation();
   const { t } = useTranslation();
   const { eventId } = useParams<'eventId'>() as { eventId: EventId };
-  const { data: event, isLoading } = useGetEventQuery({ eventId, inviteesMax: 20 });
+  const { data: event, isLoading, isError, isFetching } = useGetEventQuery({ eventId, inviteesMax: 20 });
   const { data: me } = useGetMeQuery();
   const isMeetingCreator = me?.id === event?.createdBy.id;
   const { data: tariff } = useGetRoomTariffQuery(event?.room.id ?? skipToken);
   const roomParticipantLimit = tariff?.quotas.roomParticipantLimit;
   const theme = useTheme();
+  const navigate = useNavigate();
 
-  if (isLoading || !event) return <SuspenseLoading />;
+  if (isLoading || isFetching) return <SuspenseLoading />;
+
+  if (isError) {
+    notifications.error(t('error-unauthorized'));
+    navigate('/dashboard');
+    return null;
+  }
+
+  if (!event) return null;
 
   const renderParticipantRows = () => {
     const reorderedInviteStatus = [
