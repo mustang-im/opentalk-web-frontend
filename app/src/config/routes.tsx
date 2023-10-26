@@ -2,13 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Typography } from '@mui/material';
+import { InviteCode } from '@opentalk/common';
 import { AuthCallback, selectAuthError, selectIsAuthed, selectIsLoading, useAuth } from '@opentalk/react-redux-appauth';
 import i18next from 'i18next';
 import React, { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
+import { To, RouteObject, useNavigate, Outlet, useParams, useSearchParams } from 'react-router-dom';
 
-import { useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import {
   SettingsProfilePage,
   SettingsGeneralPage,
@@ -21,6 +22,7 @@ import {
   EventDetailsPage,
 } from '../pages/Dashboard';
 import RoomPage from '../pages/RoomPage';
+import { fetchRoomByInviteId } from '../store/slices/roomSlice';
 import { selectIsGuest } from '../store/slices/userSlice';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
@@ -79,7 +81,18 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const isGuest = useAppSelector(selectIsGuest);
   const startLogin = !isAuthenticated && !isAuthLoading && !isAuthError && !isGuest;
 
+  const dispatch = useAppDispatch();
+  const [urlSearchParam, setUrlSearchParams] = useSearchParams();
+  const inviteCodeFromUrl = urlSearchParam.get('invite');
+
   useEffect(() => {
+    if (inviteCodeFromUrl) {
+      dispatch(fetchRoomByInviteId(inviteCodeFromUrl as InviteCode)).then(() => {
+        setUrlSearchParams(undefined);
+        return;
+      });
+    }
+
     if (startLogin) {
       const timeout = setTimeout(async () => {
         const redirectUrl = sessionStorage.getItem(sessionStorageItems.redirectUri);
@@ -90,7 +103,7 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
       }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
       return () => clearTimeout(timeout);
     }
-  }, [startLogin]);
+  }, [startLogin, inviteCodeFromUrl]);
 
   if (isAuthenticated || isGuest) {
     if (children !== undefined) {
