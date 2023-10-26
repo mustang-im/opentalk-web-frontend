@@ -1,6 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { BreakoutRoomId } from '@opentalk/common';
+import { RoomId } from '@opentalk/rest-api-rtk-query';
+
 import { ConfigState, DefaultAvatarImage } from '../store/slices/configSlice';
 
 type Fetch = typeof window.fetch;
@@ -23,8 +26,13 @@ export const getSignalingUrl = ({ insecure, controller }: ConfigState) => {
   return new URL(`${insecure ? 'ws' : 'wss'}://${addEndingSlash(controller)}signaling`);
 };
 
-export const composeInviteUrl = (baseUrl: string, inviteCode: string) => {
-  return new URL(`invite/${inviteCode}`, baseUrl);
+export const composeInviteUrl = (
+  baseUrl: string,
+  inviteCode: string,
+  roomId: RoomId,
+  breakoutRoomId?: BreakoutRoomId | null
+) => {
+  return new URL(`/room/${roomId}${breakoutRoomId ? `/${breakoutRoomId}` : ``}?invite=${inviteCode}`, baseUrl);
 };
 
 const fetchWrapper = (
