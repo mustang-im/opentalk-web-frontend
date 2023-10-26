@@ -47,7 +47,7 @@ const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
 }));
 
 interface RoomOverviewListProps {
-  joinRoom: (roomId: string) => void;
+  joinRoom: (breakoutRoomId: BreakoutRoomId) => void;
   groupedParticipants: Participant[];
   breakoutRoomId: BreakoutRoomId;
 }

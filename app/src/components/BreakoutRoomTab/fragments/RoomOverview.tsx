@@ -116,7 +116,7 @@ const RoomOverview = () => {
         <RoomOverviewListItem
           groupedParticipants={participantsInCurrentBreakout}
           breakoutRoomId={breakout.id}
-          joinRoom={(breakoutRoom) => navigateToBreakoutRoom(breakoutRoom as BreakoutRoomId)}
+          joinRoom={(breakoutRoom) => navigateToBreakoutRoom(breakoutRoom)}
           key={breakout.id}
         />
       );
