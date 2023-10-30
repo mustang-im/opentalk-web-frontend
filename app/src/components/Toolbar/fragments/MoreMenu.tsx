@@ -294,7 +294,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   });
 
   useEffect(() => {
-    fullscreenHandle.setHasActiveOverlay(true);
+    fullscreenHandle.setHasActiveOverlay(open);
 
     return () => {
       fullscreenHandle.setHasActiveOverlay(false);
