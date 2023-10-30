@@ -1,29 +1,36 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Chip, CircularProgress, InputAdornment, Stack, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  Chip,
+  CircularProgress,
+  InputAdornment,
+  Stack,
+  Typography,
+  TextField,
+  styled,
+  UseAutocompleteProps,
+} from '@mui/material';
 import { CloseIcon, CopyIcon, ParticipantAvatar, SearchIcon, setLibravatarOptions } from '@opentalk/common';
-import { Email, FindUserResponse, EventInvite, User } from '@opentalk/rest-api-rtk-query';
+import { EventInvite, User } from '@opentalk/rest-api-rtk-query';
 import { differenceBy, debounce } from 'lodash';
-import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as Yup from 'yup';
 
 import { useGetMeQuery, useLazyFindUsersQuery } from '../../api/rest';
-import TextField from '../../commonComponents/TextField';
 import { useAppSelector } from '../../hooks';
 import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
-
-export type EmailUser = {
-  email: Email;
-};
+import { EmailStrategy } from './fragments/EmailStrategy';
+import { ParticipantOption } from './fragments/ParticipantOption';
+import { SuggestedUserStrategy } from './fragments/SuggestedUserStrategy';
 
 type SelectParticipantsProps = {
   label?: string;
   placeholder?: string;
   invitees?: Array<EventInvite>;
   resetSelected?: boolean;
-  onChange: (selected: Array<FindUserResponse | EmailUser>) => void;
+  onChange: (selected: Array<ParticipantOption>) => void;
   onRevokeUserInvite: (invitee: User) => void;
 };
 
@@ -36,6 +43,28 @@ const Container = ({ children, title, testId }: { children: React.ReactNode; tit
   </Stack>
 );
 
+const AutocompleteTextField = styled(TextField)(({ theme }) => ({
+  '.MuiInputBase-root': {
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.secondary.dark,
+    padding: theme.spacing(0.5),
+    borderRadius: 0,
+  },
+  '& .MuiSvgIcon-root': {
+    color: `${theme.palette.secondary.dark} !important`,
+  },
+  '& fieldset': {
+    display: 'none',
+  },
+  '.MuiFormLabel-root': {
+    fontSize: '1rem',
+    transformOrigin: 'unset',
+    position: 'relative',
+    transform: 'unset',
+    paddingBottom: theme.spacing(1.5),
+  },
+}));
+
 const SelectParticipants = ({
   onChange,
   label,
@@ -46,18 +75,18 @@ const SelectParticipants = ({
 }: SelectParticipantsProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
-  const [selectedUsers, setSelectedUsers] = useState<Array<FindUserResponse | EmailUser>>([]);
+  const [selectedUsers, setSelectedUsers] = useState<Array<ParticipantOption>>([]);
   const avatarDefaultImage = useAppSelector(selectLibravatarDefaultImage);
 
-  const { myId } = useGetMeQuery(undefined, {
+  const { myEmail } = useGetMeQuery(undefined, {
     selectFromResult: ({ data }) => ({
-      myId: data?.email,
+      myEmail: data?.email,
     }),
   });
 
   const [findUsers, { isLoading, foundUsers }] = useLazyFindUsersQuery({
     selectFromResult: ({ data, ...props }) => ({
-      foundUsers: data?.filter((user) => user.email !== myId),
+      foundUsers: data?.filter((user) => user.email !== myEmail),
       ...props,
     }),
   });
@@ -68,6 +97,19 @@ const SelectParticipants = ({
     }, 250),
     []
   );
+
+  const suggestedParticipants: Array<{ firstname: string; lastname: string; email: string; avatarUrl?: string }> =
+    useMemo(() => {
+      if (isLoading || searchValue.length < 3) {
+        return [];
+      }
+      const invitedUsers = invitees?.map((invited) => invited.profile) || [];
+      return differenceBy(foundUsers, invitedUsers, selectedUsers, 'email').sort((a, b) => {
+        const aName = `${a.firstname} ${a.lastname}`;
+        const bName = `${b.firstname} ${b.lastname}`;
+        return aName.localeCompare(bName);
+      });
+    }, [isLoading, foundUsers, selectedUsers, searchValue]);
 
   const searchEntryHandler = useCallback((inputValue: string) => {
     setSearchValue(inputValue);
@@ -86,19 +128,19 @@ const SelectParticipants = ({
     resetSelected && setSelectedUsers([]);
   }, [resetSelected]);
 
-  const addSelectedUser = useCallback((user: FindUserResponse | EmailUser) => {
-    setSelectedUsers((selectedUsers) => [...selectedUsers, user]);
+  const addSelectedUser = useCallback((user: ParticipantOption) => {
+    if (user) {
+      setSelectedUsers((selectedUsers) => [...selectedUsers, user]);
+    }
     setSearchValue('');
   }, []);
 
-  const deleteSelectedUser = (user: FindUserResponse | EmailUser) => {
-    const upUsers = selectedUsers.filter(
-      (selectedUser: FindUserResponse | EmailUser) => selectedUser.email !== user.email
-    );
+  const deleteSelectedUser = (user: ParticipantOption) => {
+    const upUsers = selectedUsers.filter((selectedUser: ParticipantOption) => selectedUser.email !== user.email);
     setSelectedUsers(upUsers);
   };
 
-  const renderUserData = (user: FindUserResponse) => {
+  const renderUserData = (user: { firstname?: string; email?: string; lastname?: string }) => {
     if (typeof user.firstname === 'string') {
       return (
         <Stack>
@@ -123,69 +165,13 @@ const SelectParticipants = ({
     }
   };
 
-  const renderFoundSuggestions = () => {
-    const invitedUsers = invitees?.map((invited) => invited.profile) || [];
-    const suggestedUsers = differenceBy(foundUsers, invitedUsers, selectedUsers, 'email');
-
-    if (suggestedUsers.length === 0) {
-      return;
-    }
-    if (searchValue.length <= 2) {
-      return;
-    }
-
-    return (
-      <Container title={t('dashboard-select-participants-label-suggestions')}>
-        {suggestedUsers.map((user) => (
-          <Stack
-            data-testid={'SuggestedParticipant'}
-            key={`${user.email}-suggested`}
-            direction={'row'}
-            spacing={1.5}
-            onClick={() => addSelectedUser(user)}
-            alignItems={'center'}
-            sx={{ cursor: 'pointer' }}
-          >
-            <ParticipantAvatar
-              src={getAvatarSrc(user.avatarUrl)}
-            >{`${user.firstname} ${user.lastname}`}</ParticipantAvatar>
-            {renderUserData(user)}
-          </Stack>
-        ))}
-      </Container>
-    );
-  };
-
-  const renderSuggestedEmail = () => {
-    const schema = Yup.string().email();
-    const isEmail = schema.isValidSync(searchValue);
-
-    if (searchValue.length > 0 && isEmail) {
-      const emailUser: EmailUser = {
-        email: searchValue as Email,
-      };
-
-      return (
-        <Container title={t('dashboard-select-participants-label-suggestions')}>
-          <Stack
-            data-testid={'SuggestedEmail'}
-            direction={'row'}
-            spacing={1.5}
-            onClick={() => addSelectedUser(emailUser)}
-            alignItems={'center'}
-            sx={{ cursor: 'pointer' }}
-          >
-            <ParticipantAvatar specialCharacter="@" />
-            <Typography noWrap>{searchValue}</Typography>
-          </Stack>
-        </Container>
-      );
-    }
-  };
-
+  /**
+   * Function that renders participants once they are
+   * selected from the dropdown but not yet invited.
+   */
   const renderSelectedParticipants = () =>
     selectedUsers.length > 0 && (
-      <Container title={t('dashboard-select-participants-label-added')}>
+      <Container data-testid={'SelectedParticipant'} title={t('dashboard-select-participants-label-added')}>
         {selectedUsers.map((selectedUser) => (
           <Chip
             key={`${selectedUser.email}-selected`}
@@ -201,7 +187,6 @@ const SelectParticipants = ({
             }
             onDelete={() => deleteSelectedUser(selectedUser)}
             deleteIcon={<CloseIcon data-testid={'SelectedParticipants-deleteButton'} />}
-            data-testid={'SelectedParticipant'}
           />
         ))}
       </Container>
@@ -222,39 +207,88 @@ const SelectParticipants = ({
       </Container>
     );
 
+  const onAutocompleteChange: UseAutocompleteProps<ParticipantOption, undefined, undefined, undefined>['onChange'] = (
+    _event,
+    value
+  ) => {
+    if (value) {
+      addSelectedUser(value);
+    }
+  };
+
+  const onInputChange: UseAutocompleteProps<ParticipantOption, undefined, undefined, undefined>['onInputChange'] = (
+    _event,
+    value
+  ) => {
+    searchEntryHandler(value || '');
+  };
+
+  const emailSuggestion = useMemo(() => {
+    if (
+      !(
+        selectedUsers.find((user) => user.email === searchValue) ||
+        invitees.find((invitee) => invitee.profile.email === searchValue)
+      )
+    ) {
+      return [{ email: searchValue }];
+    }
+    return [];
+  }, [searchValue, selectedUsers, invitees]);
+
   return (
-    <Stack spacing={2} data-testid={'SelectParticipants'}>
-      <TextField
-        inputProps={{ 'data-testid': 'InputSearchUsers' }}
-        onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-          searchEntryHandler(event.target.value)
+    <>
+      <Autocomplete
+        data-testid="SelectParticipants"
+        options={
+          suggestedParticipants.length
+            ? (suggestedParticipants as ParticipantOption[])
+            : (emailSuggestion as ParticipantOption[])
         }
-        placeholder={placeholder}
-        label={label}
-        value={searchValue}
-        startAdornment={
-          <InputAdornment position="start">
-            <SearchIcon aria-label={t('dashboard-select-participants-label-search')}>
-              <CopyIcon />
-            </SearchIcon>
-          </InputAdornment>
+        getOptionLabel={
+          suggestedParticipants.length ? SuggestedUserStrategy.getOptionLabel : EmailStrategy.getOptionLabel
         }
-        endAdornment={
-          <InputAdornment position="end">
-            {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
-          </InputAdornment>
+        renderOption={
+          suggestedParticipants.length
+            ? SuggestedUserStrategy.renderOption(avatarDefaultImage)
+            : EmailStrategy.renderOption(t('global-no-result'))
         }
-        fullWidth
+        inputValue={searchValue || ''}
+        value={null}
+        clearOnEscape={true}
+        onChange={onAutocompleteChange}
+        onInputChange={onInputChange}
+        noOptionsText={t('global-no-result')}
+        loading={isLoading}
+        open={!isLoading && (suggestedParticipants.length !== 0 || searchValue.length > 2)}
+        renderInput={({ InputProps, ...params }) => (
+          <AutocompleteTextField
+            {...params}
+            placeholder={placeholder}
+            label={label}
+            variant="outlined"
+            InputProps={{
+              ...InputProps,
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon aria-label={t('dashboard-select-participants-label-search')}>
+                    <CopyIcon />
+                  </SearchIcon>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  {isLoading ? <CircularProgress color="inherit" size={16} /> : null}
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
       />
-
-      {renderInvitees()}
-
-      {renderSelectedParticipants()}
-
-      {renderFoundSuggestions()}
-
-      {renderSuggestedEmail()}
-    </Stack>
+      <Stack mt={2} spacing={2}>
+        {renderSelectedParticipants()}
+        {renderInvitees()}
+      </Stack>
+    </>
   );
 };
 

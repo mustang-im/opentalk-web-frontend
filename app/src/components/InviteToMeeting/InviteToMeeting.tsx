@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, IconButton, InputAdornment, Tooltip } from '@mui/material';
 import { BackIcon, CopyIcon, notifications } from '@opentalk/common';
-import { Event, isEvent, FindUserResponse } from '@opentalk/rest-api-rtk-query';
+import { Event, isEvent } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
 import { merge } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -24,7 +24,7 @@ import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
 import { selectBaseUrl, selectFeatures } from '../../store/slices/configSlice';
 import { composeInviteUrl } from '../../utils/apiUtils';
-import { EmailUser } from '../SelectParticipants/SelectParticipants';
+import { ParticipantOption } from '../SelectParticipants';
 
 interface InviteToMeetingProps {
   existingEvent: Event;
@@ -52,7 +52,7 @@ const InviteToMeeting = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [selectedUsers, setSelectedUser] = useState<Array<FindUserResponse | EmailUser>>([]);
+  const [selectedUsers, setSelectedUser] = useState<Array<ParticipantOption>>([]);
   const [isRoomLinkCopied, setRoomLinkCopied] = useState(false);
   const [isSipLinkCopied, setSipLinkCopied] = useState(false);
   const [isGuestLinkCopied, setGuestLinkCopied] = useState(false);
@@ -379,7 +379,7 @@ const InviteToMeeting = ({
           </>
         )}
         {!showOnlyLinkFields && features.userSearch && (
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             {features.userSearch && (
               <SelectParticipants
                 label={

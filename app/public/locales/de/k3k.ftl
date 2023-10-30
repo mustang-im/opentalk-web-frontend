@@ -586,6 +586,7 @@ global-start-now = Jetzt starten
 global-clear = Löschen
 global-close = Schließen
 global-ok = Ok
+global-no-result = Keine Ergebnisse
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings
@@ -682,7 +683,7 @@ dashboard-direct-meeting-copy-link-aria-label = Raum Link kopieren
 dashboard-direct-meeting-copy-guest-link-aria-label = Raum Link für Gast kopieren
 dashboard-direct-meeting-copy-password-aria-label = Raum Passwort kopieren
 
-dashboard-select-participants-textfield-placeholder = Name oder E-Mail Adresse eingeben ... ( min. 3 Zeichen )
+dashboard-select-participants-textfield-placeholder = Name oder E-Mail Adresse eingeben ( min. 3 Zeichen )
 dashboard-select-participants-label-added = Hinzugefügt
 dashboard-select-participants-label-suggestions = Vorschläge
 dashboard-select-participants-label-search = Teilnehmer finden
