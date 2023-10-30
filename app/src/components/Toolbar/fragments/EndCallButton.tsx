@@ -47,7 +47,6 @@ const EndCallButton = () => {
   const hangUpHandler = useCallback(() => dispatch(hangUp()), [dispatch]);
 
   const onClose = useCallback(() => {
-    fullscreenContext.setHasActiveOverlay(false);
     showConfirmDialog(false);
   }, [showConfirmDialog]);
 
@@ -71,7 +70,9 @@ const EndCallButton = () => {
         <EndCallIcon color="error" />
       </StyledEndCallButton>
 
-      {isConfirmDialogVisible && <CloseMeetingDialog open={isConfirmDialogVisible} onClose={onClose} />}
+      {isConfirmDialogVisible && (
+        <CloseMeetingDialog open={isConfirmDialogVisible} onClose={onClose} container={fullscreenContext.rootElement} />
+      )}
     </>
   );
 };

@@ -20,9 +20,7 @@ const FullscreenProvider = ({ children }: { children: ReactNode }) => {
   const fullscreenHandle = useFullScreenHandle();
 
   const [fullscreenParticipantID, setFullscreenParticipantID] = useState<ParticipantId | undefined>(undefined);
-  const [rootElement, setRootElement] = useState<HTMLElement | null>(
-    typeof document !== 'undefined' ? document.body : null
-  );
+  const [rootElement, setRootElement] = useState<HTMLElement | null>(document?.body ?? null);
   const [hasActiveOverlay, setHasActiveOverlay] = useState<boolean>(false);
 
   const enterFullscreen = (participantId?: ParticipantId) => {

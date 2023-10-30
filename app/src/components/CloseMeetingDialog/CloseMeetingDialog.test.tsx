@@ -9,6 +9,7 @@ import CloseMettingDialog, { CloseMeetingDialogProps } from './CloseMeetingDialo
 const dialogProps: CloseMeetingDialogProps = {
   open: true,
   onClose: jest.fn(),
+  container: null,
 };
 
 describe('CloseMettingDialog', () => {

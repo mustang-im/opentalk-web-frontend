@@ -28,7 +28,7 @@ import {
   ParticipantAvatar,
 } from '@opentalk/common';
 import { BackendModules } from '@opentalk/common';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { enableChat, disableChat, clearGlobalChatMessages } from '../../../api/types/outgoing/chat';
@@ -292,6 +292,14 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const Divider = styled(MuiDivider)({
     marginTop: 0,
   });
+
+  useEffect(() => {
+    fullscreenHandle.setHasActiveOverlay(true);
+
+    return () => {
+      fullscreenHandle.setHasActiveOverlay(false);
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={createOpenTalkTheme()}>
