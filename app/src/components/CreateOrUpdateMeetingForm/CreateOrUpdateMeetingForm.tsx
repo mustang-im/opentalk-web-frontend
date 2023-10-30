@@ -21,6 +21,8 @@ import {
   formikProps,
   formikDateTimePickerProps,
   FormWrapper,
+  StreamingTargetPayload,
+  formikMinimalProps,
 } from '@opentalk/common';
 import {
   CreateEventPayload,
@@ -53,7 +55,9 @@ import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
 import DateTimePicker from '../DateTimePicker';
-import EventConflictDialog from './fragment/EventConflictDialog';
+import StreamingOptions from './fragment/StreamingOptions';
+import EventConflictDialog from './fragments/EventConflictDialog';
+import LabeledSwitch from './fragments/LabeledSwitch';
 
 interface CreateOrUpdateMeetingFormProps {
   existingEvent?: Event;
@@ -79,6 +83,19 @@ const DEFAULT_MINUTES_DIFFERENCE = 30;
 const MAX_CHARACTERS_TITLE = 255;
 const MAX_CHARACTERS_PASSWORD = 255;
 const MAX_CHARACTERS_DESCRIPTION = 4096;
+
+export interface FormikValuesType {
+  title?: string;
+  description?: string; 
+  waitingRoom: boolean;
+  password?: string;
+  isScheduled: boolean;
+  startDate: string;
+  endDate: string;
+  recurrencePattern: IntervalEnum;
+  isAdhoc?: boolean;
+  sharedFolder: boolean;
+}
 
 const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: CreateOrUpdateMeetingFormProps) => {
   const { t } = useTranslation();
@@ -199,7 +216,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     { label: t('dashboard-meeting-recurrence-monthly'), value: IntervalEnum.MONTHLY },
   ];
 
-  const formik = useFormik({
+  const formik = useFormik<FormikValuesType>({
     initialValues: {
       title: existingEvent?.title,
       description: existingEvent?.description || '',
@@ -508,17 +525,12 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             maxCharacters={MAX_CHARACTERS_PASSWORD}
           />
 
-          <Stack>
-            <Typography pb={1.3}> {t('dashboard-meeting-date-and-time')}</Typography>
-            <Tooltip title={t('dashboard-meeting-time-independent-tooltip') || ''}>
-              <FormControlLabel
-                checked={formik.values.isScheduled}
-                control={<Switch {...formikMinimalProps('isScheduled', formik)} />}
-                label={t(`dashboard-meeting-time-independent-${formik.values.isScheduled ? 'no' : 'yes'}`)}
-                sx={{ margin: 0, gap: 1, verticalAlign: 'baseline', width: 'max-content' }}
-              />
-            </Tooltip>
-          </Stack>
+          <LabeledSwitch
+            titleLabel={t('dashboard-meeting-date-and-time')}
+            checked={formik.values.isScheduled}
+            switchProps={formikMinimalProps('isScheduled', formik)}
+            switchValueLabel={t(`dashboard-meeting-time-independent-${formik.values.isScheduled ? 'no' : 'yes'}`)}
+          />
 
           <Collapse orientation="vertical" in={formik.values.isScheduled} unmountOnExit mountOnEnter>
             <Grid container columnSpacing={{ xs: 2, sm: 5 }}>
@@ -556,25 +568,19 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             </Grid>
           </Collapse>
 
-          <Stack>
-            <Typography pb={1.3}>{t('waiting-room-participant-label')}</Typography>
-            <FormControlLabel
-              checked={formik.values.waitingRoom}
-              control={<Switch {...formikMinimalProps('waitingRoom', formik)} />}
-              label={t(`dashboard-meeting-switch-${formik.values.waitingRoom ? 'enabled' : 'disabled'}`)}
-              sx={{ margin: 0, gap: 1, verticalAlign: 'baseline', width: 'max-content' }}
-            />
-          </Stack>
+          <LabeledSwitch
+            titleLabel={t('waiting-room-participant-label')}
+            checked={formik.values.waitingRoom}
+            switchProps={formikMinimalProps('waitingRoom', formik)}
+            switchValueLabel={t(`dashboard-meeting-switch-${formik.values.waitingRoom ? 'enabled' : 'disabled'}`)}
+          />
           {features.sharedFolder && (
-            <Stack>
-              <Typography pb={1.3}>{t('dashboard-meeting-shared-folder-label')}</Typography>
-              <FormControlLabel
-                checked={formik.values.sharedFolder}
-                control={<Switch {...formikMinimalProps('sharedFolder', formik)} />}
-                label={t(`dashboard-meeting-switch-${formik.values.sharedFolder ? 'enabled' : 'disabled'}`)}
-                sx={{ margin: 0, gap: 1, verticalAlign: 'baseline', width: 'max-content' }}
-              />
-            </Stack>
+            <LabeledSwitch
+              titleLabel={t('dashboard-meeting-shared-folder-label')}
+              checked={formik.values.sharedFolder}
+              switchProps={formikMinimalProps('sharedFolder', formik)}
+              switchValueLabel={t(`dashboard-meeting-switch-${formik.values.sharedFolder ? 'enabled' : 'disabled'}`)}
+            />
           )}
         </Stack>
         <Grid container item justifyContent={'space-between'} spacing={2}>
