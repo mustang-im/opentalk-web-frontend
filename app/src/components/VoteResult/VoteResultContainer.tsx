@@ -115,7 +115,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const startTime = new Date(currentLegalVote?.startTime ?? new Date());
   const formattedTime = useDateFormat(startTime, 'time');
   const [showResults, setShowResults] = useState(false);
-  const isLiveVote = currentLegalVote?.kind === 'live_roll_call';
+  const isLiveVote = currentLegalVote?.kind === 'live_roll_call' || currentLegalVote?.kind === 'roll_call';
 
   const closeResultWindow = () => {
     dispatch(closePollResultWindow());
@@ -298,7 +298,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   };
 
   const scrollToResults = () => {
-    if (resultsRef && resultsRef.current) {
+    if (resultsRef && resultsRef.current && resultsRef.current.scrollIntoView) {
       resultsRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
