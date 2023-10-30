@@ -30,6 +30,7 @@ const Container = styled(Stack)({
   height: '100%',
   display: 'flex',
   justifyContent: 'flex-end',
+  alignItems: 'center',
 });
 
 const RecordingsIcon = styled(DefaultRecordingsIcon)(({ theme }) => ({
