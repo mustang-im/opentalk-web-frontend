@@ -36,7 +36,7 @@ const HandraiseButton = () => {
       data-testid="toolbarHandraiseButton"
       disabled={!hasHandraisesEnabled}
     >
-      {hasHandUp ? <RaiseHandOffIcon /> : <RaiseHandOnIcon />}
+      {hasHandUp ? <RaiseHandOnIcon /> : <RaiseHandOffIcon />}
     </ToolbarButton>
   );
 };
