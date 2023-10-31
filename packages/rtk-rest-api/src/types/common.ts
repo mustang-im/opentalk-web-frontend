@@ -50,6 +50,7 @@ export enum InviteStatus {
   Tentative = 'tentative',
   Pending = 'pending',
   Declined = 'declined',
+  Added = 'added',
 }
 
 export type PagePaginated<T> = {

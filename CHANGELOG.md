@@ -4,6 +4,8 @@
 
 ### Improvements to the user experience
 
+- Rework the participants list in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1464))
+
 ### Bug Fixes
 
 

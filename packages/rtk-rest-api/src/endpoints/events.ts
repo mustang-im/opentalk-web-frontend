@@ -14,9 +14,11 @@ import {
   Tag,
   CreateEventInvitePayload,
   UserId,
+  EventInvite,
 } from '../types';
 import { CursorPaginated, DateTime } from '../types';
 import { UpdateEventPayload, RescheduleEventPayload, EventId, EventInstanceId } from '../types/event';
+import { RevokeEmailUserPayload } from '../types/user';
 import { toCursorPaginated } from '../utils';
 import { CursorPaginationParams } from './common';
 import { EndpointBuilder } from './helper';
@@ -187,6 +189,22 @@ export const addEventsEndpoints = <
     providesTags: (result) => (result ? [{ type: Tag.EventInstance, id: result.id }] : []),
   }),
   /**
+   * Get invites for an specific Event
+   */
+  getEventInvites: builder.query<Array<EventInvite>, { eventId: EventId }>({
+    query: ({ eventId, ...params }) => ({
+      url: `events/${eventId}/invites`,
+      params,
+    }),
+    providesTags: (result) =>
+      result
+        ? [
+            ...result.map(({ profile }) => ({ type: Tag.EventInvite, id: profile.email })),
+            { type: Tag.EventInvite, id: 'PARTIAL-LIST' },
+          ]
+        : [{ type: Tag.EventInvite, id: 'PARTIAL-LIST' }],
+  }),
+  /**
    * Create an invite to an event for an specific user
    */
   createEventInvite: builder.mutation<unknown, { eventId: EventId } & CreateEventInvitePayload>({
@@ -195,15 +213,28 @@ export const addEventsEndpoints = <
       method: 'POST',
       body: snakeCaseKeys(payload),
     }),
+    invalidatesTags: () => [{ type: Tag.EventInvite, id: 'PARTIAL-LIST' }],
   }),
   /**
-   * Delete/revoke an invite to an event for a specified user
+   * Delete/revoke an invite to an event for a specified user email
+   */
+  revokeEventUserInviteByEmail: builder.mutation<unknown, { eventId: EventId } & RevokeEmailUserPayload>({
+    query: ({ eventId, ...payload }) => ({
+      url: `events/${eventId}/invites/email`,
+      method: 'DELETE',
+      body: snakeCaseKeys(payload),
+    }),
+    invalidatesTags: () => [{ type: Tag.EventInvite, id: 'PARTIAL-LIST' }],
+  }),
+  /**
+   * Delete/revoke an invite to an event for a specified user id
    */
   revokeEventUserInvite: builder.mutation<unknown, { eventId: EventId; userId: UserId }>({
     query: ({ eventId, userId }) => ({
       url: `events/${eventId}/invites/${userId}`,
       method: 'DELETE',
     }),
+    invalidatesTags: () => [{ type: Tag.EventInvite, id: 'PARTIAL-LIST' }],
   }),
   /**
    * Accept an event invite for the current user to the specified event
@@ -223,7 +254,10 @@ export const addEventsEndpoints = <
       url: `events/${eventId}/invite`,
       method: 'DELETE',
     }),
-    invalidatesTags: (res, error, { eventId }) => [{ type: Tag.Event, id: eventId }],
+    invalidatesTags: (res, error, { eventId }) => [
+      { type: Tag.Event, id: eventId },
+      { type: Tag.EventInvite, id: eventId },
+    ],
   }),
   /**
    * Create a shared folder for event

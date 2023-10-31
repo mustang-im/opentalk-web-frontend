@@ -72,3 +72,5 @@ export type UserMe = User & {
 };
 
 type TariffStatus = 'paid' | 'downgraded' | 'default';
+
+export type RevokeEmailUserPayload = { email: Email };

@@ -178,7 +178,7 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
           { element: <EventsOverviewPage />, index: true },
           { path: 'meet-now', element: <CreateDirectMeeting /> },
           { path: 'create', element: <CreateEventsPage /> },
-          { path: 'update/:meetingId/:formStep', element: <EditEventsPage /> },
+          { path: 'update/:eventId/:formStep', element: <EditEventsPage /> },
           { path: ':eventId', element: <EventDetailsPage /> },
         ],
       },
