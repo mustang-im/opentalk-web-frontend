@@ -67,12 +67,11 @@ const EditEventsPage = () => {
   const StepperHeader = () => (
     <Stepper activeStep={activeStep}>
       {steps.map(({ label }, index) => (
-        <ActiveStep key={label}>
-          <StepButton
-            icon={activeStep !== index && <EditIcon />}
-            onClick={() => setActiveStep(index)}
-            disabled={activeStep === index}
-          >
+        // #1457 When dealing with the edit page, all steps must be available per design.
+        // Default value of future step for disabled is `true` and therefor button
+        // appears unclickable.
+        <ActiveStep key={label} disabled={activeStep === index}>
+          <StepButton icon={activeStep !== index && <EditIcon />} onClick={() => setActiveStep(index)}>
             {t(label)}
           </StepButton>
         </ActiveStep>
