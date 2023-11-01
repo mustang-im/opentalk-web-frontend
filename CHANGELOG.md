@@ -24,6 +24,7 @@
 
 ### Improvements to the user experience
 
+- Mobile users are notified with the indicator when new message occures and/or whiteboard, shared folder or protocol features are available ([#1483](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1483))
 - Change invite link generation ([#1420](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1420))
 - Show link to recorded file only to explicitly invited users ([#1536](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1536))
 - Standardize handraise icon in the toolbar to match other buttons ([#1558](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1558))
