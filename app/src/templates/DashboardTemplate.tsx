@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon } from '@opentalk/common';
+import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon, HelpIcon } from '@opentalk/common';
 import React, { useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
@@ -75,6 +75,21 @@ const getRoutes = (useProviderSettings: boolean) => {
       icon: <MeetingsIcon />,
       path: 'meetings',
       name: 'dashboard-meetings',
+    },
+    {
+      icon: <HelpIcon />,
+      path: 'help',
+      name: 'dashboard-help',
+      childRoutes: [
+        {
+          path: 'documentation',
+          name: 'dashboard-help-documentation',
+        },
+        {
+          path: 'support',
+          name: 'dashboard-help-support',
+        },
+      ],
     },
   ];
 

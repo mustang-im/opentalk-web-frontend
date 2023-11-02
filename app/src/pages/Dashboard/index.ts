@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import CreateDirectMeeting from './CreateDirectMeeting';
 import CreateEventsPage from './CreateEventsPage';
+import DocumentationPage from './DocumentationPage';
 import EditEventsPage from './EditEventsPage';
 import EventDetailsPage from './EventDetailsPage';
 import EventsOverviewPage from './EventsOverviewPage';
@@ -21,4 +22,5 @@ export {
   EventsOverviewPage,
   EditEventsPage,
   CreateEventsPage,
+  DocumentationPage,
 };

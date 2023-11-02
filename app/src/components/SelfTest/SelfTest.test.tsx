@@ -29,5 +29,7 @@ describe('SelfTest', () => {
     expect(screen.queryByTestId('toolbarHandraiseButton')).not.toBeInTheDocument();
     expect(screen.queryByTestId('toolbarMenuButton')).not.toBeInTheDocument();
     expect(screen.queryByTestId('toolbarEndCallButton')).not.toBeInTheDocument();
+
+    expect(screen.getByRole('button', { name: 'conference-quick-start-open' })).toBeInTheDocument();
   });
 });

@@ -11,6 +11,7 @@ import LocalVideo from '../../components/LocalVideo';
 import { useAppSelector } from '../../hooks';
 import { selectFeatures } from '../../store/slices/configSlice';
 import { selectVideoEnabled } from '../../store/slices/mediaSlice';
+import QuickStart from '../QuickStart';
 import SpeedTest from '../SpeedTest';
 import { EchoPlayBack } from './fragments/EchoPlayback';
 import { SelfTestToolbar } from './fragments/SelfTestToolbar';
@@ -71,10 +72,12 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
 
   return (
     <SelfTestContainer>
-      <SpeedTestContainer>
-        <SpeedTest />
-      </SpeedTestContainer>
-
+      <Stack direction="row-reverse">
+        <QuickStart variant="lobby" />
+        <SpeedTestContainer>
+          <SpeedTest />
+        </SpeedTestContainer>
+      </Stack>
       <MonitorContainer>
         {videoEnabled ? (
           <LocalVideo noRoundedCorners hideUserName />

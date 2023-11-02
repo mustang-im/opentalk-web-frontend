@@ -29,6 +29,7 @@ import {
 import { selectIsCurrentWhiteboardHighlighted } from '../../../store/slices/uiSlice';
 import { selectIsWhiteboardAvailable } from '../../../store/slices/whiteboardSlice';
 import { MAX_GRID_TILES } from '../../GridView/GridView';
+import QuickStart from '../../QuickStart';
 import LayoutSelection from './LayoutSelection';
 import MeetingUtilsSection from './MeetingUtilsSection';
 import RoomTitle from './RoomTitle';
@@ -253,7 +254,10 @@ const DesktopMeetingHeader = () => {
         </HeaderCenterContainer>
       </ContentItem>
       <ContentItem>
-        <MeetingUtilsSection />
+        <HeaderCenterContainer>
+          <MeetingUtilsSection />
+          <QuickStart variant="room" />
+        </HeaderCenterContainer>
       </ContentItem>
     </Content>
   );

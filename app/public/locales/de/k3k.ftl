@@ -586,6 +586,7 @@ global-space = Leertaste
 global-anonymous = Anonym
 global-start-now = Jetzt starten
 global-clear = Löschen
+global-open = Öffnen
 global-close = Schließen
 global-ok = Ok
 global-no-result = Keine Ergebnisse
@@ -609,6 +610,18 @@ dashboard-account-management = Accountverwaltung
 dashboard-legal = Rechtliches
 dashboard-legal-imprint = Impressum
 dashboard-legal-data-protection = Datenschutzhinweise
+dashboard-help = Hilfe
+dashboard-help-documentation = Dokumentation
+dashboard-help-support = Support
+
+dashboard-quick-start-title = Kurzanleitung für das OpenTalk-Dashboard
+conference-quick-start-title = Kurzanleitung für die OpenTalk-Konferenz
+conference-quick-start-open = Öffnen die Kurzanleitung 
+conference-quick-start-close = Schließen die Kurzanleitung
+
+quick-start-loading = Kurzanleitung wird geladen
+quick-start-error = Kurzanleitung konnte nicht geladen werden
+
 
 dashboard-FAQ = faq
 dashboard-close-navbar= Navigation schließen
@@ -775,7 +788,6 @@ feedback-dialog-description-placeholder = Ihr Feedback ist uns wichtig. Bitte te
 feedback-dialog-submit-success = Vielen Dank für die Übermittlung
 feedback-dialog-form-validation = Pflichtfeld
 
-help-button = Hilfe
 protocol-join-session = Nehmen Sie an der Protokollsitzung teil
 
 protocol-invite-button = Schreibrechte für Teilnehmer vergeben

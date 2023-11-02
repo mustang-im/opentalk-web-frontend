@@ -31,6 +31,8 @@ Files:
  app/src/assets/images/*.svg
  app/src/assets/images/*.png
  app/public/assets/background.svg
+ app/public/assets/quick_start/de/*.svg
+ app/public/assets/quick_start/en/*.svg
  packages/common/assets/icons/*.svg
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: CC-BY-NC-ND-4.0

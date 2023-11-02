@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { List as MuiList, ListItem as MuiListItem, styled, useMediaQuery, useTheme } from '@mui/material';
-import { FeedbackIcon, HelpIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
+import { FeedbackIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
 import { useAuth } from '@opentalk/react-redux-appauth';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,6 @@ import { useAppSelector } from '../../../hooks';
 import {
   selectAccountManagementUrl,
   selectDataProtectionUrl,
-  selectHelpdeskUrl,
   selectImprintUrl,
   selectUserSurveyUrl,
 } from '../../../store/slices/configSlice';
@@ -137,7 +136,6 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const { t } = useTranslation();
-  const helpdeskUrl = useAppSelector(selectHelpdeskUrl);
   const userSurveyEnabled = useAppSelector(selectUserSurveyUrl);
   const accountManagementUrl = useAppSelector(selectAccountManagementUrl);
   const imprintUrl = useAppSelector(selectImprintUrl);
@@ -184,17 +182,6 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
             setActiveNavbar={setActiveNavbar}
             filter={{ value: 'legal', mode: FilterMode.Include }}
             collapsedBar={collapsedBar}
-          />
-        )}
-        {helpdeskUrl && (
-          <PrimaryNavigationEntry
-            href={helpdeskUrl}
-            target="_blank"
-            disabled={auth.isLoading}
-            Icon={<HelpIcon />}
-            collapsedBar={collapsedBar}
-            label={t('help-button')}
-            isSubmenuOpen={false}
           />
         )}
         {userSurveyEnabled && (
