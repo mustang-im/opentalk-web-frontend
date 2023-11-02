@@ -29,8 +29,8 @@ export type SignalingConnectionEvent = {
 
 type EchoMessage = NamespacedIncoming<{ message: 'ping' }, 'echo'>;
 
-const HEARTBEAT_INTERVAL = 4000; //ms
-const HEARTBEAT_TIMEOUT = 3000; //ms
+const HEARTBEAT_INTERVAL = 12000; //ms
+const HEARTBEAT_TIMEOUT = 10000; //ms
 export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> {
   private readonly url: URL;
   private readonly socket;
