@@ -13,7 +13,7 @@
     "build": "yarn workspaces foreach -vptR --from '@opentalk/opentalk' run build",
     "build-storybook": "yarn build:libs && yarn workspace @opentalk/opentalk build-storybook",
     "build:libs": "yarn workspaces foreach -vptR --from '@opentalk/opentalk' --exclude '@opentalk/opentalk' run build",
-    "build:profiler": "yarn workspaces foreach -vptR --from '@opentalk/opentalk' --exclude '@opentalk/opentalk' run build && yarn workspace @opentalk/opentalk build --profile",
+    "build:profiler": "yarn workspaces foreach -vptR --from '@opentalk/opentalk' --exclude '@opentalk/opentalk' run build && yarn workspace @opentalk/opentalk build:profiler --profile",
     "test": "yarn build:libs && yarn workspaces foreach -vA run test --watchAll=false --ci --bail",
     "ci": "yarn run fmt && yarn run lint && yarn run test",
     "storybook": "yarn workspace @opentalk/opentalk storybook",

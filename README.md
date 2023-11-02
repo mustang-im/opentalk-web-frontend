@@ -211,6 +211,11 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `yarn build:profiler`
+
+Builds libraries and calls `yarn build:profiler` in `@opentalk/opentalk`, this build 
+can be used for profiling the application. 
+
 ## Build the container image
 
 The `Dockerfile` for the app is located in `ci/Dockerfile`.

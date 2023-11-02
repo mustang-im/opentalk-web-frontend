@@ -323,7 +323,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
             <Avatar src={avatarUrl}>{displayName}</Avatar>
             <MenuTitle translate="no">{displayName}</MenuTitle>
           </Box>
-          <small>{window.config.version || t('dev-version')}</small>
+          <small>{window.config.version?.product || t('dev-version')}</small>
         </MenuTitleContainer>
         <Divider />
         {isModerator && renderMenuItems(moderatorMenuItems)}

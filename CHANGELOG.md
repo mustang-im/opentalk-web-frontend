@@ -67,7 +67,11 @@
 
 - Make meeting room header mobile responsive ([#1447](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1447))
 
-## 1.6.0
+### Internal
+
+- upload source maps for better stacktrace in error reports ([#1081](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1081))
+
+## 1.6.x
 
 ### UI/UX Fixes
 

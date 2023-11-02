@@ -13,6 +13,10 @@ window.config = {
   userSurveyApiKey: '${USER_SURVEY_API_KEY}',
   errorReportAddress: "${ERROR_REPORT_ADDRESS}",
   disallowCustomDisplayName: '${DISALLOW_CUSTOM_DISPLAY_NAME}',
+  version: {
+    product: "${PRODUCT_VERSION}",
+    frontend: "$(cat /usr/share/nginx/html/FRONTEND_VERSION)"
+  },
   beta: {
     isBeta: '${IS_BETA_RELEASE:-true}',
     badgeUrl: "${BETA_BADGE_URL}"
@@ -48,8 +52,8 @@ window.config = {
   },
   videoBackgrounds: '${VIDEO_BACKGROUNDS}',
   maxVideoBandwidth: '${MAX_VIDEO_BANDWIDTH}',
-  version: '${PRODUCT_VERSION}',
-  glitchtipDsn: '${SENTRY_DSN}',
-  glitchtipRelease: "${SENTRY_RELEASE}",
+  glitchtip: {
+    dsn: '${SENTRY_DSN}',
+  },
   libravatarDefaultImage: 'robohash'
 };

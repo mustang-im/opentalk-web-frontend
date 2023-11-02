@@ -11,6 +11,7 @@
     "start:hot": "yarn run create:hot && REACT_APP_VERSION='dev' REACT_HOT_MODE='hot' craco start",
     "start-react-scripts": "REACT_APP_VERSION='dev' react-scripts start",
     "build": "yarn run create:dev && BUILD_PATH=../dist REACT_APP_VERSION=$(git rev-parse --short HEAD) craco build",
+    "build:profiler": "yarn run create:dev && BUILD_PATH=../dist-profiler REACT_APP_VERSION=$(git rev-parse --short HEAD) craco build",
     "build-react-scripts": "yarn run create:dev && REACT_APP_VERSION=$(git rev-parse --short HEAD) react-scripts build",
     "test": "yarn run create:dev && craco test",
     "test:debug": "craco --inspect-brk test --runInBand --no-cache",

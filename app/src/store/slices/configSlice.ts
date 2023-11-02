@@ -75,7 +75,10 @@ export interface Config {
   };
   imprintUrl?: string;
   dataProtectionUrl?: string;
-  version?: `v${string}`;
+  version?: {
+    product: `v${string}`;
+    frontend: `v${string}`;
+  };
 }
 
 export interface ConfigState {
@@ -116,9 +119,13 @@ export interface ConfigState {
   tariff: Tariff;
   imprintUrl?: string;
   dataProtectionUrl?: string;
-  version?: `v${string}`;
-  glitchtipDsn?: string;
-  glitchtipRelease?: string;
+  version?: {
+    product: `v${string}`;
+    frontend: `v${string}`;
+  };
+  glitchtip: {
+    dsn?: string;
+  };
 }
 /**
  * Initial Configuration.
@@ -179,8 +186,9 @@ export const initialState: ConfigState = {
     quotas: {},
     enabledModules: [],
   },
-  glitchtipDsn: undefined,
-  glitchtipRelease: undefined,
+  glitchtip: {
+    dsn: undefined,
+  },
 };
 
 export const configSlice = createSlice({

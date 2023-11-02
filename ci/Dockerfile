@@ -4,6 +4,7 @@
 
 FROM node:16-alpine AS Build
 ARG BUILD_TYPE=build
+
 WORKDIR /app
 
 COPY .yarnrc.yml yarn.lock package.json tsconfig.base.json ./
@@ -23,15 +24,10 @@ COPY packages/react-redux-appauth/tsconfig.json ./packages/react-redux-appauth/t
 COPY packages/common/package.json ./packages/common/package.json
 COPY packages/common/tsconfig.json ./packages/common/tsconfig.json
 
-RUN apk add git jq
 RUN yarn install --silent
 COPY app ./app
 COPY packages ./packages
 RUN yarn $BUILD_TYPE
-
-RUN jq -r '.version' ./app/package.json > /app/dist/FRONTEND_VERSION
-
-RUN /app/node_modules/.bin/sentry-cli sourcemaps inject /app/dist/
 
 FROM nginx:alpine
 COPY --from=Build /app/dist /usr/share/nginx/html

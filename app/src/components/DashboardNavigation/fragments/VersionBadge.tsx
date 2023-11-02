@@ -33,7 +33,7 @@ interface VersionBadgeProps {
 
 const VersionBadge = (props: VersionBadgeProps) => {
   const { t } = useTranslation();
-  const version = window.config.version || t('dev-version');
+  const version = window.config.version?.product || t('dev-version');
 
   return (
     <Tooltip title={t('version-label', { version })}>

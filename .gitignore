@@ -103,6 +103,7 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+dist-profiler
 
 # Gatsby files
 .cache/
@@ -177,3 +178,6 @@ public/*config.js
 .DS_Store
 **/public/*config.json
 **/public/*config.js
+
+### Sentry/Glitchtip Config
+.sentryclirc

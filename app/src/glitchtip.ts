@@ -4,9 +4,9 @@
 import * as Sentry from '@sentry/browser';
 
 Sentry.init({
-  dsn: window.config.glitchtipDsn,
-  enabled: Boolean(window.config.glitchtipDsn),
-  release: window.config.glitchtipRelease,
+  dsn: window.config.glitchtip.dsn,
+  enabled: Boolean(window.config.glitchtip.dsn),
+  release: window.config.version?.frontend,
   beforeSend: (event) => {
     if (window.showReportDialog) {
       window.showReportDialog(event);
