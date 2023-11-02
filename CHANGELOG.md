@@ -2,16 +2,47 @@
 
 ### New Features
 
-- Show voting results of live vote even the participant has not yet voted or saved ([#1425](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1425))
+### Improvements to the user experience
+
+### Bug Fixes
+
+
+## 1.7.2
+
+### Bug Fixes
+
+- Increase heartbeat interval
+
+## 1.7.1
+
+### New Features
+
 - Add mobile drawer ([#1120](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1120))
 
 ### Improvements to the user experience
 
-- Show link to recorded file only to explicitly invited users ([#1536], (https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1536))
+- Show link to recorded file only to explicitly invited users ([#1536](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1536))
 - Show Meeting Title in lobby & waiting room ([#1398](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1398))
-- Improve date time picker behaviour ([#1046], (https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1046))
-- Remove the dialog from adhoc meetings at the end ([#1113](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1113))
-- Safari: change CtA for browser notification ([#1485](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1485))
+- Enhanced behavior of the room participant selection ([#1500](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1500))
+
+### Bug Fixes
+
+- Fix Password notification don't disappear ([#1591](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1591))
+- Fix popovers in the fullscreen mode for three dot menu and hang up confirmation. ([#1535](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1535))
+- Fix notifications not being display on the personal fullscreen mode ([1504](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1504))
+
+
+## 1.7.0
+
+### New Features
+
+- Show voting results of live vote even the participant has not yet voted or saved ([#1425](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1425))
+
+### Improvements to the user experience
+
+- Improve date time picker behaviour ([#1046](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1046))
+- Remove the dialog from Ad-Hoc meetings at the end ([#1113](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1113))
+- Safari: change button color for browser notification ([#1485](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1485))
 - Change wording for inviting field ([#1533](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1533))
 - Change wording of dashboard password field ([#1527](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1527))
 - Change allow button color in recording consent dialog ([#1508](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1508))
@@ -19,22 +50,18 @@
 - Remove the redundant login screen - fixed redirect ([#1360, #1463](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1360, https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1463))
 - Fix: [Lobby] no feedback for wrong password ([1440](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1440))
 - Increase size of toolbar buttons for mobile user ([#1460](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1460))
-- Customize glitchtip user feedback dialog labels ([#1452](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1452))
-- Improved loading time of the participant list with over 100 participants in the room. [#1487](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1487)
+- Customize Glitchtip user feedback dialog labels ([#1452](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1452))
+- Improved loading time of the participant list with over 100 participants in the room. ([#1487](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1487))
 - Improve performance while scrolling both long personal, group or global chats. ([#1422](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1422))
-- Enhanced behavior of the room participant selection ([#1500](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1500))
 
 ### Bug Fixes
 
-- Fix Password notification don't disappear ([#1591](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1591))
 - Updating @babel/traverse to 7.23.2 ([#1569](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1569))
 - Implementing ping-pong control protocol with the server to check the websocket connection. ([#1554](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1554))
 - Fix waiting participants, which rejoined after debriefing([#1262](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1262))
 - Fix push-to-talk functionality ([#1344](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1344))
 - Fix handling with disallow custom display name ([!1089](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1089))
 - Fix overflowing details on the meeting details page ([#1144](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1144))
-- Fix popovers in the fullscreen mode for three dot menu and hang up confirmation. ([#1535](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1535))
-- Fix notifications not being display on the personal fullscreen mode ([1504](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1504))
 
 ### Stability Improvements
 
@@ -44,7 +71,7 @@
 
 ### UI/UX Fixes
 
-- Change the naming for votings in accordance with the municipal code ([#1424](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1424))
+- Change the naming for voting in accordance with the municipal code ([#1424](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1424))
 - Fix guest link generation in the dashboard (!1066)
 - Fix: future meetings displayed in past tabs (!1057)
 - Fix participants timer state in moderators timer tab (!1404)
