@@ -20,6 +20,7 @@ signaling-subscription-failed = Die Verbindung zu einen Teilnehmer ist leider fe
 media-subscription-failed = Keine Verbindung zum Teilnehmer
 
 error-system-currently-unavailable = Das System ist zur Zeit nicht erreichbar, bitte versuchen sie es später nochmal.
+error-unauthorized = Sie haben leider keinen Zugriff, bitte kontaktieren Sie den Moderator des Meetings.
 
 login-form-title = Anmeldung
 login-form-body = Bitte melden Sie sich an
