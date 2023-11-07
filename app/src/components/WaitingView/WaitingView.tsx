@@ -9,8 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { useGetRoomEventInfoQuery } from '../../api/rest';
 import { enterRoom } from '../../api/types/outgoing/control';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useInviteCode } from '../../hooks/useInviteCode';
 import { selectFeatures, selectShowmprintContainer } from '../../store/slices/configSlice';
-import { selectRoomConnectionState, ConnectionState, selectInviteId, selectRoomId } from '../../store/slices/roomSlice';
+import { selectRoomConnectionState, ConnectionState, selectRoomId } from '../../store/slices/roomSlice';
 import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider/MediaProvider';
 import SelfTest from '../SelfTest';
@@ -23,7 +24,7 @@ const WaitingView = () => {
   const mediaContext = useMediaContext();
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
   const showImprintContainer = useAppSelector(selectShowmprintContainer);
-  const inviteCode = useAppSelector(selectInviteId);
+  const inviteCode = useInviteCode();
   const roomId = useAppSelector(selectRoomId);
   const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId as RoomId, inviteCode }, { skip: !roomId });
 

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as BreakoutRoomIcon } from '../../assets/images/subroom-illustration.svg';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useInviteCode } from '../../hooks/useInviteCode';
 import { startRoom } from '../../store/commonActions';
 import {
   breakoutSlice,
@@ -15,8 +16,9 @@ import {
   selectCurrentBreakoutRoomId,
   selectLastDispatchedActionType,
 } from '../../store/slices/breakoutSlice';
-import { selectInviteId, selectRoomId, selectRoomPassword } from '../../store/slices/roomSlice';
+import { selectRoomId, selectRoomPassword } from '../../store/slices/roomSlice';
 import { selectDisplayName, selectIsLoggedIn } from '../../store/slices/userSlice';
+import { composeRoomPath } from '../../utils/apiUtils';
 import BreakoutRoomNotification, { Action } from './fragments/BreakoutRoomNotification';
 
 const BreakoutRoomProvider = ({ children }: { children: React.ReactNode }) => {
@@ -27,7 +29,7 @@ const BreakoutRoomProvider = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const roomPassword = useAppSelector(selectRoomPassword);
   const roomId = useAppSelector(selectRoomId);
-  const inviteCode = useAppSelector(selectInviteId);
+  const inviteCode = useInviteCode();
   const visibleNotifications = useRef<SnackbarKey[]>([]);
   const lastDispatchedActionType = useAppSelector(selectLastDispatchedActionType);
   const displayName = useAppSelector(selectDisplayName);
@@ -45,7 +47,7 @@ const BreakoutRoomProvider = ({ children }: { children: React.ReactNode }) => {
         displayName,
         inviteCode: isLoggedIn ? undefined : inviteCode,
       })
-    ).then(() => navigate(`/room/${roomId}/${assignedBreakoutRoomId}`));
+    ).then(() => navigate(composeRoomPath(roomId, inviteCode, assignedBreakoutRoomId)));
   }, [dispatch, isLoggedIn, roomId, roomPassword, displayName, assignedBreakoutRoomId, navigate, inviteCode]);
 
   const handleLeaveBreakoutRoom = useCallback(() => {
@@ -60,7 +62,7 @@ const BreakoutRoomProvider = ({ children }: { children: React.ReactNode }) => {
         displayName,
         inviteCode: isLoggedIn ? undefined : inviteCode,
       })
-    ).then(() => navigate(`/room/${roomId}`));
+    ).then(() => navigate(composeRoomPath(roomId, inviteCode)));
   }, [dispatch, isLoggedIn, roomId, roomPassword, inviteCode, displayName, navigate]);
 
   const joinActions: Action[] = useMemo(

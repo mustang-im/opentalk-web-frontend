@@ -6,15 +6,17 @@ import { BreakoutRoomId, RoomId } from '@opentalk/common';
 import { ClockIcon } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { stop } from '../../../api/types/outgoing/breakout';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useInviteCode } from '../../../hooks/useInviteCode';
 import { startRoom } from '../../../store/commonActions';
 import { selectCombinedParticipantsAndUserInCoference } from '../../../store/selectors';
 import { selectAllBreakoutRooms, selectExpiredDate } from '../../../store/slices/breakoutSlice';
-import { selectRoomId, selectRoomPassword } from '../../../store/slices/roomSlice';
+import { selectRoomPassword } from '../../../store/slices/roomSlice';
 import { selectDisplayName, selectOurUuid } from '../../../store/slices/userSlice';
+import { composeRoomPath } from '../../../utils/apiUtils';
 import RoomOverviewListItem from './RoomOverviewListItem';
 
 const StyledClockIcon = styled(ClockIcon)(({ theme }) => ({
@@ -43,7 +45,9 @@ const RoomOverview = () => {
   const [timeLeft, setTimeLeft] = useState<{ minutes: number; seconds: number } | null>(null);
   const participants = useAppSelector(selectCombinedParticipantsAndUserInCoference);
   const expires = useAppSelector(selectExpiredDate);
-  const roomId = useAppSelector(selectRoomId);
+  const { roomId } = useParams<'roomId'>() as {
+    roomId: RoomId;
+  };
   const roomPassword = useAppSelector(selectRoomPassword);
   const displayName = useAppSelector(selectDisplayName);
   const ourUuid = useAppSelector(selectOurUuid);
@@ -58,6 +62,7 @@ const RoomOverview = () => {
       seconds: Math.floor((distance % (1000 * 60)) / 1000),
     };
   };
+  const inviteCode = useInviteCode();
 
   useEffect(() => {
     if (expires !== undefined && expires !== null) {
@@ -97,13 +102,13 @@ const RoomOverview = () => {
   const navigateToBreakoutRoom = (breakoutRoom: BreakoutRoomId) => {
     dispatch(
       startRoom({
-        roomId: roomId as RoomId,
+        roomId: roomId,
         password: roomPassword,
         breakoutRoomId: breakoutRoom,
         displayName,
-        inviteCode: undefined,
+        inviteCode: inviteCode,
       })
-    ).then(() => navigate(`/room/${roomId}/${breakoutRoom}`));
+    ).then(() => navigate(composeRoomPath(roomId, inviteCode, breakoutRoom)));
   };
 
   const renderAccordions = () => {

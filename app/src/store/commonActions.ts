@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BreakoutRoomId, RoomId, notifications } from '@opentalk/common';
+import { BreakoutRoomId, InviteCode, RoomId, notifications } from '@opentalk/common';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
@@ -17,7 +17,7 @@ import { ConnectionState } from './slices/roomSlice';
 export interface RoomCredentials {
   roomId: RoomId;
   password?: string;
-  inviteCode?: string;
+  inviteCode?: InviteCode;
   breakoutRoomId: BreakoutRoomId | null;
 }
 

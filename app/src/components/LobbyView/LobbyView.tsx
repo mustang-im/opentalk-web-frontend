@@ -7,7 +7,7 @@ import { notifications } from '@opentalk/common';
 import { closeSnackbar, enqueueSnackbar, SnackbarKey } from '@opentalk/common';
 import { useFormik } from 'formik';
 import i18next from 'i18next';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import { ApiErrorWithBody, StartRoomError, useGetMeQuery, useGetRoomEventInfoQuery } from '../../api/rest';
 import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useInviteCode } from '../../hooks/useInviteCode';
 import { startRoom } from '../../store/commonActions';
 import {
   selectDisallowCustomDisplayName,
@@ -23,11 +24,13 @@ import {
 } from '../../store/slices/configSlice';
 import {
   ConnectionState,
-  selectInviteId,
+  fetchRoomByInviteId,
+  selectInviteCode,
   selectPasswordRequired,
   selectRoomConnectionState,
 } from '../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../store/slices/userSlice';
+import { composeRoomPath } from '../../utils/apiUtils';
 import { formikProps } from '../../utils/formikUtils';
 import { ContitionalToolTip } from '../ConditionalToolTip/ContitionalToolTip';
 import ImprintContainer from '../ImprintContainer';
@@ -64,15 +67,27 @@ const LobbyView: FC = () => {
   };
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { data } = useGetMeQuery(undefined, { skip: !isLoggedIn });
-  const inviteCode = useAppSelector(selectInviteId);
+  const inviteCode = useInviteCode();
+  const inviteCodeInState = useAppSelector(selectInviteCode);
   const connectionState = useAppSelector(selectRoomConnectionState);
   const navigate = useNavigate();
   const passwordRequired = useAppSelector(selectPasswordRequired);
   const showImprintContainer = useAppSelector(selectShowmprintContainer);
   const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
-  const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId, inviteCode }, { skip: !roomId });
+  const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId, inviteCode: inviteCode }, { skip: !roomId });
   const disableDisplayNameField = disallowCustomDisplayName && !inviteCode;
   const initialDisplayName = data?.displayName || '';
+
+  //Password is only required for guests or non invited users.
+  //We do not have a way of telling if you are invited with the current backend so we will always show the password if you are using the invite link.
+  const showPasswordField = passwordRequired;
+
+  // Temporary request to figure out if we need to show a password field until it is added in getEventInfo request - https://git.opentalk.dev/opentalk/backend/services/controller/-/issues/603
+  useEffect(() => {
+    if (inviteCode && !inviteCodeInState) {
+      dispatch(fetchRoomByInviteId(inviteCode));
+    }
+  }, [inviteCode]);
 
   const enterRoom = useCallback(
     async (displayName: string, password: string) => {
@@ -104,7 +119,7 @@ const LobbyView: FC = () => {
               case StartRoomError.InvalidBreakoutRoomId:
               case StartRoomError.NoBreakoutRooms:
                 notifications.info(t('breakout-notification-session-ended-header'));
-                navigate(`/room/${roomId}`);
+                navigate(composeRoomPath(roomId, inviteCode, breakoutRoomId));
                 break;
               case StartRoomError.InvalidJson:
                 console.error('invalid json request in startRoom', e);
@@ -113,7 +128,7 @@ const LobbyView: FC = () => {
               case StartRoomError.WrongRoomPassword:
               case StartRoomError.InvalidCredentials:
                 showWrongPasswordNotification();
-                navigate(`/room/${roomId}`);
+                navigate(composeRoomPath(roomId, inviteCode, breakoutRoomId));
                 break;
               case StartRoomError.NotFound:
                 notifications.error(t('joinform-room-not-found'));
@@ -198,7 +213,7 @@ const LobbyView: FC = () => {
                     />
                   }
                 />
-                {passwordRequired && (
+                {showPasswordField && (
                   <TextField
                     {...formikProps('password', formik)}
                     color={'secondary'}

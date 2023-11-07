@@ -5,7 +5,8 @@ import { styled } from '@mui/material';
 import { Trans } from 'react-i18next';
 
 import { useAppSelector } from '../../hooks';
-import { selectEventInfo, selectInviteId } from '../../store/slices/roomSlice';
+import { useInviteCode } from '../../hooks/useInviteCode';
+import { selectEventInfo } from '../../store/slices/roomSlice';
 
 const RecordingLink = styled('a')(({ theme }) => ({
   color: theme.palette.common.white,
@@ -13,11 +14,11 @@ const RecordingLink = styled('a')(({ theme }) => ({
 
 const RecordingStoppedMessage = () => {
   const eventInfo = useAppSelector(selectEventInfo);
-  const inviteId = useAppSelector(selectInviteId);
+  const inviteCode = useInviteCode();
 
   // Guest in this context is either a not registered user or a registered user,
   // that joined a room via invite link (was not explicitly invited via dashboard)
-  const isGuest = inviteId !== undefined;
+  const isGuest = inviteCode !== undefined;
   if (isGuest) {
     return <Trans i18nKey={'recording-stopped-message'} />;
   }

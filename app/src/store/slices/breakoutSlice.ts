@@ -100,6 +100,7 @@ export const breakoutSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(startRoom.pending, (state, { meta: { arg } }) => {
       state.currentBreakoutRoomId = arg.breakoutRoomId;
+      state.assignment = arg.breakoutRoomId;
       state.action = undefined;
     });
     builder.addCase(joinSuccess, (state, { payload }) => {

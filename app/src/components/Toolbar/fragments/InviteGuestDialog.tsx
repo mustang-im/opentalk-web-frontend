@@ -67,7 +67,7 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   const currentBreakoutRoomId = useAppSelector(selectCurrentBreakoutRoomId);
   const [createGuestLink, { data, reset, isSuccess }] = useCreateRoomInviteMutation();
   const inviteUrl =
-    isSuccess && data && roomId ? composeInviteUrl(baseUrl, data.inviteCode, roomId, currentBreakoutRoomId) : null;
+    isSuccess && data && roomId ? composeInviteUrl(baseUrl, roomId, data.inviteCode, currentBreakoutRoomId) : null;
 
   const endOfToday = dateFns.endOfDay(new Date());
   const minTimeDate = dateFns.addMinutes(new Date(), 5);

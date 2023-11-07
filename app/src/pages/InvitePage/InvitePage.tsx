@@ -10,6 +10,7 @@ import Error from '../../commonComponents/Error';
 import SuspenseLoading from '../../commonComponents/SuspenseLoading';
 import { useAppDispatch } from '../../hooks';
 import { fetchRoomByInviteId, InviteRoomVerifyResponse } from '../../store/slices/roomSlice';
+import { composeRoomPath } from '../../utils/apiUtils';
 
 /**
  * @deprecated To be removed when there are no `/invite/<invite_code>` links in use. Related to https://git.opentalk.dev/opentalk/backend/services/controller/-/issues/474
@@ -25,7 +26,7 @@ const InvitePage = () => {
     dispatch(fetchRoomByInviteId(inviteCode))
       .unwrap()
       .then(({ roomId }: InviteRoomVerifyResponse) => {
-        navigate(`/room/${roomId}?invite=${inviteCode}`);
+        navigate(composeRoomPath(roomId, inviteCode));
       })
       .catch((error: FetchRequestError) => setError(error));
   }, [dispatch, navigate, inviteCode]);

@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Typography } from '@mui/material';
-import { InviteCode } from '@opentalk/common';
 import { AuthCallback, selectAuthError, selectIsAuthed, selectIsLoading, useAuth } from '@opentalk/react-redux-appauth';
 import i18next from 'i18next';
 import React, { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { To, RouteObject, useNavigate, Outlet, useParams, useSearchParams } from 'react-router-dom';
+import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppSelector } from '../hooks';
+import { useInviteCode } from '../hooks/useInviteCode';
 import {
   SettingsProfilePage,
   SettingsGeneralPage,
@@ -22,8 +22,6 @@ import {
   EventDetailsPage,
 } from '../pages/Dashboard';
 import RoomPage from '../pages/RoomPage';
-import { fetchRoomByInviteId } from '../store/slices/roomSlice';
-import { selectIsGuest } from '../store/slices/userSlice';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
 import LobbyTemplate from '../templates/LobbyTemplate';
@@ -78,21 +76,11 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const isAuthenticated = useAppSelector(selectIsAuthed);
   const isAuthLoading = useAppSelector(selectIsLoading);
   const isAuthError = useAppSelector(selectAuthError);
-  const isGuest = useAppSelector(selectIsGuest);
-  const startLogin = !isAuthenticated && !isAuthLoading && !isAuthError && !isGuest;
+  const inviteCode = useInviteCode();
 
-  const dispatch = useAppDispatch();
-  const [urlSearchParam, setUrlSearchParams] = useSearchParams();
-  const inviteCodeFromUrl = urlSearchParam.get('invite');
+  const startLogin = !isAuthenticated && !isAuthLoading && !isAuthError && !inviteCode;
 
   useEffect(() => {
-    if (inviteCodeFromUrl) {
-      dispatch(fetchRoomByInviteId(inviteCodeFromUrl as InviteCode)).then(() => {
-        setUrlSearchParams(undefined);
-        return;
-      });
-    }
-
     if (startLogin) {
       const timeout = setTimeout(async () => {
         const redirectUrl = sessionStorage.getItem(sessionStorageItems.redirectUri);
@@ -103,9 +91,9 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
       }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
       return () => clearTimeout(timeout);
     }
-  }, [startLogin, inviteCodeFromUrl]);
+  }, [startLogin]);
 
-  if (isAuthenticated || isGuest) {
+  if (isAuthenticated || inviteCode) {
     if (children !== undefined) {
       return <>{children}</>;
     }

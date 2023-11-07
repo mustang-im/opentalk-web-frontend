@@ -7,7 +7,8 @@ import { useParams } from 'react-router-dom';
 
 import LobbyView from '../../components/LobbyView';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { ConnectionState, selectInviteId, selectRoomConnectionState } from '../../store/slices/roomSlice';
+import { useInviteCode } from '../../hooks/useInviteCode';
+import { ConnectionState, selectRoomConnectionState } from '../../store/slices/roomSlice';
 import { selectDisplayName, selectIsAuthenticated } from '../../store/slices/userSlice';
 import RoomLoadingView from './fragments/RoomLoadingView';
 
@@ -20,8 +21,7 @@ const RoomPage = () => {
     roomId: RoomId;
     breakoutRoomId?: BreakoutRoomId;
   };
-
-  const inviteCode = useAppSelector(selectInviteId);
+  const inviteCode = useInviteCode();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const displayName = useAppSelector(selectDisplayName);
   const connectionState = useAppSelector(selectRoomConnectionState);

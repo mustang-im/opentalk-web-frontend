@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { RoomId } from '@opentalk/common';
+import { InviteCode, RoomId } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { CallIn, DateTime } from './common';
@@ -89,7 +89,7 @@ export interface RoomAsset {
 export type RoomAssets = Array<RoomAsset>;
 
 export type RoomInvite = {
-  inviteCode: string;
+  inviteCode: InviteCode;
   room: string;
   active: boolean;
   expiration: DateTime | null;
@@ -107,5 +107,5 @@ export type CreateRoomInvitePayload = {
 
 export type RoomEventInfo = {
   id: RoomId;
-  inviteCode?: string;
+  inviteCode?: InviteCode;
 };

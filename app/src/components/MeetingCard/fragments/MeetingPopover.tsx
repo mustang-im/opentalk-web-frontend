@@ -101,7 +101,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
         const permanentInvite = invitesList.find((invite) => invite.active && invite.expiration === null);
 
         if (permanentInvite) {
-          const inviteURLString = composeInviteUrl(baseUrl, permanentInvite.inviteCode, roomId).toString();
+          const inviteURLString = composeInviteUrl(baseUrl, roomId, permanentInvite.inviteCode).toString();
           navigator.clipboard.writeText(inviteURLString);
           notifications.success(t('global-copy-link-success'));
           setAnchorEl(undefined);
