@@ -61,6 +61,7 @@ frontend                                                                        
 | DATA_PROTECTION_URL             | no      |                                                   | The URL to the data protection page |
 | ACCOUNT_MANAGEMENT_URL             | no      |                                                   | The account management url for use the dashboard menu, if provider.active is true |
 | DISALLOW_CUSTOM_DISPLAY_NAME  | no  | false                                             | Disable editing of display name in profile and lobby page |
+| SENTRY_DSN  | no  |                                              | Adding a valid sentry dsn will activate error logging |
 
 ## Use yarn to build a local version
 
@@ -135,6 +136,10 @@ window.config = {
     // Configure the maximum video bandwidth.
     "maxVideoBandwidth":600000,
     "errorReportAddress": 'report@opentalk.eu',
+    // Activate error logging for frontend
+    glitchtip: {
+      dsn: '${SENTRY_DSN}',
+    },
     // Available moderator's features, can be enabled by setting feature to true
     "features": {
       "userSearch": true,
