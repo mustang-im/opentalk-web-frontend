@@ -36,7 +36,7 @@ import {
   createTalkingStickNotification,
   legalVoteStore,
 } from '@opentalk/components';
-import { token_updated } from '@opentalk/react-redux-appauth';
+import { login } from '@opentalk/redux-oidc';
 import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
@@ -58,7 +58,7 @@ import {
 } from '../modules/WebRTC';
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
 import { AppDispatch, RootState } from '../store';
-import { hangUp, login, startRoom } from '../store/commonActions';
+import { hangUp, startRoom } from '../store/commonActions';
 import * as breakoutStore from '../store/slices/breakoutSlice';
 import { clearGlobalChat, received as chatReceived, setChatSettings } from '../store/slices/chatSlice';
 import { selectLibravatarDefaultImage } from '../store/slices/configSlice';
@@ -1076,15 +1076,6 @@ export const apiMiddleware: Middleware = ({
   // matchBuilder acts similar to the builder for reducers and allows us to avoid a lot of if statements.
   const actionsMap = matchBuilder<RootState>((builder) => {
     builder
-      .addCase(token_updated, (state, { payload: { id_token } }) => {
-        if (id_token !== undefined && id_token !== state.user.loggedIdToken) {
-          dispatch(login(id_token));
-        }
-      })
-      .addCase(login.rejected, (state, { payload }) => {
-        console.error('login at the backend failed', payload);
-        notifications.info(i18next.t('error-general'));
-      })
       .addCase(login.fulfilled, () => {
         dispatch(restApi.endpoints.getMe.initiate()).then((user) => {
           user.data &&

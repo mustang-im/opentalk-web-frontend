@@ -39,7 +39,7 @@
     "@opentalk/components": "^1.0.34",
     "@opentalk/fluent_conv": "workspace:*",
     "@opentalk/i18next-fluent": "workspace:*",
-    "@opentalk/react-redux-appauth": "workspace:*",
+    "@opentalk/redux-oidc": "workspace:*",
     "@opentalk/rest-api-rtk-query": "workspace:*",
     "@reduxjs/toolkit": "^1.8.5",
     "@sentry/browser": "^7.60.0",

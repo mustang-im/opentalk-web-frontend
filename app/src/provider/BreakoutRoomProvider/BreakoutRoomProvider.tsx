@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { SnackbarKey, notifications } from '@opentalk/common';
+import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,7 @@ import {
   selectLastDispatchedActionType,
 } from '../../store/slices/breakoutSlice';
 import { selectRoomId, selectRoomPassword } from '../../store/slices/roomSlice';
-import { selectDisplayName, selectIsLoggedIn } from '../../store/slices/userSlice';
+import { selectDisplayName } from '../../store/slices/userSlice';
 import { composeRoomPath } from '../../utils/apiUtils';
 import BreakoutRoomNotification, { Action } from './fragments/BreakoutRoomNotification';
 
@@ -26,7 +27,7 @@ const BreakoutRoomProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const assignedBreakoutRoomId = useAppSelector(selectAssignedBreakoutRoomId);
   const currentBreakoutRoomId = useAppSelector(selectCurrentBreakoutRoomId);
-  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const isLoggedIn = useAppSelector(selectIsAuthenticated);
   const roomPassword = useAppSelector(selectRoomPassword);
   const roomId = useAppSelector(selectRoomId);
   const inviteCode = useInviteCode();

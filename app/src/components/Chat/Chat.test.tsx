@@ -20,6 +20,9 @@ describe('Chat component', () => {
             entities: {},
           },
         },
+        user: {
+          uuid: '1234546',
+        },
         events: {
           ids: [],
           entities: {},

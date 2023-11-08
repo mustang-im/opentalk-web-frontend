@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { List as MuiList, ListItem as MuiListItem, styled, useMediaQuery, useTheme } from '@mui/material';
 import { FeedbackIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
-import { useAuth } from '@opentalk/react-redux-appauth';
-import { useCallback, useState } from 'react';
+import { selectAuthIsPending, useAuthContext } from '@opentalk/redux-oidc';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
@@ -140,13 +140,8 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
   const accountManagementUrl = useAppSelector(selectAccountManagementUrl);
   const imprintUrl = useAppSelector(selectImprintUrl);
   const dataProtectionUrl = useAppSelector(selectDataProtectionUrl);
-  const auth = useAuth();
-
-  const logout = useCallback(async () => {
-    if (!auth.isLoading) {
-      await auth.signOut();
-    }
-  }, [auth]);
+  const auth = useAuthContext();
+  const isAuthPending = useAppSelector(selectAuthIsPending);
 
   const toggleFeedbackModal = () => setShowFeedbackModal((prevState) => !prevState);
 
@@ -168,10 +163,10 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
         {accountManagementUrl && (
           <PrimaryNavigationEntry
             href={accountManagementUrl}
-            disabled={auth.isLoading}
             Icon={<SettingsIcon />}
             collapsedBar={collapsedBar}
             label={t('dashboard-account-management')}
+            disabled={isAuthPending}
           />
         )}
 
@@ -199,12 +194,12 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
 
         <PrimaryNavigationEntry
           href={''}
-          onClick={logout}
+          onClick={() => auth?.signOut()}
           Icon={<SignOutIcon />}
           collapsedBar={collapsedBar}
           label={t('dashboard-settings-logout')}
+          disabled={isAuthPending}
           isSubmenuOpen={false}
-          disabled={auth.isLoading}
         />
       </List>
       <CollapseRow collapsed={collapsedBar} onChange={setcollapsedBar} />

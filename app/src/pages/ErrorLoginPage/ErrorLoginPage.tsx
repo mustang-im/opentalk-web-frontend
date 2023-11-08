@@ -3,14 +3,12 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Container as MuiContainer, CssBaseline, Stack, styled, ThemeProvider, useTheme } from '@mui/material';
 import { WarningIcon } from '@opentalk/common';
-import { EventTypeError, useAuth } from '@opentalk/react-redux-appauth';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import { createOpenTalkTheme } from '../../assets/themes/opentalk';
 import Error from '../../commonComponents/Error';
-import { sessionStorageItems } from '../../config/storage';
 import { useAppDispatch } from '../../hooks';
 import { hangUp } from '../../store/commonActions';
 import LobbyTemplate from '../../templates/LobbyTemplate';
@@ -34,28 +32,14 @@ interface ErrorLoginProps {
   error: Error;
 }
 
-const ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT = 2500;
-
 const ErrorLoginPage = ({ error }: ErrorLoginProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { signOut } = useAuth();
 
   useEffect(() => {
     dispatch(hangUp());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (error.name === EventTypeError.SessionExpired) {
-      setTimeout(() => {
-        (async () => {
-          sessionStorage.setItem(sessionStorageItems.redirectUri, window.location.pathname);
-          await signOut();
-        })();
-      }, ERROR_MESSAGE_DISPLAY_BEFORE_SIGNOUT);
-    }
-  }, [error]);
 
   return (
     <ThemeProvider theme={createOpenTalkTheme()}>

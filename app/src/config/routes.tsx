@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Typography } from '@mui/material';
-import { AuthCallback, selectAuthError, selectIsAuthed, selectIsLoading, useAuth } from '@opentalk/react-redux-appauth';
+import { AuthCallbackComponent, selectAuthIsPending } from '@opentalk/redux-oidc';
+import { useAuthContext, selectIsAuthenticated } from '@opentalk/redux-oidc';
 import i18next from 'i18next';
 import React, { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +27,6 @@ import RoomPage from '../pages/RoomPage';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
 import LobbyTemplate from '../templates/LobbyTemplate';
-import { sessionStorageItems } from './storage';
 
 const InvitePage = React.lazy(() => import('../pages/InvitePage'));
 
@@ -40,12 +40,10 @@ export type Routes = {
 };
 
 const AuthRedirect = ({ label }: { label: string }) => {
-  const navigate = useNavigate();
-  const historyStub = { push: (target: string) => navigate(target) };
   return (
-    <AuthCallback history={historyStub}>
+    <AuthCallbackComponent>
       <p>{label}</p>
-    </AuthCallback>
+    </AuthCallbackComponent>
   );
 };
 
@@ -70,37 +68,25 @@ const Redirect = ({ to }: { to: To }) => {
   return null;
 };
 
-const WAIT_FOR_REDIRECT_BEFORE_SIGNIN = 500; //ms
-
 const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
-  const { signIn } = useAuth();
-  const isAuthenticated = useAppSelector(selectIsAuthed);
-  const isAuthLoading = useAppSelector(selectIsLoading);
-  const isAuthError = useAppSelector(selectAuthError);
+  const auth = useAuthContext();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAuthPending = useAppSelector(selectAuthIsPending);
   const inviteCode = useInviteCode();
 
-  const startLogin = !isAuthenticated && !isAuthLoading && !isAuthError && !inviteCode;
-
-  useEffect(() => {
-    if (startLogin) {
-      const timeout = setTimeout(async () => {
-        const redirectUrl = sessionStorage.getItem(sessionStorageItems.redirectUri);
-        if (!redirectUrl || redirectUrl === '/auth/popup_callback') {
-          sessionStorage.setItem(sessionStorageItems.redirectUri, window.location.pathname);
-        }
-        await signIn();
-      }, WAIT_FOR_REDIRECT_BEFORE_SIGNIN);
-      return () => clearTimeout(timeout);
-    }
-  }, [startLogin]);
-
-  if (isAuthenticated || inviteCode) {
-    if (children !== undefined) {
-      return <>{children}</>;
-    }
-    return <Outlet />;
+  if (!isAuthenticated && !inviteCode && !isAuthPending) {
+    auth?.signIn();
+    return null;
   }
-  return null;
+
+  if (isAuthPending) {
+    return null;
+  }
+
+  if (children !== undefined) {
+    return <>{children}</>;
+  }
+  return <Outlet />;
 };
 
 type CreateRoutes = (redirectUri: string, popUpRedirect: string) => RouteObject[];

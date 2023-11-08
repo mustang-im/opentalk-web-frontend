@@ -39,28 +39,28 @@ module.exports = {
         '@mui/material': path.resolve(__dirname, '../../node_modules/@mui/material'),
         'react-i18next': path.resolve(__dirname, '../../node_modules/react-i18next'),
         '@opentalk/common': path.resolve(
-            __dirname,
-            configTs.compilerOptions.paths['@opentalk/common']
-                ? configTs.compilerOptions.paths['@opentalk/common'][0]
-                : '../../node_modules/@opentalk/common'
+          __dirname,
+          configTs.compilerOptions.paths['@opentalk/common']
+            ? configTs.compilerOptions.paths['@opentalk/common'][0]
+            : '../../node_modules/@opentalk/common'
         ),
         '@opentalk/components': path.resolve(
-            __dirname,
-            configTs.compilerOptions.paths['@opentalk/components']
-                ? configTs.compilerOptions.paths['@opentalk/components'][0]
-                : '../node_modules/@opentalk/components'
+          __dirname,
+          configTs.compilerOptions.paths['@opentalk/components']
+            ? configTs.compilerOptions.paths['@opentalk/components'][0]
+            : '../node_modules/@opentalk/components'
         ),
         '@opentalk/rest-api-rtk-query': path.resolve(
-            __dirname,
-            configTs.compilerOptions.paths['@opentalk/rest-api-rtk-query']
-                ? configTs.compilerOptions.paths['@opentalk/rest-api-rtk-query'][0]
-                : '../../node_modules/@opentalk/rest-api-rtk-query'
+          __dirname,
+          configTs.compilerOptions.paths['@opentalk/rest-api-rtk-query']
+            ? configTs.compilerOptions.paths['@opentalk/rest-api-rtk-query'][0]
+            : '../../node_modules/@opentalk/rest-api-rtk-query'
         ),
-        '@opentalk/react-redux-appauth': path.resolve(
-            __dirname,
-            configTs.compilerOptions.paths['@opentalk/react-redux-appauth']
-                ? configTs.compilerOptions.paths['@opentalk/react-redux-appauth'][0]
-                : '../../node_modules/@opentalk/react-redux-appauth'
+        '@opentalk/redux-oidc': path.resolve(
+          __dirname,
+          configTs.compilerOptions.paths['@opentalk/redux-oidc']
+            ? configTs.compilerOptions.paths['@opentalk/redux-oidc'][0]
+            : '../../node_modules/redux-oidc'
         ),
       };
 

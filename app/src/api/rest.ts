@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { FetchRequestError, ParticipantId, RoomId } from '@opentalk/common';
-import { auth_error, EventTypeError } from '@opentalk/react-redux-appauth';
+import { authError, AuthTypeError } from '@opentalk/redux-oidc';
 import { fetchQuery, createOpenTalkApiWithReactHooks } from '@opentalk/rest-api-rtk-query';
 import { createAsyncThunk, isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
@@ -46,6 +46,7 @@ export enum StartRoomError {
   InvalidJson = 'invalid_json',
   NotFound = 'not_found',
   Forbidden = 'forbidden',
+  Unathorized = 'unauthorized',
 }
 
 export const addRoom = createAsyncThunk<Room, NewRoom, { state: RootState; rejectValue: FetchRequestError }>(
@@ -95,8 +96,8 @@ export const sendFeedback = createAsyncThunk<void, FeedbackData, { state: RootSt
 
 const baseQuery = fetchQuery({
   baseUrl: ({ getState }) => `${getControllerBaseUrl((getState() as RootState).config).toString()}v1`,
-  prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).auth.access_token;
+  prepareHeaders: (headers) => {
+    const token = localStorage.getItem('access_token');
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
@@ -110,34 +111,38 @@ export const rtkQueryErrorLoggerMiddlware: Middleware =
   ({ dispatch }) =>
   (next) =>
   (action) => {
+    // Auth library is handling only auth errors with name: AuthTypeError.RefreshTokenFailed && AuthTypeError.SessionExpired
     // If rtk query get rejected dispatch auth error
     if (isRejectedWithValue(action)) {
       if (action.payload.status === 401) {
         dispatch(
-          auth_error({
-            name: EventTypeError.SessionExpired,
-            message: `${EventTypeError.SessionExpired}-message`,
+          authError({
+            status: action.payload.status,
+            name: AuthTypeError.SessionExpired,
+            message: AuthTypeError.SessionExpired,
           })
         );
-        return;
-      } else if (action.payload.status === 403) {
+        return next(action);
+      }
+      if (action.payload.status === 403) {
         // Warning: This can be potentially dangereous as we don't know
         // what pandora's box we are openning, before hand this middleware
         // couldn't even finish up on 403 as it would come to this sopt and be
         // left unhandled as next callback was never called.
         return next(action);
-      } else if (action.payload.status >= 500) {
+      }
+      if (action.payload.status >= 500) {
         dispatch(
-          auth_error({
-            name: EventTypeError.SystemCurrentlyUnavailable,
-            message: EventTypeError.SystemCurrentlyUnavailable,
+          authError({
+            status: action.payload.status,
+            name: AuthTypeError.SystemCurrentlyUnavailable,
+            message: AuthTypeError.SystemCurrentlyUnavailable,
           })
         );
-        return;
+        return next(action);
       }
-    } else {
-      return next(action);
     }
+    return next(action);
   };
 
 // Re-export the most common api hooks
