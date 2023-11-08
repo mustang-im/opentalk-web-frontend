@@ -296,6 +296,7 @@ deploy:review-app:
 cleanup:review-app:
   stage: cleanup
   rules:
+    - if: $CI_MERGE_REQUEST_EVENT_TYPE == "close"
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
           $CI_PROJECT_ROOT_NAMESPACE == 'opentalk' &&
           $CI_PIPELINE_SOURCE == 'push'
