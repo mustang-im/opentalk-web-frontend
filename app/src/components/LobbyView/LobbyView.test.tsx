@@ -1,9 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { InviteCode } from '@opentalk/common';
 import React from 'react';
 
 import { Role } from '../../api/types/incoming/control';
+import * as UseInviteCodeModule from '../../hooks/useInviteCode';
 import { render, screen, fireEvent, waitFor, cleanup, configureStore } from '../../utils/testUtils';
 import LobbyView from './LobbyView';
 
@@ -21,14 +23,19 @@ describe('LobbyForm', () => {
   const { store /*, dispatch*/ } = configureStore({
     initialState: {
       auth: { isAuthed: true },
-      user: { loggedIdToken: 'DUMMY', role: Role.User },
+      user: { loggedIdToken: undefined, role: Role.Guest },
       room: { passwordRequired: true, invite: { inviteCode: 'inviteCode' } },
     },
   });
   afterEach(() => cleanup());
 
   test('render LobbyForm component without crashing for authed user', async () => {
+    //As we now get the invite code in components from the query params we need to mock a value for it.
+    const useInviteCodeMock = jest.spyOn(UseInviteCodeModule, 'useInviteCode');
+    useInviteCodeMock.mockReturnValue('invite-code' as InviteCode);
+
     await render(<LobbyView />, store);
+
     const userNameInput = screen.getByPlaceholderText('joinform-enter-name');
     expect(userNameInput).toBeInTheDocument();
     expect(userNameInput).toHaveAttribute('type', 'text');
