@@ -21,7 +21,8 @@ import { sendChatMessage } from '../../../api/types/outgoing/chat';
 import { LimitedTextField } from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
-import { formikProps } from '../../../utils/formikUtils';
+import { saveDefaultChatMessage, selectDefaultChatMessage } from '../../../store/slices/uiSlice';
+import { formikGetValue, formikProps } from '../../../utils/formikUtils';
 import yup from '../../../utils/yupUtils';
 
 const Form = styled('form')({
@@ -71,6 +72,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
   const [openPicker, setOpenPicker] = useState(false);
   const isChatEnabled = useAppSelector(selectChatEnabledState);
   const emojiButton = useRef<HTMLButtonElement | null>(null);
+  const defaultChatMessage = useAppSelector(selectDefaultChatMessage(scope, targetId));
 
   const emojiPickerCategories = useMemo(() => {
     return Object.values(Categories).reduce((categories, category) => {
@@ -80,7 +82,9 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
   }, [t]);
 
   const handleEmojiClick = (data: EmojiClickData) => {
-    formik.setFieldValue('message', formik.values.message + data.emoji);
+    const message = formik.values.message + data.emoji;
+    formik.setFieldValue('message', message);
+    dispatch(saveDefaultChatMessage({ scope, targetId, input: message }));
   };
 
   const focusHandler = (event: FocusEvent<HTMLDivElement>) => {
@@ -92,6 +96,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
   const blurHandler = (event: FocusEvent<HTMLDivElement>) => {
     if (event.target && event.target.tagName === 'INPUT') {
       dispatch(setHotkeysEnabled(true));
+      dispatch(saveDefaultChatMessage({ scope, targetId, input: formikGetValue('message', formik, '') }));
     }
   };
 
@@ -145,10 +150,11 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
   });
 
   const formik = useFormik({
-    initialValues: { message: '' },
+    initialValues: { message: defaultChatMessage },
     validationSchema,
     validateOnChange: true,
     validateOnBlur: false,
+    enableReinitialize: true, // It is essential to reinitialize in order to pick up new default input message.
     onSubmit: (values, { resetForm, setErrors, setTouched }) => {
       switch (scope) {
         case ChatScope.Group:
@@ -174,6 +180,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
       setTouched({});
       resetForm();
       setOpenPicker(false);
+      dispatch(saveDefaultChatMessage({ scope, targetId, input: '' }));
     },
   });
 
@@ -188,6 +195,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
         placeholder={t('chatinput-placeholder')}
         onKeyDown={handleSubmitOnEnter}
         onBlur={(e) => {
+          dispatch(saveDefaultChatMessage({ scope, targetId, input: formikGetValue('message', formik, '') }));
           if (e.currentTarget.value.trim() === '') {
             formik.setErrors({});
           }
