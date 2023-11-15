@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import {
-  Button,
+  Button as MuiButton,
   ListItem as MuiListItem,
   ListItemAvatar,
   ListItemText as MuiListItemText,
@@ -29,6 +29,9 @@ const ListItem = styled(MuiListItem)(({ theme }) => ({
 
 const ListItemText = styled(MuiListItemText)({
   '& p': {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    textWrap: 'nowrap',
     fontWeight: 400,
     lineHeight: 1,
   },
@@ -36,7 +39,12 @@ const ListItemText = styled(MuiListItemText)({
 
 const JoinedText = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
+  textWrap: 'nowrap',
 }));
+
+const Button = styled(MuiButton)({
+  textWrap: 'nowrap',
+});
 
 type ParticipantRowProps = {
   participant: Participant;

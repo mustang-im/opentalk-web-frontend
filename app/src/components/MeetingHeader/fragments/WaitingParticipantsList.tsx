@@ -21,9 +21,7 @@ const List = styled(MuiList)(({ theme }) => ({
   padding: theme.spacing(1, 1),
   borderRadius: '0.1rem',
   background: theme.palette.background.video,
-  [theme.breakpoints.up('lg')]: {
-    maxHeight: 200,
-  },
+  overflow: 'hidden',
 }));
 
 const Subheader = styled(ListSubheader)(({ theme }) => ({
@@ -39,6 +37,7 @@ const Subheader = styled(ListSubheader)(({ theme }) => ({
 
 const ScrollableBox = styled(Box)({
   overflow: 'auto',
+  maxHeight: 'calc(calc(2.25rem + 20px) * 3.25)', // (2.25rem = avatar height) + (8px padding top + 6px name margin top + 6px name margin bottom)
 });
 
 interface WaitingParticipantsListProps {
