@@ -94,14 +94,14 @@ const InviteToMeeting = ({
     if (invites) {
       const foundInvite = invites.find((invite) => invite.active && invite.expiration === null);
       if (foundInvite) {
-        return composeInviteUrl(baseUrl, foundInvite.inviteCode);
+        return composeInviteUrl(baseUrl, existingEvent.room.id, foundInvite.inviteCode);
       }
     }
 
     const userMe = await getMe().unwrap();
     if (userMe.id === existingEvent.createdBy.id) {
       const createdInvite = await createRoomInvite({ id: existingEvent.room.id }).unwrap();
-      return composeInviteUrl(baseUrl, createdInvite.inviteCode);
+      return composeInviteUrl(baseUrl, existingEvent.room.id, createdInvite.inviteCode);
     }
   }, []);
 

@@ -14,6 +14,7 @@ import {
   ParticipantId,
   ParticipationKind,
   VideoSetting,
+  InviteCode,
 } from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
 import { AuthProvider } from '@opentalk/react-redux-appauth';
@@ -271,7 +272,7 @@ export const eventMockedData: TimelessEvent = {
 };
 
 export const mockedExpiringDateRoomInvite: RoomInvite = {
-  inviteCode: 'string',
+  inviteCode: 'string' as InviteCode,
   created: '2019-08-24T14:15:22Z' as DateTime,
   createdBy: {
     id: '497f6eca-6276-4993-bfeb-53cbbbba6f08' as UserId,

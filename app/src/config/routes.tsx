@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
 
 import { useAppSelector } from '../hooks';
+import { useInviteCode } from '../hooks/useInviteCode';
 import {
   SettingsProfilePage,
   SettingsGeneralPage,
@@ -21,7 +22,6 @@ import {
   EventDetailsPage,
 } from '../pages/Dashboard';
 import RoomPage from '../pages/RoomPage';
-import { selectIsGuest } from '../store/slices/userSlice';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
 import LobbyTemplate from '../templates/LobbyTemplate';
@@ -76,8 +76,9 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
   const isAuthenticated = useAppSelector(selectIsAuthed);
   const isAuthLoading = useAppSelector(selectIsLoading);
   const isAuthError = useAppSelector(selectAuthError);
-  const isGuest = useAppSelector(selectIsGuest);
-  const startLogin = !isAuthenticated && !isAuthLoading && !isAuthError && !isGuest;
+  const inviteCode = useInviteCode();
+
+  const startLogin = !isAuthenticated && !isAuthLoading && !isAuthError && !inviteCode;
 
   useEffect(() => {
     if (startLogin) {
@@ -92,7 +93,7 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
     }
   }, [startLogin]);
 
-  if (isAuthenticated || isGuest) {
+  if (isAuthenticated || inviteCode) {
     if (children !== undefined) {
       return <>{children}</>;
     }

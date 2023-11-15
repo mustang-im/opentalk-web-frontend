@@ -21,7 +21,8 @@
 
 ### Improvements to the user experience
 
-- Show link to recorded file only to explicitly invited users ([#1536], (https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1536))
+- Change invite link generation ([#1420](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1420))
+- Show link to recorded file only to explicitly invited users ([#1536](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1536))
 - Standardize handraise icon in the toolbar to match other buttons ([#1558](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1558))
 - Show Meeting Title in lobby & waiting room ([#1398](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1398))
 - Enhanced behavior of the room participant selection ([#1500](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1500))

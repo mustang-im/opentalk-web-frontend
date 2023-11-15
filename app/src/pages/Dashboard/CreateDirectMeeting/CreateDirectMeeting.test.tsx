@@ -27,7 +27,7 @@ const mockCreateSipConfig = jest.fn();
 const ROOM_ID = 'ROOM_ID' as RoomId;
 const INVITE_CODE = 'INVITE_CODE';
 const INVITE_LINK = `${window.location.origin}/room/${ROOM_ID}`;
-const INVITE_GUEST_LINK = `${window.location.origin}/invite/${INVITE_CODE}`;
+const INVITE_GUEST_LINK = `${window.location.origin}/room/${ROOM_ID}?invite=${INVITE_CODE}`;
 
 const createMockEvent = () => ({
   ...eventMockedData,

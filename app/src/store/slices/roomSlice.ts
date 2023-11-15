@@ -204,7 +204,7 @@ export const roomSlice = createSlice({
         state,
         {
           meta: {
-            arg: { roomId, password },
+            arg: { roomId, password, inviteCode },
           },
         }
       ) => {
@@ -212,6 +212,7 @@ export const roomSlice = createSlice({
         state.connectionState = ConnectionState.Starting;
         state.roomId = roomId;
         state.password = password;
+        state.invite = { inviteCode, loading: false };
       }
     );
     builder.addCase(startRoom.fulfilled, (state, { payload: { resumption } }) => {
@@ -291,7 +292,7 @@ export const {
 
 export const selectRoomPassword = (state: RootState) => state.room.password;
 export const selectRoomId = (state: RootState) => state.room.roomId;
-export const selectInviteId = (state: RootState) => state.room.invite.inviteCode;
+export const selectInviteCode = (state: RootState) => state.room.invite.inviteCode;
 export const selectRoomConnectionState = (state: RootState) => state.room.connectionState;
 export const selectWaitingRoomState = (state: RootState) => state.room.waitingRoomEnabled;
 export const selectServerTimeOffset = (state: RootState) => state.room.serverTimeOffset;
