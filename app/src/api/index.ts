@@ -86,7 +86,7 @@ import {
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
-import { recordingStopped, recordingStarted } from '../store/slices/recordingSlice';
+import { recordingStopped, recordingStarted, recordingConsent } from '../store/slices/recordingSlice';
 import {
   enteredWaitingRoom,
   readyToEnter,
@@ -102,8 +102,8 @@ import { updatedCinemaLayout } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import { initSentryReportWithUser } from '../utils/glitchtipUtils';
-import showConsentNotification from '../utils/showConsentNotification';
-import showRecordingStoppedNotification from '../utils/showRecordingStoppedNotification';
+import { showConsentNotification } from '../utils/showConsentNotification';
+import { showRecordingStoppedNotification } from '../utils/showRecordingStoppedNotification';
 import { restApi } from './rest';
 import {
   breakout,
@@ -123,6 +123,7 @@ import { Role } from './types/incoming/control';
 import { Action as OutgoingActionType, automod } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
+import { sendRecordingConsentSignal } from './types/outgoing/recording';
 
 /**
  * Transforms the dictionary of group chat histories into a list of groupIds and a flat list
@@ -296,7 +297,7 @@ const handleControlMessage = (
       }
 
       if (data.recording?.state === 'recording') {
-        showConsentNotification(dispatch);
+        showConsentNotification(dispatch); // ignore consent result
       }
 
       if (data.breakout !== undefined) {
@@ -971,7 +972,7 @@ const handleRecordingMessage = (dispatch: AppDispatch, data: recording.Message) 
   switch (data.message) {
     case 'started':
       dispatch(recordingStarted(data.recordingId));
-      showConsentNotification(dispatch);
+      showConsentNotification(dispatch); // ignore consent result
       break;
     case 'stopped':
       dispatch(recordingStopped());
@@ -1133,6 +1134,9 @@ export const apiMiddleware: Middleware = ({
       })
       .addCase(hangUp.pending, () => {
         dispatch(legalVoteStore.initialize());
+      })
+      .addCase(recordingConsent, (state, { payload }) => {
+        sendRecordingConsentSignal.action({ consent: payload });
       })
       .addModule((builder) => outgoing.automod.handler(builder, dispatch))
       .addModule((builder) => outgoing.chat.handler(builder, dispatch))

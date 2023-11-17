@@ -5,7 +5,7 @@ import { VideoSetting, notifications } from '@opentalk/common';
 import i18next from 'i18next';
 import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import browser from '../../modules/BrowserSupport';
 import { BackgroundConfig } from '../../modules/Media/BackgroundBlur';
 import { SignalLevel } from '../../modules/Media/LevelNode';
@@ -23,6 +23,8 @@ import {
   setSpeakerActivity,
   setVideoEnable,
 } from '../../store/slices/mediaSlice';
+import { selectNeedRecordingConsent } from '../../store/slices/recordingSlice';
+import { showConsentNotification } from '../../utils/showConsentNotification';
 
 export interface MediaContextValue {
   getDeviceDetails: (constraints: { audio?: boolean; video?: boolean }) => Promise<void>;
@@ -63,6 +65,7 @@ enum HandledErrorType {
 }
 
 export const MediaProvider = ({ children }: MediaProviderProps) => {
+  const askConsent = useAppSelector(selectNeedRecordingConsent);
   const [devices, setDevices] = useState<MediaDeviceInfo[] | undefined>();
 
   const [defaultAudioDevice, setDefaultAudioDevice] = useState<DeviceId | undefined>();
@@ -293,6 +296,13 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
   const trySetScreenShare = useCallback(
     async (enabled: boolean) => {
       if (enabled) {
+        if (askConsent) {
+          const consent = await showConsentNotification(dispatch);
+          if (!consent) {
+            return;
+          }
+        }
+
         return permissionDeniedObserver(localScreenContext.start())
           .then(() => {
             dispatch(setScreenShare(true));
@@ -302,25 +312,39 @@ export const MediaProvider = ({ children }: MediaProviderProps) => {
         localScreenContext.release();
       }
     },
-    [dispatch, permissionDeniedObserver, errorNotificationHandler]
+    [dispatch, permissionDeniedObserver, errorNotificationHandler, askConsent]
   );
 
   const trySetAudio = useCallback(
-    (enabled: boolean) => {
+    async (enabled: boolean) => {
+      if (askConsent && enabled) {
+        const consent = await showConsentNotification(dispatch);
+        if (!consent) {
+          return;
+        }
+      }
+
       return permissionDeniedObserver(localMediaContext.reconfigure({ audio: enabled })).catch((e) =>
         errorNotificationHandler(e, HandledErrorType.Audio, `switch ${enabled ? 'on' : 'off'}`)
       );
     },
-    [permissionDeniedObserver, errorNotificationHandler]
+    [permissionDeniedObserver, errorNotificationHandler, askConsent, dispatch]
   );
 
   const trySetVideo = useCallback(
-    (enabled: boolean) => {
+    async (enabled: boolean) => {
+      if (askConsent && enabled) {
+        const consent = await showConsentNotification(dispatch);
+        if (!consent) {
+          return;
+        }
+      }
+
       return permissionDeniedObserver(localMediaContext.reconfigure({ video: enabled })).catch((e) =>
         errorNotificationHandler(e, HandledErrorType.Video, `switch ${enabled ? 'on' : 'off'}`)
       );
     },
-    [permissionDeniedObserver, errorNotificationHandler]
+    [permissionDeniedObserver, errorNotificationHandler, askConsent, dispatch]
   );
 
   const trySetBackground = useCallback(

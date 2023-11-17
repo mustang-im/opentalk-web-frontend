@@ -19,6 +19,11 @@
 
 ## 1.7.2
 
+
+### Improvements to the user experience
+
+- Denying recording consent will block media publishing, but notify. ([#1547](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1547))
+
 ### Bug Fixes
 
 - Increase heartbeat interval
