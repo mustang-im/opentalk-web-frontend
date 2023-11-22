@@ -18,3 +18,4 @@ export * from './whiteboard';
 export * from './actions';
 export * from './sharedFolder';
 export * from './eventInfo';
+export * from './streaming';
