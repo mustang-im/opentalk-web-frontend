@@ -1,27 +1,15 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  Button,
-  Collapse,
-  FormControlLabel,
-  Grid,
-  MenuItem,
-  Stack,
-  styled,
-  Switch,
-  Typography,
-  Tooltip,
-} from '@mui/material';
+import { Button, Collapse, Grid, MenuItem, Stack, styled } from '@mui/material';
 import {
   ForwardIcon,
   notifications,
   notificationAction,
-  formikMinimalProps,
   formikProps,
   formikDateTimePickerProps,
   FormWrapper,
-  StreamingTargetPayload,
+  StreamingPlatform,
   formikMinimalProps,
 } from '@opentalk/common';
 import {
@@ -47,6 +35,7 @@ import {
   useUpdateEventMutation,
   useCreateEventSharedFolderMutation,
   useDeleteEventSharedFolderMutation,
+  useAddStreamingTargetsMutation,
 } from '../../api/rest';
 import { LimitedTextField, Select } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
@@ -55,9 +44,9 @@ import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
 import DateTimePicker from '../DateTimePicker';
-import StreamingOptions from './fragment/StreamingOptions';
 import EventConflictDialog from './fragments/EventConflictDialog';
 import LabeledSwitch from './fragments/LabeledSwitch';
+import StreamingOptions from './fragments/StreamingOptions';
 
 interface CreateOrUpdateMeetingFormProps {
   existingEvent?: Event;
@@ -84,9 +73,13 @@ const MAX_CHARACTERS_TITLE = 255;
 const MAX_CHARACTERS_PASSWORD = 255;
 const MAX_CHARACTERS_DESCRIPTION = 4096;
 
-export interface FormikValuesType {
+interface Streaming {
+  enabled: boolean;
+  streamingTarget?: StreamingPlatform;
+}
+export interface CreateOrUpdateMeetingFormikValues {
   title?: string;
-  description?: string; 
+  description?: string;
   waitingRoom: boolean;
   password?: string;
   isScheduled: boolean;
@@ -95,7 +88,11 @@ export interface FormikValuesType {
   recurrencePattern: IntervalEnum;
   isAdhoc?: boolean;
   sharedFolder: boolean;
+  streaming: Streaming;
 }
+
+const urlValidationRegex =
+  /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
 const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: CreateOrUpdateMeetingFormProps) => {
   const { t } = useTranslation();
@@ -104,6 +101,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const [checkForEvents] = useLazyGetEventsQuery();
   const [createSharedFolder] = useCreateEventSharedFolderMutation();
   const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
+  const [addStreamingTargets] = useAddStreamingTargetsMutation();
 
   const navigate = useNavigate();
 
@@ -176,6 +174,28 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       }),
     isAdhoc: yup.boolean().optional(),
     sharedFolder: yup.boolean().optional(),
+    streaming: yup.object().shape({
+      enabled: yup.boolean().required(),
+      platform: yup.object().when('enabled', (value: boolean) => {
+        if (!value) {
+          return yup.object().optional();
+        }
+        //Initial implementation supports only 'custom' platform model
+        return yup.object().shape({
+          kind: yup.string().required(),
+          name: yup.string().required(t('dashboard-meeting-livestream-platform-name-required')),
+          streamingEndpoint: yup
+            .string()
+            .matches(urlValidationRegex, t('dashboard-meeting-livestream-streaming-endpoint-invalid-url'))
+            .required(t('dashboard-meeting-livestream-streaming-endpoint-required')),
+          streamingKey: yup.string().required(t('dashboard-meeting-livestream-streaming-key-required')),
+          publicURL: yup
+            .string()
+            .matches(urlValidationRegex, t('dashboard-meeting-livestream-public-url-invalid-url'))
+            .required(t('dashboard-meeting-livestream-public-url-required')),
+        });
+      }),
+    }),
   });
 
   const mapRruleToInterval = (timeIndependent: boolean, interval: string): string | undefined => {
@@ -216,7 +236,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     { label: t('dashboard-meeting-recurrence-monthly'), value: IntervalEnum.MONTHLY },
   ];
 
-  const formik = useFormik<FormikValuesType>({
+  const formik = useFormik<CreateOrUpdateMeetingFormikValues>({
     initialValues: {
       title: existingEvent?.title,
       description: existingEvent?.description || '',
@@ -235,6 +255,9 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
           : IntervalEnum.NONE,
       isAdhoc: existingEvent && Boolean(existingEvent.isAdhoc),
       sharedFolder: (existingEvent?.sharedFolder && Boolean(existingEvent.sharedFolder)) || false,
+      streaming: {
+        enabled: false,
+      },
     },
     validationSchema,
     validateOnChange: false,
@@ -325,6 +348,12 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       if (event.current === undefined) {
         event.current = await createEvent(payload).unwrap();
       }
+      if (values.streaming.enabled) {
+        await addStreamingTargets({ roomId: event.current.room.id, target: values.streaming.platform })
+          .unwrap()
+          .catch(() => notifications.error(t('streaming-targets-request-error')));
+      }
+
       const goToNextStep = await handleCreateDeleteSharedFolder(event.current, values);
       if (goToNextStep === false) {
         return;
@@ -582,6 +611,8 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               switchValueLabel={t(`dashboard-meeting-switch-${formik.values.sharedFolder ? 'enabled' : 'disabled'}`)}
             />
           )}
+
+          {!existingEvent && <StreamingOptions formik={formik} />}
         </Stack>
         <Grid container item justifyContent={'space-between'} spacing={2}>
           <Grid item xs={12} sm={'auto'}>

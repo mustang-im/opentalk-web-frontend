@@ -59,7 +59,7 @@ http-error-message-no-breakout-room = Breakout room does not exist
 
 auth-popup-closes-message = This popup will close automatically.
 auth-redirect-message = You will be redirected shortly.
-copy-url-to-clipboard = copy url to clipboard
+copy-url-to-clipboard = copy URL to clipboard
 toggle-password-visibility = toggle password visibility
 
 echotest-warn-no-echo-cancellation = Your Browser does not support echo canceling. Please use headphones to avoid audio feedback.
@@ -743,6 +743,24 @@ dashboard-meeting-shared-folder-error-retry-button = Retry
 dashboard-meeting-shared-folder-error-ok-button = Ok
 dashboard-meeting-grant-moderator-rights = Grant moderator rights
 dashboard-meeting-revoke-moderator-rights = Revoke moderator rights
+dashboard-meeting-livestream-label = Livestream
+dashboard-meeting-livestream-platform-label = Platform
+dashboard-meeting-livestream-platform-name-label = Name
+dashboard-meeting-livestream-platform-name-placeholder = Add name
+dashboard-meeting-livestream-platform-name-required = This is a mandatory field
+dashboard-meeting-livestream-streaming-endpoint-label = Streaming receiver URL
+dashboard-meeting-livestream-streaming-endpoint-placeholder = Add URL
+dashboard-meeting-livestream-streaming-endpoint-invalid-url = Must enter a valid URL
+dashboard-meeting-livestream-streaming-endpoint-required = This is a mandatory field
+dashboard-meeting-livestream-public-url-label = Livestream URL
+dashboard-meeting-livestream-public-url-placeholder = Add URL
+dashboard-meeting-livestream-public-url-invalid-url = Must enter a valid URL
+dashboard-meeting-livestream-public-url-required = This is a mandatory field
+dashboard-meeting-livestream-streaming-key-label = Streaming key
+dashboard-meeting-livestream-streaming-key-placeholder = Add Streaming key
+dashboard-meeting-livestream-streaming-key-required = This is a mandatory field
+
+streaming-targets-request-error = Could not add streaming target
 
 dashboard-meeting-details-page-future = future
 dashboard-meeting-details-page-past = past

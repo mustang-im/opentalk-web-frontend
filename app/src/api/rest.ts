@@ -175,4 +175,6 @@ export const {
   useGetRoomEventInfoQuery,
   useGetEventInvitesQuery,
   useUpdateEventInviteMutation,
+  useGetStreamingTargetsQuery,
+  useAddStreamingTargetsMutation,
 } = restApi;

@@ -744,6 +744,24 @@ dashboard-meeting-shared-folder-error-retry-button = Wiederholen
 dashboard-meeting-shared-folder-error-ok-button = Ok
 dashboard-meeting-grant-moderator-rights = Moderatorenrechte gewähren
 dashboard-meeting-revoke-moderator-rights = Moderatorenrechte entziehen
+dashboard-meeting-livestream-label = Livestream
+dashboard-meeting-livestream-platform-label = Platform
+dashboard-meeting-livestream-platform-name-label = Name
+dashboard-meeting-livestream-platform-name-placeholder = Name eingeben
+dashboard-meeting-livestream-platform-name-required = Dies ist ein Pflichtfeld
+dashboard-meeting-livestream-streaming-endpoint-label = Stream Empfänger Url
+dashboard-meeting-livestream-streaming-endpoint-placeholder = URL eingeben
+dashboard-meeting-livestream-streaming-endpoint-invalid-url = Bitte eine gültige URL eingeben
+dashboard-meeting-livestream-streaming-endpoint-required = Dies ist ein Pflichtfeld
+dashboard-meeting-livestream-public-url-label = Livestream Url
+dashboard-meeting-livestream-public-url-placeholder = URL eingeben
+dashboard-meeting-livestream-public-url-invalid-url = Bitte eine gültige URL eingeben
+dashboard-meeting-livestream-public-url-required = Dies ist ein Pflichtfeld
+dashboard-meeting-livestream-streaming-key-label = Streamschlüssel
+dashboard-meeting-livestream-streaming-key-placeholder = Streamschlüssel eingeben
+dashboard-meeting-livestream-streaming-key-required = Dies ist ein Pflichtfeld
+
+streaming-targets-request-error = Streaming-Ziel konnte nicht hinzugefügt werden
 
 dashboard-meeting-details-page-future = zukünftige
 dashboard-meeting-details-page-past = vergangene
