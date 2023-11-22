@@ -22,6 +22,7 @@ const mockCreateRoomInvite = () => ({
   unwrap: jest.fn().mockResolvedValue(createMockedPermanentRoomInvites()),
 });
 const mockCreateSipConfig = jest.fn();
+const mockCreateStreamingTarget = jest.fn();
 
 const ROOM_ID = 'ROOM_ID' as RoomId;
 const INVITE_CODE = 'INVITE_CODE';
@@ -66,19 +67,22 @@ jest.mock('../../../api/rest', () => ({
       isLoading: false,
     },
   ],
-  useLazyGetRoomInvitesQuery: () => [
-    mockCreateRoomInvite,
-    {
-      data: [
-        {
-          inviteCode: INVITE_CODE,
-          expiration: null,
-          active: true,
-        },
-      ],
-      isSuccess: true,
+  useGetRoomInvitesQuery: () => ({
+    data: [
+      {
+        inviteCode: INVITE_CODE,
+        expiration: null,
+        active: true,
+      },
+    ],
+    isLoading: false,
+    isFetching: false,
+  }),
+  useGetMeQuery: () => ({
+    data: {
+      displayName: 'Test',
     },
-  ],
+  }),
   useCreateRoomInviteMutation: () => [
     mockCreateRoomInvite,
     {
@@ -97,6 +101,7 @@ jest.mock('../../../api/rest', () => ({
       },
     },
   ],
+  useGetStreamingTargetsQuery: () => [mockCreateStreamingTarget],
 }));
 
 jest.mock('../../../components/InvitedParticipants/InvitedParticipants', () => ({
@@ -141,7 +146,7 @@ describe('Dashboard CreateDirectMeeting', () => {
     const { store } = createStore();
     await render(<CreateDirectMeeting />, store);
 
-    const copyButton = screen.getByLabelText('dashboard-direct-meeting-copy-link-aria-label');
+    const copyButton = screen.getByLabelText('dashboard-invite-to-meeting-copy-room-link-aria-label');
     expect(copyButton).toBeInTheDocument();
 
     fireEvent.click(copyButton);
@@ -163,7 +168,7 @@ describe('Dashboard CreateDirectMeeting', () => {
     const { store } = createStore();
     await render(<CreateDirectMeeting />, store);
 
-    const copyButton = screen.getByLabelText('dashboard-direct-meeting-copy-guest-link-aria-label');
+    const copyButton = screen.getByLabelText('dashboard-invite-to-meeting-copy-guest-link-aria-label');
     expect(copyButton).toBeInTheDocument();
 
     fireEvent.click(copyButton);
