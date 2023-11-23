@@ -2,6 +2,8 @@
 
 ### New Features
 
+- Added granting/revoking the moderator role in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1429))
+
 ### Improvements to the user experience
 
 - Chat no longer discards draft message when hidden ([#1596](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1596))

@@ -18,6 +18,7 @@ import {
 } from '../types';
 import { CursorPaginated, DateTime } from '../types';
 import { UpdateEventPayload, RescheduleEventPayload, EventId, EventInstanceId } from '../types/event';
+import { UpdateEventInvitePayload } from '../types/eventInvite';
 import { RevokeEmailUserPayload } from '../types/user';
 import { toCursorPaginated } from '../utils';
 import { CursorPaginationParams } from './common';
@@ -199,7 +200,10 @@ export const addEventsEndpoints = <
     providesTags: (result) =>
       result
         ? [
-            ...result.map(({ profile }) => ({ type: Tag.EventInvite, id: profile.email })),
+            ...result.map(({ profile }) => ({
+              type: Tag.EventInvite,
+              id: 'id' in profile ? profile.id : profile.email,
+            })),
             { type: Tag.EventInvite, id: 'PARTIAL-LIST' },
           ]
         : [{ type: Tag.EventInvite, id: 'PARTIAL-LIST' }],
@@ -215,6 +219,18 @@ export const addEventsEndpoints = <
     }),
     invalidatesTags: () => [{ type: Tag.EventInvite, id: 'PARTIAL-LIST' }],
   }),
+  /**
+   * Create an invite to an event for an specific user
+   */
+  updateEventInvite: builder.mutation<unknown, { eventId: EventId; userId: UserId } & UpdateEventInvitePayload>({
+    query: ({ eventId, userId, ...payload }) => ({
+      url: `events/${eventId}/invites/${userId}`,
+      method: 'PATCH',
+      body: snakeCaseKeys(payload),
+    }),
+    invalidatesTags: (result, error, { userId }) => [{ type: Tag.EventInvite, id: userId }],
+  }),
+
   /**
    * Delete/revoke an invite to an event for a specified user email
    */

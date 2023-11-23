@@ -224,6 +224,7 @@ waiting-room-enabled-message = Waiting room is enabled
 waiting-room-disabled-message = Waiting room is disabled
 more-menu-enable-chat = Enable chat
 more-menu-disable-chat = Disable chat
+more-menu-moderator-aria-label = Open menu for more options
 chat-enabled-message = Chat was enabled by moderator
 chat-disabled-message = Chat was disabled by moderator
 chat-disabled-tooltip = The Chat is deactivated by the moderator
@@ -728,6 +729,8 @@ dashboard-meeting-shared-folder-delete-retry-error-message = Unfortunately, the 
 dashboard-meeting-shared-folder-error-cancel-button = Cancel
 dashboard-meeting-shared-folder-error-retry-button = Retry
 dashboard-meeting-shared-folder-error-ok-button = Ok
+dashboard-meeting-grant-moderator-rights = Grant moderator rights
+dashboard-meeting-revoke-moderator-rights = Revoke moderator rights
 
 dashboard-meeting-details-page-future = future
 dashboard-meeting-details-page-past = past

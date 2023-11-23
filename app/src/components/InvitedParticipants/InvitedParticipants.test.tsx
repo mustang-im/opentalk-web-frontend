@@ -1,14 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { UserId, Email, InviteStatus, EventId } from '@opentalk/rest-api-rtk-query';
+import { Email, EventId, InviteStatus, UserId } from '@opentalk/rest-api-rtk-query';
+import { UserRole } from '@opentalk/rest-api-rtk-query/src/types';
 import { EventInvite } from '@opentalk/rest-api-rtk-query/src/types/eventInvite';
 import { v4 as uuidv4 } from 'uuid';
 
 import { cleanup, configureStore, render, screen } from '../../utils/testUtils';
 import InvitedParticipants from './InvitedParticipants';
-
-const MOCK_USER_ME_ID = 'MOCK_USER_ID' as UserId;
 
 const mockInvitees: Array<EventInvite> = [
   {
@@ -20,6 +19,7 @@ const mockInvitees: Array<EventInvite> = [
       id: uuidv4() as UserId,
       lastname: 'User 1',
       title: '',
+      role: UserRole.USER,
     },
     status: InviteStatus.Accepted,
   },
@@ -32,6 +32,7 @@ const mockInvitees: Array<EventInvite> = [
       id: uuidv4() as UserId,
       lastname: 'User 2',
       title: '',
+      role: UserRole.USER,
     },
     status: InviteStatus.Pending,
   },
@@ -44,6 +45,7 @@ const mockInvitees: Array<EventInvite> = [
       id: uuidv4() as UserId,
       lastname: 'User 3',
       title: '',
+      role: UserRole.USER,
     },
     status: InviteStatus.Declined,
   },
@@ -51,9 +53,6 @@ const mockInvitees: Array<EventInvite> = [
 
 jest.mock('../../api/rest', () => ({
   ...jest.requireActual('../../api/rest'),
-  useGetMeQuery: () => ({
-    meId: MOCK_USER_ME_ID,
-  }),
   useGetEventInvitesQuery: () => ({
     data: mockInvitees,
   }),
@@ -63,7 +62,7 @@ describe('InvitedParticipants', () => {
   const { store } = configureStore();
 
   beforeEach(async () => {
-    await render(<InvitedParticipants eventId={'123' as EventId} showDeleteIcon={true} />, store);
+    await render(<InvitedParticipants eventId={'SOME_EVENT_ID' as EventId} isUpdatable={true} />, store);
   });
 
   afterEach(() => cleanup());
@@ -72,11 +71,7 @@ describe('InvitedParticipants', () => {
     expect(screen.getByTestId('InvitedParticipants')).toBeInTheDocument();
   });
 
-  test('should render pending, accepted and declined participant list', async () => {
-    expect(screen.getByText('dashboard-meeting-details-page-participant-pending')).toBeInTheDocument();
-    expect(screen.getByTestId('InvitedParticipants')).toBeInTheDocument();
-    expect(screen.getByText('Accepted Test User 1')).toBeInTheDocument();
-    expect(screen.getByText('Invited Test User 2')).toBeInTheDocument();
-    expect(screen.getByText('Declined Test User 3')).toBeInTheDocument();
+  test('render 3 ParticipantList components', async () => {
+    expect(screen.getByTestId('InvitedParticipants').children).toHaveLength(3);
   });
 });

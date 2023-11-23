@@ -3,7 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 export * from './common';
-export type { UserMe, User, UpdateMePayload, FindUserResponse } from './user';
+export type { UserMe, BaseUser, UpdateMePayload, User, RegisteredUser } from './user';
+export { UserRole } from './user';
 export type {
   Event,
   TimelessEvent,

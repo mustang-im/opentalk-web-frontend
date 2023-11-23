@@ -130,7 +130,7 @@ const EventDetailsPage = () => {
         )}
 
         <Stack mb={2}>
-          <InviteToMeeting existingEvent={event} showOnlyLinkFields showDeleteIcon={false} />
+          <InviteToMeeting existingEvent={event} showOnlyLinkFields isUpdatable={false} />
         </Stack>
         {roomParticipantLimit && (
           <ParticipantLimitTypography>
@@ -138,9 +138,7 @@ const EventDetailsPage = () => {
           </ParticipantLimitTypography>
         )}
 
-        {event.invitees && event.invitees.length > 0 && (
-          <InvitedParticipants eventId={event.id} showDeleteIcon={false} />
-        )}
+        {event.invitees && event.invitees.length > 0 && <InvitedParticipants eventId={event.id} isUpdatable={false} />}
 
         <AssetTable roomId={event.room.id} isMeetingCreator={isMeetingCreator} />
       </Stack>

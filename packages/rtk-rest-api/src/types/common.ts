@@ -4,7 +4,7 @@
 import { Opaque } from 'type-fest';
 
 import { SipId } from './room';
-import { User } from './user';
+import { BaseUser } from './user';
 
 export type UserId = Opaque<string, 'userId'>;
 export type Email = Opaque<string, 'email'>;
@@ -69,9 +69,9 @@ export type CursorPaginated<T> = {
 };
 
 export interface EntityBase {
-  createdBy: User;
+  createdBy: BaseUser;
   createdAt: DateTime;
-  updatedBy: User;
+  updatedBy: BaseUser;
   updatedAt: DateTime;
 }
 

@@ -26,13 +26,18 @@ type UserFindType = {
   kind?: 'unregistered' | 'registered';
 };
 
+export enum UserRole {
+  USER = 'user',
+  MODERATOR = 'moderator',
+}
+
 /**
  * Public User information
  *
  * Part of other embedded responses that reference a user.
  * E.g. GET /events
  */
-export type User = {
+export type BaseUser = {
   id: UserId;
   displayName: string;
   email: Email;
@@ -42,8 +47,8 @@ export type User = {
   avatarUrl?: string;
 };
 
-type RegisteredUser = User & UserFindType;
-type UnregisteredUser = {
+export type RegisteredUser = BaseUser & UserFindType & { role: UserRole };
+export type UnregisteredUser = {
   email: Email;
   title: string;
   firstname: string;
@@ -57,14 +62,14 @@ type UnregisteredUser = {
  * Part of other embedded responses that reference a user.
  * GET /users/find?q=
  */
-export type FindUserResponse = RegisteredUser | UnregisteredUser;
+export type User = RegisteredUser | UnregisteredUser;
 
 /**
  * Private User Information
  *
  * Usually retrieved by calling GET /me
  */
-export type UserMe = User & {
+export type UserMe = BaseUser & {
   conferenceTheme: string;
   dashboardTheme: string;
   language: string;
