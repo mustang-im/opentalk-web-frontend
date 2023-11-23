@@ -287,6 +287,7 @@ deploy:review-app:
       --set ot_frontend_url=www.$CI_MERGE_REQUEST_IID.review-latest.kube.opentalk.run
       --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
       --set ot_backend_url=controller.review-latest.kube.opentalk.run
+      --set ot_feature_shared_folder="true"
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
