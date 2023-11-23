@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, IconButton, InputAdornment, Tooltip } from '@mui/material';
 import { BackIcon, CopyIcon, notifications } from '@opentalk/common';
-import { Event, isEvent } from '@opentalk/rest-api-rtk-query';
+import { Event, EventInvite, isEvent } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
-import { merge } from 'lodash';
+import { isEmpty, merge } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,7 +14,6 @@ import {
   useLazyGetRoomInvitesQuery,
   useCreateEventInviteMutation,
   useDeleteEventMutation,
-  useRevokeEventUserInviteMutation,
   useGetMeTariffQuery,
   useLazyGetMeQuery,
   useCreateRoomInviteMutation,
@@ -24,24 +23,25 @@ import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
 import { selectBaseUrl, selectFeatures } from '../../store/slices/configSlice';
 import { composeInviteUrl } from '../../utils/apiUtils';
+import InvitedParticipants from '../InvitedParticipants';
 import { ParticipantOption } from '../SelectParticipants';
 
 interface InviteToMeetingProps {
+  showDeleteIcon: boolean;
   existingEvent: Event;
   directMeeting?: boolean;
   invitationsSent?: () => void;
   onBackButtonClick?: () => void;
   showOnlyLinkFields?: boolean;
-  refreshEvent?: () => void;
 }
 
 const InviteToMeeting = ({
+  showDeleteIcon,
   existingEvent,
   onBackButtonClick,
   directMeeting,
   invitationsSent,
   showOnlyLinkFields,
-  refreshEvent,
 }: InviteToMeetingProps) => {
   const [creatEventInvitation, { isLoading: sendingInvitation, isSuccess, status, isError }] =
     useCreateEventInviteMutation();
@@ -77,7 +77,6 @@ const InviteToMeeting = ({
   const [getMe] = useLazyGetMeQuery();
 
   const [permanentGuestLink, setPermanentGuestLink] = useState<URL>();
-
   /*    
         Fetch permanent guest link for the meeting.
         If there is no permanent guest link -> we assume, that the meeting has just been created.
@@ -115,13 +114,13 @@ const InviteToMeeting = ({
     });
   }, []);
 
-  const [revokeInvite] = useRevokeEventUserInviteMutation();
-
   const sendInvitations = useCallback(async () => {
     const allInvites = selectedUsers.map((selectedUser) => {
       const invite = 'id' in selectedUser ? { invitee: selectedUser.id } : { email: selectedUser.email };
       return creatEventInvitation(merge({ eventId: existingEvent.id }, invite));
     });
+
+    setSelectedUser(() => []);
 
     await Promise.all(allInvites)
       .then(() => {
@@ -231,9 +230,23 @@ const InviteToMeeting = ({
     navigate('/dashboard/');
   };
 
+  const addSelectedUser = (selected: ParticipantOption[]) => {
+    if (selected.length > 0) {
+      setSelectedUser((selectedUsers) => [...selectedUsers, selected[0]]);
+    }
+  };
+
+  const removeSelectedUser = (removedUser: EventInvite) => {
+    setSelectedUser((selectedUsers) => selectedUsers.filter((user) => user.email !== removedUser.profile.email));
+  };
+
+  const selectParticipantsLabel = userTariffLimit
+    ? t('dashboard-direct-meeting-label-select-participants', { maxParticipants: userTariffLimit })
+    : t('dashboard-direct-meeting-label-select-participants-fallback');
+
   return (
-    <Grid container justifyContent={'space-between'} flexDirection={'column'} spacing={2}>
-      <Grid container item spacing={3} direction={'row'}>
+    <Grid container justifyContent="space-between" flexDirection="column" spacing={2}>
+      <Grid container item spacing={3} direction="row">
         <Grid item xs={12} sm={6}>
           <Tooltip title={t('dashboard-direct-meeting-invitation-link-tooltip') || ''}>
             <TextField
@@ -272,7 +285,7 @@ const InviteToMeeting = ({
                     onMouseDown={copySipLinkToClipboard}
                     edge="end"
                     href={`tel:${sipLink}`}
-                    disabled={sipLink === undefined}
+                    disabled={isEmpty(sipLink)}
                   >
                     <CopyIcon />
                   </IconButton>
@@ -292,7 +305,7 @@ const InviteToMeeting = ({
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label={'dashboard-direct-meeting-copy-guest-link-aria-label'}
+                    aria-label={t('dashboard-direct-meeting-copy-guest-link-aria-label')}
                     onClick={copyGuestLinkToClipboard}
                     onMouseDown={copyGuestLinkToClipboard}
                     edge="end"
@@ -316,7 +329,7 @@ const InviteToMeeting = ({
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label={'dashboard-direct-meeting-copy-password-aria-label'}
+                    aria-label={t('dashboard-direct-meeting-copy-password-aria-label')}
                     onClick={copyRoomPasswordToClipboard}
                     onMouseDown={copyRoomPasswordToClipboard}
                     edge="end"
@@ -345,7 +358,7 @@ const InviteToMeeting = ({
                       onClick={copyRoomSharedFolderUrlToClipboard}
                       onMouseDown={copyRoomSharedFolderUrlToClipboard}
                       edge="end"
-                      disabled={roomSharedFolderUrl === undefined}
+                      disabled={!!roomSharedFolderUrl}
                     >
                       <CopyIcon />
                     </IconButton>
@@ -363,7 +376,7 @@ const InviteToMeeting = ({
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={'dashboard-meeting-shared-folder-password-label'}
+                      aria-label={t('dashboard-meeting-shared-folder-password-label')}
                       onClick={copyRoomSharedFolderPasswordToClipboard}
                       onMouseDown={copyRoomSharedFolderPasswordToClipboard}
                       edge="end"
@@ -379,44 +392,41 @@ const InviteToMeeting = ({
           </>
         )}
         {!showOnlyLinkFields && features.userSearch && (
-          <Grid item xs={12} sm={6}>
-            {features.userSearch && (
-              <SelectParticipants
-                label={
-                  userTariffLimit
-                    ? t('dashboard-direct-meeting-label-select-participants', { maxParticipants: userTariffLimit })
-                    : t('dashboard-direct-meeting-label-select-participants-fallback')
-                }
-                placeholder={t('dashboard-select-participants-textfield-placeholder')}
-                onChange={(selected) => setSelectedUser(selected)}
-                invitees={existingEvent?.invitees}
-                resetSelected={isSuccess && status === QueryStatus.fulfilled}
-                onRevokeUserInvite={(invitee) => {
-                  revokeInvite({ eventId: existingEvent.id, userId: invitee.id })
-                    .then(() => {
-                      if (typeof refreshEvent === 'function') {
-                        refreshEvent();
-                      }
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                    });
-                }}
+          <>
+            <Grid item xs={12} sm={6}>
+              {features.userSearch && (
+                <SelectParticipants
+                  label={selectParticipantsLabel}
+                  placeholder={t('dashboard-select-participants-textfield-placeholder')}
+                  onChange={addSelectedUser}
+                  selectedUsers={selectedUsers}
+                  invitees={existingEvent?.invitees}
+                  resetSelected={isSuccess && status === QueryStatus.fulfilled}
+                  eventId={existingEvent.id}
+                />
+              )}
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <InvitedParticipants
+                eventId={existingEvent.id}
+                selectedUsers={selectedUsers}
+                showDeleteIcon={showDeleteIcon}
+                removeSelectedUser={removeSelectedUser}
               />
-            )}
-          </Grid>
+            </Grid>
+          </>
         )}
       </Grid>
       {!showOnlyLinkFields && (
         <Grid container item spacing={2} justifyContent={{ xs: 'center', sm: 'space-between' }}>
-          <Grid item xs={12} sm={'auto'}>
+          <Grid item xs={12} sm="auto">
             {onBackButtonClick && (
-              <Button variant={'text'} color={'secondary'} startIcon={<BackIcon />} onClick={onBackButtonClick}>
+              <Button variant="text" color="secondary" startIcon={<BackIcon />} onClick={onBackButtonClick}>
                 {t('dashboard-meeting-to-step', { step: 1 })}
               </Button>
             )}
           </Grid>
-          <Grid container item xs={12} sm={'auto'} spacing={3} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
+          <Grid container item xs={12} sm="auto" spacing={3} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
             <Grid item>
               <Button fullWidth color="secondary" variant="outlined" onClick={handleCancelMeetingPress}>
                 {t('global-cancel')}

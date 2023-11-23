@@ -39,7 +39,7 @@ const Main = styled('main')(({ theme }) => ({
 
 const Container = styled(MuiContainer)(({ theme }) => ({
   background: theme.palette.common.white,
-
+  width: '100%',
   '&::before': {
     position: 'absolute',
     inset: 0,

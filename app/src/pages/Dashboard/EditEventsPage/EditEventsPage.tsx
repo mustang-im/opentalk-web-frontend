@@ -4,7 +4,7 @@
 import { Box, Skeleton, Stack, Step, StepButton as MuiStepButton, Stepper, styled } from '@mui/material';
 import { EditIcon } from '@opentalk/common';
 import { EventId } from '@opentalk/rest-api-rtk-query';
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -47,8 +47,8 @@ const EditEventsPage = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(1);
   const [getEvent, { data: event, isLoading, error }] = useLazyGetEventQuery();
-  const { meetingId, formStep } = useParams<'meetingId' | 'formStep'>() as { meetingId: EventId; formStep: string };
-  const eventQuery = useMemo(() => ({ eventId: meetingId, inviteesMax: 10 }), [meetingId]);
+  const { eventId, formStep } = useParams<'eventId' | 'formStep'>() as { eventId: EventId; formStep: string };
+  const eventQuery = useMemo(() => ({ eventId: eventId, inviteesMax: 10 }), [eventId]);
 
   useEffect(() => {
     getEvent(eventQuery);
@@ -109,10 +109,10 @@ const EditEventsPage = () => {
       )}
       {activeStep === 1 && event && (
         <InviteToMeeting
+          showDeleteIcon={true}
           existingEvent={event}
           onBackButtonClick={() => setActiveStep(0)}
           invitationsSent={() => getEvent(eventQuery)}
-          refreshEvent={() => getEvent(eventQuery)}
         />
       )}
     </Container>

@@ -77,10 +77,10 @@ const CreateDirectMeeting = () => {
         <AttentionMessageTypography>{t('dashboard-adhoc-meeting-attention')}</AttentionMessageTypography>
       </Stack>
       <InviteToMeeting
+        showDeleteIcon={true}
         existingEvent={updatedEvent ?? event}
         directMeeting
         invitationsSent={() => getEvent({ eventId: event.id, inviteesMax: 10 })}
-        refreshEvent={() => getEvent({ eventId: event.id, inviteesMax: 10 })}
       />
     </Container>
   );

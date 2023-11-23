@@ -688,7 +688,6 @@ dashboard-select-participants-textfield-placeholder = Type name or email address
 dashboard-select-participants-label-added = Added
 dashboard-select-participants-label-suggestions = Suggestions
 dashboard-select-participants-label-search = Find participants
-dashboard-select-participants-label-invited = Invited
 dashboard-event-time-independent-meetings = Unscheduled Meetings
 dashboard-meeting-card-time-independent = Unscheduled
 dashboard-events-my-meetings = My Meetings

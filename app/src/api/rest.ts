@@ -162,6 +162,7 @@ export const {
   useUpdateEventMutation,
   useAcceptEventInviteMutation,
   useDeclineEventInviteMutation,
+  useRevokeEventUserInviteByEmailMutation,
   useRevokeEventUserInviteMutation,
   useGetRoomQuery,
   useGetRoomInvitesQuery,
@@ -172,4 +173,5 @@ export const {
   useCreateEventSharedFolderMutation,
   useDeleteEventSharedFolderMutation,
   useGetRoomEventInfoQuery,
+  useGetEventInvitesQuery,
 } = restApi;

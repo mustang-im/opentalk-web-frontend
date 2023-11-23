@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box, Button, Stack, Typography, useTheme } from '@mui/material';
-import { notifications, ParticipantAvatar } from '@opentalk/common';
-import { EventId, InviteStatus, User } from '@opentalk/rest-api-rtk-query';
+import { notifications } from '@opentalk/common';
+import { EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -19,15 +19,9 @@ import {
 import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
 import EventTimePreview from '../../../components/EventTimePreview';
 import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting';
+import InvitedParticipants from '../../../components/InvitedParticipants';
 import AssetTable from './fragments/AssetTable';
 import ButtonBack from './fragments/ButtonBack';
-
-const UserRow = styled(Stack)(({ theme }) => ({
-  gap: theme.spacing(2),
-  flexDirection: 'row',
-  alignItems: 'baseline',
-  flexWrap: 'wrap',
-}));
 
 const ButtonContainer = styled(Stack)(({ theme }) => ({
   gap: theme.spacing(3),
@@ -61,41 +55,6 @@ const EventDetailsPage = () => {
   }
 
   if (!event) return null;
-
-  const renderParticipantRows = () => {
-    const reorderedInviteStatus = [
-      InviteStatus.Pending,
-      InviteStatus.Accepted,
-      InviteStatus.Declined,
-      InviteStatus.Tentative,
-    ];
-
-    return reorderedInviteStatus.map((status) => {
-      const usersWithCurrentStatus = event.invitees && event.invitees.filter((user) => user.status === status);
-      return usersWithCurrentStatus && usersWithCurrentStatus.length > 0 ? (
-        <Stack key={status} mb={1}>
-          <Typography mb={1}>{t(`dashboard-meeting-details-page-participant-${status}`)}</Typography>
-          <UserRow>{usersWithCurrentStatus.map((user) => renderUser(user.profile))}</UserRow>
-        </Stack>
-      ) : null;
-    });
-  };
-
-  const renderUser = (user: User) => {
-    return (
-      <Stack key={user.email} direction={'row'} spacing={1.5} alignItems={'center'}>
-        <ParticipantAvatar src={user.avatarUrl}>{`${user.firstname} ${user.lastname}`}</ParticipantAvatar>
-        <Stack>
-          <Typography noWrap>
-            {user.firstname} {user.lastname}
-          </Typography>
-          <Typography variant="caption" noWrap>
-            {user.email}
-          </Typography>
-        </Stack>
-      </Stack>
-    );
-  };
 
   const getTimeInformationString = () => {
     if (event.isTimeIndependent) {
@@ -170,13 +129,18 @@ const EventDetailsPage = () => {
           </Stack>
         )}
 
-        <InviteToMeeting existingEvent={event} showOnlyLinkFields />
+        <Stack mb={2}>
+          <InviteToMeeting existingEvent={event} showOnlyLinkFields showDeleteIcon={false} />
+        </Stack>
         {roomParticipantLimit && (
           <ParticipantLimitTypography>
             {t('dashboard-meeting-details-page-participant-limit', { maxParticipants: roomParticipantLimit })}
           </ParticipantLimitTypography>
         )}
-        {event.invitees && event.invitees.length > 0 && <Stack mt={4}>{renderParticipantRows()}</Stack>}
+
+        {event.invitees && event.invitees.length > 0 && (
+          <InvitedParticipants eventId={event.id} showDeleteIcon={false} />
+        )}
 
         <AssetTable roomId={event.room.id} isMeetingCreator={isMeetingCreator} />
       </Stack>

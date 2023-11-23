@@ -1,24 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  Autocomplete,
-  Chip,
-  CircularProgress,
-  InputAdornment,
-  Stack,
-  Typography,
-  TextField,
-  styled,
-  UseAutocompleteProps,
-} from '@mui/material';
-import { CloseIcon, CopyIcon, ParticipantAvatar, SearchIcon, setLibravatarOptions } from '@opentalk/common';
-import { EventInvite, User } from '@opentalk/rest-api-rtk-query';
+import { Autocomplete, CircularProgress, InputAdornment, TextField, styled, UseAutocompleteProps } from '@mui/material';
+import { CopyIcon, SearchIcon } from '@opentalk/common';
+import { EventId, EventInvite } from '@opentalk/rest-api-rtk-query';
 import { differenceBy, debounce } from 'lodash';
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetMeQuery, useLazyFindUsersQuery } from '../../api/rest';
+import { useGetEventInvitesQuery, useGetMeQuery, useLazyFindUsersQuery } from '../../api/rest';
 import { useAppSelector } from '../../hooks';
 import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 import { EmailStrategy } from './fragments/EmailStrategy';
@@ -30,18 +20,10 @@ type SelectParticipantsProps = {
   placeholder?: string;
   invitees?: Array<EventInvite>;
   resetSelected?: boolean;
+  selectedUsers?: Array<ParticipantOption>;
   onChange: (selected: Array<ParticipantOption>) => void;
-  onRevokeUserInvite: (invitee: User) => void;
+  eventId: EventId;
 };
-
-const Container = ({ children, title, testId }: { children: React.ReactNode; title: string; testId?: string }) => (
-  <Stack direction={'column'} spacing={1} data-testid={testId ? testId : null}>
-    <Typography variant={'caption'}>{title}</Typography>
-    <Stack direction={'row'} gap={2} flexWrap="wrap">
-      {children}
-    </Stack>
-  </Stack>
-);
 
 const AutocompleteTextField = styled(TextField)(({ theme }) => ({
   '.MuiInputBase-root': {
@@ -69,14 +51,14 @@ const SelectParticipants = ({
   onChange,
   label,
   placeholder,
-  invitees = [],
   resetSelected,
-  onRevokeUserInvite,
+  selectedUsers = [],
+  eventId,
 }: SelectParticipantsProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
-  const [selectedUsers, setSelectedUsers] = useState<Array<ParticipantOption>>([]);
   const avatarDefaultImage = useAppSelector(selectLibravatarDefaultImage);
+  const { data: invitees = [] } = useGetEventInvitesQuery({ eventId }, { refetchOnMountOrArgChange: true });
 
   const { myEmail } = useGetMeQuery(undefined, {
     selectFromResult: ({ data }) => ({
@@ -116,96 +98,16 @@ const SelectParticipants = ({
     debounceFindUsers(inputValue);
   }, []);
 
-  const getAvatarSrc = (url: string | undefined) => {
-    return setLibravatarOptions(url, { defaultImage: avatarDefaultImage });
-  };
-
   useEffect(() => {
-    onChange(selectedUsers);
-  }, [onChange, selectedUsers]);
-
-  useEffect(() => {
-    resetSelected && setSelectedUsers([]);
+    resetSelected && onChange([]);
   }, [resetSelected]);
 
   const addSelectedUser = useCallback((user: ParticipantOption) => {
     if (user) {
-      setSelectedUsers((selectedUsers) => [...selectedUsers, user]);
+      onChange([...selectedUsers, user]);
     }
     setSearchValue('');
   }, []);
-
-  const deleteSelectedUser = (user: ParticipantOption) => {
-    const upUsers = selectedUsers.filter((selectedUser: ParticipantOption) => selectedUser.email !== user.email);
-    setSelectedUsers(upUsers);
-  };
-
-  const renderUserData = (user: { firstname?: string; email?: string; lastname?: string }) => {
-    if (typeof user.firstname === 'string') {
-      return (
-        <Stack>
-          <Typography noWrap>
-            {user.firstname} {user.lastname}
-          </Typography>
-          <Typography variant="caption" noWrap>
-            {user.email}
-          </Typography>
-        </Stack>
-      );
-    }
-
-    if (typeof user.email === 'string') {
-      return (
-        <Stack>
-          <Typography variant="caption" noWrap>
-            {user.email}
-          </Typography>
-        </Stack>
-      );
-    }
-  };
-
-  /**
-   * Function that renders participants once they are
-   * selected from the dropdown but not yet invited.
-   */
-  const renderSelectedParticipants = () =>
-    selectedUsers.length > 0 && (
-      <Container data-testid={'SelectedParticipant'} title={t('dashboard-select-participants-label-added')}>
-        {selectedUsers.map((selectedUser) => (
-          <Chip
-            key={`${selectedUser.email}-selected`}
-            label={
-              'firstname' in selectedUser ? `${selectedUser.firstname} ${selectedUser.lastname}` : selectedUser.email
-            }
-            avatar={
-              'firstname' in selectedUser ? (
-                <ParticipantAvatar src={getAvatarSrc(selectedUser.avatarUrl)} />
-              ) : (
-                <ParticipantAvatar specialCharacter="@" />
-              )
-            }
-            onDelete={() => deleteSelectedUser(selectedUser)}
-            deleteIcon={<CloseIcon data-testid={'SelectedParticipants-deleteButton'} />}
-          />
-        ))}
-      </Container>
-    );
-
-  const renderInvitees = () =>
-    invitees.length > 0 && (
-      <Container title={t('dashboard-select-participants-label-invited')} testId={'InvitedParticipants'}>
-        {invitees.map(({ profile: invitee }) => (
-          <Chip
-            key={`${invitee.email}-invitees`}
-            label={renderUserData(invitee)}
-            avatar={<ParticipantAvatar src={getAvatarSrc(invitee.avatarUrl)} />}
-            deleteIcon={<CloseIcon data-testid={'InvitedParticipants-deleteButton'} />}
-            onDelete={() => onRevokeUserInvite(invitee)}
-          />
-        ))}
-      </Container>
-    );
 
   const onAutocompleteChange: UseAutocompleteProps<ParticipantOption, undefined, undefined, undefined>['onChange'] = (
     _event,
@@ -236,59 +138,53 @@ const SelectParticipants = ({
   }, [searchValue, selectedUsers, invitees]);
 
   return (
-    <>
-      <Autocomplete
-        data-testid="SelectParticipants"
-        options={
-          suggestedParticipants.length
-            ? (suggestedParticipants as ParticipantOption[])
-            : (emailSuggestion as ParticipantOption[])
-        }
-        getOptionLabel={
-          suggestedParticipants.length ? SuggestedUserStrategy.getOptionLabel : EmailStrategy.getOptionLabel
-        }
-        renderOption={
-          suggestedParticipants.length
-            ? SuggestedUserStrategy.renderOption(avatarDefaultImage)
-            : EmailStrategy.renderOption(t('global-no-result'))
-        }
-        inputValue={searchValue || ''}
-        value={null}
-        clearOnEscape={true}
-        onChange={onAutocompleteChange}
-        onInputChange={onInputChange}
-        noOptionsText={t('global-no-result')}
-        loading={isLoading}
-        open={!isLoading && (suggestedParticipants.length !== 0 || searchValue.length > 2)}
-        renderInput={({ InputProps, ...params }) => (
-          <AutocompleteTextField
-            {...params}
-            placeholder={placeholder}
-            label={label}
-            variant="outlined"
-            InputProps={{
-              ...InputProps,
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon aria-label={t('dashboard-select-participants-label-search')}>
-                    <CopyIcon />
-                  </SearchIcon>
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  {isLoading ? <CircularProgress color="inherit" size={16} /> : null}
-                </InputAdornment>
-              ),
-            }}
-          />
-        )}
-      />
-      <Stack mt={2} spacing={2}>
-        {renderSelectedParticipants()}
-        {renderInvitees()}
-      </Stack>
-    </>
+    <Autocomplete
+      data-testid="SelectParticipants"
+      options={
+        suggestedParticipants.length
+          ? (suggestedParticipants as ParticipantOption[])
+          : (emailSuggestion as ParticipantOption[])
+      }
+      getOptionLabel={
+        suggestedParticipants.length ? SuggestedUserStrategy.getOptionLabel : EmailStrategy.getOptionLabel
+      }
+      renderOption={
+        suggestedParticipants.length
+          ? SuggestedUserStrategy.renderOption(avatarDefaultImage)
+          : EmailStrategy.renderOption(t('global-no-result'))
+      }
+      inputValue={searchValue || ''}
+      value={null}
+      clearOnEscape={true}
+      onChange={onAutocompleteChange}
+      onInputChange={onInputChange}
+      noOptionsText={t('global-no-result')}
+      loading={isLoading}
+      open={!isLoading && (suggestedParticipants.length !== 0 || searchValue.length > 2)}
+      renderInput={({ InputProps, ...params }) => (
+        <AutocompleteTextField
+          {...params}
+          placeholder={placeholder}
+          label={label}
+          variant="outlined"
+          InputProps={{
+            ...InputProps,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon aria-label={t('dashboard-select-participants-label-search')}>
+                  <CopyIcon />
+                </SearchIcon>
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                {isLoading ? <CircularProgress color="inherit" size={16} /> : null}
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
+    />
   );
 };
 

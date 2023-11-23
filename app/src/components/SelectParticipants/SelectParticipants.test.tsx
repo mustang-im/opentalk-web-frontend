@@ -1,12 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { UserId, Email, InviteStatus } from '@opentalk/rest-api-rtk-query';
+import { UserId, EventId } from '@opentalk/rest-api-rtk-query';
 import { fireEvent, waitFor, within } from '@testing-library/react';
-import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
-import { EventInvite } from '../../../../packages/rtk-rest-api/src/types/eventInvite';
 import { cleanup, configureStore, render, screen } from '../../utils/testUtils';
 import SelectParticipants from './SelectParticipants';
 
@@ -37,41 +34,11 @@ jest.mock('../../api/rest', () => ({
   ],
 }));
 
-const invitees: Array<EventInvite> = [
-  {
-    profile: {
-      avatarUrl: 'url',
-      displayName: 'Invited Test User',
-      email: 'someemail1@mail.com' as Email,
-      firstname: 'Invited Test',
-      id: uuidv4() as UserId,
-      lastname: 'User 1',
-      title: '',
-    },
-    status: InviteStatus.Accepted,
-  },
-  {
-    profile: {
-      avatarUrl: 'url',
-      displayName: 'Invited Test User 2',
-      email: 'someemail2@mail.com' as Email,
-      firstname: 'Invited Test',
-      id: uuidv4() as UserId,
-      lastname: 'User 2',
-      title: '',
-    },
-    status: InviteStatus.Pending,
-  },
-];
-
 describe('SelectParticipants', () => {
   const { store } = configureStore();
 
   beforeEach(async () => {
-    await render(
-      <SelectParticipants label="Test" onChange={mockOnChange} onRevokeUserInvite={jest.fn()} invitees={invitees} />,
-      store
-    );
+    await render(<SelectParticipants label="Test" onChange={mockOnChange} eventId={'id' as EventId} />, store);
   });
 
   afterEach(() => cleanup());
@@ -91,13 +58,6 @@ describe('SelectParticipants', () => {
       },
       { timeout: 500 }
     );
-  });
-
-  test('with prop invitees available, should render invited participant list', async () => {
-    expect(screen.getByText('dashboard-select-participants-label-invited')).toBeInTheDocument();
-    expect(screen.getByTestId('InvitedParticipants')).toBeInTheDocument();
-    expect(screen.getByText('Invited Test User 1')).toBeInTheDocument();
-    expect(screen.getByText('Invited Test User 2')).toBeInTheDocument();
   });
 
   test('click on suggested participant will move him to added list', async () => {

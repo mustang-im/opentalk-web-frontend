@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { RoomId } from '@opentalk/rest-api-rtk-query';
 import { fireEvent, waitFor } from '@testing-library/react';
-import React from 'react';
 
 import {
   createStore,
@@ -100,7 +99,14 @@ jest.mock('../../../api/rest', () => ({
   ],
 }));
 
-jest.mock('../../../components/SelectParticipants', () => ({
+jest.mock('../../../components/InvitedParticipants/InvitedParticipants', () => ({
+  __esModule: true,
+  default: () => {
+    return <div />;
+  },
+}));
+
+jest.mock('../../../components/SelectParticipants/SelectParticipants', () => ({
   __esModule: true,
   default: () => {
     return <div />;
