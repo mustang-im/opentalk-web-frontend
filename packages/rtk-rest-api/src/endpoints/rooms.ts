@@ -78,7 +78,7 @@ export const addRoomEndpoints = <
       { type: Tag.Room, id: 'PARTIAL-LIST' },
     ],
   }),
-  deleteRoom: builder.mutation<unknown, RoomId>({
+  deleteRoom: builder.mutation<void, RoomId>({
     query: (id) => ({
       url: `rooms/${id}`,
       method: 'DELETE',
@@ -143,7 +143,7 @@ export const addRoomEndpoints = <
   /*
    * delete an asset from room
    */
-  deleteRoomAsset: builder.mutation<unknown, { roomId: RoomId; assetId: AssetId }>({
+  deleteRoomAsset: builder.mutation<void, { roomId: RoomId; assetId: AssetId }>({
     query: ({ roomId, assetId }) => ({ url: `rooms/${roomId}/assets/${assetId}`, method: 'DELETE' }),
     invalidatesTags: (result, error, { assetId }) => [
       { type: Tag.Asset, assetId },
