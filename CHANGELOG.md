@@ -4,6 +4,7 @@
 
 ### Improvements to the user experience
 
+- Chat no longer discards draft message when hidden ([#1596](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1596))
 - Rework the participants list in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1464))
 - Improved look of participants in the waiting room with user friendlier indicator that there are more participants than shown ([#1570](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1570))
 

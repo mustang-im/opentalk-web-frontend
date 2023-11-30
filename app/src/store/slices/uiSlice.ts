@@ -53,6 +53,11 @@ interface UIState {
   showCoffeeBreakCurtain: boolean;
   activeTab: ModerationTabKey;
   isFullscreenMode: boolean;
+  chatAutosavedInputs: {
+    [ChatScope.Global]: string;
+    [ChatScope.Group]: Record<TargetId, string>;
+    [ChatScope.Private]: Record<TargetId, string>;
+  };
 }
 
 const initialState: UIState = {
@@ -76,6 +81,11 @@ const initialState: UIState = {
   showCoffeeBreakCurtain: false,
   activeTab: ModerationTabKey.Home,
   isFullscreenMode: false,
+  chatAutosavedInputs: {
+    [ChatScope.Global]: '',
+    [ChatScope.Group]: {},
+    [ChatScope.Private]: {},
+  },
 };
 
 export const uiSlice = createSlice({
@@ -139,6 +149,19 @@ export const uiSlice = createSlice({
     pinnedRemoteScreenshare(state, { payload: id }: PayloadAction<ParticipantId>) {
       state.pinnedParticipantId = id;
       state.cinemaLayout = LayoutOptions.Speaker;
+    },
+    saveDefaultChatMessage(
+      state,
+      { payload }: PayloadAction<{ scope: ChatScope; targetId?: TargetId; input: string }>
+    ) {
+      if (payload.scope === ChatScope.Global) {
+        state.chatAutosavedInputs[ChatScope.Global] = payload.input;
+        return;
+      }
+
+      if (payload.targetId) {
+        state.chatAutosavedInputs[payload.scope][payload.targetId] = payload.input;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -220,6 +243,7 @@ export const {
   setActiveTab,
   toggledFullScreenMode,
   pinnedRemoteScreenshare,
+  saveDefaultChatMessage,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -241,5 +265,18 @@ export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui
 export const selectShowCoffeeBreakCurtain = (state: RootState) => state.ui.showCoffeeBreakCurtain;
 export const selectActiveTab = (state: RootState) => state.ui.activeTab;
 export const selectIsFullscreenMode = (state: RootState) => state.ui.isFullscreenMode;
+export function selectDefaultChatMessage(scope: ChatScope, target?: TargetId) {
+  return (state: RootState): string => {
+    if (scope === ChatScope.Global) {
+      return state.ui.chatAutosavedInputs[ChatScope.Global];
+    }
+
+    if (target && state.ui.chatAutosavedInputs[scope][target]) {
+      return state.ui.chatAutosavedInputs[scope][target];
+    }
+
+    return '';
+  };
+}
 
 export default uiSlice.reducer;

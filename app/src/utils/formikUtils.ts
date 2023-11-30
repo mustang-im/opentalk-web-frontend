@@ -154,3 +154,8 @@ export function formikRatingProps<Values>(
     helperText: (hasError && (errorMessage as string)) || undefined,
   };
 }
+
+export function formikGetValue<Values>(fieldName: string, formik: FormikProps<Values>, defaultValue?: Primitive) {
+  const { values } = formik;
+  return get(values, fieldName, defaultValue);
+}
