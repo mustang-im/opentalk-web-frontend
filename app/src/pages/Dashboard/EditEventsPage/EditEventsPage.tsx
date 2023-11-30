@@ -109,7 +109,7 @@ const EditEventsPage = () => {
       )}
       {activeStep === 1 && event && (
         <InviteToMeeting
-          showDeleteIcon={true}
+          isUpdatable={true}
           existingEvent={event}
           onBackButtonClick={() => setActiveStep(0)}
           invitationsSent={() => getEvent(eventQuery)}

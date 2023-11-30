@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, IconButton, InputAdornment, Tooltip } from '@mui/material';
 import { BackIcon, CopyIcon, notifications } from '@opentalk/common';
-import { Event, EventInvite, isEvent } from '@opentalk/rest-api-rtk-query';
+import { Event, EventInvite, isEvent, UserRole } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
 import { isEmpty, merge } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -27,7 +27,7 @@ import InvitedParticipants from '../InvitedParticipants';
 import { ParticipantOption } from '../SelectParticipants';
 
 interface InviteToMeetingProps {
-  showDeleteIcon: boolean;
+  isUpdatable: boolean;
   existingEvent: Event;
   directMeeting?: boolean;
   invitationsSent?: () => void;
@@ -36,7 +36,7 @@ interface InviteToMeetingProps {
 }
 
 const InviteToMeeting = ({
-  showDeleteIcon,
+  isUpdatable,
   existingEvent,
   onBackButtonClick,
   directMeeting,
@@ -116,7 +116,8 @@ const InviteToMeeting = ({
 
   const sendInvitations = useCallback(async () => {
     const allInvites = selectedUsers.map((selectedUser) => {
-      const invite = 'id' in selectedUser ? { invitee: selectedUser.id } : { email: selectedUser.email };
+      const invite =
+        'id' in selectedUser ? { invitee: selectedUser.id, role: UserRole.USER } : { email: selectedUser.email };
       return creatEventInvitation(merge({ eventId: existingEvent.id }, invite));
     });
 
@@ -410,7 +411,7 @@ const InviteToMeeting = ({
               <InvitedParticipants
                 eventId={existingEvent.id}
                 selectedUsers={selectedUsers}
-                showDeleteIcon={showDeleteIcon}
+                isUpdatable={isUpdatable}
                 removeSelectedUser={removeSelectedUser}
               />
             </Grid>

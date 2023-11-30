@@ -14,6 +14,7 @@ import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { hangUp } from '../../../store/commonActions';
 import { selectEventInfo } from '../../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../../store/slices/userSlice';
+import { isRegisteredUser } from '../../../utils/typeGuardUtils';
 import CloseMeetingDialog from '../../CloseMeetingDialog';
 import ToolbarButton from './ToolbarButton';
 
@@ -28,7 +29,8 @@ const EndCallButton = () => {
   const { data: roomData } = useGetRoomQuery(roomId, { skip: !isLoggedInUser });
 
   const [isConfirmDialogVisible, showConfirmDialog] = useState(false);
-  const isMeetingCreator = me?.id && roomData?.createdBy?.id ? me.id === roomData.createdBy?.id : false;
+  const isMeetingCreator =
+    roomData?.createdBy && isRegisteredUser(roomData.createdBy) && me?.id === roomData.createdBy.id;
   const eventInfo = useAppSelector(selectEventInfo);
   const fullscreenContext = useFullscreenContext();
 

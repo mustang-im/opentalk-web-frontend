@@ -8,6 +8,7 @@ import { EventId } from '@opentalk/rest-api-rtk-query/src/types';
 import { useTranslation } from 'react-i18next';
 
 import { useRevokeEventUserInviteMutation, useRevokeEventUserInviteByEmailMutation } from '../../../api/rest';
+import { isRegisteredUser } from '../../../utils/typeGuardUtils';
 import UserRow from './UserRow';
 
 const ParticipantListBox = styled(Stack)({
@@ -26,32 +27,33 @@ const ParticipantsContainer = styled(Stack)(({ theme }) => ({
 type ParticipantListProps = {
   status: InviteStatus;
   invitees: Array<EventInvite>;
-  showDeleteIcon: boolean;
+  isUpdatable: boolean;
   removeSelectedUser?: (invitee: EventInvite) => void;
   eventId: EventId;
 };
 
-const ParticipantList = ({ eventId, showDeleteIcon, status, invitees, removeSelectedUser }: ParticipantListProps) => {
+const ParticipantList = ({ isUpdatable, status, invitees, removeSelectedUser, eventId }: ParticipantListProps) => {
   const [revokeUserInvite] = useRevokeEventUserInviteMutation();
   const [revokeUserInviteByEmail] = useRevokeEventUserInviteByEmailMutation();
   const { t } = useTranslation();
 
   const revokeInvitedUser = (user: EventInvite) => {
-    if (user.profile.id) {
+    if (isRegisteredUser(user.profile)) {
       revokeUserInvite({ eventId, userId: user.profile.id });
     } else {
       revokeUserInviteByEmail({ eventId, email: user.profile.email });
     }
   };
   return (
-    <ParticipantsContainer>
+    <ParticipantsContainer data-testid={'ParticipantList'}>
       <Typography mb={1}>{t(`dashboard-meeting-details-page-participant-${status}`)}</Typography>
-      <ParticipantListBox>
+      <ParticipantListBox data-testid={'ParticipantListBox'}>
         {invitees.map((eventInvite) => (
           <UserRow
             key={eventInvite.profile.email}
-            showDeleteIcon={showDeleteIcon}
-            user={eventInvite}
+            eventId={eventId}
+            isUpdatable={isUpdatable}
+            eventInvite={eventInvite}
             onRevokeUserInvite={revokeInvitedUser}
             onRemoveUser={eventInvite.status === InviteStatus.Added ? removeSelectedUser : undefined}
           />

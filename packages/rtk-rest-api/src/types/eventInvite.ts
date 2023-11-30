@@ -4,7 +4,7 @@
 import { Opaque } from 'type-fest';
 
 import { Email, InviteStatus, UserId } from './common';
-import { User } from './user';
+import { User, UserRole } from './user';
 
 export type EventInviteId = Opaque<string, 'eventInviteId'>;
 
@@ -19,9 +19,14 @@ type CreateEventInviteEmailPayload = {
 
 type CreateEventInviteInviteePayload = {
   invitee: UserId;
+  role: UserRole;
 };
 
 export type CreateEventInvitePayload = CreateEventInviteInviteePayload | CreateEventInviteEmailPayload;
+
+export type UpdateEventInvitePayload = {
+  role: UserRole;
+};
 
 /**
  * Event invite object

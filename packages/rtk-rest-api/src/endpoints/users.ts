@@ -6,8 +6,8 @@ import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import snakeCaseKeys from 'snakecase-keys';
 
-import { UserMe, UpdateMePayload, User, EventId, Tag, Tags, UserId } from '../types';
-import { FindUserResponse } from '../types/user';
+import { UserMe, UpdateMePayload, BaseUser, EventId, Tag, Tags, UserId } from '../types';
+import { User } from '../types/user';
 
 export type FindUsersParams = {
   /**
@@ -40,13 +40,13 @@ export const addUserEndpoints = <
     query: () => 'users/me/tariff',
     providesTags: (result) => (result ? [{ type: Tag.Tariff, id: result.id }] : []),
   }),
-  getUser: builder.query<User, UserId>({
+  getUser: builder.query<BaseUser, UserId>({
     query: (id) => `users/${id}`,
     providesTags: (result) => (result ? [{ type: Tag.User, id: result.id }] : []),
   }),
   // TODO(r.floren) we could implement a debounce based ratelimit here I guess as a safeguard, else this should realisticly
   // be included in the caller, else this would create a bad UX with jittering all over the place.
-  findUsers: builder.query<Array<FindUserResponse>, { q: string }>({
+  findUsers: builder.query<Array<User>, { q: string }>({
     query: (params) => ({
       url: 'users/find',
       params,

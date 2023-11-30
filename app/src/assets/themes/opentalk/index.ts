@@ -125,6 +125,14 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
           sizeMedium: ({ theme }) => ({
             fontSize: theme.typography.pxToRem(20),
           }),
+          sizeLarge: ({ theme }) => ({
+            '& > .MuiSvgIcon-root': {
+              fontSize: theme.typography.pxToRem(20),
+              [theme.breakpoints.down('md')]: {
+                fontSize: theme.typography.pxToRem(16),
+              },
+            },
+          }),
           root: ({ ownerState, theme }) => ({
             borderRadius: theme.borderRadius.large,
             padding: theme.spacing(1.5, 2),

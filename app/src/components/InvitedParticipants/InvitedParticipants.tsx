@@ -6,24 +6,25 @@ import { EventInvite, InviteStatus, EventId } from '@opentalk/rest-api-rtk-query
 import { sortBy } from 'lodash';
 
 import { useGetEventInvitesQuery } from '../../api/rest';
+import { isRegisteredUser } from '../../utils/typeGuardUtils';
 import { ParticipantOption } from '../SelectParticipants';
 import ParticipantList from './fragments/ParticipantList';
 
 type InvitedParticipantsProps = {
-  showDeleteIcon: boolean;
+  isUpdatable: boolean;
   selectedUsers?: Array<ParticipantOption>;
   removeSelectedUser?: (invitee: EventInvite) => void;
   eventId: EventId;
 };
 
 const inviteeSorter = (user: EventInvite) =>
-  user.profile.displayName ? user.profile.displayName.toUpperCase() : user.profile.email.toUpperCase();
+  isRegisteredUser(user.profile) ? user.profile.displayName.toUpperCase() : user.profile.email.toUpperCase();
 
 const InvitedParticipants = ({
-  eventId,
-  showDeleteIcon,
+  isUpdatable,
   removeSelectedUser,
   selectedUsers = [],
+  eventId,
 }: InvitedParticipantsProps) => {
   const { data: invitees = [] } = useGetEventInvitesQuery({ eventId }, { refetchOnMountOrArgChange: true });
 
@@ -81,7 +82,7 @@ const InvitedParticipants = ({
       <Grid item xs={4}>
         <ParticipantList
           eventId={eventId}
-          showDeleteIcon={showDeleteIcon}
+          isUpdatable={isUpdatable}
           key="pending-invitees"
           status={InviteStatus.Pending}
           invitees={mergedEventInvites}
@@ -91,7 +92,7 @@ const InvitedParticipants = ({
       <Grid item xs={4}>
         <ParticipantList
           eventId={eventId}
-          showDeleteIcon={showDeleteIcon}
+          isUpdatable={isUpdatable}
           key="accepted-invitees"
           status={InviteStatus.Accepted}
           invitees={sortBy(inviteeMap[InviteStatus.Accepted], inviteeSorter)}
@@ -101,7 +102,7 @@ const InvitedParticipants = ({
       <Grid item xs={4}>
         <ParticipantList
           eventId={eventId}
-          showDeleteIcon={false}
+          isUpdatable={false}
           key="declined-invitees"
           status={InviteStatus.Declined}
           invitees={sortBy(inviteeMap[InviteStatus.Declined], inviteeSorter)}

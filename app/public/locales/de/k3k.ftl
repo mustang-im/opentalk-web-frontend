@@ -224,6 +224,7 @@ waiting-room-enabled-message = Warteraum ist aktiviert
 waiting-room-disabled-message = Warteraum ist deaktiviert
 more-menu-enable-chat = Chat aktivieren
 more-menu-disable-chat = Chat deaktivieren
+more-menu-moderator-aria-label = Öffne Menu für mehr Optionen
 chat-enabled-message = Der Chat wurde durch den Moderator aktiviert
 chat-disabled-message = Der Chat wurde durch den Moderator deaktiviert
 chat-disabled-tooltip = Der Chat wurde durch den Moderator deaktiviert
@@ -728,6 +729,8 @@ dashboard-meeting-shared-folder-delete-retry-error-message = Leider konnte der g
 dashboard-meeting-shared-folder-error-cancel-button = Abbrechen
 dashboard-meeting-shared-folder-error-retry-button = Wiederholen
 dashboard-meeting-shared-folder-error-ok-button = Ok
+dashboard-meeting-grant-moderator-rights = Moderatorenrechte gewähren
+dashboard-meeting-revoke-moderator-rights = Moderatorenrechte entziehen
 
 dashboard-meeting-details-page-future = zukünftige
 dashboard-meeting-details-page-past = vergangene

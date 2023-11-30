@@ -174,4 +174,5 @@ export const {
   useDeleteEventSharedFolderMutation,
   useGetRoomEventInfoQuery,
   useGetEventInvitesQuery,
+  useUpdateEventInviteMutation,
 } = restApi;

@@ -5,7 +5,7 @@ import { InviteCode, RoomId } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { CallIn, DateTime } from './common';
-import { User } from './user';
+import { BaseUser } from './user';
 
 export type { RoomId };
 export type SipId = Opaque<string, 'sipId'>;
@@ -42,7 +42,7 @@ export type UpdateRoomPayload = {
 export type PublicRoom = {
   id: RoomId;
   createdAt: DateTime;
-  createdBy: User;
+  createdBy: BaseUser;
 };
 
 // TODO(r.floren): Should we put them here into the same interface?
@@ -94,9 +94,9 @@ export type RoomInvite = {
   active: boolean;
   expiration: DateTime | null;
   created: DateTime;
-  createdBy: User;
+  createdBy: BaseUser;
   updated: DateTime;
-  updatedBy: User;
+  updatedBy: BaseUser;
 };
 
 export type RoomInvites = Array<RoomInvite>;
