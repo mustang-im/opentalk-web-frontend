@@ -8,7 +8,7 @@ import { useMemo, useState } from 'react';
 
 import NameTile from '../../commonComponents/NameTile/NameTile';
 import { useAppSelector } from '../../hooks';
-import { useFullscreenContext } from '../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { selectSubscriberStateById } from '../../store/slices/mediaSubscriberSlice';
 import { selectParticipantName } from '../../store/slices/participantsSlice';
 import HandRaisedIndicator from './fragments/HandRaisedIndicator';

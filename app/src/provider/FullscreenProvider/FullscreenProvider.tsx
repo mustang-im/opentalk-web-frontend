@@ -2,59 +2,62 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ParticipantId } from '@opentalk/common';
-import React, { createContext, ReactNode, useContext, useState, useLayoutEffect } from 'react';
-import { FullScreenHandle, useFullScreenHandle } from 'react-full-screen';
+import fscreen from 'fscreen';
+import React, { createContext, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
-interface ExtendedFullScreenHandle extends FullScreenHandle {
-  enter: (participantId?: ParticipantId) => Promise<void>;
+export interface ExtendedFullScreenHandle {
+  node: React.MutableRefObject<HTMLDivElement | null>;
+  active: boolean;
+  enter: (participantId?: ParticipantId) => void;
+  exit: () => void;
   fullscreenParticipantID: ParticipantId | undefined;
-  rootElement: HTMLElement | null;
-  setRootElement: (element: HTMLElement | null) => void;
   hasActiveOverlay: boolean;
   setHasActiveOverlay: (hasActiveOverlay: boolean) => void;
+  rootElement: HTMLElement | null;
+  setRootElement: (element: HTMLElement | null) => void;
 }
 
-const FullscreenContext = createContext<ExtendedFullScreenHandle | null>(null);
+export const FullscreenContext = createContext<ExtendedFullScreenHandle | null>(null);
 
 const FullscreenProvider = ({ children }: { children: ReactNode }) => {
-  const fullscreenHandle = useFullScreenHandle();
-
+  const node = useRef<HTMLDivElement | null>(null);
   const [fullscreenParticipantID, setFullscreenParticipantID] = useState<ParticipantId | undefined>(undefined);
   const [rootElement, setRootElement] = useState<HTMLElement | null>(document?.body ?? null);
+  const [active, setActive] = useState<boolean>(false);
   const [hasActiveOverlay, setHasActiveOverlay] = useState<boolean>(false);
 
-  const enterFullscreen = (participantId?: ParticipantId) => {
-    setFullscreenParticipantID(participantId);
-    return fullscreenHandle.enter();
-  };
-
-  useLayoutEffect(() => {
-    if (!fullscreenHandle.active) {
-      setHasActiveOverlay(false);
+  const enter = useCallback((participantId?: ParticipantId) => {
+    if (node.current) {
+      setFullscreenParticipantID(participantId);
+      return fscreen.requestFullscreen(node.current);
     }
-  }, [fullscreenHandle.active]);
+  }, []);
+
+  const exit = useCallback(() => {
+    return fscreen.exitFullscreen();
+  }, []);
+
+  useEffect(() => {
+    const handleChange = () => {
+      setActive(Boolean(fscreen.fullscreenElement));
+    };
+    fscreen.addEventListener('fullscreenchange', handleChange);
+    return () => fscreen.removeEventListener('fullscreenchange', handleChange);
+  }, []);
 
   const extendedFullscreenHandle = {
-    ...fullscreenHandle,
-    rootElement,
-    setRootElement,
+    node,
+    active,
+    enter,
+    exit,
+    fullscreenParticipantID,
     hasActiveOverlay,
     setHasActiveOverlay,
-    enter: enterFullscreen,
-    fullscreenParticipantID,
+    rootElement,
+    setRootElement,
   };
 
   return <FullscreenContext.Provider value={extendedFullscreenHandle}>{children}</FullscreenContext.Provider>;
 };
 
 export default FullscreenProvider;
-
-export const useFullscreenContext = (): ExtendedFullScreenHandle => {
-  const contextValue = useContext(FullscreenContext);
-
-  if (contextValue === null) {
-    throw Error('Fullscreen context has not been Provided!');
-  }
-
-  return contextValue;
-};

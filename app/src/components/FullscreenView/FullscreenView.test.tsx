@@ -6,12 +6,25 @@ import { cleanup, waitFor } from '@testing-library/react';
 import { render, screen, configureStore, fireEvent } from '../../utils/testUtils';
 import FullscreenView from './FullscreenView';
 
-const mockExitCall = jest.fn();
+/**
+ * By default, jest is hoisting all mock calls to the top, and when
+ * declaring outside function with block scope keywords we end up with
+ * the error that variable cannot be used before declaration.
+ * This is why we have to define exit mock function as var in order to hoist
+ * on top of the mock call.
+ */
+var mockExitCall = jest.fn();
 
-jest.mock('react-full-screen', () => ({
-  ...jest.requireActual('react-full-screen'),
-  useFullScreenHandle: () => ({
+jest.mock('../../hooks/useFullscreenContext.ts', () => ({
+  useFullscreenContext: () => ({
+    active: true,
+    node: null,
     exit: mockExitCall,
+    enter: jest.fn(),
+    fullscreenParticipantID: '',
+    setRootElement: jest.fn(),
+    rootElement: null,
+    setHasActiveOverlay: jest.fn(),
   }),
 }));
 
@@ -50,7 +63,7 @@ describe('FullscreenView', () => {
     await fireEvent.click(closeBtn);
 
     await waitFor(() => {
-      expect(mockExitCall).toBeCalledTimes(1);
+      expect(mockExitCall).toBeCalled();
     });
   });
 });

@@ -20,15 +20,6 @@ const ScreenPresenterVideoProps = {
   changeVideoPosition: jest.fn(),
 };
 
-const mockEnterCall = jest.fn();
-
-jest.mock('react-full-screen', () => ({
-  ...jest.requireActual('react-full-screen'),
-  useFullScreenHandle: () => ({
-    enter: mockEnterCall,
-  }),
-}));
-
 describe('ScreenPresenterVideo Component', () => {
   const handleClick = jest.fn();
   const { store } = mockStore(1, { video: true, screen: true });

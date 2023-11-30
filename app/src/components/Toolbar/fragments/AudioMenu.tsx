@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppSelector } from '../../../hooks';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { DeviceId } from '../../../modules/Media/MediaUtils';
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectAudioDeviceId } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';
 import DeviceList from './DeviceList';

@@ -31,9 +31,9 @@ import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppSelector, useAppDispatch } from '../../../hooks';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import browser from '../../../modules/BrowserSupport';
 import { DeviceId } from '../../../modules/Media/MediaUtils';
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
 import { selectVideoBackgrounds } from '../../../store/slices/configSlice';
 import { selectQualityCap, selectVideoDeviceId, selectVideoBackgroundEffects } from '../../../store/slices/mediaSlice';
 import { mirroredVideoSet, selectMirroredVideoEnabled } from '../../../store/slices/uiSlice';

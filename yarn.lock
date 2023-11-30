@@ -4434,6 +4434,7 @@ __metadata:
     "@testing-library/user-event": ^14.4.3
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
     "@types/emscripten": ^1.39.6
+    "@types/fscreen": ^1
     "@types/jest": ^29.0.2
     "@types/lodash": ^4.14.185
     "@types/node": ^18.7.18
@@ -4458,6 +4459,7 @@ __metadata:
     eslint-plugin-jsx-a11y: ^6.6.1
     formik: ^2.2.9
     formik-wizard-form: ^2.1.0
+    fscreen: ^1.2.0
     i18next: ^21.9.1
     i18next-browser-languagedetector: ^6.1.5
     i18next-http-backend: ^1.4.1
@@ -4473,7 +4475,6 @@ __metadata:
     react: ^17.0.2
     react-beautiful-dnd: ^13.1.0
     react-dom: ^17.0.2
-    react-full-screen: ^1.1.0
     react-i18next: ^11.18.6
     react-redux: ^7.2.8
     react-router-dom: ^6.4.0
@@ -7900,6 +7901,13 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 15c1af46d02de834e4a225eccaa9d85c0370fdbb3ed4e1bc2d323d24872309961542b993ae236335aeb3e278630224a6ea002078d39e651d78a3b0356b1eaa79
+  languageName: node
+  linkType: hard
+
+"@types/fscreen@npm:^1":
+  version: 1.0.2
+  resolution: "@types/fscreen@npm:1.0.2"
+  checksum: 4ae419d9a5c218e3e811f37482e2e5c77144423a4b0e2a37a43fa2d1383a86591af9838ec449b2f31a9d2c043d65938d30b0935ba4bd4027917add3d8da3808b
   languageName: node
   linkType: hard
 
@@ -14837,7 +14845,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fscreen@npm:^1.0.2":
+"fscreen@npm:^1.2.0":
   version: 1.2.0
   resolution: "fscreen@npm:1.2.0"
   checksum: ac50f9ac52a157b8fe6aaecdf9efa7c1cfa90b42a76c3bc6b85372fab05c5a9cd72c1b7f4c2e273eba1a0e630e381fd72ae135fcc57acd05a0943d5d0c21b451
@@ -22498,17 +22506,6 @@ __metadata:
   version: 2.0.4
   resolution: "react-fast-compare@npm:2.0.4"
   checksum: 06046595f90a4e3e3a56f40a8078c00aa71bdb064ddb98343f577f546aa22e888831fd45f009c93b34707cc842b4c637737e956fd13d6f80607ee92fb9cf9a1c
-  languageName: node
-  linkType: hard
-
-"react-full-screen@npm:^1.1.0":
-  version: 1.1.1
-  resolution: "react-full-screen@npm:1.1.1"
-  dependencies:
-    fscreen: ^1.0.2
-  peerDependencies:
-    react: ">= 16.8.0"
-  checksum: 70ad927b9d6c485ac46b5bb4b1639ef9a860da28290b3a1c419c42b9c427d78b80e8dba403eb6451458af56838012c81d5e12ef05097395f154defc32fe06c34
   languageName: node
   linkType: hard
 

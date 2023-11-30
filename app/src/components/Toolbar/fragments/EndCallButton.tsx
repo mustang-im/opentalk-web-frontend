@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 
 import { useGetMeQuery, useGetRoomQuery } from '../../../api/rest';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { hangUp } from '../../../store/commonActions';
 import { selectEventInfo } from '../../../store/slices/roomSlice';
 import { selectIsLoggedIn } from '../../../store/slices/userSlice';

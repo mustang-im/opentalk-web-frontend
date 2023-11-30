@@ -2,11 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container as MuiContainer } from '@mui/material';
-import { FullScreen as ReactFullScreen } from 'react-full-screen';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppSelector } from '../../../hooks';
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectCinemaLayout } from '../../../store/slices/uiSlice';
 import FullscreenView from '../../FullscreenView';
 import GridView from '../../GridView';
@@ -14,13 +13,9 @@ import ProtocolView from '../../ProtocolView';
 import SpeakerView from '../../SpeakerView';
 import WhiteboardView from '../../Whiteboard';
 
-const FullScreen = styled(ReactFullScreen)({
-  width: '100%',
-});
-
 const Container = styled(MuiContainer)({
   height: '100%',
-  overflow: 'auto',
+  overflow: 'hidden',
   display: 'flex',
 });
 
@@ -47,8 +42,8 @@ const Cinema = () => {
   };
 
   return (
-    <Container disableGutters maxWidth={false}>
-      <FullScreen handle={fullscreenHandle}>{renderView()}</FullScreen>
+    <Container disableGutters maxWidth={false} ref={fullscreenHandle.node}>
+      {renderView()}
     </Container>
   );
 };

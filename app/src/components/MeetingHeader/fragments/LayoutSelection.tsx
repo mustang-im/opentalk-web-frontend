@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useFullscreenContext } from '../../../provider/FullscreenProvider';
+import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectCinemaLayout, toggledFullScreenMode, updatedCinemaLayout } from '../../../store/slices/uiSlice';
 
 const ViewPopperContainer = styled(Stack)(({ theme }) => ({
@@ -49,9 +49,9 @@ const LayoutSelection = () => {
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const isViewPopoverOpen = Boolean(anchorElement);
 
-  const openFullscreenView = useCallback(async () => {
+  const openFullscreenView = useCallback(() => {
     setAnchorElement(null);
-    await fullscreenHandle.enter();
+    fullscreenHandle.enter();
     dispatch(toggledFullScreenMode());
   }, [fullscreenHandle]);
 
