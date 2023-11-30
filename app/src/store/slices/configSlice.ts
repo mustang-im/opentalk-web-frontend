@@ -143,8 +143,8 @@ export const initialState: ConfigState = {
   insecure: false,
   baseUrl: 'http://localhost',
   helpdeskUrl: 'HELPDESK',
-  userSurveyUrl: 'https://p01nc.heinlein-video.de:11443/api/v0/opentalk/store',
-  userSurveyApiKey: 'opentalk_TG5ePw5k_2YZjs6j5qPdjAVUTKf2ux4a',
+  userSurveyUrl: undefined,
+  userSurveyApiKey: undefined,
   errorReportAddress: 'report@opentalk.eu',
   disallowCustomDisplayName: false,
   beta: {

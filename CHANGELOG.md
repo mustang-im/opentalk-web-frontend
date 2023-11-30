@@ -8,6 +8,7 @@
 
 ### Bug Fixes
 
+- Remove hardcoded default values for survey feature ([#1605](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1605))
 
 ## 1.7.2
 
