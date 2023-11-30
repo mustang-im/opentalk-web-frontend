@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import { useAppSelector } from '../../../hooks';
-import { selectDataProtectionUrl, selectImprintUrl } from '../../../store/slices/configSlice';
+import { selectDataProtectionUrl, selectImprintUrl, selectHelpdeskUrl } from '../../../store/slices/configSlice';
 import { SecondaryRoute } from '../DashboardNavigation';
 
 interface NavigationProps {
@@ -88,6 +88,7 @@ const SecondaryNavigation = ({ label, routes, submenu, setActiveNavbar }: Naviga
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const imprintUrl = useAppSelector(selectImprintUrl);
   const dataProtectionUrl = useAppSelector(selectDataProtectionUrl);
+  const helpdeskUrl = useAppSelector(selectHelpdeskUrl);
 
   const handleNavigation = (path: string) => {
     switch (path) {
@@ -96,6 +97,9 @@ const SecondaryNavigation = ({ label, routes, submenu, setActiveNavbar }: Naviga
         break;
       case 'data-protection':
         window.open(dataProtectionUrl, '_blank');
+        break;
+      case 'support':
+        window.open(helpdeskUrl, '_blank');
         break;
     }
     if (!isDesktop) {
@@ -109,6 +113,9 @@ const SecondaryNavigation = ({ label, routes, submenu, setActiveNavbar }: Naviga
     }
     if (path === 'data-protection') {
       return Boolean(dataProtectionUrl);
+    }
+    if (path === 'support') {
+      return Boolean(helpdeskUrl);
     }
     return true;
   };

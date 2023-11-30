@@ -586,6 +586,7 @@ global-space = space
 global-anonymous = Anonymous
 global-start-now = Start now
 global-clear = Clear
+global-open = Open
 global-close = Close
 global-ok = Ok
 global-no-result = No result
@@ -609,11 +610,22 @@ dashboard-account-management = Account management
 dashboard-legal = Legal
 dashboard-legal-imprint = Imprint
 dashboard-legal-data-protection = Data protection
+dashboard-help = Help
+dashboard-help-documentation = Documentation
+dashboard-help-support = Support
+
+dashboard-quick-start-title = OpenTalk Dashboard Quick Guide
+conference-quick-start-title = OpenTalk Conference Quick Guide
+conference-quick-start-open = Open quick guide
+conference-quick-start-close = Close quick guide
 
 dashboard-faq = FAQ
 dashboard-close-navbar = Close navigation
 dashboard-open-navbar = Open navigation
 dashboard-join-meeting = Join the meeting
+
+quick-start-loading = Loading the quick guide
+quick-start-error = Couldn't load the quick guide
 
 dashboard-settings-general-notification-save-success = Your settings have been saved successfully.
 dashboard-settings-general-notification-save-error = Your settings couln't be saved.
@@ -775,7 +787,6 @@ feedback-dialog-description-placeholder = Your feedback is important to us. Plea
 feedback-dialog-submit-success = Thank you for submitting
 feedback-dialog-form-validation = required
 
-help-button = Help
 protocol-join-session = Join protocol session
 
 protocol-invite-button = Assign write permissions to participants

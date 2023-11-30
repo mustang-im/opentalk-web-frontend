@@ -3,6 +3,7 @@
 ### New Features
 
 - Added granting/revoking the moderator role in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1429))
+- Add quick start guide ([#1525](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1525))
 
 ### Improvements to the user experience
 

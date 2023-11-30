@@ -20,6 +20,7 @@ import {
   CreateDirectMeeting,
   EventsOverviewPage,
   EventDetailsPage,
+  DocumentationPage,
 } from '../pages/Dashboard';
 import RoomPage from '../pages/RoomPage';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
@@ -180,6 +181,13 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
           { path: 'create', element: <CreateEventsPage /> },
           { path: 'update/:eventId/:formStep', element: <EditEventsPage /> },
           { path: ':eventId', element: <EventDetailsPage /> },
+        ],
+      },
+      {
+        path: 'help',
+        children: [
+          { path: 'documentation', element: <DocumentationPage /> },
+          { path: 'support', element: <></> },
         ],
       },
     ],
