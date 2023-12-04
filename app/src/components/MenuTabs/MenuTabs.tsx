@@ -74,6 +74,10 @@ export enum MenuTab {
   Messages = 'messages',
 }
 
+function getMessagingTab(isPrivateChatTab: boolean) {
+  return isPrivateChatTab ? MenuTab.Messages : MenuTab.Chat;
+}
+
 const MenuTabs = () => {
   const { t } = useTranslation();
   const chatConversationState = useAppSelector(selectChatConversationState);
@@ -81,15 +85,16 @@ const MenuTabs = () => {
   const unreadPersonalMessageCount = useAppSelector(selectUnreadPersonalMessageCount);
   const totalParticipants = useAppSelector(selectParticipantsTotal);
   const currentRoomMode = useAppSelector(selectCurrentRoomMode);
+  const isPrivateChatTab = chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined;
   const [currentTab, setCurrentTab] = useState<MenuTab>(
-    currentRoomMode === RoomMode.TalkingStick ? MenuTab.People : MenuTab.Chat
+    currentRoomMode === RoomMode.TalkingStick ? MenuTab.People : getMessagingTab(isPrivateChatTab)
   );
 
   useEffect(() => {
-    if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined) {
+    if (isPrivateChatTab) {
       setCurrentTab(MenuTab.Messages);
     }
-  }, [chatConversationState]);
+  }, [isPrivateChatTab]);
 
   useEffect(() => {
     if (currentRoomMode === RoomMode.TalkingStick) {
