@@ -347,20 +347,21 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
       return;
     }
 
-    if (lastReservation && lastReservation.mediaId !== mediaId) {
-      const oldSubscriber = this.subscribers.get(lastReservation.mediaId);
-      if (oldSubscriber !== undefined) {
-        oldSubscriber.connection?.updateQualityTarget(VideoSetting.Off);
-      }
-    }
-
-    const subscriber = this.subscribers.get(mediaId);
-
     if (target === VideoSetting.Off) {
       this.reservations.delete(mediaRef);
     } else {
       this.reservations.set(mediaRef, { mediaId, target });
     }
+
+    console.debug('Subscriber reservations changed', this.reservations);
+
+    if (lastReservation && lastReservation.mediaId !== mediaId) {
+      const oldSubscriber = this.subscribers.get(lastReservation.mediaId);
+      const oldSubscriberTarget = this.currentTarget(lastReservation.mediaId);
+      oldSubscriber?.connection?.updateQualityTarget(oldSubscriberTarget);
+    }
+
+    const subscriber = this.subscribers.get(mediaId);
 
     if (subscriber === undefined) {
       if (target === VideoSetting.Off) {
