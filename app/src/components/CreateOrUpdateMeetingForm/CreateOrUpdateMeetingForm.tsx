@@ -27,7 +27,6 @@ import { isEmpty } from 'lodash';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
 
 import {
   useCreateEventMutation,
@@ -43,6 +42,7 @@ import { selectFeatures } from '../../store/slices/configSlice';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
+import yup from '../../utils/yupUtils';
 import DateTimePicker from '../DateTimePicker';
 import EventConflictDialog from './fragments/EventConflictDialog';
 import LabeledSwitch from './fragments/LabeledSwitch';
@@ -90,9 +90,6 @@ export interface CreateOrUpdateMeetingFormikValues {
   sharedFolder: boolean;
   streaming: Streaming;
 }
-
-const urlValidationRegex =
-  /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
 const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: CreateOrUpdateMeetingFormProps) => {
   const { t } = useTranslation();
@@ -186,12 +183,12 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
           name: yup.string().required(t('dashboard-meeting-livestream-platform-name-required')),
           streamingEndpoint: yup
             .string()
-            .matches(urlValidationRegex, t('dashboard-meeting-livestream-streaming-endpoint-invalid-url'))
+            .validateURL(t('dashboard-meeting-livestream-streaming-endpoint-invalid-url'))
             .required(t('dashboard-meeting-livestream-streaming-endpoint-required')),
           streamingKey: yup.string().required(t('dashboard-meeting-livestream-streaming-key-required')),
           publicURL: yup
             .string()
-            .matches(urlValidationRegex, t('dashboard-meeting-livestream-public-url-invalid-url'))
+            .validateURL(t('dashboard-meeting-livestream-streaming-endpoint-invalid-url'))
             .required(t('dashboard-meeting-livestream-public-url-required')),
         });
       }),
