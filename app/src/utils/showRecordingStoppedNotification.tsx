@@ -5,6 +5,4 @@ import { enqueueSnackbar } from '@opentalk/common';
 
 import RecordingStoppedMessage from '../components/RecordingStoppedMessage';
 
-export default function showRecordingStoppedNotification() {
-  enqueueSnackbar(<RecordingStoppedMessage />, { variant: 'info' });
-}
+export const showRecordingStoppedNotification = () => enqueueSnackbar(<RecordingStoppedMessage />, { variant: 'info' });

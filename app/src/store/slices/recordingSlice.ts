@@ -5,6 +5,7 @@ import { joinSuccess } from '@opentalk/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
+import { hangUp } from '../commonActions';
 
 type RecordingStatus = 'initializing' | 'recording';
 
@@ -14,10 +15,10 @@ interface RecordingState {
   consent: boolean;
 }
 
-const initialState = {
+const initialState: RecordingState = {
   status: 'initializing',
   consent: false,
-} as RecordingState;
+};
 
 const recordingSlice = createSlice({
   name: 'recording',
@@ -32,7 +33,7 @@ const recordingSlice = createSlice({
       state.status = 'initializing';
       state.consent = false;
     },
-    setConsent: (state, { payload }: PayloadAction<boolean>) => {
+    recordingConsent: (state, { payload }: PayloadAction<boolean>) => {
       state.consent = payload;
     },
   },
@@ -49,13 +50,14 @@ const recordingSlice = createSlice({
         state.recordingId = recording.recordingId;
       }
     });
+    builder.addCase(hangUp.pending, () => initialState);
   },
 });
 
-export const { recordingStarted, recordingStopped } = recordingSlice.actions;
+export const { recordingStarted, recordingStopped, recordingConsent } = recordingSlice.actions;
 
 export const selectRecordingState = (state: RootState) => state.recording.status === 'recording';
 export const selectRecordingId = (state: RootState) => state.recording.recordingId;
-export const selectConsentStatus = (state: RootState) => state.recording.consent;
+export const selectNeedRecordingConsent = (state: RootState) => selectRecordingState(state) && !state.recording.consent;
 
 export default recordingSlice.reducer;
