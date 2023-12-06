@@ -3,18 +3,18 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { closeSnackbar, notificationAction } from '@opentalk/common';
 
+import { sendRecordingConsentSignal } from '../api/types/outgoing/recording';
 import StartRecordingConsentDialog from '../components/StartRecordingConsentDialog';
 import localMediaContext from '../modules/Media/LocalMedia';
 import localScreenContext from '../modules/Media/LocalScreen';
 import { AppDispatch } from '../store';
-import { recordingConsent } from '../store/slices/recordingSlice';
 
 export const showConsentNotification = (dispatch: AppDispatch) =>
   new Promise((resolve) => {
     const key = 'recording-consent-dialog';
 
     const setRecordingConsent = (consent: boolean) => {
-      dispatch(recordingConsent(consent));
+      dispatch(sendRecordingConsentSignal.action({ consent }));
       closeSnackbar(key);
       if (!consent) {
         localMediaContext.reconfigure({ audio: false, video: false }).catch((e) => {
