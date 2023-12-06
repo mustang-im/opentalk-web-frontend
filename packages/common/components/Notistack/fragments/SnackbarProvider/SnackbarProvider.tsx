@@ -21,14 +21,17 @@ const IconButton = styled(IconButtonDefault)(({ theme }) => ({
   color: theme.palette.common.white,
 }));
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   containerRoot: {
     '&&': {
       top: '60px',
     },
     '&& > div': {
-      width: '30vw',
-      minWidth: '400px',
+      width: '100%',
+      minWidth: '280px',
+      [theme.breakpoints.up('sm')]: {
+        width: '30vw',
+      }
     },
   },
   root: {
