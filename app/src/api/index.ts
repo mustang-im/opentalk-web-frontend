@@ -86,7 +86,7 @@ import {
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
-import { recordingStopped, recordingStarted, recordingConsent } from '../store/slices/recordingSlice';
+import { recordingStopped, recordingStarted } from '../store/slices/recordingSlice';
 import {
   enteredWaitingRoom,
   readyToEnter,
@@ -123,7 +123,6 @@ import { Role } from './types/incoming/control';
 import { Action as OutgoingActionType, automod } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
-import { sendRecordingConsentSignal } from './types/outgoing/recording';
 
 /**
  * Transforms the dictionary of group chat histories into a list of groupIds and a flat list
@@ -1134,9 +1133,6 @@ export const apiMiddleware: Middleware = ({
       })
       .addCase(hangUp.pending, () => {
         dispatch(legalVoteStore.initialize());
-      })
-      .addCase(recordingConsent, (state, { payload }) => {
-        sendRecordingConsentSignal.action({ consent: payload });
       })
       .addModule((builder) => outgoing.automod.handler(builder, dispatch))
       .addModule((builder) => outgoing.chat.handler(builder, dispatch))
