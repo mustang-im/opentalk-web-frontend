@@ -2,6 +2,7 @@
 
 ### New Features
 
+- Add streaming options to create meeting ([#1587](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1587))
 - Added granting/revoking the moderator role in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1429))
 - Add quick start guide ([#1525](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1525))
 
