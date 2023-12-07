@@ -3,24 +3,24 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Collapse, Grid, MenuItem, Stack, styled } from '@mui/material';
 import {
-  ForwardIcon,
-  notifications,
-  notificationAction,
   formikProps,
   formikDateTimePickerProps,
   FormWrapper,
+  ForwardIcon,
+  notificationAction,
+  notifications,
   StreamingPlatform,
   formikMinimalProps,
 } from '@opentalk/common';
 import {
   CreateEventPayload,
+  DateTime,
   Event,
   isTimelessEvent,
-  UpdateEventPayload,
-  DateTime,
   SingleEvent,
+  UpdateEventPayload,
 } from '@opentalk/rest-api-rtk-query';
-import { addDays, addMinutes, areIntervalsOverlapping, format, formatRFC3339, Interval } from 'date-fns';
+import { addMinutes, areIntervalsOverlapping, formatRFC3339, Interval } from 'date-fns';
 import { useFormik } from 'formik';
 import { FormikValues } from 'formik/dist/types';
 import { isEmpty } from 'lodash';
@@ -41,6 +41,7 @@ import { useAppSelector } from '../../hooks';
 import { selectFeatures } from '../../store/slices/configSlice';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
+import { FrequencySelect, mapFrequencySelectToRRuleFrequency, mapRRuleToFrequencySelect } from '../../utils/rruleUtils';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
 import yup from '../../utils/yupUtils';
 import DateTimePicker from '../DateTimePicker';
@@ -51,14 +52,6 @@ import StreamingOptions from './fragments/StreamingOptions';
 interface CreateOrUpdateMeetingFormProps {
   existingEvent?: Event;
   onForwardButtonClick?: () => void;
-}
-
-const enum IntervalEnum {
-  NONE = '-',
-  DAILY = 'DAILY',
-  WEEKLY = 'WEEKLY',
-  BIWEEKLY = 'BI-WEEKLY',
-  MONTHLY = 'MONTHLY',
 }
 
 const Form = styled('form')({
@@ -82,10 +75,10 @@ export interface CreateOrUpdateMeetingFormikValues {
   description?: string;
   waitingRoom: boolean;
   password?: string;
-  isScheduled: boolean;
+  isTimeDependent: boolean;
   startDate: string;
   endDate: string;
-  recurrencePattern: IntervalEnum;
+  recurrencePattern: FrequencySelect;
   isAdhoc?: boolean;
   sharedFolder: boolean;
   streaming: Streaming;
@@ -140,13 +133,13 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
         return !isInvalidDate(new Date(startDate as string));
       })
       .test('is in the future', t('dashboard-meeting-date-field-error-future'), function (startDate) {
-        if (this.parent.isScheduled && startDate && new Date(startDate) < new Date()) {
+        if (this.parent.isTimeDependent && startDate && new Date(startDate) < new Date()) {
           return false;
         }
         return true;
       })
       .test('is before end date', t('dashboard-meeting-date-field-error-duration'), function (startDate) {
-        if (this.parent.isScheduled && startDate) {
+        if (this.parent.isTimeDependent && startDate) {
           return startDate < this.parent.endDate;
         }
         return true;
@@ -164,7 +157,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
         return !isInvalidDate(new Date(endDate as string));
       })
       .test('if after start date', t('dashboard-meeting-date-field-error-duration'), function (endDate) {
-        if (this.parent.isScheduled && endDate) {
+        if (this.parent.isTimeDependent && endDate) {
           return endDate > this.parent.startDate;
         }
         return true;
@@ -195,42 +188,15 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     }),
   });
 
-  const mapRruleToInterval = (timeIndependent: boolean, interval: string): string | undefined => {
-    if (timeIndependent || interval === IntervalEnum.NONE) return undefined;
-    const date = new Date(formik.values.startDate);
-    const end = addDays(date, 180);
-
-    if (interval === IntervalEnum.BIWEEKLY) {
-      return 'RRULE:FREQ=WEEKLY;INTERVAL=2;UNTIL=' + format(end, "yyyyMMdd'T'HHmmss'Z'");
-    }
-    return `RRULE:FREQ=${interval};UNTIL=` + format(end, "yyyyMMdd'T'HHmmss'Z'");
-  };
-
-  const mapIntervalToRule = (rule: string) => {
-    if (rule.indexOf('FREQ=DAILY') > 0) {
-      return IntervalEnum.DAILY;
-    }
-    if (rule.indexOf('FREQ=WEEKLY') > 0 && rule.indexOf('INTERVAL=2') > 0) {
-      return IntervalEnum.BIWEEKLY;
-    }
-    if (rule.indexOf('FREQ=WEEKLY') > 0) {
-      return IntervalEnum.WEEKLY;
-    }
-    if (rule.indexOf('FREQ=MONTHLY') > 0) {
-      return IntervalEnum.MONTHLY;
-    }
-    return IntervalEnum.NONE;
-  };
-
   const intervals = [
     {
       label: t('dashboard-meeting-recurrence-none'),
-      value: IntervalEnum.NONE,
+      value: FrequencySelect.NONE,
     },
-    { label: t('dashboard-meeting-recurrence-daily'), value: IntervalEnum.DAILY },
-    { label: t('dashboard-meeting-recurrence-weekly'), value: IntervalEnum.WEEKLY },
-    { label: t('dashboard-meeting-recurrence-bi-weekly'), value: IntervalEnum.BIWEEKLY },
-    { label: t('dashboard-meeting-recurrence-monthly'), value: IntervalEnum.MONTHLY },
+    { label: t('dashboard-meeting-recurrence-daily'), value: FrequencySelect.DAILY },
+    { label: t('dashboard-meeting-recurrence-weekly'), value: FrequencySelect.WEEKLY },
+    { label: t('dashboard-meeting-recurrence-bi-weekly'), value: FrequencySelect.BIWEEKLY },
+    { label: t('dashboard-meeting-recurrence-monthly'), value: FrequencySelect.MONTHLY },
   ];
 
   const formik = useFormik<CreateOrUpdateMeetingFormikValues>({
@@ -239,7 +205,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       description: existingEvent?.description || '',
       waitingRoom: existingEvent?.room.waitingRoom || false,
       password: existingEvent?.room.password?.trim() || undefined,
-      isScheduled: !existingEvent?.isTimeIndependent,
+      isTimeDependent: !existingEvent?.isTimeIndependent,
       startDate:
         (existingEvent && !isTimelessEvent(existingEvent) && existingEvent.startsAt?.datetime) ||
         formatRFC3339(defaultStartDate),
@@ -247,9 +213,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
         (existingEvent && !isTimelessEvent(existingEvent) && existingEvent.endsAt?.datetime) ||
         formatRFC3339(defaultEndDate),
       recurrencePattern:
-        existingEvent && existingEvent.recurrencePattern?.length > 0
-          ? mapIntervalToRule(existingEvent.recurrencePattern[0])
-          : IntervalEnum.NONE,
+        (existingEvent &&
+          !isEmpty(existingEvent.recurrencePattern) &&
+          mapRRuleToFrequencySelect(existingEvent.recurrencePattern[0])) ||
+        FrequencySelect.NONE,
       isAdhoc: existingEvent && Boolean(existingEvent.isAdhoc),
       sharedFolder: (existingEvent?.sharedFolder && Boolean(existingEvent.sharedFolder)) || false,
       streaming: {
@@ -309,18 +276,26 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   };
 
   const createPayload = (values: FormikValues): CreateEventPayload | UpdateEventPayload => {
-    const pattern: string | undefined = mapRruleToInterval(!values.isScheduled, values.recurrencePattern);
     let payload: CreateEventPayload | UpdateEventPayload = {
       title: values.title.trim() || '',
       description: values.description.trim() || '',
       waitingRoom: values.waitingRoom,
       password: values.password?.trim() !== '' ? values.password?.trim() : null,
-      isTimeIndependent: !values.isScheduled,
-      recurrencePattern: pattern ? [pattern] : [],
+      isTimeIndependent: !values.isTimeDependent,
+      recurrencePattern: [],
       isAdhoc: values.isAdhoc || false,
     };
 
-    if (values.isScheduled) {
+    if (values.recurrencePattern && values.recurrencePattern !== FrequencySelect.NONE) {
+      const pattern = `RRULE:${mapFrequencySelectToRRuleFrequency(values.recurrencePattern)}`;
+
+      payload = {
+        ...payload,
+        recurrencePattern: pattern ? [pattern] : [],
+      };
+    }
+
+    if (values.isTimeDependent) {
       payload = {
         ...payload,
         startsAt: {
@@ -471,8 +446,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   };
 
   const handleSubmit = async () => {
-    const isTimeIndependent = !formik.values.isScheduled;
-    if (isTimeIndependent) {
+    if (!formik.values.isTimeDependent) {
       formik.handleSubmit();
       return;
     }
@@ -553,12 +527,12 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
 
           <LabeledSwitch
             titleLabel={t('dashboard-meeting-date-and-time')}
-            checked={formik.values.isScheduled}
-            switchProps={formikMinimalProps('isScheduled', formik)}
-            switchValueLabel={t(`dashboard-meeting-time-independent-${formik.values.isScheduled ? 'no' : 'yes'}`)}
+            checked={formik.values.isTimeDependent}
+            switchProps={formikMinimalProps('isTimeDependent', formik)}
+            switchValueLabel={t(`dashboard-meeting-time-independent-${formik.values.isTimeDependent ? 'no' : 'yes'}`)}
           />
 
-          <Collapse orientation="vertical" in={formik.values.isScheduled} unmountOnExit mountOnEnter>
+          <Collapse orientation="vertical" in={formik.values.isTimeDependent} unmountOnExit mountOnEnter>
             <Grid container columnSpacing={{ xs: 2, sm: 5 }}>
               <Grid item xs={12} sm={6}>
                 <FormWrapper label={t('dashboard-meeting-date-from')} fullWidth>
@@ -585,7 +559,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               <Grid item xs={12} sm={12} mt={2}>
                 <Select {...formikProps('recurrencePattern', formik)}>
                   {intervals.map((entry) => (
-                    <MenuItem key={entry.value} value={entry.value}>
+                    <MenuItem key={entry.label} value={entry.value}>
                       {entry.label}
                     </MenuItem>
                   ))}

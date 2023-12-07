@@ -19,6 +19,7 @@
 
 - Remove hardcoded default values for survey feature ([#1605](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1605))
 - Fix partially visible notification on smaller mobile devices. ([#1568](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1568))
+- Fix/refactor recurrence event instance creation ([#1618](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1618))
 
 ## 1.7.2
 

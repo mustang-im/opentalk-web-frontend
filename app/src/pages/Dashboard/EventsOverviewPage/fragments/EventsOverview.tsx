@@ -95,7 +95,7 @@ const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
           <AccordionDetails>
             {entry.events?.map((event) => (
               <MeetingCard
-                key={`${isTimelessEvent(event) ? '' : event.startsAt?.datetime}.${event.id}`}
+                key={`${isTimelessEvent(event) ? event.id : event.startsAt?.datetime}`}
                 event={event}
                 overview
               />

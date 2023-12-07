@@ -11,7 +11,7 @@ import {
   InviteStatus,
   isTimelessEvent,
 } from '@opentalk/rest-api-rtk-query';
-import { endOfISOWeek, getWeek, formatRFC3339, startOfISOWeek } from 'date-fns';
+import { endOfISOWeek, formatRFC3339, getWeek, startOfISOWeek } from 'date-fns';
 import i18n, { t } from 'i18next';
 import { groupBy } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useGetEventsQuery } from '../../../api/rest';
 import { useHeader } from '../../../templates/DashboardTemplate';
-import { getExpandedEvents } from '../../../utils/eventUtils';
+import { appendRecurrenceEventInstances, SortDirection, orderEventsByDate } from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
 import EventsPageHeader, { TimeFilter } from './fragments/EventsPageHeader';
 
@@ -160,23 +160,35 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
   /**
    * Returns memorized function to optimize the performance (acts like memorized selector)
    **/
-  const selectAndTransformToMeetingProps = (data: CursorPaginated<Event | EventException> | undefined) =>
+  const selectAndTransformToMeetingProps = (
+    data: CursorPaginated<Event | EventException> | undefined,
+    timePerspectiveFilter: TimePerspectiveFilter
+  ) =>
     useMemo(() => {
       if (!data) {
         return [];
       }
-      const expandedEvents = formatEventsByHeaderChange(
-        getExpandedEvents(data.data, true, undefined, undefined, undefined, timePeriodFilter)
+      const eventsWithEventInstances = appendRecurrenceEventInstances(
+        data.data,
+        true,
+        undefined,
+        timePerspectiveFilter
       );
-      if (timePeriodFilter === TimePerspectiveFilter.TimeIndependent) {
+
+      const orderedEventsWithRecurrenceInstances = orderEventsByDate(
+        formatEventsByHeaderChange(eventsWithEventInstances),
+        timePerspectiveFilter === TimePerspectiveFilter.Future ? SortDirection.ASC : SortDirection.DESC
+      );
+
+      if (timePerspectiveFilter === TimePerspectiveFilter.TimeIndependent) {
         const constructMeetingProp = {
           title: t('dashboard-meeting-details-page-time-independent'),
-          events: expandedEvents,
+          events: orderedEventsWithRecurrenceInstances,
         };
         setExpandAccordion('all');
         return [constructMeetingProp];
       }
-      const eventsGroupedByTimeFilter = groupBy(expandedEvents, (event) =>
+      const eventsGroupedByTimeFilter = groupBy(orderedEventsWithRecurrenceInstances, (event) =>
         filterByTimePeriod(
           filter.timePeriod,
           isTimelessEvent(event) ? event.createdAt : (event.startsAt?.datetime as DateTime)
@@ -190,7 +202,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
         setExpandAccordion(eventsTransformedAsMeetingProp[0].title);
       }
       return [...eventsTransformedAsMeetingProp];
-    }, [timePeriodFilter, filter, data]);
+    }, [timePerspectiveFilter, filter, data]);
 
   const { events, isLoading, isFetching } = useGetEventsQuery(
     {
@@ -203,7 +215,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
     },
     {
       selectFromResult: ({ data, isLoading, isFetching }) => ({
-        events: selectAndTransformToMeetingProps(data),
+        events: selectAndTransformToMeetingProps(data, timePeriodFilter),
         isLoading,
         isFetching,
       }),
@@ -226,12 +238,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
         <Typography variant={'h1'} component={'h2'}>
           {t('dashboard-events-my-meetings')}
         </Typography>
-        <Toggle
-          options={toggleOptions}
-          onChange={(timePeriod: TimePerspectiveFilter) => {
-            setTimePeriodFilter(timePeriod);
-          }}
-        ></Toggle>
+        <Toggle options={toggleOptions} onChange={setTimePeriodFilter} />
         <ArrowDownButton
           active={expandAccordion === 'all'}
           onClick={() => setExpandAccordion((prev) => (prev === 'all' ? '' : 'all'))}

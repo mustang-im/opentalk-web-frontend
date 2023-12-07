@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { formatDuration, intervalToDuration } from 'date-fns';
 
+export const getISOStringWithoutMilliseconds = (date: Date) => date.toISOString().split('.')[0] + 'Z';
+
 export const getIntervalToDurationString = (interval: Interval) => {
   const duration = intervalToDuration(interval);
 
