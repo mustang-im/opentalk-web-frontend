@@ -18,6 +18,7 @@ import {
   selectIsCurrentWhiteboardHighlighted,
   setActiveTab,
 } from '../../../../store/slices/uiSlice';
+import { selectIsModerator } from '../../../../store/slices/userSlice';
 import DrawerTab from './DrawerTab';
 
 const DrawerContentContainer = styled(Stack)(({ theme }) => ({
@@ -68,6 +69,7 @@ const Drawer = () => {
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
   const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const isSharedFolderAvailableIndicatorVisible = useAppSelector(selectIsSharedFolderAvailableIndicatorVisible);
+  const isModerator = useAppSelector(selectIsModerator);
 
   const showIndicator =
     unreadGlobalMessageCount > 0 ||
@@ -92,6 +94,8 @@ const Drawer = () => {
 
     return '';
   };
+
+  const HomeTab = tabs.find((tab) => tab.key === ModerationTabKey.Home);
 
   const Tabs = tabs.map((tab) => {
     if (
@@ -122,7 +126,22 @@ const Drawer = () => {
         {showIndicator && <Indicator />}
       </IconButton>
       <StyledDrawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-        <DrawerContentContainer>{Tabs}</DrawerContentContainer>
+        {isModerator && <DrawerContentContainer>{Tabs}</DrawerContentContainer>}
+        {!isModerator && HomeTab && (
+          <DrawerContentContainer>
+            <DrawerTab
+              key={HomeTab.key}
+              tabTitle={getTabTitle(HomeTab)}
+              disabled={HomeTab.disabled}
+              active={activeTab === HomeTab.key}
+              handleClick={() => handleSetActiveTab(HomeTab.key)}
+            >
+              {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
+          or some other way to prevent duplication with MeetingSidebar.tsx */}
+              <EnterpriseProvider moduleKey={HomeTab.moduleKey}>{HomeTab.component}</EnterpriseProvider>
+            </DrawerTab>
+          </DrawerContentContainer>
+        )}
       </StyledDrawer>
     </>
   );
