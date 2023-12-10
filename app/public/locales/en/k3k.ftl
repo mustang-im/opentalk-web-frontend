@@ -131,6 +131,7 @@ chat-delete-global-messages-success = The global chat has been deleted by the mo
 chat-open-emoji-picker = open emoji picker
 chat-close-emoji-picker = close emoji picker
 chat-submit-button = submit chat message
+chat-smiley-label = smiling face emoji
 
 no-group-participants-label = without group
 button-back-messages = Back

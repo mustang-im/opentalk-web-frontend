@@ -131,6 +131,7 @@ chat-delete-global-messages-success = Der globale Chat wurde durch den Moderator
 chat-open-emoji-picker = emoji picker öffnen
 chat-close-emoji-picker = emoji picker schließen
 chat-submit-button = Chat Nachricht absenden
+chat-smiley-label = lächelndes Gesicht-Emoji
 
 no-group-participants-label = Ohne Gruppe
 button-back-messages = zurück
