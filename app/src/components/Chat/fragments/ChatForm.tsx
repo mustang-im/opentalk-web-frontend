@@ -14,7 +14,7 @@ import Picker, {
   Categories,
 } from 'emoji-picker-react';
 import { useFormik } from 'formik';
-import React, { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef } from 'react';
+import React, { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
@@ -59,20 +59,40 @@ const PickerContainer = styled('div')(({ theme }) => ({
   },
 }));
 
-interface IChatFormProps {
+interface ChatFormProps {
   scope: ChatScope;
   targetId?: TargetId;
+  autoFocusMessageInput?: boolean;
 }
 
 const MAX_CHAT_CHARS = 4000;
 
-const ChatForm = ({ scope, targetId }: IChatFormProps) => {
+const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [openPicker, setOpenPicker] = useState(false);
   const isChatEnabled = useAppSelector(selectChatEnabledState);
   const emojiButton = useRef<HTMLButtonElement | null>(null);
   const defaultChatMessage = useAppSelector(selectDefaultChatMessage(scope, targetId));
+  const messageInputReference = useRef<HTMLInputElement>(null);
+
+  useLayoutEffect(
+    function bootstrapMessageInputAutofocusing() {
+      if (autoFocusMessageInput && messageInputReference.current) {
+        /**
+         * Not a big fan of the solution but at the moment I couldn't find
+         * proper way to put nested textarea in the MUI BaseInput component in focus.
+         * Reference object is pointing to the HTMLDivElement and calling .focus on it does
+         * nothing.
+         */
+        const nestedTextarea = messageInputReference.current.querySelector('textarea');
+        if (nestedTextarea) {
+          nestedTextarea.focus();
+        }
+      }
+    },
+    [autoFocusMessageInput]
+  );
 
   const emojiPickerCategories = useMemo(() => {
     return Object.values(Categories).reduce((categories, category) => {
@@ -188,6 +208,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
     <Form onSubmit={formik.handleSubmit}>
       {renderPicker()}
       <LimitedTextField
+        ref={messageInputReference}
         maxCharacters={MAX_CHAT_CHARS}
         showLimitAt={MAX_CHAT_CHARS / 2}
         {...formikProps('message', formik)}

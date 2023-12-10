@@ -135,4 +135,12 @@ describe('Chat component', () => {
       expect(screen.getByText('chat-input-error-required')).toBeInTheDocument();
     });
   });
+
+  test('should autofocus message input when `autoFocusMessageInput` property is specified', async () => {
+    await render(<Chat autoFocusMessageInput={true} />, store);
+
+    await waitFor(() => {
+      expect(document.activeElement?.tagName).toBe('TEXTAREA');
+    });
+  });
 });
