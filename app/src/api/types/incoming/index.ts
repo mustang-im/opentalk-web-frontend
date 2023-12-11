@@ -10,8 +10,8 @@ import MediaMessage from './media';
 import ModerationMessage from './moderation';
 import PollMessage from './poll';
 import ProtocolMessage from './protocol';
-import RecordingMessage from './recording';
 import SharedFolderMessage from './sharedFolder';
+import StreamingMessage from './streaming';
 import TimerMessage from './timer';
 import WhiteboardMessage from './whiteboard';
 
@@ -24,7 +24,7 @@ export * as protocol from './protocol';
 export * as timer from './timer';
 export * as whiteboard from './whiteboard';
 export * as media from './media';
-export * as recording from './recording';
+export * as streaming from './streaming';
 export * as sharedFolder from './sharedFolder';
 
 export type Message =
@@ -39,5 +39,5 @@ export type Message =
   | ProtocolMessage
   | TimerMessage
   | WhiteboardMessage
-  | RecordingMessage
+  | StreamingMessage
   | SharedFolderMessage;

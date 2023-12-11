@@ -29,7 +29,7 @@ yup.addMethod<yup.StringSchema>(yup.string, 'validateURL', function (message?: s
 
     try {
       const url = new URL(value);
-      return url.protocol === 'http:' || url.protocol === 'https:';
+      return url.protocol.length > 0;
     } catch (error) {
       return createError({ path, message });
     }

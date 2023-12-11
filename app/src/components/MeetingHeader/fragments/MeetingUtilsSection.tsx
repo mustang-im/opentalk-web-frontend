@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Stack } from '@mui/material';
-import { RecordingsIcon as DefaultRecordingsIcon, DurationIcon } from '@opentalk/common';
+import { RecordingsIcon as DefaultRecordingsIcon, DurationIcon, LiveIcon as DefaultLiveIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
-import { selectRecordingState } from '../../../store/slices/recordingSlice';
+import { selectIsRecordingActive, selectIsStreamActive } from '../../../store/slices/streamingSlice';
 import { selectIsModerator } from '../../../store/slices/userSlice';
 import MeetingTimer from './MeetingTimer';
 import SecureConnectionField from './SecureConnectionField';
@@ -36,9 +36,14 @@ const RecordingsIcon = styled(DefaultRecordingsIcon)(({ theme }) => ({
   fill: theme.palette.error.light,
 }));
 
+const LiveIcon = styled(DefaultLiveIcon)(({ theme }) => ({
+  fill: theme.palette.error.light,
+}));
+
 const MeetingUtilsSection = () => {
   const isModerator = useAppSelector(selectIsModerator);
-  const recording = useAppSelector(selectRecordingState);
+  const isRecordingActive = useAppSelector(selectIsRecordingActive);
+  const isStreamingActive = useAppSelector(selectIsStreamActive);
   const { t } = useTranslation();
 
   const showSecurityIcon = window.location.protocol === 'https:';
@@ -51,7 +56,8 @@ const MeetingUtilsSection = () => {
         <MeetingTimer aria-label="current time" />
         {showSecurityIcon && <SecureConnectionField />}
       </ContainerWithBackground>
-      {recording && <RecordingsIcon aria-label={t('recording-active-label')} />}
+      {isRecordingActive && <RecordingsIcon aria-label={t('recording-active-label')} />}
+      {isStreamingActive && <LiveIcon aria-label={t('livestream-active-label')} />}
     </Container>
   );
 };

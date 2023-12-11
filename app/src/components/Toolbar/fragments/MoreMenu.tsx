@@ -25,8 +25,10 @@ import {
   notificationAction,
   notificationPersistent,
   ParticipantAvatar,
+  LiveIcon,
+  BackendModules,
+  StreamingStatus,
 } from '@opentalk/common';
-import { BackendModules } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,15 +39,19 @@ import {
   enableRaiseHands,
   enableWaitingRoom,
 } from '../../../api/types/outgoing/moderation';
-import { sendStartRecordingSignal, sendStopRecordingSignal } from '../../../api/types/outgoing/recording';
+import { sendStartStreamSignal, sendStopStreamSignal } from '../../../api/types/outgoing/streaming';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useEnabledModules } from '../../../hooks/enabledModules';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
 import { selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
-import { selectRecordingId, selectRecordingState } from '../../../store/slices/recordingSlice';
 import { selectWaitingRoomState } from '../../../store/slices/roomSlice';
+import {
+  selectActiveStreamIds,
+  selectInactiveStreamIds,
+  selectRecordingTarget,
+} from '../../../store/slices/streamingSlice';
 import { selectIsModerator, selectDisplayName, selectAvatarUrl } from '../../../store/slices/userSlice';
 import InviteGuestDialog from './InviteGuestDialog';
 import { ToolbarMenuProps, ToolbarMenuItem, ToolbarMenu } from './ToolbarMenuUtils';
@@ -65,9 +71,10 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const isWaitingRoomActive = useAppSelector(selectWaitingRoomState);
   const hasHandraisesEnabled = useAppSelector(selectRaiseHandsEnabled);
   const isChatEnabled = useAppSelector(selectChatEnabledState);
-  const recording = useAppSelector(selectRecordingState);
   const dispatch = useAppDispatch();
-  const recordingId = useAppSelector(selectRecordingId);
+  const recording = useAppSelector(selectRecordingTarget);
+  const activeStreamIds = useAppSelector(selectActiveStreamIds);
+  const inactiveStreamIds = useAppSelector(selectInactiveStreamIds);
   const enabledModules = useEnabledModules();
   const hasRecordingFeatureOn = enabledModules.has(BackendModules.Recording);
   const fullscreenHandle = useFullscreenContext();
@@ -153,16 +160,52 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
     deleteGlobalChatItem,
   ];
 
-  if (hasRecordingFeatureOn) {
+  //Exclude start/stop recording when errored/unavailable until we have designs/approach for how to handle errored and unavailable streams
+  const isValidRecordingTarget =
+    recording && recording.status !== StreamingStatus.Error && recording.status !== StreamingStatus.Unavailable;
+
+  if (hasRecordingFeatureOn && isValidRecordingTarget) {
+    switch (recording.status) {
+      case StreamingStatus.Active:
+        moderatorMenuItems.push({
+          label: 'more-menu-stop-recording',
+          action: () => {
+            dispatch(sendStopStreamSignal.action({ targetIds: [recording.targetId] }));
+            onClose();
+          },
+          icon: <RecordingsIcon />,
+        });
+        break;
+      case StreamingStatus.Inactive:
+        moderatorMenuItems.push({
+          label: 'more-menu-start-recording',
+          action: () => {
+            dispatch(sendStartStreamSignal.action({ targetIds: [recording.targetId] }));
+            onClose();
+          },
+          icon: <RecordingsIcon />,
+        });
+        break;
+    }
+  }
+
+  if (activeStreamIds.length > 0) {
     moderatorMenuItems.push({
-      label: `more-menu-${recording ? 'stop' : 'start'}-recording`,
+      label: 'more-menu-stop-streaming',
       action: () => {
+        dispatch(sendStopStreamSignal.action({ targetIds: activeStreamIds }));
         onClose();
-        recording && recordingId !== undefined
-          ? dispatch(sendStopRecordingSignal.action({ recordingId }))
-          : dispatch(sendStartRecordingSignal.action());
       },
-      icon: <RecordingsIcon />,
+      icon: <LiveIcon />,
+    });
+  } else if (inactiveStreamIds.length > 0) {
+    moderatorMenuItems.push({
+      label: 'more-menu-start-streaming',
+      action: () => {
+        dispatch(sendStartStreamSignal.action({ targetIds: inactiveStreamIds }));
+        onClose();
+      },
+      icon: <LiveIcon />,
     });
   }
 

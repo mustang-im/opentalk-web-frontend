@@ -23,8 +23,8 @@ import {
   setSpeakerActivity,
   setVideoEnable,
 } from '../../store/slices/mediaSlice';
-import { selectNeedRecordingConsent } from '../../store/slices/recordingSlice';
-import { showConsentNotification } from '../../utils/showConsentNotification';
+import { selectAskForStreamingConsent } from '../../store/slices/streamingSlice';
+import { showConsentNotification } from '../ConsentNotification';
 
 export interface MediaContextValue {
   getDeviceDetails: (constraints: { audio?: boolean; video?: boolean }) => Promise<void>;
@@ -65,7 +65,7 @@ enum HandledErrorType {
 }
 
 export const MediaProvider = ({ children }: MediaProviderProps) => {
-  const askConsent = useAppSelector(selectNeedRecordingConsent);
+  const askConsent = useAppSelector(selectAskForStreamingConsent);
   const [devices, setDevices] = useState<MediaDeviceInfo[] | undefined>();
 
   const [defaultAudioDevice, setDefaultAudioDevice] = useState<DeviceId | undefined>();

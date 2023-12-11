@@ -9,6 +9,8 @@ import { Message as IncomingMessage } from '../../api/types/incoming';
 import { Message as OutgoingMessage } from '../../api/types/outgoing';
 import { BaseEventEmitter } from '../EventListener';
 
+const uuidMatchingRegexp = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+
 // Currently, this is a living spec
 const API_VERSION = '1.0';
 
@@ -61,6 +63,8 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
           'payload.chat.last_seen_timestamps_group',
         ],
         deep: true,
+        //Preserves formatting for keys that match uuid pattern (example: "765bb8e6-77cf-40ee-94f3-b1aefe9a1d0c")
+        exclude: [uuidMatchingRegexp],
       });
       // Server responded on our message heartbeat -> connection is still alive
       if (message.namespace === 'echo') {

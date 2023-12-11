@@ -219,6 +219,7 @@ more-menu-leave-call = Leave Call
 more-menu-create-invite = Invite guest
 more-menu-start-recording = Start recording
 more-menu-stop-recording = Stop recording
+more-menu-pause-recording = Pause recording
 
 more-menu-enable-waiting-room = Enable waiting room
 more-menu-disable-waiting-room = Disable waiting room
@@ -233,6 +234,8 @@ more-menu-moderator-aria-label = Open menu for more options
 chat-enabled-message = Chat was enabled by moderator
 chat-disabled-message = Chat was disabled by moderator
 chat-disabled-tooltip = The Chat is deactivated by the moderator
+more-menu-start-streaming = Start livestream
+more-menu-stop-streaming = Stop livestream
 
 turn-handraises-off-notification = Handraises were disabled by the moderator
 turn-handraises-on-notification = Handraises were enabled by the moderator
@@ -784,7 +787,7 @@ dashboard-meeting-livestream-streaming-endpoint-label = Streaming receiver URL
 dashboard-meeting-livestream-streaming-endpoint-placeholder = Add URL
 dashboard-meeting-livestream-streaming-endpoint-invalid-url = Must enter a valid URL
 dashboard-meeting-livestream-streaming-endpoint-required = This is a mandatory field
-dashboard-meeting-livestream-public-url-label = Livestream URL
+dashboard-meeting-livestream-public-url-label = Public livestream URL
 dashboard-meeting-livestream-public-url-placeholder = Add URL
 dashboard-meeting-livestream-public-url-invalid-url = Must enter a valid URL
 dashboard-meeting-livestream-public-url-required = This is a mandatory field
@@ -909,14 +912,17 @@ meeting-required-end-date = End date is required
 meeting-invalid-start-date = Start date is invalid
 meeting-invalid-end-date = End date is invalid
 
-recording-consent-message = A recording has been started. Do you consent that your audio and video is recorded?
+consent-message = Do you consent that your audio and video is recorded?
+consent-accept = Accept
+consent-decline = Decline
 
 recording-active-label = Recording active
-
-recording-accept = Accept
-recording-decline = Decline
-recording-stopped-message = The recording has ended.
-recording-stopped-message-with-link = <messageContent>The recording has ended. The corresponding file is located in the dashboard under the <messageLink>meeting-details</messageLink>.</messageContent>
+livestream-active-label = Livestream active
+recording-active-message = The recording has started.
+recording-inactive-message = The recording has ended.
+recording-inactive-message-with-link = <messageContent>The recording has ended. The corresponding file is located in the dashboard under the <messageLink>meeting-details</messageLink>.</messageContent>
+livestream-active-message = <messageContent>The stream has started. Streaming URL: <publicUrl>{$publicUrl}</publicUrl></messageContent>
+livestream-inactive-message = The stream has ended.
 
 emoji-category-smileys_people = Smileys & People
 emoji-category-animals_nature = Animals & Nature

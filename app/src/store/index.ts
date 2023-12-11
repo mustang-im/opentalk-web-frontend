@@ -21,11 +21,11 @@ import moderationReducer from './slices/moderationSlice';
 import participantsReducer, { participantsMiddleware } from './slices/participantsSlice';
 import pollReducer from './slices/pollSlice';
 import protocolReducer from './slices/protocolSlice';
-import recordingReducer from './slices/recordingSlice';
 import roomReducer, { roomMiddleware } from './slices/roomSlice';
 import sharedFolderReducer from './slices/sharedFolderSlice';
 import slotReducer from './slices/slotSlice';
 import speedMeterReducer from './slices/speedMeterSlice';
+import streamingReducer from './slices/streamingSlice';
 import timerReducer, { timerMiddleware } from './slices/timerSlice';
 import uiReducer from './slices/uiSlice';
 import userReducer from './slices/userSlice';
@@ -91,7 +91,7 @@ export const appReducers = {
   protocol: protocolReducer,
   timer: timerReducer,
   whiteboard: whiteboardReducer,
-  recording: recordingReducer,
+  streaming: streamingReducer,
   sharedFolder: sharedFolderReducer,
 };
 
