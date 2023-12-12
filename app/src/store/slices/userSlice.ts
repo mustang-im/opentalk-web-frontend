@@ -11,7 +11,6 @@ import {
   WaitingState,
   joinSuccess,
 } from '@opentalk/common';
-import { logged_out } from '@opentalk/react-redux-appauth';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
@@ -103,7 +102,6 @@ export const userSlice = createSlice({
       state.uuid = null;
       state.joinedAt = undefined;
     });
-    builder.addCase(logged_out, () => initialState);
 
     builder.addCase(
       setFocusedSpeaker,
@@ -151,11 +149,6 @@ export const selectDisplayName = createSelector(userState, (state) => state.disp
 export const selectAvatarUrl = createSelector(userState, (state) => state.avatarUrl);
 export const selectIsPresenter = createSelector(userState, (state) => state.isPresenter);
 export const selectUserProtocolAccess = createSelector(userState, (state) => state.protocolAccess);
-export const selectIsLoggedIn = createSelector(userState, (state) => state.loggedIdToken !== undefined);
-export const selectIsAuthenticated = createSelector(
-  userState,
-  (state) => state.loggedIdToken !== undefined || state.role === Role.Guest
-);
 export const selectIsModerator = createSelector(userState, (state) => state.role === Role.Moderator);
 export const selectIsGuest = createSelector(userState, (state) => state.role === Role.Guest);
 

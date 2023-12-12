@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
 import { EndCallIcon } from '@opentalk/common';
+import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +14,6 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { hangUp } from '../../../store/commonActions';
 import { selectEventInfo } from '../../../store/slices/roomSlice';
-import { selectIsLoggedIn } from '../../../store/slices/userSlice';
 import { isRegisteredUser } from '../../../utils/typeGuardUtils';
 import CloseMeetingDialog from '../../CloseMeetingDialog';
 import ToolbarButton from './ToolbarButton';
@@ -24,7 +24,7 @@ const EndCallButton = () => {
   const { roomId } = useParams<'roomId'>() as {
     roomId: RoomId;
   };
-  const isLoggedInUser = useAppSelector(selectIsLoggedIn);
+  const isLoggedInUser = useAppSelector(selectIsAuthenticated);
   const { data: me } = useGetMeQuery(undefined, { skip: !isLoggedInUser });
   const { data: roomData } = useGetRoomQuery(roomId, { skip: !isLoggedInUser });
 

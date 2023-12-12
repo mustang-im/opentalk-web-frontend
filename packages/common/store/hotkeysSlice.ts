@@ -2,7 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TimerStyle, joinSuccess, timerStarted, timerStopped } from '@opentalk/common';
+
+import { TimerStyle } from '../types';
+import { joinSuccess, timerStarted, timerStopped } from './actions';
 
 interface HotkeysState {
   hotkeysEnabled: boolean;
@@ -28,16 +30,16 @@ export const hotkeysSlice = createSlice({
         state.hotkeysEnabled = true;
       }
     }),
-    builder.addCase(timerStarted, (state, { payload }) => {
-      if (payload.style === TimerStyle.CoffeeBreak) {
-        state.hotkeysEnabled = false;
-      }
-    }),
-    builder.addCase(timerStopped, (state) => {
-      if (!state.hotkeysEnabled) {
-        state.hotkeysEnabled = true;
-      }
-    })
+      builder.addCase(timerStarted, (state, { payload }) => {
+        if (payload.style === TimerStyle.CoffeeBreak) {
+          state.hotkeysEnabled = false;
+        }
+      }),
+      builder.addCase(timerStopped, (state) => {
+        if (!state.hotkeysEnabled) {
+          state.hotkeysEnabled = true;
+        }
+      });
   },
 });
 

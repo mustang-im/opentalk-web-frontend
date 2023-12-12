@@ -16,6 +16,7 @@ import {
   notifications,
 } from '@opentalk/common';
 import { automodStore } from '@opentalk/components';
+import { AuthTypeError, authError } from '@opentalk/redux-oidc';
 import {
   createAsyncThunk,
   createSlice,
@@ -313,6 +314,11 @@ function reconnect(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
   const { displayName } = state.user;
   const { assignment: breakoutRoomId } = state.breakout;
 
+  if (state.room.error === StartRoomError.Unathorized) {
+    listenerApi.dispatch(
+      authError({ status: 401, name: AuthTypeError.SessionExpired, message: AuthTypeError.SessionExpired })
+    );
+  }
   if (state.room.error === StartRoomError.WrongRoomPassword) {
     return;
   }

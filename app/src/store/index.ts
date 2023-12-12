@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { HotkeysReducer } from '@opentalk/common';
 import { legalVoteStore, automodStore } from '@opentalk/components';
-import { authReducer } from '@opentalk/react-redux-appauth';
+import { authReducer } from '@opentalk/redux-oidc';
 import { configureStore, Middleware, MiddlewareAPI, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { merge } from 'lodash';

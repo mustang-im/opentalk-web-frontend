@@ -17,7 +17,7 @@ import {
   InviteCode,
 } from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
-import { AuthProvider } from '@opentalk/react-redux-appauth';
+import { AuthProvider } from '@opentalk/redux-oidc';
 import {
   DateTime,
   Email,
@@ -112,12 +112,14 @@ export const render = async (ui: React.ReactElement, store?: Store, options?: Re
         <Provider store={store}>
           <MemoryRouter>
             <AuthProvider
-              store={store}
-              authority="http://OP"
-              clientId="Frontend"
-              redirectUri="http://void"
-              signOutRedirectUri="http://void"
-              scope="void"
+              configuration={{
+                authority: 'http://OP',
+                clientId: 'Frontend',
+                redirectUri: '/',
+                baseUrl: '/',
+                scope: 'void',
+                signOutRedirectUri: '/',
+              }}
             >
               <I18nextProvider i18n={i18n}>
                 <SnackbarProvider>

@@ -5,6 +5,7 @@ import { Button, Container, IconButton, InputAdornment, Stack, styled } from '@m
 import { BreakoutRoomId, HiddenIcon, VisibleIcon, RoomId } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { closeSnackbar, enqueueSnackbar, SnackbarKey } from '@opentalk/common';
+import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import { useFormik } from 'formik';
 import i18next from 'i18next';
 import { FC, useCallback, useEffect, useState } from 'react';
@@ -29,7 +30,6 @@ import {
   selectPasswordRequired,
   selectRoomConnectionState,
 } from '../../store/slices/roomSlice';
-import { selectIsLoggedIn } from '../../store/slices/userSlice';
 import { composeRoomPath } from '../../utils/apiUtils';
 import { formikProps } from '../../utils/formikUtils';
 import { ContitionalToolTip } from '../ConditionalToolTip/ContitionalToolTip';
@@ -65,7 +65,7 @@ const LobbyView: FC = () => {
     roomId: RoomId;
     breakoutRoomId?: BreakoutRoomId;
   };
-  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const isLoggedIn = useAppSelector(selectIsAuthenticated);
   const { data } = useGetMeQuery(undefined, { skip: !isLoggedIn });
   const inviteCode = useInviteCode();
   const inviteCodeInState = useAppSelector(selectInviteCode);
