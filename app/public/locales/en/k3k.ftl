@@ -59,7 +59,7 @@ http-error-message-no-breakout-room = Breakout room does not exist
 
 auth-popup-closes-message = This popup will close automatically.
 auth-redirect-message = You will be redirected shortly.
-copy-url-to-clipboard = copy url to clipboard
+copy-url-to-clipboard = copy URL to clipboard
 toggle-password-visibility = toggle password visibility
 
 echotest-warn-no-echo-cancellation = Your Browser does not support echo canceling. Please use headphones to avoid audio feedback.
@@ -619,13 +619,13 @@ conference-quick-start-title = OpenTalk Conference Quick Guide
 conference-quick-start-open = Open quick guide
 conference-quick-start-close = Close quick guide
 
+quick-start-loading = Loading the quick guide
+quick-start-error = Couldn't load the quick guide
+
 dashboard-faq = FAQ
 dashboard-close-navbar = Close navigation
 dashboard-open-navbar = Open navigation
 dashboard-join-meeting = Join the meeting
-
-quick-start-loading = Loading the quick guide
-quick-start-error = Couldn't load the quick guide
 
 dashboard-settings-general-notification-save-success = Your settings have been saved successfully.
 dashboard-settings-general-notification-save-error = Your settings couln't be saved.
@@ -684,18 +684,33 @@ dashboard-direct-meeting-button-open-room = Open Video Room
 dashboard-direct-meeting-button-send-invitations = Send Invitations
 dashboard-direct-meeting-invitations-successful = All the people you added have been successfully invited to your meeting.
 dashboard-direct-meeting-invitations-error = There was a problem sending one or more invitations. Please try again later.
-dashboard-direct-meeting-invitation-link-field-label = Meeting-Link
-dashboard-direct-meeting-invitation-guest-link-field-label = Guest-Link
-dashboard-direct-meeting-invitation-sip-field-label = Phone Dial-In
-dashboard-direct-meeting-invitation-guest-link-tooltip = For guests without an account
-dashboard-direct-meeting-invitation-password-tooltip = Room password
 dashboard-direct-meeting-password-label = Password - optional
 dashboard-direct-meeting-password-placeholder = Please define a meeting password
-dashboard-direct-meeting-invitation-link-tooltip = Only for registered users
-dashboard-direct-meeting-copy-sip-aria-label = Copy Sip link
-dashboard-direct-meeting-copy-link-aria-label = Copy Room link
-dashboard-direct-meeting-copy-guest-link-aria-label = Copy Room link for guests
-dashboard-direct-meeting-copy-password-aria-label = Copy Room password
+
+dashboard-invite-to-meeting-room-link-label = Meeting-Link
+dashboard-invite-to-meeting-copy-room-link-aria-label = Copy Room link
+dashboard-invite-to-meeting-copy-room-link-success = The link was copied to your clipboard
+dashboard-invite-to-meeting-room-link-tooltip = Only for registered users
+dashboard-invite-to-meeting-sip-link-label = Phone Dial-in
+dashboard-invite-to-meeting-copy-sip-link-aria-label = Copy Sip link
+dashboard-invite-to-meeting-copy-sip-link-success = The telephone dial-in was copied to your clipboard
+dashboard-invite-to-meeting-guest-link-label = Guest-Link
+dashboard-invite-to-meeting-copy-guest-link-aria-label = Copy Room link for guests
+dashboard-invite-to-meeting-copy-guest-link-success = The link was copied to your clipboard
+dashboard-invite-to-meeting-guest-link-tooltip = For guests without an account
+dashboard-invite-to-meeting-room-password-label = Password
+dashboard-invite-to-meeting-copy-room-password-aria-label = Copy Room password
+dashboard-invite-to-meeting-copy-room-password-success = The password was copied to your clipboard
+dashboard-invite-to-meeting-room-password-tooltip = Room password
+dashboard-invite-to-meeting-shared-folder-link-label = Shared folder
+dashboard-invite-to-meeting-copy-shared-folder-link-aria-label = Copy shared folder link
+dashboard-invite-to-meeting-copy-shared-folder-link-success = The link was copied to your clipboard
+dashboard-invite-to-meeting-shared-folder-password-label =  Folder password - For moderator ( with write permissions )
+dashboard-invite-to-meeting-copy-shared-folder-password-aria-label = Copy shared folder password
+dashboard-invite-to-meeting-copy-shared-folder-password-success = The password was copied to your clipboard
+dashboard-invite-to-meeting-livestream-link-label = Livestream-Link
+dashboard-invite-to-meeting-copy-livestream-link-aria-label = Copy livestream link
+dashboard-invite-to-meeting-copy-livestream-link-success = The link was copied to your clipboard
 
 dashboard-select-participants-textfield-placeholder = Type name or email address ( min. 3 characters )
 dashboard-select-participants-label-added = Added
@@ -733,7 +748,6 @@ dashboard-meeting-notification-error = Something went wrong. Please try again la
 dashboard-meeting-switch-enabled = Enabled
 dashboard-meeting-switch-disabled = Disabled
 dashboard-meeting-shared-folder-label = Shared folder
-dashboard-meeting-shared-folder-password-label = Folder password - For moderator ( with write permissions )
 dashboard-meeting-shared-folder-create-error-message = Unfortunately, the shared folder could not be created.
 dashboard-meeting-shared-folder-create-retry-error-message = Unfortunately, the shared folder could not be created. Please try again later.
 dashboard-meeting-shared-folder-delete-error-message = Unfortunately, an error occurred, the shared folder could not be deleted.
@@ -743,6 +757,24 @@ dashboard-meeting-shared-folder-error-retry-button = Retry
 dashboard-meeting-shared-folder-error-ok-button = Ok
 dashboard-meeting-grant-moderator-rights = Grant moderator rights
 dashboard-meeting-revoke-moderator-rights = Revoke moderator rights
+dashboard-meeting-livestream-label = Livestream
+dashboard-meeting-livestream-platform-label = Platform
+dashboard-meeting-livestream-platform-name-label = Name
+dashboard-meeting-livestream-platform-name-placeholder = Add name
+dashboard-meeting-livestream-platform-name-required = This is a mandatory field
+dashboard-meeting-livestream-streaming-endpoint-label = Streaming receiver URL
+dashboard-meeting-livestream-streaming-endpoint-placeholder = Add URL
+dashboard-meeting-livestream-streaming-endpoint-invalid-url = Must enter a valid URL
+dashboard-meeting-livestream-streaming-endpoint-required = This is a mandatory field
+dashboard-meeting-livestream-public-url-label = Livestream URL
+dashboard-meeting-livestream-public-url-placeholder = Add URL
+dashboard-meeting-livestream-public-url-invalid-url = Must enter a valid URL
+dashboard-meeting-livestream-public-url-required = This is a mandatory field
+dashboard-meeting-livestream-streaming-key-label = Streaming key
+dashboard-meeting-livestream-streaming-key-placeholder = Add Streaming key
+dashboard-meeting-livestream-streaming-key-required = This is a mandatory field
+
+streaming-targets-request-error = Could not add streaming target
 
 dashboard-meeting-details-page-future = future
 dashboard-meeting-details-page-past = past
