@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Protocol feature is now fully available for mobile users ([#1507](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1507))
 - Switch off media devices if user aborts reconnect ([#1531](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1531))
 - Improve virtual background quality by introducing confidence thresholds ([#1595](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1595))
 - Improved accessibility of dashboard main navigation. ([#1641](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1641))

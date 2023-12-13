@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Badge, Drawer as MuiDrawer, Stack, styled } from '@mui/material';
+import { Drawer as MuiDrawer, Stack, styled } from '@mui/material';
 import { IconButton as DefaultIconButton, LogoSmallIcon } from '@opentalk/common';
 import { BackendModules } from '@opentalk/common';
 import { useState } from 'react';
@@ -19,7 +19,9 @@ import {
   setActiveTab,
 } from '../../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../../store/slices/userSlice';
+import { Indicator } from '../../fragments/Indicator';
 import DrawerTab from './DrawerTab';
+import { ProtocolDrawerTab } from './ProtocolDrawerTab';
 
 const DrawerContentContainer = styled(Stack)(({ theme }) => ({
   height: '100%',
@@ -48,16 +50,11 @@ const StyledDrawer = styled(MuiDrawer)(({ theme }) => ({
   },
 }));
 
-const Indicator = styled(Badge)(({ theme }) => ({
+const ButtonIndicator = styled(Indicator)({
   position: 'absolute',
-  top: '25%',
-  right: '15%',
-  width: '0.75rem',
-  height: '0.75rem',
-  transform: 'translate(50%, -50%)',
-  borderRadius: '50%',
-  background: theme.palette.primary.main,
-}));
+  top: '0.1rem',
+  right: '0.1rem',
+});
 
 const Drawer = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -70,12 +67,13 @@ const Drawer = () => {
   const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const isSharedFolderAvailableIndicatorVisible = useAppSelector(selectIsSharedFolderAvailableIndicatorVisible);
   const isModerator = useAppSelector(selectIsModerator);
+  const isProtocolHiglightedForNonModerator = !isModerator && isCurrentProtocolHighlighted;
 
   const showIndicator =
     unreadGlobalMessageCount > 0 ||
     unreadPersonalMessageCount > 0 ||
     isCurrentWhiteboardHighlighted ||
-    isCurrentProtocolHighlighted ||
+    isProtocolHiglightedForNonModerator ||
     isSharedFolderAvailableIndicatorVisible;
 
   const handleSetActiveTab = (tabKey: ModerationTabKey) => {
@@ -103,8 +101,13 @@ const Drawer = () => {
       //Temporary disabling of voting and polls until they are taken care of by separate issue
       !(tab.moduleKey === BackendModules.LegalVote || tab.moduleKey === BackendModules.Polls)
     ) {
+      let TabComponent = DrawerTab;
+      if (tab.moduleKey === BackendModules.Protocol) {
+        TabComponent = ProtocolDrawerTab;
+      }
+
       return (
-        <DrawerTab
+        <TabComponent
           key={tab.key}
           tabTitle={getTabTitle(tab)}
           disabled={tab.disabled}
@@ -114,7 +117,7 @@ const Drawer = () => {
           {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
           or some other way to prevent duplication with MeetingSidebar.tsx */}
           <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
-        </DrawerTab>
+        </TabComponent>
       );
     }
   });
@@ -123,7 +126,7 @@ const Drawer = () => {
     <>
       <IconButton onClick={() => setIsDrawerOpen(true)}>
         <LogoSmallIcon />
-        {showIndicator && <Indicator />}
+        {showIndicator && <ButtonIndicator />}
       </IconButton>
       <StyledDrawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
         {isModerator && <DrawerContentContainer>{Tabs}</DrawerContentContainer>}

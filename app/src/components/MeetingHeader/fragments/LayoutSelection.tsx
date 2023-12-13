@@ -1,8 +1,18 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ListItemIcon, MenuItem as MuiMenuItem, MenuList, Popover, Stack, Typography, styled } from '@mui/material';
-import { FullscreenViewIcon, GridViewIcon, IconButton, SpeakerViewIcon } from '@opentalk/common';
+import {
+  ListItemIcon,
+  MenuItem as MuiMenuItem,
+  MenuList,
+  Popover,
+  Stack,
+  Typography,
+  styled,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { FullscreenViewIcon, GridViewIcon, IconButton, ProtocolIcon, SpeakerViewIcon } from '@opentalk/common';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -60,12 +70,15 @@ const LayoutSelection = () => {
     dispatch(updatedCinemaLayout(layout));
   };
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const ViewIcon = useMemo(() => {
     switch (selectedLayout) {
       case LayoutOptions.Grid:
         return <GridViewIcon />;
       case LayoutOptions.Protocol:
-        return <Typography noWrap>{t('protocol-hide')}</Typography>;
+        return isMobile ? <ProtocolIcon /> : <Typography noWrap>{t('protocol-hide')}</Typography>;
       case LayoutOptions.Whiteboard:
         return <Typography noWrap>{t('whiteboard-hide')}</Typography>;
       case LayoutOptions.Speaker:
@@ -122,6 +135,14 @@ const LayoutSelection = () => {
             </ListItemIcon>
             {t('conference-view-fullscreen')}
           </MenuItem>
+          {isMobile && (
+            <MenuItem onClick={() => handleSelectedView(LayoutOptions.Protocol)}>
+              <ListItemIcon aria-hidden={true}>
+                <ProtocolIcon />
+              </ListItemIcon>
+              {t('moderationbar-button-protocol-tooltip')}
+            </MenuItem>
+          )}
         </PopoverContainer>
       </Popover>
     </ViewPopperContainer>

@@ -835,6 +835,8 @@ protocol-created-all-notification = Protocol was set up for all.
 protocol-new-protocol-message-button = Open
 protocol-hide = Hide protocol
 protocol-tab-title = Create protocol
+protocol-tab-open-title = Open meeting minutes
+protocol-tab-close-title = Hide meeting minutes
 
 beta-flag-tooltip-text = You are using the <demoLink>beta version</demoLink> of OpenTalk. We are continuously developing new features and provide them as an early preview in our demo environment. Please note that there may be restrictions in using this version. Please feel free to send us any criticism, ideas or bugs to <reportEmailLink>{$reportEmail}</reportEmailLink>.<br /><br />Say Hello to OpenTalk!
 
