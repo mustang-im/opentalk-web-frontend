@@ -575,9 +575,9 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
    * Configures the maximum quality and resolution of the published video track.
    * @param {VideoSetting} qualityCap - maximum quality
    */
-  public async setQuality(qualityCap: VideoSetting) {
+  public setQuality(qualityCap: VideoSetting) {
     this.qualityCap = qualityCap;
-    await this.connection?.requestQuality(qualityCap);
+    this.connection?.requestQuality(qualityCap);
   }
 }
 

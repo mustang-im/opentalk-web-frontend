@@ -21,7 +21,7 @@ import {
   SubscriberStateChanged,
 } from '../../modules/WebRTC';
 import { SubscriberState } from '../../modules/WebRTC/SubscriberConnection';
-import { hangUp } from '../commonActions';
+import { hangUp, startRoom } from '../commonActions';
 import { leave } from './participantsSlice';
 import { pinnedRemoteScreenshare } from './uiSlice';
 
@@ -100,6 +100,7 @@ export const mediaSubscriberSlice = createSlice({
     builder.addCase(hangUp.pending, (state) => {
       mediaSubscriberAdapter.removeAll(state);
     });
+    builder.addCase(startRoom.rejected, () => mediaSubscriberAdapter.getInitialState());
   },
 });
 
