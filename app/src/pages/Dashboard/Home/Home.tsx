@@ -6,7 +6,7 @@ import { AddIcon, CameraOnIcon } from '@opentalk/common';
 import { DateTime, Event, EventException, RoomId } from '@opentalk/rest-api-rtk-query';
 import { formatRFC3339 } from 'date-fns';
 import { isEmpty } from 'lodash';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -16,8 +16,9 @@ import MeetingCard from '../../../components/MeetingCard';
 import PaymentStatusBanner from '../../../components/PaymentStatusBanner';
 import StartMeetingImage from '../../../components/StartMeetingImage';
 import { useHeader } from '../../../templates/DashboardTemplate';
-import { getExpandedEvents } from '../../../utils/eventUtils';
+import { appendRecurrenceEventInstances } from '../../../utils/eventUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
+import { TimePerspectiveFilter } from '../EventsOverviewPage/EventsOverviewPage';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -47,7 +48,6 @@ const Home = () => {
   const { t } = useTranslation();
   const maxEventsPerPage = 4;
   const maxConsideredMonths = 12;
-  const maxUsedEntries = 366;
   const { setHeader } = useHeader();
 
   const { data: favoritesEvents, isLoading: favoritesEventsIsLoading } = useGetEventsQuery({
@@ -149,7 +149,7 @@ const Home = () => {
       return renderCurrentEventsLoading();
     }
 
-    if (timeIndependentEvents?.data === undefined && upcomingEvents?.data === undefined) {
+    if (isEmpty(timeIndependentEvents?.data) && isEmpty(upcomingEvents?.data)) {
       return undefined;
     }
 
@@ -157,12 +157,11 @@ const Home = () => {
       let tiEvents = Array.from(timeIndependentEvents.data);
       if (upcomingEvents?.data) {
         const ucEvents = Array.from(upcomingEvents.data);
-        const expandedEvents = getExpandedEvents(
+        const expandedEvents = appendRecurrenceEventInstances(
           ucEvents,
           true,
-          maxUsedEntries,
-          currentDate.toISOString(),
-          maxConsideredMonths
+          maxConsideredMonths,
+          TimePerspectiveFilter.Future
         );
         tiEvents = tiEvents.concat(expandedEvents.slice(0, maxEventsPerPage - tiEvents.length));
       }
