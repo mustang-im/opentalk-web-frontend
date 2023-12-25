@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Stack } from '@mui/material';
+import { Button, MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Stack, MenuList } from '@mui/material';
 import { MoreIcon, notificationAction, notifications } from '@opentalk/common';
 import { Event, EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
-import React, { useRef, useState } from 'react';
+import React, { KeyboardEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -235,6 +235,21 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
       </MenuItem>
     ));
 
+  const handleMoreButtonKeyDownEvent = (event: KeyboardEvent) => {
+    const { code } = event;
+    if (code === 'ArrowDown') {
+      event.preventDefault(); // prevent scrolling
+      setAnchorEl(event.target as HTMLButtonElement);
+    }
+  };
+
+  const handleMoreButtonKeyUpEvent = (event: KeyboardEvent) => {
+    const { code } = event;
+    if (code === 'Enter' || code === 'Space' || code === 'ArrowDown') {
+      setAnchorEl(event.target as HTMLButtonElement);
+    }
+  };
+
   return (
     <Stack flexDirection={'row'}>
       <MoreButton
@@ -242,6 +257,8 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
         aria-label={t('toolbar-button-more-tooltip-title')}
         size={'small'}
         onMouseDown={openPopupMenu}
+        onKeyDown={handleMoreButtonKeyDownEvent}
+        onKeyUp={handleMoreButtonKeyUpEvent}
       >
         <MoreIcon />
       </MoreButton>
@@ -259,7 +276,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
         }}
         onMouseDown={stopPropagation}
       >
-        {renderMenuOptionItems()}
+        <MenuList autoFocusItem={true}>{renderMenuOptionItems()}</MenuList>
       </MuiPopover>
       <ConfirmDialog
         open={isConfirmDialogVisible}
