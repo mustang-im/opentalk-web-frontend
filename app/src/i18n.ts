@@ -50,4 +50,12 @@ i18n
 i18n.loadNamespaces('k3k');
 window.i18n = i18n;
 
+i18n.on('languageChanged', function (nextLanguage) {
+  document.documentElement.setAttribute('lang', nextLanguage);
+});
+
+i18n.on('loaded', function () {
+  document.documentElement.setAttribute('lang', i18n.language);
+});
+
 export default i18n;
