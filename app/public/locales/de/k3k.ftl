@@ -131,6 +131,7 @@ chat-delete-global-messages-success = Der globale Chat wurde durch den Moderator
 chat-open-emoji-picker = emoji picker öffnen
 chat-close-emoji-picker = emoji picker schließen
 chat-submit-button = Chat Nachricht absenden
+chat-smiley-label = lächelndes Gesicht-Emoji
 
 no-group-participants-label = Ohne Gruppe
 button-back-messages = zurück
@@ -616,7 +617,7 @@ dashboard-help-support = Support
 
 dashboard-quick-start-title = Kurzanleitung für das OpenTalk-Dashboard
 conference-quick-start-title = Kurzanleitung für die OpenTalk-Konferenz
-conference-quick-start-open = Öffnen die Kurzanleitung 
+conference-quick-start-open = Öffnen die Kurzanleitung
 conference-quick-start-close = Schließen die Kurzanleitung
 
 quick-start-loading = Kurzanleitung wird geladen

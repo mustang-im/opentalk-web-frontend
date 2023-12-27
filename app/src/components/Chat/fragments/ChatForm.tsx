@@ -225,7 +225,7 @@ const ChatForm = ({ scope, targetId }: IChatFormProps) => {
               edge={'start'}
               disabled={!isChatEnabled}
             >
-              <span role="img" aria-label="smiling face emoji">
+              <span role="img" aria-label={t('chat-smiley-label')}>
                 😋
               </span>
             </IconButton>
