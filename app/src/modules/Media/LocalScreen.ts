@@ -101,9 +101,9 @@ export class LocalScreen extends BaseEventEmitter<LocalScreenEvent> {
     await this.connection?.replacedTrack(track.id);
   };
 
-  public async setQuality(qualityCap: VideoSetting) {
+  public setQuality(qualityCap: VideoSetting) {
     this.qualityCap = qualityCap;
-    await this.connection?.requestQuality(qualityCap);
+    this.connection?.requestQuality(qualityCap);
   }
 
   public release() {
