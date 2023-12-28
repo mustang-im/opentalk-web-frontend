@@ -19,7 +19,7 @@
 - Added translation to aria label on the chat emoji button. ([#1275](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1275))
 - Fix: Error on late publisher reconnect ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1158))
 - Fix logic bug in reservation logic, which might lead to 'black' videos. ([#1611](https://git.open  talk.dev/opentalk/frontend/web/web-app/-/issues/1611))
-
+- Fix missing unread global chat message indicator in mobile view. ([#1610](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1610))
 - Remove hardcoded default values for survey feature ([#1605](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1605))
 - Fix partially visible notification on smaller mobile devices. ([#1568](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1568))
 - Fix/refactor recurrence event instance creation ([#1618](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1618))
