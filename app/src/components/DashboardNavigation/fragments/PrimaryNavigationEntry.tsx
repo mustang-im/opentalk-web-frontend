@@ -18,7 +18,7 @@ interface NavigationProps {
 
 const PrimaryNavigationEntry = (props: NavigationProps) => {
   return (
-    <ListItem isSubmenuOpen={props.isSubmenuOpen} role="button">
+    <ListItem isSubmenuOpen={props.isSubmenuOpen}>
       <Button
         onClick={props.onClick}
         href={props.href || ''}
