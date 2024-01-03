@@ -30,5 +30,6 @@ export const { setProtocolReadUrl, setProtocolWriteUrl } = protocolSlice.actions
 
 const protocolState = (state: RootState) => state.protocol;
 export const selectProtocolUrl = createSelector(protocolState, (state) => state.protocolUrl);
+export const selectIsProtocolAvailable = createSelector(protocolState, (state) => Boolean(state.protocolUrl));
 
 export default protocolSlice.reducer;

@@ -19,9 +19,17 @@ import { useTranslation } from 'react-i18next';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
-import { selectCinemaLayout, toggledFullScreenMode, updatedCinemaLayout } from '../../../store/slices/uiSlice';
+import { selectIsProtocolAvailable } from '../../../store/slices/protocolSlice';
+import {
+  selectCinemaLayout,
+  selectIsCurrentProtocolHighlighted,
+  toggledFullScreenMode,
+  updatedCinemaLayout,
+} from '../../../store/slices/uiSlice';
+import { Indicator } from './Indicator';
 
 const ViewPopperContainer = styled(Stack)(({ theme }) => ({
+  position: 'relative',
   background: theme.palette.background.video,
   borderRadius: '0.25rem',
   justifyContent: 'center',
@@ -41,15 +49,33 @@ const PopoverContainer = styled(MenuList)(({ theme }) => ({
   background: theme.palette.background.video,
 }));
 
-const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
+const MenuItem = styled(MuiMenuItem, {
+  shouldForwardProp: (prop) => prop !== 'hasIndicator',
+})<{ hasIndicator?: boolean }>(({ theme, hasIndicator }) => ({
   padding: theme.spacing(1),
   '& .MuiListItemIcon-root .MuiSvgIcon-root': {
+    position: 'relative',
     fontSize: theme.typography.pxToRem(16),
     [theme.breakpoints.down('md')]: {
       fontSize: theme.typography.pxToRem(20),
     },
   },
+  '&:after': {
+    content: '""',
+    display: hasIndicator ? 'block' : 'none',
+    width: '0.5rem',
+    height: '0.5rem',
+    background: theme.palette.primary.main,
+    borderRadius: '50%',
+    marginLeft: '0.5rem',
+  },
 }));
+
+const ButtonIndicator = styled(Indicator)({
+  position: 'absolute',
+  top: '0.1rem',
+  right: '0.1rem',
+});
 
 const LayoutSelection = () => {
   const dispatch = useAppDispatch();
@@ -58,6 +84,14 @@ const LayoutSelection = () => {
   const { t } = useTranslation();
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const isViewPopoverOpen = Boolean(anchorElement);
+  const isProtocolAvailable = useAppSelector(selectIsProtocolAvailable);
+  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
+  const isProtocolActive = selectedLayout === LayoutOptions.Protocol;
+
+  /**
+   * Placeholder condition for all features that has to show indicator.
+   */
+  const showButtonIndicator = isCurrentProtocolHighlighted;
 
   const openFullscreenView = useCallback(() => {
     setAnchorElement(null);
@@ -95,12 +129,13 @@ const LayoutSelection = () => {
         aria-controls={isViewPopoverOpen ? 'view-popover-menu' : undefined}
         aria-label={t('conference-view-trigger-button')}
         onClick={(event) =>
-          [LayoutOptions.Protocol, LayoutOptions.Whiteboard].includes(selectedLayout)
+          [LayoutOptions.Whiteboard].includes(selectedLayout)
             ? handleSelectedView(LayoutOptions.Grid)
             : setAnchorElement(event.currentTarget)
         }
       >
         {ViewIcon}
+        {showButtonIndicator && isMobile && <ButtonIndicator />}
       </IconButton>
       <Popover
         open={isViewPopoverOpen}
@@ -135,12 +170,19 @@ const LayoutSelection = () => {
             </ListItemIcon>
             {t('conference-view-fullscreen')}
           </MenuItem>
-          {isMobile && (
-            <MenuItem onClick={() => handleSelectedView(LayoutOptions.Protocol)}>
+          {isMobile && isProtocolAvailable && (
+            <MenuItem
+              onClick={() => {
+                handleSelectedView(
+                  selectedLayout === LayoutOptions.Protocol ? LayoutOptions.Grid : LayoutOptions.Protocol
+                );
+              }}
+              hasIndicator={isCurrentProtocolHighlighted}
+            >
               <ListItemIcon aria-hidden={true}>
                 <ProtocolIcon />
               </ListItemIcon>
-              {t('moderationbar-button-protocol-tooltip')}
+              {t(isProtocolActive ? 'protocol-hide' : 'protocol-open')}
             </MenuItem>
           )}
         </PopoverContainer>

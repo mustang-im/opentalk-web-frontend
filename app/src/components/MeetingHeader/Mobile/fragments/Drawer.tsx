@@ -12,16 +12,10 @@ import { useAppDispatch, useAppSelector, useTabs } from '../../../../hooks';
 import { EnterpriseProvider } from '../../../../provider/EnterpriseProvider';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../../../store/slices/chatSlice';
 import { selectIsSharedFolderAvailableIndicatorVisible } from '../../../../store/slices/sharedFolderSlice';
-import {
-  selectActiveTab,
-  selectIsCurrentProtocolHighlighted,
-  selectIsCurrentWhiteboardHighlighted,
-  setActiveTab,
-} from '../../../../store/slices/uiSlice';
+import { selectActiveTab, selectIsCurrentWhiteboardHighlighted, setActiveTab } from '../../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../../store/slices/userSlice';
 import { Indicator } from '../../fragments/Indicator';
 import DrawerTab from './DrawerTab';
-import { ProtocolDrawerTab } from './ProtocolDrawerTab';
 
 const DrawerContentContainer = styled(Stack)(({ theme }) => ({
   height: '100%',
@@ -64,16 +58,13 @@ const Drawer = () => {
   const unreadGlobalMessageCount = useAppSelector(selectUnreadGlobalMessageCount);
   const unreadPersonalMessageCount = useAppSelector(selectUnreadPersonalMessageCount);
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
-  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const isSharedFolderAvailableIndicatorVisible = useAppSelector(selectIsSharedFolderAvailableIndicatorVisible);
   const isModerator = useAppSelector(selectIsModerator);
-  const isProtocolHiglightedForNonModerator = !isModerator && isCurrentProtocolHighlighted;
 
   const showIndicator =
     unreadGlobalMessageCount > 0 ||
     unreadPersonalMessageCount > 0 ||
     isCurrentWhiteboardHighlighted ||
-    isProtocolHiglightedForNonModerator ||
     isSharedFolderAvailableIndicatorVisible;
 
   const handleSetActiveTab = (tabKey: ModerationTabKey) => {
@@ -101,13 +92,8 @@ const Drawer = () => {
       //Temporary disabling of voting and polls until they are taken care of by separate issue
       !(tab.moduleKey === BackendModules.LegalVote || tab.moduleKey === BackendModules.Polls)
     ) {
-      let TabComponent = DrawerTab;
-      if (tab.moduleKey === BackendModules.Protocol) {
-        TabComponent = ProtocolDrawerTab;
-      }
-
       return (
-        <TabComponent
+        <DrawerTab
           key={tab.key}
           tabTitle={getTabTitle(tab)}
           disabled={tab.disabled}
@@ -117,7 +103,7 @@ const Drawer = () => {
           {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
           or some other way to prevent duplication with MeetingSidebar.tsx */}
           <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
-        </TabComponent>
+        </DrawerTab>
       );
     }
   });

@@ -833,10 +833,9 @@ protocol-upload-pdf-message = Protokoll PDF erstellt
 protocol-created-notification = Protokoll ist eingerichtet.
 protocol-created-all-notification = Protokoll für alle eingerichtet.
 protocol-new-protocol-message-button = Anzeigen
-protocol-hide = Protokoll ausblenden
+protocol-hide = Protokoll schließen
+protocol-open = Protokoll öffnen
 protocol-tab-title = Protokoll erstellen
-protocol-tab-open-title = Protokoll öffnen
-protocol-tab-close-title = Protokoll schließen
 
 beta-flag-tooltip-text = Sie nutzen die Beta-Version von OpenTalk. Wir entwickeln kontinuierlich neue Funktionen und stellen diese im Rahmen unserer <demoLink>Demo</demoLink> frühzeitig als Ausblick bereit. Bitte beachten Sie, dass es zu Einschränkungen bei der Nutzung kommen kann. Kritik, Ideen und Fehler können Sie uns gerne an <reportEmailLink>{$reportEmail}</reportEmailLink> senden.<br /><br />Viel Spaß beim ausprobieren von OpenTalk!
 
