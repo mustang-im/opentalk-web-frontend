@@ -8,6 +8,7 @@
 
 ### Improvements to the user experience
 
+- Aligned the page language with the chosen application language to enhance the pronunciation accuracy of screen readers. ([#1272](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1272))
 - Implementing new auth provider ([#1598](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1598))
 - Chat no longer discards draft message when hidden ([#1596](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1596))
 - Rework the participants list in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1464))
