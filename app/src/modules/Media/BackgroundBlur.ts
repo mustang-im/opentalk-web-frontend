@@ -8,6 +8,8 @@ export type SourcePlayback = {
   height: number;
 };
 
+// For more information on TFlite and WASM refer to:
+// https://github.com/Volcomix/virtual-background#building-tflite-to-webassembly
 export interface TFLite extends EmscriptenModule {
   _getModelBufferMemoryOffset(): number;
   _getInputMemoryOffset(): number;
@@ -28,6 +30,14 @@ declare function createTFLiteSIMDModule(): Promise<TFLite>;
 const SEGMENTATION_HEIGHT = 144;
 const SEGMENTATION_WIDTH = 256;
 const REFRESH_RATE = 25;
+
+// Confidence range is [0, 1]
+// Current values have been determined during testing
+// https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1162#note_79329
+const MIN_CONFIDENCE = 0.3;
+const MAX_CONFIDENCE = 0.8;
+const BLEND_COEFF = 1 / (MAX_CONFIDENCE - MIN_CONFIDENCE);
+const BLUR_STRENGTH = 7;
 
 export interface BackgroundConfig {
   style: 'blur' | 'color' | 'image' | 'off';
@@ -77,6 +87,8 @@ export class BackgroundBlur {
       tfLite = await createTFLiteModule();
     }
 
+    // For model card refer to:
+    // https://storage.googleapis.com/mediapipe-assets/Model%20Card%20MediaPipe%20Selfie%20Segmentation.pdf
     const modelResponse = await fetch(`${process.env.PUBLIC_URL}/models/selfie_segmentation_landscape_05185647.tflite`);
     const model = await modelResponse.arrayBuffer();
 
@@ -117,7 +129,9 @@ export class BackgroundBlur {
     // fire fix -> https://bugzilla.mozilla.org/show_bug.cgi?id=1572422
     this.drawingContext = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    this.config = { style: 'blur' };
+    this.config = {
+      style: 'blur',
+    };
   }
 
   /**
@@ -204,10 +218,13 @@ export class BackgroundBlur {
 
   private async runInference() {
     this.tfLite._runInference();
-
     for (let i = 0; i < this.segmentationPixelCount; i++) {
-      const person = this.tfLite.HEAPF32[this.outputMemoryOffset + i];
-      this.segmentationMask.data[i * 4 + 3] = 255 * person; // set mask alpha value
+      const confidence = this.tfLite.HEAPF32[this.outputMemoryOffset + i];
+      // Aplha blending in the edge area to smooth the mask corners
+      // Original formula "edgeAlpha = (confidence - minConfidence) / (maxConfidence - minConfidence)"
+      const edgeAlpha = (confidence - MIN_CONFIDENCE) * BLEND_COEFF;
+      const alpha = Math.min(Math.max(edgeAlpha, 0), 1);
+      this.segmentationMask.data[i * 4 + 3] = 255 * alpha; // set mask alpha value
     }
     this.segmentationMaskCtx?.putImageData(this.segmentationMask, 0, 0);
   }
@@ -278,7 +295,7 @@ export class BackgroundBlur {
 
     switch (this.config.style) {
       case 'blur':
-        ctx.filter = 'blur(12px)'; // FIXME Does not work on Safari
+        ctx.filter = `blur(${BLUR_STRENGTH}px)`; // FIXME Does not work on Safari
         ctx.drawImage(this.sourcePlayback?.htmlElement as CanvasImageSource, 0, 0);
         break;
       case 'color':
