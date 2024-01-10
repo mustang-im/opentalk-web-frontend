@@ -21,12 +21,13 @@ const Container = styled(Stack)({
   width: '100%',
 });
 
-interface IChatProps {
+interface ChatProps {
   scope: ChatScope;
   target?: TargetId;
+  autoFocusMessageInput?: boolean;
 }
 
-const Chat = ({ target, scope }: IChatProps) => {
+const Chat = ({ target, scope, autoFocusMessageInput }: ChatProps) => {
   // Default value is used when we switch tabs and component remounts.
   const defaultChatValue = useAppSelector(selectChatSearchValue);
   const [searchValue, setSearchValue] = useState<string>(defaultChatValue);
@@ -66,7 +67,7 @@ const Chat = ({ target, scope }: IChatProps) => {
     <Container data-testid={'chat'} spacing={1}>
       <ChatSearch value={searchValue} onChange={onChangeMiddleware} ref={chatSearchInputReference} />
       <ChatList scope={scope} targetId={target} onReset={resetSearch} />
-      <ChatForm scope={scope} targetId={target} />
+      <ChatForm scope={scope} targetId={target} autoFocusMessageInput={autoFocusMessageInput} />
     </Container>
   );
 };

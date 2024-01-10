@@ -80,7 +80,13 @@ const ChatOverview = () => {
         >
           {t('button-back-messages')}
         </Button>
-        <Chat scope={chatConversationState.scope} target={chatConversationState.targetId} />
+        <Chat
+          scope={chatConversationState.scope}
+          target={chatConversationState.targetId}
+          // We want to focus chat input for the private and group messages
+          // which are the ones containing `targetId`.
+          autoFocusMessageInput={Boolean(chatConversationState.targetId)}
+        />
       </Stack>
     );
 

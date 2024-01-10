@@ -12,6 +12,7 @@
 - Improved accessibility of dashboard main navigation. ([#1641](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1641))
 - More menu buttons on the meetings page are interactive using `space` or `enter` key. ([#1647](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1647))
 - Aligned the page language with the chosen application language to enhance the pronunciation accuracy of screen readers. ([#1272](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1272))
+- Chat input gets autofocused upon private and group message opening. ([#1287](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1287))
 - Implementing new auth provider ([#1598](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1598))
 - Chat no longer discards draft message when hidden ([#1596](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1596))
 - Rework the participants list in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1464))
