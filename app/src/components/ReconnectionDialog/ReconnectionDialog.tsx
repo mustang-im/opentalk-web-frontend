@@ -5,15 +5,31 @@ import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, Di
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from '../../hooks';
+import { useAppSelector } from '../../hooks';
+import { selectAudioEnabled, selectVideoEnabled } from '../../store/slices/mediaSlice';
 import { abortedReconnection } from '../../store/slices/roomSlice';
+import { useMediaContext } from '../MediaProvider';
 
 const ReconnectionDialog = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const mediaContext = useMediaContext();
+  const audioEnabled = useAppSelector(selectAudioEnabled);
+  const videoEnabled = useAppSelector(selectVideoEnabled);
 
-  function abort() {
+  const disableMedia = async () => {
+    if (audioEnabled) {
+      await mediaContext.trySetAudio(false);
+    }
+    if (videoEnabled) {
+      await mediaContext.trySetVideo(false);
+    }
+  };
+
+  const abort = () => {
+    disableMedia();
     dispatch(abortedReconnection());
-  }
+  };
 
   return (
     <Dialog open fullWidth maxWidth={'xs'}>
