@@ -2,12 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ParticipantId, Timestamp, VideoSetting } from '@opentalk/common';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createListenerMiddleware, TypedStartListening } from '@reduxjs/toolkit';
 
-import { RootState } from '../';
+import { RootState, AppDispatch } from '../';
 import { RequestMute } from '../../api/types/incoming/media';
+import { updateSpeakingState } from '../../api/types/outgoing/media';
 import { BackgroundConfig } from '../../modules/Media/BackgroundBlur';
 import { DeviceId } from '../../modules/Media/MediaUtils';
+import { getCurrentConferenceRoom } from '../../modules/WebRTC';
 import { leave as participantLeave } from './participantsSlice';
 
 export enum NotificationKind {
@@ -136,5 +138,19 @@ export const selectNotification = (state: RootState) => state.media.requestMuteN
 export const selectMediaChangeInProgress = (state: RootState) => state.media.inProgress;
 
 export const actions = mediaSlice.actions;
+
+export const mediaMiddleware = createListenerMiddleware();
+type AppStartListening = TypedStartListening<RootState, AppDispatch>;
+
+const startAppListening = mediaMiddleware.startListening as AppStartListening;
+startAppListening({
+  actionCreator: setSpeakerActivity,
+  effect: (action, listenerApi) => {
+    const isInConference = getCurrentConferenceRoom() !== undefined;
+    if (isInConference) {
+      listenerApi.dispatch(updateSpeakingState.action({ isSpeaking: action.payload }));
+    }
+  },
+});
 
 export default mediaSlice.reducer;

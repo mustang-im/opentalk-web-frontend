@@ -99,6 +99,11 @@ export interface RevokePresenterRole {
   participantIds: Array<ParticipantId>;
 }
 
+export interface UpdateSpeakingState {
+  action: 'update_speaking_state';
+  isSpeaking: boolean;
+}
+
 export type Action =
   | Publish
   | PublishComplete
@@ -112,13 +117,15 @@ export type Action =
   | SdpEndOfCandidates
   | GrantPresenterRole
   | RevokePresenterRole
-  | ModeratorMute;
+  | ModeratorMute
+  | UpdateSpeakingState;
 
 export type Media = Namespaced<Action, 'media'>;
 
 export const requestMute = createSignalingApiCall<ModeratorMute>('media', 'moderator_mute');
 export const grantPresenterRole = createSignalingApiCall<GrantPresenterRole>('media', 'grant_presenter_role');
 export const revokePresenterRole = createSignalingApiCall<RevokePresenterRole>('media', 'revoke_presenter_role');
+export const updateSpeakingState = createSignalingApiCall<UpdateSpeakingState>('media', 'update_speaking_state');
 
 export const handler = createModule<RootState>((builder) => {
   builder.addCase(requestMute.action, (_state, action) => {
@@ -129,6 +136,9 @@ export const handler = createModule<RootState>((builder) => {
   });
   builder.addCase(revokePresenterRole.action, (_state, action) => {
     sendMessage(revokePresenterRole(action.payload));
+  });
+  builder.addCase(updateSpeakingState.action, (_state, action) => {
+    sendMessage(updateSpeakingState(action.payload));
   });
 });
 
