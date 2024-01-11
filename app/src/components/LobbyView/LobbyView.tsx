@@ -211,7 +211,7 @@ const LobbyView: FC = () => {
                       {...formikProps('name', formik)}
                       color={'secondary'}
                       placeholder={t('joinform-enter-name')}
-                      autoComplete="user-name"
+                      autoComplete="username"
                       disabled={disableDisplayNameField}
                     />
                   }
@@ -240,9 +240,8 @@ const LobbyView: FC = () => {
             </form>
           </SelfTest>
         </Stack>
-      </Container >
-      {showImprintContainer && <ImprintContainer />
-      }
+      </Container>
+      {showImprintContainer && <ImprintContainer />}
     </>
   );
 };

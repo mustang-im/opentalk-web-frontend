@@ -39,7 +39,8 @@ const SpeedTestContainer = styled(MuiContainer)(({ theme }) => ({
   },
 }));
 
-const BottomContainer = styled(MuiContainer)(({ theme }) => ({
+const BottomContainer = styled('nav')(({ theme }) => ({
+  width: '100%',
   padding: theme.spacing(6),
   bottom: 0,
   left: 0,
@@ -49,7 +50,9 @@ const BottomContainer = styled(MuiContainer)(({ theme }) => ({
   },
 }));
 
-const MonitorContainer = styled(Stack)(({ theme }) => ({
+const MonitorContainer = styled('main')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   aspectRatio: '16/9',
@@ -72,7 +75,7 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
 
   return (
     <SelfTestContainer>
-      <Stack direction="row-reverse">
+      <Stack component="header" direction="row-reverse">
         <QuickStart variant="lobby" />
         <SpeedTestContainer>
           <SpeedTest />
