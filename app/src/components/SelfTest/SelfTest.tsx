@@ -89,11 +89,20 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
                 textAlign={'center'}
                 color={theme.palette.common.white}
                 marginBottom={theme.spacing(5)}
+                component="h1"
               >
                 {t('joinform-room-title', { title })}
               </Typography>
             )}
-            <Typography variant="h1" textAlign={'center'} fontSize={'2.9rem'} lineHeight={'2.9rem'} mb={2}>
+            <Typography
+              variant="h1"
+              textAlign={'center'}
+              fontSize={'2.9rem'}
+              lineHeight={'2.9rem'}
+              mb={2}
+              component="h2"
+              color={theme.palette.common.white}
+            >
               {t('selftest-header')}
             </Typography>
             <Typography textAlign={'center'} fontSize={'1.37rem'}>
