@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Typography, Badge } from '@mui/material';
 import { ChatScope, RoomMode } from '@opentalk/common';
+import { VisuallyHiddenTitle } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -108,6 +109,7 @@ const MenuTabs = () => {
 
   return (
     <>
+      <VisuallyHiddenTitle component={'h2'} label={'menutabs-area-hidden-heading'} />
       <AppBar position={'static'} color={'secondary'} elevation={0}>
         <Tabs value={currentTab} onChange={handleChange} variant={'fullWidth'}>
           <Tab
@@ -138,9 +140,11 @@ const MenuTabs = () => {
       </AppBar>
 
       <TabPanel value={MenuTab.Chat} hidden={currentTab !== MenuTab.Chat}>
+        <VisuallyHiddenTitle component={'h3'} label={'chatroom-hidden-heading'} />
         <Chat scope={ChatScope.Global} />
       </TabPanel>
       <TabPanel value={MenuTab.People} hidden={currentTab !== MenuTab.People}>
+        <VisuallyHiddenTitle component={'h3'} label={'participant-list-hidden-heading'} />
         <Participants />
       </TabPanel>
       <TabPanel value={MenuTab.Messages} hidden={currentTab !== MenuTab.Messages}>

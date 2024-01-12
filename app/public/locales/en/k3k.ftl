@@ -82,6 +82,7 @@ videomenu-background-images = Background images
 videomenu-background-no-image = No background image
 remotevideo-no-stream = no video stream
 localvideo-no-device = no video device found
+videoroom-hidden-heading = Video Room
 
 participant-stream-broken-tooltip = Mediastream broken
 participant-audio-broken-tooltip = Audio channel broken
@@ -163,9 +164,12 @@ sort-random = Random
 grant-presenter-role = Grant presenter role
 revoke-presenter-role = Revoke presenter role
 
+menutabs-area-hidden-heading = Additional Functions
 menutabs-chat = Chat
 menutabs-people = People
 menutabs-messages = Messages
+participant-list-hidden-heading = Participant List
+chatroom-hidden-heading = Chat Room
 
 guest-label = Guest
 

@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container as MuiContainer } from '@mui/material';
+import { VisuallyHiddenTitle } from '@opentalk/common';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppSelector } from '../../../hooks';
@@ -43,6 +44,7 @@ const Cinema = () => {
 
   return (
     <Container disableGutters maxWidth={false} ref={fullscreenHandle.node}>
+      <VisuallyHiddenTitle component={'h2'} label={'videoroom-hidden-heading'} />
       {renderView()}
     </Container>
   );

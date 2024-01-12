@@ -7,7 +7,7 @@ import { screen, render, createStore } from '../../../utils/testUtils';
 import RoomTitle, { ROOM_TITLE_MAX_LENGTH } from './RoomTitle';
 
 describe('Room title', () => {
-  test('shall display the whole name in the title and in the tooltip', async () => {
+  test('should display the whole name in the title and in the tooltip', async () => {
     const allowedLengthName = 'a'.repeat(ROOM_TITLE_MAX_LENGTH);
     const createdStore = createStore({
       initialState: {
@@ -29,7 +29,7 @@ describe('Room title', () => {
     expect(tooltip).toHaveTextContent(allowedLengthName);
   });
 
-  test('shall dispaly dots after exceeding max length in the title and whole name in the tooltip', async () => {
+  test('should display dots after exceeding max length in the title and whole name in the tooltip', async () => {
     const exceedingMaxLengthName = 'a'.repeat(ROOM_TITLE_MAX_LENGTH + 1);
     const createdStore = createStore({
       initialState: {
@@ -52,7 +52,7 @@ describe('Room title', () => {
     expect(tooltip).toHaveTextContent(exceedingMaxLengthName);
   });
 
-  test('shall display fallback title in case room title is undefined', async () => {
+  test('should display fallback title in case room title is undefined', async () => {
     const createdStore = createStore({
       initialState: {
         room: {
@@ -68,5 +68,18 @@ describe('Room title', () => {
     await userEvent.hover(title);
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toHaveTextContent('fallback-room-title');
+  });
+  test('should be rendered inside an h1 tag', async () => {
+    const createdStore = createStore({
+      initialState: {
+        room: {
+          eventInfo: undefined,
+        },
+      },
+    });
+    await render(<RoomTitle />, createdStore.store);
+
+    const roomTitleElement = screen.getByText('fallback-room-title');
+    expect(roomTitleElement.tagName).toBe('H1');
   });
 });

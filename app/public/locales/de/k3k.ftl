@@ -82,6 +82,7 @@ videomenu-background-images = Hintergrundbilder
 videomenu-background-no-image = Kein Hintergrundbild
 localvideo-no-device = Keine Videocamera vorhanden oder freigegeben
 remotevideo-no-stream = Kein Videosignal
+videoroom-hidden-heading = Videoraum
 
 participant-stream-broken-tooltip = Medienstrom unterbrochen
 participant-audio-broken-tooltip = Audiokanal unterbrochen
@@ -163,9 +164,12 @@ sort-random = Zufällig
 grant-presenter-role = Präsentatorrolle zuweisen
 revoke-presenter-role = Widerrufen Sie die Rolle des Präsentators
 
+menutabs-area-hidden-heading = Zusatzfunktionen
 menutabs-chat = Chat
 menutabs-people = Teilnehmer
 menutabs-messages = Nachrichten
+participant-list-hidden-heading = Teilnehmerliste
+chatroom-hidden-heading = Chatraum
 
 guest-label = Gast
 
