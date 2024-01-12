@@ -123,7 +123,7 @@ export interface ConfigState {
     product: `v${string}`;
     frontend: `v${string}`;
   };
-  glitchtip: {
+  glitchtip?: {
     dsn?: string;
   };
 }
