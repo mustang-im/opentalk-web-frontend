@@ -63,6 +63,12 @@ export interface PresenterRoleState {
   isPresenter: boolean;
 }
 
+export interface SpeakingState {
+  isSpeaking: boolean;
+  // implement updatedAt in case we need a speaker timeline
+  // updatedAt: string
+}
+
 export interface ProtocolState {
   readonly: boolean;
 }
@@ -112,6 +118,7 @@ export interface IParticipantControl {
 export type ParticipantMediaState = PresenterRoleState & {
   screen?: MediaSessionState;
   video?: MediaSessionState;
+  speaking: SpeakingState | null;
 };
 
 type TimerIsReady = Pick<TimerState, 'readyStatus'>;
