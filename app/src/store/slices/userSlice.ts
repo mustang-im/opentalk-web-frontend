@@ -176,6 +176,7 @@ export const selectUserAsPartialParticipant = createSelector(
       waitingState: WaitingState.Joined,
       protocolAccess: state.protocolAccess,
       isPresenter: state.isPresenter,
+      isSpeaking: false,
     };
   }
 );

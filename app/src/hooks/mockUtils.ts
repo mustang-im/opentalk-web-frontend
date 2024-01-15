@@ -41,6 +41,7 @@ export const useMockUsers = (users: number) => {
                 protocolAccess: ProtocolAccess.None,
                 isPresenter: false,
                 waitingState: WaitingState.Joined,
+                isSpeaking: false,
               },
             })
           );

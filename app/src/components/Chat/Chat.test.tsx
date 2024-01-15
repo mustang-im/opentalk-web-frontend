@@ -66,6 +66,7 @@ describe('Chat component', () => {
           waitingState: WaitingState.Joined,
           protocolAccess: ProtocolAccess.None,
           isPresenter: false,
+          isSpeaking: false,
         },
       })
     );

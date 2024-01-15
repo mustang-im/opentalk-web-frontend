@@ -27,6 +27,7 @@ import {
   timerStarted,
   timerStopped,
   setLibravatarOptions,
+  SpeakingState,
 } from '@opentalk/common';
 import { ParticipantId } from '@opentalk/common';
 import {
@@ -162,6 +163,11 @@ const mapProtocolToProtocolAccess = (protocol?: ProtocolState) => {
   return ProtocolAccess.Write;
 };
 
+// if speaking state object is null, participant has not spoken in a session yet
+const mapSpeakingState = (speakingState: SpeakingState | null) => {
+  return speakingState?.isSpeaking ?? false;
+};
+
 const mapToUiParticipant = (
   state: RootState,
   { id, control, media, protocol }: BackendParticipant,
@@ -183,6 +189,7 @@ const mapToUiParticipant = (
   waitingState,
   protocolAccess: mapProtocolToProtocolAccess(protocol),
   isPresenter: Boolean(media?.isPresenter),
+  isSpeaking: mapSpeakingState(media.speaking),
 });
 
 const mapBreakoutToUiParticipant = (
@@ -204,6 +211,8 @@ const mapBreakoutToUiParticipant = (
   waitingState: WaitingState.Joined,
   protocolAccess: ProtocolAccess.None,
   isPresenter: false,
+  // TODO: test for breakout rooms
+  isSpeaking: false,
 });
 
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
@@ -422,6 +431,7 @@ const handleControlMessage = (
             waitingState: WaitingState.Joined,
             isPresenter: Boolean(data.media?.isPresenter),
             protocolAccess: mapProtocolToProtocolAccess(data.protocol),
+            isSpeaking: mapSpeakingState(data.media.speaking),
             ...data.control,
           })
         );
