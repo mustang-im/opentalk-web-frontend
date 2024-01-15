@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MediaSessionType, NamespacedIncoming, ParticipantId, TrickleCandidate } from '@opentalk/common';
+import { MediaSessionType, SpeakingState, NamespacedIncoming, ParticipantId, TrickleCandidate } from '@opentalk/common';
 
 export interface Source {
   source: ParticipantId;
@@ -76,10 +76,16 @@ export interface PresenterRoleRevoked {
   message: 'presenter_revoked';
 }
 
+export interface SpeakerUpdated extends SpeakingState {
+  message: 'speaker_updated';
+  participant: ParticipantId;
+}
+
 export type Message =
   | SdpAnswer
   | SdpOffer
   | SdpCandidate
+  // TODO: FocusSpeaker is obsolete -> remove
   | FocusSpeaker
   | MediaError
   | WebRtcUp
@@ -87,7 +93,9 @@ export type Message =
   | WebRtcSlow
   | RequestMute
   | PresenterRoleGranted
-  | PresenterRoleRevoked;
+  | PresenterRoleRevoked
+  | SpeakerUpdated;
+
 export type Media = NamespacedIncoming<Message, 'media'>;
 
 export default Media;

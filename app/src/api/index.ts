@@ -498,11 +498,15 @@ const handleMediaMessage = async (
       dispatch(mediaStore.notificationShown());
       return;
     }
+    // TODO: 'focus_update' obsolete -> remove
     case 'focus_update':
       // user itself (own uuid) may not be focusedSpeaker & we don't reset focusedSpeaker when he stops to speak
       if (data.focus && state.user.uuid !== data.focus) {
         dispatch(setFocusedSpeaker({ id: data.focus, timestamp }));
       }
+      return;
+    case 'speaker_updated':
+      console.log('Speaker id: ', data.participant, ' speaks: ', data.isSpeaking);
       return;
     case 'error': {
       const error = data.error;
