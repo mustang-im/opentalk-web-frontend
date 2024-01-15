@@ -69,6 +69,10 @@ export interface SpeakingState {
   // updatedAt: string
 }
 
+export interface Speaker extends SpeakingState {
+  id: ParticipantId;
+}
+
 export interface ProtocolState {
   readonly: boolean;
 }
