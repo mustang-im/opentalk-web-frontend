@@ -11,6 +11,7 @@ import {
   ProtocolAccess,
   ParticipantInOtherRoom,
   joinSuccess,
+  Speaker,
 } from '@opentalk/common';
 import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadAction } from '@reduxjs/toolkit';
 
@@ -167,6 +168,7 @@ export const participantsSlice = createSlice({
           role,
           isPresenter,
           protocolAccess,
+          isSpeaking,
         },
       }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups'>>
     ) => {
@@ -182,6 +184,17 @@ export const participantsSlice = createSlice({
           isPresenter,
           role,
           protocolAccess,
+          isSpeaking,
+        },
+      });
+    },
+    updatedSpeaker: (state, { payload }: PayloadAction<Speaker>) => {
+      const { id, isSpeaking } = payload;
+      participantAdapter.updateOne(state, {
+        id,
+        changes: {
+          isSpeaking,
+          // TODO: implement lastActive = updatedAt
         },
       });
     },
@@ -221,6 +234,7 @@ export const {
   waitingRoomLeft,
   approveToEnter,
   approvedAll,
+  updatedSpeaker,
 } = participantsSlice.actions;
 export const actions = participantsSlice.actions;
 

@@ -28,8 +28,8 @@ import {
   timerStopped,
   setLibravatarOptions,
   SpeakingState,
+  ParticipantId,
 } from '@opentalk/common';
-import { ParticipantId } from '@opentalk/common';
 import {
   AutomodEventType,
   LegalVoteMessageType,
@@ -84,6 +84,7 @@ import {
   waitingRoomJoined,
   waitingRoomLeft,
   selectParticipantsTotal,
+  updatedSpeaker,
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
@@ -506,7 +507,7 @@ const handleMediaMessage = async (
       }
       return;
     case 'speaker_updated':
-      console.log('Speaker id: ', data.participant, ' speaks: ', data.isSpeaking);
+      dispatch(updatedSpeaker({ id: data.participant, isSpeaking: data.isSpeaking }));
       return;
     case 'error': {
       const error = data.error;
