@@ -39,7 +39,6 @@ const CreateByGroupsForm = ({ formik, handleNext, formName }: ICreateByGroupsFor
           {...formikSwitchProps(getFormName('distribution'), formik)}
           control={<Switch color="primary" />}
           label={t('breakout-room-form-field-random-distribution')}
-          labelPlacement="start"
         />
       </GridItem>
       <GridItem item xs>
@@ -47,7 +46,6 @@ const CreateByGroupsForm = ({ formik, handleNext, formName }: ICreateByGroupsFor
           {...formikSwitchProps(getFormName('includeModerators'), formik)}
           control={<Switch color="primary" />}
           label={t('breakout-room-form-field-include-moderators')}
-          labelPlacement="start"
         />
       </GridItem>
       <Grid item>

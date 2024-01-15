@@ -20,6 +20,7 @@ import ConnectionBadIcon from './ConnectionBadIcon';
 import ConnectionGoodIcon from './ConnectionGoodIcon';
 import ConnectionMediumIcon from './ConnectionMediumIcon';
 import CopyIcon from './CopyIcon';
+import DashboardLegalIcon from './DashboardLegalIcon';
 import DebriefingIcon from './DebriefingIcon';
 import DoneIcon from './DoneIcon';
 import DurationIcon from './DurationIcon';
@@ -105,6 +106,7 @@ export {
   ConnectionGoodIcon,
   ConnectionMediumIcon,
   CopyIcon,
+  DashboardLegalIcon,
   DebriefingIcon,
   DoneIcon,
   DurationIcon,

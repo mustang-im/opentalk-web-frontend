@@ -6,6 +6,7 @@ import { DateTimePicker as MuiDateTimePicker, PickersActionBarAction, PickersLoc
 import { ErrorFormMessage } from '@opentalk/common';
 import { isSameDay } from 'date-fns';
 import { isEmpty } from 'lodash';
+import React from 'react';
 
 import PickerLocalizationProvider from '../../provider/PickerLocalizationProvider';
 import { IFormikCustomFieldPropsReturnValue } from '../../utils/formikUtils';
@@ -19,6 +20,7 @@ type DateTimePickerProps = {
   okButtonLabel?: string;
   cancelButtonLabel?: string;
   placeholder?: string;
+  id?: string;
 } & Pick<IFormikCustomFieldPropsReturnValue, 'onChange' | 'helperText' | 'error'>;
 
 const DateTimePicker = ({
@@ -33,6 +35,7 @@ const DateTimePicker = ({
   ampm = false,
   placeholder,
   error,
+  id,
 }: DateTimePickerProps) => {
   const isScreenHeightTooSmall = useMediaQuery((theme: Theme) => {
     const query = theme.breakpoints.up('sm') + ' and (max-height:900px)';
@@ -90,7 +93,7 @@ const DateTimePicker = ({
           minDate={minTimeDate}
           minTime={minTime}
           slotProps={{
-            textField: { placeholder },
+            textField: { helperText, placeholder, error, id },
             actionBar: { actions },
             popper: { placement: 'bottom-start', modifiers: [getOffsetModifier()] },
           }}

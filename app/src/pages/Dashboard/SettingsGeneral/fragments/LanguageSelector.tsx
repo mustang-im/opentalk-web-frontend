@@ -51,7 +51,7 @@ const LanguageSelector = () => {
     <form onSubmit={formik.handleSubmit}>
       <Grid container item spacing={3}>
         <Grid item xs={12}>
-          <Typography variant={'h1'} component={'h2'}>
+          <Typography variant={'h1'} component={'label'}>
             {t('dashboard-settings-general-language')}
           </Typography>
         </Grid>

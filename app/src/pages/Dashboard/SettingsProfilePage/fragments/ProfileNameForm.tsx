@@ -4,6 +4,7 @@
 import { Button, Grid, Typography } from '@mui/material';
 import { notifications } from '@opentalk/common';
 import { useFormik } from 'formik';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -18,6 +19,7 @@ const ProfileNameForm = () => {
   const { data } = useGetMeQuery();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
   const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
+  const profileNameFieldId = 'profile-name';
 
   const validationSchema = yup.object({
     displayName: yup.string().trim().required(t('dashboard-settings-profile-input-required')),
@@ -45,7 +47,7 @@ const ProfileNameForm = () => {
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={3} direction={'column'}>
         <Grid item>
-          <Typography variant={'h1'} component={'h2'}>
+          <Typography id={profileNameFieldId} variant={'h1'} component={'label'}>
             {t('dashboard-settings-profile-name')}
           </Typography>
         </Grid>
@@ -57,6 +59,9 @@ const ProfileNameForm = () => {
               fullWidth
               // Autocomplete attribute on a disabled field makes no sense in terms of the UX and A11Y so we omit it.
               autoComplete={!disallowCustomDisplayName ? 'name' : undefined}
+              inputProps={{
+                'aria-labelledby': profileNameFieldId,
+              }}
             />
           </Grid>
           <Grid item>

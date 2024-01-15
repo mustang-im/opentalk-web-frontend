@@ -1,13 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FormControl as MuiFormControl, FormControlLabel as MuiFormControlLabel, styled } from '@mui/material';
-import { ErrorFormMessage } from '@opentalk/common';
+import { Box, Stack } from '@mui/material';
+import { ErrorFormMessage, generateUniquedId } from '@opentalk/common';
 import React from 'react';
 
 interface IFormItem {
   label: string;
-  labelPlacement: 'end' | 'start' | 'top' | 'bottom';
   control: React.ReactElement;
   name: string;
   onChange: {
@@ -24,29 +23,11 @@ interface IFormItem {
   helperText?: string;
   value?: unknown;
   checked?: boolean;
+  id?: string;
 }
-
-const FormControlLabel = styled(MuiFormControlLabel)({
-  flex: 1,
-  justifyContent: 'space-between',
-  marginLeft: 0,
-  marginRight: 0,
-  '& .MuiTypography-root': {
-    fontWeight: 400,
-  },
-});
-
-const FormControl = styled(MuiFormControl)<{ component: string }>({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  border: 'none',
-  padding: 0,
-});
 
 const FormItem = ({
   label,
-  labelPlacement,
   error,
   helperText,
   control,
@@ -55,18 +36,18 @@ const FormItem = ({
   onBlur,
   name,
   checked,
+  ...props
 }: IFormItem) => {
   const isChecked = checked === undefined ? undefined : checked;
+  const id = props.id || generateUniquedId();
   return (
-    <FormControl error={error ? error : undefined} component="fieldset">
-      <FormControlLabel
-        control={React.cloneElement(control, { onChange, onBlur, name, checked: isChecked })}
-        label={label}
-        labelPlacement={labelPlacement}
-        value={value}
-      />
+    <Stack>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <label htmlFor={id}>{label}</label>
+        {React.cloneElement(control, { onChange, onBlur, name, checked: isChecked, inputProps: { id }, value })}
+      </Box>
       {error && <ErrorFormMessage helperText={helperText} />}
-    </FormControl>
+    </Stack>
   );
 };
 

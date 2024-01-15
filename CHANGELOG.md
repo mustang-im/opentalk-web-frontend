@@ -20,6 +20,7 @@
 
 ### Improvements to the user experience
 
+- add appropriate linking between input fields and accessible labels for visually impared users. ([#1642](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1642))
 - Improved lobby page markup structure for better experience using screen readers. ([#1649](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1649))
 - Opentalk SVG logo can now be interpreted by accessibility tools ([#1636](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1636))
 - Change order of moderator tabs ([#1663](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1663))

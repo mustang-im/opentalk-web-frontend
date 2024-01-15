@@ -57,20 +57,17 @@ const CreateByRoomsForm = ({ handleNext, formName }: ICreateByRoomsFormProps) =>
       <CommonFormItem
         {...formikProps(getFormName('rooms'), formik)}
         label={t('breakout-room-form-field-rooms')}
-        labelPlacement="start"
         control={<NumberInput type={'number'} inputProps={{ min: 2, max: maxRooms }} />}
       />
       <CommonFormItem
         {...formikSwitchProps(getFormName('distribution'), formik)}
         control={<Switch color="primary" />}
         label={t('breakout-room-form-field-random-distribution')}
-        labelPlacement="start"
       />
       <CommonFormItem
         {...formikSwitchProps(getFormName('includeModerators'), formik)}
         control={<Switch color="primary" />}
         label={t('breakout-room-form-field-include-moderators')}
-        labelPlacement="start"
       />
       <TextWithDivider variant={'caption'}>
         {t('breakout-room-assignable-participants-per-rooms', {

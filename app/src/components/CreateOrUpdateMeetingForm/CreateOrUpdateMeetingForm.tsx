@@ -4,8 +4,6 @@
 import { Button, Collapse, Grid, MenuItem, Stack, styled } from '@mui/material';
 import {
   formikProps,
-  formikDateTimePickerProps,
-  FormWrapper,
   ForwardIcon,
   notificationAction,
   notifications,
@@ -24,7 +22,7 @@ import { addMinutes, areIntervalsOverlapping, formatRFC3339, Interval } from 'da
 import { useFormik } from 'formik';
 import { FormikValues } from 'formik/dist/types';
 import { isEmpty } from 'lodash';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -44,7 +42,7 @@ import roundToUpper30 from '../../utils/roundToUpper30';
 import { FrequencySelect, mapFrequencySelectToRRuleFrequency, mapRRuleToFrequencySelect } from '../../utils/rruleUtils';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
 import yup from '../../utils/yupUtils';
-import DateTimePicker from '../DateTimePicker';
+import { DashboardDateTimePicker } from './fragments/DashboardDateTimePicker';
 import EventConflictDialog from './fragments/EventConflictDialog';
 import LabeledSwitch from './fragments/LabeledSwitch';
 import StreamingOptions from './fragments/StreamingOptions';
@@ -535,25 +533,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
           <Collapse orientation="vertical" in={formik.values.isTimeDependent} unmountOnExit mountOnEnter>
             <Grid container columnSpacing={{ xs: 2, sm: 5 }}>
               <Grid item xs={12} sm={6}>
-                <FormWrapper label={t('dashboard-meeting-date-from')} fullWidth>
-                  <Stack spacing={2}>
-                    <DateTimePicker
-                      {...formikDateTimePickerProps('startDate', {
-                        ...formik,
-                        handleChange: onChangeStartDate as never,
-                      })}
-                    />
-                  </Stack>
-                </FormWrapper>
+                <DashboardDateTimePicker type="start" formik={formik} onChange={onChangeStartDate} />
               </Grid>
               <Grid item xs={12} sm={6} mt={{ xs: 2, sm: 0 }}>
-                <FormWrapper label={t('dashboard-meeting-date-to')} fullWidth>
-                  <Stack spacing={2}>
-                    <DateTimePicker
-                      {...formikDateTimePickerProps('endDate', { ...formik, handleChange: onChangeEndDate as never })}
-                    />
-                  </Stack>
-                </FormWrapper>
+                <DashboardDateTimePicker type="end" formik={formik} onChange={onChangeEndDate} />
               </Grid>
 
               <Grid item xs={12} sm={12} mt={2}>
