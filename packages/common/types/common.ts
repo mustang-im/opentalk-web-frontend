@@ -65,8 +65,7 @@ export interface PresenterRoleState {
 
 export interface SpeakingState {
   isSpeaking: boolean;
-  // implement updatedAt in case we need a speaker timeline
-  // updatedAt: string
+  updatedAt: string;
 }
 
 export interface Speaker extends SpeakingState {

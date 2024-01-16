@@ -5,7 +5,6 @@ import {
   BackendParticipant,
   ChatMessage,
   ParticipantId,
-  Timestamp,
   Participant,
   WaitingState,
   ProtocolAccess,
@@ -18,7 +17,6 @@ import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadActi
 import { RootState } from '../';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
 import { received } from './chatSlice';
-import { setFocusedSpeaker } from './mediaSlice';
 import { connectionClosed } from './roomSlice';
 
 export const participantAdapter = createEntityAdapter<Participant>({
@@ -189,12 +187,12 @@ export const participantsSlice = createSlice({
       });
     },
     updatedSpeaker: (state, { payload }: PayloadAction<Speaker>) => {
-      const { id, isSpeaking } = payload;
+      const { id, isSpeaking, updatedAt } = payload;
       participantAdapter.updateOne(state, {
         id,
         changes: {
           isSpeaking,
-          // TODO: implement lastActive = updatedAt
+          lastActive: updatedAt,
         },
       });
     },
@@ -212,15 +210,6 @@ export const participantsSlice = createSlice({
         changes: { lastActive: payload.timestamp },
       });
     });
-    builder.addCase(
-      setFocusedSpeaker,
-      (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp?: Timestamp }>) => {
-        participantAdapter.updateOne(state, {
-          id,
-          changes: { lastActive: timestamp },
-        });
-      }
-    );
   },
 });
 
