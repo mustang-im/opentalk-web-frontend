@@ -65,7 +65,7 @@ import { clearGlobalChat, received as chatReceived, setChatSettings } from '../s
 import { selectLibravatarDefaultImage } from '../store/slices/configSlice';
 import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectionStatsSlice';
 import * as mediaStore from '../store/slices/mediaSlice';
-import { setFocusedSpeaker, setUpstreamLimit } from '../store/slices/mediaSlice';
+import { setUpstreamLimit } from '../store/slices/mediaSlice';
 import {
   closed as subscriberClosed,
   removed as subscriberRemoved,
@@ -463,12 +463,7 @@ const handleControlMessage = (
  * @param dispatch AppDispatch function
  * @param data mediaMsgs Message content
  */
-const handleMediaMessage = async (
-  dispatch: AppDispatch,
-  data: media.Message,
-  state: RootState,
-  timestamp: Timestamp
-) => {
+const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, state: RootState) => {
   // TODO: Theses two are actually a control messages -- talk to the backend
   switch (data.message) {
     case 'presenter_granted':
@@ -499,13 +494,6 @@ const handleMediaMessage = async (
       dispatch(mediaStore.notificationShown());
       return;
     }
-    // TODO: 'focus_update' obsolete -> remove
-    case 'focus_update':
-      // user itself (own uuid) may not be focusedSpeaker & we don't reset focusedSpeaker when he stops to speak
-      if (data.focus && state.user.uuid !== data.focus) {
-        dispatch(setFocusedSpeaker({ id: data.focus, timestamp }));
-      }
-      return;
     case 'speaker_updated':
       dispatch(updatedSpeaker({ id: data.participant, isSpeaking: data.isSpeaking, updatedAt: data.updatedAt }));
       return;
@@ -1031,7 +1019,7 @@ const onMessage =
         handleBreakoutMessage(dispatch, getState(), message.payload, message.timestamp);
         break;
       case 'media':
-        handleMediaMessage(dispatch, message.payload, getState(), message.timestamp).catch((e) => {
+        handleMediaMessage(dispatch, message.payload, getState()).catch((e) => {
           console.error('Error in handleMediaMessage:', e);
         });
         break;

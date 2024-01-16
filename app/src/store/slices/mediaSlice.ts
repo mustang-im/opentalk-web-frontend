@@ -73,9 +73,6 @@ export const mediaSlice = createSlice({
     changedVideoDevice: (state, action: PayloadAction<DeviceId | undefined>) => {
       state.videoDevice = action.payload;
     },
-    setFocusedSpeaker: (state, { payload: { id } }: PayloadAction<{ id: ParticipantId; timestamp?: Timestamp }>) => {
-      state.focusedSpeaker = id;
-    },
     setSpeakerActivity: (state, { payload }: PayloadAction<boolean>) => {
       state.isUserSpeaking = payload;
     },
@@ -121,7 +118,6 @@ export const {
   changedVideoDevice,
   setBackgroundEffects,
   setScreenShare,
-  setFocusedSpeaker,
   setSpeakerActivity,
   setQualityCap,
   setUpstreamLimit,
