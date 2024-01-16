@@ -41,7 +41,13 @@ const GridView = () => {
   const highlight = slicedParticipants.length >= 2;
 
   const gridCells = slicedParticipants.map((participant, index) => (
-    <GridCell direction={direction} index={index} participantId={participant.id} highlight={highlight} />
+    <GridCell
+      key={participant.id}
+      direction={direction}
+      index={index}
+      participantId={participant.id}
+      highlight={highlight}
+    />
   ));
 
   return <GridContainer videoWidth={videoWidth}>{gridCells}</GridContainer>;

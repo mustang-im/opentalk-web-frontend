@@ -65,7 +65,7 @@ const GridCell = (props: GridCellProps) => {
   const isParticipantSpeaking = useAppSelector(selectIsParticipantSpeaking(participantId));
   const highlightSpeaker = highlight && (isParticipantSpeaking ?? false);
   return (
-    <Slide direction={direction} key={index} in mountOnEnter unmountOnExit>
+    <Slide direction={direction} key={participantId} in mountOnEnter unmountOnExit>
       <CinemaCell data-testid="cinemaCell" highlight={highlightSpeaker}>
         <ParticipantWindow key={participantId} participantId={participantId} mediaRef={`grid-${index}`} />
       </CinemaCell>
