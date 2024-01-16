@@ -19,7 +19,7 @@ const breathe = keyframes`
 `;
 
 const CinemaCell = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'isActiveSpeaker',
+  shouldForwardProp: (prop) => prop !== 'highlight',
 })<{ highlight: boolean }>(({ theme, highlight }) => ({
   width: '100%',
   height: '100%',
