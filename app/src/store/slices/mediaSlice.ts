@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, VideoSetting, Speaker } from '@opentalk/common';
+import { ParticipantId, VideoSetting } from '@opentalk/common';
 import { createSlice, PayloadAction, createListenerMiddleware, TypedStartListening } from '@reduxjs/toolkit';
 
 import { RootState, AppDispatch } from '../';
@@ -10,7 +10,6 @@ import { updateSpeakingState } from '../../api/types/outgoing/media';
 import { BackgroundConfig } from '../../modules/Media/BackgroundBlur';
 import { DeviceId } from '../../modules/Media/MediaUtils';
 import { getCurrentConferenceRoom } from '../../modules/WebRTC';
-import { leave as participantLeave, updatedSpeaker } from './participantsSlice';
 
 export enum NotificationKind {
   ForceMute = 'forceMute',
@@ -29,7 +28,6 @@ interface MediaState {
   videoBackgroundEffects: BackgroundConfig;
   audioDevice?: DeviceId;
   videoDevice?: DeviceId;
-  focusedSpeaker: ParticipantId | undefined;
   qualityCap: VideoSetting;
   upstreamLimit: VideoSetting;
   requestMuteNotification?: MuteNotification;
@@ -44,7 +42,6 @@ const initialState: MediaState = {
   videoBackgroundEffects: { style: 'off' },
   audioDevice: undefined,
   videoDevice: undefined,
-  focusedSpeaker: undefined,
   qualityCap: VideoSetting.High,
   upstreamLimit: VideoSetting.High,
   inProgress: false,
@@ -96,19 +93,6 @@ export const mediaSlice = createSlice({
       state.requestMuteNotification = undefined;
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(participantLeave, (state, action) => {
-      if (state.focusedSpeaker === action.payload.id) {
-        state.focusedSpeaker = undefined;
-      }
-    });
-    builder.addCase(updatedSpeaker, (state, { payload }: PayloadAction<Speaker>) => {
-      const { id, isSpeaking } = payload;
-      if (isSpeaking) {
-        state.focusedSpeaker = id;
-      }
-    });
-  },
 });
 
 export const {
@@ -132,7 +116,6 @@ export const selectShareScreenEnabled = (state: RootState) => state.media.shareS
 export const selectVideoBackgroundEffects = (state: RootState) => state.media.videoBackgroundEffects;
 export const selectAudioDeviceId = (state: RootState) => state.media.audioDevice;
 export const selectVideoDeviceId = (state: RootState) => state.media.videoDevice;
-export const selectFocusedSpeaker = (state: RootState) => state.media.focusedSpeaker;
 export const selectIsUserSpeaking = (state: RootState) => state.media.isUserSpeaking;
 export const selectQualityCap = (state: RootState) => state.media.qualityCap;
 export const selectUpstreamLimit = (state: RootState) => state.media.upstreamLimit;

@@ -13,6 +13,7 @@ import {
   MediaSessionType,
   timerStarted,
   timerStopped,
+  Speaker,
 } from '@opentalk/common';
 import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -24,7 +25,7 @@ import LayoutOptions from '../../enums/LayoutOptions';
 import { MediaDescriptor } from '../../modules/WebRTC';
 import { hangUp } from '../commonActions';
 import { removed } from './mediaSubscriberSlice';
-import { leave, breakoutLeft } from './participantsSlice';
+import { leave, breakoutLeft, updatedSpeaker } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
@@ -58,6 +59,7 @@ interface UIState {
     [ChatScope.Group]: Record<TargetId, string>;
     [ChatScope.Private]: Record<TargetId, string>;
   };
+  focusedSpeaker: ParticipantId | undefined;
 }
 
 const initialState: UIState = {
@@ -86,6 +88,7 @@ const initialState: UIState = {
     [ChatScope.Group]: {},
     [ChatScope.Private]: {},
   },
+  focusedSpeaker: undefined,
 };
 
 export const uiSlice = createSlice({
@@ -169,6 +172,9 @@ export const uiSlice = createSlice({
       if (state.pinnedParticipantId === id) {
         state.pinnedParticipantId = undefined;
       }
+      if (state.focusedSpeaker === id) {
+        state.focusedSpeaker = undefined;
+      }
     });
     builder.addCase(breakoutLeft, (state, { payload: { id } }: PayloadAction<{ id: ParticipantId }>) => {
       if (state.pinnedParticipantId === id) {
@@ -222,6 +228,12 @@ export const uiSlice = createSlice({
         state.pinnedParticipantId = undefined;
       }
     });
+    builder.addCase(updatedSpeaker, (state, { payload }: PayloadAction<Speaker>) => {
+      const { id, isSpeaking } = payload;
+      if (isSpeaking) {
+        state.focusedSpeaker = id;
+      }
+    });
   },
 });
 
@@ -265,6 +277,7 @@ export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui
 export const selectShowCoffeeBreakCurtain = (state: RootState) => state.ui.showCoffeeBreakCurtain;
 export const selectActiveTab = (state: RootState) => state.ui.activeTab;
 export const selectIsFullscreenMode = (state: RootState) => state.ui.isFullscreenMode;
+export const selectFocusedSpeaker = (state: RootState) => state.ui.focusedSpeaker;
 export function selectDefaultChatMessage(scope: ChatScope, target?: TargetId) {
   return (state: RootState): string => {
     if (scope === ChatScope.Global) {
