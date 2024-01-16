@@ -272,6 +272,7 @@ export const selectSlicedParticipants = (page: number, maxParticipants: number) 
   });
 
 export const selectParticipantById = (id: EntityId) => (state: RootState) => participantSelectors.selectById(state, id);
+
 export const selectParticipants = (state: RootState) => participantSelectors.selectEntities(state);
 export const selectParticipantsTotal = createSelector(
   selectAllOnlineParticipants,
@@ -294,8 +295,7 @@ export const selectParticipationKind = (id: EntityId) => {
 };
 
 export const selectIsParticipantSpeaking = (id: EntityId) => {
-  const selectParticipant = selectParticipantById(id);
-  return createSelector(selectParticipant, (participant) => participant?.isSpeaking);
+  return createSelector(selectParticipantById(id), (participant) => participant?.isSpeaking);
 };
 
 export default participantsSlice.reducer;
