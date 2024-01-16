@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, Timestamp, VideoSetting } from '@opentalk/common';
+import { ParticipantId, VideoSetting, Speaker } from '@opentalk/common';
 import { createSlice, PayloadAction, createListenerMiddleware, TypedStartListening } from '@reduxjs/toolkit';
 
 import { RootState, AppDispatch } from '../';
@@ -10,7 +10,7 @@ import { updateSpeakingState } from '../../api/types/outgoing/media';
 import { BackgroundConfig } from '../../modules/Media/BackgroundBlur';
 import { DeviceId } from '../../modules/Media/MediaUtils';
 import { getCurrentConferenceRoom } from '../../modules/WebRTC';
-import { leave as participantLeave } from './participantsSlice';
+import { leave as participantLeave, updatedSpeaker } from './participantsSlice';
 
 export enum NotificationKind {
   ForceMute = 'forceMute',
@@ -103,6 +103,12 @@ export const mediaSlice = createSlice({
     builder.addCase(participantLeave, (state, action) => {
       if (state.focusedSpeaker === action.payload.id) {
         state.focusedSpeaker = undefined;
+      }
+    });
+    builder.addCase(updatedSpeaker, (state, { payload }: PayloadAction<Speaker>) => {
+      const { id, isSpeaking } = payload;
+      if (isSpeaking) {
+        state.focusedSpeaker = id;
       }
     });
   },
