@@ -294,8 +294,8 @@ export const selectParticipationKind = (id: EntityId) => {
 };
 
 export const selectIsParticipantSpeaking = (id: EntityId) => {
-  const sel = selectParticipantById(id);
-  return createSelector(sel, (participant) => participant?.isSpeaking);
+  const selectParticipant = selectParticipantById(id);
+  return createSelector(selectParticipant, (participant) => participant?.isSpeaking);
 };
 
 export default participantsSlice.reducer;

@@ -212,7 +212,6 @@ const mapBreakoutToUiParticipant = (
   waitingState: WaitingState.Joined,
   protocolAccess: ProtocolAccess.None,
   isPresenter: false,
-  // TODO: test for breakout rooms
   isSpeaking: false,
 });
 

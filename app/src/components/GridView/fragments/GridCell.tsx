@@ -64,6 +64,7 @@ const GridCell = (props: GridCellProps) => {
   const { direction, index, participantId, highlight } = props;
   const isParticipantSpeaking = useAppSelector(selectIsParticipantSpeaking(participantId));
   const highlightSpeaker = highlight && (isParticipantSpeaking ?? false);
+
   return (
     <Slide direction={direction} key={participantId} in mountOnEnter unmountOnExit>
       <CinemaCell data-testid="cinemaCell" highlight={highlightSpeaker}>

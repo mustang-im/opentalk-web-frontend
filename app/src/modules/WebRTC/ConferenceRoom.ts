@@ -263,7 +263,6 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
         if (
           subType === 'error' ||
           subType === 'request_mute' ||
-          subType === 'focus_update' ||
           subType === 'presenter_granted' ||
           subType === 'presenter_revoked' ||
           subType === 'speaker_updated'

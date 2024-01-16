@@ -8,11 +8,6 @@ export interface Source {
   mediaSessionType: MediaSessionType;
 }
 
-export interface FocusSpeaker {
-  message: 'focus_update';
-  focus: ParticipantId;
-}
-
 interface Sdp extends Source {
   sdp: string;
 }
@@ -85,8 +80,6 @@ export type Message =
   | SdpAnswer
   | SdpOffer
   | SdpCandidate
-  // TODO: FocusSpeaker is obsolete -> remove
-  | FocusSpeaker
   | MediaError
   | WebRtcUp
   | WebRtcDown
