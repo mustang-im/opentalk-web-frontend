@@ -13,7 +13,6 @@ import {
   MediaSessionType,
   timerStarted,
   timerStopped,
-  Speaker,
 } from '@opentalk/common';
 import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -25,7 +24,7 @@ import LayoutOptions from '../../enums/LayoutOptions';
 import { MediaDescriptor } from '../../modules/WebRTC';
 import { hangUp } from '../commonActions';
 import { removed } from './mediaSubscriberSlice';
-import { leave, breakoutLeft, updatedSpeaker } from './participantsSlice';
+import { leave, breakoutLeft } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
@@ -153,6 +152,9 @@ export const uiSlice = createSlice({
       state.pinnedParticipantId = id;
       state.cinemaLayout = LayoutOptions.Speaker;
     },
+    setFocusedSpeaker(state, { payload: id }: PayloadAction<ParticipantId>) {
+      state.focusedSpeaker = id;
+    },
     saveDefaultChatMessage(
       state,
       { payload }: PayloadAction<{ scope: ChatScope; targetId?: TargetId; input: string }>
@@ -228,12 +230,6 @@ export const uiSlice = createSlice({
         state.pinnedParticipantId = undefined;
       }
     });
-    builder.addCase(updatedSpeaker, (state, { payload }: PayloadAction<Speaker>) => {
-      const { id, isSpeaking } = payload;
-      if (isSpeaking) {
-        state.focusedSpeaker = id;
-      }
-    });
   },
 });
 
@@ -256,6 +252,7 @@ export const {
   toggledFullScreenMode,
   pinnedRemoteScreenshare,
   saveDefaultChatMessage,
+  setFocusedSpeaker,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;

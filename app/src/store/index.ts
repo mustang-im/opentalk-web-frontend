@@ -19,7 +19,7 @@ import eventReducer from './slices/eventSlice';
 import mediaReducer, { mediaMiddleware } from './slices/mediaSlice';
 import subscribersReducer, { mediaSubscriberMiddleware } from './slices/mediaSubscriberSlice';
 import moderationReducer from './slices/moderationSlice';
-import participantsReducer from './slices/participantsSlice';
+import participantsReducer, { participantsMiddleware } from './slices/participantsSlice';
 import pollReducer from './slices/pollSlice';
 import protocolReducer from './slices/protocolSlice';
 import recordingReducer from './slices/recordingSlice';
@@ -40,6 +40,7 @@ const middleware: Array<Middleware> = [
   mediaMiddleware.middleware,
   timerMiddleware.middleware,
   roomMiddleware.middleware,
+  participantsMiddleware.middleware,
 ];
 
 const logger = () => (next: Dispatch) => (action: AnyAction) => {

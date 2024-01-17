@@ -12,12 +12,21 @@ import {
   joinSuccess,
   Speaker,
 } from '@opentalk/common';
-import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  EntityId,
+  PayloadAction,
+  createListenerMiddleware,
+  TypedStartListening,
+} from '@reduxjs/toolkit';
 
-import { RootState } from '../';
+import { RootState, AppDispatch } from '../';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
 import { received } from './chatSlice';
 import { connectionClosed } from './roomSlice';
+import { setFocusedSpeaker } from './uiSlice';
 
 export const participantAdapter = createEntityAdapter<Participant>({
   sortComparer: (a, b) => a.displayName.localeCompare(b.displayName),
@@ -297,5 +306,21 @@ export const selectParticipationKind = (id: EntityId) => {
 export const selectIsParticipantSpeaking = (id: EntityId) => {
   return createSelector(selectParticipantById(id), (participant) => participant?.isSpeaking);
 };
+
+export const participantsMiddleware = createListenerMiddleware();
+type AppStartListening = TypedStartListening<RootState, AppDispatch>;
+
+const startAppListening = participantsMiddleware.startListening as AppStartListening;
+startAppListening({
+  actionCreator: updatedSpeaker,
+  effect: (action, listenerApi) => {
+    const ourId = listenerApi.getState().user.uuid;
+    const speakerId = action.payload.id;
+    const isSpeaking = action.payload.isSpeaking;
+    if (isSpeaking && speakerId !== ourId) {
+      listenerApi.dispatch(setFocusedSpeaker(speakerId));
+    }
+  },
+});
 
 export default participantsSlice.reducer;
