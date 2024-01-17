@@ -3,35 +3,48 @@
 ### New Features
 
 - Add streaming options to create meeting ([#1587](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1587))
-- Added granting/revoking the moderator role in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1429))
-- Add quick start guide ([#1525](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1525))
 
 ### Improvements to the user experience
 
+- Protocol feature is now fully available for mobile users ([#1507](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1507))
 - Switch off media devices if user aborts reconnect ([#1531](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1531))
 - Improve virtual background quality by introducing confidence thresholds ([#1595](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1595))
 - Improved accessibility of dashboard main navigation. ([#1641](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1641))
 - More menu buttons on the meetings page are interactive using `space` or `enter` key. ([#1647](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1647))
 - Aligned the page language with the chosen application language to enhance the pronunciation accuracy of screen readers. ([#1272](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1272))
 - Chat input gets autofocused upon private and group message opening. ([#1287](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1287))
-- Implementing new auth provider ([#1598](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1598))
-- Chat no longer discards draft message when hidden ([#1596](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1596))
-- Rework the participants list in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1464))
-- Improved look of participants in the waiting room with user friendlier indicator that there are more participants than shown ([#1570](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1570))
 - Hide moderator functionalities from non moderators in the mobile view. ([#1620](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1620))
 
 ### Bug Fixes
 
 - Added translation to aria label on the chat emoji button. ([#1275](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1275))
 - Fix: Error on late publisher reconnect ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1158))
-- Fix logic bug in reservation logic, which might lead to 'black' videos. ([#1611](https://git.open  talk.dev/opentalk/frontend/web/web-app/-/issues/1611))
 - Fix missing unread global chat message indicator in mobile view. ([#1610](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1610))
-- Remove hardcoded default values for survey feature ([#1605](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1605))
 - Fix partially visible notification on smaller mobile devices. ([#1568](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1568))
 - Fix/refactor recurrence event instance creation ([#1618](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1618))
 
-## 1.7.2
 
+## 1.8.0
+
+### New Features
+
+- Added granting/revoking the moderator role in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1429))
+- Add quick start guide ([#1525](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1525))
+
+### Improvements to the user experience
+
+- Implementing new auth provider ([#1598](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1598))
+- Chat no longer discards draft message when hidden ([#1596](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1596))
+- Rework the participants list in dashboard ([#1464](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1464))
+- Improved look of participants in the waiting room with user friendlier indicator that there are more participants than shown ([#1570](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1570))
+
+### Bug Fixes
+
+- Fix logic bug in reservation logic, which might lead to 'black' videos. ([#1611](https://git.open  talk.dev/opentalk/frontend/web/web-app/-/issues/1611))
+- Remove hardcoded default values for survey feature ([#1605](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1605))
+
+
+## 1.7.2
 
 ### Improvements to the user experience
 
@@ -40,6 +53,7 @@
 ### Bug Fixes
 
 - Increase heartbeat interval
+
 
 ## 1.7.1
 

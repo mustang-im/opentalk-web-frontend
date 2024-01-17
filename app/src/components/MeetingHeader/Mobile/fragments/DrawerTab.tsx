@@ -4,6 +4,8 @@
 import { styled, Typography, Box, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 
+import { Indicator } from '../../fragments/Indicator';
+
 const TabHeader = styled(Stack)(({ theme }) => ({
   borderRadius: '1rem',
   padding: theme.spacing(1, 2),
@@ -16,9 +18,14 @@ const TabHeader = styled(Stack)(({ theme }) => ({
 const Header = styled(TabHeader, {
   shouldForwardProp: (prop) => prop !== 'active',
 })<{ active?: boolean }>(({ theme, active }) => ({
+  position: 'relative',
   background: active ? theme.palette.text.primary : theme.palette.background.defaultGradient,
   '& .MuiTypography-root': {
     color: active ? theme.palette.text.secondary : theme.palette.text.primary,
+  },
+  '& .MuiBadge-root': {
+    top: '50%',
+    right: '1rem',
   },
 }));
 
@@ -54,9 +61,18 @@ interface DrawerTabProps {
   active?: boolean;
   disabled?: boolean;
   handleClick: () => void;
+  showIndicator?: boolean;
 }
 
-const DrawerTab = ({ children, tabTitle, active, disabled, handleClick }: DrawerTabProps) => {
+const TabIndicator = styled(Indicator)({
+  marginLeft: '1rem',
+  position: 'absolute',
+  right: '0.1rem',
+  top: '50%',
+  transform: 'translateY(-50%)',
+});
+
+const DrawerTab = ({ children, tabTitle, active, disabled, handleClick, showIndicator }: DrawerTabProps) => {
   return (
     <Stack direction="column">
       {disabled ? (
@@ -67,6 +83,7 @@ const DrawerTab = ({ children, tabTitle, active, disabled, handleClick }: Drawer
         <>
           <Header active={active} onClick={handleClick}>
             <Typography>{tabTitle}</Typography>
+            {showIndicator && <TabIndicator />}
           </Header>
           <Content active={active}>{active && children}</Content>
         </>

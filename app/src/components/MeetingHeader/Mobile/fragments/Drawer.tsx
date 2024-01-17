@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Badge, Drawer as MuiDrawer, Stack, styled } from '@mui/material';
+import { Drawer as MuiDrawer, Stack, styled } from '@mui/material';
 import { IconButton as DefaultIconButton, LogoSmallIcon } from '@opentalk/common';
 import { BackendModules } from '@opentalk/common';
 import { useState } from 'react';
@@ -12,13 +12,9 @@ import { useAppDispatch, useAppSelector, useTabs } from '../../../../hooks';
 import { EnterpriseProvider } from '../../../../provider/EnterpriseProvider';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../../../store/slices/chatSlice';
 import { selectIsSharedFolderAvailableIndicatorVisible } from '../../../../store/slices/sharedFolderSlice';
-import {
-  selectActiveTab,
-  selectIsCurrentProtocolHighlighted,
-  selectIsCurrentWhiteboardHighlighted,
-  setActiveTab,
-} from '../../../../store/slices/uiSlice';
+import { selectActiveTab, selectIsCurrentWhiteboardHighlighted, setActiveTab } from '../../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../../store/slices/userSlice';
+import { Indicator } from '../../fragments/Indicator';
 import DrawerTab from './DrawerTab';
 
 const DrawerContentContainer = styled(Stack)(({ theme }) => ({
@@ -48,16 +44,11 @@ const StyledDrawer = styled(MuiDrawer)(({ theme }) => ({
   },
 }));
 
-const Indicator = styled(Badge)(({ theme }) => ({
+const ButtonIndicator = styled(Indicator)({
   position: 'absolute',
-  top: '25%',
-  right: '15%',
-  width: '0.75rem',
-  height: '0.75rem',
-  transform: 'translate(50%, -50%)',
-  borderRadius: '50%',
-  background: theme.palette.primary.main,
-}));
+  top: '0.1rem',
+  right: '0.1rem',
+});
 
 const Drawer = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -67,7 +58,6 @@ const Drawer = () => {
   const unreadGlobalMessageCount = useAppSelector(selectUnreadGlobalMessageCount);
   const unreadPersonalMessageCount = useAppSelector(selectUnreadPersonalMessageCount);
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
-  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const isSharedFolderAvailableIndicatorVisible = useAppSelector(selectIsSharedFolderAvailableIndicatorVisible);
   const isModerator = useAppSelector(selectIsModerator);
 
@@ -75,7 +65,6 @@ const Drawer = () => {
     unreadGlobalMessageCount > 0 ||
     unreadPersonalMessageCount > 0 ||
     isCurrentWhiteboardHighlighted ||
-    isCurrentProtocolHighlighted ||
     isSharedFolderAvailableIndicatorVisible;
 
   const handleSetActiveTab = (tabKey: ModerationTabKey) => {
@@ -123,7 +112,7 @@ const Drawer = () => {
     <>
       <IconButton onClick={() => setIsDrawerOpen(true)}>
         <LogoSmallIcon />
-        {showIndicator && <Indicator />}
+        {showIndicator && <ButtonIndicator />}
       </IconButton>
       <StyledDrawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
         {isModerator && <DrawerContentContainer>{Tabs}</DrawerContentContainer>}
