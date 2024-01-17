@@ -175,9 +175,8 @@ export const participantsSlice = createSlice({
           role,
           isPresenter,
           protocolAccess,
-          isSpeaking,
         },
-      }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups'>>
+      }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups' | 'isSpeaking'>>
     ) => {
       participantAdapter.updateOne(state, {
         id,
@@ -191,7 +190,6 @@ export const participantsSlice = createSlice({
           isPresenter,
           role,
           protocolAccess,
-          isSpeaking,
         },
       });
     },
