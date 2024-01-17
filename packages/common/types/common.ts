@@ -69,7 +69,7 @@ export interface SpeakingState {
 }
 
 export interface Speaker extends SpeakingState {
-  id: ParticipantId;
+  participant: ParticipantId;
 }
 
 export interface ProtocolState {

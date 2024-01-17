@@ -194,9 +194,9 @@ export const participantsSlice = createSlice({
       });
     },
     updatedSpeaker: (state, { payload }: PayloadAction<Speaker>) => {
-      const { id, isSpeaking, updatedAt } = payload;
+      const { participant, isSpeaking, updatedAt } = payload;
       participantAdapter.updateOne(state, {
-        id,
+        id: participant,
         changes: {
           isSpeaking,
           lastActive: updatedAt,
@@ -313,7 +313,7 @@ startAppListening({
   actionCreator: updatedSpeaker,
   effect: (action, listenerApi) => {
     const ourId = listenerApi.getState().user.uuid;
-    const speakerId = action.payload.id;
+    const speakerId = action.payload.participant;
     const isSpeaking = action.payload.isSpeaking;
     if (isSpeaking && speakerId !== ourId) {
       listenerApi.dispatch(setFocusedSpeaker(speakerId));

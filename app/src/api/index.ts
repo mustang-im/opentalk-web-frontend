@@ -487,7 +487,9 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
       return;
     }
     case 'speaker_updated':
-      dispatch(updatedSpeaker({ id: data.participant, isSpeaking: data.isSpeaking, updatedAt: data.updatedAt }));
+      dispatch(
+        updatedSpeaker({ participant: data.participant, isSpeaking: data.isSpeaking, updatedAt: data.updatedAt })
+      );
       return;
     case 'error': {
       const error = data.error;
