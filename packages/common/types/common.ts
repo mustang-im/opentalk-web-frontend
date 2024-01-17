@@ -121,6 +121,7 @@ export interface IParticipantControl {
 export type ParticipantMediaState = PresenterRoleState & {
   screen?: MediaSessionState;
   video?: MediaSessionState;
+  speakers?: Speaker[];
 };
 
 type TimerIsReady = Pick<TimerState, 'readyStatus'>;

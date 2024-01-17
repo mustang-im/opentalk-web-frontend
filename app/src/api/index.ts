@@ -28,6 +28,7 @@ import {
   timerStopped,
   setLibravatarOptions,
   ParticipantId,
+  Speaker,
 } from '@opentalk/common';
 import {
   AutomodEventType,
@@ -163,11 +164,21 @@ const mapProtocolToProtocolAccess = (protocol?: ProtocolState) => {
   return ProtocolAccess.Write;
 };
 
+const isParticipantSpeaking = (speakers: Speaker[], participantId: ParticipantId) => {
+  let isSpeaking = false;
+  const speakerWithSameId = speakers.find((speaker) => participantId === speaker.participant);
+  if (speakerWithSameId?.isSpeaking) {
+    isSpeaking = true;
+  }
+  return isSpeaking;
+};
+
 const mapToUiParticipant = (
   state: RootState,
   { id, control, media, protocol }: BackendParticipant,
   breakoutRoomId: BreakoutRoomId | null,
-  waitingState: WaitingState
+  waitingState: WaitingState,
+  speakers?: Speaker[]
 ): Participant => ({
   id,
   groups: [],
@@ -184,7 +195,7 @@ const mapToUiParticipant = (
   waitingState,
   protocolAccess: mapProtocolToProtocolAccess(protocol),
   isPresenter: Boolean(media?.isPresenter),
-  isSpeaking: false,
+  isSpeaking: speakers ? isParticipantSpeaking(speakers, id) : false,
 });
 
 const mapBreakoutToUiParticipant = (
@@ -277,9 +288,15 @@ const handleControlMessage = (
       roomHistory = roomHistory.concat(groupMessages);
 
       let joinedParticipants: Participant[];
-      joinedParticipants = data.participants.map((participant) =>
-        mapToUiParticipant(state, participant, data.breakout?.current || null, WaitingState.Joined)
-      );
+      joinedParticipants = data.participants.map((participant) => {
+        return mapToUiParticipant(
+          state,
+          participant,
+          data.breakout?.current || null,
+          WaitingState.Joined,
+          data.media?.speakers
+        );
+      });
 
       if (data.moderation?.waitingRoomEnabled && data.moderation.waitingRoomParticipants.length > 0) {
         // There can be a situation, that some participants are in both arrays (e.g. after Debriefing)
@@ -292,7 +309,13 @@ const handleControlMessage = (
             joinedParticipants.splice(duplicateParticipantIndex, 1);
           }
           //TODO the backend should provide a waitingState: 'waiting' | 'approved', change when implemented
-          return mapToUiParticipant(state, waitingParticipant, data.breakout?.current || null, WaitingState.Waiting);
+          return mapToUiParticipant(
+            state,
+            waitingParticipant,
+            data.breakout?.current || null,
+            WaitingState.Waiting,
+            data.media?.speakers
+          );
         });
 
         joinedParticipants = joinedParticipants.concat(waitingParticipants);
