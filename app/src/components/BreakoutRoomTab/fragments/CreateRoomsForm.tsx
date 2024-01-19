@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, FormHelperText, Button, Box } from '@mui/material';
-import { Seconds } from '@opentalk/common';
+import { styled, Button, Box } from '@mui/material';
+import { ErrorFormMessage, Seconds } from '@opentalk/common';
 import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon, Participant } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import { FormikProps } from 'formik';
@@ -122,7 +122,7 @@ const CreateRoomsForm = () => {
             >
               <CreateByParticipantsForm formName={AccordionOptions.Participants} handleNext={handleNext} />
             </AccordionItem>
-            {formik.errors.expanded && <FormHelperText error>{t(formik.errors.expanded as string)}</FormHelperText>}
+            {formik.errors.expanded && <ErrorFormMessage helperText={t(formik.errors.expanded as string)} />}
           </Box>
         ),
         validationSchema: validationSchema(),

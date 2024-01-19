@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FormControl, FormHelperText, InputLabel as MuiInputLabel, Stack, styled } from '@mui/material';
+import { FormControl, InputLabel as MuiInputLabel, Stack, styled } from '@mui/material';
 import type { CSSObject } from '@mui/material';
 import React, { useMemo } from 'react';
+import { ErrorFormMessage } from '../ErrorFormMessage';
 
 export type FormProps = {
   label?: string;
@@ -39,7 +40,7 @@ export const FormWrapper = ({
     <>
       {label && <span>{label}</span>}
       {children}
-      {error && <FormHelperText error>{helperText}</FormHelperText>}
+      {error && <ErrorFormMessage helperText={helperText} />}
     </>
   );
 
@@ -52,7 +53,7 @@ export const FormWrapper = ({
   }, [inline]);
 
   return (
-    <FormControl variant="standard" fullWidth={fullWidth} sx={sx}>
+    <FormControl variant="standard" fullWidth={fullWidth} sx={sx} error={error}>
       <InputLabel disableAnimation shrink>
         {stacked ? <Stack spacing={2}>{content}</Stack> : content}
       </InputLabel>

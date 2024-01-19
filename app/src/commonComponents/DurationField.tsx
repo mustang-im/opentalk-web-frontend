@@ -6,14 +6,13 @@ import {
   Button,
   ButtonProps,
   Chip as MuiChip,
-  FormHelperText,
   InputLabel,
   Popover,
   Stack,
   styled,
   Typography,
 } from '@mui/material';
-import { ClockIcon } from '@opentalk/common';
+import { ClockIcon, ErrorFormMessage } from '@opentalk/common';
 import { isNumber } from 'lodash';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -184,7 +183,7 @@ const DurationField = ({
           </Stack>
         </Container>
       </Popover>
-      {error && <FormHelperText error>{helperText}</FormHelperText>}
+      {error && <ErrorFormMessage helperText={helperText} />}
     </Box>
   );
 };

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Theme, useMediaQuery } from '@mui/material';
 import { DateTimePicker as MuiDateTimePicker, PickersActionBarAction, PickersLocaleText } from '@mui/x-date-pickers';
+import { ErrorFormMessage } from '@opentalk/common';
 import { isSameDay } from 'date-fns';
 import { isEmpty } from 'lodash';
 
@@ -80,20 +81,23 @@ const DateTimePicker = ({
   return (
     // This provider is needed to customize and translate action button labels
     // Another option would be to introduce custom action components, which will make more work at the moment
-    <PickerLocalizationProvider localeText={actionButtonLabels}>
-      <MuiDateTimePicker
-        value={actualValue}
-        onChange={onChange}
-        ampm={ampm}
-        minDate={minTimeDate}
-        minTime={minTime}
-        slotProps={{
-          textField: { helperText, placeholder, error },
-          actionBar: { actions },
-          popper: { placement: 'bottom-start', modifiers: [getOffsetModifier()] },
-        }}
-      />
-    </PickerLocalizationProvider>
+    <>
+      <PickerLocalizationProvider localeText={actionButtonLabels}>
+        <MuiDateTimePicker
+          value={actualValue}
+          onChange={onChange}
+          ampm={ampm}
+          minDate={minTimeDate}
+          minTime={minTime}
+          slotProps={{
+            textField: { placeholder },
+            actionBar: { actions },
+            popper: { placement: 'bottom-start', modifiers: [getOffsetModifier()] },
+          }}
+        />
+      </PickerLocalizationProvider>
+      {error && <ErrorFormMessage helperText={helperText} />}
+    </>
   );
 };
 

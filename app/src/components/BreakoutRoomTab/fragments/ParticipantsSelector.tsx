@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Button, FormHelperText, styled, Typography } from '@mui/material';
-import { Participant } from '@opentalk/common';
+import { Box, Button, styled, Typography } from '@mui/material';
+import { ErrorFormMessage, Participant } from '@opentalk/common';
 import { useField, useFormikContext } from 'formik';
 import i18n from 'i18next';
 import { get, includes, isEmpty, reduce, xorBy } from 'lodash';
@@ -235,7 +235,7 @@ const ParticipantsSelector = ({ name, formName, onSubmit }: IParticipantsSelecto
       {meta.error ||
         (error && (
           <Box>
-            <FormHelperText error>{meta.error || error}</FormHelperText>
+            <ErrorFormMessage helperText={meta.error || error} />
           </Box>
         ))}
       <Box>

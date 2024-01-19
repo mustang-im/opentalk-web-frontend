@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, styled, Switch, Typography, Tooltip, Box } from '@mui/material';
-import { Seconds, BackIcon, notifications, RoomMode } from '@opentalk/common';
+import { Seconds, BackIcon, notifications, RoomMode, ErrorFormMessage } from '@opentalk/common';
 import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { FormikValues, Formik } from 'formik';
 import i18next from 'i18next';
@@ -142,6 +142,10 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
               </Box>
               <Box marginBottom={1}>
                 <AnswersFormElement name={'choices'} />
+              </Box>
+              <Box marginBottom={1}>
+                {/* General choices error message */}
+                {typeof formik.errors.choices === 'string' && <ErrorFormMessage helperText={formik.errors.choices} />}
               </Box>
             </Box>
           </Box>
