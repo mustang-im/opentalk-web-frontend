@@ -19,6 +19,7 @@ export interface Participant {
   waitingState: WaitingState;
   protocolAccess: ProtocolAccess;
   isPresenter: boolean;
+  isSpeaking: boolean;
 }
 
 export enum ProtocolAccess {

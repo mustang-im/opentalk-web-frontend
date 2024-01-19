@@ -27,8 +27,9 @@ import {
   timerStarted,
   timerStopped,
   setLibravatarOptions,
+  ParticipantId,
+  Speaker,
 } from '@opentalk/common';
-import { ParticipantId } from '@opentalk/common';
 import {
   AutomodEventType,
   LegalVoteMessageType,
@@ -64,7 +65,7 @@ import { clearGlobalChat, received as chatReceived, setChatSettings } from '../s
 import { selectLibravatarDefaultImage } from '../store/slices/configSlice';
 import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectionStatsSlice';
 import * as mediaStore from '../store/slices/mediaSlice';
-import { setFocusedSpeaker, setUpstreamLimit } from '../store/slices/mediaSlice';
+import { setUpstreamLimit } from '../store/slices/mediaSlice';
 import {
   closed as subscriberClosed,
   removed as subscriberRemoved,
@@ -83,6 +84,7 @@ import {
   waitingRoomJoined,
   waitingRoomLeft,
   selectParticipantsTotal,
+  updatedSpeaker,
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
@@ -162,11 +164,21 @@ const mapProtocolToProtocolAccess = (protocol?: ProtocolState) => {
   return ProtocolAccess.Write;
 };
 
+const isParticipantSpeaking = (speakers: Speaker[], participantId: ParticipantId) => {
+  let isSpeaking = false;
+  const speakerWithSameId = speakers.find((speaker) => participantId === speaker.participant);
+  if (speakerWithSameId?.isSpeaking) {
+    isSpeaking = true;
+  }
+  return isSpeaking;
+};
+
 const mapToUiParticipant = (
   state: RootState,
   { id, control, media, protocol }: BackendParticipant,
   breakoutRoomId: BreakoutRoomId | null,
-  waitingState: WaitingState
+  waitingState: WaitingState,
+  speakers?: Speaker[]
 ): Participant => ({
   id,
   groups: [],
@@ -183,6 +195,7 @@ const mapToUiParticipant = (
   waitingState,
   protocolAccess: mapProtocolToProtocolAccess(protocol),
   isPresenter: Boolean(media?.isPresenter),
+  isSpeaking: speakers ? isParticipantSpeaking(speakers, id) : false,
 });
 
 const mapBreakoutToUiParticipant = (
@@ -204,6 +217,7 @@ const mapBreakoutToUiParticipant = (
   waitingState: WaitingState.Joined,
   protocolAccess: ProtocolAccess.None,
   isPresenter: false,
+  isSpeaking: false,
 });
 
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
@@ -274,9 +288,15 @@ const handleControlMessage = (
       roomHistory = roomHistory.concat(groupMessages);
 
       let joinedParticipants: Participant[];
-      joinedParticipants = data.participants.map((participant) =>
-        mapToUiParticipant(state, participant, data.breakout?.current || null, WaitingState.Joined)
-      );
+      joinedParticipants = data.participants.map((participant) => {
+        return mapToUiParticipant(
+          state,
+          participant,
+          data.breakout?.current || null,
+          WaitingState.Joined,
+          data.media?.speakers
+        );
+      });
 
       if (data.moderation?.waitingRoomEnabled && data.moderation.waitingRoomParticipants.length > 0) {
         // There can be a situation, that some participants are in both arrays (e.g. after Debriefing)
@@ -289,7 +309,13 @@ const handleControlMessage = (
             joinedParticipants.splice(duplicateParticipantIndex, 1);
           }
           //TODO the backend should provide a waitingState: 'waiting' | 'approved', change when implemented
-          return mapToUiParticipant(state, waitingParticipant, data.breakout?.current || null, WaitingState.Waiting);
+          return mapToUiParticipant(
+            state,
+            waitingParticipant,
+            data.breakout?.current || null,
+            WaitingState.Waiting,
+            data.media?.speakers
+          );
         });
 
         joinedParticipants = joinedParticipants.concat(waitingParticipants);
@@ -452,12 +478,7 @@ const handleControlMessage = (
  * @param dispatch AppDispatch function
  * @param data mediaMsgs Message content
  */
-const handleMediaMessage = async (
-  dispatch: AppDispatch,
-  data: media.Message,
-  state: RootState,
-  timestamp: Timestamp
-) => {
+const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, state: RootState) => {
   // TODO: Theses two are actually a control messages -- talk to the backend
   switch (data.message) {
     case 'presenter_granted':
@@ -488,11 +509,10 @@ const handleMediaMessage = async (
       dispatch(mediaStore.notificationShown());
       return;
     }
-    case 'focus_update':
-      // user itself (own uuid) may not be focusedSpeaker & we don't reset focusedSpeaker when he stops to speak
-      if (data.focus && state.user.uuid !== data.focus) {
-        dispatch(setFocusedSpeaker({ id: data.focus, timestamp }));
-      }
+    case 'speaker_updated':
+      dispatch(
+        updatedSpeaker({ participant: data.participant, isSpeaking: data.isSpeaking, updatedAt: data.updatedAt })
+      );
       return;
     case 'error': {
       const error = data.error;
@@ -1016,7 +1036,7 @@ const onMessage =
         handleBreakoutMessage(dispatch, getState(), message.payload, message.timestamp);
         break;
       case 'media':
-        handleMediaMessage(dispatch, message.payload, getState(), message.timestamp).catch((e) => {
+        handleMediaMessage(dispatch, message.payload, getState()).catch((e) => {
           console.error('Error in handleMediaMessage:', e);
         });
         break;

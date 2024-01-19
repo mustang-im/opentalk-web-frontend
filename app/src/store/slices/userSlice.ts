@@ -5,7 +5,6 @@ import {
   GroupId,
   ParticipantId,
   ParticipationKind,
-  Timestamp,
   Participant,
   ProtocolAccess,
   WaitingState,
@@ -20,7 +19,7 @@ import { sendChatMessage } from '../../api/types/outgoing/chat';
 import { lowerHand, raiseHand } from '../../api/types/outgoing/control';
 import { initSentryReportWithUser } from '../../utils/glitchtipUtils';
 import { login, startRoom } from '../commonActions';
-import { setAudioEnable, setFocusedSpeaker, setScreenShare, setVideoEnable } from './mediaSlice';
+import { setAudioEnable, setScreenShare, setVideoEnable, setSpeakerActivity } from './mediaSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
 
@@ -103,14 +102,9 @@ export const userSlice = createSlice({
       state.joinedAt = undefined;
     });
 
-    builder.addCase(
-      setFocusedSpeaker,
-      (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp?: Timestamp }>) => {
-        if (id === state.uuid) {
-          state.lastActive = timestamp;
-        }
-      }
-    );
+    builder.addCase(setSpeakerActivity, (state) => {
+      state.lastActive = new Date().toISOString();
+    });
     builder.addCase(raiseHand.action, (state) => {
       state.lastActive = new Date().toISOString();
     });
@@ -176,6 +170,7 @@ export const selectUserAsPartialParticipant = createSelector(
       waitingState: WaitingState.Joined,
       protocolAccess: state.protocolAccess,
       isPresenter: state.isPresenter,
+      isSpeaking: false,
     };
   }
 );

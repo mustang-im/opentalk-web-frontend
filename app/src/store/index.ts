@@ -16,10 +16,10 @@ import { initialState as initialConfig } from './slices/configSlice';
 import configReducer from './slices/configSlice';
 import connectionStatsReducer from './slices/connectionStatsSlice';
 import eventReducer from './slices/eventSlice';
-import mediaReducer from './slices/mediaSlice';
+import mediaReducer, { mediaMiddleware } from './slices/mediaSlice';
 import subscribersReducer, { mediaSubscriberMiddleware } from './slices/mediaSubscriberSlice';
 import moderationReducer from './slices/moderationSlice';
-import participantsReducer from './slices/participantsSlice';
+import participantsReducer, { participantsMiddleware } from './slices/participantsSlice';
 import pollReducer from './slices/pollSlice';
 import protocolReducer from './slices/protocolSlice';
 import recordingReducer from './slices/recordingSlice';
@@ -37,8 +37,10 @@ const middleware: Array<Middleware> = [
   restApi.middleware,
   rtkQueryErrorLoggerMiddlware,
   mediaSubscriberMiddleware.middleware,
+  mediaMiddleware.middleware,
   timerMiddleware.middleware,
   roomMiddleware.middleware,
+  participantsMiddleware.middleware,
 ];
 
 const logger = () => (next: Dispatch) => (action: AnyAction) => {

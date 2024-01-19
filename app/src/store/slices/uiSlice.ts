@@ -58,6 +58,7 @@ interface UIState {
     [ChatScope.Group]: Record<TargetId, string>;
     [ChatScope.Private]: Record<TargetId, string>;
   };
+  focusedSpeaker: ParticipantId | undefined;
 }
 
 const initialState: UIState = {
@@ -86,6 +87,7 @@ const initialState: UIState = {
     [ChatScope.Group]: {},
     [ChatScope.Private]: {},
   },
+  focusedSpeaker: undefined,
 };
 
 export const uiSlice = createSlice({
@@ -150,6 +152,9 @@ export const uiSlice = createSlice({
       state.pinnedParticipantId = id;
       state.cinemaLayout = LayoutOptions.Speaker;
     },
+    setFocusedSpeaker(state, { payload: id }: PayloadAction<ParticipantId>) {
+      state.focusedSpeaker = id;
+    },
     saveDefaultChatMessage(
       state,
       { payload }: PayloadAction<{ scope: ChatScope; targetId?: TargetId; input: string }>
@@ -168,6 +173,9 @@ export const uiSlice = createSlice({
     builder.addCase(leave, (state, { payload: { id } }: PayloadAction<{ id: ParticipantId }>) => {
       if (state.pinnedParticipantId === id) {
         state.pinnedParticipantId = undefined;
+      }
+      if (state.focusedSpeaker === id) {
+        state.focusedSpeaker = undefined;
       }
     });
     builder.addCase(breakoutLeft, (state, { payload: { id } }: PayloadAction<{ id: ParticipantId }>) => {
@@ -244,6 +252,7 @@ export const {
   toggledFullScreenMode,
   pinnedRemoteScreenshare,
   saveDefaultChatMessage,
+  setFocusedSpeaker,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -265,6 +274,7 @@ export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui
 export const selectShowCoffeeBreakCurtain = (state: RootState) => state.ui.showCoffeeBreakCurtain;
 export const selectActiveTab = (state: RootState) => state.ui.activeTab;
 export const selectIsFullscreenMode = (state: RootState) => state.ui.isFullscreenMode;
+export const selectFocusedSpeaker = (state: RootState) => state.ui.focusedSpeaker;
 export function selectDefaultChatMessage(scope: ChatScope, target?: TargetId) {
   return (state: RootState): string => {
     if (scope === ChatScope.Global) {

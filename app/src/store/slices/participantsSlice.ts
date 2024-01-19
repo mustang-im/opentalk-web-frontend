@@ -5,20 +5,28 @@ import {
   BackendParticipant,
   ChatMessage,
   ParticipantId,
-  Timestamp,
   Participant,
   WaitingState,
   ProtocolAccess,
   ParticipantInOtherRoom,
   joinSuccess,
+  Speaker,
 } from '@opentalk/common';
-import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  EntityId,
+  PayloadAction,
+  createListenerMiddleware,
+  TypedStartListening,
+} from '@reduxjs/toolkit';
 
-import { RootState } from '../';
+import { RootState, AppDispatch } from '../';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
 import { received } from './chatSlice';
-import { setFocusedSpeaker } from './mediaSlice';
 import { connectionClosed } from './roomSlice';
+import { setFocusedSpeaker } from './uiSlice';
 
 export const participantAdapter = createEntityAdapter<Participant>({
   sortComparer: (a, b) => a.displayName.localeCompare(b.displayName),
@@ -46,6 +54,7 @@ export const participantsSlice = createSlice({
             role,
             protocolAccess,
             isPresenter,
+            isSpeaking,
           },
         },
       }: PayloadAction<{ participant: Participant }>
@@ -66,6 +75,7 @@ export const participantsSlice = createSlice({
         waitingState: WaitingState.Joined,
         protocolAccess,
         isPresenter,
+        isSpeaking,
       });
     },
     leave: (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp: string }>) => {
@@ -100,6 +110,7 @@ export const participantsSlice = createSlice({
         waitingState: WaitingState.Joined,
         protocolAccess: ProtocolAccess.None,
         isPresenter: false,
+        isSpeaking: false,
       };
       participantAdapter.upsertOne(state, participant);
     },
@@ -125,6 +136,7 @@ export const participantsSlice = createSlice({
         protocolAccess: ProtocolAccess.None,
         isPresenter: false,
         waitingState: WaitingState.Waiting,
+        isSpeaking: false,
       };
       participantAdapter.upsertOne(state, participant);
     },
@@ -164,7 +176,7 @@ export const participantsSlice = createSlice({
           isPresenter,
           protocolAccess,
         },
-      }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups'>>
+      }: PayloadAction<Omit<Participant, 'breakoutRoomId' | 'groups' | 'isSpeaking'>>
     ) => {
       participantAdapter.updateOne(state, {
         id,
@@ -178,6 +190,16 @@ export const participantsSlice = createSlice({
           isPresenter,
           role,
           protocolAccess,
+        },
+      });
+    },
+    updatedSpeaker: (state, { payload }: PayloadAction<Speaker>) => {
+      const { participant, isSpeaking, updatedAt } = payload;
+      participantAdapter.updateOne(state, {
+        id: participant,
+        changes: {
+          isSpeaking,
+          lastActive: updatedAt,
         },
       });
     },
@@ -195,15 +217,6 @@ export const participantsSlice = createSlice({
         changes: { lastActive: payload.timestamp },
       });
     });
-    builder.addCase(
-      setFocusedSpeaker,
-      (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp?: Timestamp }>) => {
-        participantAdapter.updateOne(state, {
-          id,
-          changes: { lastActive: timestamp },
-        });
-      }
-    );
   },
 });
 
@@ -217,6 +230,7 @@ export const {
   waitingRoomLeft,
   approveToEnter,
   approvedAll,
+  updatedSpeaker,
 } = participantsSlice.actions;
 export const actions = participantsSlice.actions;
 
@@ -265,6 +279,7 @@ export const selectSlicedParticipants = (page: number, maxParticipants: number) 
   });
 
 export const selectParticipantById = (id: EntityId) => (state: RootState) => participantSelectors.selectById(state, id);
+
 export const selectParticipants = (state: RootState) => participantSelectors.selectEntities(state);
 export const selectParticipantsTotal = createSelector(
   selectAllOnlineParticipants,
@@ -285,5 +300,25 @@ export const selectParticipationKind = (id: EntityId) => {
   const sel = selectParticipantById(id);
   return createSelector(sel, (participant) => participant?.participationKind);
 };
+
+export const selectIsParticipantSpeaking = (id: EntityId) => {
+  return createSelector(selectParticipantById(id), (participant) => participant?.isSpeaking);
+};
+
+export const participantsMiddleware = createListenerMiddleware();
+type AppStartListening = TypedStartListening<RootState, AppDispatch>;
+
+const startAppListening = participantsMiddleware.startListening as AppStartListening;
+startAppListening({
+  actionCreator: updatedSpeaker,
+  effect: (action, listenerApi) => {
+    const ourId = listenerApi.getState().user.uuid;
+    const speakerId = action.payload.participant;
+    const isSpeaking = action.payload.isSpeaking;
+    if (isSpeaking && speakerId !== ourId) {
+      listenerApi.dispatch(setFocusedSpeaker(speakerId));
+    }
+  },
+});
 
 export default participantsSlice.reducer;

@@ -23,7 +23,6 @@ import { ProtocolParticipant } from '../components/ProtocolTab/ProtocolTab';
 import { selectCurrentBreakoutRoomId } from './slices/breakoutSlice';
 import { selectChatMessagesByScope } from './slices/chatSlice';
 import { selectGlobalEvents, RoomEvent } from './slices/eventSlice';
-import { selectFocusedSpeaker } from './slices/mediaSlice';
 import { selectUnmutedSubscribers } from './slices/mediaSubscriberSlice';
 import { selectHandUp, selectHandUpdatedAt } from './slices/moderationSlice';
 import {
@@ -37,6 +36,7 @@ import {
   selectParticipantsSearchValue,
   selectParticipantsSortOption,
   selectPinnedParticipantId,
+  selectFocusedSpeaker,
 } from './slices/uiSlice';
 import { selectGroups, selectUserAsPartialParticipant } from './slices/userSlice';
 
