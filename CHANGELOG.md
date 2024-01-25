@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Enhanced profile display name input field with the autocomplete functionality for faster completion. ([#1643](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1643))
 - Implement client-side speaker detection and highlight multiple speakers concurrently ([#1498]https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1498) 
 - Protocol feature is now fully available for mobile users ([#1507](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1507))
 - Improved user experience for screen reader users in lobby view ([#1640](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1640))

@@ -51,7 +51,13 @@ const ProfileNameForm = () => {
         </Grid>
         <Grid item container spacing={1} direction={'column'}>
           <Grid item>
-            <TextField disabled={disallowCustomDisplayName} {...formikProps('displayName', formik)} fullWidth />
+            <TextField
+              disabled={disallowCustomDisplayName}
+              {...formikProps('displayName', formik)}
+              fullWidth
+              // Autocomplete attribute on a disabled field makes no sense in terms of the UX and A11Y so we omit it.
+              autoComplete={!disallowCustomDisplayName ? 'name' : undefined}
+            />
           </Grid>
           <Grid item>
             <Typography variant={'caption'}>{t('dashboard-settings-profile-input-hint')}</Typography>
