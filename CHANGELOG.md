@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Opentalk SVG logo can now be interpreted by accessibility tools ([#1636](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1636))
 - Change order of moderator tabs ([#1663](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1663))
 - Improved english sentence for the chat encrypted message panel. ([#1657](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1657))
 - Enhanced profile display name input field with the autocomplete functionality for faster completion. ([#1643](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1643))
