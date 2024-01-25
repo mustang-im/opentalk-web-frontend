@@ -17,7 +17,7 @@ describe('SelfTest', () => {
     );
 
     expect(screen.getByText('selftest-body')).toBeInTheDocument();
-    expect(screen.getByText('selftest-header')).toBeInTheDocument();
+
     expect(screen.getByPlaceholderText('joinform-enter-name')).toBeInTheDocument();
 
     expect(screen.getByLabelText('speed-meter-button')).toBeInTheDocument();
@@ -31,5 +31,28 @@ describe('SelfTest', () => {
     expect(screen.queryByTestId('toolbarEndCallButton')).not.toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: 'conference-quick-start-open' })).toBeInTheDocument();
+  });
+  test('render SelfTest header as h2', async () => {
+    await render(
+      <SelfTest>
+        <TextField color={'secondary'} placeholder={'joinform-enter-name'} />
+      </SelfTest>,
+      store
+    );
+    const headerElement = screen.getByText('selftest-header');
+    expect(headerElement).toBeInTheDocument();
+    expect(headerElement.tagName).toBe('H2');
+  });
+  test('render room title as h1', async () => {
+    const title = 'room title';
+    await render(
+      <SelfTest title={title}>
+        <TextField color={'secondary'} placeholder={'joinform-enter-name'} />
+      </SelfTest>,
+      store
+    );
+    const titleElement = screen.getByText('joinform-room-title');
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement.tagName).toBe('H1');
   });
 });
