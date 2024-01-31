@@ -128,44 +128,20 @@ export const tabs: Array<Tab> = [
     titleKey: 'reset-handraises-tab-title',
   },
   {
-    icon: <DebriefingIcon />,
-    component: (
-      <Suspense fallback={<SuspenseLoading />}>
-        <DebriefingTab />
-      </Suspense>
-    ),
-    tooltipTranslationKey: 'moderationbar-button-debriefing',
-    featureKey: FeaturesKeys.Debriefing,
-    key: ModerationTabKey.Debriefing,
-    titleKey: 'debriefing-tab-title',
-  },
-  {
     key: ModerationTabKey.Divider,
     divider: true,
   },
   {
-    icon: <BreakroomsIcon />,
+    icon: <TalkingStickIcon />,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
-        <BreakoutRoomTab />
+        <TalkingStickTabPanel />
       </Suspense>
     ),
-    tooltipTranslationKey: 'moderationbar-button-breakout-tooltip',
-    moduleKey: BackendModules.Breakout,
-    key: ModerationTabKey.Breakout,
-    titleKey: 'breakout-room-tab-title',
-  },
-  {
-    icon: <WhiteboardIcon />,
-    tooltipTranslationKey: 'moderationbar-button-whiteboard-tooltip',
-    component: (
-      <Suspense fallback={<SuspenseLoading />}>
-        <WhiteboardTab />
-      </Suspense>
-    ),
-    moduleKey: BackendModules.Whiteboard,
-    key: ModerationTabKey.Whiteboard,
-    titleKey: 'whiteboard-tab-title',
+    tooltipTranslationKey: 'moderationbar-button-talking-stick-tooltip',
+    moduleKey: BackendModules.Automod,
+    key: ModerationTabKey.TalkingStick,
+    titleKey: 'talking-stick-tab-title',
   },
   {
     icon: <PollIcon />,
@@ -192,16 +168,40 @@ export const tabs: Array<Tab> = [
     titleKey: 'legal-vote-tab-title',
   },
   {
-    icon: <TalkingStickIcon />,
+    icon: <ProtocolIcon />,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
-        <TalkingStickTabPanel />
+        <ProtocolTab />
       </Suspense>
     ),
-    tooltipTranslationKey: 'moderationbar-button-talking-stick-tooltip',
-    moduleKey: BackendModules.Automod,
-    key: ModerationTabKey.TalkingStick,
-    titleKey: 'talking-stick-tab-title',
+    tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
+    moduleKey: BackendModules.Protocol,
+    key: ModerationTabKey.Protocol,
+    titleKey: 'protocol-tab-title',
+  },
+  {
+    icon: <WhiteboardIcon />,
+    tooltipTranslationKey: 'moderationbar-button-whiteboard-tooltip',
+    component: (
+      <Suspense fallback={<SuspenseLoading />}>
+        <WhiteboardTab />
+      </Suspense>
+    ),
+    moduleKey: BackendModules.Whiteboard,
+    key: ModerationTabKey.Whiteboard,
+    titleKey: 'whiteboard-tab-title',
+  },
+  {
+    icon: <BreakroomsIcon />,
+    component: (
+      <Suspense fallback={<SuspenseLoading />}>
+        <BreakoutRoomTab />
+      </Suspense>
+    ),
+    tooltipTranslationKey: 'moderationbar-button-breakout-tooltip',
+    moduleKey: BackendModules.Breakout,
+    key: ModerationTabKey.Breakout,
+    titleKey: 'breakout-room-tab-title',
   },
   {
     icon: <TimerIcon />,
@@ -228,16 +228,16 @@ export const tabs: Array<Tab> = [
     titleKey: 'coffee-break-tab-title',
   },
   {
-    icon: <ProtocolIcon />,
+    icon: <DebriefingIcon />,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
-        <ProtocolTab />
+        <DebriefingTab />
       </Suspense>
     ),
-    tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
-    moduleKey: BackendModules.Protocol,
-    key: ModerationTabKey.Protocol,
-    titleKey: 'protocol-tab-title',
+    tooltipTranslationKey: 'moderationbar-button-debriefing',
+    featureKey: FeaturesKeys.Debriefing,
+    key: ModerationTabKey.Debriefing,
+    titleKey: 'debriefing-tab-title',
   },
   {
     icon: <AddUserIcon />,
