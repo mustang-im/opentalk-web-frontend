@@ -6,7 +6,6 @@ import {
   Button,
   ButtonProps,
   Chip as MuiChip,
-  FormHelperText,
   Popover,
   Stack,
   styled,
@@ -20,6 +19,7 @@ import { ClockIcon } from '../../assets/icons';
 import { IFormikCustomFieldPropsReturnDurationValue } from '../../utils';
 import TextField from '../TextField';
 import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils';
+import { ErrorFormMessage } from '../ErrorFormMessage';
 
 export type DurationValueOptions = number | 'custom' | null;
 interface IDurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue {
@@ -188,7 +188,7 @@ export const DurationField = ({
           </Stack>
         </Container>
       </Popover>
-      {error && <FormHelperText error>{helperText}</FormHelperText>}
+      {error && <ErrorFormMessage helperText={helperText} />}
     </Box>
   );
 };

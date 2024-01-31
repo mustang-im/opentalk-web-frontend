@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Chip as MuiChip, FormHelperText, Grid } from '@mui/material';
+import { Button, Chip as MuiChip, Grid } from '@mui/material';
 import { styled } from '@mui/styles';
 import { AddIcon } from '@opentalk/common';
 import { FieldArray, Field, FieldProps, useFormikContext } from 'formik';
@@ -41,10 +41,9 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { values, errors } = useFormikContext();
   const { t } = useTranslation();
-  const error = get(errors, name, undefined);
-  const hasError = Boolean(error);
 
   const choices = get(values, name, []);
+  const answerErrors = get(errors, name, []);
 
   useEffect(() => {
     choices.forEach((item: string, index: number) => {
@@ -71,6 +70,8 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
                       size={'small'}
                       fullWidth
                       defaultValue={value}
+                      error={Array.isArray(answerErrors) && Boolean(answerErrors[index])}
+                      helperText={Array.isArray(answerErrors) && answerErrors[index]}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           setEditMode(undefined);
@@ -112,11 +113,6 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
               >
                 {t('poll-input-choices')}
               </Button>
-            </Grid>
-          )}
-          {hasError && (
-            <Grid item xs={12}>
-              <FormHelperText error={hasError}>{error}</FormHelperText>
             </Grid>
           )}
         </Grid>

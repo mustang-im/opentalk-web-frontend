@@ -1,12 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  FormControl as MuiFormControl,
-  FormControlLabel as MuiFormControlLabel,
-  FormHelperText,
-  styled,
-} from '@mui/material';
+import { FormControl as MuiFormControl, FormControlLabel as MuiFormControlLabel, styled } from '@mui/material';
+import { ErrorFormMessage } from '@opentalk/common';
 import React from 'react';
 
 interface IFormItem {
@@ -69,7 +65,7 @@ const FormItem = ({
         labelPlacement={labelPlacement}
         value={value}
       />
-      {error && <FormHelperText error>{helperText}</FormHelperText>}
+      {error && <ErrorFormMessage helperText={helperText} />}
     </FormControl>
   );
 };

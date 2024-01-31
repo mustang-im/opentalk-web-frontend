@@ -12,6 +12,7 @@ title-actions = Actions
 action-delete = Delete
 action-download = Download
 global-calendar-week = CW
+global-error = Error
 
 error-fetch-4xx = error loading resource
 error-general = Ups, something went wrong. Please try again.

@@ -40,7 +40,7 @@ const TextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProps>(
   ({ label, error, helperText, fullWidth, ...props }, ref) => {
     return (
       <FormWrapper label={label} helperText={helperText} error={error} fullWidth={fullWidth}>
-        <ObservedInput {...props} ref={ref} />
+        <ObservedInput {...props} ref={ref} error={error} />
       </FormWrapper>
     );
   }

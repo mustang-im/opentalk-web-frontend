@@ -4,10 +4,10 @@
 import {
   FormControl as MuiFormControl,
   FormControlLabel as MuiFormControlLabel,
-  FormHelperText,
   styled,
 } from '@mui/material';
 import React from 'react';
+import { ErrorFormMessage } from '../ErrorFormMessage';
 
 interface IFormItem {
   label: string;
@@ -69,7 +69,7 @@ const FormItem = ({
         labelPlacement={labelPlacement}
         value={value}
       />
-      {error && <FormHelperText error>{helperText}</FormHelperText>}
+      {error && <ErrorFormMessage helperText={helperText} />}
     </FormControl>
   );
 };

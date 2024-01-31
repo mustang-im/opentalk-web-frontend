@@ -12,6 +12,7 @@ title-actions = Aktionen
 action-delete = löschen
 action-download = Download
 global-calendar-week = KW
+global-error = Fehler
 
 error-fetch-4xx = Ladefehler
 error-general = Ups, hier ist leider etwas schiefgelaufen. Bitte versuche es erneut.

@@ -13,6 +13,7 @@ import TextField from './TextField';
 import Toggle from './Toggle';
 import ToolbarMenuUtils from './ToolbarMenuUtils';
 import VisuallyHiddenTitle from './VisuallyHiddenTitle';
+import { ErrorFormMessage } from './ErrorFormMessage';
 
 export * from 'notistack';
 export {
@@ -40,6 +41,7 @@ export {
   SortPopoverMenu,
   Toggle,
   VisuallyHiddenTitle,
+  ErrorFormMessage,
 };
 
 export type { DurationValueOptions, FormProps };
