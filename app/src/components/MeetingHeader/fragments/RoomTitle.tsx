@@ -24,6 +24,7 @@ const Container = styled(Stack)(({ theme }) => ({
 const RoomTitleTypograhy = styled(Typography)(({ theme }) => ({
   padding: theme.spacing(0, 1),
   fontSize: theme.typography.pxToRem(14),
+  fontWeight: 500,
   maxWidth: '100%',
 }));
 
@@ -49,7 +50,7 @@ const RoomTitle = () => {
   return (
     <Container>
       <Tooltip translate="no" title={title} describeChild>
-        <RoomTitleTypograhy noWrap translate="no">
+        <RoomTitleTypograhy noWrap translate="no" variant="h1">
           {truncatedTitle}
         </RoomTitleTypograhy>
       </Tooltip>

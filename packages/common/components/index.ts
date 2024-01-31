@@ -12,6 +12,7 @@ import SortPopoverMenu from './SortPopoverMenu';
 import TextField from './TextField';
 import Toggle from './Toggle';
 import ToolbarMenuUtils from './ToolbarMenuUtils';
+import VisuallyHiddenTitle from './VisuallyHiddenTitle';
 
 export * from 'notistack';
 export {
@@ -38,6 +39,7 @@ export {
   IconButton,
   SortPopoverMenu,
   Toggle,
+  VisuallyHiddenTitle,
 };
 
 export type { DurationValueOptions, FormProps };
