@@ -143,7 +143,7 @@ participant-menu-accept-participant = Accept participant
 participant-menu-accepted-participant = Accepted participant
 button-new-message = New Message
 empty-messages = You have no messages at the moment. Create one to start a private conversation with a person or a group.
-encrypted-messages = This is the beginning of your chat history. Nobody has access the content of your chat except the people inside the chat.
+encrypted-messages = This is the beginning of your chat history. Nobody has access to the content of your chat except for the people inside the chat.
 
 moderation-rights-granted = You have been granted moderation rights.
 moderation-rights-revoked = Your moderation rights have been revoked.
