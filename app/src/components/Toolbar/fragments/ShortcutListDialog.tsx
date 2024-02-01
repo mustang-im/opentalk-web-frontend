@@ -22,6 +22,7 @@ import {
 import { CloseIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 import { ShortcutTable } from './ShortcutTable';
+import { useState } from 'react';
 
 interface ShortcutListDialogProps {
   onClose: () => void;
@@ -44,6 +45,7 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const { t } = useTranslation();
   const { onClose, open } = props;
   const switchId = 'switch-shortcut-activation';
+  const [active, setActive] = useState(true);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
@@ -58,10 +60,10 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
         </Box>
         <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
           <SwitchLabel htmlFor={switchId}>{t('more-menu-keyboard-shortcuts')}</SwitchLabel>
-          <Switch id={switchId} value={false} />
+          <Switch id={switchId} checked={active} onChange={() => setActive(!active)} />
         </Box>
       </Stack>
-      <ShortcutTable />
+      {active ? <ShortcutTable /> : null}
     </Dialog>
   );
 };
