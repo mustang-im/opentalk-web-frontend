@@ -17,6 +17,8 @@ import {
   Stack,
   Box,
   styled,
+  Switch,
+  FormLabel,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
@@ -33,10 +35,16 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   transform: 'translateY(-50%)',
 }));
 
+const SwitchLabel = styled(FormLabel)(({ theme }) => ({
+  color: theme.palette.secondary.dark,
+  fontWeight: 300,
+}));
+
 const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { onClose, open } = props;
+  const switchId = 'switch-shortcut-activation';
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
@@ -48,6 +56,10 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
               <CloseIcon />
             </CloseButton>
           )}
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
+          <SwitchLabel htmlFor={switchId}>{t('more-menu-keyboard-shortcuts')}</SwitchLabel>
+          <Switch id={switchId} value={false} />
         </Box>
       </Stack>
       {/* TODO: Make shortcuts dynamic. */}
