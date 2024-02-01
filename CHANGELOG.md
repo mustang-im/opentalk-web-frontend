@@ -6,6 +6,13 @@
 
 ### Improvements to the user experience
 
+### Bug Fixes
+
+
+## 1.10.0
+
+### Improvements to the user experience
+
 - Opentalk SVG logo can now be interpreted by accessibility tools ([#1636](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1636))
 - Change order of moderator tabs ([#1663](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1663))
 - Improved english sentence for the chat encrypted message panel. ([#1657](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1657))
@@ -14,6 +21,12 @@
 - Protocol feature is now fully available for mobile users ([#1507](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1507))
 - Improved user experience for screen reader users in lobby view ([#1640](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1640))
 - Improved screen reader usability inside the meeting room ([#1267](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1267))
+
+
+## 1.9.0
+
+### Improvements to the user experience
+
 - Switch off media devices if user aborts reconnect ([#1531](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1531))
 - Improve virtual background quality by introducing confidence thresholds ([#1595](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1595))
 - Improved accessibility of dashboard main navigation. ([#1641](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1641))
