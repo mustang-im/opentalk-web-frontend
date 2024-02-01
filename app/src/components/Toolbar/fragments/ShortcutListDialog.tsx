@@ -41,6 +41,16 @@ const SwitchLabel = styled(FormLabel)(({ theme }) => ({
   fontWeight: 300,
 }));
 
+const DeactivatedContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  color: theme.palette.secondary.light,
+  fontWeight: 500,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  aspectRatio: '2/1',
+}));
+
 const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const { t } = useTranslation();
   const { onClose, open } = props;
@@ -63,7 +73,9 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
           <Switch id={switchId} checked={active} onChange={() => setActive(!active)} />
         </Box>
       </Stack>
-      {active ? <ShortcutTable /> : null}
+      {active ? <ShortcutTable /> : (
+        <DeactivatedContainer>{t('shortcut-deactive-message')}</DeactivatedContainer>
+      )}
     </Dialog>
   );
 };

@@ -886,6 +886,7 @@ whiteboard-hide = Whiteboard ausblenden
 
 shortcut-hold-to-speak = Nicht stumm geschaltet, während gedrückt gehalten
 shortcut-pass-talking-stick = Redestab weitergeben
+shortcut-deactive-message = Die Tastaturkürzel wurden deaktiviert
 
 meeting-required-start-date = Startdatum ist erforderlich
 meeting-required-end-date = Enddatum ist erforderlich
