@@ -20,8 +20,8 @@ import {
   FormLabel,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ShortcutTable } from './ShortcutTable';
 
 interface ShortcutListDialogProps {
   onClose: () => void;
@@ -45,31 +45,6 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const { onClose, open } = props;
   const switchId = 'switch-shortcut-activation';
 
-  const shortcuts = useMemo(() => {
-    return [
-      {
-        key: 'm',
-        description: `${t('global-microphone')} ${t('global-on')}/${t('global-off')}`,
-      },
-      {
-        key: 'v',
-        description: `${t('global-video')} ${t('global-on')}/${t('global-off')}`,
-      },
-      {
-        key: 'f',
-        description: `${t('global-fullscreen')} ${t('global-on')}/${t('global-off')}`,
-      },
-      {
-        key: 'n',
-        description: t('shortcut-pass-talking-stick'),
-      },
-      {
-        key: t('global-space'),
-        description: t('shortcut-hold-to-speak'),
-      },
-    ];
-  }, [t]);
-
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
       <Stack component="header">
@@ -86,28 +61,7 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
           <Switch id={switchId} value={false} />
         </Box>
       </Stack>
-      <TableContainer component={Paper}>
-        <Table padding="normal">
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('global-shortcut')}</TableCell>
-              <TableCell>{t('global-description')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {shortcuts.map((shortcut) => (
-              <TableRow key={shortcut.key}>
-                <TableCell>
-                  <code>{shortcut.key}</code>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight={300}>{shortcut.description}</Typography>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <ShortcutTable />
     </Dialog>
   );
 };
