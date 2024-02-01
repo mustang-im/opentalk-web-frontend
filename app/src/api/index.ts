@@ -74,7 +74,13 @@ import {
   mediaUpdated as subscriberMediaUpdated,
   updated as subscriberUpdate,
 } from '../store/slices/mediaSubscriberSlice';
-import { forceLowerHand, disableRaisedHands, enableRaisedHands } from '../store/slices/moderationSlice';
+import {
+  forceLowerHand,
+  disableRaisedHands,
+  enableRaisedHands,
+  loweredHand,
+  raisedHand,
+} from '../store/slices/moderationSlice';
 import {
   breakoutJoined,
   breakoutLeft,
@@ -466,9 +472,11 @@ const handleControlMessage = (
       dispatch(hangUp());
       break;
     case 'hand_raised': {
+      dispatch(raisedHand({ timestamp }));
       break;
     }
     case 'hand_lowered': {
+      dispatch(loweredHand());
       break;
     }
     default: {
