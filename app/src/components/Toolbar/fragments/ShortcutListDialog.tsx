@@ -6,13 +6,6 @@ import {
   DialogTitle,
   IconButton,
   Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  Typography,
-  TableRow,
-  TableCell,
-  TableBody,
   Stack,
   Box,
   styled,
@@ -20,9 +13,9 @@ import {
   FormLabel,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShortcutTable } from './ShortcutTable';
-import { useState } from 'react';
 
 interface ShortcutListDialogProps {
   onClose: () => void;
@@ -73,9 +66,7 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
           <Switch id={switchId} checked={active} onChange={() => setActive(!active)} />
         </Box>
       </Stack>
-      {active ? <ShortcutTable /> : (
-        <DeactivatedContainer>{t('shortcut-deactive-message')}</DeactivatedContainer>
-      )}
+      {active ? <ShortcutTable /> : <DeactivatedContainer>{t('shortcut-deactive-message')}</DeactivatedContainer>}
     </Dialog>
   );
 };
