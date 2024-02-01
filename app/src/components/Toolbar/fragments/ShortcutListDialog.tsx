@@ -1,20 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  Dialog,
-  DialogTitle,
-  IconButton,
-  Paper,
-  Stack,
-  Box,
-  styled,
-  Switch,
-  FormLabel,
-} from '@mui/material';
+import { Dialog, DialogTitle, IconButton, Paper, Stack, Box, styled, Switch, FormLabel } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useAppDispatch, useAppSelector } from '../../../hooks/index';
+import { selectShortcutsActive, switchShortcutsActiveState } from '../../../store/slices/uiSlice';
 import { ShortcutTable } from './ShortcutTable';
 
 interface ShortcutListDialogProps {
@@ -48,7 +40,8 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const { t } = useTranslation();
   const { onClose, open } = props;
   const switchId = 'switch-shortcut-activation';
-  const [active, setActive] = useState(true);
+  const dispatch = useAppDispatch();
+  const shortcutsActive = useAppSelector(selectShortcutsActive);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
@@ -63,10 +56,14 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
         </Box>
         <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
           <SwitchLabel htmlFor={switchId}>{t('more-menu-keyboard-shortcuts')}</SwitchLabel>
-          <Switch id={switchId} checked={active} onChange={() => setActive(!active)} />
+          <Switch id={switchId} checked={shortcutsActive} onChange={() => dispatch(switchShortcutsActiveState())} />
         </Box>
       </Stack>
-      {active ? <ShortcutTable /> : <DeactivatedContainer>{t('shortcut-deactive-message')}</DeactivatedContainer>}
+      {shortcutsActive ? (
+        <ShortcutTable />
+      ) : (
+        <DeactivatedContainer>{t('shortcut-deactive-message')}</DeactivatedContainer>
+      )}
     </Dialog>
   );
 };
