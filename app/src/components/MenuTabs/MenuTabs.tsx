@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { AppBar as MuiAppBar, Tab as MuiTab, Tabs as MuiTabs, styled, Typography, Badge } from '@mui/material';
+import { AppBar as MuiAppBar, Tabs as MuiTabs, styled, Typography, Badge, Tab as MuiTab } from '@mui/material';
 import { ChatScope, RoomMode } from '@opentalk/common';
 import { VisuallyHiddenTitle } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
@@ -37,25 +37,6 @@ const ChatBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const Tab = styled(MuiTab)(({ theme }) => ({
-  minWidth: '33%',
-  minHeight: 0,
-  fontSize: '0.75rem',
-  borderRadius: theme.borderRadius.large,
-  color: theme.palette.text.primary,
-  textTransform: 'initial',
-  fontWeight: 400,
-  padding: theme.spacing(1),
-  whiteSpace: 'nowrap',
-  '&.Mui-selected': {
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.text.secondary,
-  },
-  '& .MuiTab-iconWrapper': {
-    marginLeft: theme.spacing(0.2),
-  },
-}));
-
 const Tabs = styled(MuiTabs)(({ theme }) => ({
   minHeight: 0,
   borderRadius: theme.borderRadius.large,
@@ -66,6 +47,25 @@ const Tabs = styled(MuiTabs)(({ theme }) => ({
   },
   '& .MuiTabs-indicator': {
     display: 'none',
+  },
+}));
+
+const Tab = styled(MuiTab)(({ theme }) => ({
+  minWidth: '33%',
+  minHeight: 0,
+  fontSize: '0.75rem',
+  borderRadius: theme.borderRadius.large,
+  color: theme.palette.text.primary,
+  textTransform: 'initial',
+  fontWeight: 400,
+  padding: theme.spacing(1),
+  whiteSpace: 'nowrap',
+  '&:hover, &.Mui-selected': {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.text.secondary,
+  },
+  '& .MuiTab-iconWrapper': {
+    marginLeft: theme.spacing(0.2),
   },
 }));
 
