@@ -8,6 +8,8 @@
 
 ### Bug Fixes
 
+- Fix inconsistant order of participants when sorted by the raised hand. ([#1630](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1630))
+
 
 ## 1.10.0
 

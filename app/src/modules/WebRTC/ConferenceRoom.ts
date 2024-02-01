@@ -248,14 +248,6 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
         this.webRtc.removeParticipant(message.id);
         break;
       }
-      case 'hand_raised': {
-        // This control action have no effect on the WebRTC context
-        break;
-      }
-      case 'hand_lowered': {
-        // This control action have no effect on the WebRTC context
-        break;
-      }
     }
   }
 
