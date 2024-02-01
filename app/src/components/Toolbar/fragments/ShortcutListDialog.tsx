@@ -10,7 +10,6 @@ import {
   Table,
   TableHead,
   Typography,
-  useTheme,
   TableRow,
   TableCell,
   TableBody,
@@ -28,7 +27,7 @@ interface ShortcutListDialogProps {
   open: boolean;
 }
 
-const CloseButton = styled(IconButton)(({ theme }) => ({
+const CloseButton = styled(IconButton)(() => ({
   position: 'absolute',
   right: 0,
   top: '50%',
@@ -41,7 +40,6 @@ const SwitchLabel = styled(FormLabel)(({ theme }) => ({
 }));
 
 const ShortcutListDialog = (props: ShortcutListDialogProps) => {
-  const theme = useTheme();
   const { t } = useTranslation();
   const { onClose, open } = props;
   const switchId = 'switch-shortcut-activation';
