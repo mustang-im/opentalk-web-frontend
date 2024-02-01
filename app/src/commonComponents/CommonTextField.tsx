@@ -2,24 +2,26 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { TextField, TextFieldProps } from '@mui/material';
-import { setHotkeysEnabled } from '@opentalk/common';
 import React from 'react';
 
-import { useAppDispatch } from '../hooks';
-
 export const CommonTextField = (props: TextFieldProps) => {
-  const dispatch = useAppDispatch();
-
   return (
     <TextField
       {...props}
       onFocus={(event) => {
-        dispatch(setHotkeysEnabled(false));
         props.onFocus && props.onFocus(event);
       }}
       onBlur={(event) => {
-        dispatch(setHotkeysEnabled(true));
         props.onBlur && props.onBlur(event);
+      }}
+      onKeyDown={(event) => {
+        // prevent keys from triggering global shortcuts.
+        event.stopPropagation();
+        props.onKeyDown && props.onKeyDown(event);
+      }}
+      onKeyUp={(event) => {
+        event.stopPropagation();
+        props.onKeyUp && props.onKeyUp(event);
       }}
     />
   );

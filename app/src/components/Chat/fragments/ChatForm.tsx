@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton as MuiIconButton, InputAdornment, styled, Tooltip, Popover } from '@mui/material';
-import { GroupId, ParticipantId, setHotkeysEnabled, TargetId, ChatScope } from '@opentalk/common';
+import { GroupId, ParticipantId, TargetId, ChatScope } from '@opentalk/common';
 import { SendMessageIcon } from '@opentalk/common';
 import Picker, {
   EmojiClickData,
@@ -107,15 +107,8 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
     dispatch(saveDefaultChatMessage({ scope, targetId, input: message }));
   };
 
-  const focusHandler = (event: FocusEvent<HTMLDivElement>) => {
-    if (event.target && event.target.tagName === 'INPUT') {
-      dispatch(setHotkeysEnabled(false));
-    }
-  };
-
   const blurHandler = (event: FocusEvent<HTMLDivElement>) => {
     if (event.target && event.target.tagName === 'INPUT') {
-      dispatch(setHotkeysEnabled(true));
       dispatch(saveDefaultChatMessage({ scope, targetId, input: formikGetValue('message', formik, '') }));
     }
   };
@@ -134,7 +127,11 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
       }}
       onClose={() => setOpenPicker(false)}
     >
-      <PickerContainer onFocus={focusHandler} onBlur={blurHandler}>
+      <PickerContainer
+        onBlur={blurHandler}
+        onKeyDown={(event) => event.stopPropagation()}
+        onKeyUp={(event) => event.stopPropagation()}
+      >
         <Picker
           onEmojiClick={handleEmojiClick}
           autoFocusSearch={false}

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, InputAdornment } from '@mui/material';
-import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu, setHotkeysEnabled } from '@opentalk/common';
+import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu } from '@opentalk/common';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -68,14 +68,14 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
     <TextField
       fullWidth={fullWidth}
       value={searchValue}
+      onKeyDown={(event) => {
+        event.stopPropagation();
+      }}
+      onKeyUp={(event) => {
+        event.stopPropagation();
+      }}
       onChange={handleSearchChange}
       size={'small'}
-      onFocus={() => {
-        dispatch(setHotkeysEnabled(false));
-      }}
-      onBlur={() => {
-        dispatch(setHotkeysEnabled(true));
-      }}
       placeholder={t('input-search-placehoder')}
       startAdornment={
         <InputAdornment position="start">

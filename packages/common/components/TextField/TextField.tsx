@@ -2,35 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBase, InputBaseProps, TextFieldProps } from '@mui/material';
-import React, { forwardRef, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { forwardRef } from 'react';
 
-import { setHotkeysEnabled } from '../../store';
 import { FormWrapper, FormProps } from '../FormWrapper/FormWrapper';
 import { generateUniquedId } from '../../utils';
 
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 
-export const ObservedInput = forwardRef<HTMLInputElement, InputBaseProps>(({ error, onFocus, onBlur, ...props }, ref) => {
-    const dispatch = useDispatch();
-
-  const handleOnFocus = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => {
-      dispatch(setHotkeysEnabled(false));
-      onFocus && onFocus(event);
-    },
-    [onFocus]
-  );
-
-  const handleOnBlur = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => {
-      dispatch(setHotkeysEnabled(true));
-      onBlur && onBlur(event);
-    },
-    [onBlur]
-  );
-
-  return <InputBase ref={ref} {...props} error={error} onFocus={handleOnFocus} onBlur={handleOnBlur} />;
+export const ObservedInput = forwardRef<HTMLInputElement, InputBaseProps>(({ error, ...props }, ref) => {
+  return <InputBase ref={ref} {...props} error={error} onKeyDown={(event) => event.stopPropagation()} onKeyUp={(event) => event.stopPropagation()} />;
 })
 
 const TextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProps>(

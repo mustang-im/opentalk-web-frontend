@@ -2,37 +2,30 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBase, InputBaseProps, TextFieldProps } from '@mui/material';
-import { generateUniquedId, setHotkeysEnabled } from '@opentalk/common';
+import { generateUniquedId } from '@opentalk/common';
 import { FormWrapper, FormProps } from '@opentalk/common';
-import React, { useCallback } from 'react';
-
-import { useAppDispatch } from '../../hooks';
+import React from 'react';
 
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 
-export const ObservedInput = React.forwardRef(
-  ({ error, onFocus, onBlur, ...props }: InputBaseProps, ref: React.Ref<unknown>) => {
-    const dispatch = useAppDispatch();
-
-    const handleOnFocus = useCallback(
-      (event: React.FocusEvent<HTMLInputElement>) => {
-        dispatch(setHotkeysEnabled(false));
-        onFocus && onFocus(event);
-      },
-      [dispatch, onFocus]
-    );
-
-    const handleOnBlur = useCallback(
-      (event: React.FocusEvent<HTMLInputElement>) => {
-        dispatch(setHotkeysEnabled(true));
-        onBlur && onBlur(event);
-      },
-      [dispatch, onBlur]
-    );
-
-    return <InputBase ref={ref} {...props} error={error} onFocus={handleOnFocus} onBlur={handleOnBlur} />;
-  }
-);
+export const ObservedInput = React.forwardRef(({ error, ...props }: InputBaseProps, ref: React.Ref<unknown>) => {
+  return (
+    <InputBase
+      ref={ref}
+      {...props}
+      error={error}
+      onKeyDown={(event) => {
+        // prevent keys from triggering global shortcuts.
+        event.stopPropagation();
+        props.onKeyDown && props.onKeyDown(event);
+      }}
+      onKeyUp={(event) => {
+        event.stopPropagation();
+        props.onKeyUp && props.onKeyUp(event);
+      }}
+    />
+  );
+});
 
 ObservedInput.displayName = 'ObservedInput';
 
