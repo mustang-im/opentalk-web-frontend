@@ -465,6 +465,12 @@ const handleControlMessage = (
     case 'time_limit_quota_elapsed':
       dispatch(hangUp());
       break;
+    case 'hand_raised': {
+      break;
+    }
+    case 'hand_lowered': {
+      break;
+    }
     default: {
       const dataString = JSON.stringify(data, null, 2);
       console.error(`Unknown control message type: ${dataString}`);

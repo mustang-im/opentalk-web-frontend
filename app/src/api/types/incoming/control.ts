@@ -46,6 +46,14 @@ export interface RoleUpdated {
   newRole: Role;
 }
 
+export interface HandRaised {
+  message: 'hand_raised';
+}
+
+export interface HandLowered {
+  message: 'hand_lowered';
+}
+
 // Currently this is a string
 export type ControlError = string;
 
@@ -59,7 +67,9 @@ export type Message =
   | Left
   | RoleUpdated
   | TimeLimitQuotaElapsed
-  | ErrorStruct<ControlError>;
+  | ErrorStruct<ControlError>
+  | HandRaised
+  | HandLowered;
 export type Control = NamespacedIncoming<Message, 'control'>;
 
 export default Control;
