@@ -20,6 +20,7 @@ import {
   FormLabel,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ShortcutListDialogProps {
@@ -44,6 +45,31 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const { onClose, open } = props;
   const switchId = 'switch-shortcut-activation';
 
+  const shortcuts = useMemo(() => {
+    return [
+      {
+        key: 'm',
+        description: `${t('global-microphone')} ${t('global-on')}/${t('global-off')}`,
+      },
+      {
+        key: 'v',
+        description: `${t('global-video')} ${t('global-on')}/${t('global-off')}`,
+      },
+      {
+        key: 'f',
+        description: `${t('global-fullscreen')} ${t('global-on')}/${t('global-off')}`,
+      },
+      {
+        key: 'n',
+        description: t('shortcut-pass-talking-stick'),
+      },
+      {
+        key: t('global-space'),
+        description: t('shortcut-hold-to-speak'),
+      },
+    ];
+  }, [t]);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
       <Stack component="header">
@@ -60,7 +86,6 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
           <Switch id={switchId} value={false} />
         </Box>
       </Stack>
-      {/* TODO: Make shortcuts dynamic. */}
       <TableContainer component={Paper}>
         <Table padding="normal">
           <TableHead>
@@ -70,52 +95,16 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <code>m</code>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight={300}>
-                  {t('global-microphone')}&nbsp;{t('global-on')}/{t('global-off')}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <code>v</code>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight={300}>
-                  {t('global-video')}&nbsp;{t('global-on')}/{t('global-off')}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <code>f</code>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight={300}>
-                  {t('global-fullscreen')}&nbsp;{t('global-on')}/{t('global-off')}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <code>n</code>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight={300}>{t('shortcut-pass-talking-stick')}</Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <code>{t('global-space')}</code>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight={300}>{t('shortcut-hold-to-speak')}</Typography>
-              </TableCell>
-            </TableRow>
+            {shortcuts.map((shortcut) => (
+              <TableRow key={shortcut.key}>
+                <TableCell>
+                  <code>{shortcut.key}</code>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={300}>{shortcut.description}</Typography>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
