@@ -5,8 +5,8 @@ import { Dialog, DialogTitle, IconButton, Paper, Stack, Box, styled, Switch, For
 import { CloseIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { selectHotkeysEnabled, setHotkeysEnabled } from '../../../../../packages/common/store/hotkeysSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/index';
-import { selectShortcutsActive, switchShortcutsActiveState } from '../../../store/slices/uiSlice';
 import { ShortcutTable } from './ShortcutTable';
 
 interface ShortcutListDialogProps {
@@ -41,7 +41,7 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const { onClose, open } = props;
   const switchId = 'switch-shortcut-activation';
   const dispatch = useAppDispatch();
-  const shortcutsActive = useAppSelector(selectShortcutsActive);
+  const shortcutsActive = useAppSelector(selectHotkeysEnabled);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
@@ -56,7 +56,11 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
         </Box>
         <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
           <SwitchLabel htmlFor={switchId}>{t('more-menu-keyboard-shortcuts')}</SwitchLabel>
-          <Switch id={switchId} checked={shortcutsActive} onChange={() => dispatch(switchShortcutsActiveState())} />
+          <Switch
+            id={switchId}
+            checked={shortcutsActive}
+            onChange={() => dispatch(setHotkeysEnabled(!shortcutsActive))}
+          />
         </Box>
       </Stack>
       {shortcutsActive ? (

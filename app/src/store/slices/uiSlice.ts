@@ -59,7 +59,6 @@ interface UIState {
     [ChatScope.Private]: Record<TargetId, string>;
   };
   focusedSpeaker: ParticipantId | undefined;
-  shortcutsActive: boolean;
 }
 
 const initialState: UIState = {
@@ -89,7 +88,6 @@ const initialState: UIState = {
     [ChatScope.Private]: {},
   },
   focusedSpeaker: undefined,
-  shortcutsActive: true,
 };
 
 export const uiSlice = createSlice({
@@ -169,9 +167,6 @@ export const uiSlice = createSlice({
       if (payload.targetId) {
         state.chatAutosavedInputs[payload.scope][payload.targetId] = payload.input;
       }
-    },
-    switchShortcutsActiveState(state) {
-      state.shortcutsActive = !state.shortcutsActive;
     },
   },
   extraReducers: (builder) => {
@@ -258,7 +253,6 @@ export const {
   pinnedRemoteScreenshare,
   saveDefaultChatMessage,
   setFocusedSpeaker,
-  switchShortcutsActiveState,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -294,6 +288,5 @@ export function selectDefaultChatMessage(scope: ChatScope, target?: TargetId) {
     return '';
   };
 }
-export const selectShortcutsActive = (state: RootState) => state.ui.shortcutsActive;
 
 export default uiSlice.reducer;
