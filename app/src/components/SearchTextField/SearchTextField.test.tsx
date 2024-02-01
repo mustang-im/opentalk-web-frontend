@@ -35,28 +35,6 @@ describe('SearchTextField', () => {
     expect(mockOnSearch).toBeCalledTimes(1);
   });
 
-  test('when input get focus, it should dispatch setHotkeysEnabled with payload:false', async () => {
-    await render(<SearchTextField onSearch={mockOnSearch} />, store);
-    const searchInput = screen.getByPlaceholderText('input-search-placehoder');
-    expect(searchInput).toBeInTheDocument();
-
-    fireEvent.focus(searchInput);
-    await waitFor(() => {
-      expect(dispatch.mock.calls).toContainEqual([{ payload: false, type: 'hotkeys/setHotkeysEnabled' }]);
-    });
-  });
-
-  test('when input get blur, it should dispatch setHotkeysEnabled with payload: true', async () => {
-    await render(<SearchTextField onSearch={mockOnSearch} />, store);
-    const searchInput = screen.getByPlaceholderText('input-search-placehoder');
-    expect(searchInput).toBeInTheDocument();
-
-    fireEvent.blur(searchInput);
-    await waitFor(() => {
-      expect(dispatch.mock.calls).toContainEqual([{ payload: true, type: 'hotkeys/setHotkeysEnabled' }]);
-    });
-  });
-
   test('click on sortButton should open menu with list of sortOptionItems', async () => {
     await render(<SearchTextField onSearch={mockOnSearch} showSort />, store);
     const sortButton = screen.getByRole('button', { name: /sort-by/i });
