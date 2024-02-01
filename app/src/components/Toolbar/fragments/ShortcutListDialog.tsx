@@ -2,11 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Dialog, DialogTitle, IconButton, Paper, Stack, Box, styled, Switch, FormLabel } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
+import { CloseIcon, TimerStyle } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 import { selectHotkeysEnabled, setHotkeysEnabled } from '../../../../../packages/common/store/hotkeysSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/index';
+import { selectTimerStyle } from '../../../store/slices/timerSlice';
 import { ShortcutTable } from './ShortcutTable';
 
 interface ShortcutListDialogProps {
@@ -42,6 +43,7 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const switchId = 'switch-shortcut-activation';
   const dispatch = useAppDispatch();
   const shortcutsActive = useAppSelector(selectHotkeysEnabled);
+  const timerStyle = useAppSelector(selectTimerStyle);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
@@ -60,6 +62,7 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
             id={switchId}
             checked={shortcutsActive}
             onChange={() => dispatch(setHotkeysEnabled(!shortcutsActive))}
+            disabled={timerStyle === TimerStyle.CoffeeBreak}
           />
         </Box>
       </Stack>

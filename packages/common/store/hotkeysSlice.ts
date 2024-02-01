@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { TimerStyle } from '../types';
-import { joinSuccess, timerStarted, timerStopped } from './actions';
 
 interface HotkeysState {
   hotkeysEnabled: boolean;
@@ -22,30 +21,30 @@ export const hotkeysSlice = createSlice({
       state.hotkeysEnabled = enabled;
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(joinSuccess, (state, { payload }) => {
-      if (payload.timer?.style === TimerStyle.CoffeeBreak) {
-        state.hotkeysEnabled = false;
-      } else {
-        state.hotkeysEnabled = true;
-      }
-    }),
-      builder.addCase(timerStarted, (state, { payload }) => {
-        if (payload.style === TimerStyle.CoffeeBreak) {
-          state.hotkeysEnabled = false;
-        }
-      }),
-      builder.addCase(timerStopped, (state) => {
-        if (!state.hotkeysEnabled) {
-          state.hotkeysEnabled = true;
-        }
-      });
-  },
 });
 
 export const { setHotkeysEnabled } = hotkeysSlice.actions;
 
-export const selectHotkeysEnabled = (state: { hotkeys: HotkeysState }) => state.hotkeys.hotkeysEnabled;
+/**
+ * Since we cannot go up and pull information from the main repository
+ * and moving global state to the common package is highly expensive,
+ * we have to use this workaround to pickup needed information.
+ */
+type RootLikeState = {
+  timer: { style: TimerStyle };
+  hotkeys: HotkeysState,
+}
+
+export const selectHotkeysEnabled = createSelector(
+  (state: RootLikeState) => state.timer.style,
+  (state: RootLikeState) => state.hotkeys.hotkeysEnabled,
+  (style, hotkeysEnabled) => {
+    if (style === TimerStyle.CoffeeBreak) {
+      return false;
+    }
+    return hotkeysEnabled;
+  }
+);
 
 export const actions = hotkeysSlice.actions;
 
