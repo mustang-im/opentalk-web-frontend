@@ -14,6 +14,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Stack,
+  Box,
+  styled,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +25,14 @@ interface ShortcutListDialogProps {
   onClose: () => void;
   open: boolean;
 }
+
+const CloseButton = styled(IconButton)(({ theme }) => ({
+  position: 'absolute',
+  right: 0,
+  top: '50%',
+  transform: 'translateY(-50%)',
+}));
+
 const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -29,14 +40,16 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
-      <DialogTitle display="flex" alignItems="center" justifyContent="space-between">
-        <Typography style={{ color: theme.palette.secondary.dark }}>{t('more-menu-keyboard-shortcuts')}</Typography>
-        {onClose && (
-          <IconButton aria-label="close-button" onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
-        )}
-      </DialogTitle>
+      <Stack component="header">
+        <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
+          <DialogTitle sx={{ p: 0 }}>{t('more-menu-keyboard-shortcuts')}</DialogTitle>
+          {onClose && (
+            <CloseButton aria-label="close-button" onClick={onClose}>
+              <CloseIcon />
+            </CloseButton>
+          )}
+        </Box>
+      </Stack>
       {/* TODO: Make shortcuts dynamic. */}
       <TableContainer component={Paper}>
         <Table padding="normal">
