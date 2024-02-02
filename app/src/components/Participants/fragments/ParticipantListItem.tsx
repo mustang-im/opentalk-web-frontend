@@ -23,6 +23,7 @@ import {
   ChatScope,
   PhoneIcon,
   TelephoneStrokeIcon,
+  IconButton,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
 import React, { CSSProperties, useCallback, useState } from 'react';
@@ -32,7 +33,6 @@ import { Role } from '../../../api/types/incoming/control';
 import { grantModeratorRole, revokeModeratorRole } from '../../../api/types/outgoing/control';
 import { grantPresenterRole, revokePresenterRole } from '../../../api/types/outgoing/media';
 import { banParticipant, kickParticipant, enableWaitingRoom } from '../../../api/types/outgoing/moderation';
-import IconButton from '../../../commonComponents/IconButton';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';

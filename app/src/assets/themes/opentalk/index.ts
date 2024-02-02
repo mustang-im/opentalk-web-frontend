@@ -151,6 +151,12 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
                 fontSize: theme.typography.pxToRem(12),
               },
             },
+            ...(ownerState.variant === 'adornment' && {
+              padding: theme.typography.pxToRem(12),
+              '& .MuiTouchRipple-child': {
+                backgroundColor: mode === 'light' ? theme.palette.secondary.light : theme.palette.background.light,
+              },
+            }),
             ...(ownerState.variant === 'toolbar' && {
               backgroundColor: theme.palette.secondary.main,
               borderRadius: theme.borderRadius.large,
@@ -564,11 +570,13 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
             paddingRight: theme.spacing(2.5),
           }),
           deleteIcon: ({ theme }) => ({
-            fontSize: theme.typography.pxToRem(8),
             color: theme.palette.text.primary,
             marginRight: 0,
             ':hover': {
-              color: theme.palette.text.primary,
+              color: theme.palette.secondary.light,
+            },
+            ':focus': {
+              color: theme.palette.secondary.light,
             },
           }),
           avatar: ({ theme }) => ({
@@ -661,6 +669,13 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
                 color: theme.palette.primary.main,
               },
             },
+          }),
+        },
+      },
+      MuiDayCalendar: {
+        styleOverrides: {
+          weekDayLabel: ({ theme }) => ({
+            color: theme.palette.text.primary,
           }),
         },
       },

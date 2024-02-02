@@ -11,6 +11,6 @@ import { ExtendButtonBase } from '@mui/material/ButtonBase';
  * IconButtonVariantOverrides interface
  */
 
-const IconButton: ExtendButtonBase<IconButtonTypeMap<{ variant?: 'toolbar' }>> = MuiIconButton;
+const IconButton: ExtendButtonBase<IconButtonTypeMap<{ variant?: 'toolbar' | 'adornment' }>> = MuiIconButton;
 
 export default IconButton;

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Stack, MenuList } from '@mui/material';
-import { MoreIcon, notificationAction, notifications } from '@opentalk/common';
+import { MoreIcon, notificationAction, notifications, IconButton } from '@opentalk/common';
 import { Event, EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
 import React, { KeyboardEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,6 @@ import {
   useMarkFavoriteEventMutation,
   useUnmarkFavoriteEventMutation,
 } from '../../../api/rest';
-import IconButton from '../../../commonComponents/IconButton';
 import { useAppSelector } from '../../../hooks';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
 import { composeInviteUrl } from '../../../utils/apiUtils';

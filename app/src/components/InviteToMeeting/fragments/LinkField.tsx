@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Grid, InputAdornment, IconButton, Tooltip, CircularProgress, styled } from '@mui/material';
-import { TextField, CopyIcon, notifications } from '@opentalk/common';
+import { Grid, InputAdornment, Tooltip, CircularProgress, styled } from '@mui/material';
+import { TextField, CopyIcon, notifications, AdornmentIconButton } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 export enum FieldKeys {
@@ -52,9 +52,9 @@ const LinkField = ({ fieldKey, checked, value, setHighlightedField, tooltip, isL
         <TextField
           label={t(`dashboard-invite-to-meeting-${fieldKey}-label`)}
           fullWidth
-          disabled
           checked={checked}
           value={value ? value.toString() : '-'}
+          disabled
           endAdornment={
             isLoading ? (
               <SpinnerAdornment position="end">
@@ -62,14 +62,15 @@ const LinkField = ({ fieldKey, checked, value, setHighlightedField, tooltip, isL
               </SpinnerAdornment>
             ) : (
               <InputAdornment position="end">
-                <IconButton
+                <AdornmentIconButton
                   aria-label={t(`dashboard-invite-to-meeting-copy-${fieldKey}-aria-label`)}
                   onClick={handleClick}
                   edge="end"
                   disabled={!value}
+                  parentDisabled
                 >
                   <CopyIcon />
-                </IconButton>
+                </AdornmentIconButton>
               </InputAdornment>
             )
           }

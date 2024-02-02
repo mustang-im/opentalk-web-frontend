@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import AdornmentIconButton from './AdornmentIconButton';
 import IconButton from './IconButton';
 
-export default IconButton;
+export { IconButton, AdornmentIconButton };

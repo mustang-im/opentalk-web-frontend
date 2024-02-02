@@ -2,11 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Theme, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { DateTimePicker as MuiDateTimePicker, PickersActionBarAction, PickersLocaleText } from '@mui/x-date-pickers';
 import { ErrorFormMessage } from '@opentalk/common';
 import { isSameDay } from 'date-fns';
 import { isEmpty } from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 
 import PickerLocalizationProvider from '../../provider/PickerLocalizationProvider';
 import { IFormikCustomFieldPropsReturnValue } from '../../utils/formikUtils';
@@ -37,10 +38,13 @@ const DateTimePicker = ({
   error,
   id,
 }: DateTimePickerProps) => {
+  const [focused, setFocused] = useState(false);
+  const [opened, setOpened] = useState(false);
   const isScreenHeightTooSmall = useMediaQuery((theme: Theme) => {
     const query = theme.breakpoints.up('sm') + ' and (max-height:900px)';
     return query;
   });
+  const theme = useTheme();
 
   // There are cases, when the screen height is too small to fit the popper of the desktop variant
   // Therefore we need an offset for the popper relativ to it's anchor
@@ -81,6 +85,13 @@ const DateTimePicker = ({
     clearButtonLabel,
   };
 
+  const onFocus = () => {
+    setFocused(true);
+  };
+  const onBlur = () => {
+    setFocused(false);
+  };
+
   return (
     // This provider is needed to customize and translate action button labels
     // Another option would be to introduce custom action components, which will make more work at the moment
@@ -89,13 +100,25 @@ const DateTimePicker = ({
         <MuiDateTimePicker
           value={actualValue}
           onChange={onChange}
+          onOpen={() => setOpened(true)}
+          onClose={() => setOpened(false)}
           ampm={ampm}
           minDate={minTimeDate}
           minTime={minTime}
           slotProps={{
-            textField: { helperText, placeholder, error, id },
+            textField: { helperText, placeholder, error, id, onFocus, onBlur },
             actionBar: { actions },
             popper: { placement: 'bottom-start', modifiers: [getOffsetModifier()] },
+            openPickerButton: {
+              sx: {
+                ':hover': {
+                  backgroundColor: focused || opened ? theme.palette.secondary.lighter : theme.palette.secondary.light,
+                },
+                '& .MuiTouchRipple-child': {
+                  backgroundColor: theme.palette.secondary.lighter,
+                },
+              },
+            },
           }}
         />
       </PickerLocalizationProvider>

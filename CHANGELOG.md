@@ -20,6 +20,7 @@
 
 ### Improvements to the user experience
 
+- Improved the contrast of icon buttons used as adornment for inputfields ([#1245](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1245))
 - Improved user experience with screen readers for breakout rooms ([#1723](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1723))
 - Improved user experience of the end call button popup for moderators ([#1492](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1492))
 - Improve right corner with burger menu instead of the guide icon ([#1719](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1719))

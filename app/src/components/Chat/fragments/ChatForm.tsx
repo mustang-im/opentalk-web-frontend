@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { IconButton as MuiIconButton, InputAdornment, styled, Tooltip, Popover } from '@mui/material';
+import { InputAdornment, styled, Tooltip, Popover } from '@mui/material';
+import { AdornmentIconButton } from '@opentalk/common';
 import { GroupId, ParticipantId, TargetId, ChatScope } from '@opentalk/common';
 import { SendMessageIcon } from '@opentalk/common';
 import Picker, {
@@ -14,7 +15,7 @@ import Picker, {
   Categories,
 } from 'emoji-picker-react';
 import { useFormik } from 'formik';
-import React, { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef, useLayoutEffect } from 'react';
+import { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
@@ -29,8 +30,18 @@ const Form = styled('form')({
   position: 'relative',
 });
 
-const IconButton = styled(MuiIconButton)({
+const SendMessageButton = styled(AdornmentIconButton)({
   fontSize: '1rem',
+});
+
+/**
+ * We have to adjust here because there is no glyphicon in this button
+ * there is an emoji. It screws up all sizes and makes the ripple effect
+ * cut through the border of the parent input field
+ */
+const EmojiIconButton = styled(AdornmentIconButton)({
+  padding: '0.5rem',
+  lineHeight: '1.25rem',
 });
 
 const PickerContainer = styled('div')(({ theme }) => ({
@@ -71,6 +82,7 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [openPicker, setOpenPicker] = useState(false);
+  const [hasFocus, setFocus] = useState(false);
   const isChatEnabled = useAppSelector(selectChatEnabledState);
   const emojiButton = useRef<HTMLButtonElement | null>(null);
   const defaultChatMessage = useAppSelector(selectDefaultChatMessage(scope, targetId));
@@ -207,6 +219,14 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
     },
   });
 
+  const handleFormBlur = (e: FocusEvent<HTMLInputElement>) => {
+    dispatch(saveDefaultChatMessage({ scope, targetId, input: formikGetValue('message', formik, '') }));
+    setFocus(false);
+    if (e.currentTarget.value.trim() === '') {
+      formik.setErrors({});
+    }
+  };
+
   const renderForm = (
     <Form onSubmit={formik.handleSubmit}>
       {renderPicker()}
@@ -218,41 +238,39 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
         size={'small'}
         placeholder={t('chatinput-placeholder')}
         onKeyDown={handleSubmitOnEnter}
-        onBlur={(e) => {
-          dispatch(saveDefaultChatMessage({ scope, targetId, input: formikGetValue('message', formik, '') }));
-          if (e.currentTarget.value.trim() === '') {
-            formik.setErrors({});
-          }
-        }}
+        onFocus={() => setFocus(true)}
+        onBlur={handleFormBlur}
         countBytes={true}
         endAdornment={
           <InputAdornment position="end">
-            <IconButton
+            <SendMessageButton
               aria-label={t('chat-submit-button')}
               type={'submit'}
               edge="end"
               data-testid={'send-message-button'}
               disabled={!isChatEnabled}
+              parentHasFocus={hasFocus}
             >
               <SendMessageIcon />
-            </IconButton>
+            </SendMessageButton>
           </InputAdornment>
         }
         startAdornment={
           <InputAdornment position="start">
-            <IconButton
+            <EmojiIconButton
               ref={emojiButton}
               aria-label={t(`chat-${openPicker ? 'close' : 'open'}-emoji-picker`)}
               aria-pressed={openPicker}
               onClick={() => setOpenPicker(!openPicker)}
               type="button"
-              edge={'start'}
+              edge="start"
               disabled={!isChatEnabled}
+              parentHasFocus={hasFocus}
             >
               <span role="img" aria-label={t('chat-smiley-label')}>
                 😋
               </span>
-            </IconButton>
+            </EmojiIconButton>
           </InputAdornment>
         }
         maxRows={3}
