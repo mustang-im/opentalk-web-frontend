@@ -6,6 +6,8 @@
 
 ### Improvements to the user experience
 
+- End Call button is more prominent now ([#1679](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1679))
+
 ### Bug Fixes
 
 - Fix inconsistant order of participants when sorted by the raised hand. ([#1630](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1630))
