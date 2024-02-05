@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
 import { useAppDispatch } from '../../../hooks';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 import { approveToEnter } from '../../../store/slices/participantsSlice';
 
 const Avatar = styled(ParticipantAvatar)({
@@ -24,10 +25,11 @@ const Avatar = styled(ParticipantAvatar)({
 });
 
 const ListItem = styled(MuiListItem)(({ theme }) => ({
-  padding: theme.spacing(1, 1, 0, 0),
+  padding: theme.spacing(0), // Inlined `p={0}` is not overriding the default padding.
 }));
 
-const ListItemText = styled(MuiListItemText)({
+const ListItemText = styled(MuiListItemText)(({ theme }) => ({
+  marginRight: theme.spacing(1),
   '& p': {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -35,7 +37,7 @@ const ListItemText = styled(MuiListItemText)({
     fontWeight: 400,
     lineHeight: 1,
   },
-});
+}));
 
 const JoinedText = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
@@ -55,6 +57,7 @@ const WaitingParticipantItem = ({ participant }: ParticipantRowProps) => {
   const dispatch = useAppDispatch();
   const timestamp = new Date(participant?.joinedAt) ?? Date.now;
   const formattedTime = useDateFormat(timestamp, 'time');
+  const isMobile = useIsMobile();
 
   const handleAccept = useCallback(() => {
     if (participant.waitingState === WaitingState.Waiting) {
@@ -69,19 +72,19 @@ const WaitingParticipantItem = ({ participant }: ParticipantRowProps) => {
       case WaitingState.Waiting:
         return (
           <Button variant="text" onClick={handleAccept} focusRipple>
-            {t('participant-menu-accept-participant')}
+            {t(`participant-menu-accept-participant${isMobile ? '-mobile' : ''}`)}
           </Button>
         );
       case WaitingState.Approved:
         return (
           <Button variant="text" disabled>
-            {t('participant-menu-accepted-participant')}
+            {t(`participant-menu-accepted-participant${isMobile ? '-mobile' : ''}`)}
           </Button>
         );
       default:
         return null;
     }
-  }, [participant.waitingState, handleAccept, t]);
+  }, [participant.waitingState, handleAccept, t, isMobile]);
 
   return (
     <ListItem>

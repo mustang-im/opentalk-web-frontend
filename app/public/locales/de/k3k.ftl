@@ -142,7 +142,9 @@ participant-menu-remove-participant = Teilnehmer entfernen
 participant-menu-grant-moderator = Moderatorenrechte einräumen
 participant-menu-revoke-moderator = Moderatorenrechte entziehen
 participant-menu-accept-participant = Teilnehmer aufnehmen
+participant-menu-accept-participant-mobile = Aufnehmen
 participant-menu-accepted-participant = Teilnehmer aufgenommen
+participant-menu-accepted-participant-mobile = Aufgenommen
 button-new-message = Neue Nachricht
 empty-messages = Sie haben zur Zeit keine Nachrichten. Erstellen Sie eine und starten Sie eine Private- oder Gruppenkonversation.
 encrypted-messages = Dies ist der Anfang Ihres Chatverlaufs. Niemand hat Zugriff auf den Inhalt Ihres Chats außer den Personen, die im Chat sind.
@@ -261,6 +263,7 @@ moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
 moderationbar-button-debriefing = Nachbesprechung
 moderationbar-button-talking-stick-tooltip = Redestab
+moderationbar-button-waiting-room-tooltip = Teilnehmer im Warteraum
 moderationbar-aria-label = Moderationsbar
 
 mute-participants-tab-title = Teilnehmer stummschalten

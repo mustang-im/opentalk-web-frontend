@@ -27,6 +27,7 @@ import React, { Suspense } from 'react';
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
 import DebriefingTab from '../components/DebriefingTab';
 import HomeIconComponent from '../components/HomeIconComponent';
+import WaitingParticipantsList from '../components/MeetingHeader/fragments/WaitingParticipantsList';
 import { useAppSelector } from '../hooks';
 import { FeaturesKeys } from '../store/slices/configSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
@@ -64,6 +65,7 @@ export enum ModerationTabKey {
   SpeakerQueue = 'tab-speaker-queue',
   WheelOfNames = 'tab-wheel-of-names',
   Divider = 'tab-divider',
+  WaitingRoom = 'tab-waiting-room',
 }
 
 export interface Tab {
@@ -265,3 +267,15 @@ export const tabs: Array<Tab> = [
     key: ModerationTabKey.WheelOfNames,
   },
 ];
+
+/**
+ * This is a special tab that is not part of the desktop moderation bar
+ * and is intended to be used as a part of a mobile drawer in a specific way.
+ */
+export const WaitingRoomMobileTab: Tab = {
+  icon: <SpeakerQueueIcon />,
+  key: ModerationTabKey.WaitingRoom,
+  tooltipTranslationKey: 'moderationbar-button-waiting-room-tooltip',
+  titleKey: 'moderationbar-button-waiting-room-tooltip',
+  component: <WaitingParticipantsList />,
+};
