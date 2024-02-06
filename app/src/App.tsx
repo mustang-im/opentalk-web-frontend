@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { notificationAction } from '@opentalk/common';
+import { closeSnackbar, notificationAction } from '@opentalk/common';
 import { differenceInMonths } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,12 +20,13 @@ import ErrorConfigPage from './pages/ErrorConfigPage';
 import store from './store';
 import { checkConfigError } from './utils/configUtils';
 
+let safariWarningNotificationKey: string | undefined = undefined;
+
 const App = () => {
   const signature = browser.getBrowserSignature();
   const [isConfirmed, setBrowserConfirmed] = useState(isBrowserConfirmed());
   const hasConfigError = checkConfigError();
-  const { t } = useTranslation();
-
+  const { t, i18n } = useTranslation();
   if (hasConfigError) return <ErrorConfigPage />;
 
   const handleClick = useCallback(() => {
@@ -43,12 +44,17 @@ const App = () => {
         : undefined;
       const showNotification = !lastSeenDate || differenceInMonths(now, lastSeenDate) > 0;
       if (showNotification) {
+        if (safariWarningNotificationKey) {
+          closeSnackbar(safariWarningNotificationKey);
+        }
+        safariWarningNotificationKey = `${localStorageItems.safariNotificationKey}-${i18n.language}`;
+
         notificationAction({
           msg: t('safari-warning-notification'),
           variant: 'warning',
           cancelBtnText: t('global-ok'),
           persist: true,
-          key: localStorageItems.safariNotificationKey,
+          key: safariWarningNotificationKey,
           onCancel: () => localStorage.setItem(localStorageItems.safariNotificationKey, now.toISOString()),
         });
       }
