@@ -1,7 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { render, screen, cleanup, mockStore, fireEvent } from '../../../utils/testUtils';
+import { ParticipantId } from '@opentalk/common';
+
+import { leave } from '../../../store/slices/participantsSlice';
+import { render, screen, cleanup, mockStore, fireEvent, waitFor } from '../../../utils/testUtils';
 import ThumbsRow from './ThumbsRow';
 
 afterEach(() => {
@@ -103,5 +106,39 @@ describe('ThumbsRow', () => {
     expect(screen.getByTestId(`thumbsVideo-${ids[3]}`)).toBeInTheDocument();
     expect(screen.getByTestId(`thumbsVideo-${ids[4]}`)).toBeInTheDocument();
     expect(screen.queryByTestId(`thumbsVideo-${ids[5]}`)).not.toBeInTheDocument();
+  });
+
+  test('ThumbsRow shall fill the gap if a thumbnail participant leaves the meeting', async () => {
+    const { store, dispatch } = mockStore(3);
+    const ids = store.getState().participants.ids;
+
+    await render(<ThumbsRow thumbsPerWindow={2} thumbWidth={340} />, store);
+
+    // first two participants and the right slider are visible
+    expect(screen.getByTestId(`thumbsVideo-${ids[0]}`)).toBeInTheDocument();
+    expect(screen.getByTestId(`thumbsVideo-${ids[1]}`)).toBeInTheDocument();
+    expect(screen.queryByTestId(`thumbsVideo-${ids[2]}`)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('navigate-to-left')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('navigate-to-right')).toBeInTheDocument();
+
+    // click slider to right -> last two participants and left slider are visible
+    fireEvent.click(screen.getByLabelText('navigate-to-right'));
+
+    expect(screen.queryByTestId(`thumbsVideo-${ids[0]}`)).not.toBeInTheDocument();
+    expect(screen.getByTestId(`thumbsVideo-${ids[1]}`)).toBeInTheDocument();
+    expect(screen.getByTestId(`thumbsVideo-${ids[2]}`)).toBeInTheDocument();
+    expect(screen.getByLabelText('navigate-to-left')).toBeInTheDocument();
+    expect(screen.queryByLabelText('navigate-to-right')).not.toBeInTheDocument();
+
+    // one visible participant is leaving (last one in the row)
+    // now the first two participants must be visible + no slider buttons
+    dispatch(leave({ id: ids[2] as ParticipantId, timestamp: Date.now().toString() }));
+    await waitFor(() => {
+      expect(screen.getByTestId(`thumbsVideo-${ids[0]}`)).toBeInTheDocument();
+      expect(screen.getByTestId(`thumbsVideo-${ids[1]}`)).toBeInTheDocument();
+      expect(screen.queryByTestId(`thumbsVideo-${ids[2]}`)).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('navigate-to-right')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('navigate-to-left')).not.toBeInTheDocument();
+    });
   });
 });
