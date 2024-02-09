@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '..';
-import { lowerHand, raiseHand } from '../../api/types/outgoing/control';
 
 interface ModerationState {
   hasHandUp: boolean;
@@ -30,21 +29,25 @@ export const moderationSlice = createSlice({
     disableRaisedHands: (state) => {
       state.raiseHandsEnabled = false;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(raiseHand.action, (state) => {
-        state.hasHandUp = true;
-        state.handUpdatedAt = new Date().toISOString();
-      })
-      .addCase(lowerHand.action, (state) => {
-        state.hasHandUp = false;
-        state.handUpdatedAt = new Date().toISOString();
-      });
+    /**
+     * Inbound action
+     */
+    raisedHand: (state, { payload: { timestamp } }: PayloadAction<{ timestamp: string }>) => {
+      state.hasHandUp = true;
+      state.handUpdatedAt = timestamp;
+    },
+    /**
+     * Inbound action
+     */
+    loweredHand: (state) => {
+      state.hasHandUp = false;
+      state.handUpdatedAt = undefined;
+    },
   },
 });
 
-export const { forceLowerHand, disableRaisedHands, enableRaisedHands } = moderationSlice.actions;
+export const { forceLowerHand, disableRaisedHands, enableRaisedHands, raisedHand, loweredHand } =
+  moderationSlice.actions;
 export const actions = moderationSlice.actions;
 
 export const selectHandUp = (state: RootState) => state.moderation.hasHandUp;
