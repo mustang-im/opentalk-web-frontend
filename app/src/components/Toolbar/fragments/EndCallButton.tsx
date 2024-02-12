@@ -35,13 +35,14 @@ const EndCallButton = () => {
   const fullscreenContext = useFullscreenContext();
 
   const StyledEndCallButton = styled(ToolbarButton)(({ theme }) => ({
+    background: theme.palette.error.main,
     svg: {
-      fill: theme.palette.error.main,
+      fill: theme.palette.common.white,
     },
     ':hover': {
-      background: theme.palette.error.main,
+      background: theme.palette.common.white,
       svg: {
-        fill: theme.palette.common.white,
+        fill: theme.palette.error.main,
       },
     },
   }));
