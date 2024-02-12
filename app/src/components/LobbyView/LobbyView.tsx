@@ -55,6 +55,8 @@ const showWrongPasswordNotification = () => {
   });
 };
 
+const JOIN_FORM_ID = 'join-form';
+
 const LobbyView: FC = () => {
   const dispatch = useAppDispatch();
   const mediaContext = useMediaContext();
@@ -181,24 +183,25 @@ const LobbyView: FC = () => {
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit}>
-        <Container>
-          <Stack direction={'column'} spacing={4} justifyContent={'center'} alignItems={'center'}>
-            <SelfTest
-              actionButton={
-                <Button
-                  type={'submit'}
-                  disabled={
-                    !(isLoggedIn || inviteCode !== undefined) ||
-                    connectionState === ConnectionState.Starting ||
-                    !formik.isValid
-                  }
-                >
-                  {t('joinform-enter-now')}
-                </Button>
-              }
-              title={roomData?.title}
-            >
+      <Container>
+        <Stack direction={'column'} spacing={4} justifyContent={'center'} alignItems={'center'}>
+          <SelfTest
+            actionButton={
+              <Button
+                form={JOIN_FORM_ID}
+                type={'submit'}
+                disabled={
+                  !(isLoggedIn || inviteCode !== undefined) ||
+                  connectionState === ConnectionState.Starting ||
+                  !formik.isValid
+                }
+              >
+                {t('joinform-enter-now')}
+              </Button>
+            }
+            title={roomData?.title}
+          >
+            <form id={JOIN_FORM_ID} onSubmit={formik.handleSubmit}>
               <Stack direction={'row'} spacing={1}>
                 <ContitionalToolTip
                   showToolTip={Boolean(disableDisplayNameField)}
@@ -208,7 +211,7 @@ const LobbyView: FC = () => {
                       {...formikProps('name', formik)}
                       color={'secondary'}
                       placeholder={t('joinform-enter-name')}
-                      autoComplete="user-name"
+                      autoComplete="username"
                       disabled={disableDisplayNameField}
                     />
                   }
@@ -234,10 +237,10 @@ const LobbyView: FC = () => {
                   />
                 )}
               </Stack>
-            </SelfTest>
-          </Stack>
-        </Container>
-      </form>
+            </form>
+          </SelfTest>
+        </Stack>
+      </Container>
       {showImprintContainer && <ImprintContainer />}
     </>
   );

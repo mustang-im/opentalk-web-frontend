@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../hooks';
 import { selectDataProtectionUrl, selectImprintUrl } from '../../store/slices/configSlice';
 
-const Container = styled('div')({
+const Container = styled('footer')({
   width: '100%',
   color: 'white',
   padding: '1rem',
