@@ -24,6 +24,13 @@ export const HOTKEY_NEXT_SPEAKER = 'n';
 const HOTKEYS = [HOTKEY_VIDEO, HOTKEY_MICROPHONE, HOTKEY_FULLSCREEN, HOTKEY_PUSH_TO_TALK, HOTKEY_NEXT_SPEAKER];
 const HOTKEY_DEBOUNCE_TIME = 100; //ms
 
+export const useHotkeysActive = (): boolean => {
+  const hotkeysEnabled = useAppSelector(selectHotkeysEnabled);
+  const timerStyle = useAppSelector(selectTimerStyle);
+
+  return hotkeysEnabled && timerStyle !== TimerStyle.CoffeeBreak;
+};
+
 export const useHotkeys = () => {
   const mediaContext = useMediaContext();
   const fullscreenContext = useFullscreenContext();
