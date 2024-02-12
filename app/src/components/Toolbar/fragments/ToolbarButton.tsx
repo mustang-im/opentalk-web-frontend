@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Tooltip, ThemeProvider } from '@mui/material';
+import { styled, Tooltip, ThemeProvider, Theme } from '@mui/material';
 import { ArrowDownIcon, IconButton } from '@opentalk/common';
 import { MouseEvent, ReactNode } from 'react';
 
@@ -17,6 +17,11 @@ const ButtonContainer = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.borderRadius.large,
 }));
+const keyboardFocusStyle = (theme: Theme, isActive: boolean | undefined) => ({
+  '& .MuiTouchRipple-child': {
+    background: isActive ? theme.palette.secondary.light : theme.palette.secondary.lightest,
+  },
+});
 
 const ToolbarIconButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== 'isActive' && prop !== 'isLobby',
@@ -27,6 +32,7 @@ const ToolbarIconButton = styled(IconButton, {
   minWidth: 0,
   width: '2.5rem',
   height: '2.08rem',
+  ...keyboardFocusStyle(theme, isActive),
   '& .MuiSvgIcon-root': {
     [theme.breakpoints.down('sm')]: {
       fontSize: '1.4rem',
@@ -62,6 +68,7 @@ const ToggleButton = styled(IconButton, {
   position: 'absolute',
   bottom: '-0.25em',
   right: '-0.25em',
+  ...keyboardFocusStyle(theme, isActive),
   '& .MuiSvgIcon-root': {
     [theme.breakpoints.down('sm')]: {
       fontSize: '1.3rem',
