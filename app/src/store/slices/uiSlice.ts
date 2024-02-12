@@ -59,6 +59,7 @@ interface UIState {
     [ChatScope.Private]: Record<TargetId, string>;
   };
   focusedSpeaker: ParticipantId | undefined;
+  hotkeysEnabled: boolean;
 }
 
 const initialState: UIState = {
@@ -88,6 +89,7 @@ const initialState: UIState = {
     [ChatScope.Private]: {},
   },
   focusedSpeaker: undefined,
+  hotkeysEnabled: true,
 };
 
 export const uiSlice = createSlice({
@@ -167,6 +169,9 @@ export const uiSlice = createSlice({
       if (payload.targetId) {
         state.chatAutosavedInputs[payload.scope][payload.targetId] = payload.input;
       }
+    },
+    setHotkeysEnabled: (state, { payload }) => {
+      state.hotkeysEnabled = payload;
     },
   },
   extraReducers: (builder) => {
@@ -253,6 +258,7 @@ export const {
   pinnedRemoteScreenshare,
   saveDefaultChatMessage,
   setFocusedSpeaker,
+  setHotkeysEnabled,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -288,5 +294,6 @@ export function selectDefaultChatMessage(scope: ChatScope, target?: TargetId) {
     return '';
   };
 }
+export const selectHotkeysEnabled = (state: RootState) => state.ui.hotkeysEnabled;
 
 export default uiSlice.reducer;

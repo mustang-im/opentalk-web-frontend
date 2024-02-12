@@ -5,29 +5,31 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { HOTKEY_FULLSCREEN, HOTKEY_MICROPHONE, HOTKEY_NEXT_SPEAKER, HOTKEY_VIDEO } from '../../../hooks/useHotkeys';
+
 export const ShortcutTable = () => {
   const { t } = useTranslation();
 
   const shortcuts = useMemo(() => {
     return [
       {
-        key: 'm',
+        key: HOTKEY_MICROPHONE,
         description: `${t('global-microphone')} ${t('global-on')}/${t('global-off')}`,
       },
       {
-        key: 'v',
+        key: HOTKEY_VIDEO,
         description: `${t('global-video')} ${t('global-on')}/${t('global-off')}`,
       },
       {
-        key: 'f',
+        key: HOTKEY_FULLSCREEN,
         description: `${t('global-fullscreen')} ${t('global-on')}/${t('global-off')}`,
       },
       {
-        key: 'n',
+        key: HOTKEY_NEXT_SPEAKER,
         description: t('shortcut-pass-talking-stick'),
       },
       {
-        key: t('global-space'),
+        key: t('global-spacebar'),
         description: t('shortcut-hold-to-speak'),
       },
     ] as const;
