@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Stack } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectAllOnlineParticipants } from '../../../store/slices/participantsSlice';
@@ -24,39 +24,47 @@ export interface ThumbsProps {
 const ThumbsRow = ({ thumbWidth, thumbsPerWindow }: ThumbsProps) => {
   const participants = useAppSelector(selectAllOnlineParticipants);
 
-  // firstParticipantIndex: the index of the first participant in the row of thumbs
-  const [firstParticipantIndex, setFirstParticipantIndex] = useState<number>(0);
+  const [firstVisibleParticipantIndex, setFirstVisibleParticipantIndex] = useState(0);
+  const lastVisibleParticipantIndex = Math.min(firstVisibleParticipantIndex + thumbsPerWindow, participants.length);
+  const currentlyVisibleParticipantsNumber = lastVisibleParticipantIndex - firstVisibleParticipantIndex;
 
-  // endIndex is out of the range of the shown elements (thumbs) (see arraySlice)
-  const endIndex = Math.min(firstParticipantIndex + thumbsPerWindow, participants.length);
-
-  // firstIndex is reducing by the thumbs-quantity, minimum = 0
   const slideLeft = () => {
-    const firstIndex = Math.max(firstParticipantIndex - thumbsPerWindow, 0);
-    setFirstParticipantIndex(firstIndex);
+    const newFirstIndex = Math.max(firstVisibleParticipantIndex - thumbsPerWindow, 0);
+    setFirstVisibleParticipantIndex(newFirstIndex);
   };
 
-  // endIndex adds length of thumbsPerPage to show the next row of participants, maximum = participants.length
   const slideRight = () => {
-    const lastPossibleFirstIndex = Math.max(participants.length - thumbsPerWindow, 0);
-    const index = Math.min(endIndex, lastPossibleFirstIndex);
-    setFirstParticipantIndex(index);
+    const newFirstIndex = Math.max(participants.length - thumbsPerWindow, 0);
+    const minFirstIndex = Math.min(lastVisibleParticipantIndex, newFirstIndex);
+    setFirstVisibleParticipantIndex(minFirstIndex);
   };
+
+  // we compare number of visible participants (thumbnails) with the participants length, to detect
+  // if a participant, we were showing in the thumbnails row, has left the meeting
+  // if there is a gap -> we update the firstVisibleParticipantIndex and move the whole row to the left
+  useEffect(() => {
+    if (currentlyVisibleParticipantsNumber < participants.length) {
+      setFirstVisibleParticipantIndex((firstVisibleParticipantIndex) => Math.max(firstVisibleParticipantIndex - 1, 0));
+    }
+  }, [participants.length, currentlyVisibleParticipantsNumber]);
 
   const visibleParticipantIds = useMemo(
-    () => participants.slice(firstParticipantIndex, endIndex).map((participant) => participant.id),
-    [participants, firstParticipantIndex, endIndex]
+    () =>
+      participants
+        .slice(firstVisibleParticipantIndex, lastVisibleParticipantIndex)
+        .map((participant) => participant.id),
+    [participants, firstVisibleParticipantIndex, lastVisibleParticipantIndex]
   );
 
   return (
     <ThumbsHolder direction="row" gap={1} tracks={thumbsPerWindow} data-testid="ThumbsHolder">
-      {firstParticipantIndex > 0 && (
+      {firstVisibleParticipantIndex > 0 && (
         <IconSlideButton direction="left" aria-label="navigate-to-left" onClick={slideLeft} />
       )}
       {visibleParticipantIds.map((participantId, index) => (
         <Thumbnail width={thumbWidth} key={participantId} participantId={participantId} index={index} />
       ))}
-      {endIndex < participants.length && (
+      {lastVisibleParticipantIndex < participants.length && (
         <IconSlideButton direction="right" aria-label="navigate-to-right" onClick={slideRight} />
       )}
     </ThumbsHolder>
