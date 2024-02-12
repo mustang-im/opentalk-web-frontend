@@ -2,6 +2,8 @@
 
 ### New Features
 
+- Add join meeting button to dashboard ([#1622](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1622))
+
 ### Improvements to the user experience
 
 - Enable keyboard navigation through participants sort option list. ([#1753](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1753))

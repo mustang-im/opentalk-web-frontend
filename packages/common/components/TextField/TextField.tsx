@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBase, InputBaseProps, TextFieldProps } from '@mui/material';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, KeyboardEvent } from 'react';
 
 import { FormWrapper, FormProps } from '../FormWrapper/FormWrapper';
 import { generateUniquedId } from '../../utils';
@@ -10,7 +10,12 @@ import { generateUniquedId } from '../../utils';
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 
 export const ObservedInput = forwardRef<HTMLInputElement, InputBaseProps>(({ error, ...props }, ref) => {
-  return <InputBase ref={ref} {...props} error={error} onKeyDown={(event) => event.stopPropagation()} onKeyUp={(event) => event.stopPropagation()} />;
+  const handlePropagation = (event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (event.key !== 'Escape') {
+      event.stopPropagation();
+    }
+  }
+  return <InputBase ref={ref} {...props} error={error} onKeyDown={handlePropagation} onKeyUp={handlePropagation} />;
 })
 
 const TextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProps>(

@@ -657,6 +657,15 @@ dashboard-meeting-card-button-start-direct = Meeting jetzt starten
 dashboard-meeting-card-title-favorite-meetings = Meine Favoriten
 dashboard-meeting-card-title-next-meetings = Aktuelle Meetings
 dashboard-plan-new-meeting = Neues Meeting planen
+dashboard-join-meeting-button = Konferenz beitreten
+dashboard-join-meeting-dialog = Besprechung beitreten Dialog
+dashboard-join-meeting-dialog-title = Jetzt einer Konferenz beitreten
+dashboard-join-meeting-dialog-input-field = Besprechung beitreten Feld
+dashboard-join-meeting-dialog-placeholder = Konferenz-ID (URL)
+dashboard-join-meeting-dialog-invalid-id = Fehlerhafte Konferenz-ID
+dashboard-join-meeting-dialog-invalid-url = Bitte gültige URL einfügen
+dashboard-join-meeting-dialog-join-button = Beitreten
+dashboard-join-meeting-dialog-close-button = Dialog schließen
 
 dashboard-settings-account-title = Allgemeine Informationen
 dashboard-settings-account-email-label = E-Mail-Adresse

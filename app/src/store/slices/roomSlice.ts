@@ -70,6 +70,16 @@ export enum ConnectionState {
   ReadyToEnter = 'ready-to-enter',
 }
 
+/**
+ * List of errors for which we should not attempt to reconnect automatically
+ */
+//Error in state and list should probably be typed (StartRoomError, websocket errors and any other if they are possible)
+const reconnectExceptionErrorList: Array<string> = [
+  StartRoomError.WrongRoomPassword,
+  StartRoomError.Forbidden,
+  StartRoomError.NotFound,
+];
+
 interface RoomState {
   roomId?: RoomId;
   password?: string;
@@ -186,6 +196,7 @@ export const roomSlice = createSlice({
     setHotkeysEnabled: (state, { payload }) => {
       state.hotkeysEnabled = payload;
     },
+    roomReset: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(fetchRoomByInviteId.pending, (state) => {
@@ -298,11 +309,12 @@ export const {
   updatedReconnectTimerId,
   abortedReconnection,
   setHotkeysEnabled,
+  roomReset,
 } = actions;
 
 export const selectRoomPassword = (state: RootState) => state.room.password;
 export const selectRoomId = (state: RootState) => state.room.roomId;
-export const selectInviteCode = (state: RootState) => state.room.invite.inviteCode;
+export const selectInviteState = (state: RootState) => state.room.invite;
 export const selectRoomConnectionState = (state: RootState) => state.room.connectionState;
 export const selectWaitingRoomState = (state: RootState) => state.room.waitingRoomEnabled;
 export const selectServerTimeOffset = (state: RootState) => state.room.serverTimeOffset;
@@ -319,17 +331,18 @@ export const roomMiddleware = createListenerMiddleware<RootState, AppDispatch>()
 function reconnect(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
   const RECONNECT_DELAY = 5000; //ms
   const state = listenerApi.getState();
-  const { roomId } = state.room;
+  const { roomId, error } = state.room;
   const { inviteCode } = state.room.invite;
   const { displayName } = state.user;
   const { assignment: breakoutRoomId } = state.breakout;
 
-  if (state.room.error === StartRoomError.Unathorized) {
+  if (error === StartRoomError.Unathorized) {
     listenerApi.dispatch(
       authError({ status: 401, name: AuthTypeError.SessionExpired, message: AuthTypeError.SessionExpired })
     );
   }
-  if (state.room.error === StartRoomError.WrongRoomPassword) {
+
+  if (error && reconnectExceptionErrorList.includes(error)) {
     return;
   }
 
