@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Change german translation for unmuted notification ([#1566](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1566))
 - Change wording for invite participants label on the create meeting page ([#1614](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1614))
 - Ported waiting room feature to the mobile design. ([#1515](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1515))
 - Applied hover styles on the "chat", "participants" and "messages" tabs in the meeting room. ([#1676](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1676))
