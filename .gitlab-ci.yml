@@ -99,7 +99,7 @@ prepare-artifact:build:
     - yarn install
   script:
     - yarn build
-    - jq -r '.version' ./app/package.json > ./dist/FRONTEND_VERSION
+    - echo v$(jq -r '.version' ./app/package.json) > ./dist/FRONTEND_VERSION
   artifacts:
     paths:
       - dist/*
