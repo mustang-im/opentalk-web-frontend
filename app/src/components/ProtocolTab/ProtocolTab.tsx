@@ -20,6 +20,7 @@ import {
 import { DoneIcon, ParticipantAvatar, ParticipantId } from '@opentalk/common';
 import { SearchIcon } from '@opentalk/common';
 import { cloneDeep, isEmpty, some, differenceBy } from 'lodash';
+import { unionBy, intersectionBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -73,9 +74,28 @@ const ProtocolTab = () => {
   const [searchMask, setSearchMask] = useState('');
 
   useEffect(() => {
-    setParticipants(allProtocolParticipants);
-    setSelectedParticipants(allProtocolParticipants);
-  }, [allProtocolParticipants]);
+    setParticipants((prevParticipants) => mergeParticipants(allProtocolParticipants, prevParticipants));
+    setSelectedParticipants((prevParticipants) => mergeParticipants(allProtocolParticipants, prevParticipants));
+  }, [allProtocolParticipants.length]);
+
+  // List of selected participants with permission writes is stored locally, untill moderator pressed `Show protocol to all`
+  // button. Only then we send all selected participants to the controller.
+  // Therefore we need to preserve this state, if during the selection a `protocol` participant joins or leaves the conference.
+  const mergeParticipants = (newParticipants: ProtocolParticipant[], oldParticipants: ProtocolParticipant[]) => {
+    let mergedParticipants: ProtocolParticipant[] = [];
+    const idProperty: keyof ProtocolParticipant = 'id';
+
+    // Participants have joined the conference
+    if (newParticipants.length > oldParticipants.length) {
+      mergedParticipants = unionBy(oldParticipants, newParticipants, idProperty);
+    }
+    // Participants have left the conference
+    if (newParticipants.length < oldParticipants.length) {
+      mergedParticipants = intersectionBy(oldParticipants, newParticipants, idProperty);
+    }
+
+    return mergedParticipants;
+  };
 
   const handleSearch = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchMask(event.target.value);
