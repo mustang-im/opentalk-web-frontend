@@ -157,6 +157,12 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
   );
 
   const handleSubmitOnEnter: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    // Workaround for handling dead keys (special char) for German and other non-english keyboards
+    if (event.key === 'Dead') {
+      const nestedTextarea = messageInputReference.current?.querySelector('textarea');
+      nestedTextarea?.blur();
+      nestedTextarea?.focus();
+    }
     if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey) {
       event.preventDefault();
       event.stopPropagation();
