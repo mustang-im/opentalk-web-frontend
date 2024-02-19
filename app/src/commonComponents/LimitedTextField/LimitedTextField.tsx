@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBaseProps, TextFieldProps, Typography, styled } from '@mui/material';
-import { FormWrapper, FormProps } from '@opentalk/common';
+import { FormWrapper, FormProps, generateUniquedId } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -16,10 +16,12 @@ const CounterMessage = styled(Typography, {
   shouldForwardProp: (prop) => !['isError'].includes(prop as string),
 })<{ isError?: boolean }>(({ theme, isError }) => ({
   color: isError ? theme.palette.error.main : theme.palette.secondary.main,
+  marginTop: theme.spacing(0.5),
 }));
 
 const LimitedTextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProps>(
   ({ label, error, helperText, fullWidth, maxCharacters, showLimitAt, countBytes, ...props }, ref) => {
+    const id = props.id || generateUniquedId();
     const { t } = useTranslation();
 
     const { value } = props;
@@ -30,8 +32,8 @@ const LimitedTextField = React.forwardRef<HTMLInputElement, ComposedTextFieldPro
     const showInfo = valueLength > (showLimitAt || 0);
 
     return (
-      <FormWrapper label={label} helperText={helperText} error={error} fullWidth={fullWidth}>
-        <ObservedInput {...props} error={error || lengthError} ref={ref} />
+      <FormWrapper label={label} helperText={helperText} error={error} fullWidth={fullWidth} htmlFor={id}>
+        <ObservedInput {...props} error={error || lengthError} ref={ref} id={id} />
         {showInfo ? (
           <CounterMessage variant="caption" isError={lengthError}>
             {t(`global-textfield-max-characters${remainingCharacters < 0 ? '-error' : ''}`, {

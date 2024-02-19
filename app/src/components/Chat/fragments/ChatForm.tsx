@@ -242,7 +242,7 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
               aria-label={t(`chat-${openPicker ? 'close' : 'open'}-emoji-picker`)}
               aria-pressed={openPicker}
               onClick={() => setOpenPicker(!openPicker)}
-              role="button"
+              type="button"
               edge={'start'}
               disabled={!isChatEnabled}
             >

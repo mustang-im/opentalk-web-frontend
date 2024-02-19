@@ -132,7 +132,6 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
                 {...formikSwitchProps('enableReadyCheck', formik)}
                 control={<Switch color="primary" />}
                 label={t('timer-form-ready-to-continue')}
-                labelPlacement="start"
               />
             </Stack>
           </>

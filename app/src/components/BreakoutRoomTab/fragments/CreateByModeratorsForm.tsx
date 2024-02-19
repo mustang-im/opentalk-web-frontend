@@ -40,7 +40,6 @@ const CreateByModeratorsForm = ({ formik, handleNext, formName }: ICreateByModer
           {...formikSwitchProps(getFormName('distribution'), formik)}
           control={<Switch color="primary" />}
           label={t('breakout-room-form-field-random-distribution')}
-          labelPlacement="start"
         />
       </GridItem>
       <GridItem item>

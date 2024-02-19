@@ -10,10 +10,11 @@ type RadioGroupProps = MuiRadioGroupProps &
     setFieldValue?: (field: string, value: string, shouldValidate?: boolean) => void;
   };
 
-const RadioGroup = ({ children, setFieldValue, name, error, helperText, ...props }: RadioGroupProps) => (
-  <FormWrapper error={error} helperText={helperText} {...props} fullWidth>
+const RadioGroup = ({ children, setFieldValue, name, error, helperText, id, ...props }: RadioGroupProps) => (
+  <FormWrapper error={error} helperText={helperText} {...props} fullWidth htmlFor={id}>
     <MuiRadioGroup
       {...props}
+      id={id}
       onChange={(_, value) => setFieldValue && name && setFieldValue(name, value, true)}
       data-testid="radioGroupTest"
     >

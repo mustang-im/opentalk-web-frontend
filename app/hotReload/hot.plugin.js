@@ -60,7 +60,7 @@ module.exports = {
           __dirname,
           configTs.compilerOptions.paths['@opentalk/redux-oidc']
             ? configTs.compilerOptions.paths['@opentalk/redux-oidc'][0]
-            : '../../node_modules/redux-oidc'
+            : '../../node_modules/@opentalk/redux-oidc'
         ),
       };
 

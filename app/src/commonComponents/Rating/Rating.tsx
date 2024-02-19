@@ -5,20 +5,20 @@ import { Rating as MuiRating, RatingProps, styled } from '@mui/material';
 import { FormWrapper, FormProps } from '@opentalk/common';
 import React from 'react';
 
-const Rating = React.forwardRef<HTMLInputElement, RatingProps & FormProps>(
-  ({ label, error, helperText, ...props }, ref) => {
-    const Ratings = styled(MuiRating)(({ theme }) => ({
-      '&.MuiRating-root': {
-        display: 'flex',
-        '& .MuiRating-icon, & .MuiRating-iconEmpty': {
-          color: theme.palette.primary.main,
-        },
-      },
-    }));
+const Ratings = styled(MuiRating)(({ theme }) => ({
+  '&.MuiRating-root': {
+    display: 'flex',
+    '& .MuiRating-icon, & .MuiRating-iconEmpty': {
+      color: theme.palette.primary.main,
+    },
+  },
+}));
 
+const Rating = React.forwardRef<HTMLInputElement, RatingProps & FormProps>(
+  ({ label, error, helperText, id, ...props }, ref) => {
     return (
-      <FormWrapper label={label} helperText={helperText} error={error} inline={true}>
-        <Ratings {...props} ref={ref} />
+      <FormWrapper htmlFor={id} label={label} helperText={helperText} error={error} inline={true}>
+        <Ratings {...props} id={id} ref={ref} />
       </FormWrapper>
     );
   }

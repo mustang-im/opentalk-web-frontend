@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputBase, InputBaseProps, TextFieldProps } from '@mui/material';
-import { setHotkeysEnabled } from '@opentalk/common';
+import { generateUniquedId, setHotkeysEnabled } from '@opentalk/common';
 import { FormWrapper, FormProps } from '@opentalk/common';
 import React, { useCallback } from 'react';
 
@@ -38,9 +38,11 @@ ObservedInput.displayName = 'ObservedInput';
 
 const TextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProps>(
   ({ label, error, helperText, fullWidth, ...props }, ref) => {
+    const id = props.id || generateUniquedId();
+
     return (
-      <FormWrapper label={label} helperText={helperText} error={error} fullWidth={fullWidth}>
-        <ObservedInput {...props} ref={ref} error={error} />
+      <FormWrapper label={label} helperText={helperText} error={error} fullWidth={fullWidth} htmlFor={id}>
+        <ObservedInput {...props} ref={ref} error={error} id={id} />
       </FormWrapper>
     );
   }

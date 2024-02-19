@@ -11,6 +11,9 @@ for f in *.svg; do
     componentName=$(echo "${f%.*}" | perl -pe 's/(^|-)./uc($&)/ge;s/-//g')
 
 cat > "${componentName}Icon.tsx" << EOF
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
 import { SvgIcon, SvgIconProps } from '@mui/material';
 import React from 'react';
 

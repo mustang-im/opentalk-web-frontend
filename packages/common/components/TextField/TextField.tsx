@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { setHotkeysEnabled } from '../../store';
 import { FormWrapper, FormProps } from '../FormWrapper/FormWrapper';
+import { generateUniquedId } from '../../utils';
 
 type ComposedTextFieldProps = TextFieldProps & InputBaseProps & FormProps;
 
@@ -34,9 +35,11 @@ export const ObservedInput = forwardRef<HTMLInputElement, InputBaseProps>(({ err
 
 const TextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProps>(
   ({ label, error, helperText, fullWidth, ...props }, ref) => {
+    const id = props.id || generateUniquedId();
+
     return (
-      <FormWrapper label={label} helperText={helperText} error={error} fullWidth={fullWidth}>
-        <ObservedInput {...props} ref={ref} error={error} />
+      <FormWrapper label={label} helperText={helperText} error={error} fullWidth={fullWidth} htmlFor={id}>
+        <ObservedInput {...props} ref={ref} error={error} id={id} />
       </FormWrapper>
     );
   }

@@ -127,7 +127,6 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                     </Tooltip>
                   }
                   label={t('poll-form-switch-live')}
-                  labelPlacement="start"
                 />
               </Box>
               <Box marginBottom={1}>
