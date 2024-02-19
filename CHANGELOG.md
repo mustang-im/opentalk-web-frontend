@@ -48,6 +48,7 @@
 
 ### Bug Fixes
 
+- Update safari notification warning on language change. ([@1526](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1546))
 - Added translation to aria label on the chat emoji button. ([#1275](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1275))
 - Fix: Error on late publisher reconnect ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1158))
 - Fix missing unread global chat message indicator in mobile view. ([#1610](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1610))
