@@ -142,7 +142,9 @@ participant-menu-remove-participant = Remove participant
 participant-menu-grant-moderator = Grant moderator right
 participant-menu-revoke-moderator = Revoke moderator right
 participant-menu-accept-participant = Accept participant
+participant-menu-accept-participant-mobile = Accept
 participant-menu-accepted-participant = Accepted participant
+participant-menu-accepted-participant-mobile = Accepted
 button-new-message = New Message
 empty-messages = You have no messages at the moment. Create one to start a private conversation with a person or a group.
 encrypted-messages = This is the beginning of your chat history. Nobody has access to the content of your chat except for the people inside the chat.
@@ -261,6 +263,7 @@ moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Reset raised hands
 moderationbar-button-debriefing = Debriefing
 moderationbar-button-talking-stick-tooltip = Talking stick
+moderationbar-button-waiting-room-tooltip = Participants in waiting room
 moderationbar-aria-label = Moderation sidebar
 
 mute-participants-tab-title = Mute participants

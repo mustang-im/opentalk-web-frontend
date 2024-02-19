@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Ported waiting room feature to the mobile design. ([#1515](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1515))
 - Applied hover styles on the "chat", "participants" and "messages" tabs in the meeting room. ([#1676](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1676))
 - End Call button is more prominent now ([#1679](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1679))
 

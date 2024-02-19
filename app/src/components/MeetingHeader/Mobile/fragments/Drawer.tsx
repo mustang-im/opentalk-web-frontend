@@ -7,10 +7,12 @@ import { BackendModules } from '@opentalk/common';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ModerationTabKey, Tab } from '../../../../config/moderationTabs';
+import { ModerationTabKey, Tab, WaitingRoomMobileTab } from '../../../../config/moderationTabs';
 import { useAppDispatch, useAppSelector, useTabs } from '../../../../hooks';
 import { EnterpriseProvider } from '../../../../provider/EnterpriseProvider';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../../../store/slices/chatSlice';
+import { selectParticipantsWaitingCount } from '../../../../store/slices/participantsSlice';
+import { selectWaitingRoomState } from '../../../../store/slices/roomSlice';
 import { selectIsSharedFolderAvailableIndicatorVisible } from '../../../../store/slices/sharedFolderSlice';
 import { selectActiveTab, selectIsCurrentWhiteboardHighlighted, setActiveTab } from '../../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../../store/slices/userSlice';
@@ -60,12 +62,16 @@ const Drawer = () => {
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
   const isSharedFolderAvailableIndicatorVisible = useAppSelector(selectIsSharedFolderAvailableIndicatorVisible);
   const isModerator = useAppSelector(selectIsModerator);
+  const participantsWaitingCount = useAppSelector(selectParticipantsWaitingCount);
+  const isWaitingRoomEnabled = useAppSelector(selectWaitingRoomState);
+  const hasParticipantsWaiting = participantsWaitingCount > 0;
+  const hasUnreadMessages = unreadGlobalMessageCount > 0 || unreadPersonalMessageCount > 0;
 
   const showIndicator =
-    unreadGlobalMessageCount > 0 ||
-    unreadPersonalMessageCount > 0 ||
+    hasUnreadMessages ||
     isCurrentWhiteboardHighlighted ||
-    isSharedFolderAvailableIndicatorVisible;
+    isSharedFolderAvailableIndicatorVisible ||
+    (isModerator && hasParticipantsWaiting);
 
   const handleSetActiveTab = (tabKey: ModerationTabKey) => {
     dispatch(setActiveTab(tabKey));
@@ -84,14 +90,47 @@ const Drawer = () => {
     return '';
   };
 
-  const HomeTab = tabs.find((tab) => tab.key === ModerationTabKey.Home);
+  const homeTab = tabs.find((tab) => tab.key === ModerationTabKey.Home);
+  const mobileModerationTabs = tabs.slice();
+  if (isWaitingRoomEnabled && isModerator) {
+    /**
+     * This solution works for now as we want waiting room to be first tab
+     * when it's available and is only conditionally visible tab outside of the
+     * settings. This will be refactored in the future when we have more tabs.
+     */
+    mobileModerationTabs.unshift(WaitingRoomMobileTab);
+  }
 
-  const Tabs = tabs.map((tab) => {
+  const open = () => {
+    if (participantsWaitingCount > 0 && isModerator) {
+      // The click on the indicator "o" opens the waiting room overview
+      dispatch(setActiveTab(ModerationTabKey.WaitingRoom));
+    }
+    setIsDrawerOpen(true);
+  };
+
+  const close = () => {
+    setIsDrawerOpen(false);
+    if (participantsWaitingCount === 0 && activeTab === ModerationTabKey.WaitingRoom && isModerator) {
+      dispatch(setActiveTab(ModerationTabKey.Home));
+    }
+  };
+
+  const toggle = () => {
+    isDrawerOpen ? close() : open();
+  };
+
+  const Tabs = mobileModerationTabs.map((tab) => {
     if (
       !tab.divider &&
       //Temporary disabling of voting and polls until they are taken care of by separate issue
       !(tab.moduleKey === BackendModules.LegalVote || tab.moduleKey === BackendModules.Polls)
     ) {
+      // Placeholder condition to show indicator inside of the drawer accordion button.
+      const showIndicator =
+        (ModerationTabKey.WaitingRoom === tab.key && participantsWaitingCount > 0) ||
+        (ModerationTabKey.Home === tab.key && hasUnreadMessages);
+
       return (
         <DrawerTab
           key={tab.key}
@@ -99,6 +138,7 @@ const Drawer = () => {
           disabled={tab.disabled}
           active={activeTab === tab.key}
           handleClick={() => handleSetActiveTab(tab.key)}
+          showIndicator={showIndicator}
         >
           {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
           or some other way to prevent duplication with MeetingSidebar.tsx */}
@@ -110,24 +150,24 @@ const Drawer = () => {
 
   return (
     <>
-      <IconButton onClick={() => setIsDrawerOpen(true)}>
+      <IconButton onClick={toggle}>
         <LogoSmallIcon />
         {showIndicator && <ButtonIndicator />}
       </IconButton>
-      <StyledDrawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+      <StyledDrawer open={isDrawerOpen} onClose={close}>
         {isModerator && <DrawerContentContainer>{Tabs}</DrawerContentContainer>}
-        {!isModerator && HomeTab && (
+        {!isModerator && homeTab && (
           <DrawerContentContainer>
             <DrawerTab
-              key={HomeTab.key}
-              tabTitle={getTabTitle(HomeTab)}
-              disabled={HomeTab.disabled}
-              active={activeTab === HomeTab.key}
-              handleClick={() => handleSetActiveTab(HomeTab.key)}
+              key={homeTab.key}
+              tabTitle={getTabTitle(homeTab)}
+              disabled={homeTab.disabled}
+              active={activeTab === homeTab.key}
+              handleClick={() => handleSetActiveTab(homeTab.key)}
             >
               {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
           or some other way to prevent duplication with MeetingSidebar.tsx */}
-              <EnterpriseProvider moduleKey={HomeTab.moduleKey}>{HomeTab.component}</EnterpriseProvider>
+              <EnterpriseProvider moduleKey={homeTab.moduleKey}>{homeTab.component}</EnterpriseProvider>
             </DrawerTab>
           </DrawerContentContainer>
         )}

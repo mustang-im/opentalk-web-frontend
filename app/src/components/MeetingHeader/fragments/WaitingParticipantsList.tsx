@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Button, Typography, List as MuiList, ListSubheader, Box } from '@mui/material';
+import { styled, Button, Typography, List as MuiList, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
@@ -16,15 +16,13 @@ import WaitingParticipantItem from './WaitingParticipantsItem';
 const List = styled(MuiList)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  height: '100%',
   alignItems: 'space-between',
-  padding: theme.spacing(1, 1),
   borderRadius: '0.1rem',
-  background: theme.palette.background.video,
   overflow: 'hidden',
+  gap: theme.spacing(1.25),
 }));
 
-const Subheader = styled(ListSubheader)(({ theme }) => ({
+const Subheader = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -33,6 +31,7 @@ const Subheader = styled(ListSubheader)(({ theme }) => ({
   '& .MuiTypography-root': {
     color: theme.palette.text.primary,
   },
+  marginBottom: theme.spacing(2),
 }));
 
 const ScrollableBox = styled(Box)({
@@ -45,6 +44,7 @@ interface WaitingParticipantsListProps {
    * Passed when used inside popover for accessibility
    */
   id?: string;
+  className?: string;
 }
 
 const WaitingParticipantsList = ({ id }: WaitingParticipantsListProps) => {
@@ -63,7 +63,7 @@ const WaitingParticipantsList = ({ id }: WaitingParticipantsListProps) => {
   };
 
   return (
-    <List id={id}>
+    <>
       <Subheader>
         <Typography variant="body2">{t('waiting-room-participant-label')}</Typography>
         <Button variant="text" disabled={participantsNotApproved.length === 0} onClick={handleApproveAll} focusRipple>
@@ -71,11 +71,13 @@ const WaitingParticipantsList = ({ id }: WaitingParticipantsListProps) => {
         </Button>
       </Subheader>
       <ScrollableBox>
-        {participantsInWaitingRoom.map((participant) => (
-          <WaitingParticipantItem key={participant.id} participant={participant} />
-        ))}
+        <List id={id}>
+          {participantsInWaitingRoom.map((participant) => (
+            <WaitingParticipantItem key={participant.id} participant={participant} />
+          ))}
+        </List>
       </ScrollableBox>
-    </List>
+    </>
   );
 };
 

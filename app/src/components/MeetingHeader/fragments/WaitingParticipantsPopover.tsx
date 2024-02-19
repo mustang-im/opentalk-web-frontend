@@ -26,6 +26,12 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
+const WaitingParticipantsPopoverRoot = styled(Popover)(({ theme }) => ({
+  '.MuiPaper-root': {
+    padding: theme.spacing(1, 1, 1, 2),
+  },
+}));
+
 const WaitingParticipantsPopover = () => {
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
   const isPopoverOpen = Boolean(anchorElement);
@@ -49,7 +55,7 @@ const WaitingParticipantsPopover = () => {
       >
         <SpeakerQueueIcon />
       </WaitingListButton>
-      <Popover
+      <WaitingParticipantsPopoverRoot
         open={Boolean(anchorElement)}
         anchorEl={anchorElement}
         anchorOrigin={{
@@ -64,7 +70,7 @@ const WaitingParticipantsPopover = () => {
         disablePortal
       >
         <WaitingParticipantsList id="waiting-list-popover" />
-      </Popover>
+      </WaitingParticipantsPopoverRoot>
     </StyledBadge>
   );
 };
