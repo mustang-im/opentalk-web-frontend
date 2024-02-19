@@ -13,7 +13,7 @@ import VideoButton from './fragments/VideoButton';
 
 type LayoutTypes = 'fullscreen';
 
-const MainContainer = styled('div')(({ theme }) => ({
+const MainContainer = styled('aside')(({ theme }) => ({
   display: 'flex',
   background: 'transparent',
   justifyContent: 'space-evenly',
@@ -36,7 +36,7 @@ const MainContainer = styled('div')(({ theme }) => ({
 const Toolbar = ({ layout }: { layout?: LayoutTypes }) => {
   const { t } = useTranslation();
   return (
-    <MainContainer role={'tablist'} aria-label={t('toolbar-aria-label')} className={layout} data-testid={'Toolbar'}>
+    <MainContainer aria-label={t('landmark-complementary-toolbar')} className={layout} data-testid={'Toolbar'}>
       <HandraiseButton />
       <ShareScreenButton />
       <AudioButton />

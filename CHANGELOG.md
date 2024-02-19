@@ -7,6 +7,7 @@
 
 ### Improvements to the user experience
 
+- Improved conference landmark structure for better experience using screen readers ([#1289](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1289))
 - Adjust tabpanel title markup for better screen reader experience. ([#1707](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1707))
 - Minor adjustments to the hotkey popup ([#1251](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1251))
 - Change german translation for unmuted notification ([#1566](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1566))

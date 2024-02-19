@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { AppBar as MuiAppBar, Tabs as MuiTabs, styled, Typography, Badge, Tab as MuiTab } from '@mui/material';
+import { Tabs as MuiTabs, styled, Typography, Badge, Tab as MuiTab } from '@mui/material';
 import { ChatScope, RoomMode } from '@opentalk/common';
 import { VisuallyHiddenTitle } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
@@ -16,10 +16,6 @@ import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';
 import TabPanel from './fragments/TabPanel';
-
-const AppBar = styled(MuiAppBar)({
-  borderRadius: '0.5rem',
-});
 
 const MessagesBadge = styled(Badge)(({ theme }) => ({
   right: -4,
@@ -110,34 +106,32 @@ const MenuTabs = () => {
   return (
     <>
       <VisuallyHiddenTitle component={'h2'} label={'menutabs-area-hidden-heading'} />
-      <AppBar position={'static'} color={'secondary'} elevation={0}>
-        <Tabs value={currentTab} onChange={handleChange} variant={'fullWidth'}>
-          <Tab
-            id={`tab-${MenuTab.Chat}`}
-            label={t('menutabs-chat')}
-            icon={unreadGlobalMessageCount > 0 ? <ChatBadge variant={'dot'} /> : undefined}
-            iconPosition="end"
-            value={MenuTab.Chat}
-            aria-controls={`tabpanel-${MenuTab.Chat}`}
-          />
-          <Tab
-            id={`tab-${MenuTab.People}`}
-            label={t('menutabs-people')}
-            icon={<Typography variant="caption">({totalParticipants})</Typography>}
-            iconPosition="end"
-            value={MenuTab.People}
-            aria-controls={`tabpanel-${MenuTab.People}`}
-          />
-          <Tab
-            id={`tab-${MenuTab.Messages}`}
-            label={t('menutabs-messages')}
-            icon={unreadPersonalMessageCount > 0 ? <MessagesBadge variant={'dot'} /> : undefined}
-            iconPosition="end"
-            value={MenuTab.Messages}
-            aria-controls={`tabpanel-${MenuTab.Messages}`}
-          />
-        </Tabs>
-      </AppBar>
+      <Tabs value={currentTab} onChange={handleChange} variant={'fullWidth'}>
+        <Tab
+          id={`tab-${MenuTab.Chat}`}
+          label={t('menutabs-chat')}
+          icon={unreadGlobalMessageCount > 0 ? <ChatBadge variant={'dot'} /> : undefined}
+          iconPosition="end"
+          value={MenuTab.Chat}
+          aria-controls={`tabpanel-${MenuTab.Chat}`}
+        />
+        <Tab
+          id={`tab-${MenuTab.People}`}
+          label={t('menutabs-people')}
+          icon={<Typography variant="caption">({totalParticipants})</Typography>}
+          iconPosition="end"
+          value={MenuTab.People}
+          aria-controls={`tabpanel-${MenuTab.People}`}
+        />
+        <Tab
+          id={`tab-${MenuTab.Messages}`}
+          label={t('menutabs-messages')}
+          icon={unreadPersonalMessageCount > 0 ? <MessagesBadge variant={'dot'} /> : undefined}
+          iconPosition="end"
+          value={MenuTab.Messages}
+          aria-controls={`tabpanel-${MenuTab.Messages}`}
+        />
+      </Tabs>
 
       <TabPanel value={MenuTab.Chat} hidden={currentTab !== MenuTab.Chat}>
         <VisuallyHiddenTitle component={'h3'} label={'chatroom-hidden-heading'} />
