@@ -15,7 +15,7 @@ import {
 
 export interface AuthContextValues {
   configuration: AuthAdapterConfiguration;
-  signIn: () => void;
+  signIn: (redirectUrl?: string) => void;
   signOut: (signOutRedirectUrl?: string) => void;
   getConfigurationEndpoints: () => Promise<AuthenticationProviderUrls>;
   getBaseUrl: () => string;

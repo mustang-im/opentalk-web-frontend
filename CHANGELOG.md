@@ -2,6 +2,7 @@
 
 ### New Features
 
+- Add guest landing page ([#1673](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1673))
 - Add join meeting button to dashboard ([#1622](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1622))
 
 ### Improvements to the user experience

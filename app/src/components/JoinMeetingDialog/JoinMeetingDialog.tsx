@@ -154,7 +154,6 @@ export const JoinMeetingDialog = ({ openButtonProps, ...props }: JoinMeetingDial
     <>
       <Button
         color="primary"
-        size="large"
         fullWidth
         {...openButtonProps}
         //Props that can't be overriden

@@ -23,6 +23,10 @@ const ImprintContainer = () => {
   const imprintUrl = useAppSelector(selectImprintUrl);
   const dataProtectionUrl = useAppSelector(selectDataProtectionUrl);
 
+  if (!imprintUrl && !dataProtectionUrl) {
+    return null;
+  }
+
   const { t } = useTranslation();
   return (
     <Container data-testid={'ImprintContainer'} style={{}}>

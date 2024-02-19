@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material';
 import { AuthCallbackComponent, selectAuthIsPending } from '@opentalk/redux-oidc';
 import { useAuthContext, selectIsAuthenticated } from '@opentalk/redux-oidc';
 import i18next from 'i18next';
-import React, { ReactNode, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
 
@@ -23,6 +23,7 @@ import {
   EventDetailsPage,
   DocumentationPage,
 } from '../pages/Dashboard';
+import LandingPage from '../pages/LandingPage';
 import RoomPage from '../pages/RoomPage';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
@@ -38,6 +39,8 @@ type RouteValue = {
 export type Routes = {
   [key: string]: RouteValue;
 };
+
+type ProtectedRouteProps = PropsWithChildren<{ isDashboard?: boolean }>;
 
 const AuthRedirect = ({ label }: { label: string }) => {
   return (
@@ -68,13 +71,17 @@ const Redirect = ({ to }: { to: To }) => {
   return null;
 };
 
-const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
+const ProtectedRoute = ({ children, isDashboard }: ProtectedRouteProps) => {
   const auth = useAuthContext();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAuthPending = useAppSelector(selectAuthIsPending);
   const inviteCode = useInviteCode();
 
   if (!isAuthenticated && !inviteCode && !isAuthPending) {
+    if (isDashboard) {
+      return <Redirect to={'/join'} />;
+    }
+
     auth?.signIn();
     return null;
   }
@@ -131,9 +138,15 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
     key: 'invite',
   },
   {
+    path: '/join',
+    element: <LobbyTemplate />,
+    children: [{ index: true, element: <LandingPage /> }],
+    key: 'join',
+  },
+  {
     path: '/dashboard',
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute isDashboard>
         <DashboardTemplate />
       </ProtectedRoute>
     ),
