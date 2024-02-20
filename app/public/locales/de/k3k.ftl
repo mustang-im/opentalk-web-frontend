@@ -280,8 +280,8 @@ talking-stick-next-announcement = Sie sind als nächstes dran.
 talking-stick-speaker-announcement = Sie sind jetzt dran. Bitte schalten Sie das Mikro ein!
 talking-stick-notification-unmute = Einschalten
 talking-stick-notification-next-speaker = Weitergeben
-talking-stick-unmuted-notification = Die Teilnehmen hören Sie jetzt. Wenn Sie fertig sind, geben Sie bitte den Redestab weiter.
-talking-stick-unmuted-notification-last-participant = Die Teilnehmer hören... Sie jetzt. Sie sind der letzte Teilnehmer, wenn Sie fertig sind, geben Sie bitte den Redestab ab.
+talking-stick-unmuted-notification = Die Teilnehmenden hören Sie jetzt. Wenn Sie fertig sind, geben Sie bitte den Redestab weiter.
+talking-stick-unmuted-notification-last-participant = Die Teilnehmenden hören Sie jetzt. Sie sind der letzte Teilnehmer, wenn Sie fertig sind, geben Sie bitte den Redestab ab.
 
 reset-handraises-tab-title = Gehobene Hände zurücksetzen
 reset-handraises-button = Alle
