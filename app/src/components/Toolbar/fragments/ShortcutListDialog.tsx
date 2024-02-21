@@ -58,6 +58,8 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
             id={switchId}
             checked={hotkeysEnabled}
             onChange={() => dispatch(setHotkeysEnabled(!hotkeysEnabled))}
+            onKeyDown={(e) => e.stopPropagation()}
+            onKeyUp={(e) => e.stopPropagation()}
           />
         </Box>
       </Stack>
