@@ -591,7 +591,7 @@ global-video = Video
 global-description = Beschreibung
 global-fullscreen = ganzer Bildschirm
 global-shortcut = Abkürzung
-global-space = Leertaste
+global-spacebar = Leertaste
 global-anonymous = Anonym
 global-start-now = Jetzt starten
 global-clear = Löschen
@@ -886,6 +886,7 @@ whiteboard-hide = Whiteboard ausblenden
 
 shortcut-hold-to-speak = Nicht stumm geschaltet, während gedrückt gehalten
 shortcut-pass-talking-stick = Redestab weitergeben
+shortcut-deactive-message = Die Tastaturkürzel wurden deaktiviert
 
 meeting-required-start-date = Startdatum ist erforderlich
 meeting-required-end-date = Enddatum ist erforderlich

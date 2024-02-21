@@ -1,3 +1,9 @@
+## 1.0.23
+
+### Stability Improvements
+
+- Removed excessive hotkey logic from the shared package. (!1251)
+
 ## 1.0.20
 
 ### Stability Improvements

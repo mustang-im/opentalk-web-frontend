@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { HotkeysReducer } from '@opentalk/common';
 import { legalVoteStore, automodStore } from '@opentalk/components';
 import { authReducer } from '@opentalk/redux-oidc';
 import { configureStore, Middleware, MiddlewareAPI, Dispatch, AnyAction } from '@reduxjs/toolkit';
@@ -93,7 +92,6 @@ export const appReducers = {
   timer: timerReducer,
   whiteboard: whiteboardReducer,
   recording: recordingReducer,
-  hotkeys: HotkeysReducer,
   sharedFolder: sharedFolderReducer,
 };
 

@@ -84,6 +84,7 @@ interface RoomState {
   currentMode?: RoomMode;
   eventInfo?: EventInfo;
   reconnectTimerId: ReturnType<typeof setTimeout> | null;
+  hotkeysEnabled: boolean;
 }
 
 export interface InviteRoomVerifyResponse {
@@ -109,6 +110,7 @@ const initialState: RoomState = {
   passwordRequired: false,
   participantLimit: 0,
   reconnectTimerId: null,
+  hotkeysEnabled: true,
 };
 
 export const fetchRoomByInviteId = createAsyncThunk<
@@ -178,6 +180,9 @@ export const roomSlice = createSlice({
       }
       state.reconnectTimerId = null;
       state.connectionState = ConnectionState.Left;
+    },
+    setHotkeysEnabled: (state, { payload }) => {
+      state.hotkeysEnabled = payload;
     },
   },
   extraReducers: (builder) => {
@@ -289,6 +294,7 @@ export const {
   disableWaitingRoom,
   updatedReconnectTimerId,
   abortedReconnection,
+  setHotkeysEnabled,
 } = actions;
 
 export const selectRoomPassword = (state: RootState) => state.room.password;
@@ -301,6 +307,7 @@ export const selectPasswordRequired = (state: RootState) => state.room.passwordR
 export const selectParticipantLimit = (state: RootState) => state.room.participantLimit;
 export const selectCurrentRoomMode = (state: RootState) => state.room.currentMode;
 export const selectEventInfo = (state: RootState) => state.room.eventInfo;
+export const selectHotkeysEnabled = (state: RootState) => state.room.hotkeysEnabled;
 
 export default roomSlice.reducer;
 

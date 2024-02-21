@@ -3,9 +3,11 @@
 ### New Features
 
 - Add streaming options to create meeting ([#1587](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1587))
+- Add ability to turn hotkeys off ([#1251](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1251))
 
 ### Improvements to the user experience
 
+- Minor adjustments to the hotkey popup ([#1251](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1251))
 - Change german translation for unmuted notification ([#1566](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1566))
 - Change wording for invite participants label on the create meeting page ([#1614](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1614))
 - Ported waiting room feature to the mobile design. ([#1515](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1515))

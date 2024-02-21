@@ -9,12 +9,11 @@ import TextField from '.';
 import { createStore, fireEvent, render, screen } from '../../utils/testUtils';
 
 describe('TextField', () => {
-  let store: Store, dispatch: jest.Mock;
+  let store: Store;
   afterEach(() => cleanup());
   beforeEach(() => {
     const createdStore = createStore();
     store = createdStore.store;
-    dispatch = createdStore.dispatch;
   });
 
   test('render label', async () => {
@@ -28,28 +27,6 @@ describe('TextField', () => {
 
     expect(screen.getByText('test')).toBeInTheDocument();
     expect(screen.getByText('test helper text')).toBeInTheDocument();
-  });
-
-  test('push2talk is deactivated when TextField is focused', async () => {
-    await render(<TextField label={'test'} />, store);
-
-    expect(screen.getByText('test')).toBeInTheDocument();
-
-    const inputElement = screen.getByRole('textbox');
-    fireEvent.focus(inputElement);
-
-    expect(dispatch.mock.calls).toContainEqual([{ payload: false, type: 'hotkeys/setHotkeysEnabled' }]);
-  });
-
-  test('push2talk is activated when TextField is unfocused', async () => {
-    await render(<TextField label={'test'} />, store);
-    expect(screen.getByText('test')).toBeInTheDocument();
-
-    const inputElement = screen.getByRole('textbox');
-    fireEvent.focus(inputElement);
-    fireEvent.blur(inputElement);
-
-    expect(dispatch.mock.calls).toContainEqual([{ payload: true, type: 'hotkeys/setHotkeysEnabled' }]);
   });
 
   test('onFocus and onBlur are called', async () => {

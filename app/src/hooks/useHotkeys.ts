@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { RoomMode, selectHotkeysEnabled } from '@opentalk/common';
+import { RoomMode, TimerStyle } from '@opentalk/common';
 import { automodStore } from '@opentalk/components';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -13,19 +13,27 @@ import { useMediaContext } from '../components/MediaProvider';
 import { useFullscreenContext } from '../hooks/useFullscreenContext';
 import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../store/slices/mediaSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
+import { selectTimerStyle } from '../store/slices/timerSlice';
+import { selectHotkeysEnabled } from '../store/slices/uiSlice';
 
-const MICROPHONE = 'm';
-const VIDEO = 'v';
-const FULLSCREEN = 'f';
-const PUSH_TO_TALK = ' ';
-const NEXT_SPEAKER = 'n';
-const HOTKEYS = [VIDEO, MICROPHONE, FULLSCREEN, PUSH_TO_TALK, NEXT_SPEAKER];
+export const HOTKEY_MICROPHONE = 'm';
+export const HOTKEY_VIDEO = 'v';
+export const HOTKEY_FULLSCREEN = 'f';
+export const HOTKEY_PUSH_TO_TALK = ' ';
+export const HOTKEY_NEXT_SPEAKER = 'n';
+const HOTKEYS = [HOTKEY_VIDEO, HOTKEY_MICROPHONE, HOTKEY_FULLSCREEN, HOTKEY_PUSH_TO_TALK, HOTKEY_NEXT_SPEAKER];
 const HOTKEY_DEBOUNCE_TIME = 100; //ms
+
+export const useHotkeysActive = (): boolean => {
+  const hotkeysEnabled = useAppSelector(selectHotkeysEnabled);
+  const timerStyle = useAppSelector(selectTimerStyle);
+
+  return hotkeysEnabled && timerStyle !== TimerStyle.CoffeeBreak;
+};
 
 export const useHotkeys = () => {
   const mediaContext = useMediaContext();
   const fullscreenContext = useFullscreenContext();
-  const hotkeysEnabled = useAppSelector(selectHotkeysEnabled);
   const audioEnabled = useAppSelector(selectAudioEnabled);
   const videoEnabled = useAppSelector(selectVideoEnabled);
   const roomMode = useAppSelector(selectCurrentRoomMode);
@@ -36,6 +44,11 @@ export const useHotkeys = () => {
   const startingAudio = useRef<Promise<void> | undefined>();
   const stoppingAudio = useRef<Promise<void> | undefined>();
   const [isInPushedToTalkMode, setIsInPushedToTalkMode] = useState(false);
+
+  const hotkeysEnabled = useAppSelector(selectHotkeysEnabled);
+  const timerStyle = useAppSelector(selectTimerStyle);
+
+  const hotkeysActive = hotkeysEnabled && timerStyle !== TimerStyle.CoffeeBreak;
 
   const switchAudio = useCallback((value: boolean) => mediaContext.trySetAudio(value), [mediaContext]);
 
@@ -101,7 +114,7 @@ export const useHotkeys = () => {
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
-      if (!hotkeysEnabled) {
+      if (!hotkeysActive) {
         return;
       }
 
@@ -111,27 +124,27 @@ export const useHotkeys = () => {
         event.preventDefault();
 
         switch (key) {
-          case MICROPHONE:
+          case HOTKEY_MICROPHONE:
             if (type === 'keyup' && mediaContext.hasMicrophone) {
               toggleAudio();
             }
             break;
-          case VIDEO:
+          case HOTKEY_VIDEO:
             if (type === 'keyup' && mediaContext.hasCamera) {
               toggleVideo();
             }
             break;
-          case FULLSCREEN:
+          case HOTKEY_FULLSCREEN:
             if (type === 'keyup') {
               toggleFullscreenView();
             }
             break;
-          case PUSH_TO_TALK:
+          case HOTKEY_PUSH_TO_TALK:
             // if (!repeat) {
             pushToTalk(type);
             //}
             break;
-          case NEXT_SPEAKER:
+          case HOTKEY_NEXT_SPEAKER:
             if (!repeat && roomMode === RoomMode.TalkingStick && speakerState === 'active') {
               // Attempted to achieve `setAsTransitioningSpeaker` in a middleware, but we are unable
               // to define `pass.action` case twice as it is already defined in the ee-components.
@@ -150,7 +163,7 @@ export const useHotkeys = () => {
       mediaContext.hasMicrophone,
       mediaContext.hasCamera,
       pushToTalk,
-      hotkeysEnabled,
+      hotkeysActive,
       audioEnabled,
       toggleAudio,
       toggleVideo,
