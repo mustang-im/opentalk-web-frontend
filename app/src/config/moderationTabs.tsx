@@ -27,6 +27,7 @@ import React, { Suspense } from 'react';
 import SuspenseLoading from '../commonComponents/SuspenseLoading';
 import DebriefingTab from '../components/DebriefingTab';
 import HomeIconComponent from '../components/HomeIconComponent';
+import ResultsList from '../components/MeetingHeader/fragments/ResultsList';
 import WaitingParticipantsList from '../components/MeetingHeader/fragments/WaitingParticipantsList';
 import { useAppSelector } from '../hooks';
 import { FeaturesKeys } from '../store/slices/configSlice';
@@ -66,6 +67,7 @@ export enum ModerationTabKey {
   WheelOfNames = 'tab-wheel-of-names',
   Divider = 'tab-divider',
   WaitingRoom = 'tab-waiting-room',
+  PollsAndLegalVote = 'tab-polls-voting',
 }
 
 export interface Tab {
@@ -278,4 +280,12 @@ export const WaitingRoomMobileTab: Tab = {
   tooltipTranslationKey: 'moderationbar-button-waiting-room-tooltip',
   titleKey: 'moderationbar-button-waiting-room-tooltip',
   component: <WaitingParticipantsList />,
+};
+
+export const PollsAndVotesMobileTab: Tab = {
+  icon: <PollIcon />,
+  key: ModerationTabKey.PollsAndLegalVote,
+  tooltipTranslationKey: 'votes-poll-overview-title',
+  titleKey: 'votes-poll-overview-title',
+  component: <ResultsList />,
 };

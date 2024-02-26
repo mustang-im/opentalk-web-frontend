@@ -1,17 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Stack, MenuList as MuiMenuList, Typography, styled } from '@mui/material';
+import { Stack, MenuList, Typography } from '@mui/material';
 import { legalVoteStore } from '@opentalk/components';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectAllPollVotes } from '../../../store/slices/pollSlice';
 import ResultsItem from './ResultsItem';
-
-const MenuList = styled(MuiMenuList)({
-  maxWidth: 300,
-});
 
 const ResultsList = () => {
   const { t } = useTranslation();
