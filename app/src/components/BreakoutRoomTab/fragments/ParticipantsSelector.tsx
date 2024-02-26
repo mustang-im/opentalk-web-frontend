@@ -12,8 +12,14 @@ import { useTranslation } from 'react-i18next';
 import AccordionItem from '../../../commonComponents/AccordionItem';
 import { useAppSelector } from '../../../hooks';
 import { selectCombinedParticipantsAndUser } from '../../../store/selectors';
-import { AccordionOptions } from './CreateRoomsForm';
 import ParticipantsEditor from './ParticipantsEditor';
+
+export enum AccordionOptions {
+  Rooms = 'rooms',
+  Participants = 'participants',
+  Groups = 'groups',
+  Moderators = 'Moderators',
+}
 
 const UserNameContainer = styled('div')(({ theme }) => ({
   '& > *': {

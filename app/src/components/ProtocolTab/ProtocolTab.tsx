@@ -17,8 +17,7 @@ import {
   Stack,
   Grid,
 } from '@mui/material';
-import { DoneIcon, ParticipantAvatar, ParticipantId } from '@opentalk/common';
-import { SearchIcon } from '@opentalk/common';
+import { DoneIcon, ParticipantAvatar, ProtocolParticipant, SearchIcon } from '@opentalk/common';
 import { cloneDeep, isEmpty, some, differenceBy } from 'lodash';
 import { unionBy, intersectionBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -55,13 +54,6 @@ const SelectedParticipantsList = styled(List)({
   width: '100%',
   flex: 1,
 });
-
-export interface ProtocolParticipant {
-  id: ParticipantId;
-  displayName: string;
-  avatarUrl?: string;
-  isSelected: boolean;
-}
 
 const ProtocolTab = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

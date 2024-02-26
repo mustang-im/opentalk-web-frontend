@@ -84,12 +84,6 @@ Copyright:
  2022 OpenTalk GmbH <mail@opentalk.eu>
 License: LicenseRef-MIT-i18next-fluent
 
-Files: packages/react-redux-appauth/*
-Copyright:
- 2020 The OpenID Foundation
- 2022 OpenTalk GmbH <mail@opentalk.eu>
-License: Apache-2.0
-
 Files: packages/redux-oidc/*
 Copyright:
  2022 Daniél Kerkmann

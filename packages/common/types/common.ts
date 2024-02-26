@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Seconds } from '../utils';
+import { ProtocolState } from './protocol';
 import { TimerState } from './timer';
 
 export type ParticipantId = string & { readonly __tag: unique symbol };
@@ -70,10 +71,6 @@ export interface SpeakingState {
 
 export interface Speaker extends SpeakingState {
   participant: ParticipantId;
-}
-
-export interface ProtocolState {
-  readonly: boolean;
 }
 
 export interface TrickleCandidate {

@@ -19,7 +19,12 @@ import { useTranslation } from 'react-i18next';
 
 import { useGetEventsQuery } from '../../../api/rest';
 import { useHeader } from '../../../templates/DashboardTemplate';
-import { appendRecurrenceEventInstances, SortDirection, orderEventsByDate } from '../../../utils/eventUtils';
+import {
+  appendRecurrenceEventInstances,
+  SortDirection,
+  orderEventsByDate,
+  TimePerspectiveFilter,
+} from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
 import EventsPageHeader, { TimeFilter } from './fragments/EventsPageHeader';
 
@@ -76,12 +81,6 @@ export const filterByTimePeriod = (timePeriod: DashboardEventsFilters['timePerio
     }
   }
 };
-
-export enum TimePerspectiveFilter {
-  TimeIndependent = 'timeindependent',
-  Future = 'future',
-  Past = 'past',
-}
 
 const EVENTS_PER_REQUEST = 100;
 

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Grid, styled, IconButton } from '@mui/material';
+import { Grid, styled } from '@mui/material';
 import { PinIcon, FullscreenViewIcon, ParticipantId, MediaSessionType } from '@opentalk/common';
 import { MouseEventHandler, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { selectIsSubscriberOnlineByDescriptor } from '../../../store/slices/medi
 import { selectParticipantName } from '../../../store/slices/participantsSlice';
 import { pinnedParticipantIdSet, selectCinemaLayout, selectPinnedParticipantId } from '../../../store/slices/uiSlice';
 import BrokenSubscriberIndicator from './BrokenSubscriberIndicator';
+import { OverlayIconButton } from './OverlayIconButton';
 import Statistics from './Statistics';
 
 const OverlayContainer = styled(Grid)(({ theme }) => ({
@@ -32,37 +33,6 @@ const IndicatorContainer = styled(Grid)(({ theme }) => ({
   gridAutoFlow: 'column',
   gridAutoColumns: theme.spacing(3),
   gap: theme.spacing(1),
-}));
-
-export const OverlayIconButton = styled(IconButton)(({ theme }) => ({
-  '&.MuiIconButton-colorPrimary, &.MuiIconButton-colorSecondary': {
-    height: theme.spacing(2.5),
-    width: theme.spacing(3),
-    padding: theme.spacing(1),
-    opacity: 0.8,
-    color: theme.palette.primary.contrastText,
-    '& .MuiSvgIcon-root': {
-      fontSize: theme.typography.pxToRem(13),
-    },
-    ':hover': {
-      opacity: 1,
-    },
-  },
-
-  '&.MuiIconButton-colorPrimary': {
-    svg: {
-      fill: theme.palette.secondary.contrastText,
-    },
-    ':hover': {
-      backgroundColor: theme.palette.primary.main,
-    },
-  },
-
-  '&.MuiIconButton-colorSecondary': {
-    ':hover': {
-      backgroundColor: theme.palette.secondary.lighter,
-    },
-  },
 }));
 
 interface VideoOverlayProps {

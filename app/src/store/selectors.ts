@@ -12,6 +12,7 @@ import {
   ChatMessage as ChatMessageType,
   ChatScope,
   FilterableParticipant,
+  ProtocolParticipant,
 } from '@opentalk/common';
 import { automodStore, legalVoteStore } from '@opentalk/components';
 import { createSelector } from '@reduxjs/toolkit';
@@ -19,7 +20,6 @@ import i18next, { t } from 'i18next';
 import _, { intersection } from 'lodash';
 import { some } from 'lodash';
 
-import { ProtocolParticipant } from '../components/ProtocolTab/ProtocolTab';
 import { selectCurrentBreakoutRoomId } from './slices/breakoutSlice';
 import { selectChatMessagesByScope } from './slices/chatSlice';
 import { selectGlobalEvents, RoomEvent } from './slices/eventSlice';

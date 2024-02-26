@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, Box } from '@mui/material';
-import { MediaSessionType, ParticipantId, Participant } from '@opentalk/common';
+import { MediaSessionType, ParticipantId } from '@opentalk/common';
 import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,10 +13,6 @@ import { selectUnmutedParticipants } from '../../store/selectors';
 import { selectAllSubscribers } from '../../store/slices/mediaSubscriberSlice';
 import SearchTextField from '../SearchTextField/index';
 import MuteParticipantsList from './fragments/MuteParticipantsList';
-
-export interface MutedParticipant extends Participant {
-  selected: boolean;
-}
 
 const MuteParticipants = () => {
   const { t } = useTranslation();

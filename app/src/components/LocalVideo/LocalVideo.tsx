@@ -18,7 +18,7 @@ import {
 import { selectMirroredVideoEnabled } from '../../store/slices/uiSlice';
 import { selectDisplayName } from '../../store/slices/userSlice';
 import { useMediaContext } from '../MediaProvider';
-import { OverlayIconButton } from '../ParticipantWindow/fragments/VideoOverlay';
+import { OverlayIconButton } from '../ParticipantWindow/fragments/OverlayIconButton';
 
 type PropsType = VideoHTMLAttributes<HTMLVideoElement>;
 

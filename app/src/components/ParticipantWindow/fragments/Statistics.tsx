@@ -10,8 +10,8 @@ import { useAppSelector } from '../../../hooks';
 import { MediaDescriptor } from '../../../modules/WebRTC';
 import { selectStatsPacketLossByDescriptor } from '../../../store/slices/connectionStatsSlice';
 import { selectIsSubscriberOnlineByDescriptor } from '../../../store/slices/mediaSubscriberSlice';
+import { OverlayIconButton } from './OverlayIconButton';
 import { StatisticsContent } from './StatisticsContent';
-import { OverlayIconButton } from './VideoOverlay';
 
 const Statistics = ({
   descriptor,

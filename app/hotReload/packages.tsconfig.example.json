@@ -3,8 +3,7 @@
     "baseUrl": "./",
     "paths": {
       "@opentalk/components": ["../../../components"],
-      "@opentalk/common": ["../../packages/common"],
-      "@opentalk/react-redux-appauth": ["../../packages/react-redux-appauth"]
+      "@opentalk/common": ["../../packages/common"]
     }
   }
 }

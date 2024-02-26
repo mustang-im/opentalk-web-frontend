@@ -25,7 +25,7 @@ For now avaliable packages for hot reload are:
 1. @opentalk/common
 2. @opentalk/components
 3. @opentalk/rest-api-rtk-query
-4. @opentalk/react-redux-appauth
+4. @opentalk/redux-oidc
 
 ### @opentalk/components specific
 

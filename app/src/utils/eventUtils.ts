@@ -14,8 +14,13 @@ import {
 import { addMonths, subMonths } from 'date-fns';
 import { cloneDeep, orderBy } from 'lodash';
 
-import { TimePerspectiveFilter } from '../pages/Dashboard/EventsOverviewPage/EventsOverviewPage';
 import { getISOStringWithoutMilliseconds } from './timeUtils';
+
+export enum TimePerspectiveFilter {
+  TimeIndependent = 'timeindependent',
+  Future = 'future',
+  Past = 'past',
+}
 
 const DEFAULT_MONTHS_CONSIDERED = 3;
 

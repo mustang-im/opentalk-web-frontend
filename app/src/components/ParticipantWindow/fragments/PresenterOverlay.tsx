@@ -8,9 +8,10 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantName } from '../../../store/slices/participantsSlice';
-import { PresenterVideoPosition } from './ParticipantVideo';
+import { OverlayIconButton } from './OverlayIconButton';
 import Statistics from './Statistics';
-import { OverlayIconButton } from './VideoOverlay';
+
+export type PresenterVideoPosition = 'bottomLeft' | 'upperRight' | 'bottomRight';
 
 const OverlayContainer = styled(Grid)(({ theme }) => ({
   position: 'absolute',

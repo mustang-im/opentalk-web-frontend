@@ -26,6 +26,10 @@
 - Fix inconsistant order of participants when sorted by the raised hand. ([#1630](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1630))
 - Fix frontend version number for glitchtip
 
+### Internal
+
+- Resolve circular dependencies in the UI components ([#1201](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1201))
+
 ## 1.10.0
 
 ### Improvements to the user experience

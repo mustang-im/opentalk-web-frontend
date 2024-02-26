@@ -4,7 +4,11 @@
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 
-import { MenuTab } from '../MenuTabs';
+export enum MenuTab {
+  Chat = 'chat',
+  People = 'people',
+  Messages = 'messages',
+}
 
 interface TabPanelProps {
   children?: React.ReactNode;
