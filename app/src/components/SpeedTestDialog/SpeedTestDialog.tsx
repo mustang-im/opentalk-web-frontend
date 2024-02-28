@@ -12,10 +12,10 @@ import {
   Typography,
   DialogContent,
   DialogActions,
-  alpha,
+  DialogProps,
 } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
-import React, { useCallback, useState, Fragment } from 'react';
+import { CircularIconButton, CloseIcon, SpeedTestIcon } from '@opentalk/common';
+import React, { useCallback, useState, Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -55,7 +55,7 @@ const GridDiv = styled('div')({
   gridTemplateColumns: '50% 30% 20%',
 });
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
+const CloseIconButton = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
   borderRadius: '100%',
   right: theme.spacing(2),
@@ -65,17 +65,6 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
     fill: theme.palette.common.black,
     width: '0.75em',
     height: '0.75em',
-  },
-}));
-
-const CTAButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  borderColor: theme.palette.outline,
-  backgroundColor: alpha(theme.palette.secondary.dark, 0.5),
-  zIndex: 1,
-  ':hover': {
-    borderColor: theme.palette.common.white,
-    backgroundColor: alpha(theme.palette.secondary.main, 0.5),
   },
 }));
 
@@ -119,9 +108,10 @@ const ResultDiv = styled('div', {
   fontWeight: 'bold',
 }));
 
-const SpeedTest = () => {
+type SpeedTestDialogProps = Omit<DialogProps, 'open'>;
+
+const SpeedTestDialog = ({ ...props }: SpeedTestDialogProps) => {
   const [testState, setTestState] = useState<SessionState>(SessionState.Initializing);
-  const [showDialog, setShowDialog] = useState(false);
   const downloadState = useAppSelector(selectDownload);
   const uploadState = useAppSelector(selectUpload);
   const latencyState = useAppSelector(selectLatency);
@@ -129,15 +119,17 @@ const SpeedTest = () => {
   const { t } = useTranslation();
   const config = useAppSelector(selectSpeedTestConfig);
   const testCompleted = testState === SessionState.Completed;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleCloseDialog = () => {
-    setShowDialog(false);
+    setIsDialogOpen(false);
   };
 
-  const handleOpenDialog = () => {
-    setShowDialog(true);
-    startTest();
-  };
+  useEffect(() => {
+    if (isDialogOpen) {
+      startTest();
+    }
+  }, [isDialogOpen]);
 
   const startTest = useCallback(() => {
     setTestState(SessionState.Initializing);
@@ -255,20 +247,20 @@ const SpeedTest = () => {
   };
 
   return (
-    <div>
-      <CTAButton variant={'outlined'} onClick={handleOpenDialog} aria-label={t('speed-meter-button')}>
-        {t('speed-meter-button')}
-      </CTAButton>
-      <Dialog aria-labelledby="speed-meter-title" open={showDialog}>
+    <>
+      <CircularIconButton onClick={() => setIsDialogOpen(true)} aria-label={t('speed-meter-button')}>
+        <SpeedTestIcon />
+      </CircularIconButton>
+      <Dialog {...props} onClose={handleCloseDialog} aria-labelledby="speed-meter-title" open={isDialogOpen}>
         <DialogTitle>
           {t('speed-meter-title')}
-          <StyledIconButton aria-label="close" onClick={handleCloseDialog} size="small">
+          <CloseIconButton aria-label="close" onClick={handleCloseDialog} size="small">
             <CloseIcon />
-          </StyledIconButton>
+          </CloseIconButton>
         </DialogTitle>
 
         <Grid container>
-          <Grid container direction={'column'} alignItems={'center'} spacing={2}>
+          <Grid container direction="column" alignItems="center" spacing={2}>
             <IconContainer
               item
               container
@@ -280,7 +272,7 @@ const SpeedTest = () => {
             </IconContainer>
             {!testCompleted && (
               <Grid item>
-                <StyledTypography align={'center'} variant={'body2'}>
+                <StyledTypography align="center" variant="body2">
                   {getMessage()}
                 </StyledTypography>
               </Grid>
@@ -290,31 +282,31 @@ const SpeedTest = () => {
           <ExpandingContainer
             visible={testCompleted}
             container
-            direction={'column'}
-            alignItems={'center'}
+            direction="column"
+            alignItems="center"
             spacing={2}
-            wrap={'nowrap'}
+            wrap="nowrap"
           >
             <Grid item>
               <GridDiv>
-                <StyledTypography variant={'body2'}>{t('speed-meter-download-label')}:</StyledTypography>
+                <StyledTypography variant="body2">{t('speed-meter-download-label')}:</StyledTypography>
                 <ResultDiv quality={downloadQuality}>
                   {downloadState !== undefined ? downloadState.toFixed(2) : '-'}
                 </ResultDiv>
-                <StyledTypography variant={'body2'}>{t('speed-meter-mbps')}</StyledTypography>
-                <StyledTypography variant={'body2'}>{t('speed-meter-upload-label')}:</StyledTypography>
+                <StyledTypography variant="body2">{t('speed-meter-mbps')}</StyledTypography>
+                <StyledTypography variant="body2">{t('speed-meter-upload-label')}:</StyledTypography>
                 <ResultDiv quality={uploadQuality}>
                   {uploadState !== undefined ? uploadState.toFixed(2) : '-'}
                 </ResultDiv>
-                <StyledTypography variant={'body2'}>{t('speed-meter-mbps')}</StyledTypography>
-                <StyledTypography variant={'body2'}>{t('speed-meter-latency-label')}:</StyledTypography>
+                <StyledTypography variant="body2">{t('speed-meter-mbps')}</StyledTypography>
+                <StyledTypography variant="body2">{t('speed-meter-latency-label')}:</StyledTypography>
 
                 <ResultDiv quality={latencyQuality}>{latencyState !== undefined ? latencyState : '-'}</ResultDiv>
-                <StyledTypography variant={'body2'}>{t('speed-meter-ms')}</StyledTypography>
+                <StyledTypography variant="body2">{t('speed-meter-ms')}</StyledTypography>
               </GridDiv>
             </Grid>
             <DialogContent>
-              <StyledTypography variant={'body2'} align={'center'}>
+              <StyledTypography variant="body2" align="center">
                 {getMessage()}
               </StyledTypography>
             </DialogContent>
@@ -326,8 +318,8 @@ const SpeedTest = () => {
           </ExpandingContainer>
         </Grid>
       </Dialog>
-    </div>
+    </>
   );
 };
 
-export default SpeedTest;
+export default SpeedTestDialog;

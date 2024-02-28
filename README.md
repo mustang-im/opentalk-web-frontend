@@ -117,11 +117,11 @@ window.config = {
     // Speed-Test configuration, see also https://github.com/m-lab/ndt7-js and https://www.measurementlab.net/blog/ndt7-introduction/
     "speedTest": {
       // NDT Server to use for the test
-      "ntdServer": 'localhost:10443',
+      "ndtServer": 'localhost:10443',
       // js worker file to use for the download test
-      "ntdDownloadWorkerJs": '/workers/ndt7-download-worker.js',
+      "ndtDownloadWorkerJs": '/workers/ndt7-download-worker.js',
       // js worker file to use for the upload test
-      "ntdUploadWorkerJs": '/workers/ndt7-upload-worker.js',
+      "ndtUploadWorkerJs": '/workers/ndt7-upload-worker.js',
     },
     // To enable user feedback collection configure a collection URL. (optional) & API KEY
     "userSurveyUrl":"https://your-survey.collection/endpoint",

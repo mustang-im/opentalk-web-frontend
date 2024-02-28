@@ -78,6 +78,7 @@ import SignOutIcon from './SignOutIcon';
 import SortIcon from './SortIcon';
 import SpeakerQueueIcon from './SpeakerQueueIcon';
 import SpeakerViewIcon from './SpeakerViewIcon';
+import SpeedTestIcon from './SpeedTestIcon';
 import StatisticsIcon from './StatisticsIcon';
 import TalkingStickIcon from './TalkingStickIcon';
 import TelephoneStrokeIcon from './TelephoneStrokeIcon';
@@ -165,6 +166,7 @@ export {
   SortIcon,
   SpeakerQueueIcon,
   SpeakerViewIcon,
+  SpeedTestIcon,
   StatisticsIcon,
   TalkingStickIcon,
   TimerIcon,

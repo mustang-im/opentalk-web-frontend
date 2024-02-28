@@ -598,6 +598,7 @@ global-close = Close
 global-ok = Ok
 global-no-result = No result
 global-close-dialog = Close dialog
+global-back = Back
 
 dashboard-home = Home
 dashboard-meetings = Meetings

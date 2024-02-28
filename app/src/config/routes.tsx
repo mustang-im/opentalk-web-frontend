@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Typography } from '@mui/material';
 import { AuthCallbackComponent, selectAuthIsPending } from '@opentalk/redux-oidc';
 import { useAuthContext, selectIsAuthenticated } from '@opentalk/redux-oidc';
 import i18next from 'i18next';
@@ -9,6 +8,7 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
 
+import Error from '../components/Error';
 import { useAppSelector } from '../hooks';
 import { useInviteCode } from '../hooks/useInviteCode';
 import {
@@ -52,13 +52,7 @@ const AuthRedirect = ({ label }: { label: string }) => {
 
 const RouteNotFound = () => {
   const { t } = useTranslation();
-  return (
-    <Box display={'flex'} margin={'auto'}>
-      <Typography variant="h5" component={'h1'} color={'white'}>
-        {t('route-not-found')}
-      </Typography>
-    </Box>
-  );
+  return <Error title={t('route-not-found')} />;
 };
 
 const Redirect = ({ to }: { to: To }) => {
