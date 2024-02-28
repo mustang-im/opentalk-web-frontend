@@ -19,7 +19,6 @@ import {
   RaiseHandOnIcon,
   CloseIcon,
   DoneIcon,
-  HelpSquareIcon,
   TrashIcon,
   RecordingsIcon,
   notifications,
@@ -49,7 +48,6 @@ import { selectRecordingId, selectRecordingState } from '../../../store/slices/r
 import { selectWaitingRoomState } from '../../../store/slices/roomSlice';
 import { selectIsModerator, selectDisplayName, selectAvatarUrl } from '../../../store/slices/userSlice';
 import InviteGuestDialog from './InviteGuestDialog';
-import ShortcutListDialog from './ShortcutListDialog';
 import { ToolbarMenuProps, ToolbarMenuItem, ToolbarMenu } from './ToolbarMenuUtils';
 
 interface MenuEntry {
@@ -60,7 +58,6 @@ interface MenuEntry {
 
 const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const [areShortcutsVisible, setShortcutsVisibilityState] = useState(false);
   const { t } = useTranslation();
   const isModerator = useAppSelector(selectIsModerator);
   const displayName = useAppSelector(selectDisplayName);
@@ -132,16 +129,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         icon: <DoneIcon />,
       };
 
-  const shortcutDialogItem = {
-    label: 'more-menu-keyboard-shortcuts',
-    // TODO: find appropriate icon.
-    icon: <HelpSquareIcon />,
-    action: () => {
-      onClose();
-      setShortcutsVisibilityState(true);
-    },
-  };
-
   const deleteGlobalChatItem = {
     label: 'more-menu-delete-global-chat',
     icon: <TrashIcon />,
@@ -163,7 +150,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
     toggleWaitingRoomItem,
     toggleHandraises,
     toggleChatItem,
-    shortcutDialogItem,
     deleteGlobalChatItem,
   ];
 
@@ -179,8 +165,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
       icon: <RecordingsIcon />,
     });
   }
-
-  const participantMenuItems = [shortcutDialogItem];
 
   const devMenuItems = [
     {
@@ -328,11 +312,9 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         </MenuTitleContainer>
         <Divider />
         {isModerator && renderMenuItems(moderatorMenuItems)}
-        {!isModerator && renderMenuItems(participantMenuItems)}
         {isDevMode && renderMenuItems(devMenuItems)}
       </ToolbarMenu>
       <InviteGuestDialog open={showInviteModal} onClose={() => setShowInviteModal(false)} />
-      <ShortcutListDialog open={areShortcutsVisible} onClose={() => setShortcutsVisibilityState(false)} />
     </ThemeProvider>
   );
 };

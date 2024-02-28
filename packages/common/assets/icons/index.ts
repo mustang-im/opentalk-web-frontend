@@ -11,6 +11,7 @@ import AudioIcon from './AudioIcon';
 import AvatarIcon from './AvatarIcon';
 import BackIcon from './BackIcon';
 import BreakroomsIcon from './BreakroomsIcon';
+import BurgermenuIcon from './BurgermenuIcon';
 import CameraOffIcon from './CameraOffIcon';
 import CameraOnIcon from './CameraOnIcon';
 import ClockIcon from './ClockIcon';
@@ -173,4 +174,5 @@ export {
   TelephoneStrokeIcon,
   MyAccountIcon,
   LogoSmallIcon,
+  BurgermenuIcon,
 };

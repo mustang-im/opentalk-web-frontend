@@ -29,9 +29,9 @@ import {
 import { selectIsCurrentWhiteboardHighlighted } from '../../../store/slices/uiSlice';
 import { selectIsWhiteboardAvailable } from '../../../store/slices/whiteboardSlice';
 import { MAX_GRID_TILES } from '../../GridView/GridView';
-import QuickStart from '../../QuickStart';
 import LayoutSelection from './LayoutSelection';
 import MeetingUtilsSection from './MeetingUtilsSection';
+import MyMeetingMenu from './MyMeetingMenu';
 import RoomTitle from './RoomTitle';
 
 const OpenTalkLogo = styled(Logo)(({ theme }) => ({
@@ -262,7 +262,7 @@ const DesktopMeetingHeader = () => {
       <ContentItem>
         <HeaderCenterContainer>
           <MeetingUtilsSection />
-          <QuickStart variant="room" />
+          <MyMeetingMenu />
         </HeaderCenterContainer>
       </ContentItem>
     </Content>

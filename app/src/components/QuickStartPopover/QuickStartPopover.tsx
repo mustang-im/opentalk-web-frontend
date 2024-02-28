@@ -1,17 +1,32 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { PopperProps, Popper, useMediaQuery, Stack, styled, Typography, CircularProgress } from '@mui/material';
-import { WarningIcon } from '@opentalk/common';
+import {
+  useMediaQuery,
+  Stack,
+  styled,
+  Typography,
+  CircularProgress,
+  IconButton,
+  Popover,
+  PopoverProps,
+} from '@mui/material';
+import { CloseIcon, WarningIcon } from '@opentalk/common';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useQuickStartUrl } from '../../../hooks/useQuickStartUrl';
+import { useQuickStartUrl } from '../../hooks/useQuickStartUrl';
 
 const MIDDLE_SCREEN_HEIGHT_RATIO = 0.92;
 const BIG_SCREEN_HEIGHT_RATIO = 0.8;
 const WIDTH_TO_HEIGHT_RATIO = 1.5;
 
+const StyledPopover = styled(Popover)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.background.default,
+  },
+}));
 const StatusMessageContainer = styled(Stack, {
   shouldForwardProp: (prop) => prop !== 'heightInPx' && prop !== 'widthInPx',
 })<{
@@ -20,11 +35,18 @@ const StatusMessageContainer = styled(Stack, {
 }>(({ theme, heightInPx, widthInPx }) => ({
   width: widthInPx.toString() + 'px',
   height: heightInPx.toString() + 'px',
-  background: theme.palette.common.white,
+  background: theme.palette.background.default,
   color: theme.palette.common.black,
   alignItems: 'center',
   justifyContent: 'center',
   display: 'flex',
+}));
+
+const CloseButton = styled(IconButton)(() => ({
+  position: 'absolute',
+  right: '-3px',
+  top: '-3px',
+  maxHeight: '50px',
 }));
 
 interface MessageProps {
@@ -33,6 +55,8 @@ interface MessageProps {
   message: string;
   status: 'error' | 'loading';
 }
+
+type QuickStartVariant = 'lobby' | 'room';
 
 const StatusMessage = (props: MessageProps) => {
   const { message, heightInPx, widthInPx, status } = props;
@@ -45,7 +69,13 @@ const StatusMessage = (props: MessageProps) => {
   );
 };
 
-const QuickStartPopper = (props: PopperProps) => {
+interface QuickStartPopoverProps extends PopoverProps {
+  onClose: () => void;
+  variant: QuickStartVariant;
+}
+
+const QuickStartPopover = (props: QuickStartPopoverProps) => {
+  const { onClose } = props;
   const { t } = useTranslation();
   const isScreenHeightBig = useMediaQuery('(min-height:750px)');
   const [isLoaded, setIsLoaded] = useState(false);
@@ -70,9 +100,22 @@ const QuickStartPopper = (props: PopperProps) => {
   }, [conferenceQuickStartUrl]);
 
   return (
-    <Popper {...props} placement="left-start">
+    <StyledPopover
+      {...props}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+    >
+      <CloseButton aria-label={t('close-button')} onClick={onClose}>
+        <CloseIcon />
+      </CloseButton>
       <img
-        height={imgHeight}
+        height="100%"
         width={imgWidth}
         src={conferenceQuickStartUrl}
         alt={t('conference-quick-start-title')}
@@ -91,8 +134,8 @@ const QuickStartPopper = (props: PopperProps) => {
       {isMissing && (
         <StatusMessage message={t('quick-start-error')} heightInPx={imgHeight} widthInPx={imgWidth} status="error" />
       )}
-    </Popper>
+    </StyledPopover>
   );
 };
 
-export default QuickStartPopper;
+export default QuickStartPopover;

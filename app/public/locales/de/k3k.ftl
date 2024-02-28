@@ -625,6 +625,8 @@ conference-quick-start-title = Kurzanleitung für die OpenTalk-Konferenz
 conference-quick-start-open = Öffnen die Kurzanleitung
 conference-quick-start-close = Schließen die Kurzanleitung
 
+conference-quick-start-menu-item = Kurzanleitung
+
 quick-start-loading = Kurzanleitung wird geladen
 quick-start-error = Kurzanleitung konnte nicht geladen werden
 
@@ -942,3 +944,5 @@ glitchtip-crash-report-send-successful-title = Senden erfolgreich!
 landmark-complementary-tools = Hilfsmittel
 landmark-complementary-moderation-panel = Moderationsleiste
 landmark-complementary-toolbar = Persönliche Kontrollleiste
+
+my-meeting-menu = Mein Meeting
