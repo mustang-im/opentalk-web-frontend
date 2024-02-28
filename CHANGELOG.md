@@ -4,6 +4,7 @@
 
 ### Improvements to the user experience
 
+- Improved vote and poll underlying HTML structure so it can be better navigated using the screen readers. ([#1708](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1708))
 - Mobile users can access on-going and finished poll and legal vote lists from the drawer ([#1519](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1519))
 
 ### Bug Fixes

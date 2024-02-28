@@ -103,11 +103,11 @@ describe('VoteResultContainer', () => {
     expect(screen.getByText(testTopic)).toBeInTheDocument();
     expect(screen.getByText('legal-vote-success')).toBeInTheDocument();
 
-    expect(screen.getByRole('checkbox', { name: 'legal-vote-yes-label' })).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: 'legal-vote-no-label' })).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: 'legal-vote-abstain-label' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'legal-vote-yes-label' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'legal-vote-no-label' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'legal-vote-abstain-label' })).toBeInTheDocument();
     expect(screen.queryByText('legal-vote-not-selected')).not.toBeInTheDocument();
-    expect(screen.getByLabelText('close-vote-results')).toBeInTheDocument();
+    expect(screen.getByLabelText('global-close-dialog')).toBeInTheDocument();
   });
 
   test('render VoteResultContainer component without crashing with enableAbstain = false, should not display checkboxAbstain', async () => {
@@ -126,9 +126,9 @@ describe('VoteResultContainer', () => {
 
     await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
 
-    const checkboxYes = screen.getByRole('checkbox', { name: 'legal-vote-yes-label' });
-    const checkboxNo = screen.getByRole('checkbox', { name: 'legal-vote-no-label' });
-    const checkboxAbstain = screen.queryByRole('checkbox', { name: 'legal-vote-abstain-label' });
+    const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
+    const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
+    const checkboxAbstain = screen.queryByRole('radio', { name: 'legal-vote-abstain-label' });
 
     expect(checkboxYes).toBeInTheDocument();
     expect(checkboxNo).toBeInTheDocument();
@@ -138,9 +138,9 @@ describe('VoteResultContainer', () => {
   test('click on vote checkbox should dispatch action signaling/legal_vote/vote with selected option', async () => {
     await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
 
-    const checkboxYes = screen.getByRole('checkbox', { name: 'legal-vote-yes-label' });
-    const checkboxNo = screen.getByRole('checkbox', { name: 'legal-vote-no-label' });
-    const checkboxAbstain = screen.getByRole('checkbox', { name: 'legal-vote-abstain-label' });
+    const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
+    const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
+    const checkboxAbstain = screen.getByRole('radio', { name: 'legal-vote-abstain-label' });
     const saveButton = screen.getByTestId('legal-vote-save-button');
 
     expect(checkboxYes).toBeInTheDocument();
@@ -198,8 +198,8 @@ describe('VoteResultContainer', () => {
   test('should display proper percentages of vote result and on mouse over field should show additional info for users votes', async () => {
     await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
 
-    const checkboxYes = screen.getByRole('checkbox', { name: 'legal-vote-yes-label' });
-    const checkboxNo = screen.getByRole('checkbox', { name: 'legal-vote-no-label' });
+    const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
+    const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
 
     await fireEvent.mouseOver(checkboxYes);
     await waitFor(() => {
@@ -230,9 +230,9 @@ describe('VoteResultContainer', () => {
 
     expect(screen.getByText(testName)).toBeInTheDocument();
     expect(screen.getByText(testTopic)).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: 'legal-vote-yes-label' })).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: 'legal-vote-no-label' })).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: 'legal-vote-abstain-label' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'legal-vote-yes-label' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'legal-vote-no-label' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'legal-vote-abstain-label' })).toBeInTheDocument();
 
     expect(screen.queryByText('legal-vote-success')).not.toBeInTheDocument();
   });
@@ -257,9 +257,9 @@ describe('VoteResultContainer', () => {
 
     await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
 
-    const checkboxYes = screen.getByRole('checkbox', { name: 'legal-vote-yes-label' });
-    const checkboxNo = screen.getByRole('checkbox', { name: 'legal-vote-no-label' });
-    const checkboxAbstain = screen.getByRole('checkbox', { name: 'legal-vote-abstain-label' });
+    const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
+    const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
+    const checkboxAbstain = screen.getByRole('radio', { name: 'legal-vote-abstain-label' });
 
     expect(screen.getByText('legal-vote-not-selected')).toBeInTheDocument();
 

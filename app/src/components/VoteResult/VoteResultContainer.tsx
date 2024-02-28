@@ -30,8 +30,9 @@ import {
   LegalVoteCountdown,
   LegalVoteTokenClipboard,
 } from '@opentalk/components';
-import { useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { batch } from 'react-redux';
 
 import legalVoteSignaling from '../../api/types/outgoing/legal-vote';
 import { vote as pollVote } from '../../api/types/outgoing/poll';
@@ -68,25 +69,36 @@ const MainContainer = styled(Container)(({ theme }) => ({
   scrollBehavior: 'smooth',
 }));
 
-const StyledStack = styled(Stack)(() => ({
-  padding: 0,
-  width: '100%',
-}));
-
-const TopicTypography = styled(Typography)({
-  wordBreak: 'break-word',
-});
-
 const Chip = styled(MuiChip)(() => ({
   marginLeft: 0,
   borderRadius: 0,
   borderColor: 'transparent',
+  pointerEvents: 'none',
   '& .MuiChip-label': {
     paddingRight: 0,
     '&:first-letter': {
       textTransform: 'capitalize',
     },
   },
+}));
+
+const CustomFieldset = styled('fieldset')(({ theme }) => ({
+  border: 'none',
+  padding: 0,
+  margin: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  '& legend': {
+    width: '100%',
+    padding: 0,
+    margin: 0,
+    color: theme.palette.text.primary,
+  },
+}));
+
+const CustomForm = styled('form')(() => ({
+  width: '100%',
 }));
 
 interface IVoteResultContainerProps {
@@ -159,7 +171,8 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
     return t(`legal-vote-${key}-label`);
   };
 
-  const submitLegalVoteOption = () => {
+  const submitLegalVoteOption = (event: FormEvent) => {
+    event.preventDefault();
     if (!currentLegalVote || !currentLegalVote.id || !selectedLegalVoteOption) {
       return;
     }
@@ -180,74 +193,72 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   };
 
   const renderVoteResult = () => {
-    if (currentLegalVote?.votes !== undefined) {
+    if (currentLegalVote && currentLegalVote.votes !== undefined) {
       return (
-        <Grid item xs={12} container direction={'column'} rowSpacing={1}>
+        <>
           {Object.keys(currentLegalVote.votes).map(
             (voteKey, index) =>
-              (voteKey !== 'abstain' || (voteKey === 'abstain' && currentLegalVote?.enableAbstain)) && (
-                <Grid item key={index}>
-                  <VoteResult
-                    key={index}
-                    title={mapVoteKey(voteKey as VoteOption)}
-                    optionIndex={index}
-                    voteType={VoteType.LegalVote}
-                    voteData={{
-                      votePercentage:
-                        currentLegalVote?.votes && currentLegalVote?.votes[voteKey as VoteOption] != 0
-                          ? (currentLegalVote?.votes[voteKey as VoteOption] / numberOfVotes) * 100
-                          : 0,
-                      numberOfVotes,
-                      currentVotes: currentLegalVote?.votes ? currentLegalVote?.votes[voteKey as VoteOption] : 0,
-                      isVotable: Boolean(allowedToVote) && Boolean(currentLegalVote?.state === 'active'),
-                      legalVoteId: currentLegalVote?.id as LegalVoteId,
-                    }}
-                    isChecked={voteKey === selectedLegalVoteOption}
-                    onVote={() => {
-                      setSelectedLegalVoteOption(voteKey as VoteOption);
-                    }}
-                  />
-                </Grid>
+              (voteKey !== 'abstain' || (voteKey === 'abstain' && currentLegalVote.enableAbstain)) && (
+                <VoteResult
+                  key={index}
+                  title={mapVoteKey(voteKey as VoteOption)}
+                  optionIndex={index}
+                  voteType={VoteType.LegalVote}
+                  voteData={{
+                    votePercentage:
+                      currentLegalVote.votes && currentLegalVote.votes[voteKey as VoteOption] != 0
+                        ? (currentLegalVote.votes[voteKey as VoteOption] / numberOfVotes) * 100
+                        : 0,
+                    numberOfVotes,
+                    currentVotes: currentLegalVote.votes ? currentLegalVote.votes[voteKey as VoteOption] : 0,
+                    isVotable: Boolean(allowedToVote) && Boolean(currentLegalVote.state === 'active'),
+                    legalVoteId: currentLegalVote.id as LegalVoteId,
+                  }}
+                  isChecked={voteKey === selectedLegalVoteOption}
+                  onVote={() => {
+                    setSelectedLegalVoteOption(voteKey as VoteOption);
+                  }}
+                />
               )
           )}
-        </Grid>
+        </>
       );
     }
 
     return (
-      <Grid item xs={12} container rowSpacing={1} direction={'column'}>
+      <>
         {currentPoll &&
-          currentPoll?.choices &&
-          currentPoll?.choices.map((choice, index) => {
-            const result = currentPoll?.results?.find((result) => result.id === choice.id);
+          currentPoll.choices &&
+          currentPoll.choices.map((choice, index) => {
+            const result = currentPoll.results?.find((result) => result.id === choice.id);
             return (
-              <Grid item key={index}>
-                <VoteResult
-                  key={index}
-                  voteType={VoteType.Poll}
-                  title={choice.content || ''}
-                  optionIndex={index}
-                  voteData={{
-                    votePercentage: result !== undefined ? (result.count / numberOfVotes) * 100 : 0,
-                    numberOfVotes,
-                    currentVotes: result !== undefined ? result.count : 0,
-                    isVotable:
-                      typeof currentPoll?.voted === 'boolean'
-                        ? !currentPoll?.voted
-                        : Boolean(currentPoll?.state === 'active'),
-                    legalVoteId: currentPoll?.id,
-                  }}
-                  isChecked={currentPoll?.selectedChoiceId === choice.id}
-                  onVote={() => {
-                    dispatch(voted({ id: currentPoll?.id as PollId, selectedChoiceId: choice.id }));
-                    dispatch(pollVote.action({ pollId: currentPoll?.id as PollId, choiceId: choice.id }));
-                  }}
-                  showResult={currentPoll?.live || currentPoll?.state === 'finished'}
-                />
-              </Grid>
+              <VoteResult
+                key={index}
+                voteType={VoteType.Poll}
+                title={choice.content || ''}
+                optionIndex={index}
+                voteData={{
+                  votePercentage: result !== undefined ? (result.count / numberOfVotes) * 100 : 0,
+                  numberOfVotes,
+                  currentVotes: result !== undefined ? result.count : 0,
+                  isVotable:
+                    typeof currentPoll.voted === 'boolean'
+                      ? !currentPoll.voted
+                      : Boolean(currentPoll.state === 'active'),
+                  legalVoteId: currentPoll.id,
+                }}
+                isChecked={currentPoll.selectedChoiceId === choice.id}
+                onVote={() => {
+                  batch(() => {
+                    dispatch(voted({ id: currentPoll.id as PollId, selectedChoiceId: choice.id }));
+                    dispatch(pollVote.action({ pollId: currentPoll.id as PollId, choiceId: choice.id }));
+                  });
+                }}
+                showResult={currentPoll.live || currentPoll.state === 'finished'}
+              />
             );
           })}
-      </Grid>
+      </>
     );
   };
 
@@ -256,28 +267,13 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
       const liveTooltip = t('votes-result-live-tooltip');
       const notLiveTooltip = t('votes-result-not-live-tooltip');
       return (
-        <Grid item container alignItems={'flex-start'} justifyContent={'space-between'} spacing={0}>
-          {vote?.topic && (
-            <Grid item>
-              <TopicTypography>{vote?.topic}</TopicTypography>
-            </Grid>
-          )}
-          <Grid item>
-            {vote?.live ? (
-              <Tooltip title={liveTooltip}>
-                <TooltipIcon color={'green'} />
-              </Tooltip>
-            ) : (
-              <Tooltip title={notLiveTooltip}>
-                <TooltipIcon color={'red'} />
-              </Tooltip>
-            )}
-          </Grid>
-        </Grid>
+        <Box mt={1}>
+          <Tooltip title={vote?.live ? liveTooltip : notLiveTooltip}>
+            <TooltipIcon color={vote?.live ? 'green' : 'red'} />
+          </Tooltip>
+        </Box>
       );
     }
-
-    return vote?.topic && <TopicTypography>{vote?.topic}</TopicTypography>;
   };
 
   const getSubtitle = (vote: LegalVoteType | undefined) => {
@@ -335,40 +331,52 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
                 />
               )}
             </Box>
-            <IconButton onClick={closeResultWindow} aria-label="close-vote-results">
+            <IconButton onClick={closeResultWindow} aria-label={t('global-close-dialog')}>
               <CloseIcon />
             </IconButton>
           </Stack>
         </Grid>
-        <Grid item xs={12}>
-          <StyledStack>
-            <Typography variant={'h2'}>{vote?.name}</Typography>
-            {getSubtitle(vote as LegalVoteType) && (
-              <TopicTypography>{getSubtitle(vote as LegalVoteType)}</TopicTypography>
-            )}
+        <CustomForm onSubmit={submitLegalVoteOption} method="POST">
+          <CustomFieldset>
+            <legend>
+              {vote?.name && (
+                <Typography variant="h2" component="h3">
+                  {vote.name}
+                </Typography>
+              )}
+              {getSubtitle(vote as LegalVoteType) && (
+                <Typography variant="body1" component="h4">
+                  {getSubtitle(vote as LegalVoteType)}
+                </Typography>
+              )}
+              {vote?.topic && (
+                <Typography variant="body1" component="h4">
+                  {vote.topic}
+                </Typography>
+              )}
+            </legend>
             {renderLiveIndicator(vote as Vote)}
-          </StyledStack>
-        </Grid>
-        {renderVoteResult()}
-        {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
-          <Grid item xs={12} container justifyContent="flex-start">
-            <Typography color={'primary'} textAlign={'center'}>
-              {t('legal-vote-not-selected')}
-            </Typography>
-          </Grid>
-        )}
-        {currentLegalVote && allowedToVote && currentLegalVote.state === 'active' && (
-          <Grid item xs={12} pb={1} container justifyContent="flex-end">
-            <Button
-              data-testid="legal-vote-save-button"
-              type="button"
-              onClick={submitLegalVoteOption}
-              disabled={Boolean(currentLegalVote?.votedAt)}
-            >
-              {t('legal-vote-form-button-save')}
-            </Button>
-          </Grid>
-        )}
+            {renderVoteResult()}
+          </CustomFieldset>
+          {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
+            <Grid item xs={12} container justifyContent="flex-start">
+              <Typography color={'primary'} textAlign={'center'}>
+                {t('legal-vote-not-selected')}
+              </Typography>
+            </Grid>
+          )}
+          {currentLegalVote && allowedToVote && currentLegalVote.state === 'active' && (
+            <Grid item xs={12} my={1} container justifyContent="flex-end">
+              <Button
+                data-testid="legal-vote-save-button"
+                type="submit"
+                disabled={Boolean(currentLegalVote?.votedAt) || !allowedToVote}
+              >
+                {t('legal-vote-form-button-save')}
+              </Button>
+            </Grid>
+          )}
+        </CustomForm>
         {currentLegalVote?.votedAt && allowedToVote && (
           <Grid item xs={12}>
             <VoteResultDate
