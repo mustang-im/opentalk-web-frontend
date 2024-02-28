@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FormControlLabel as MuiFormControlLabel, Stack, Switch, SwitchProps, Typography, styled } from '@mui/material';
+import { FormControlLabel as MuiFormControlLabel, Stack, Switch, SwitchProps, styled } from '@mui/material';
 
-interface LabeledSwitchProps {
-  titleLabel: string;
+interface MeetingFormSwitchProps {
   switchProps: SwitchProps;
   checked: boolean;
   switchValueLabel: string;
@@ -17,13 +16,12 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   width: 'max-content',
 }));
 
-const LabeledSwitch = ({ titleLabel, switchProps, checked, switchValueLabel }: LabeledSwitchProps) => {
+const MeetingFormSwitch = ({ switchProps, checked, switchValueLabel }: MeetingFormSwitchProps) => {
   return (
     <Stack>
-      <Typography pb={1.3}>{titleLabel}</Typography>
       <FormControlLabel checked={checked} control={<Switch {...switchProps} />} label={switchValueLabel} />
     </Stack>
   );
 };
 
-export default LabeledSwitch;
+export default MeetingFormSwitch;

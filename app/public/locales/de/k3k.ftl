@@ -238,11 +238,10 @@ chat-disabled-tooltip = Der Chat wurde durch den Moderator deaktiviert
 turn-handraises-off-notification = Der Moderator hat das Handheben deaktiviert
 turn-handraises-on-notification = Der Moderator hat das Handheben aktiviert
 
-waiting-room-participant-label = Warteraum
-
 in-waiting-room = Sie befinden sich gerade im Warteraum
 in-waiting-room-ready = Sie sind freigeschaltet
 
+waiting-room-participant-list-label = Warteraum
 approve-all-participants-from-waiting = Alles genehmigen
 
 moderationbar-button-home-tooltip = Home
@@ -739,21 +738,17 @@ dashboard-meeting-textfield-title-placeholder = Mein neues Meeting
 dashboard-meeting-textfield-details = Details - optional
 dashboard-meeting-textfield-details-placeholder = Worum geht es im Meeting?
 dashboard-meeting-to-step = Zu Schritt {$step}
-dashboard-meeting-date-and-time = Datum & Uhrzeit
 dashboard-meeting-date-start = von
 dashboard-meeting-date-end = bis
 dashboard-meeting-date-field-error-invalid-value = Das Startdatum und das Enddatum müssen gültige Werte haben
 dashboard-meeting-date-field-error-duration = Das Meeting kann nicht vor dem Start enden
 dashboard-meeting-date-field-error-future = Das Startdatum muss in der Zukunft beginnen
-dashboard-meeting-time-independent-yes = Zeitunabhängiges Meeting
-dashboard-meeting-time-independent-no = Zeitabhängiges Meeting
+dashboard-meeting-date-and-time-switch = Datum & Uhrzeit festlegen
 dashboard-meeting-time-independent-tooltip = Sie können ein Meeting mit einem genauen Zeitlimit oder ohne Zeitbegrenzung erstellen.
 dashboard-meeting-notification-success-create = Das Meeting {$event} wurde erfolgreich erstellt!
 dashboard-meeting-notification-success-edit = Die Änderungen an {$event} wurden erfolgreich gespeichert!
 dashboard-meeting-notification-error = Es ist ein Fehler aufgetreten. Versuche es bitte später erneut.
-dashboard-meeting-switch-enabled = Aktiviert
-dashboard-meeting-switch-disabled = Deaktiviert
-dashboard-meeting-shared-folder-label = Geteilter Ordner
+dashboard-meeting-shared-folder-switch = Geteilten Ordner erstellen
 dashboard-meeting-shared-folder-create-error-message = Es ist leider ein Fehler aufgetreten, der geteilte Ordner konnte nicht erstellt werden.
 dashboard-meeting-shared-folder-create-retry-error-message = Leider konnte der geteilte Ordner nicht erstellt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt nocheinmal.
 dashboard-meeting-shared-folder-delete-error-message = Es ist leider ein Fehler aufgetreten, der geteilte Ordner konnte nicht gelöscht werden.
@@ -763,7 +758,7 @@ dashboard-meeting-shared-folder-error-retry-button = Wiederholen
 dashboard-meeting-shared-folder-error-ok-button = Ok
 dashboard-meeting-grant-moderator-rights = Moderatorenrechte gewähren
 dashboard-meeting-revoke-moderator-rights = Moderatorenrechte entziehen
-dashboard-meeting-livestream-label = Livestream
+dashboard-meeting-livestream-switch = Livestream
 dashboard-meeting-livestream-platform-label = Platform
 dashboard-meeting-livestream-platform-name-label = Name
 dashboard-meeting-livestream-platform-name-placeholder = Name eingeben
@@ -779,6 +774,8 @@ dashboard-meeting-livestream-public-url-required = Dies ist ein Pflichtfeld
 dashboard-meeting-livestream-streaming-key-label = Streamschlüssel
 dashboard-meeting-livestream-streaming-key-placeholder = Streamschlüssel eingeben
 dashboard-meeting-livestream-streaming-key-required = Dies ist ein Pflichtfeld
+dashboard-meeting-waiting-room-switch = Warteraum
+
 
 streaming-targets-request-error = Streaming-Ziel konnte nicht hinzugefügt werden
 
