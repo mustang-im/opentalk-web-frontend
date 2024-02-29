@@ -35,6 +35,7 @@ import FullscreenViewIcon from './FullscreenViewIcon';
 import GongIcon from './GongIcon';
 import GridViewIcon from './GridViewIcon';
 import HelpIcon from './HelpIcon';
+import HelpSquareIcon from './HelpSquareIcon';
 import HiddenIcon from './HiddenIcon';
 import HomeIcon from './HomeIcon';
 import InfoIcon from './InfoIcon';
@@ -121,6 +122,7 @@ export {
   GongIcon,
   GridViewIcon,
   HelpIcon,
+  HelpSquareIcon,
   HiddenIcon,
   HomeIcon,
   InfoIcon,
