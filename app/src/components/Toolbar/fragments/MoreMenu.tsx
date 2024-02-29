@@ -19,7 +19,7 @@ import {
   RaiseHandOnIcon,
   CloseIcon,
   DoneIcon,
-  HelpIcon,
+  HelpSquareIcon,
   TrashIcon,
   RecordingsIcon,
   notifications,
@@ -134,7 +134,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const shortcutDialogItem = {
     label: 'more-menu-keyboard-shortcuts',
     // TODO: find appropriate icon.
-    icon: <HelpIcon />,
+    icon: <HelpSquareIcon />,
     action: () => {
       onClose();
       setShortcutsVisibilityState(true);

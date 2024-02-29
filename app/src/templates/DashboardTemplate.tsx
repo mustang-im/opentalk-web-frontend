@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon, HelpIcon } from '@opentalk/common';
+import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon, HelpSquareIcon } from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import React, { useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
@@ -77,7 +77,7 @@ const getRoutes = (useProviderSettings: boolean) => {
       name: 'dashboard-meetings',
     },
     {
-      icon: <HelpIcon />,
+      icon: <HelpSquareIcon />,
       path: 'help',
       name: 'dashboard-help',
       childRoutes: [
