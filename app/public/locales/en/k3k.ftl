@@ -125,7 +125,6 @@ chat-error-invalid-participant-selection = The user addressed by this message is
 chat-new-private-message = You have a new message
 chat-new-group-message = You have a new message
 chat-message-error-max-input = The message is too long (max {$maxCharacters} chars)
-event_chat = Event Chat
 chatinput-placeholder = type a message...
 chat-input-error-required = Empty messages are not allowed
 chat-no-search-results = No messages matching the criteria
@@ -134,7 +133,6 @@ chat-delete-global-messages-success = The global chat has been deleted by the mo
 chat-open-emoji-picker = open emoji picker
 chat-close-emoji-picker = close emoji picker
 chat-submit-button = submit chat message
-chat-smiley-label = smiling face emoji
 
 no-group-participants-label = without group
 button-back-messages = Back

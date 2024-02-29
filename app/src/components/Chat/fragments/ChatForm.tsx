@@ -2,9 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputAdornment, styled, Tooltip, Popover } from '@mui/material';
-import { AdornmentIconButton } from '@opentalk/common';
-import { GroupId, ParticipantId, TargetId, ChatScope } from '@opentalk/common';
-import { SendMessageIcon } from '@opentalk/common';
+import {
+  GroupId,
+  ParticipantId,
+  TargetId,
+  ChatScope,
+  VisuallyHiddenTitle,
+  SendMessageIcon,
+  EmojiIcon,
+  AdornmentIconButton,
+} from '@opentalk/common';
 import Picker, {
   EmojiClickData,
   SkinTones,
@@ -259,17 +266,14 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
           <InputAdornment position="start">
             <EmojiIconButton
               ref={emojiButton}
-              aria-label={t(`chat-${openPicker ? 'close' : 'open'}-emoji-picker`)}
-              aria-pressed={openPicker}
               onClick={() => setOpenPicker(!openPicker)}
               type="button"
               edge="start"
               disabled={!isChatEnabled}
               parentHasFocus={hasFocus}
             >
-              <span role="img" aria-label={t('chat-smiley-label')}>
-                😋
-              </span>
+              <EmojiIcon />
+              <VisuallyHiddenTitle component="span" label={`chat-${openPicker ? 'close' : 'open'}-emoji-picker`} />
             </EmojiIconButton>
           </InputAdornment>
         }

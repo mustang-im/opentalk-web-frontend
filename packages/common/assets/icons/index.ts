@@ -28,6 +28,7 @@ import DebriefingIcon from './DebriefingIcon';
 import DoneIcon from './DoneIcon';
 import DurationIcon from './DurationIcon';
 import EditIcon from './EditIcon';
+import EmojiIcon from './EmojiIcon';
 import EndCallIcon from './EndCallIcon';
 import ErrorIcon from './ErrorIcon';
 import FaqIcon from './FaqIcon';
@@ -119,6 +120,7 @@ export {
   DoneIcon,
   DurationIcon,
   EditIcon,
+  EmojiIcon,
   EndCallIcon,
   ErrorIcon,
   FaqIcon,
