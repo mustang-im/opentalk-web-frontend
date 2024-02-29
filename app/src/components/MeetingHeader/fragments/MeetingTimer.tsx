@@ -14,7 +14,7 @@ const Container = styled(Stack)(({ theme }) => ({
   justifyContent: 'center',
   height: '100%',
   //For mobile MeetingTimer is used on it is own so the background color and rounding is handled here.
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     background: theme.palette.background.video,
     borderRadius: '0.25rem',
     '& .MuiTypography-root': {

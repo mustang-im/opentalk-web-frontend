@@ -8,9 +8,9 @@ import DesktopInnerLayout from './DesktopInnerLayout';
 
 const InnerLayout = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumDevice = useMediaQuery(theme.breakpoints.down('md'));
 
-  return isMobile ? <MobileInnerLayout /> : <DesktopInnerLayout />;
+  return isMediumDevice ? <MobileInnerLayout /> : <DesktopInnerLayout />;
 };
 
 export default InnerLayout;
