@@ -365,6 +365,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             values.sharedFolder = false;
             setIsFirstTryToCreateSharedFolder(true);
           },
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': t('dashboard-meeting-shared-folder-create-error-message'),
+          },
         });
         return false;
       }
@@ -399,6 +403,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
           onCancel: () => {
             values.sharedFolder = true;
             setIsFirstTryToDeleteSharedFolder(true);
+          },
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': t('dashboard-meeting-shared-folder-delete-error-message'),
           },
         });
         return false;

@@ -91,7 +91,7 @@ const BinaryActionNotification = React.forwardRef<HTMLDivElement, BinaryActionNo
     }
 
     return (
-      <SnackbarContent ref={ref} role="alertdialog" className={className} style={style}>
+      <SnackbarContent ref={ref} role="alert" className={className} style={style}>
         <AlertBox type={type}>
           <Box display="flex" gap={1} flex={1}>
             <Box display="flex" flexDirection="column" flex={1}>

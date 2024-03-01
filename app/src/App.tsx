@@ -49,14 +49,18 @@ const App = () => {
           closeSnackbar(safariWarningNotificationKey);
         }
         safariWarningNotificationKey = `${localStorageItems.safariNotificationKey}-${i18n.language}`;
-
+        const message = t('safari-warning-notification');
         notificationAction({
-          msg: t('safari-warning-notification'),
+          msg: message,
           variant: 'warning',
           cancelBtnText: t('global-ok'),
           persist: true,
           key: safariWarningNotificationKey,
           onCancel: () => localStorage.setItem(localStorageItems.safariNotificationKey, now.toISOString()),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': message,
+          },
         });
       }
     }

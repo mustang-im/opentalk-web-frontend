@@ -1,6 +1,6 @@
 {
     "name": "@opentalk/common",
-    "version": "1.0.24",
+    "version": "1.0.25",
     "author": "OpenTalk GmbH <mail@opentalk.eu>",
     "license": "EUPL-1.2",
     "main": "./index.js",

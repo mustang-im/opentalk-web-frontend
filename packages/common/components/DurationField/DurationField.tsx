@@ -159,6 +159,8 @@ export const DurationField = ({
         {renderButtonText()}
       </Button>
       <Popover
+        role="dialog"
+        aria-labelledby="duration-field-popover-title"
         open={open}
         onClose={handlePopoverClose}
         anchorEl={anchorEl}
@@ -172,7 +174,7 @@ export const DurationField = ({
         }}
       >
         <Container spacing={2}>
-          <MenuTitle>{t('field-duration-button-text')}</MenuTitle>
+          <MenuTitle id="duration-field-popover-title">{t('field-duration-button-text')}</MenuTitle>
           {renderDurationOptions()}
           {showCustomDurationField && (
             <Stack spacing={1}>
@@ -189,7 +191,12 @@ export const DurationField = ({
             <Button variant={'text'} size={'small'} onClick={handlePopoverClose}>
               {t('field-duration-button-close')}
             </Button>
-            <Button size={'small'} onClick={handleSave}>
+            <Button
+              size="small"
+              onClick={handleSave}
+              /* When session duration popover is open we want to focus it so screen reader can tell the content. */
+              autoFocus
+            >
               {t('field-duration-button-save')}
             </Button>
           </Stack>

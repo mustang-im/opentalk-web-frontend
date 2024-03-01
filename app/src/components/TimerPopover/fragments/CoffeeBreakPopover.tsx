@@ -38,6 +38,8 @@ const CoffeeBreakPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
 
   return (
     <Popover
+      role="dialog"
+      aria-labelledby="transition-modal-title"
       anchorEl={anchorEl}
       open={Boolean(timerActive)}
       hideBackdrop
