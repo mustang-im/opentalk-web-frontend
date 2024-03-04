@@ -31,6 +31,9 @@ const StyledSnackbarContent = styled(SnackbarContent)(({ theme }) => ({
   background: theme.palette.info.dark,
   padding: theme.spacing(1, 2),
   borderRadius: theme.borderRadius.medium,
+  '& .MuiTypography-root': {
+    fontSize: '1rem',
+  },
 }));
 
 const BreakoutRoomNotification = React.forwardRef<HTMLDivElement, IJoinNotificationProps>(
@@ -61,7 +64,9 @@ const BreakoutRoomNotification = React.forwardRef<HTMLDivElement, IJoinNotificat
         <Stack spacing={1}>
           <Box display="flex" alignItems="center">
             <Icon width="2rem" height="2rem" />
-            <Typography ml={2}>{message}</Typography>
+            <Typography variant="h3" ml={2}>
+              {message}
+            </Typography>
           </Box>
           <Box display="flex" pl={6}>
             {renderActions()}
