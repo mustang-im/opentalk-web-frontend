@@ -4,23 +4,29 @@
 import {
   Box,
   Button,
-  Checkbox,
+  Radio,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   FormControlLabel,
+  Checkbox,
   Grid,
   IconButton,
+  RadioGroup,
   Typography,
+  FormLabel,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
-import { RoomId } from '@opentalk/rest-api-rtk-query';
+import { DateTimeWithTimezone, Event, EventType, RoomId, EventStatus } from '@opentalk/rest-api-rtk-query';
+import { EventInstanceId } from '@opentalk/rest-api-rtk-query/src/types/event';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { useUpdateEventInstanceMutation } from '../../api/rest';
 import { useAppDispatch } from '../../hooks';
 import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { hangUp } from '../../store/commonActions';
@@ -30,89 +36,166 @@ export interface CloseMeetingDialogProps {
   open: boolean;
   onClose: () => void;
   container: HTMLElement | null;
+  eventData?: Event;
 }
 
-export const CloseMeetingDialog = ({ open, onClose }: CloseMeetingDialogProps) => {
+enum DeletionType {
+  One = 'one',
+  All = 'all',
+}
+
+/**
+ * Generates an instanceId by using todays date combined
+ * with the starting time of the event. Takes into account the
+ * current timezone of the user clicking the End Call button.
+ * @param startTime
+ * @returns a string formatted as a valid instanceId
+ */
+export const generateInstanceId = (startTime: DateTimeWithTimezone): EventInstanceId => {
+  const formatTimeString = (number: number) => String(number).padStart(2, '0');
+
+  const startDate = new Date(startTime.datetime);
+  const now = new Date();
+
+  const hours = formatTimeString(startDate.getUTCHours());
+  const minutes = formatTimeString(startDate.getUTCMinutes());
+  const seconds = formatTimeString(startDate.getUTCSeconds());
+  const month = formatTimeString(now.getUTCMonth() + 1);
+  const day = formatTimeString(now.getUTCDate());
+  const year = now.getUTCFullYear();
+
+  const timeString = `${hours}${minutes}${seconds}Z`;
+  const dateString = `${year}${month}${day}T`;
+
+  return `${dateString}${timeString}` as EventInstanceId;
+};
+
+export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDialogProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { roomId } = useParams<'roomId'>() as {
     roomId: RoomId;
   };
+  const [updateEventInstance] = useUpdateEventInstanceMutation();
 
   const [disableLeaveAndDeleteButton, setDisableLeaveAndDeleteButton] = useState(true);
+  const [deletionMode, setDeletionMode] = useState<DeletionType | null>(null);
 
-  const checkboxHandling = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckbox = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setDisableLeaveAndDeleteButton(!event.target.checked);
   }, []);
 
-  const hangUpHandler = useCallback(() => dispatch(hangUp()), [dispatch]);
+  const handleDeletionModeChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setDeletionMode((event.target as HTMLInputElement).value as DeletionType);
+    setDisableLeaveAndDeleteButton(!event.target.checked);
+  }, []);
 
-  const leaveAndDeleteAllData = useCallback(async () => {
+  const handleHangUp = useCallback(() => dispatch(hangUp()), [dispatch]);
+
+  const handleLeaveButton = async () => {
     try {
-      await dispatch(deleteRoomMetaData(roomId));
-      hangUpHandler();
+      switch (eventData?.type) {
+        case EventType.Single:
+          await dispatch(deleteRoomMetaData(roomId));
+          break;
+        case EventType.Recurring:
+          if (deletionMode === 'one') {
+            updateEventInstance({
+              eventId: eventData.id,
+              instanceId: generateInstanceId(eventData.startsAt),
+              status: EventStatus.Cancelled,
+            });
+          } else if (deletionMode === 'all') {
+            await dispatch(deleteRoomMetaData(roomId));
+          }
+          break;
+      }
+      handleHangUp();
       navigate('/dashboard');
     } catch (e) {
       console.error('error on delete room meta data: %s', JSON.stringify(e));
       notifications.error(t('meeting-delete-metadata-submit-error'));
     }
-  }, [t, navigate, hangUpHandler, dispatch, roomId]);
+  };
 
-  const fullscreenHandler = useFullscreenContext();
+  const singleConfigurationForm = () => (
+    <DialogContent>
+      <Typography>{t(`meeting-delete-metadata-dialog-message`)}</Typography>
+      <Grid mt={1}>
+        <FormControlLabel
+          control={<Checkbox checked={!disableLeaveAndDeleteButton} onChange={handleCheckbox} />}
+          label={t(`meeting-delete-metadata-dialog-checkbox`)}
+          labelPlacement={'end'}
+        />
+      </Grid>
+    </DialogContent>
+  );
+  const recurringConfigurationForm = () => (
+    <DialogContent>
+      <Typography>{t(`meeting-delete-recurring-metadata-dialog-message`)}</Typography>
+      <Grid mt={1}>
+        <FormControl>
+          <FormLabel></FormLabel>
+          <RadioGroup onChange={handleDeletionModeChange}>
+            <FormControlLabel
+              value={DeletionType.One}
+              control={<Radio />}
+              label={t('meeting-delete-recurring-dialog-radio-single')}
+            />
+            <FormControlLabel
+              value={DeletionType.All}
+              control={<Radio />}
+              label={t('meeting-delete-recurring-dialog-radio-all')}
+            />
+          </RadioGroup>
+        </FormControl>
+      </Grid>
+    </DialogContent>
+  );
+
+  const getConfigurationForm = () => {
+    switch (eventData?.type) {
+      case EventType.Single:
+        return singleConfigurationForm();
+      case EventType.Recurring:
+        return recurringConfigurationForm();
+    }
+  };
+
+  const handleFullscreen = useFullscreenContext();
 
   useEffect(() => {
-    fullscreenHandler.setHasActiveOverlay(true);
+    handleFullscreen.setHasActiveOverlay(true);
 
     return () => {
-      fullscreenHandler.setHasActiveOverlay(false);
+      handleFullscreen.setHasActiveOverlay(false);
     };
   }, []);
 
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth container={fullscreenHandler.rootElement}>
-      <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
+    <>
+      <Dialog open={open} maxWidth="sm" fullWidth container={handleFullscreen.rootElement}>
+        <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
 
-      <Box position="absolute" top={0} right={0}>
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
+        <Box position="absolute" top={0} right={0}>
+          <IconButton onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
 
-      <DialogContent>
-        <Typography>{t(`meeting-delete-metadata-dialog-message`)}</Typography>
+        {getConfigurationForm()}
 
-        <Grid mt={1}>
-          <FormControlLabel
-            key="checkbox-confirm"
-            control={
-              <Checkbox
-                checked={!disableLeaveAndDeleteButton}
-                id="checkbox-confirm"
-                data-testid="checkbox-confirm"
-                onChange={checkboxHandling}
-              />
-            }
-            label={t(`meeting-delete-metadata-dialog-checkbox`)}
-            labelPlacement={'end'}
-          />
-        </Grid>
-      </DialogContent>
-
-      <DialogActions>
-        <Button
-          onClick={leaveAndDeleteAllData}
-          color="secondary"
-          variant="contained"
-          disabled={disableLeaveAndDeleteButton}
-        >
-          {t('meeting-delete-metadata-button-leave-and-delete')}
-        </Button>
-        <Button onClick={hangUpHandler} color="primary" variant="contained">
-          {t('meeting-delete-metadata-button-leave-without-delete')}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        <DialogActions>
+          <Button onClick={handleLeaveButton} color="error" variant="contained" disabled={disableLeaveAndDeleteButton}>
+            {t('meeting-delete-metadata-button-leave-and-delete')}
+          </Button>
+          <Button onClick={handleHangUp} color="primary" variant="contained">
+            {t('meeting-delete-metadata-button-leave-without-delete')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

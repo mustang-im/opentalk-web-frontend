@@ -7,12 +7,13 @@ import {
   EventException,
   InviteStatus,
   isEvent,
+  isEventException,
   isRecurringEvent,
   isTimelessEvent,
   RecurringEvent,
 } from '@opentalk/rest-api-rtk-query';
 import { addMonths, subMonths } from 'date-fns';
-import { cloneDeep, orderBy } from 'lodash';
+import { cloneDeep, findIndex, orderBy } from 'lodash';
 
 import { getISOStringWithoutMilliseconds } from './timeUtils';
 
@@ -50,10 +51,15 @@ const mapDateToRecurringEvent = (recurrenceDate: Date, initialEvent: RecurringEv
   return recurringEvent;
 };
 
-const createRecurrenceEventInstances = (
+const isRecurringEventException = (event: RecurringEvent, exceptions: EventException[]) => {
+  return findIndex(exceptions, { recurringEventId: event.id, originalStartsAt: event.startsAt }) != -1;
+};
+
+const createRecurringEventInstances = (
   event: RecurringEvent,
   maxMonths: number = DEFAULT_MONTHS_CONSIDERED,
-  filter?: TimePerspectiveFilter
+  filter?: TimePerspectiveFilter,
+  exceptions?: EventException[]
 ) => {
   const today = new Date();
   const recurrenceStartDate = new Date(event.startsAt.datetime);
@@ -80,9 +86,9 @@ const createRecurrenceEventInstances = (
 
   const generatedRecurrenceDates = rule.between(windowStartDate, windowEndDate, true);
 
-  return generatedRecurrenceDates.map((generatedRecurrenceDate) =>
-    mapDateToRecurringEvent(generatedRecurrenceDate, event)
-  );
+  return generatedRecurrenceDates
+    .map((generatedRecurrenceDate) => mapDateToRecurringEvent(generatedRecurrenceDate, event))
+    .filter((recurringEvent) => (exceptions ? !isRecurringEventException(recurringEvent, exceptions) : true));
 };
 
 export enum SortDirection {
@@ -104,25 +110,27 @@ export const orderEventsByDate = (events: Event[], sortDirection: SortDirection 
     [sortDirection]
   );
 
-export const appendRecurrenceEventInstances = (
+export const appendRecurringEventInstances = (
   eventList: (EventException | Event)[],
   filterDeclined?: boolean,
   maxMonths?: number,
   filter?: TimePerspectiveFilter
 ): Event[] => {
   const events = Array<Event>();
+  const exceptions = eventList.filter((event): event is EventException => isEventException(event));
 
   eventList
     .filter((event): event is Event => isEvent(event))
     .filter((event) => (filterDeclined ? event.inviteStatus !== InviteStatus.Declined : true))
     .forEach((event) => {
       if (!isTimelessEvent(event) && isRecurringEvent(event)) {
-        createRecurrenceEventInstances(event, maxMonths, filter).forEach((event) => {
-          events.push(event);
+        createRecurringEventInstances(event, maxMonths, filter, exceptions).forEach((recurringEvent) => {
+          events.push(recurringEvent);
         });
       } else {
         events.push(event);
       }
     });
+
   return events;
 };

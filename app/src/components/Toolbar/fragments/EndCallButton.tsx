@@ -4,12 +4,12 @@
 import { styled } from '@mui/material';
 import { EndCallIcon } from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
-import { RoomId } from '@opentalk/rest-api-rtk-query';
+import { EventId, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useGetMeQuery, useGetRoomQuery } from '../../../api/rest';
+import { useGetMeQuery, useGetRoomQuery, useGetEventQuery } from '../../../api/rest';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { hangUp } from '../../../store/commonActions';
@@ -24,6 +24,7 @@ const EndCallButton = () => {
   const { roomId } = useParams<'roomId'>() as {
     roomId: RoomId;
   };
+
   const isLoggedInUser = useAppSelector(selectIsAuthenticated);
   const { data: me } = useGetMeQuery(undefined, { skip: !isLoggedInUser });
   const { data: roomData } = useGetRoomQuery(roomId, { skip: !isLoggedInUser });
@@ -32,7 +33,9 @@ const EndCallButton = () => {
   const isMeetingCreator =
     roomData?.createdBy && isRegisteredUser(roomData.createdBy) && me?.id === roomData.createdBy.id;
   const eventInfo = useAppSelector(selectEventInfo);
+  const requiresConfirmDialog = isMeetingCreator && !eventInfo?.isAdhoc;
   const fullscreenContext = useFullscreenContext();
+  const { data: eventData } = useGetEventQuery({ eventId: eventInfo?.id as EventId }, { skip: !requiresConfirmDialog });
 
   const StyledEndCallButton = styled(ToolbarButton)(({ theme }) => ({
     background: theme.palette.error.main,
@@ -54,7 +57,7 @@ const EndCallButton = () => {
   }, [showConfirmDialog]);
 
   const handleEndCall = () => {
-    if (isMeetingCreator && !eventInfo?.isAdhoc) {
+    if (requiresConfirmDialog) {
       showConfirmDialog(true);
       fullscreenContext.setHasActiveOverlay(true);
     } else {
@@ -74,7 +77,12 @@ const EndCallButton = () => {
       </StyledEndCallButton>
 
       {isConfirmDialogVisible && (
-        <CloseMeetingDialog open={isConfirmDialogVisible} onClose={onClose} container={fullscreenContext.rootElement} />
+        <CloseMeetingDialog
+          open={isConfirmDialogVisible}
+          onClose={onClose}
+          container={fullscreenContext.rootElement}
+          eventData={eventData}
+        />
       )}
     </>
   );

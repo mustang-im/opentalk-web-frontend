@@ -845,10 +845,13 @@ beta-flag-tooltip-text = You are using the <demoLink>beta version</demoLink> of 
 
 tooltip-empty-favourites = You can mark favourites over the menu in the card.
 meeting-delete-metadata-dialog-title = Leave Meeting
-meeting-delete-metadata-dialog-message = Should this meeting be removed from the dashboard? This will permanently delete all information about this meeting (incl. recordings, protocols, voting results etc.)!
-meeting-delete-metadata-dialog-checkbox = Confirm deletion
-meeting-delete-metadata-button-leave-and-delete = Leave and delete all data
-meeting-delete-metadata-button-leave-without-delete = Leave without deleting data
+meeting-delete-metadata-dialog-message = Should this meeting be deleted? The meeting will be immediately removed from the dashboard.
+meeting-delete-recurring-metadata-dialog-message = Should this meeting be deleted? This meeting is part of a meeting series. You can delete the entire series, including all data (recordings, meeting minutes and voting results) or just one meeting occurrence where all data is preserved.
+meeting-delete-metadata-dialog-checkbox = Delete this meeting
+meeting-delete-recurring-dialog-radio-single = Delete only this meeting
+meeting-delete-recurring-dialog-radio-all = Delete the entire meeting series (including attached data)
+meeting-delete-metadata-button-leave-and-delete = Yes, leave and delete
+meeting-delete-metadata-button-leave-without-delete = No, just leave
 meeting-delete-metadata-submit-error =
     An error occurred while deleting the data.
     Please try again later!

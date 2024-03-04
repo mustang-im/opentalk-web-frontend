@@ -16,7 +16,7 @@ import MeetingCard from '../../../components/MeetingCard';
 import PaymentStatusBanner from '../../../components/PaymentStatusBanner';
 import StartMeetingImage from '../../../components/StartMeetingImage';
 import { useHeader } from '../../../templates/DashboardTemplate';
-import { appendRecurrenceEventInstances, TimePerspectiveFilter } from '../../../utils/eventUtils';
+import { appendRecurringEventInstances, TimePerspectiveFilter } from '../../../utils/eventUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
 
 const Container = styled('div')(({ theme }) => ({
@@ -156,7 +156,7 @@ const Home = () => {
       let tiEvents = Array.from(timeIndependentEvents.data);
       if (upcomingEvents?.data) {
         const ucEvents = Array.from(upcomingEvents.data);
-        const expandedEvents = appendRecurrenceEventInstances(
+        const expandedEvents = appendRecurringEventInstances(
           ucEvents,
           true,
           maxConsideredMonths,
