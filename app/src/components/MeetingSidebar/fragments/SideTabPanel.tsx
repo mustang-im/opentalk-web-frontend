@@ -16,6 +16,7 @@ interface SideTabPanelProps {
 const TabTitle = styled(Typography)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
   fontSize: '1.25rem',
+  margin: 0,
 }));
 
 const TabContainer = styled('div')({
@@ -40,7 +41,7 @@ const SideTabPanel = forwardRef<unknown, SideTabPanelProps>(({ children, value, 
       maxHeight={'100%'}
       overflow="hidden"
     >
-      {tabTitle && <TabTitle>{tabTitle}</TabTitle>}
+      {tabTitle && <TabTitle variant="h3">{tabTitle}</TabTitle>}
       {!hidden && <TabContainer>{children}</TabContainer>}
     </Box>
   );
