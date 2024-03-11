@@ -148,7 +148,13 @@ export const DurationField = ({
 
   return (
     <Box>
-      <Button variant={'text'} onClick={handlePopoverOpen} {...ButtonProps} startIcon={<StyledClockIcon />}>
+      <Button
+        variant={'text'}
+        onClick={handlePopoverOpen}
+        {...ButtonProps}
+        startIcon={<StyledClockIcon />}
+        aria-label={`${t('global-duration')}: ${renderButtonText()}`}
+      >
         {renderButtonText()}
       </Button>
       <Popover

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Stack, styled, Switch, Typography } from '@mui/material';
+import { Button, Stack, styled, Switch, Typography, Box } from '@mui/material';
 import {
   formikDurationFieldProps,
   formikProps,
@@ -113,16 +113,18 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   return (
     <Container>
       <Stack spacing={2} mb={2}>
-        <Typography>{t('global-duration')}</Typography>
-        <DurationField
-          {...formikDurationFieldProps('duration', formik, defaultValue)}
-          durationOptions={durationOptions}
-          ButtonProps={{
-            size: 'small',
-          }}
-          min={min}
-          allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
-        />
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography>{t('global-duration')}</Typography>
+          <DurationField
+            {...formikDurationFieldProps('duration', formik, defaultValue)}
+            durationOptions={durationOptions}
+            ButtonProps={{
+              size: 'small',
+            }}
+            min={min}
+            allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
+          />
+        </Box>
 
         {timerStyle === TimerStyle.Normal && (
           <>
