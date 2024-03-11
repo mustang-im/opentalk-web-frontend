@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
 import { PollFormValues, savePollFormValues } from '../../../store/slices/pollSlice';
 import { selectCurrentRoomMode } from '../../../store/slices/roomSlice';
+import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 import AnswersFormElement from './AnswersFormElement';
 
 interface ICreatePollForm {
@@ -111,13 +112,13 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
           </Box>
           <Box flex={1} overflow="auto">
             <Box display="flex" flexDirection="column">
-              <Box marginBottom={1}>
+              <DurationFieldWrapper marginBottom={1}>
                 <DurationField
                   {...formikDurationFieldProps('duration', formik)}
                   durationOptions={[1, 2, 5, 'custom']}
                   min={1}
                 />
-              </Box>
+              </DurationFieldWrapper>
               <Box marginBottom={1}>
                 <CommonFormItem
                   {...formikSwitchProps('live', formik)}

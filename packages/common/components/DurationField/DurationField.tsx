@@ -22,7 +22,7 @@ import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils';
 import { ErrorFormMessage } from '../ErrorFormMessage';
 
 export type DurationValueOptions = number | 'custom' | null;
-interface IDurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue {
+interface DurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue {
   name: string;
   /**
    * Options:
@@ -75,7 +75,7 @@ export const DurationField = ({
   helperText,
   min = 1,
   allowEmpty,
-}: IDurationFieldProps) => {
+}: DurationFieldProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
   const [customDurationFieldValue, setCustomDurationFieldValue] = React.useState<number | null>(
@@ -98,6 +98,7 @@ export const DurationField = ({
   };
 
   const renderButtonText = () => (value ? `${value} min` : t('field-duration-unlimited-time'));
+  const getButtonAriaLabel = () => `${t('global-duration')} ${(value ? `${value} minute` : t('field-duration-unlimited-time')) }`;
 
   const getChipLabel = (duration: DurationValueOptions) => {
     switch (duration) {
@@ -149,11 +150,11 @@ export const DurationField = ({
   return (
     <Box>
       <Button
-        variant={'text'}
+        variant='text'
         onClick={handlePopoverOpen}
         {...ButtonProps}
         startIcon={<StyledClockIcon />}
-        aria-label={`${t('global-duration')}: ${renderButtonText()}`}
+        aria-label={getButtonAriaLabel()}
       >
         {renderButtonText()}
       </Button>
@@ -176,7 +177,7 @@ export const DurationField = ({
           {showCustomDurationField && (
             <Stack spacing={1}>
               <NumberInput
-                type={'number'}
+                type='number'
                 inputProps={{ min }}
                 onChange={handleInputChange}
                 value={customDurationFieldValue}

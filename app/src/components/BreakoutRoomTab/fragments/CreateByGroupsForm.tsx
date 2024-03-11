@@ -9,6 +9,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
+import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 
 const GridItem = styled(Grid)({
   display: 'inline-flex',
@@ -32,7 +33,9 @@ const CreateByGroupsForm = ({ formik, handleNext, formName }: ICreateByGroupsFor
   return (
     <Grid container direction={'column'} spacing={1}>
       <GridItem item xs>
-        <DurationField {...formikDurationFieldProps(getFormName('duration'), formik, 0)} min={0} />
+        <DurationFieldWrapper>
+          <DurationField {...formikDurationFieldProps(getFormName('duration'), formik, 0)} min={0} />
+        </DurationFieldWrapper>
       </GridItem>
       <GridItem item xs>
         <CommonFormItem
