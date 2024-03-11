@@ -215,8 +215,6 @@ toolbar-button-end-call-tooltip-title = Leave Call
 
 toolbar-button-screen-share-tooltip-request-moderator-presenter-role = Ask a moderator to allow to share your screen
 
-toolbar-aria-label = Personal control panel
-
 more-menu-leave-call = Leave Call
 more-menu-create-invite = Invite guest
 more-menu-start-recording = Start recording
@@ -264,7 +262,6 @@ moderationbar-button-reset-handraises-tooltip = Reset raised hands
 moderationbar-button-debriefing = Debriefing
 moderationbar-button-talking-stick-tooltip = Talking stick
 moderationbar-button-waiting-room-tooltip = Participants in waiting room
-moderationbar-aria-label = Moderation sidebar
 
 mute-participants-tab-title = Mute participants
 mute-participants-button-all = All
@@ -941,3 +938,7 @@ glitchtip-crash-report-labelSubmit = Submit
 glitchtip-crash-report-errorGeneric = An unknown error occurred while submitting your report. Please try again.
 glitchtip-crash-report-errorFormEntry = Some fields were invalid. Please correct the errors and try again.
 glitchtip-crash-report-successMessage = Your feedback has been sent. Thank you!
+
+landmark-complementary-tools = Tools
+landmark-complementary-moderation-panel = Moderation panel
+landmark-complementary-toolbar = Personal control panel

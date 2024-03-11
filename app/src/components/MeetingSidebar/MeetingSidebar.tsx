@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Paper, styled, useMediaQuery } from '@mui/material';
+import { styled, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ import ModerationSideToolbar from '../ModerationSideToolbar';
 import Toolbar from '../Toolbar';
 import SideTabPanel from './fragments/SideTabPanel';
 
-const SideBar = styled(Paper)(({ theme }) => ({
+const SideBar = styled('aside')(({ theme }) => ({
   display: 'flex',
   background: theme.palette.background.paper,
   borderRadius: theme.borderRadius.medium,
@@ -73,7 +73,7 @@ const MeetingSidebar = () => {
   };
 
   return isModerator ? (
-    <SideBar>
+    <SideBar aria-label={t('landmark-complementary-tools')}>
       <ModerationSideToolbar displayedTabs={tabs} onSelect={handleSetActiveTab} activeTab={activeTab} />
       <ProfileWindow isModerator={isModerator}>
         <LocalVideo />
@@ -82,7 +82,7 @@ const MeetingSidebar = () => {
       </ProfileWindow>
     </SideBar>
   ) : (
-    <SideBar>
+    <SideBar aria-label={t('landmark-complementary-tools')}>
       <ProfileWindow>
         <LocalVideo />
         <Toolbar />

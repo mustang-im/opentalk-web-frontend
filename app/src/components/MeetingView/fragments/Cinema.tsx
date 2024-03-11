@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Container as MuiContainer } from '@mui/material';
+import { styled } from '@mui/material';
 import { VisuallyHiddenTitle } from '@opentalk/common';
 
 import LayoutOptions from '../../../enums/LayoutOptions';
@@ -14,7 +14,7 @@ import ProtocolView from '../../ProtocolView';
 import SpeakerView from '../../SpeakerView';
 import WhiteboardView from '../../Whiteboard';
 
-const Container = styled(MuiContainer)({
+const Container = styled('main')({
   height: '100%',
   overflow: 'hidden',
   display: 'flex',
@@ -43,7 +43,7 @@ const Cinema = () => {
   };
 
   return (
-    <Container disableGutters maxWidth={false} ref={fullscreenHandle.node}>
+    <Container ref={fullscreenHandle.node}>
       <VisuallyHiddenTitle component={'h2'} label={'videoroom-hidden-heading'} />
       {renderView()}
     </Container>

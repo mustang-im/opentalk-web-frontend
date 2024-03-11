@@ -34,6 +34,12 @@ import LayoutSelection from './LayoutSelection';
 import MeetingUtilsSection from './MeetingUtilsSection';
 import RoomTitle from './RoomTitle';
 
+const OpenTalkLogo = styled(Logo)(({ theme }) => ({
+  width: theme.typography.pxToRem(205),
+  height: theme.typography.pxToRem(35),
+  fill: 'white',
+}));
+
 const HeaderItem = styled('div')<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
   background: highlighted ? theme.palette.primary.main : theme.palette.background.video,
   borderRadius: '0.25rem',
@@ -73,7 +79,7 @@ const HeaderCenterContainer = styled('div')(({ theme }) => ({
   height: '100%',
 }));
 
-const Content = styled('div')(({ theme }) => ({
+const Content = styled('header')(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
   gap: theme.spacing(1),
@@ -124,8 +130,6 @@ const DesktopMeetingHeader = () => {
       setClickCount(0);
     }
   }, [dispatch, clickCount]);
-
-  const logoImage = () => <Logo width={'12.8997em'} height={'2.072em'} onClick={showDebugDialog} fill={'white'} />;
 
   const pageCount = useMemo(() => {
     return Math.ceil(participants.length / MAX_GRID_TILES);
@@ -223,7 +227,9 @@ const DesktopMeetingHeader = () => {
 
   return (
     <Content>
-      <ContentItem>{logoImage()}</ContentItem>
+      <ContentItem>
+        <OpenTalkLogo onClick={showDebugDialog} aria-disabled />
+      </ContentItem>
       <ContentItem lgOrder={2}>
         <HeaderCenterContainer>
           <RoomTitle />

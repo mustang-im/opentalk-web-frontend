@@ -215,8 +215,6 @@ toolbar-button-end-call-tooltip-title = Raum verlassen
 
 toolbar-button-screen-share-tooltip-request-moderator-presenter-role = Frage einen Moderator um deinen Bildschirm zu teilen
 
-toolbar-aria-label = Persönliche Kontrollleiste
-
 more-menu-leave-call = Anruf beenden
 more-menu-create-invite = Gast einladen
 more-menu-start-recording = Aufnahme starten
@@ -264,7 +262,6 @@ moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
 moderationbar-button-debriefing = Nachbesprechung
 moderationbar-button-talking-stick-tooltip = Redestab
 moderationbar-button-waiting-room-tooltip = Teilnehmer im Warteraum
-moderationbar-aria-label = Moderationsbar
 
 mute-participants-tab-title = Teilnehmer stummschalten
 mute-participants-button-all = Alle
@@ -941,3 +938,7 @@ glitchtip-crash-report-labelSubmit = Senden
 glitchtip-crash-report-errorGeneric = Beim Absenden Ihres Berichts ist ein unbekannter Fehler aufgetreten. Bitte versuchen Sie es erneut.
 glitchtip-crash-report-errorFormEntry = Einige Felder waren ungültig. Bitte korrigieren Sie die Fehler und versuchen Sie es erneut.
 glitchtip-crash-report-successMessage = Ihr Bericht wurde gesendet. Vielen Dank!
+
+landmark-complementary-tools = Hilfsmittel
+landmark-complementary-moderation-panel = Moderationsleiste
+landmark-complementary-toolbar = Persönliche Kontrollleiste

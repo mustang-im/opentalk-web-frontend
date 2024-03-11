@@ -13,6 +13,7 @@ const Tabs = styled(MuiTabs)(({ theme }) => ({
   padding: theme.spacing(4.5, 0),
   borderBottomLeftRadius: theme.borderRadius.medium,
   borderTopLeftRadius: theme.borderRadius.medium,
+  height: '100%',
   '& .MuiTabs-flexContainer': {
     display: 'grid',
     gridColumns: '1fr',
@@ -112,9 +113,11 @@ const ModerationSideToolbar = ({ onSelect, displayedTabs, activeTab }: Moderatio
     );
 
   return (
-    <Tabs value={activeTab} onChange={handleChange} orientation="vertical" aria-label={t('moderationbar-aria-label')}>
-      {renderTabs()}
-    </Tabs>
+    <aside aria-label={t('landmark-complementary-moderation-panel')}>
+      <Tabs value={activeTab} onChange={handleChange} orientation="vertical">
+        {renderTabs()}
+      </Tabs>
+    </aside>
   );
 };
 
