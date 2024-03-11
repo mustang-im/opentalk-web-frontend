@@ -65,7 +65,7 @@ const WaitingParticipantsList = ({ id }: WaitingParticipantsListProps) => {
   return (
     <>
       <Subheader>
-        <Typography variant="body2">{t('waiting-room-participant-label')}</Typography>
+        <Typography variant="body2">{t('waiting-room-participant-list-label')}</Typography>
         <Button variant="text" disabled={participantsNotApproved.length === 0} onClick={handleApproveAll} focusRipple>
           {t('approve-all-participants-from-waiting')}
         </Button>

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Select } from '../../../commonComponents';
 import { CreateOrUpdateMeetingFormikValues } from '../CreateOrUpdateMeetingForm';
-import LabeledSwitch from './LabeledSwitch';
+import MeetingFormSwitch from './MeetingFormSwitch';
 
 interface StreamingOptionsProps {
   formik: FormikProps<CreateOrUpdateMeetingFormikValues>;
@@ -55,11 +55,10 @@ const StreamingOptions = ({ formik }: StreamingOptionsProps) => {
 
   return (
     <Stack gap={2}>
-      <LabeledSwitch
-        titleLabel={t('dashboard-meeting-livestream-label')}
+      <MeetingFormSwitch
         checked={streamingEnabled}
         switchProps={formikMinimalProps('streaming.enabled', formik)}
-        switchValueLabel={t(`dashboard-meeting-switch-${streamingEnabled ? 'enabled' : 'disabled'}`)}
+        switchValueLabel={t(`dashboard-meeting-livestream-switch`)}
       />
 
       <Collapse orientation="vertical" in={streamingEnabled} unmountOnExit mountOnEnter>

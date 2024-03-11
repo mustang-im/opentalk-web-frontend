@@ -44,7 +44,7 @@ import { isInvalidDate } from '../../utils/typeGuardUtils';
 import yup from '../../utils/yupUtils';
 import { DashboardDateTimePicker } from './fragments/DashboardDateTimePicker';
 import EventConflictDialog from './fragments/EventConflictDialog';
-import LabeledSwitch from './fragments/LabeledSwitch';
+import MeetingFormSwitch from './fragments/MeetingFormSwitch';
 import StreamingOptions from './fragments/StreamingOptions';
 
 interface CreateOrUpdateMeetingFormProps {
@@ -523,11 +523,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             maxCharacters={MAX_CHARACTERS_PASSWORD}
           />
 
-          <LabeledSwitch
-            titleLabel={t('dashboard-meeting-date-and-time')}
+          <MeetingFormSwitch
             checked={formik.values.isTimeDependent}
             switchProps={formikMinimalProps('isTimeDependent', formik)}
-            switchValueLabel={t(`dashboard-meeting-time-independent-${formik.values.isTimeDependent ? 'no' : 'yes'}`)}
+            switchValueLabel={t(`dashboard-meeting-date-and-time-switch`)}
           />
 
           <Collapse orientation="vertical" in={formik.values.isTimeDependent} unmountOnExit mountOnEnter>
@@ -551,18 +550,16 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             </Grid>
           </Collapse>
 
-          <LabeledSwitch
-            titleLabel={t('waiting-room-participant-label')}
+          <MeetingFormSwitch
             checked={formik.values.waitingRoom}
             switchProps={formikMinimalProps('waitingRoom', formik)}
-            switchValueLabel={t(`dashboard-meeting-switch-${formik.values.waitingRoom ? 'enabled' : 'disabled'}`)}
+            switchValueLabel={t(`dashboard-meeting-waiting-room-switch`)}
           />
           {features.sharedFolder && (
-            <LabeledSwitch
-              titleLabel={t('dashboard-meeting-shared-folder-label')}
+            <MeetingFormSwitch
               checked={formik.values.sharedFolder}
               switchProps={formikMinimalProps('sharedFolder', formik)}
-              switchValueLabel={t(`dashboard-meeting-switch-${formik.values.sharedFolder ? 'enabled' : 'disabled'}`)}
+              switchValueLabel={t(`dashboard-meeting-shared-folder-switch`)}
             />
           )}
 
