@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { StreamStats } from './ConnectionStats';
-import { StreamState } from './StreamState';
+import { StreamState, StreamStats } from './StreamState';
 
 export class InboundStreamState extends StreamState {
   bytesReceived = 0;

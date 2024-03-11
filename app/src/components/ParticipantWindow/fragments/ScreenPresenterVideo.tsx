@@ -9,7 +9,7 @@ import { useAppSelector } from '../../../hooks';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
 import { selectSubscriberHasVideoById } from '../../../store/slices/mediaSubscriberSlice';
 import { AvatarContainer } from './AvatarContainer';
-import { PresenterVideoPosition } from './ParticipantVideo';
+import { PresenterVideoPosition } from './PresenterOverlay';
 import { PresenterOverlay } from './PresenterOverlay';
 import RemoteVideo from './RemoteVideo';
 

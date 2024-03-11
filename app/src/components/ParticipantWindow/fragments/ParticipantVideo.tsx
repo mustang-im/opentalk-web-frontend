@@ -9,6 +9,7 @@ import { useAppSelector } from '../../../hooks';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
 import { selectSubscriberHasVideoById } from '../../../store/slices/mediaSubscriberSlice';
 import { AvatarContainer } from './AvatarContainer';
+import { PresenterVideoPosition } from './PresenterOverlay';
 import RemoteVideo from './RemoteVideo';
 import ScreenPresenterVideo from './ScreenPresenterVideo';
 
@@ -18,8 +19,6 @@ const Container = styled('div')({
   width: '100%',
   height: '100%',
 });
-
-export type PresenterVideoPosition = 'bottomLeft' | 'upperRight' | 'bottomRight';
 
 interface ParticipantVideoProps {
   participantId: ParticipantId;

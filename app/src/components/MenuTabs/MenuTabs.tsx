@@ -15,7 +15,7 @@ import { selectChatConversationState } from '../../store/slices/uiSlice';
 import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';
-import TabPanel from './fragments/TabPanel';
+import TabPanel, { MenuTab } from './fragments/TabPanel';
 
 const MessagesBadge = styled(Badge)(({ theme }) => ({
   right: -4,
@@ -64,12 +64,6 @@ const Tab = styled(MuiTab)(({ theme }) => ({
     marginLeft: theme.spacing(0.2),
   },
 }));
-
-export enum MenuTab {
-  Chat = 'chat',
-  People = 'people',
-  Messages = 'messages',
-}
 
 function getMessagingTab(isPrivateChatTab: boolean) {
   return isPrivateChatTab ? MenuTab.Messages : MenuTab.Chat;

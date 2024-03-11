@@ -2,9 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Button, Box } from '@mui/material';
-import { ErrorFormMessage, Seconds } from '@opentalk/common';
-import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon, Participant } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
+import {
+  BackIcon,
+  NoOfParticipantsIcon,
+  NoOfRoomsIcon,
+  Participant,
+  notifications,
+  ErrorFormMessage,
+  Seconds,
+} from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { Step, FormikWizard } from 'formik-wizard-form';
 import { FormikValues } from 'formik/dist/types';
@@ -21,14 +27,7 @@ import { selectCombinedParticipantsAndUser, selectCombinedParticipantsAndUserCou
 import { spliceIntoChunks } from '../../../utils/arrayUtils';
 import CreateByParticipantsForm from './CreateByParticipantsForm';
 import CreateByRoomsForm from './CreateByRoomsForm';
-import ParticipantsSelector, { BreakoutRoomWithFullParticipants } from './ParticipantsSelector';
-
-export enum AccordionOptions {
-  Rooms = 'rooms',
-  Participants = 'participants',
-  Groups = 'groups',
-  Moderators = 'Moderators',
-}
+import ParticipantsSelector, { BreakoutRoomWithFullParticipants, AccordionOptions } from './ParticipantsSelector';
 
 type Expanded = string | false;
 

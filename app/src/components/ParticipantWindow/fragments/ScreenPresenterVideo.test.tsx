@@ -5,7 +5,7 @@ import { fireEvent, cleanup } from '@testing-library/react';
 
 import { idFromDescriptor } from '../../../modules/WebRTC';
 import { render, screen, mockedParticipant, mockedVideoMediaDescriptor, mockStore } from '../../../utils/testUtils';
-import { PresenterVideoPosition } from './ParticipantVideo';
+import { PresenterVideoPosition } from './PresenterOverlay';
 import ScreenPresenterVideo from './ScreenPresenterVideo';
 
 const participant = mockedParticipant(0);

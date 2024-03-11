@@ -5,8 +5,7 @@ import { List } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
 import React from 'react';
 
-import { MutedParticipant } from '../MuteParticipants';
-import MuteParticipantsItem from './MuteParticipantsItem';
+import MuteParticipantsItem, { MutedParticipant } from './MuteParticipantsItem';
 
 type MuteParticipantsListProps = {
   participantsList: MutedParticipant[];

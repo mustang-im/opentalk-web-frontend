@@ -12,6 +12,18 @@ export interface MediaStats {
   frameHeight?: number;
 }
 
+export interface StreamStats extends MediaStats {
+  type: 'inbound' | 'outbound';
+  timestamp: number;
+  bitRate?: number;
+  packetRate?: number;
+  packetLoss?: number;
+  packetsDiscarded?: number;
+  jitter?: number;
+  roundTripTime?: number;
+  retransmitRatio?: number;
+}
+
 type AnyRtpStreamStats = RTCOutboundRtpStreamStats | RTCInboundRtpStreamStats;
 
 export class StreamState {

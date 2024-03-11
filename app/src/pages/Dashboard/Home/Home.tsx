@@ -16,9 +16,8 @@ import MeetingCard from '../../../components/MeetingCard';
 import PaymentStatusBanner from '../../../components/PaymentStatusBanner';
 import StartMeetingImage from '../../../components/StartMeetingImage';
 import { useHeader } from '../../../templates/DashboardTemplate';
-import { appendRecurrenceEventInstances } from '../../../utils/eventUtils';
+import { appendRecurrenceEventInstances, TimePerspectiveFilter } from '../../../utils/eventUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
-import { TimePerspectiveFilter } from '../EventsOverviewPage/EventsOverviewPage';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'grid',

@@ -10,10 +10,12 @@ import {
   FormControlLabel as MuiFormControlLabel,
   ListItemText,
 } from '@mui/material';
-import { ParticipantAvatar } from '@opentalk/common';
+import { ParticipantAvatar, Participant } from '@opentalk/common';
 import React from 'react';
 
-import { MutedParticipant } from '../MuteParticipants';
+export interface MutedParticipant extends Participant {
+  selected: boolean;
+}
 
 type MuteParticipantsItemProps = {
   participant: MutedParticipant;

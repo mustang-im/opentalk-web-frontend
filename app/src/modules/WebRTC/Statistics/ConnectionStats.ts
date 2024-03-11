@@ -6,19 +6,7 @@ import { maxBy, sumBy } from 'lodash';
 import { CandidatePairState, CandidatePairStats } from './CandidatePairState';
 import { InboundStreamState } from './InboundStreamState';
 import { OutboundStreamState } from './OutboundStreamState';
-import { MediaStats } from './StreamState';
-
-export interface StreamStats extends MediaStats {
-  type: 'inbound' | 'outbound';
-  timestamp: number;
-  bitRate?: number;
-  packetRate?: number;
-  packetLoss?: number;
-  packetsDiscarded?: number;
-  jitter?: number;
-  roundTripTime?: number;
-  retransmitRatio?: number;
-}
+import { StreamStats } from './StreamState';
 
 export interface StatsEvent {
   connection: CandidatePairStats;

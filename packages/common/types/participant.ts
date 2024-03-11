@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { BreakoutRoomId, GroupId, ParticipantId, ParticipationKind, Role, WaitingState } from './common';
+import { ProtocolAccess } from './protocol';
 
 export interface Participant {
   id: ParticipantId;
@@ -20,12 +21,6 @@ export interface Participant {
   protocolAccess: ProtocolAccess;
   isPresenter: boolean;
   isSpeaking: boolean;
-}
-
-export enum ProtocolAccess {
-  Read = 'read',
-  Write = 'write',
-  None = 'none',
 }
 
 export type FilterableParticipant = Pick<Participant, 'displayName'>;
