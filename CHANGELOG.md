@@ -7,6 +7,7 @@
 
 ### Improvements to the user experience
 
+- Improve accessibility of the breakout room notification header ([#1709](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1709))
 - Restyle switches in the meeting creation form ([#1700](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1700))
 - Improved conference landmark structure for better experience using screen readers ([#1289](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1289))
 - Adjust tabpanel title markup for better screen reader experience. ([#1707](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1707))
