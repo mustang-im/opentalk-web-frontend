@@ -7,6 +7,10 @@ import store from './store';
 import { setShowErrorDialog } from './store/slices/uiSlice';
 
 if (window.config.glitchtip && window.config.glitchtip.dsn) {
+  Sentry.setTags({
+    'release.productVersion': window.config.version?.product,
+    instance: window.location.origin,
+  });
   Sentry.init({
     autoSessionTracking: false, // switched because its not implemented https://gitlab.com/glitchtip/glitchtip-backend/-/issues/206
     dsn: window.config.glitchtip.dsn,
