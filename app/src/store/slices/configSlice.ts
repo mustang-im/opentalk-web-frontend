@@ -235,6 +235,8 @@ export const selectAccountManagementUrl = (state: RootState) => state.config.pro
 export const selectImprintUrl = (state: RootState) => state.config.imprintUrl;
 export const selectIsProviderActive = (state: RootState) => state.config.provider.active;
 export const selectDataProtectionUrl = (state: RootState) => state.config.dataProtectionUrl;
+export const selectGlitchtipConfig = (state: RootState) => state.config.glitchtip;
+export const selectIsGlitchtipConfigured = (state: RootState) => Boolean(state.config.glitchtip?.dsn);
 export const selectShowmprintContainer = (state: RootState) => {
   if (state.config.imprintUrl || state.config.dataProtectionUrl) {
     return true;

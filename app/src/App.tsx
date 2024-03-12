@@ -13,6 +13,7 @@ import Provider from './Provider';
 import Routes from './Routes';
 import { createOpenTalkTheme } from './assets/themes/opentalk';
 import ConfirmBrowserDialog, { isBrowserConfirmed } from './components/ConfirmBrowserDialog/ConfirmBrowserDialog';
+import GlitchtipErrorDialog from './components/GlitchtipErrorDialog';
 import { localStorageItems } from './config/storage';
 import AppErrorBoundary from './errorBoundaries/AppErrorBoundary';
 import browser from './modules/BrowserSupport';
@@ -75,6 +76,7 @@ const App = () => {
       <StoreProvider store={store}>
         <AppErrorBoundary>
           <Provider>
+            <GlitchtipErrorDialog />
             <Routes />
           </Provider>
         </AppErrorBoundary>

@@ -16,6 +16,7 @@ import {
 } from '@opentalk/common';
 import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Event } from '@sentry/react';
 
 import { RootState } from '../';
 import { Started as PollStartedInterface } from '../../api/types/incoming/poll';
@@ -33,6 +34,11 @@ import { setWhiteboardAvailable } from './whiteboardSlice';
 export interface IChatConversationState {
   scope?: ChatScope;
   targetId?: TargetId;
+}
+
+interface ErrorDialog {
+  event: Event | undefined;
+  showErrorDialog: boolean;
 }
 
 interface UIState {
@@ -60,6 +66,7 @@ interface UIState {
   };
   focusedSpeaker: ParticipantId | undefined;
   hotkeysEnabled: boolean;
+  errorDialog: ErrorDialog;
 }
 
 const initialState: UIState = {
@@ -90,6 +97,10 @@ const initialState: UIState = {
   },
   focusedSpeaker: undefined,
   hotkeysEnabled: true,
+  errorDialog: {
+    event: undefined,
+    showErrorDialog: false,
+  },
 };
 
 export const uiSlice = createSlice({
@@ -172,6 +183,10 @@ export const uiSlice = createSlice({
     },
     setHotkeysEnabled: (state, { payload }) => {
       state.hotkeysEnabled = payload;
+    },
+    setShowErrorDialog(state, { payload: { showErrorDialog, event } }: PayloadAction<ErrorDialog>) {
+      state.errorDialog.event = event;
+      state.errorDialog.showErrorDialog = showErrorDialog;
     },
   },
   extraReducers: (builder) => {
@@ -259,6 +274,7 @@ export const {
   saveDefaultChatMessage,
   setFocusedSpeaker,
   setHotkeysEnabled,
+  setShowErrorDialog,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -295,5 +311,7 @@ export function selectDefaultChatMessage(scope: ChatScope, target?: TargetId) {
   };
 }
 export const selectHotkeysEnabled = (state: RootState) => state.ui.hotkeysEnabled;
+export const selectShowErrorDialog = (state: RootState) => state.ui.errorDialog.showErrorDialog;
+export const selectErrorDialogEvent = (state: RootState) => state.ui.errorDialog.event;
 
 export default uiSlice.reducer;

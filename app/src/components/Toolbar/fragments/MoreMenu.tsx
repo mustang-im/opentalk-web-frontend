@@ -74,6 +74,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const enabledModules = useEnabledModules();
   const hasRecordingFeatureOn = enabledModules.has(BackendModules.Recording);
   const fullscreenHandle = useFullscreenContext();
+  const isDevMode: boolean = JSON.parse(localStorage.getItem('devMode') ?? 'false');
 
   const toggleWaitingRoomItem = isWaitingRoomActive
     ? {
@@ -328,7 +329,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         <Divider />
         {isModerator && renderMenuItems(moderatorMenuItems)}
         {!isModerator && renderMenuItems(participantMenuItems)}
-        {process.env.NODE_ENV !== 'production' && renderMenuItems(devMenuItems)}
+        {isDevMode && renderMenuItems(devMenuItems)}
       </ToolbarMenu>
       <InviteGuestDialog open={showInviteModal} onClose={() => setShowInviteModal(false)} />
       <ShortcutListDialog open={areShortcutsVisible} onClose={() => setShortcutsVisibilityState(false)} />
