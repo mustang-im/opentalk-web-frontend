@@ -37,7 +37,7 @@ lint:prettier+eslint:
     - apk add --no-cache git
     - yarn install
   script:
-    - yarn lint --no-inline-config --max-warnings 0
+    - yarn lint --max-warnings 0
     - yarn workspaces foreach -pA run fmt:ci
 
 lint:yaml:
@@ -288,6 +288,7 @@ deploy:review-app:
       --set ot_keycloak_domain=accounts.review-latest.kube.opentalk.run
       --set ot_backend_url=controller.review-latest.kube.opentalk.run
       --set ot_feature_shared_folder="true"
+      --set ot_sentry_dsn=$SENTRY_DSN_TESTING
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
