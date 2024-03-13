@@ -7,6 +7,7 @@
 
 ### Improvements to the user experience
 
+- Improve right corner with burger menue instead of the guide icon ([#1719](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1719))
 - Improve accessibility of the breakout room notification header ([#1709](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1709))
 - Restyle switches in the meeting creation form ([#1700](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1700))
 - Improved conference landmark structure for better experience using screen readers ([#1289](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1289))

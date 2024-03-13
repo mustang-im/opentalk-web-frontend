@@ -625,6 +625,8 @@ conference-quick-start-title = OpenTalk Conference Quick Guide
 conference-quick-start-open = Open quick guide
 conference-quick-start-close = Close quick guide
 
+conference-quick-start-menu-item = Quick Guide
+
 quick-start-loading = Loading the quick guide
 quick-start-error = Couldn't load the quick guide
 
@@ -941,3 +943,5 @@ glitchtip-crash-report-send-successful-title = Sending successful!
 landmark-complementary-tools = Tools
 landmark-complementary-moderation-panel = Moderation panel
 landmark-complementary-toolbar = Personal control panel
+
+my-meeting-menu = My meeting

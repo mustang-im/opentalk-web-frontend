@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Container as MuiContainer, Grid, Stack, styled, Typography } from '@mui/material';
+import { Container as MuiContainer, Grid, Stack, styled, Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/styles';
-import React, { ReactNode } from 'react';
+import { HelpIcon } from '@opentalk/common';
+import React, { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import arrowImage from '../../assets/images/arrow-illustration.png';
@@ -11,7 +12,7 @@ import LocalVideo from '../../components/LocalVideo';
 import { useAppSelector } from '../../hooks';
 import { selectFeatures } from '../../store/slices/configSlice';
 import { selectVideoEnabled } from '../../store/slices/mediaSlice';
-import QuickStart from '../QuickStart';
+import QuickStartPopper from '../QuickStartPopover';
 import SpeedTest from '../SpeedTest';
 import { EchoPlayBack } from './fragments/EchoPlayback';
 import { SelfTestToolbar } from './fragments/SelfTestToolbar';
@@ -39,12 +40,26 @@ const SpeedTestContainer = styled(MuiContainer)(({ theme }) => ({
   },
 }));
 
+const HelpIconButton = styled(Button)(({ theme }) => ({
+  borderRadius: '50%',
+  padding: theme.spacing(0.5),
+  margin: theme.spacing(1, 1, 0, 0),
+  minWidth: '10px',
+  borderColor: theme.palette.common.white,
+  zIndex: 2,
+  '& .MuiSvgIcon-root': {
+    color: theme.palette.common.white,
+    fontSize: theme.typography.pxToRem(30),
+  },
+}));
+
 const BottomContainer = styled('nav')(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(6),
   bottom: 0,
   left: 0,
   position: 'relative',
+  zIndex: 1,
   [theme.breakpoints.up('md')]: {
     position: 'absolute',
   },
@@ -70,13 +85,28 @@ interface SelftestProps {
 const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
   const videoEnabled = useAppSelector(selectVideoEnabled);
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
+  const [showQuickStart, setShowQuickStart] = useState(false);
+  const quickTestIconRef = useRef(null);
   const { t } = useTranslation();
   const theme = useTheme();
 
   return (
     <SelfTestContainer>
       <Stack component="header" direction="row-reverse">
-        <QuickStart variant="lobby" />
+        <HelpIconButton
+          aria-label={t('conference-quick-start-open')}
+          variant="outlined"
+          onClick={() => setShowQuickStart(true)}
+          ref={quickTestIconRef}
+        >
+          <HelpIcon />
+        </HelpIconButton>
+        <QuickStartPopper
+          onClose={() => setShowQuickStart(false)}
+          open={showQuickStart}
+          variant="lobby"
+          anchorEl={quickTestIconRef.current}
+        />
         <SpeedTestContainer>
           <SpeedTest />
         </SpeedTestContainer>
