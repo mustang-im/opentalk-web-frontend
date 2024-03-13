@@ -22,6 +22,7 @@
 
 ### Bug Fixes
 
+- Support OIDC .well-known/openid-configuration ([#1701](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1701))
 - Fix selection of the protocol write permissions ([1706](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1706))
 - Fix: The chat gives out some characters twice ([#1612](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1612))
 - Fix: audit - ip@npm:2.0.0 vulnerability ([#1735](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1735))

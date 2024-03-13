@@ -23,13 +23,22 @@ const AuthCallbackComponent = ({ children, redirectUrl = '/' }: AuthCallbackCont
     const code = searchParams.get('code');
     if (code && auth) {
       const clientId = auth.configuration.clientId;
-      const tokenEndpoint = auth.getConfigurationEndpoints().tokenEndpoint;
       const baseUrl = auth?.getBaseUrl();
       /**
        * Once user is back from sing in provider
        * get the code from the auth provider and call codeCallback to get access tokens
        */
-      dispatch(codeCallback({ clientId, redirectUri: auth.configuration.redirectUri, tokenEndpoint, baseUrl, code }));
+      auth.getConfigurationEndpoints().then((config) => {
+        dispatch(
+          codeCallback({
+            clientId,
+            redirectUri: auth.configuration.redirectUri,
+            tokenEndpoint: config.tokenEndpoint,
+            baseUrl,
+            code,
+          })
+        );
+      });
     }
   }, []);
 

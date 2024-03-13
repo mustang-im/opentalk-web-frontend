@@ -1,8 +1,8 @@
 import React, { createContext, FC, PropsWithChildren, useContext, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { AuthTypeError, calculateTokenRenewalTime, hasValidToken } from '.';
-import { AuthAdapater, AuthAdapterConfiguration, AuthenticationProviderUrls } from './authAdapter';
+import { AuthAdapter, AuthAdapterConfiguration, AuthenticationProviderUrls } from './authAdapter';
 import { getNewToken } from './store/authActions';
 import {
   selectError,
@@ -17,7 +17,7 @@ export interface AuthContextValues {
   configuration: AuthAdapterConfiguration;
   signIn: () => void;
   signOut: (signOutRedirectUrl?: string) => void;
-  getConfigurationEndpoints: () => AuthenticationProviderUrls;
+  getConfigurationEndpoints: () => Promise<AuthenticationProviderUrls>;
   getBaseUrl: () => string;
   getSavedRedirectUrl: () => string | undefined;
   getNewRefreshToken: () => void;
@@ -31,7 +31,7 @@ export const AuthContext = createContext<AuthContextValues | undefined>(undefine
 
 const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, configuration }) => {
   const dispatch = useDispatch();
-  const authAdapter = new AuthAdapater(configuration);
+  const authAdapter = AuthAdapter.getInstance(configuration);
   const isRefreshAuthError = useSelector(selectRefreshError);
   const isAuthError = useSelector(selectError);
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -39,7 +39,7 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
   const isRefresTokenLoading = useSelector(selectIsRefreshTokenLoading);
 
   // default is window.location.href
-  const signIn = (redirectUrl?: string) => {
+  const signIn = async (redirectUrl?: string) => {
     authAdapter.startOidcSignIn(redirectUrl);
   };
 
@@ -47,17 +47,21 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
     authAdapter.signOut(signOutRedirectUrl);
   };
 
-  const getConfigurationEndpoints = () => authAdapter.getConfigurationEndpoints();
+  const getConfigurationEndpoints = async () => await authAdapter.getConfigurationEndpoints();
   const getBaseUrl = () => authAdapter.getBaseUrl();
   const getSavedRedirectUrl = () => authAdapter.getSavedLocation();
-  const getNewRefreshToken = () =>
-    dispatch(
-      getNewToken({
-        clientId: configuration.clientId,
-        tokenEndpoint: authAdapter.getConfigurationEndpoints().tokenEndpoint,
-        baseUrl: configuration.baseUrl,
-      })
-    );
+
+  const getNewRefreshToken = () => {
+    getConfigurationEndpoints().then((config) => {
+      dispatch(
+        getNewToken({
+          clientId: configuration.clientId,
+          tokenEndpoint: config.tokenEndpoint,
+          baseUrl: configuration.baseUrl,
+        })
+      );
+    });
+  };
 
   /**
    * When authenticated:
@@ -74,24 +78,14 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
         // We manualy dispatch startLoading from here, because user is already authenticated, but token is not automaticly refetched
         // (probably because user closed the app in the meantime or connection issues occured)
         // The UI needs to waits untill new token is requested.
-        dispatch(startLoading());
-        dispatch(
-          getNewToken({
-            clientId: configuration.clientId,
-            tokenEndpoint: authAdapter.getConfigurationEndpoints().tokenEndpoint,
-            baseUrl: configuration.baseUrl,
-          })
-        );
+        batch(() => {
+          dispatch(startLoading());
+          getNewRefreshToken();
+        });
       } else {
         const renewalTokenInterval = calculateTokenRenewalTime(accessToken as string);
         const tokenInterval = setInterval(() => {
-          dispatch(
-            getNewToken({
-              clientId: configuration.clientId,
-              tokenEndpoint: authAdapter.getConfigurationEndpoints().tokenEndpoint,
-              baseUrl: configuration.baseUrl,
-            })
-          );
+          getNewRefreshToken();
         }, renewalTokenInterval);
         return () => {
           clearInterval(tokenInterval);
@@ -109,13 +103,7 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
       signOut(window.location.href);
     }
     if (isAuthError && isAuthError.name === AuthTypeError.SessionExpired) {
-      dispatch(
-        getNewToken({
-          clientId: configuration.clientId,
-          tokenEndpoint: authAdapter.getConfigurationEndpoints().tokenEndpoint,
-          baseUrl: configuration.baseUrl,
-        })
-      );
+      getNewRefreshToken();
     }
   }, [isRefreshAuthError, isAuthError]);
 
