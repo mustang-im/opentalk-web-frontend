@@ -47,7 +47,6 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
           color: 'primary',
           variant: 'contained',
           disableElevation: true,
-          disableFocusRipple: true,
         },
         styleOverrides: {
           root: ({ theme }) => ({
@@ -87,6 +86,9 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
           }),
           containedPrimary: ({ theme }) => ({
             color: mode === 'light' ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText,
+            ':hover': {
+              backgroundColor: theme.palette.primary.light,
+            },
             ':disabled': {
               backgroundColor: theme.palette.primary.main,
               color: mode === 'light' ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText,
@@ -96,6 +98,9 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
             },
           }),
           containedSecondary: ({ theme }) => ({
+            ':hover': {
+              backgroundColor: theme.palette.secondary.light,
+            },
             ':disabled': {
               backgroundColor: theme.palette.secondary.main,
               color: theme.palette.secondary.contrastText,
@@ -111,6 +116,9 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
             },
           }),
           containedError: ({ theme }) => ({
+            ':hover': {
+              backgroundColor: theme.palette.error.light,
+            },
             ':disabled': {
               backgroundColor: theme.palette.secondary.main,
               color: theme.palette.secondary.contrastText,

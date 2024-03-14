@@ -39,12 +39,12 @@ const ToggleButtonGroup = styled(MuiToggleButtonGroup)(({ theme }) => ({
       color: theme.palette.secondary.contrastText,
       backgroundColor: theme.palette.secondary.main,
       '&:hover': {
-        backgroundColor: theme.palette.secondary.dark,
+        backgroundColor: theme.palette.secondary.main,
         color: theme.palette.secondary.contrastText,
       },
     },
     '&:hover': {
-      backgroundColor: theme.palette.secondary.dark,
+      backgroundColor: theme.palette.secondary.light,
       color: theme.palette.secondary.contrastText,
     },
   },
