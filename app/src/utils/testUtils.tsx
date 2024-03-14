@@ -231,6 +231,7 @@ export const mockedParticipant = (index: number, kind: ParticipationKind = Parti
   protocolAccess: ProtocolAccess.None,
   isPresenter: false,
   isSpeaking: false,
+  isRoomOwner: false,
 });
 
 export const mockedVideoMediaDescriptor = (index: number) => ({

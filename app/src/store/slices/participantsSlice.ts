@@ -55,6 +55,7 @@ export const participantsSlice = createSlice({
             protocolAccess,
             isPresenter,
             isSpeaking,
+            isRoomOwner,
           },
         },
       }: PayloadAction<{ participant: Participant }>
@@ -76,6 +77,7 @@ export const participantsSlice = createSlice({
         protocolAccess,
         isPresenter,
         isSpeaking,
+        isRoomOwner,
       });
     },
     leave: (state, { payload: { id, timestamp } }: PayloadAction<{ id: ParticipantId; timestamp: string }>) => {
@@ -111,6 +113,7 @@ export const participantsSlice = createSlice({
         protocolAccess: ProtocolAccess.None,
         isPresenter: false,
         isSpeaking: false,
+        isRoomOwner: false,
       };
       participantAdapter.upsertOne(state, participant);
     },
@@ -137,6 +140,7 @@ export const participantsSlice = createSlice({
         isPresenter: false,
         waitingState: WaitingState.Waiting,
         isSpeaking: false,
+        isRoomOwner: false,
       };
       participantAdapter.upsertOne(state, participant);
     },

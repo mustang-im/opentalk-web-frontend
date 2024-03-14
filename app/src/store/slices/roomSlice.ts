@@ -85,6 +85,7 @@ interface RoomState {
   eventInfo?: EventInfo;
   reconnectTimerId: ReturnType<typeof setTimeout> | null;
   hotkeysEnabled: boolean;
+  isOwnedByCurrentUser: boolean;
 }
 
 export interface InviteRoomVerifyResponse {
@@ -111,6 +112,7 @@ const initialState: RoomState = {
   participantLimit: 0,
   reconnectTimerId: null,
   hotkeysEnabled: true,
+  isOwnedByCurrentUser: false,
 };
 
 export const fetchRoomByInviteId = createAsyncThunk<
@@ -240,6 +242,7 @@ export const roomSlice = createSlice({
       state.connectionState = ConnectionState.Online;
       state.waitingRoomEnabled = Boolean(payload.moderation?.waitingRoomEnabled);
       state.participantLimit = payload.tariff.quotas?.roomParticipantLimit;
+      state.isOwnedByCurrentUser = payload.isRoomOwner;
 
       if (payload.timer && payload.timer.style === TimerStyle.CoffeeBreak) {
         state.currentMode = RoomMode.CoffeeBreak;

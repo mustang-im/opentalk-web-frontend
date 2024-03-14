@@ -67,6 +67,7 @@ describe('Chat component', () => {
           protocolAccess: ProtocolAccess.None,
           isPresenter: false,
           isSpeaking: false,
+          isRoomOwner: false,
         },
       })
     );

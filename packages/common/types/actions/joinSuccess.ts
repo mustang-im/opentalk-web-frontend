@@ -47,6 +47,7 @@ export interface JoinSuccessInternalState {
   sharedFolder: SharedFolderData;
   eventInfo?: EventInfo;
   participantsReady: ParticipantId[],
+  isRoomOwner: boolean;
 }
 
 export interface JoinSuccessIncoming {
@@ -72,4 +73,5 @@ export interface JoinSuccessIncoming {
   closesAt: Timestamp;
   sharedFolder: SharedFolderData;
   eventInfo?: EventInfo;
+  isRoomOwner: boolean;
 }

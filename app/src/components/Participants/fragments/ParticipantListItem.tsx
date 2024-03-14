@@ -190,6 +190,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
           {
             i18nKey: 'participant-menu-revoke-moderator',
             action: handleModerationRight,
+            disabled: participant.isRoomOwner,
           },
         ];
       case Role.User:

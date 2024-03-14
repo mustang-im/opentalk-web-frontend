@@ -202,6 +202,7 @@ const mapToUiParticipant = (
   protocolAccess: mapProtocolToProtocolAccess(protocol),
   isPresenter: Boolean(media?.isPresenter),
   isSpeaking: speakers ? isParticipantSpeaking(speakers, id) : false,
+  isRoomOwner: control.isRoomOwner,
 });
 
 const mapBreakoutToUiParticipant = (
@@ -224,6 +225,7 @@ const mapBreakoutToUiParticipant = (
   protocolAccess: ProtocolAccess.None,
   isPresenter: false,
   isSpeaking: false,
+  isRoomOwner: false,
 });
 
 const listenWebRtc = (webRtc: WebRtc, dispatch: AppDispatch) => {
@@ -364,6 +366,7 @@ const handleControlMessage = (
           participantsReady: participantsReady,
           sharedFolder: data.sharedFolder,
           eventInfo: data.eventInfo,
+          isRoomOwner: data.isRoomOwner,
         })
       );
 

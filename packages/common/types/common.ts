@@ -113,6 +113,7 @@ export interface IParticipantControl {
   handUpdatedAt: string;
   participationKind: ParticipationKind;
   role?: Role;
+  isRoomOwner: boolean;
 }
 
 export type ParticipantMediaState = PresenterRoleState & {
