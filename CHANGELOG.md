@@ -2,21 +2,21 @@
 
 ### New Features
 
-- Add streaming options to create meeting ([#1587](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1587))
-- Add ability to turn hotkeys off ([#1251](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1251))
+### Improvements to the user experience
+
+### Bug Fixes
+
+### Internal
+
+## 1.12.0-rc.1
 
 ### Improvements to the user experience
 
-- Improve right corner with burger menue instead of the guide icon ([#1719](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1719))
+- Improve right corner with burger menu instead of the guide icon ([#1719](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1719))
 - Improve accessibility of the breakout room notification header ([#1709](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1709))
 - Restyle switches in the meeting creation form ([#1700](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1700))
 - Improved conference landmark structure for better experience using screen readers ([#1289](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1289))
-- Adjust tabpanel title markup for better screen reader experience. ([#1707](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1707))
-- Minor adjustments to the hotkey popup ([#1251](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1251))
-- Change german translation for unmuted notification ([#1566](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1566))
-- Change wording for invite participants label on the create meeting page ([#1614](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1614))
-- Ported waiting room feature to the mobile design. ([#1515](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1515))
-- Applied hover styles on the "chat", "participants" and "messages" tabs in the meeting room. ([#1676](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1676))
+- Adjust tab panel title markup for better screen reader experience. ([#1707](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1707))
 - Adding new tags for better error report handling ([#1606](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1606))
 - Changing error report flow, switch to manual sending report ([#1763](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1763))
 - Implement custom error report dialog ([#1737](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1737))
@@ -28,12 +28,28 @@
 - Fix: The chat gives out some characters twice ([#1612](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1612))
 - Fix: audit - ip@npm:2.0.0 vulnerability ([#1735](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1735))
 - Fix thumbnail row update on participant leave in speaker view ([#1468](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1468))
-- Fix inconsistant order of participants when sorted by the raised hand. ([#1630](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1630))
+- Fix inconsistent order of participants when sorted by the raised hand. ([#1630](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1630))
 - Fix frontend version number for glitchtip
 
 ### Internal
 
 - Resolve circular dependencies in the UI components ([#1201](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1201))
+
+## 1.11.0-rc.1
+
+### New Features
+
+- Add streaming options to create meeting ([#1587](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1587))
+- Add ability to turn hotkeys off ([#1251](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1251))
+
+### Improvements to the user experience
+
+- Minor adjustments to the hotkey popup ([#1251](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1251))
+- Change German translation for unmuted notification ([#1566](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1566))
+- Change wording for invite participants label on the create meeting page ([#1614](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1614))
+- Ported waiting room feature to the mobile design. ([#1515](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1515))
+- Applied hover styles on the "chat", "participants" and "messages" tabs in the meeting room. ([#1676](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1676))
+- End Call button is more prominent now ([#1679](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1679))
 
 ## 1.10.0
 
