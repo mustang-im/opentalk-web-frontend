@@ -24,6 +24,7 @@ import {
   PhoneIcon,
   TelephoneStrokeIcon,
   IconButton,
+  ModeratorIcon,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
 import React, { CSSProperties, useCallback, useState } from 'react';
@@ -73,6 +74,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     background: theme.palette.text.disabled,
     width: '100%',
   },
+  '& .MuiSvgIcon-root': {
+    width: '20px',
+  },
 }));
 
 const MicOffIconStyled = styled(MicOffIcon)({
@@ -114,7 +118,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const participant = data[index];
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const sortType = useAppSelector(selectParticipantsSortOption);
-  const isModerator = useAppSelector(selectIsModerator);
+  const isCurrentUserModerator = useAppSelector(selectIsModerator);
   const { t } = useTranslation();
   const isSipParticipant = participant.participationKind === ParticipationKind.Sip;
   const dispatch = useAppDispatch();
@@ -292,7 +296,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
           open={true}
           setAnchorEl={setAnchorEl}
           anchorEl={anchorEl}
-          options={isModerator ? moderatorMenuOptionItems : participantMenuOptionItems}
+          options={isCurrentUserModerator ? moderatorMenuOptionItems : participantMenuOptionItems}
         />
       )}
     </>
@@ -329,26 +333,25 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   };
 
   const renderAvatar = useCallback(() => {
-    {
-      const isGuestUser = participant.role === Role.Guest;
+    const isParticipantGuest = participant.role === Role.Guest;
+    const isParticipantModerator = participant.role === Role.Moderator;
+    const renderWithBadge = isParticipantGuest || isParticipantModerator;
 
-      if (isGuestUser) {
-        {
-          return (
-            <StyledBadge badgeContent={t('guest-label')}>
-              <Avatar src={participant?.avatarUrl} alt={participant?.displayName} isSipParticipant={isSipParticipant}>
-                {participant?.displayName}
-              </Avatar>
-            </StyledBadge>
-          );
-        }
-      }
+    if (renderWithBadge) {
       return (
-        <Avatar src={participant?.avatarUrl} alt={participant?.displayName} isSipParticipant={isSipParticipant}>
-          {participant?.displayName}
-        </Avatar>
+        <StyledBadge badgeContent={isParticipantGuest ? t('guest-label') : <ModeratorIcon color="primary" />}>
+          <Avatar src={participant?.avatarUrl} alt={participant?.displayName} isSipParticipant={isSipParticipant}>
+            {participant?.displayName}
+          </Avatar>
+        </StyledBadge>
       );
     }
+
+    return (
+      <Avatar src={participant?.avatarUrl} alt={participant?.displayName} isSipParticipant={isSipParticipant}>
+        {participant?.displayName}
+      </Avatar>
+    );
   }, [participant.role]);
 
   return (
