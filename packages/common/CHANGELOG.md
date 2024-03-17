@@ -1,3 +1,9 @@
+## 1.0.24
+
+### Stability Improvements
+
+-  Prevent push to talk feature to be activated by selecting sort option using the `space` key. ([#1753](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1753))
+
 ## 1.0.23
 
 ### Stability Improvements

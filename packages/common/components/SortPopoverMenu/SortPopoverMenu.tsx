@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Popover as MuiPopover } from '@mui/material';
+import { Menu } from '@mui/material';
 import React from 'react';
 
 import SortPopoverMenuItem from './fragments/SortPopoverMenuItem';
@@ -49,9 +49,8 @@ const SortPopoverMenu = <T extends SortPopoverItem>({
   };
 
   return (
-    <MuiPopover
+    <Menu
       id={id}
-      role="menu"
       open={isOpen}
       anchorEl={anchorEl}
       onClose={onClose}
@@ -65,7 +64,7 @@ const SortPopoverMenu = <T extends SortPopoverItem>({
       }}
     >
       {renderItems()}
-    </MuiPopover>
+    </Menu>
   );
 };
 
