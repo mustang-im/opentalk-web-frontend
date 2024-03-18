@@ -36,7 +36,7 @@
     "@mui/styles": "^5.10.3",
     "@mui/x-date-pickers": "^6.14.0",
     "@opentalk/common": "workspace:*",
-    "@opentalk/components": "^1.0.34",
+    "@opentalk/components": "^1.0.35",
     "@opentalk/fluent_conv": "workspace:*",
     "@opentalk/i18next-fluent": "workspace:*",
     "@opentalk/redux-oidc": "workspace:*",
