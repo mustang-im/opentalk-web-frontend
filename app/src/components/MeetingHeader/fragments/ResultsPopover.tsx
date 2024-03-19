@@ -1,13 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Menu } from '@mui/material';
+import { Menu, styled } from '@mui/material';
 import { PollIcon as DefaultPollIcon } from '@opentalk/common';
 import { useState, MouseEvent } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectPollsAndVotingsCount } from '../../../store/selectors';
 import ResultsList from './ResultsList';
+
+const CustomMenu = styled(Menu)({
+  maxWidth: 420,
+});
 
 const ResultsPopover = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | SVGSVGElement | null>(null);
@@ -22,7 +26,7 @@ const ResultsPopover = () => {
   ) : (
     <>
       <DefaultPollIcon fontSize={'medium'} onClick={showDialog} />
-      <Menu
+      <CustomMenu
         open={Boolean(anchorEl)}
         onClose={() => {
           setAnchorEl(null);
@@ -38,7 +42,7 @@ const ResultsPopover = () => {
         }}
       >
         <ResultsList />
-      </Menu>
+      </CustomMenu>
     </>
   );
 };

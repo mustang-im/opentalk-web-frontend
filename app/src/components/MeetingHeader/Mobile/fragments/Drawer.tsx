@@ -2,21 +2,26 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Drawer as MuiDrawer, Stack, styled } from '@mui/material';
-import { IconButton as DefaultIconButton, LogoSmallIcon } from '@opentalk/common';
 import { BackendModules } from '@opentalk/common';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { batch } from 'react-redux';
 
-import { ModerationTabKey, Tab, WaitingRoomMobileTab } from '../../../../config/moderationTabs';
+import { ModerationTabKey, PollsAndVotesMobileTab, Tab, WaitingRoomMobileTab } from '../../../../config/moderationTabs';
 import { useAppDispatch, useAppSelector, useTabs } from '../../../../hooks';
 import { EnterpriseProvider } from '../../../../provider/EnterpriseProvider';
+import { selectActivePollsAndVotingsCount, selectPollsAndVotingsCount } from '../../../../store/selectors';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../../../store/slices/chatSlice';
 import { selectParticipantsWaitingCount } from '../../../../store/slices/participantsSlice';
 import { selectWaitingRoomState } from '../../../../store/slices/roomSlice';
-import { selectIsSharedFolderAvailableIndicatorVisible } from '../../../../store/slices/sharedFolderSlice';
-import { selectActiveTab, selectIsCurrentWhiteboardHighlighted, setActiveTab } from '../../../../store/slices/uiSlice';
+import {
+  selectActiveTab,
+  selectHaveSeenMobilePollsAndVotes,
+  selectIsDrawerOpen,
+  setActiveTab,
+  setIsDrawerOpen,
+} from '../../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../../store/slices/userSlice';
-import { Indicator } from '../../fragments/Indicator';
+import { DrawerButton } from './DrawerButton';
 import DrawerTab from './DrawerTab';
 
 const DrawerContentContainer = styled(Stack)(({ theme }) => ({
@@ -27,18 +32,6 @@ const DrawerContentContainer = styled(Stack)(({ theme }) => ({
   overflow: 'auto',
 }));
 
-const IconButton = styled(DefaultIconButton)(({ theme }) => ({
-  background: theme.palette.background.video,
-  borderRadius: '0.25rem',
-  width: 'auto',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(0),
-  },
-  '& .MuiSvgIcon-root': {
-    fontSize: '1.5rem',
-  },
-}));
-
 const StyledDrawer = styled(MuiDrawer)(({ theme }) => ({
   '& .MuiPaper-root.MuiDrawer-paper': {
     width: '80%',
@@ -46,36 +39,22 @@ const StyledDrawer = styled(MuiDrawer)(({ theme }) => ({
   },
 }));
 
-const ButtonIndicator = styled(Indicator)({
-  position: 'absolute',
-  top: '0.1rem',
-  right: '0.1rem',
-});
-
 const Drawer = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isDrawerOpen = useAppSelector(selectIsDrawerOpen);
   const activeTab = useAppSelector(selectActiveTab);
   const dispatch = useAppDispatch();
   const tabs = useTabs();
   const unreadGlobalMessageCount = useAppSelector(selectUnreadGlobalMessageCount);
   const unreadPersonalMessageCount = useAppSelector(selectUnreadPersonalMessageCount);
-  const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
-  const isSharedFolderAvailableIndicatorVisible = useAppSelector(selectIsSharedFolderAvailableIndicatorVisible);
   const isModerator = useAppSelector(selectIsModerator);
   const participantsWaitingCount = useAppSelector(selectParticipantsWaitingCount);
   const isWaitingRoomEnabled = useAppSelector(selectWaitingRoomState);
-  const hasParticipantsWaiting = participantsWaitingCount > 0;
   const hasUnreadMessages = unreadGlobalMessageCount > 0 || unreadPersonalMessageCount > 0;
+  const voteAndPollCount = useAppSelector(selectPollsAndVotingsCount);
+  const activeVoteAndPollCount = useAppSelector(selectActivePollsAndVotingsCount);
+  const haveSeenMobilePollsAndVotes = useAppSelector(selectHaveSeenMobilePollsAndVotes);
 
-  const showIndicator =
-    hasUnreadMessages ||
-    isCurrentWhiteboardHighlighted ||
-    isSharedFolderAvailableIndicatorVisible ||
-    (isModerator && hasParticipantsWaiting);
-
-  const handleSetActiveTab = (tabKey: ModerationTabKey) => {
-    dispatch(setActiveTab(tabKey));
-  };
+  const handleSetActiveTab = (tabKey: ModerationTabKey) => dispatch(setActiveTab(tabKey));
 
   const { t } = useTranslation();
 
@@ -90,7 +69,11 @@ const Drawer = () => {
     return '';
   };
 
-  const homeTab = tabs.find((tab) => tab.key === ModerationTabKey.Home);
+  const mobileParticipantTabs = tabs.filter((tab) => tab.key === ModerationTabKey.Home);
+  if (!isModerator && voteAndPollCount > 0) {
+    mobileParticipantTabs.unshift(PollsAndVotesMobileTab);
+  }
+
   const mobileModerationTabs = tabs.slice();
   if (isWaitingRoomEnabled && isModerator) {
     /**
@@ -102,75 +85,71 @@ const Drawer = () => {
   }
 
   const open = () => {
-    if (participantsWaitingCount > 0 && isModerator) {
-      // The click on the indicator "o" opens the waiting room overview
-      dispatch(setActiveTab(ModerationTabKey.WaitingRoom));
-    }
-    setIsDrawerOpen(true);
+    batch(() => {
+      if (activeVoteAndPollCount > 0 && !isModerator) {
+        dispatch(setActiveTab(ModerationTabKey.PollsAndLegalVote));
+      }
+      if (participantsWaitingCount > 0 && isModerator) {
+        // The click on the indicator "o" opens the waiting room overview
+        dispatch(setActiveTab(ModerationTabKey.WaitingRoom));
+      }
+      dispatch(setIsDrawerOpen(true));
+    });
   };
 
   const close = () => {
-    setIsDrawerOpen(false);
-    if (participantsWaitingCount === 0 && activeTab === ModerationTabKey.WaitingRoom && isModerator) {
-      dispatch(setActiveTab(ModerationTabKey.Home));
-    }
+    batch(() => {
+      dispatch(setIsDrawerOpen(false));
+      if (participantsWaitingCount === 0 && activeTab === ModerationTabKey.WaitingRoom && isModerator) {
+        dispatch(setActiveTab(ModerationTabKey.Home));
+      }
+    });
   };
 
   const toggle = () => {
     isDrawerOpen ? close() : open();
   };
 
-  const Tabs = mobileModerationTabs.map((tab) => {
-    if (
-      !tab.divider &&
-      //Temporary disabling of voting and polls until they are taken care of by separate issue
-      !(tab.moduleKey === BackendModules.LegalVote || tab.moduleKey === BackendModules.Polls)
-    ) {
-      // Placeholder condition to show indicator inside of the drawer accordion button.
-      const showIndicator =
-        (ModerationTabKey.WaitingRoom === tab.key && participantsWaitingCount > 0) ||
-        (ModerationTabKey.Home === tab.key && hasUnreadMessages);
+  const renderTabs = (tabs: Tab[]) => {
+    return tabs.map((tab) => {
+      const isOmittedTab =
+        tab.divider || tab.moduleKey === BackendModules.LegalVote || tab.moduleKey === BackendModules.Polls;
 
-      return (
-        <DrawerTab
-          key={tab.key}
-          tabTitle={getTabTitle(tab)}
-          disabled={tab.disabled}
-          active={activeTab === tab.key}
-          handleClick={() => handleSetActiveTab(tab.key)}
-          showIndicator={showIndicator}
-        >
-          {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
+      if (!isOmittedTab) {
+        const showIndicatorOnWaitingRoomTab = ModerationTabKey.WaitingRoom === tab.key && participantsWaitingCount > 0;
+        const showIndicatorOnHomeTab = ModerationTabKey.Home === tab.key && hasUnreadMessages;
+        const showIndicatorOnPollsAndLegalVoteTab =
+          ModerationTabKey.PollsAndLegalVote === tab.key && voteAndPollCount > 0 && !haveSeenMobilePollsAndVotes;
+
+        // Placeholder condition to show indicator inside of the drawer accordion button.
+        const showIndicator =
+          showIndicatorOnWaitingRoomTab || showIndicatorOnHomeTab || showIndicatorOnPollsAndLegalVoteTab;
+
+        return (
+          <DrawerTab
+            key={tab.key}
+            tabTitle={getTabTitle(tab)}
+            disabled={tab.disabled}
+            active={activeTab === tab.key}
+            handleClick={() => handleSetActiveTab(tab.key)}
+            showIndicator={showIndicator}
+          >
+            {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
           or some other way to prevent duplication with MeetingSidebar.tsx */}
-          <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
-        </DrawerTab>
-      );
-    }
-  });
+            <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
+          </DrawerTab>
+        );
+      }
+    });
+  };
 
   return (
     <>
-      <IconButton onClick={toggle}>
-        <LogoSmallIcon />
-        {showIndicator && <ButtonIndicator />}
-      </IconButton>
+      <DrawerButton onClick={toggle} />
       <StyledDrawer open={isDrawerOpen} onClose={close}>
-        {isModerator && <DrawerContentContainer>{Tabs}</DrawerContentContainer>}
-        {!isModerator && homeTab && (
-          <DrawerContentContainer>
-            <DrawerTab
-              key={homeTab.key}
-              tabTitle={getTabTitle(homeTab)}
-              disabled={homeTab.disabled}
-              active={activeTab === homeTab.key}
-              handleClick={() => handleSetActiveTab(homeTab.key)}
-            >
-              {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
-          or some other way to prevent duplication with MeetingSidebar.tsx */}
-              <EnterpriseProvider moduleKey={homeTab.moduleKey}>{homeTab.component}</EnterpriseProvider>
-            </DrawerTab>
-          </DrawerContentContainer>
-        )}
+        <DrawerContentContainer>
+          {renderTabs(isModerator ? mobileModerationTabs : mobileParticipantTabs)}
+        </DrawerContentContainer>
       </StyledDrawer>
     </>
   );

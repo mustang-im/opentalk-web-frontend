@@ -67,6 +67,8 @@ interface UIState {
   focusedSpeaker: ParticipantId | undefined;
   hotkeysEnabled: boolean;
   errorDialog: ErrorDialog;
+  haveSeenMobilePollsAndVotes: boolean;
+  isDrawerOpen: boolean;
 }
 
 const initialState: UIState = {
@@ -101,6 +103,8 @@ const initialState: UIState = {
     event: undefined,
     showErrorDialog: false,
   },
+  haveSeenMobilePollsAndVotes: false,
+  isDrawerOpen: false,
 };
 
 export const uiSlice = createSlice({
@@ -157,6 +161,9 @@ export const uiSlice = createSlice({
     },
     setActiveTab(state, { payload: tabKey }: PayloadAction<ModerationTabKey>) {
       state.activeTab = tabKey;
+      if (tabKey === ModerationTabKey.PollsAndLegalVote) {
+        state.haveSeenMobilePollsAndVotes = true;
+      }
     },
     toggledFullScreenMode(state) {
       state.isFullscreenMode = !state.isFullscreenMode;
@@ -187,6 +194,9 @@ export const uiSlice = createSlice({
     setShowErrorDialog(state, { payload: { showErrorDialog, event } }: PayloadAction<ErrorDialog>) {
       state.errorDialog.event = event;
       state.errorDialog.showErrorDialog = showErrorDialog;
+    },
+    setIsDrawerOpen: (state, { payload }) => {
+      state.isDrawerOpen = payload;
     },
   },
   extraReducers: (builder) => {
@@ -225,9 +235,11 @@ export const uiSlice = createSlice({
     });
     builder.addCase(legalVoteStore.started, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
       state.votesPollIdToShow = vote.legalVoteId;
+      state.haveSeenMobilePollsAndVotes = state.isDrawerOpen && state.activeTab === ModerationTabKey.PollsAndLegalVote;
     });
     builder.addCase(PollStarted, (state, { payload: vote }: PayloadAction<PollStartedInterface>) => {
       state.votesPollIdToShow = vote.id;
+      state.haveSeenMobilePollsAndVotes = state.isDrawerOpen && state.activeTab === ModerationTabKey.PollsAndLegalVote;
     });
     builder.addCase(timerStarted, (state, { payload }) => {
       if (payload.style === TimerStyle.CoffeeBreak) {
@@ -275,6 +287,7 @@ export const {
   setFocusedSpeaker,
   setHotkeysEnabled,
   setShowErrorDialog,
+  setIsDrawerOpen,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -313,5 +326,7 @@ export function selectDefaultChatMessage(scope: ChatScope, target?: TargetId) {
 export const selectHotkeysEnabled = (state: RootState) => state.ui.hotkeysEnabled;
 export const selectShowErrorDialog = (state: RootState) => state.ui.errorDialog.showErrorDialog;
 export const selectErrorDialogEvent = (state: RootState) => state.ui.errorDialog.event;
+export const selectHaveSeenMobilePollsAndVotes = (state: RootState) => state.ui.haveSeenMobilePollsAndVotes;
+export const selectIsDrawerOpen = (state: RootState) => state.ui.isDrawerOpen;
 
 export default uiSlice.reducer;

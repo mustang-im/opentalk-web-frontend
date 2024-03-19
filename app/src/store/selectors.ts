@@ -249,3 +249,14 @@ export const selectPollsAndVotingsCount = createSelector(
     return votings.length + polls.length;
   }
 );
+
+export const selectActivePollsAndVotingsCount = createSelector(
+  legalVoteStore.selectAllVotes,
+  selectAllPollVotes,
+  (votings, polls) => {
+    return (
+      votings.filter((voting) => voting.state === 'active').length +
+      polls.filter((poll) => poll.state === 'active').length
+    );
+  }
+);

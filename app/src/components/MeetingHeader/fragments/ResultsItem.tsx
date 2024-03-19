@@ -24,6 +24,7 @@ const Chip = styled(MuiChip)(({ theme }) => ({
 }));
 
 const CustomMenuItem = styled(MenuItem)(() => ({
+  display: 'flex',
   '&:hover': {
     cursor: 'pointer',
   },
@@ -45,7 +46,7 @@ const ResultsItem = ({ item }: ResultsItemProps) => {
   return (
     <CustomMenuItem key={item.id} onClick={() => openItem(item)}>
       <ListItemIcon>{Object.hasOwn(item, 'choices') ? <PollIcon /> : <LegalBallotIcon />}</ListItemIcon>
-      <ListItemText sx={{ whiteSpace: 'normal' }}>{`${label}`}</ListItemText>
+      <ListItemText primaryTypographyProps={{ noWrap: true }} primary={label} />
       <Chip
         size="medium"
         label={t(`global-state-${item.state}`)}
