@@ -35,7 +35,7 @@
 
 - Resolve circular dependencies in the UI components ([#1201](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1201))
 
-## 1.11.0-rc.1
+## 1.11.0
 
 ### New Features
 
