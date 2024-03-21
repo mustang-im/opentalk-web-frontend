@@ -4,6 +4,7 @@
 
 ### Improvements to the user experience
 
+- After navigating to the tab as a moderator, related tab content gets focused and pronounced using a screenreader. ([#1754](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1754))
 - Improve room UI for medium screen size ([#1242](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1242))
 - Add moderator badge to the moderator in the participant list. ([#1768](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1768))
 - Moderator can mute participant through the context menu from the participant list. ([#1635](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1635))

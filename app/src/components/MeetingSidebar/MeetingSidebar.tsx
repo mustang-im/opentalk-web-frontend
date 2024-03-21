@@ -29,7 +29,7 @@ const ProfileWindow = styled('div', {
   shouldForwardProp: (prop) => prop !== 'isModerator',
 })<{ isModerator?: boolean }>(({ theme }) => ({
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column-reverse',
   borderRadius: theme.borderRadius.medium,
   padding: theme.spacing(2),
   transform: 'translateZ(0)',
@@ -76,9 +76,9 @@ const MeetingSidebar = () => {
     <SideBar aria-label={t('landmark-complementary-tools')}>
       <ModerationSideToolbar displayedTabs={tabs} onSelect={handleSetActiveTab} activeTab={activeTab} />
       <ProfileWindow isModerator={isModerator}>
-        <LocalVideo />
-        <Toolbar />
         {renderTabPanelContent()}
+        <Toolbar />
+        <LocalVideo />
       </ProfileWindow>
     </SideBar>
   ) : (
