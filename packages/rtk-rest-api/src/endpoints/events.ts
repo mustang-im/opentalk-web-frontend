@@ -13,6 +13,7 @@ import {
   Tags,
   Tag,
   CreateEventInvitePayload,
+  UpdateEventInstancePayload,
   UserId,
   EventInvite,
 } from '../types';
@@ -188,6 +189,20 @@ export const addEventsEndpoints = <
       params,
     }),
     providesTags: (result) => (result ? [{ type: Tag.EventInstance, id: result.id }] : []),
+  }),
+  /**
+   * Update an event instance based on eventId and InstanceId
+   */
+  updateEventInstance: builder.mutation<
+    EventInstance,
+    { eventId: EventId; instanceId: EventInstanceId } & UpdateEventInstancePayload
+  >({
+    query: ({ eventId, instanceId, ...payload }) => ({
+      url: `events/${eventId}/instances/${instanceId}`,
+      method: 'PATCH',
+      body: payload,
+    }),
+    invalidatesTags: (result, error, { eventId, instanceId }) => [{ type: Tag.EventInstance, eventId, instanceId }],
   }),
   /**
    * Get invites for an specific Event

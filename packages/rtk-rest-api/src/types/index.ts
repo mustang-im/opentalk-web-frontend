@@ -13,10 +13,12 @@ export type {
   EventException,
   EventInstance,
   EventAndInstanceId,
+  EventInstanceId,
   EventId,
   CreateEventPayload,
   CreateEventExceptionPayload,
   UpdateEventPayload,
+  UpdateEventInstancePayload,
   TimedEvent,
 } from './event';
 export type {
@@ -38,4 +40,5 @@ export {
   isEventInstance,
   isEvent,
   EventType,
+  EventStatus,
 } from './event';

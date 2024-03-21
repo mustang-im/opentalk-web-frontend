@@ -130,6 +130,7 @@ const darkPalette: PaletteOptions = {
     main: '#F1554C',
     contrastText: '#FFF',
     dark: '#D32F2F',
+    light: '#8B999E',
   },
   warning: {
     main: '#FF9300',

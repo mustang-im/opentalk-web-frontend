@@ -845,11 +845,14 @@ protocol-tab-title = Protokoll erstellen
 beta-flag-tooltip-text = Sie nutzen die Beta-Version von OpenTalk. Wir entwickeln kontinuierlich neue Funktionen und stellen diese im Rahmen unserer <demoLink>Demo</demoLink> frühzeitig als Ausblick bereit. Bitte beachten Sie, dass es zu Einschränkungen bei der Nutzung kommen kann. Kritik, Ideen und Fehler können Sie uns gerne an <reportEmailLink>{$reportEmail}</reportEmailLink> senden.<br /><br />Viel Spaß beim ausprobieren von OpenTalk!
 
 tooltip-empty-favourites = Sie können über das Menü auf der Karte Meetings als Favoriten markieren.
-meeting-delete-metadata-dialog-title = Meeting beenden
-meeting-delete-metadata-dialog-message = Soll dieses Meeting aus dem Dashboard entfernt werden? Dabei werden alle Informationen zu diesem Meeting (inkl. Aufnahmen, Protokolle, Abstimmungsergebnisse usw.) gelöscht!
-meeting-delete-metadata-dialog-checkbox = Löschung bestätigen
-meeting-delete-metadata-button-leave-and-delete = Verlassen und alle Daten löschen
-meeting-delete-metadata-button-leave-without-delete = Verlassen ohne Daten zu löschen
+meeting-delete-metadata-dialog-title = Meeting verlassen
+meeting-delete-metadata-dialog-message = Soll dieses Meeting gelöscht werden? Das Meeting wird dann sofort vom Dashboard entfernt. 
+meeting-delete-recurring-metadata-dialog-message = Soll dieses Meeting gelöscht werden? Das Meeting ist Teil einer Meetingserie. Sie können die ganze Meetingserie löschen, einschließlich aller Daten (Aufnahmen, Protokolle und Abstimmungsergebnisse) oder nur das einzelne Meeting, dabei bleiben alle Daten erhalten.
+meeting-delete-metadata-dialog-checkbox = Dieses Meeting löschen
+meeting-delete-recurring-dialog-radio-single = Das einzelne Meeting löschen
+meeting-delete-recurring-dialog-radio-all = Die ganze Meetingserie löschen inkl. Daten
+meeting-delete-metadata-button-leave-and-delete = Ja, verlassen und löschen
+meeting-delete-metadata-button-leave-without-delete = Nein, nur verlassen
 meeting-delete-metadata-submit-error =
     Beim löschen der Daten ist ein Fehler aufgetreten.
     Bitte versuchen sie es später nochmal!

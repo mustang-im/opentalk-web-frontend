@@ -38,17 +38,12 @@ describe('<EndCallButton />', () => {
     expect(endButton).toBeInTheDocument();
 
     expect(screen.queryByLabelText('meeting-delete-metadata-dialog-title')).not.toBeInTheDocument();
-    expect(screen.queryByText('meeting-delete-metadata-dialog-message')).not.toBeInTheDocument();
-    expect(screen.queryByText('meeting-delete-metadata-button-leave-and-delete')).not.toBeInTheDocument();
-    expect(screen.queryByText('meeting-delete-metadata-button-leave-without-delete')).not.toBeInTheDocument();
-    expect(screen.queryByText('meeting-delete-metadata-dialog-checkbox')).not.toBeInTheDocument();
 
     fireEvent.click(endButton);
 
     const closeMeetingButton = screen.getByText('meeting-delete-metadata-button-leave-and-delete');
 
     expect(screen.getByLabelText('meeting-delete-metadata-dialog-title')).toBeInTheDocument();
-    expect(screen.getByText('meeting-delete-metadata-dialog-message')).toBeInTheDocument();
     expect(closeMeetingButton).toBeInTheDocument();
     expect(screen.getByText('meeting-delete-metadata-button-leave-without-delete')).toBeInTheDocument();
   });

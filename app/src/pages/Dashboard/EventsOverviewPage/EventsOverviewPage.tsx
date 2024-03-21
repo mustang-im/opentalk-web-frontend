@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useGetEventsQuery } from '../../../api/rest';
 import { useHeader } from '../../../templates/DashboardTemplate';
 import {
-  appendRecurrenceEventInstances,
+  appendRecurringEventInstances,
   SortDirection,
   orderEventsByDate,
   TimePerspectiveFilter,
@@ -157,7 +157,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
   }, [timePeriodFilter]);
 
   /**
-   * Returns memorized function to optimize the performance (acts like memorized selector)
+   * Returns memoized function to optimize the performance (acts like a memoized selector)
    **/
   const selectAndTransformToMeetingProps = (
     data: CursorPaginated<Event | EventException> | undefined,
@@ -167,14 +167,10 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
       if (!data) {
         return [];
       }
-      const eventsWithEventInstances = appendRecurrenceEventInstances(
-        data.data,
-        true,
-        undefined,
-        timePerspectiveFilter
-      );
 
-      const orderedEventsWithRecurrenceInstances = orderEventsByDate(
+      const eventsWithEventInstances = appendRecurringEventInstances(data.data, true, undefined, timePerspectiveFilter);
+
+      const orderedEventsWithRecurringInstances = orderEventsByDate(
         formatEventsByHeaderChange(eventsWithEventInstances),
         timePerspectiveFilter === TimePerspectiveFilter.Future ? SortDirection.ASC : SortDirection.DESC
       );
@@ -182,12 +178,12 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
       if (timePerspectiveFilter === TimePerspectiveFilter.TimeIndependent) {
         const constructMeetingProp = {
           title: t('dashboard-meeting-details-page-time-independent'),
-          events: orderedEventsWithRecurrenceInstances,
+          events: orderedEventsWithRecurringInstances,
         };
         setExpandAccordion('all');
         return [constructMeetingProp];
       }
-      const eventsGroupedByTimeFilter = groupBy(orderedEventsWithRecurrenceInstances, (event) =>
+      const eventsGroupedByTimeFilter = groupBy(orderedEventsWithRecurringInstances, (event) =>
         filterByTimePeriod(
           filter.timePeriod,
           isTimelessEvent(event) ? event.createdAt : (event.startsAt?.datetime as DateTime)

@@ -27,8 +27,11 @@ import {
   RoomId,
   UserId,
   TimelessEvent,
+  RecurringEvent,
+  SingleEvent,
   RoomInvite,
 } from '@opentalk/rest-api-rtk-query';
+import { SipId } from '@opentalk/rest-api-rtk-query/src/types/room';
 import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
 import { createStore as createStoreTlk, configureStore as configureStoreTlk } from '@reduxjs/toolkit';
 import { act, render as rtlRender, RenderOptions } from '@testing-library/react';
@@ -302,3 +305,106 @@ export const mockedExpiringDateRoomInvite: RoomInvite = {
 };
 
 export const mockedPermanentRoomInvite: RoomInvite = { ...mockedExpiringDateRoomInvite, expiration: null };
+
+export const mockedRecurringEvent: RecurringEvent = {
+  id: 'db61b29b-b944-422d-b20f-6ed4158aad4d' as EventId,
+  createdBy: {
+    id: '7224df0f-7051-42ff-9bc9-b8c5a8b39bdb' as UserId,
+    email: 't1@testing.opentalk.eu' as Email,
+    title: '',
+    firstname: 'Test1',
+    lastname: 'T1',
+    displayName: 'New',
+    avatarUrl: 'https://seccdn.libravatar.org/avatar/99a8042a26cef654898731e93d003349',
+  },
+  createdAt: '2024-03-04T14:10:12.944521Z' as DateTime,
+  updatedBy: {
+    id: '7224df0f-7051-42ff-9bc9-b8c5a8b39bdb' as UserId,
+    email: 't1@testing.opentalk.eu' as Email,
+    title: '',
+    firstname: 'Test1',
+    lastname: 'T1',
+    displayName: 'New',
+    avatarUrl: 'https://seccdn.libravatar.org/avatar/99a8042a26cef654898731e93d003349',
+  },
+  updatedAt: '2024-03-04T14:10:12.944521Z' as DateTime,
+  title: 'Recurring Meeting',
+  description: 'Recurring Meeting for test data',
+  room: {
+    id: '47cc8df7-b48e-4a56-87f8-92164613f74c' as RoomId,
+    waitingRoom: false,
+    callIn: {
+      tel: '+49 30 - 577 10 231 9901',
+      id: '4082652646' as SipId,
+      password: '0513013745',
+    },
+  },
+  inviteesTruncated: true,
+  invitees: [],
+  isTimeIndependent: false,
+  isAllDay: false,
+  startsAt: {
+    datetime: '2024-03-04T18:30:00Z',
+    timezone: 'Europe/Berlin',
+  },
+  endsAt: {
+    datetime: '2024-03-04T19:00:00Z',
+    timezone: 'Europe/Berlin',
+  },
+  recurrencePattern: ['RRULE:FREQ=DAILY'],
+  isAdhoc: false,
+  type: EventType.Recurring,
+  inviteStatus: InviteStatus.Accepted,
+  isFavorite: false,
+};
+export const mockedSingleEvent: SingleEvent = {
+  id: 'c08743df-6de1-4446-95e3-f158ebd81fa0' as EventId,
+  createdBy: {
+    id: '7224df0f-7051-42ff-9bc9-b8c5a8b39bdb' as UserId,
+    email: 't1@testing.opentalk.eu' as Email,
+    title: '',
+    firstname: 'Test1',
+    lastname: 'T1',
+    displayName: 'New',
+    avatarUrl: 'https://seccdn.libravatar.org/avatar/99a8042a26cef654898731e93d003349',
+  },
+  createdAt: '2024-03-04T14:30:21.438203Z' as DateTime,
+  updatedBy: {
+    id: '7224df0f-7051-42ff-9bc9-b8c5a8b39bdb' as UserId,
+    email: 't1@testing.opentalk.eu' as Email,
+    title: '',
+    firstname: 'Test1',
+    lastname: 'T1',
+    displayName: 'New',
+    avatarUrl: 'https://seccdn.libravatar.org/avatar/99a8042a26cef654898731e93d003349',
+  },
+  updatedAt: '2024-03-04T14:30:21.438203Z' as DateTime,
+  title: 'Single Meeting',
+  description: 'Single meeting for test data',
+  room: {
+    id: '2f60df9e-c34e-4cfd-9dc9-e7ebb297583b' as RoomId,
+    waitingRoom: false,
+    callIn: {
+      tel: '+49 30 - 577 10 231 9901',
+      id: '0940955973' as SipId,
+      password: '2320845822',
+    },
+  },
+  inviteesTruncated: true,
+  invitees: [],
+  isTimeIndependent: false,
+  isAllDay: false,
+  startsAt: {
+    datetime: '2024-03-04T15:00:00Z',
+    timezone: 'Europe/Berlin',
+  },
+  endsAt: {
+    datetime: '2024-03-04T15:30:00Z',
+    timezone: 'Europe/Berlin',
+  },
+  recurrencePattern: [],
+  isAdhoc: false,
+  type: EventType.Single,
+  inviteStatus: InviteStatus.Accepted,
+  isFavorite: false,
+};

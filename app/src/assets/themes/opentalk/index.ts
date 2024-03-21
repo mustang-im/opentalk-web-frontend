@@ -110,6 +110,12 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
               backgroundColor: 'transparent',
             },
           }),
+          containedError: ({ theme }) => ({
+            ':disabled': {
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.secondary.contrastText,
+            },
+          }),
           containedInherit: ({ theme }) => ({
             color: mode === 'light' ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText,
           }),

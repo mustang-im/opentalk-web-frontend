@@ -177,9 +177,11 @@ export const {
   useLazyGetRoomInvitesQuery,
   useCreateEventSharedFolderMutation,
   useDeleteEventSharedFolderMutation,
+  useUpdateEventInstanceMutation,
   useGetRoomEventInfoQuery,
   useGetEventInvitesQuery,
   useUpdateEventInviteMutation,
   useGetStreamingTargetsQuery,
   useAddStreamingTargetsMutation,
+  useGetEventInstanceQuery,
 } = restApi;

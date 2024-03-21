@@ -30,12 +30,13 @@ type EventRoomInfo = {
  * The status of an event
  */
 export enum EventStatus {
-  Cancelled = 'canceled',
+  Cancelled = 'cancelled',
   Ok = 'ok',
 }
 
 /**
- * The type of an event
+ * The type of an event. This might actually have to be 2 types.
+ * See issue #1784
  */
 export enum EventType {
   Single = 'single',
@@ -144,6 +145,7 @@ export interface UpdateEventInstancePayload {
   isAllDay?: boolean;
   waitingRoom?: boolean;
   isAdhoc?: boolean;
+  status: EventStatus;
 }
 
 /**
