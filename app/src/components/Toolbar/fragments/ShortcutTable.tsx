@@ -14,15 +14,15 @@ export const ShortcutTable = () => {
     return [
       {
         key: HOTKEY_MICROPHONE,
-        description: `${t('global-microphone')} ${t('global-on')}/${t('global-off')}`,
+        description: `${t('global-microphone')} ${t('global-on')} / ${t('global-off')}`,
       },
       {
         key: HOTKEY_VIDEO,
-        description: `${t('global-video')} ${t('global-on')}/${t('global-off')}`,
+        description: `${t('global-video')} ${t('global-on')} / ${t('global-off')}`,
       },
       {
         key: HOTKEY_FULLSCREEN,
-        description: `${t('global-fullscreen')} ${t('global-on')}/${t('global-off')}`,
+        description: `${t('global-fullscreen')} ${t('global-on')} / ${t('global-off')}`,
       },
       {
         key: HOTKEY_NEXT_SPEAKER,
@@ -37,20 +37,24 @@ export const ShortcutTable = () => {
 
   return (
     <TableContainer component={Paper}>
-      <Table padding="normal">
+      <Table padding="normal" summary={t('shortcut-table-summary')} tabIndex={0}>
         <TableHead>
           <TableRow>
-            <TableCell>{t('global-shortcut')}</TableCell>
-            <TableCell>{t('global-description')}</TableCell>
+            <TableCell scope="col" id="shortcut-key">
+              {t('global-shortcut')}
+            </TableCell>
+            <TableCell scope="col" id="shortcut-description">
+              {t('global-description')}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {shortcuts.map((shortcut) => (
             <TableRow key={shortcut.key}>
-              <TableCell>
+              <TableCell headers="shortcut-key">
                 <code>{shortcut.key}</code>
               </TableCell>
-              <TableCell>
+              <TableCell headers="shortcut-description">
                 <Typography fontWeight={300}>{shortcut.description}</Typography>
               </TableCell>
             </TableRow>
