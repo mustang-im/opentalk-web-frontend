@@ -145,7 +145,7 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
 
   return (
     <>
-      <Dialog open={open} maxWidth="sm" fullWidth container={handleFullscreen.rootElement}>
+      <Dialog open={open} maxWidth="sm" fullWidth container={handleFullscreen.rootElement} onClose={onClose}>
         <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
 
         <Box position="absolute" top={0} right={0}>

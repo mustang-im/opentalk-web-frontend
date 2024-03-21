@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Tooltip, ThemeProvider, Theme } from '@mui/material';
+import { styled, Tooltip, ThemeProvider, Theme, IconButtonProps } from '@mui/material';
 import { ArrowDownIcon, IconButton } from '@opentalk/common';
 import { MouseEvent, ReactNode } from 'react';
 
@@ -112,7 +112,7 @@ export type ToolbarButtonProps = {
   openMenu?: () => void;
   children: ReactNode;
   isLobby?: boolean;
-};
+} & IconButtonProps;
 
 // We have to bend the standard keyboard accessibility for the toolbar buttons.
 // `Space` key shall be ignored for the microphone button, otherwise it collides

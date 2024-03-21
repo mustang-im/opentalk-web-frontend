@@ -188,6 +188,18 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
                 backgroundColor: theme.palette.secondary.main,
               },
             }),
+            ...(ownerState.color === 'error' && {
+              background: theme.palette.error.main,
+              svg: {
+                fill: theme.palette.common.white,
+              },
+              ':hover': {
+                background: theme.palette.common.white,
+                svg: {
+                  fill: theme.palette.error.main,
+                },
+              },
+            }),
           }),
           colorPrimary: ({ theme }) => ({
             background: theme.palette.primary.main,
