@@ -596,6 +596,7 @@ global-open = Open
 global-close = Close
 global-ok = Ok
 global-no-result = No result
+global-close-dialog = Close dialog
 
 dashboard-home = Home
 dashboard-meetings = Meetings
@@ -868,8 +869,8 @@ votes-poll-overview-title = Polls and votings
 votes-poll-overview-live-label = live
 votes-poll-overview-not-live-label = not live
 
-votes-result-not-live-tooltip = This vote is not live, the results will be announced when the vote end.
-votes-result-live-tooltip = This vote is live, the results will announced continuously.
+votes-result-not-live-tooltip = This poll is not live, the results will be announced when the poll end.
+votes-result-live-tooltip = This poll is live, the results will be announced continuously.
 
 debug-panel-inbound-label = Inbound (current, avr, max):
 debug-panel-outbound-label = Outbound (current, avr, max):

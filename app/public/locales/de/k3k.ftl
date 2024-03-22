@@ -381,7 +381,7 @@ legal-vote-share-token-inactive = Diesen Code nicht mit Anderen teilen und an ei
 poll-participant-list-button-select = Auswählen
 poll-participant-list-button-close = Schließen
 poll-participant-list-button-save = Speichern
-poll-participant-list-button-start = Abstimmung starten
+poll-participant-list-button-start = Umfrage starten
 poll-participant-list-button-select-all = Alle auswählen
 
 legal-vote-success = Ihre Stimme wurde um {{atVoteTime}} Uhr am {{onVoteDate}} erfolgreich gezählt mit dem folgenden Verifikation-Code.
@@ -596,6 +596,7 @@ global-open = Öffnen
 global-close = Schließen
 global-ok = Ok
 global-no-result = Keine Ergebnisse
+global-close-dialog = Dialog schließen
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings
@@ -869,8 +870,8 @@ votes-poll-overview-title = Umfragen und Abstimmungen
 votes-poll-overview-live-label = Live
 votes-poll-overview-not-live-label = Nicht live
 
-votes-result-not-live-tooltip = Diese Abstimmung ist nicht live, die Ergebnisse werden nach Ende der Abstimmung bekannt gegeben.
-votes-result-live-tooltip = Diese Abstimmung ist live, die Ergebnisse werden kontinuierlich bekannt gegeben.
+votes-result-not-live-tooltip = Diese Umfrage ist nicht live, die Ergebnisse werden nach Ende der Umfrage bekannt gegeben.
+votes-result-live-tooltip = Diese Umfrage ist live, die Ergebnisse werden kontinuierlich bekannt gegeben.
 
 debug-panel-inbound-label = Eingehende (aktuell, durchschn., max):
 debug-panel-outbound-label = Ausgehend (aktuell, durchschn., max):

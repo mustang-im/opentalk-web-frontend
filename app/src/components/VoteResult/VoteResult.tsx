@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Checkbox, LinearProgress, FormControlLabel as MuiFormControlLabel } from '@mui/material';
+import { styled, Radio, InputLabel } from '@mui/material';
 import { PollId, LegalVoteId } from '@opentalk/common';
 import { legalVoteStore } from '@opentalk/components';
 import React, { useState } from 'react';
@@ -31,19 +31,44 @@ export interface IVoteResult {
   voteType: VoteType;
 }
 
-const ProgressContainer = styled('div')({
+const ProgressContainer = styled('div')(({ theme }) => ({
   position: 'relative',
   height: '3em',
-});
-
-const ProgressBar = styled(LinearProgress)(({ theme }) => ({
-  height: '100%',
-  borderRadius: '0.5em',
+  display: 'flex',
+  alignItems: 'center',
   backgroundColor: theme.palette.secondary.main,
-  color: 'red',
+  borderRadius: '0.5em',
+  '&:not(:first-child)': {
+    marginTop: theme.spacing(1),
+  },
+  '& .MuiInputLabel-root': {
+    color: theme.palette.secondary.contrastText,
+    flex: 1,
+    height: '100%',
+    lineHeight: '3em',
+  },
+  '& .MuiRadio-root.MuiRadio-colorPrimary': {
+    marginLeft: 0,
+    aspectRatio: '1/1',
+    borderRadius: '0',
+    color: theme.palette.secondary.contrastText,
+    '&.Mui-checked': {
+      color: theme.palette.secondary.contrastText,
+    },
+    '&.Mui-disabled': {
+      opacity: 0.6,
+    },
+    '&.Mui-disabled + .MuiInputLabel-root': {
+      color: theme.palette.secondary.contrastText,
+      opacity: 0.6,
+    },
+  },
+  '& .MuiRadio-root:not(.Mui-disabled) + .MuiInputLabel-root': {
+    cursor: 'pointer',
+  },
 }));
 
-const ProgressLabel = styled('label')(({ theme }) => ({
+const ProgressLabel = styled('span')(({ theme }) => ({
   position: 'absolute',
   color: theme.palette.secondary.contrastText,
   right: '1em',
@@ -53,28 +78,12 @@ const ProgressLabel = styled('label')(({ theme }) => ({
   gap: '1em',
 }));
 
-const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
-  position: 'absolute',
-  left: '1em',
-  zIndex: 1,
-  width: '100%',
-  '&&': {
-    color: theme.palette.secondary.contrastText,
-    '& .MuiCheckbox-root, .MuiFormControlLabel-label': {
-      color: 'inherit',
-    },
-    '& .Mui-disabled': {
-      color: 'inherit',
-      opacity: 0.6,
-    },
-  },
-}));
-
-const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, voteType }: IVoteResult) => {
+const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, voteType, optionIndex }: IVoteResult) => {
   const didVote =
     voteType === VoteType.LegalVote
       ? Boolean(useAppSelector(legalVoteStore.selectCurrentShownVote)?.votedAt)
       : Boolean(useAppSelector(selectCurrentShownPollVote)?.voted);
+  const id = voteData.legalVoteId + '-' + optionIndex;
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 
   return (
@@ -82,19 +91,14 @@ const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, vot
       onMouseEnter={() => setShowAdditionalInfo(true)}
       onMouseLeave={() => setShowAdditionalInfo(false)}
     >
-      <FormControlLabel
+      <Radio
+        id={id}
         disabled={didVote || !voteData.isVotable}
-        control={
-          <Checkbox
-            checked={isChecked}
-            onChange={() => {
-              onVote();
-            }}
-          />
-        }
-        label={title}
+        checked={isChecked}
+        name={voteData.legalVoteId}
+        onChange={onVote}
       />
-      <ProgressBar color="secondary" variant="determinate" value={voteData.votePercentage} />
+      <InputLabel htmlFor={id}>{title}</InputLabel>
       {showResult && (
         <ProgressLabel>
           {`${voteData.votePercentage ? voteData.votePercentage.toFixed(1) : 0}% ${

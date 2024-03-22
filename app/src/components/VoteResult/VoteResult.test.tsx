@@ -29,7 +29,7 @@ describe('testing vote results', () => {
 
   test('component should render wothout breaking', async () => {
     await render(<VoteResult {...voteResultsProps} />, store);
-    const yesCheckbox = screen.getByRole('checkbox', { name: voteResultsProps.title });
+    const yesCheckbox = screen.getByRole('radio', { name: voteResultsProps.title });
 
     expect(yesCheckbox).toBeInTheDocument();
     expect(yesCheckbox).not.toBeChecked();
@@ -38,7 +38,7 @@ describe('testing vote results', () => {
 
   test('on click should fire onVote event', async () => {
     await render(<VoteResult {...voteResultsProps} />, store);
-    const yesCheckbox = screen.getByRole('checkbox', { name: voteResultsProps.title });
+    const yesCheckbox = screen.getByRole('radio', { name: voteResultsProps.title });
     expect(yesCheckbox).toBeInTheDocument();
     fireEvent.click(yesCheckbox);
     expect(yesCheckbox).toBeChecked();
