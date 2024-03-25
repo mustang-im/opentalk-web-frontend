@@ -3,12 +3,12 @@
 // SPDX-License-Identifier: EUPL-1.2
 import React from 'react';
 
+import { generateInstanceId } from '../../utils/eventUtils';
 import { configureStore, render, screen, mockedSingleEvent, mockedRecurringEvent } from '../../utils/testUtils';
-import CloseMeetingDialog, { CloseMeetingDialogProps, generateInstanceId } from './CloseMeetingDialog';
+import CloseMeetingDialog, { CloseMeetingDialogProps } from './CloseMeetingDialog';
 
 const TEST_DATE = '2024-02-16T10:30:00Z';
-const MOCK_TODAY_DATE = '2024-02-18T10:30:00Z';
-const VERIFY_TODAY_DATE = '20240218T103000Z';
+const VERIFY_TODAY_DATE = '20240216T103000Z';
 
 const dialogProps: CloseMeetingDialogProps = {
   open: true,
@@ -17,16 +17,14 @@ const dialogProps: CloseMeetingDialogProps = {
 };
 
 describe('generate instance id', () => {
-  it('should generate an instance id with the date of today', () => {
-    jest.useFakeTimers().setSystemTime(new Date(MOCK_TODAY_DATE));
+  it('should generate an instance id with the date of test date', () => {
     const startTimeInEventFormat = new Date(TEST_DATE);
-    const todayInCorrectFormat = VERIFY_TODAY_DATE;
 
     const instanceId = generateInstanceId({
       datetime: startTimeInEventFormat.toISOString(),
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     });
-    expect(instanceId).toEqual(todayInCorrectFormat);
+    expect(instanceId).toEqual(VERIFY_TODAY_DATE);
     jest.useRealTimers();
   });
 });

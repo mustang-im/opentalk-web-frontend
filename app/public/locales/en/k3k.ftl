@@ -686,10 +686,15 @@ dashboard-meeting-card-popover-details = Details
 dashboard-meeting-card-popover-copy-link = Copy Meeting-Link
 dashboard-meeting-card-popover-copy-guest-link = Copy Guest-Link
 
-dashboard-meeting-card-delete-dialog-title = Please confirm
-dashboard-meeting-card-delete-dialog-message = Do you really want to delete the meeting {$subject} ?
+dashboard-meeting-card-delete-dialog-title = Delete meeting
+dashboard-meeting-card-delete-dialog-message = Do you really want to delete the meeting "{$subject}" for all?
 dashboard-meeting-card-delete-dialog-ok = Delete
 dashboard-meeting-card-delete-dialog-cancel = Cancel
+
+dashboard-recurrence-meeting-card-delete-dialog-message = This meeting is part of a meetings series. You can delete the entire series, including all data (recordings, meeting minutes and voting results) or just one meeting occurrence where all data is preserved.
+dashboard-recurrence-meeting-card-delete-dialog-one = This one meeting
+dashboard-reccurence-meeting-card-delete-dialog-all = The entire meeting series
+dashboard-recurrence-meeting-card-delete-dialog-cancel = Cancel
 
 dashboard-create-meeting-dialog-title = Please confirm
 dashboard-create-meeting-dialog-message = You already have a meeting scheduled for this time: <eventTitle>{$eventTitle} <eventTime>{$eventTime}</eventTime></eventTitle> Are you sure you want to create a new one?

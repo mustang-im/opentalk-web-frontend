@@ -29,6 +29,7 @@
 
 ### Improvements to the user experience
 
+- Delete single occurance or all of reccuring events in dashboard ([#1514](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1514))
 - Restructure conference lobby page ([#1741](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1741))
 - Enable keyboard navigation through participants sort option list. ([#1753](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1753))
 - Prevent moderation right revoke from the room owner. ([#1729](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1729))

@@ -686,10 +686,15 @@ dashboard-meeting-card-popover-details = Details
 dashboard-meeting-card-popover-copy-link = Meeting-Link kopieren
 dashboard-meeting-card-popover-copy-guest-link = Gast-Link kopieren
 
-dashboard-meeting-card-delete-dialog-title = Bitte bestätigen
-dashboard-meeting-card-delete-dialog-message = Wollen Sie das Meeting {$subject} wirklich löschen?
-dashboard-meeting-card-delete-dialog-ok = Endgültig löschen
+dashboard-meeting-card-delete-dialog-title = Meeting löschen
+dashboard-meeting-card-delete-dialog-message = Soll dieses Meeting „{$subject}“ für alle gelöscht werden?
+dashboard-meeting-card-delete-dialog-ok = Löschen
 dashboard-meeting-card-delete-dialog-cancel = Abbrechen
+
+dashboard-recurrence-meeting-card-delete-dialog-message = Das Meeting ist Teil einer Meetingserie. Sie können die ganze Meetingserie löschen, einschließlich aller Daten (Aufnahmen, Protokolle und Abstimmungsergebnisse) oder nur das einzelne Meeting, dabei bleiben alle Daten erhalten.
+dashboard-recurrence-meeting-card-delete-dialog-one = Das einzelne Meeting
+dashboard-reccurence-meeting-card-delete-dialog-all = Die ganze Meetingserie
+dashboard-recurrence-meeting-card-delete-dialog-cancel = Abbrechen
 
 dashboard-create-meeting-dialog-title = Bitte bestätigen
 dashboard-create-meeting-dialog-message = Sie haben bereits ein Meeting in der angegebenen Zeit: <eventTitle>{$eventTitle} <eventTime>{$eventTime}</eventTime></eventTitle> Möchten Sie dieses Meeting dennoch erstellen?
@@ -860,7 +865,7 @@ beta-flag-tooltip-text = Sie nutzen die Beta-Version von OpenTalk. Wir entwickel
 
 tooltip-empty-favourites = Sie können über das Menü auf der Karte Meetings als Favoriten markieren.
 meeting-delete-metadata-dialog-title = Meeting verlassen
-meeting-delete-metadata-dialog-message = Soll dieses Meeting gelöscht werden? Das Meeting wird dann sofort vom Dashboard entfernt. 
+meeting-delete-metadata-dialog-message = Soll dieses Meeting gelöscht werden? Das Meeting wird dann sofort vom Dashboard entfernt.
 meeting-delete-recurring-metadata-dialog-message = Soll dieses Meeting gelöscht werden? Das Meeting ist Teil einer Meetingserie. Sie können die ganze Meetingserie löschen, einschließlich aller Daten (Aufnahmen, Protokolle und Abstimmungsergebnisse) oder nur das einzelne Meeting, dabei bleiben alle Daten erhalten.
 meeting-delete-metadata-dialog-checkbox = Dieses Meeting löschen
 meeting-delete-recurring-dialog-radio-single = Das einzelne Meeting löschen
