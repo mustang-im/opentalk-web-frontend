@@ -42,6 +42,7 @@ export const useMockUsers = (users: number) => {
                 isPresenter: false,
                 waitingState: WaitingState.Joined,
                 isSpeaking: false,
+                isRoomOwner: false,
               },
             })
           );

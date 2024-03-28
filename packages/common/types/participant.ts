@@ -21,6 +21,7 @@ export interface Participant {
   protocolAccess: ProtocolAccess;
   isPresenter: boolean;
   isSpeaking: boolean;
+  isRoomOwner: boolean;
 }
 
 export type FilterableParticipant = Pick<Participant, 'displayName'>;

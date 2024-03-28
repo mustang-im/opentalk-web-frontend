@@ -34,6 +34,7 @@ interface UserState {
   joinedAt?: string;
   isPresenter: boolean;
   protocolAccess: ProtocolAccess;
+  isRoomOwner: boolean;
 }
 
 const initialState: UserState = {
@@ -43,6 +44,7 @@ const initialState: UserState = {
   role: Role.User,
   isPresenter: false,
   protocolAccess: 'none' as ProtocolAccess.None, // this will be fixed with the next version of the ts-jest
+  isRoomOwner: false,
 };
 
 export const userSlice = createSlice({
@@ -88,15 +90,19 @@ export const userSlice = createSlice({
         }
       }
     );
-    builder.addCase(joinSuccess, (state, { payload: { isPresenter, avatarUrl, role, participantId, groups } }) => {
-      state.role = role;
-      state.avatarUrl = avatarUrl;
-      state.uuid = participantId;
-      state.groups = groups;
-      state.joinedAt = new Date().toISOString();
-      state.lastActive = state.joinedAt;
-      state.isPresenter = isPresenter || false;
-    });
+    builder.addCase(
+      joinSuccess,
+      (state, { payload: { isPresenter, avatarUrl, role, participantId, groups, isRoomOwner } }) => {
+        state.role = role;
+        state.avatarUrl = avatarUrl;
+        state.uuid = participantId;
+        state.groups = groups;
+        state.joinedAt = new Date().toISOString();
+        state.lastActive = state.joinedAt;
+        state.isPresenter = isPresenter || false;
+        state.isRoomOwner = isRoomOwner;
+      }
+    );
     builder.addCase(connectionClosed, (state) => {
       state.uuid = null;
       state.joinedAt = undefined;
@@ -149,7 +155,7 @@ export const selectIsGuest = createSelector(userState, (state) => state.role ===
 export const selectUserAsPartialParticipant = createSelector(
   userState,
   (state): Omit<Participant, 'breakoutRoomId' | 'handIsUp' | 'handUpdatedAt'> | undefined => {
-    const { displayName, avatarUrl, groups, joinedAt, lastActive } = state;
+    const { displayName, avatarUrl, groups, joinedAt, lastActive, isRoomOwner } = state;
 
     if (state.uuid === null || joinedAt === undefined || lastActive === undefined) {
       return undefined;
@@ -171,6 +177,7 @@ export const selectUserAsPartialParticipant = createSelector(
       protocolAccess: state.protocolAccess,
       isPresenter: state.isPresenter,
       isSpeaking: false,
+      isRoomOwner,
     };
   }
 );
