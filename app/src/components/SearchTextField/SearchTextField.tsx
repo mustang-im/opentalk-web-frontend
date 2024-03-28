@@ -93,6 +93,8 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
               aria-expanded={expanded}
               aria-controls={id}
               aria-haspopup="menu"
+              onKeyDown={(event) => event.stopPropagation()}
+              onKeyUp={(event) => event.stopPropagation()}
             >
               <SortIcon />
             </IconButton>

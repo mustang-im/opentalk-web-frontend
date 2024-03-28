@@ -10,9 +10,9 @@ exports[`<SortPopoverMenu /> should render given items. 1`] = `
       aria-hidden="true"
     />
     <div
-      class="MuiPopover-root MuiModal-root css-1i0e6f3-MuiModal-root-MuiPopover-root"
+      class="MuiPopover-root MuiMenu-root MuiModal-root css-10nakn3-MuiModal-root-MuiPopover-root-MuiMenu-root"
       id=""
-      role="menu"
+      role="presentation"
     >
       <div
         aria-hidden="true"
@@ -24,62 +24,68 @@ exports[`<SortPopoverMenu /> should render given items. 1`] = `
         tabindex="0"
       />
       <div
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-3bmhjh-MuiPaper-root-MuiPopover-paper"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper"
         style="opacity: 1; transform: scale(1, 1); transition: opacity 0ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,transform 0ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; top: 16px; left: 16px; transform-origin: -16px -16px;"
         tabindex="-1"
       >
-        <li
-          class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters css-4f940q-MuiButtonBase-root-MuiMenuItem-root"
-          role="menuitem"
+        <ul
+          class="MuiList-root MuiList-padding MuiMenu-list css-6hp17o-MuiList-root-MuiMenu-list"
+          role="menu"
           tabindex="-1"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          <li
+            class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters Mui-focusVisible css-4f940q-MuiButtonBase-root-MuiMenuItem-root"
+            role="menuitem"
+            tabindex="0"
           >
-            option-1
-          </p>
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1f9du2t-MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+            >
+              option-1
+            </p>
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1f9du2t-MuiSvgIcon-root"
               focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                focusable="false"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
             />
-          </svg>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </li>
-        <li
-          class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters css-4f940q-MuiButtonBase-root-MuiMenuItem-root"
-          role="menuitem"
-          tabindex="-1"
-        >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          </li>
+          <li
+            class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters css-4f940q-MuiButtonBase-root-MuiMenuItem-root"
+            role="menuitem"
+            tabindex="-1"
           >
-            option-2
-          </p>
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1f9du2t-MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+            >
+              option-2
+            </p>
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1f9du2t-MuiSvgIcon-root"
               focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                focusable="false"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
             />
-          </svg>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </li>
+          </li>
+        </ul>
       </div>
       <div
         data-testid="sentinelEnd"
@@ -154,9 +160,9 @@ exports[`<SortPopoverMenu /> should render with mandatory properties. 1`] = `
       aria-hidden="true"
     />
     <div
-      class="MuiPopover-root MuiModal-root css-1i0e6f3-MuiModal-root-MuiPopover-root"
+      class="MuiPopover-root MuiMenu-root MuiModal-root css-10nakn3-MuiModal-root-MuiPopover-root-MuiMenu-root"
       id=""
-      role="menu"
+      role="presentation"
     >
       <div
         aria-hidden="true"
@@ -168,10 +174,16 @@ exports[`<SortPopoverMenu /> should render with mandatory properties. 1`] = `
         tabindex="0"
       />
       <div
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-3bmhjh-MuiPaper-root-MuiPopover-paper"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper"
         style="opacity: 1; transform: scale(1, 1); transition: opacity 0ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,transform 0ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; top: 16px; left: 16px; transform-origin: -16px -16px;"
         tabindex="-1"
-      />
+      >
+        <ul
+          class="MuiList-root MuiList-padding MuiMenu-list css-6hp17o-MuiList-root-MuiMenu-list"
+          role="menu"
+          tabindex="0"
+        />
+      </div>
       <div
         data-testid="sentinelEnd"
         tabindex="0"
