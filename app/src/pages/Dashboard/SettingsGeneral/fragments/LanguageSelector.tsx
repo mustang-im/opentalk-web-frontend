@@ -39,7 +39,7 @@ const LanguageSelector = () => {
     onSubmit: async ({ language }) => {
       try {
         await updateMe({ language });
-        i18n.changeLanguage(language);
+        await i18n.changeLanguage(language);
         notifications.success(t('dashboard-settings-general-notification-save-success'));
       } catch (err) {
         notifications.error(t('error-general'));
