@@ -3,12 +3,12 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, IconButton, Grid, styled, useMediaQuery, useTheme, Tooltip, Stack } from '@mui/material';
 import { InviteIcon, FavoriteIcon, SearchIcon, AddIcon, Toggle } from '@opentalk/common';
+import { DateTime } from '@opentalk/rest-api-rtk-query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import getReferrerRouterState from '../../../../utils/getReferrerRouterState';
-import { DashboardEventsFilters } from '../EventsOverviewPage';
 
 const IconButtonBig = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{ active?: boolean }>(
   ({ theme, active }) => ({
@@ -19,6 +19,14 @@ const IconButtonBig = styled(IconButton, { shouldForwardProp: (prop) => prop !==
     },
   })
 );
+
+export interface DashboardEventsFilters {
+  timePeriod: TimeFilter;
+  timeMin?: DateTime;
+  timeMax?: DateTime;
+  openInvitedMeeting?: boolean;
+  favoriteMeetings?: boolean;
+}
 
 export enum TimeFilter {
   Month = 'month',

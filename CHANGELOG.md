@@ -64,6 +64,7 @@
 
 ### Internal
 
+- Resolve circular dependencies (part 2 - Dashboard) ([#1757](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1757))
 - Resolve circular dependencies in the UI components ([#1201](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1201))
 
 ## 1.11.0

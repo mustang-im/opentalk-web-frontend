@@ -7,8 +7,7 @@ import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
 import { useTranslation } from 'react-i18next';
 
 import EventTimePreview from '../../EventTimePreview';
-import { MeetingCardFragmentProps } from '../MeetingCard';
-import MeetingPopover from './MeetingPopover';
+import MeetingPopover, { MeetingCardFragmentProps } from './MeetingPopover';
 
 const CardWrapper = styled('div')(({ theme }) => ({
   background: theme.palette.background.paper,

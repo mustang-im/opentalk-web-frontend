@@ -2,23 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Collapse as CollapseMui, styled, useMediaQuery, useTheme } from '@mui/material';
-import React, { useEffect, useState, ReactNode, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import MobileHeadbar from './fragments/MobileHeadbar';
 import PrimaryNavigation from './fragments/PrimaryNavigation';
-import SecondaryNavigation from './fragments/SecondaryNavigation';
+import { PrimaryRoute } from './fragments/PrimaryNavigationList';
+import SecondaryNavigation, { SecondaryRoute } from './fragments/SecondaryNavigation';
 
-export interface PrimaryRoute {
-  icon: ReactNode;
-  path: string;
-  name: string;
-  childRoutes?: Array<SecondaryRoute>;
-}
-export interface SecondaryRoute {
-  path: string;
-  name: string;
-}
 interface DashboardProps {
   routes: Array<PrimaryRoute>;
 }

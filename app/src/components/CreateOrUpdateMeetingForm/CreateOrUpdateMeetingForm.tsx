@@ -2,14 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Collapse, Grid, MenuItem, Stack, styled } from '@mui/material';
-import {
-  formikProps,
-  ForwardIcon,
-  notificationAction,
-  notifications,
-  StreamingPlatform,
-  formikMinimalProps,
-} from '@opentalk/common';
+import { formikProps, ForwardIcon, notificationAction, notifications, formikMinimalProps } from '@opentalk/common';
 import {
   CreateEventPayload,
   DateTime,
@@ -42,7 +35,7 @@ import roundToUpper30 from '../../utils/roundToUpper30';
 import { FrequencySelect, mapFrequencySelectToRRuleFrequency, mapRRuleToFrequencySelect } from '../../utils/rruleUtils';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
 import yup from '../../utils/yupUtils';
-import { DashboardDateTimePicker } from './fragments/DashboardDateTimePicker';
+import { CreateOrUpdateMeetingFormikValues, DashboardDateTimePicker } from './fragments/DashboardDateTimePicker';
 import EventConflictDialog from './fragments/EventConflictDialog';
 import MeetingFormSwitch from './fragments/MeetingFormSwitch';
 import StreamingOptions from './fragments/StreamingOptions';
@@ -63,24 +56,6 @@ const DEFAULT_MINUTES_DIFFERENCE = 30;
 const MAX_CHARACTERS_TITLE = 255;
 const MAX_CHARACTERS_PASSWORD = 255;
 const MAX_CHARACTERS_DESCRIPTION = 4096;
-
-interface Streaming {
-  enabled: boolean;
-  streamingTarget?: StreamingPlatform;
-}
-export interface CreateOrUpdateMeetingFormikValues {
-  title?: string;
-  description?: string;
-  waitingRoom: boolean;
-  password?: string;
-  isTimeDependent: boolean;
-  startDate: string;
-  endDate: string;
-  recurrencePattern: FrequencySelect;
-  isAdhoc?: boolean;
-  sharedFolder: boolean;
-  streaming: Streaming;
-}
 
 const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: CreateOrUpdateMeetingFormProps) => {
   const { t } = useTranslation();
