@@ -482,10 +482,12 @@ const handleControlMessage = (
       dispatch(loweredHand());
       break;
     }
+    case 'room_deleted': {
+      break;
+    }
     default: {
       const dataString = JSON.stringify(data, null, 2);
       console.error(`Unknown control message type: ${dataString}`);
-      throw new Error(`Unknown message type: ${dataString}`);
     }
   }
 };

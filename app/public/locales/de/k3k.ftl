@@ -868,6 +868,7 @@ meeting-delete-metadata-button-leave-without-delete = Nein, nur verlassen
 meeting-delete-metadata-submit-error =
     Beim löschen der Daten ist ein Fehler aufgetreten.
     Bitte versuchen sie es später nochmal!
+meeting-delete-successfully-deleted = Das Meeting wurde gelöscht.
 
 send-error-button-text = Diagnosedaten senden
 hide-diagnostic-data-button = Diagnosedaten verbergen

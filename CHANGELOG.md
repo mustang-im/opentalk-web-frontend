@@ -6,6 +6,8 @@
 
 ### Bug Fixes
 
+- Fix glitchtip error for unhandled message upon successful room deletion ([#1750](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1750))
+
 ### Internal
 
 ## 1.13.0-rc.1

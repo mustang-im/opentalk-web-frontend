@@ -112,6 +112,7 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
           break;
       }
       handleHangUp();
+      notifications.success(t('meeting-delete-successfully-deleted'));
       navigate('/dashboard');
     } catch (e) {
       console.error('error on delete room meta data: %s', JSON.stringify(e));
