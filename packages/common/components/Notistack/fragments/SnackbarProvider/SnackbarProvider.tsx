@@ -11,11 +11,11 @@ import {
 import React from 'react';
 
 import { CloseIcon } from '../../../../assets/icons';
-import IconButtonDefault from '../../../IconButton';
+import { IconButton } from '../../../IconButtons';
 import { notifications } from '../utils';
 import { getNotistackComponents } from '../variations';
 
-const IconButton = styled(IconButtonDefault)(({ theme }) => ({
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
   marginRight: theme.spacing(2),
   padding: 0,
   color: theme.palette.common.white,
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
       minWidth: '280px',
       [theme.breakpoints.up('sm')]: {
         width: '30vw',
-      }
+      },
     },
   },
   root: {
@@ -72,9 +72,9 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
         horizontal: 'right',
       }}
       action={(snackbarKey: SnackbarKey) => (
-        <IconButton onClick={() => onClickDismiss(snackbarKey)}>
+        <StyledIconButton onClick={() => onClickDismiss(snackbarKey)}>
           <CloseIcon />
-        </IconButton>
+        </StyledIconButton>
       )}
       Components={getNotistackComponents(Components)}
       domRoot={domRoot}

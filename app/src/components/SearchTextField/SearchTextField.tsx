@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { IconButton, InputAdornment } from '@mui/material';
-import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu } from '@opentalk/common';
+import { InputAdornment } from '@mui/material';
+import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu, AdornmentIconButton } from '@opentalk/common';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -49,6 +49,7 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
   const { t } = useTranslation();
   const anchorEl = useRef(null);
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [hasFocus, setFocus] = useState<boolean>(false);
   const sortType = useAppSelector(selectParticipantsSortOption);
   const dispatch = useAppDispatch();
 
@@ -63,6 +64,12 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
   const handleSortSelected = (sort: string) => {
     dispatch(setParticipantsSortOption(sort as SortOption));
   };
+  const handleFocus = () => {
+    setFocus(true);
+  };
+  const handleBlur = () => {
+    setFocus(false);
+  };
 
   return (
     <TextField
@@ -76,6 +83,8 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
       }}
       onChange={handleSearchChange}
       size={'small'}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       placeholder={t('input-search-placehoder')}
       startAdornment={
         <InputAdornment position="start">
@@ -85,7 +94,7 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
       endAdornment={
         showSort && (
           <InputAdornment position="end">
-            <IconButton
+            <AdornmentIconButton
               ref={anchorEl}
               onClick={handleClick}
               edge="end"
@@ -95,9 +104,10 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
               aria-haspopup="menu"
               onKeyDown={(event) => event.stopPropagation()}
               onKeyUp={(event) => event.stopPropagation()}
+              parentHasFocus={hasFocus}
             >
               <SortIcon />
-            </IconButton>
+            </AdornmentIconButton>
             {anchorEl.current && expanded && (
               <SortPopoverMenu
                 id={id}

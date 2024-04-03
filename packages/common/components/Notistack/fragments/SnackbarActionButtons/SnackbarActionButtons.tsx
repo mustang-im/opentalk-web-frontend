@@ -5,7 +5,7 @@ import { Box, Button } from '@mui/material';
 import React from 'react';
 
 import { CloseIcon } from '../../../../assets/icons';
-import IconButton from '../../../IconButton';
+import { IconButton } from '../../../IconButtons';
 import { ISnackbarActionButtonProps } from '../utils';
 
 const SnackbarActionButtons = ({
@@ -15,7 +15,7 @@ const SnackbarActionButtons = ({
   cancelBtnText,
   hideCloseButton,
   actionBtnAttributes = {},
-  cancelBtnAttributes = {}
+  cancelBtnAttributes = {},
 }: Omit<ISnackbarActionButtonProps, 'msg'>) => {
   return (
     <Box display="flex" gap={1}>

@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputAdornment, styled } from '@mui/material';
-import { CloseIcon, SearchIcon } from '@opentalk/common';
+import { AdornmentIconButton, CloseIcon, SearchIcon } from '@opentalk/common';
 import i18next from 'i18next';
-import { ChangeEvent, ForwardedRef, forwardRef, KeyboardEvent } from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextField } from '../../../commonComponents';
@@ -13,6 +13,7 @@ interface EndAdornmentProps {
   onClick(): void;
   className?: string;
   hasValue?: boolean;
+  parentHasFocus?: boolean;
 }
 
 interface ChatSearchProps {
@@ -35,26 +36,23 @@ const startAdornment = (
   </InputAdornment>
 );
 
-const EndAdornment = styled((props: EndAdornmentProps) => (
-  <InputAdornment
-    component="button"
+const ClearButton = styled(({ onClick, className, hasValue, parentHasFocus }: EndAdornmentProps) => (
+  <AdornmentIconButton
     type="reset"
-    position="end"
-    tabIndex={0}
-    onClick={props.hasValue ? props.onClick : undefined}
-    className={props.className}
+    parentHasFocus={parentHasFocus}
+    onClick={hasValue ? onClick : undefined}
     aria-label={i18next.t('global-clear')}
+    className={className}
+    tabIndex={0}
   >
-    {props.hasValue && <CloseIcon />}
-  </InputAdornment>
-))(({ hasValue, theme }) => ({
-  cursor: hasValue ? 'pointer' : 'text',
-  pointerEvents: hasValue ? 'auto' : 'none',
-  width: theme.spacing(2),
-  height: theme.spacing(2),
-  background: 'transparent',
-  border: 'none',
-  padding: 0,
+    {hasValue && <CloseIcon />}
+  </AdornmentIconButton>
+))(({ theme }) => ({
+  '& .MuiTouchRipple-child': {
+    backgroundColor: theme.palette.secondary.lightest,
+  },
+  padding: theme.typography.pxToRem(8),
+  left: theme.typography.pxToRem(12),
 }));
 
 const DummyBlock = styled(() => <div role="presentation" aria-hidden={true} />)(({ theme }) => ({
@@ -65,6 +63,7 @@ const DummyBlock = styled(() => <div role="presentation" aria-hidden={true} />)(
 const ChatSearch = (props: ChatSearchProps, ref: ForwardedRef<HTMLInputElement>) => {
   const { t } = useTranslation();
   const hasValue = props.value !== '';
+  const [focused, setFocused] = useState(false);
 
   const onChangeMiddleware = (event: ChangeEvent<HTMLInputElement>) => {
     props.onChange(event.target.value);
@@ -80,6 +79,13 @@ const ChatSearch = (props: ChatSearchProps, ref: ForwardedRef<HTMLInputElement>)
     }
   };
 
+  const renderEndAdornment = hasValue ? (
+    <InputAdornment position="end">
+      <ClearButton onClick={clear} hasValue={hasValue} parentHasFocus={focused} />
+    </InputAdornment>
+  ) : (
+    <DummyBlock />
+  );
   return (
     <SearchField
       inputRef={ref}
@@ -90,9 +96,11 @@ const ChatSearch = (props: ChatSearchProps, ref: ForwardedRef<HTMLInputElement>)
       startAdornment={startAdornment}
       value={props.value}
       // We have to use empty adornment in order to keep layout persistant when clear icon changes visibility.
-      endAdornment={hasValue ? <EndAdornment onClick={clear} hasValue={hasValue} /> : <DummyBlock />}
+      endAdornment={renderEndAdornment}
       onChange={onChangeMiddleware}
       onKeyUp={onKeyUp}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
     />
   );
 };

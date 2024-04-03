@@ -4,8 +4,9 @@
 import AccordionItem from './AccordionItem';
 import CommonFormItem from './CommonFormItem';
 import { DurationField, DurationValueOptions } from './DurationField';
+import { ErrorFormMessage } from './ErrorFormMessage';
 import { FormWrapper, FormProps } from './FormWrapper';
-import IconButton from './IconButton';
+import { IconButton, AdornmentIconButton } from './IconButtons';
 import { ParticipantAvatar, setLibravatarOptions } from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
 import SortPopoverMenu from './SortPopoverMenu';
@@ -13,7 +14,6 @@ import TextField from './TextField';
 import Toggle from './Toggle';
 import ToolbarMenuUtils from './ToolbarMenuUtils';
 import VisuallyHiddenTitle from './VisuallyHiddenTitle';
-import { ErrorFormMessage } from './ErrorFormMessage';
 
 export * from 'notistack';
 export {
@@ -38,6 +38,7 @@ export {
   TextField,
   ToolbarMenuUtils,
   IconButton,
+  AdornmentIconButton,
   SortPopoverMenu,
   Toggle,
   VisuallyHiddenTitle,
