@@ -45,6 +45,7 @@ import InviteIcon from './InviteIcon';
 import LegalBallotIcon from './LegalBallotIcon';
 import LegalLinksIcon from './LegalLinksIcon';
 import LockedIcon from './LockedIcon';
+import Logo from './Logo';
 import LogoSmallIcon from './LogoSmallIcon';
 import MeetingsIcon from './MeetingsIcon';
 import MicOffIcon from './MicOffIcon';
@@ -132,6 +133,7 @@ export {
   InviteIcon,
   LegalBallotIcon,
   LegalLinksIcon,
+  Logo,
   LockedIcon,
   MeetingsIcon,
   MicOffIcon,

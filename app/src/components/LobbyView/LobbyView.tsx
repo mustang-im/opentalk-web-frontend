@@ -28,11 +28,7 @@ import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useInviteCode } from '../../hooks/useInviteCode';
 import { startRoom } from '../../store/commonActions';
-import {
-  selectDisallowCustomDisplayName,
-  selectFeatures,
-  selectShowmprintContainer,
-} from '../../store/slices/configSlice';
+import { selectDisallowCustomDisplayName, selectFeatures } from '../../store/slices/configSlice';
 import {
   ConnectionState,
   fetchRoomByInviteId,
@@ -86,7 +82,6 @@ const LobbyView: FC = () => {
   const connectionState = useAppSelector(selectRoomConnectionState);
   const navigate = useNavigate();
   const passwordRequired = useAppSelector(selectPasswordRequired);
-  const showImprintContainer = useAppSelector(selectShowmprintContainer);
   const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
   const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId, inviteCode: inviteCode }, { skip: !roomId });
   const disableDisplayNameField = disallowCustomDisplayName && !inviteCode;
@@ -268,7 +263,7 @@ const LobbyView: FC = () => {
           </SelfTest>
         </Stack>
       </Container>
-      {showImprintContainer && <ImprintContainer />}
+      <ImprintContainer />
     </>
   );
 };

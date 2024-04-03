@@ -10,7 +10,7 @@ import { useGetRoomEventInfoQuery } from '../../api/rest';
 import { enterRoom } from '../../api/types/outgoing/control';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useInviteCode } from '../../hooks/useInviteCode';
-import { selectFeatures, selectShowmprintContainer } from '../../store/slices/configSlice';
+import { selectFeatures } from '../../store/slices/configSlice';
 import { selectRoomConnectionState, ConnectionState, selectRoomId } from '../../store/slices/roomSlice';
 import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider/MediaProvider';
@@ -23,7 +23,6 @@ const WaitingView = () => {
   const dispatch = useAppDispatch();
   const mediaContext = useMediaContext();
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
-  const showImprintContainer = useAppSelector(selectShowmprintContainer);
   const inviteCode = useInviteCode();
   const roomId = useAppSelector(selectRoomId);
   const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId as RoomId, inviteCode }, { skip: !roomId });
@@ -61,7 +60,7 @@ const WaitingView = () => {
           </Typography>
         </SelfTest>
       </Container>
-      {showImprintContainer && <ImprintContainer />}
+      <ImprintContainer />
     </>
   );
 };
