@@ -657,6 +657,15 @@ dashboard-meeting-card-button-start-direct = Start direct meeting
 dashboard-meeting-card-title-favorite-meetings = My favorite meetings
 dashboard-meeting-card-title-next-meetings = Current meetings
 dashboard-plan-new-meeting = Plan new meeting
+dashboard-join-meeting-button = Join existing meeting
+dashboard-join-meeting-dialog = Join meeting dialog
+dashboard-join-meeting-dialog-title = Join a meeting now
+dashboard-join-meeting-dialog-input-field = Join meeting input field
+dashboard-join-meeting-dialog-placeholder = Meeting ID (URL)
+dashboard-join-meeting-dialog-invalid-id = Invalid Meeting ID
+dashboard-join-meeting-dialog-invalid-url = Please insert valid URL
+dashboard-join-meeting-dialog-join-button = Join
+dashboard-join-meeting-dialog-close-button = Close dialog
 
 dashboard-settings-account-title = General Information
 dashboard-settings-account-email-label = E-Mail Address

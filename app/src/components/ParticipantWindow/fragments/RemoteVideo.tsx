@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 /*  Since we probably won't be able to provide a real time transcription for videos as of now, media-has-caption will be disabled for now.*/
-
-/* eslint-disable jsx-a11y/media-has-caption */
 import { CircularProgress, Grid, Stack, styled, Tooltip } from '@mui/material';
 import { VideoSetting, WarningIcon } from '@opentalk/common';
 import { debounce } from 'lodash';

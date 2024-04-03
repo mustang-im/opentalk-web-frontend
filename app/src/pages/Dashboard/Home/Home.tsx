@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Skeleton, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { AddIcon, CameraOnIcon } from '@opentalk/common';
+import { AddIcon, AddWithRectangleIcon, CameraOnIcon } from '@opentalk/common';
 import { DateTime, Event, EventException, RoomId } from '@opentalk/rest-api-rtk-query';
 import { formatRFC3339 } from 'date-fns';
 import { isEmpty } from 'lodash';
@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 
 import { useGetEventsQuery } from '../../../api/rest';
 import FavoriteMeetingsCard, { FavoriteMeetingProps } from '../../../components/FavoriteMeetingsCard';
+import { default as DefaultJoinMeetingDialog } from '../../../components/JoinMeetingDialog';
 import MeetingCard from '../../../components/MeetingCard';
 import PaymentStatusBanner from '../../../components/PaymentStatusBanner';
 import StartMeetingImage from '../../../components/StartMeetingImage';
@@ -84,6 +85,7 @@ const Home = () => {
       onMouseLeave={toggleAnimation}
       startIcon={<CameraOnIcon />}
       size={'large'}
+      fullWidth={isDesktop}
       state={{
         ...getReferrerRouterState(window.location),
       }}
@@ -186,11 +188,22 @@ const Home = () => {
     return <MeetingCard key={`${event.id}${startsAt}`} event={event} />;
   };
 
+  const JoinMeetingDialog = () => (
+    <DefaultJoinMeetingDialog
+      openButtonProps={{
+        size: 'large',
+        startIcon: <AddWithRectangleIcon />,
+        fullWidth: isDesktop,
+      }}
+    />
+  );
+
   const renderLogoAndFavoriteBar = () => (
     <Stack flexDirection={'column'} flex={1} spacing={12.5} justifyContent="space-between">
       <Stack justifyContent={'center'} alignItems={'center'} spacing={1}>
         <StartMeetingImage animated={animated} width={146} height={140} />
         {renderStartDirectMeetingButton()}
+        <JoinMeetingDialog />
       </Stack>
       {renderFavoriteEvents()}
     </Stack>
@@ -205,7 +218,12 @@ const Home = () => {
       <HeaderContainer>
         <Typography>{t('dashboard-meeting-card-title-next-meetings')}</Typography>
         {renderNewMeetingButton()}
-        {!isDesktop && renderStartDirectMeetingButton()}
+        {!isDesktop && (
+          <>
+            <JoinMeetingDialog />
+            {renderStartDirectMeetingButton()}
+          </>
+        )}
       </HeaderContainer>
       {isDesktop && renderLogoAndFavoriteBar()}
       {renderCurrentEvents()}

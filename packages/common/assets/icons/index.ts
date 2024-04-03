@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import AddIcon from './AddIcon';
 import AddUserIcon from './AddUserIcon';
+import AddWithRectangleIcon from './AddWithRectangleIcon';
 import ArrowDownIcon from './ArrowDownIcon';
 import ArrowLeftIcon from './ArrowLeftIcon';
 import ArrowRightIcon from './ArrowRightIcon';
@@ -91,6 +92,7 @@ import WoolBallIcon from './WoolBallIcon';
 export {
   AddIcon,
   AddUserIcon,
+  AddWithRectangleIcon,
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,

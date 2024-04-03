@@ -2,9 +2,17 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, IconButton, InputAdornment, Stack, styled } from '@mui/material';
-import { BreakoutRoomId, HiddenIcon, VisibleIcon, RoomId } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
-import { closeSnackbar, enqueueSnackbar, SnackbarKey } from '@opentalk/common';
+import {
+  BreakoutRoomId,
+  HiddenIcon,
+  VisibleIcon,
+  RoomId,
+  FetchRequestError,
+  notifications,
+  closeSnackbar,
+  enqueueSnackbar,
+  SnackbarKey,
+} from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import { useFormik } from 'formik';
 import i18next from 'i18next';
@@ -14,6 +22,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { ApiErrorWithBody, StartRoomError, useGetMeQuery, useGetRoomEventInfoQuery } from '../../api/rest';
+import Error from '../../commonComponents/Error';
+import SuspenseLoading from '../../commonComponents/SuspenseLoading';
 import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useInviteCode } from '../../hooks/useInviteCode';
@@ -26,7 +36,8 @@ import {
 import {
   ConnectionState,
   fetchRoomByInviteId,
-  selectInviteCode,
+  roomReset,
+  selectInviteState,
   selectPasswordRequired,
   selectRoomConnectionState,
 } from '../../store/slices/roomSlice';
@@ -70,7 +81,8 @@ const LobbyView: FC = () => {
   const isLoggedIn = useAppSelector(selectIsAuthenticated);
   const { data } = useGetMeQuery(undefined, { skip: !isLoggedIn });
   const inviteCode = useInviteCode();
-  const inviteCodeInState = useAppSelector(selectInviteCode);
+  const inviteState = useAppSelector(selectInviteState);
+  const [inviteCodeError, setInviteCodeError] = useState<FetchRequestError>();
   const connectionState = useAppSelector(selectRoomConnectionState);
   const navigate = useNavigate();
   const passwordRequired = useAppSelector(selectPasswordRequired);
@@ -86,10 +98,17 @@ const LobbyView: FC = () => {
 
   // Temporary request to figure out if we need to show a password field until it is added in getEventInfo request - https://git.opentalk.dev/opentalk/backend/services/controller/-/issues/603
   useEffect(() => {
-    if (inviteCode && !inviteCodeInState) {
-      dispatch(fetchRoomByInviteId(inviteCode));
+    if (inviteCode && !inviteState.inviteCode) {
+      dispatch(fetchRoomByInviteId(inviteCode))
+        .unwrap()
+        .catch((error) => setInviteCodeError(error));
     }
   }, [inviteCode]);
+
+  const handleExitAndNavigateTo = (path: string) => {
+    dispatch(roomReset());
+    navigate(path);
+  };
 
   const enterRoom = useCallback(
     async (displayName: string, password: string) => {
@@ -134,11 +153,11 @@ const LobbyView: FC = () => {
                 break;
               case StartRoomError.NotFound:
                 notifications.error(t('joinform-room-not-found'));
-                navigate('/dashboard');
+                handleExitAndNavigateTo('/dashboard');
                 break;
               case StartRoomError.Forbidden:
                 notifications.error(t('joinform-access-denied'));
-                navigate('/dashboard');
+                handleExitAndNavigateTo('/dashboard');
                 break;
               default:
                 console.error(`unknown error code ${e.code} in startRoom`, e);
@@ -180,6 +199,14 @@ const LobbyView: FC = () => {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  if (inviteState.loading) {
+    return <SuspenseLoading />;
+  }
+
+  if (inviteCodeError) {
+    return <Error title={t('error-invite-link')} />;
+  }
 
   return (
     <>
