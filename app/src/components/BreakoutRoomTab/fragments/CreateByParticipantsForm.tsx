@@ -2,7 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Switch } from '@mui/material';
-import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
+import {
+  formikDurationFieldProps,
+  formikProps,
+  formikSwitchProps,
+  DurationField,
+  generateUniquedId,
+} from '@opentalk/common';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import React from 'react';
@@ -45,6 +51,8 @@ const CreateByParticipantsForm = ({ handleNext, formName }: ICreateByParticipant
   const rooms = Math.max(2, Math.floor(participantsTotal / participantsPerRoom));
   const maxParticipantsPerRoom = Math.max(2, Math.floor(participantsTotal / 2));
 
+  const ariaId = generateUniquedId();
+
   return (
     <Stack spacing={2} direction="column" justifyContent="flex-start">
       <DurationFieldAligned
@@ -69,10 +77,10 @@ const CreateByParticipantsForm = ({ handleNext, formName }: ICreateByParticipant
         control={<Switch color="primary" />}
         label={t('breakout-room-form-field-include-moderators')}
       />
-      <TextWithDivider variant={'caption'}>
+      <TextWithDivider variant={'caption'} id={ariaId}>
         {t('breakout-room-rooms-created-by-participants', { rooms })}
       </TextWithDivider>
-      <CreateButton size={'small'} onClick={handleNext}>
+      <CreateButton size={'small'} onClick={handleNext} aria-describedby={ariaId}>
         {t('breakout-room-create-button')}
       </CreateButton>
     </Stack>
