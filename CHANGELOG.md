@@ -16,7 +16,7 @@
 
 ### Internal
 
-## 1.12.0-rc.1
+## 1.12.0
 
 ### Improvements to the user experience
 
