@@ -2,6 +2,16 @@
 
 ### New Features
 
+### Improvements to the user experience
+
+### Bug Fixes
+
+### Internal
+
+## 1.13.0-rc.1
+
+### New Features
+
 - Add guest landing page ([#1673](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1673))
 - Add join meeting button to dashboard ([#1622](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1622))
 
@@ -19,8 +29,6 @@
 
 - Dashboard language switch notification is displayed in the wrong language ([#1773](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1773))
 - Translations missing for error in vote title ([#1725](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1725))
-
-### Internal
 
 ## 1.12.0
 
