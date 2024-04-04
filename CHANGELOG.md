@@ -17,6 +17,7 @@
 
 ### Bug Fixes
 
+- Dashboard language switch notification is displayed in the wrong language ([#1773](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1773))
 - Translations missing for error in vote title ([#1725](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1725))
 
 ### Internal
@@ -36,7 +37,6 @@
 
 ### Bug Fixes
 
-- Dashboard language switch notification is displayed in the wrong language ([#1773](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1773))
 - Support OIDC .well-known/openid-configuration ([#1701](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1701))
 - Fix selection of the protocol write permissions ([1706](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1706))
 - Fix: The chat gives out some characters twice ([#1612](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1612))
