@@ -9,10 +9,15 @@
 
 - Enable keyboard navigation through participants sort option list. ([#1753](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1753))
 - Prevent moderation right revoke from the room owner. ([#1729](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1729))
-- Improved vote and poll underlying HTML structure so it can be better navigated using the screen readers. ([#1708](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1708))
-- Mobile users can access on-going and finished poll and legal vote lists from the drawer ([#1519](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1519))
+- Improved vote and poll underlying HTML structure, so it can be better navigated using the screen readers. ([#1708](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1708))
+- Mobile users can access ongoing and finished poll and legal vote lists from the drawer ([#1519](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1519))
+- Improved the contrast of icon buttons used as adornment for input fields ([#1245](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1245))
+- Improved user experience with screen readers for breakout rooms ([#1723](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1723))
+- Improved user experience of the end call button popup for moderators ([#1492](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1492))
 
 ### Bug Fixes
+
+- Translations missing for error in vote title ([#1725](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1725))
 
 ### Internal
 
@@ -20,9 +25,6 @@
 
 ### Improvements to the user experience
 
-- Improved the contrast of icon buttons used as adornment for inputfields ([#1245](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1245))
-- Improved user experience with screen readers for breakout rooms ([#1723](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1723))
-- Improved user experience of the end call button popup for moderators ([#1492](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1492))
 - Improve right corner with burger menu instead of the guide icon ([#1719](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1719))
 - Improve accessibility of the breakout room notification header ([#1709](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1709))
 - Restyle switches in the meeting creation form ([#1700](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1700))
@@ -35,7 +37,6 @@
 ### Bug Fixes
 
 - Dashboard language switch notification is displayed in the wrong language ([#1773](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1773))
-- Translations missing for error in vote title ([#1725](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1725))
 - Support OIDC .well-known/openid-configuration ([#1701](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1701))
 - Fix selection of the protocol write permissions ([1706](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1706))
 - Fix: The chat gives out some characters twice ([#1612](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1612))
