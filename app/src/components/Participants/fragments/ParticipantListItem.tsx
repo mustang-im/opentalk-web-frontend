@@ -29,6 +29,7 @@ import {
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
 import React, { CSSProperties, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { batch } from 'react-redux';
 
 import { Role } from '../../../api/types/incoming/control';
 import { grantModeratorRole, revokeModeratorRole } from '../../../api/types/outgoing/control';
@@ -154,24 +155,26 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   };
 
   const handleRemoval = () => {
-    if (participant.participationKind === ParticipationKind.User) {
-      dispatch(banParticipant.action({ target: participant.id }));
-      notifications.info(t('meeting-notification-user-was-banned', { user: participant.displayName }));
-      return;
+    switch (participant.participationKind) {
+      case ParticipationKind.User:
+        dispatch(banParticipant.action({ target: participant.id }));
+        notifications.info(t('meeting-notification-user-was-banned', { user: participant.displayName }));
+        break;
+      case ParticipationKind.Guest:
+        batch(() => {
+          dispatch(kickParticipant.action({ target: participant.id }));
+          dispatch(enableWaitingRoom.action());
+        });
+        notifications.info(t('meeting-notification-user-was-kicked', { user: participant.displayName }));
+        break;
+      case ParticipationKind.Sip:
+        dispatch(kickParticipant.action({ target: participant.id }));
+        notifications.info(t('meeting-notification-user-was-kicked', { user: participant.displayName }));
+        break;
+      default:
+        setAnchorEl(undefined);
+        notifications.error(t('dashboard-meeting-notification-error'));
     }
-    if (participant.participationKind === ParticipationKind.Guest) {
-      dispatch(kickParticipant.action({ target: participant.id }));
-      dispatch(enableWaitingRoom.action());
-      notifications.info(t('meeting-notification-user-was-kicked', { user: participant.displayName }));
-      return;
-    }
-    if (participant.participationKind === ParticipationKind.Sip) {
-      dispatch(kickParticipant.action({ target: participant.id }));
-      notifications.info(t('meeting-notification-user-was-kicked', { user: participant.displayName }));
-      return;
-    }
-    setAnchorEl(undefined);
-    notifications.error(t('dashboard-meeting-notification-error'));
   };
 
   const handleModerationRight = () => {
@@ -257,6 +260,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
     {
       i18nKey: 'participant-menu-remove-participant',
       action: handleRemoval,
+      disabled: participant.isRoomOwner,
     },
     ...moderatorRights(),
   ];

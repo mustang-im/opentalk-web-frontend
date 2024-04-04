@@ -414,6 +414,8 @@ breakout-room-create-button-disabled = Insufficient number of participants prese
 breakout-room-rooms-created-by-participants = Create {$rooms} Rooms
 breakout-room-assignable-participants-per-rooms = Assign {$participantsPerRoom} participants per room
 
+breakout-room-room-overview-participant-list-me = (me)
+
 field-duration-unlimited-time = Unlimited Time
 field-duration-button-text = Session Duration
 field-duration-button-close = Close
@@ -440,8 +442,6 @@ breakout-room-room-overview-button-close = Close Room
 breakout-room-room-overview-title = Breakout Rooms
 breakout-room-room-overview-no-duration = no duration
 breakout-room-room-overview-participant-list = Participants in Breakout Rooms
-
-breakout-room-room-overview-participant-list-me = (me)
 
 moderator-join-breakout-room = Join room
 fallback-room-title = Meeting room

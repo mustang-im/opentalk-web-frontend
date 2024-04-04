@@ -795,7 +795,6 @@ dashboard-meeting-livestream-streaming-key-placeholder = Streamschlüssel eingeb
 dashboard-meeting-livestream-streaming-key-required = Dies ist ein Pflichtfeld
 dashboard-meeting-waiting-room-switch = Warteraum
 
-
 streaming-targets-request-error = Streaming-Ziel konnte nicht hinzugefügt werden
 
 dashboard-meeting-details-page-future = zukünftige
