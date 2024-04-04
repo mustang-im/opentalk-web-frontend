@@ -29,6 +29,8 @@
 
 - Dashboard language switch notification is displayed in the wrong language ([#1773](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1773))
 - Translations missing for error in vote title ([#1725](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1725))
+- Chat icon no longer shows hover effect when hovering over the input field ([#1720](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1720))
+- Calendars now correctly show day names ([#1736](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1736))
 
 ## 1.12.0
 
