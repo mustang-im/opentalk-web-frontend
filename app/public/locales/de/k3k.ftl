@@ -226,7 +226,6 @@ more-menu-enable-waiting-room = Warteraum aktivieren
 more-menu-disable-waiting-room = Warteraum deaktivieren
 more-menu-turn-handraises-on = Handheben aktivieren
 more-menu-turn-handraises-off = Handheben deaktivieren
-more-menu-keyboard-shortcuts = Tastaturkürzel
 more-menu-delete-global-chat = globalen Chat leeren
 waiting-room-enabled-message = Warteraum ist aktiviert
 waiting-room-disabled-message = Warteraum ist deaktiviert
@@ -628,8 +627,6 @@ conference-quick-start-title = Kurzanleitung für die OpenTalk-Konferenz
 conference-quick-start-open = Öffnen die Kurzanleitung
 conference-quick-start-close = Schließen die Kurzanleitung
 
-conference-quick-start-menu-item = Kurzanleitung
-
 quick-start-loading = Kurzanleitung wird geladen
 quick-start-error = Kurzanleitung konnte nicht geladen werden
 
@@ -969,3 +966,6 @@ landmark-complementary-moderation-panel = Moderationsleiste
 landmark-complementary-toolbar = Persönliche Kontrollleiste
 
 my-meeting-menu = Mein Meeting
+my-meeting-menu-keyboard-shortcuts = Tastaturkürzel
+my-meeting-menu-quick-guide = Kurzanleitung
+my-meeting-menu-glitchtip-trigger = Fehler melden

@@ -51,3 +51,6 @@ export const initSentryReportWithUser = (user: SentryUser) => {
     return event;
   };
 };
+export const triggerGlitchtipManually = () => {
+  throw new Error('Manual Glitchtip trigger');
+};

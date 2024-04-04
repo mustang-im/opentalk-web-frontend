@@ -226,7 +226,6 @@ more-menu-enable-waiting-room = Enable waiting room
 more-menu-disable-waiting-room = Disable waiting room
 more-menu-turn-handraises-on = Enable handraises
 more-menu-turn-handraises-off = Disable handraises
-more-menu-keyboard-shortcuts = Keyboard Shortcuts
 more-menu-delete-global-chat = Clean global chat
 waiting-room-enabled-message = Waiting room is enabled
 waiting-room-disabled-message = Waiting room is disabled
@@ -628,8 +627,6 @@ conference-quick-start-title = OpenTalk Conference Quick Guide
 conference-quick-start-open = Open quick guide
 conference-quick-start-close = Close quick guide
 
-conference-quick-start-menu-item = Quick Guide
-
 quick-start-loading = Loading the quick guide
 quick-start-error = Couldn't load the quick guide
 
@@ -968,3 +965,6 @@ landmark-complementary-moderation-panel = Moderation panel
 landmark-complementary-toolbar = Personal control panel
 
 my-meeting-menu = My meeting
+my-meeting-menu-keyboard-shortcuts = Keyboard Shortcuts
+my-meeting-menu-quick-guide = Quick Guide
+my-meeting-menu-glitchtip-trigger = Report a bug
