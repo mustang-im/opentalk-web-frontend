@@ -854,6 +854,7 @@ protocol-new-protocol-message-button = Open
 protocol-hide = Hide protocol
 protocol-open = Open protocol
 protocol-tab-title = Create protocol
+protocol-button-show = Show protocol
 
 beta-flag-tooltip-text = You are using the <demoLink>beta version</demoLink> of OpenTalk. We are continuously developing new features and provide them as an early preview in our demo environment. Please note that there may be restrictions in using this version. Please feel free to send us any criticism, ideas or bugs to <reportEmailLink>{$reportEmail}</reportEmailLink>.<br /><br />Say Hello to OpenTalk!
 
@@ -882,6 +883,7 @@ form-validation-max-characters = Maximum number of allowed characters is {$maxCh
 votes-poll-overview-title = Polls and votings
 votes-poll-overview-live-label = live
 votes-poll-overview-not-live-label = not live
+votes-poll-button-show = Show polls and votings list
 
 votes-result-not-live-tooltip = This poll is not live, the results will be announced when the poll end.
 votes-result-live-tooltip = This poll is live, the results will be announced continuously.

@@ -854,6 +854,7 @@ protocol-new-protocol-message-button = Anzeigen
 protocol-hide = Protokoll schließen
 protocol-open = Protokoll öffnen
 protocol-tab-title = Protokoll erstellen
+protocol-button-show = Protokoll anzeigen
 
 beta-flag-tooltip-text = Sie nutzen die Beta-Version von OpenTalk. Wir entwickeln kontinuierlich neue Funktionen und stellen diese im Rahmen unserer <demoLink>Demo</demoLink> frühzeitig als Ausblick bereit. Bitte beachten Sie, dass es zu Einschränkungen bei der Nutzung kommen kann. Kritik, Ideen und Fehler können Sie uns gerne an <reportEmailLink>{$reportEmail}</reportEmailLink> senden.<br /><br />Viel Spaß beim ausprobieren von OpenTalk!
 
@@ -882,6 +883,7 @@ form-validation-max-characters = Die maximal zulässige Anzahl von Zeichen betr�
 votes-poll-overview-title = Umfragen und Abstimmungen
 votes-poll-overview-live-label = Live
 votes-poll-overview-not-live-label = Nicht live
+votes-poll-button-show = Liste der Umfragen und Abstimmungen anzeigen
 
 votes-result-not-live-tooltip = Diese Umfrage ist nicht live, die Ergebnisse werden nach Ende der Umfrage bekannt gegeben.
 votes-result-live-tooltip = Diese Umfrage ist live, die Ergebnisse werden kontinuierlich bekannt gegeben.
