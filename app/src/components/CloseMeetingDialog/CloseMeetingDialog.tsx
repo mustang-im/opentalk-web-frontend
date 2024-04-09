@@ -39,6 +39,8 @@ export interface CloseMeetingDialogProps {
   eventData?: Event;
 }
 
+const DIALOG_DESCRIPTION_ID = 'close-meeting-dialog-description-id';
+
 export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDialogProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -47,7 +49,6 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
     roomId: RoomId;
   };
   const [updateEventInstance] = useUpdateEventInstanceMutation();
-
   const [disableLeaveAndDeleteButton, setDisableLeaveAndDeleteButton] = useState(true);
   const [deletionMode, setDeletionMode] = useState<EventDeletionType | null>(null);
 
@@ -91,7 +92,7 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
 
   const singleConfigurationForm = () => (
     <DialogContent>
-      <Typography>{t(`meeting-delete-metadata-dialog-message`)}</Typography>
+      <Typography id={DIALOG_DESCRIPTION_ID}>{t(`meeting-delete-metadata-dialog-message`)}</Typography>
       <Grid mt={1}>
         <FormControlLabel
           control={<Checkbox checked={!disableLeaveAndDeleteButton} onChange={handleCheckbox} />}
@@ -103,7 +104,7 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
   );
   const recurringConfigurationForm = () => (
     <DialogContent>
-      <Typography>{t(`meeting-delete-recurring-metadata-dialog-message`)}</Typography>
+      <Typography id={DIALOG_DESCRIPTION_ID}>{t(`meeting-delete-recurring-metadata-dialog-message`)}</Typography>
       <Grid mt={1}>
         <FormControl>
           <FormLabel></FormLabel>
@@ -144,28 +145,39 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
   }, []);
 
   return (
-    <>
-      <Dialog open={open} maxWidth="sm" fullWidth container={handleFullscreen.rootElement} onClose={onClose}>
-        <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
+    <Dialog
+      open={open}
+      maxWidth="sm"
+      fullWidth
+      container={handleFullscreen.rootElement}
+      onClose={onClose}
+      aria-describedby={DIALOG_DESCRIPTION_ID}
+      ref={(node) => node?.focus()}
+    >
+      <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
 
-        <Box position="absolute" top={0} right={0}>
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
+      <Box position="absolute" top={0} right={0}>
+        <IconButton onClick={onClose} aria-label={t('global-close-dialog')}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
 
-        {getConfigurationForm()}
+      {getConfigurationForm()}
 
-        <DialogActions>
-          <Button onClick={handleLeaveButton} color="error" variant="contained" disabled={disableLeaveAndDeleteButton}>
-            {t('meeting-delete-metadata-button-leave-and-delete')}
-          </Button>
-          <Button onClick={handleHangUp} color="primary" variant="contained">
-            {t('meeting-delete-metadata-button-leave-without-delete')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+      <DialogActions>
+        <Button onClick={handleLeaveButton} color="error" variant="contained" disabled={disableLeaveAndDeleteButton}>
+          {t('meeting-delete-metadata-button-leave-and-delete')}
+        </Button>
+        {/* eslint-disable jsx-a11y/no-autofocus */}
+        {/* Without the autoFocus here ORCA screenreader will not announce the dialog at all, when it appears on the screen
+        Trade-off for this, NVDA reads out some content doubled, which can be fixed in NVDA settings itself
+        https://github.com/nvaccess/nvda/issues/8971#issuecomment-1758193765
+        */}
+        <Button onClick={handleHangUp} color="primary" variant="contained" autoFocus>
+          {t('meeting-delete-metadata-button-leave-without-delete')}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
