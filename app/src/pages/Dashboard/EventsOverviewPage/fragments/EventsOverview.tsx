@@ -79,7 +79,7 @@ const EventsOverview = ({ entries, expandAccordion }: MeetingsOverviewProp) => {
   }, [expandAccordion, entries]);
 
   return (
-    <Stack spacing={1} overflow={'auto'} flex={'1 1 auto'} height={0}>
+    <Stack component="section" spacing={1} overflow={'auto'} flex={'1 1 auto'} height={0}>
       {isContainingRecurringEvents && (
         <Typography variant="h2" component={'h2'}>
           {t('dashboard-events-note-limited-view')}

@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { IconButton, Skeleton, Stack, styled, Typography } from '@mui/material';
-import { ArrowDownIcon, formatDate, Toggle, ToggleOptions } from '@opentalk/common';
+import { IconButton, Skeleton, Stack, styled } from '@mui/material';
+import { ArrowDownIcon, formatDate } from '@opentalk/common';
 import {
   CursorPaginated,
   DateTime,
@@ -30,6 +30,15 @@ import EventsPageHeader, { DashboardEventsFilters, TimeFilter } from './fragment
 
 interface MeetingsPageProps {
   header?: React.ReactNode;
+}
+
+export interface DashboardEventsFilters {
+  timePeriod: TimeFilter;
+  timeMin?: DateTime;
+  timeMax?: DateTime;
+  openInvitedMeeting?: boolean;
+  favoriteMeetings?: boolean;
+  timePerspective: TimePerspectiveFilter;
 }
 
 const ArrowDownButton = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{
@@ -79,43 +88,10 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
     timeMin: new Date().toTimeString() as DateTime,
     openInvitedMeeting: false,
     favoriteMeetings: false,
+    timePerspective: TimePerspectiveFilter.TimeIndependent,
   });
 
-  const [timePeriodFilter, setTimePeriodFilter] = useState<TimePerspectiveFilter>(
-    TimePerspectiveFilter.TimeIndependent
-  );
-
   const { t } = useTranslation();
-  const toggleOptions: Array<ToggleOptions<TimePerspectiveFilter>> = [
-    {
-      value: TimePerspectiveFilter.TimeIndependent,
-      label: t('dashboard-meeting-details-page-time-independent'),
-    },
-    {
-      value: TimePerspectiveFilter.Future,
-      label: t('dashboard-meeting-details-page-future'),
-    },
-    {
-      value: TimePerspectiveFilter.Past,
-      label: t('dashboard-meeting-details-page-past'),
-    },
-  ];
-
-  const { setHeader } = useHeader();
-
-  useEffect(() => {
-    setHeader(
-      <EventsPageHeader
-        filter={filter}
-        onFilterChange={(key, value) =>
-          setFilter((prevFilters) => ({ ...prevFilters, [key]: value ? value : !prevFilters[key] }))
-        }
-      />
-    );
-    return () => {
-      setHeader(undefined);
-    };
-  }, [header, setHeader, filter]);
 
   const formatEventsByHeaderChange = useCallback(
     (events: Array<Event>) => {
@@ -131,18 +107,18 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
   );
 
   const timeMinFilter = useMemo(() => {
-    if (timePeriodFilter === TimePerspectiveFilter.Future) {
+    if (filter.timePerspective === TimePerspectiveFilter.Future) {
       // setSecond to 0 to optimize the request and not ask data on every second when switching timePeriodFilter
       return formatRFC3339(new Date().setSeconds(0, 0)) as DateTime;
     }
-  }, [timePeriodFilter]);
+  }, [filter.timePerspective]);
 
   const timeMaxFilter = useMemo(() => {
-    if (timePeriodFilter === TimePerspectiveFilter.Past) {
+    if (filter.timePerspective === TimePerspectiveFilter.Past) {
       // setSecond to 0 to optimize the request and not ask data on every second when switching timePeriodFilter
       return formatRFC3339(new Date().setSeconds(0, 0)) as DateTime;
     }
-  }, [timePeriodFilter]);
+  }, [filter.timePerspective]);
 
   /**
    * Returns memoized function to optimize the performance (acts like a memoized selector)
@@ -165,7 +141,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
 
       if (timePerspectiveFilter === TimePerspectiveFilter.TimeIndependent) {
         const constructMeetingProp = {
-          title: t('dashboard-meeting-details-page-time-independent'),
+          title: t('dashboard-meeting-details-page-timeindependent'),
           events: orderedEventsWithRecurringInstances,
         };
         setExpandAccordion('all');
@@ -192,20 +168,20 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
       favorites: filter.favoriteMeetings,
       perPage: EVENTS_PER_REQUEST,
       adhoc: false,
-      timeIndependent: timePeriodFilter === TimePerspectiveFilter.TimeIndependent,
+      timeIndependent: filter.timePerspective === TimePerspectiveFilter.TimeIndependent,
       timeMin: timeMinFilter,
       timeMax: timeMaxFilter,
     },
     {
       selectFromResult: ({ data, isLoading, isFetching }) => ({
-        events: selectAndTransformToMeetingProps(data, timePeriodFilter),
+        events: selectAndTransformToMeetingProps(data, filter.timePerspective),
         isLoading,
         isFetching,
       }),
     }
   );
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <Stack spacing={3}>
         <Skeleton variant="text" width={'20%'} height={40} />
@@ -216,30 +192,26 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
     );
   }
   return (
-    <Stack spacing={3} height={'100%'}>
-      <Stack direction={'row'} flex={'0 1 auto'} spacing={3} justifyContent={'space-between'} alignItems="flex-end">
-        <Typography variant={'h1'} component={'h2'}>
-          {t('dashboard-events-my-meetings')}
-        </Typography>
-        <Toggle options={toggleOptions} onChange={setTimePeriodFilter} />
-        <ArrowDownButton
-          active={expandAccordion === 'all'}
-          onClick={() => setExpandAccordion((prev) => (prev === 'all' ? '' : 'all'))}
-        >
-          <ArrowDownIcon color="secondary" />
-        </ArrowDownButton>
-      </Stack>
-
-      {isFetching ? (
-        <Stack spacing={3}>
-          <Skeleton variant="rectangular" height={50} />
-          <Skeleton variant="rectangular" height={50} />
-          <Skeleton variant="rectangular" height={50} />
-        </Stack>
-      ) : (
+    <>
+      {/* Parent stack is messing up with the MUI Grid styles, therefore this wrapper is a workaround for it. */}
+      <div>
+        <EventsPageHeader
+          filter={filter}
+          onFilterChange={(key, value) =>
+            setFilter((prevFilters) => ({ ...prevFilters, [key]: value ? value : !prevFilters[key] }))
+          }
+        />
+      </div>
+      <Stack spacing={3} height={'100%'}>
+        {/* <ArrowDownButton
+            active={expandAccordion === 'all'}
+            onClick={() => setExpandAccordion((prev) => (prev === 'all' ? '' : 'all'))}
+          >
+            <ArrowDownIcon color="secondary" />
+          </ArrowDownButton> */}
         <EventsOverview entries={events || []} expandAccordion={expandAccordion} />
-      )}
-    </Stack>
+      </Stack>
+    </>
   );
 };
 
