@@ -54,6 +54,10 @@ export interface HandLowered {
   message: 'hand_lowered';
 }
 
+export interface RoomDeleted {
+  message: 'room_deleted';
+}
+
 // Currently this is a string
 export type ControlError = string;
 
@@ -69,7 +73,8 @@ export type Message =
   | TimeLimitQuotaElapsed
   | ErrorStruct<ControlError>
   | HandRaised
-  | HandLowered;
+  | HandLowered
+  | RoomDeleted;
 export type Control = NamespacedIncoming<Message, 'control'>;
 
 export default Control;

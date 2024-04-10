@@ -867,6 +867,7 @@ meeting-delete-metadata-button-leave-without-delete = No, just leave
 meeting-delete-metadata-submit-error =
     An error occurred while deleting the data.
     Please try again later!
+meeting-delete-successfully-deleted = Meeting has been deleted.
 
 send-error-button-text = Send diagnostic data
 hide-diagnostic-data-button = Hide diagnostic data
