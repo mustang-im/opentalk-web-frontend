@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, Stack, Tooltip, styled } from '@mui/material';
-import { SearchIcon } from '@opentalk/common';
 import { FavoriteIcon } from '@opentalk/common';
 import { InviteIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
@@ -19,12 +18,12 @@ const IconButtonBig = styled(IconButton, { shouldForwardProp: (prop) => prop !==
   })
 );
 
-type EventPageFilterButtonsProps = {
+type EventFilterButtonBarProps = {
   filters: DashboardEventsFilters;
   onFilterChange: FilterChangeCallbackType;
 };
 
-export const EventPageFilterButtons = ({ filters, onFilterChange }: EventPageFilterButtonsProps) => {
+export const EventFilterButtonBar = ({ filters, onFilterChange }: EventFilterButtonBarProps) => {
   const { t } = useTranslation();
 
   return (
@@ -53,9 +52,6 @@ export const EventPageFilterButtons = ({ filters, onFilterChange }: EventPageFil
           <FavoriteIcon />
         </IconButtonBig>
       </Tooltip>
-      <IconButtonBig color="secondary" size="large" disabled>
-        <SearchIcon />
-      </IconButtonBig>
     </Stack>
   );
 };

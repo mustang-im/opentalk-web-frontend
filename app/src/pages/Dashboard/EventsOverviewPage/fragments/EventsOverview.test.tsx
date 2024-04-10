@@ -4,7 +4,8 @@
 import React from 'react';
 
 import { configureStore, eventMockedData, render, screen } from '../../../../utils/testUtils';
-import EventsOverview, { MeetingsProp } from './EventsOverview';
+import { MeetingsProp } from '../types';
+import EventsOverview from './EventsOverview';
 
 const mockEvents = [
   {
@@ -16,13 +17,31 @@ const mockEvents = [
 describe('EventsOverview', () => {
   test('page will not crash', async () => {
     const { store } = configureStore();
-    await render(<EventsOverview entries={mockEvents as MeetingsProp[]} expandAccordion={''} />, store);
+    await render(
+      <EventsOverview
+        entries={mockEvents as MeetingsProp[]}
+        expandAccordion={''}
+        isFetching={false}
+        isLoading={false}
+        setExpandAccordion={() => ''}
+      />,
+      store
+    );
     expect(screen.getAllByTestId('EventAccordion')).toHaveLength(1);
   });
 
   test('Accordion Title should be in the document', async () => {
     const { store } = configureStore();
-    await render(<EventsOverview entries={mockEvents as MeetingsProp[]} expandAccordion={'false'} />, store);
+    await render(
+      <EventsOverview
+        entries={mockEvents as MeetingsProp[]}
+        expandAccordion={'false'}
+        isFetching={false}
+        isLoading={false}
+        setExpandAccordion={() => ''}
+      />,
+      store
+    );
     expect(screen.getByText('Time Independent Meetings')).toBeInTheDocument();
   });
 });

@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { IconButton, Skeleton, Stack, styled } from '@mui/material';
-import { ArrowDownIcon, formatDate } from '@opentalk/common';
+import { formatDate } from '@opentalk/common';
 import {
   CursorPaginated,
   DateTime,
@@ -14,11 +13,10 @@ import {
 import { endOfISOWeek, formatRFC3339, getWeek, startOfISOWeek } from 'date-fns';
 import i18n, { t } from 'i18next';
 import { groupBy } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetEventsQuery } from '../../../api/rest';
-import { useHeader } from '../../../templates/DashboardTemplate';
 import {
   appendRecurringEventInstances,
   SortDirection,
@@ -27,26 +25,10 @@ import {
 } from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
 import EventsPageHeader from './fragments/EventsPageHeader';
-import { DashboardEventsFilters, TimeFilter } from './types';
+import { DashboardEventsFilters, FilterChangeCallbackType, MeetingsProp, TimeFilter } from './types';
 
-interface MeetingsPageProps {
-  header?: React.ReactNode;
-}
-
-const ArrowDownButton = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{
-  active?: boolean;
-}>(({ active }) => ({
-  background: 'transparent',
-  svg: {
-    width: 40,
-    height: 24,
-    transition: 'transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-    transform: active ? 'rotate(180deg)' : 'none',
-  },
-  '&:hover': {
-    background: 'transparent',
-  },
-}));
+const EMPTY_MEETING_PROP_ARRAY: Array<MeetingsProp> = [];
+const CachedEventsPageHeader = memo(EventsPageHeader);
 
 export const filterByTimePeriod = (timePeriod: DashboardEventsFilters['timePeriod'], date: DateTime) => {
   const createDate = new Date(date);
@@ -73,7 +55,7 @@ export const filterByTimePeriod = (timePeriod: DashboardEventsFilters['timePerio
 
 const EVENTS_PER_REQUEST = 100;
 
-const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
+const EventsOverviewPage = () => {
   const [expandAccordion, setExpandAccordion] = useState<string>('');
   const [filter, setFilter] = useState<DashboardEventsFilters>({
     timePeriod: TimeFilter.Month,
@@ -173,36 +155,24 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
     }
   );
 
-  if (isLoading || isFetching) {
-    return (
-      <Stack spacing={3}>
-        <Skeleton variant="text" width={'20%'} height={40} />
-        <Skeleton variant="rectangular" height={50} />
-        <Skeleton variant="rectangular" height={50} />
-        <Skeleton variant="rectangular" height={50} />
-      </Stack>
-    );
-  }
+  const onFilterChange: FilterChangeCallbackType = useCallback((key, value) => {
+    setFilter((prevFilters) => ({ ...prevFilters, [key]: value ? value : !prevFilters[key] }));
+  }, []);
+
   return (
     <>
-      {/* Parent stack is messing up with the MUI Grid styles, therefore this wrapper is a workaround for it. */}
-      <div>
-        <EventsPageHeader
-          filters={filter}
-          onFilterChange={(key, value) =>
-            setFilter((prevFilters) => ({ ...prevFilters, [key]: value ? value : !prevFilters[key] }))
-          }
-        />
-      </div>
-      <Stack spacing={3} height={'100%'}>
-        {/* <ArrowDownButton
-            active={expandAccordion === 'all'}
-            onClick={() => setExpandAccordion((prev) => (prev === 'all' ? '' : 'all'))}
-          >
-            <ArrowDownIcon color="secondary" />
-          </ArrowDownButton> */}
-        <EventsOverview entries={events || []} expandAccordion={expandAccordion} />
-      </Stack>
+      <CachedEventsPageHeader
+        entries={events || EMPTY_MEETING_PROP_ARRAY}
+        filters={filter}
+        onFilterChange={onFilterChange}
+      />
+      <EventsOverview
+        entries={events || EMPTY_MEETING_PROP_ARRAY}
+        expandAccordion={expandAccordion}
+        setExpandAccordion={setExpandAccordion}
+        isLoading={isLoading}
+        isFetching={isFetching}
+      />
     </>
   );
 };

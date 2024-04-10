@@ -13,7 +13,8 @@ export const CreateNewMeetingButton = () => {
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up('lg'));
   const isSmall = useMediaQuery(theme.breakpoints.down('md'));
-  const showFullSizeButton = isLarge || isSmall;
+  const isReallySmall = useMediaQuery('(max-width: 430px)');
+  const showFullSizeButton = (isLarge || isSmall) && !isReallySmall;
 
   const commonProps = {
     color: 'secondary',
@@ -24,7 +25,7 @@ export const CreateNewMeetingButton = () => {
 
   if (!showFullSizeButton) {
     return (
-      <Button {...commonProps}>
+      <Button {...commonProps} aria-label={t('dashboard-plan-new-meeting')}>
         <AddIcon />
       </Button>
     );

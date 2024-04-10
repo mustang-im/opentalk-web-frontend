@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MenuItem, Select, Stack } from '@mui/material';
+import { MenuItem, Select, Stack, styled } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,10 +22,16 @@ const timePerspectiveFilterOptions: Array<TimePerspectiveFilter> = [
 
 const timeFilterOptions: Array<TimeFilter> = [TimeFilter.Month, TimeFilter.Week, TimeFilter.Day];
 
+const CustomSelect = styled(Select)({
+  '& .MuiSelect-icon': {
+    padding: 0,
+  },
+});
+
 export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: EventPageFiltersProps) => {
   const { t } = useTranslation();
 
-  const showTimePeriosFilter = useMemo(() => {
+  const showTimePerspectiveFilter = useMemo(() => {
     return [TimePerspectiveFilter.Future, TimePerspectiveFilter.Past].includes(filters.timePerspective);
   }, [filters.timePerspective]);
 
@@ -36,7 +42,7 @@ export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: Ev
       spacing={1}
       justifyContent={visuallyDivide ? 'space-between' : undefined}
     >
-      <Select
+      <CustomSelect
         value={filters.timePerspective}
         onChange={(e) => onFilterChange('timePerspective', e.target.value as TimePerspectiveFilter)}
       >
@@ -47,9 +53,12 @@ export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: Ev
             </MenuItem>
           );
         })}
-      </Select>
-      {showTimePeriosFilter && (
-        <Select value={filters.timePeriod} onChange={(e) => onFilterChange('timePeriod', e.target.value as TimeFilter)}>
+      </CustomSelect>
+      {showTimePerspectiveFilter && (
+        <CustomSelect
+          value={filters.timePeriod}
+          onChange={(e) => onFilterChange('timePeriod', e.target.value as TimeFilter)}
+        >
           {timeFilterOptions.map((option) => {
             return (
               <MenuItem key={option} value={option}>
@@ -57,7 +66,7 @@ export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: Ev
               </MenuItem>
             );
           })}
-        </Select>
+        </CustomSelect>
       )}
     </Stack>
   );
