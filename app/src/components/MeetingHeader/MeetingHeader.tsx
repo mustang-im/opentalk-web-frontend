@@ -8,9 +8,9 @@ import DesktopMeetingHeader from './fragments/DesktopMeetingHeader';
 
 const MeetingHeader = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumDevice = useMediaQuery(theme.breakpoints.down('md'));
 
-  return isMobile ? <MobileMeetingHeader /> : <DesktopMeetingHeader />;
+  return isMediumDevice ? <MobileMeetingHeader /> : <DesktopMeetingHeader />;
 };
 
 export default MeetingHeader;
