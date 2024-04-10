@@ -4,10 +4,10 @@
 import { DateTime } from '@opentalk/rest-api-rtk-query';
 import React from 'react';
 
+import { TimePerspectiveFilter } from '../../../../utils/eventUtils';
 import { configureStore, render, screen, fireEvent } from '../../../../utils/testUtils';
 import { TimeFilter } from './EventsPageHeader';
 import EventsPageHeader from './EventsPageHeader';
-import { TimePerspectiveFilter } from '../../../../utils/eventUtils';
 
 describe('Events Page Header tests', () => {
   const onFilterChange = jest.fn();
@@ -17,7 +17,7 @@ describe('Events Page Header tests', () => {
     timeMin: new Date().toTimeString() as DateTime,
     openInvitedMeeting: false,
     favoriteMeetings: false,
-    timePerspective: TimePerspectiveFilter.TimeIndependent
+    timePerspective: TimePerspectiveFilter.TimeIndependent,
   };
   test('page will not crash', async () => {
     const { store } = configureStore();
