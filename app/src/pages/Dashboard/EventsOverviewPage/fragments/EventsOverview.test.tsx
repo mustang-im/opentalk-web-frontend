@@ -4,8 +4,7 @@
 import React from 'react';
 
 import { configureStore, eventMockedData, render, screen } from '../../../../utils/testUtils';
-import { MeetingsProp } from '../EventsOverviewPage';
-import EventsOverview from './EventsOverview';
+import EventsOverview, { MeetingsProp } from './EventsOverview';
 
 const mockEvents = [
   {

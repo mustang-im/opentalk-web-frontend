@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Select } from '../../../commonComponents';
-import { CreateOrUpdateMeetingFormikValues } from '../CreateOrUpdateMeetingForm';
+import { CreateOrUpdateMeetingFormikValues } from './DashboardDateTimePicker';
 import MeetingFormSwitch from './MeetingFormSwitch';
 
 interface StreamingOptionsProps {

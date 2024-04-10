@@ -26,22 +26,10 @@ import {
   TimePerspectiveFilter,
 } from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
-import EventsPageHeader, { TimeFilter } from './fragments/EventsPageHeader';
+import EventsPageHeader, { DashboardEventsFilters, TimeFilter } from './fragments/EventsPageHeader';
 
-export interface MeetingsProp {
-  title: string;
-  events: Array<Event | EventException>;
-}
 interface MeetingsPageProps {
   header?: React.ReactNode;
-}
-
-export interface DashboardEventsFilters {
-  timePeriod: TimeFilter;
-  timeMin?: DateTime;
-  timeMax?: DateTime;
-  openInvitedMeeting?: boolean;
-  favoriteMeetings?: boolean;
 }
 
 const ArrowDownButton = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{

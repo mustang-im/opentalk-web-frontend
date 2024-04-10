@@ -2,15 +2,23 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Collapse, ListItemText, useMediaQuery, useTheme } from '@mui/material';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-import { PrimaryRoute } from '../DashboardNavigation';
-import { ListItem } from './PrimaryNavigation';
+import { ListItem } from './PrimaryNavigationEntry';
+import { SecondaryRoute } from './SecondaryNavigation';
 
 export enum FilterMode {
   Include = 'include',
   Exclude = 'exclude',
+}
+
+export interface PrimaryRoute {
+  icon: ReactNode;
+  path: string;
+  name: string;
+  childRoutes?: Array<SecondaryRoute>;
 }
 
 interface NavigationProps {

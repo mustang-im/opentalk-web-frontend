@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Stack, MenuList } from '@mui/material';
 import { MoreIcon, notificationAction, notifications, IconButton } from '@opentalk/common';
-import { Event, EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
+import { Event, EventException, EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
 import React, { KeyboardEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -21,7 +21,19 @@ import { selectBaseUrl } from '../../../store/slices/configSlice';
 import { composeInviteUrl } from '../../../utils/apiUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
 import ConfirmDialog from '../../ConfirmDialog';
-import { MeetingCardFragmentProps } from '../MeetingCard';
+
+export interface MeetingCardBaseProps {
+  event: Event | EventException;
+  highlighted?: boolean;
+}
+
+export interface MeetingCardProps extends MeetingCardBaseProps {
+  overview?: boolean;
+}
+
+export interface MeetingCardFragmentProps extends MeetingCardBaseProps {
+  isMeetingCreator: boolean;
+}
 
 interface IMeetingCardOptionItem {
   disabled?: boolean;

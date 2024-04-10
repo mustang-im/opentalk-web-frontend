@@ -6,12 +6,16 @@ import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
 import { ArrowDownIcon } from '@opentalk/common';
-import { EventType, isTimelessEvent } from '@opentalk/rest-api-rtk-query';
+import { EventException, EventType, isTimelessEvent, Event } from '@opentalk/rest-api-rtk-query';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MeetingCard from '../../../../components/MeetingCard';
-import { MeetingsProp } from '../EventsOverviewPage';
+
+export interface MeetingsProp {
+  title: string;
+  events: Array<Event | EventException>;
+}
 
 interface MeetingsOverviewProp {
   entries: MeetingsProp[];

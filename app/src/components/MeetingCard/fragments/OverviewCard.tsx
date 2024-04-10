@@ -11,8 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAcceptEventInviteMutation, useDeclineEventInviteMutation } from '../../../api/rest';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
 import EventTimePreview from '../../EventTimePreview/EventTimePreview';
-import { MeetingCardFragmentProps } from '../MeetingCard';
-import MeetingPopover from './MeetingPopover';
+import MeetingPopover, { MeetingCardFragmentProps } from './MeetingPopover';
 
 interface MouseValues {
   x: number;

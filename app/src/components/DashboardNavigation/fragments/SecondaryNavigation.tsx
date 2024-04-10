@@ -16,8 +16,11 @@ import { NavLink } from 'react-router-dom';
 
 import { useAppSelector } from '../../../hooks';
 import { selectDataProtectionUrl, selectImprintUrl, selectHelpdeskUrl } from '../../../store/slices/configSlice';
-import { SecondaryRoute } from '../DashboardNavigation';
 
+export interface SecondaryRoute {
+  path: string;
+  name: string;
+}
 interface NavigationProps {
   label: string;
   routes: Array<SecondaryRoute> | undefined;
