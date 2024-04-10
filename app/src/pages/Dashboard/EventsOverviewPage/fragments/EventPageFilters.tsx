@@ -1,17 +1,13 @@
 import { MenuItem, Select, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { TimePerspectiveFilter } from "../../../../utils/eventUtils";
-
-export enum TimeFilter {
-   Month = 'month',
-   Week = 'week',
-   Day = 'day',
-}
+import { DashboardEventsFilters, FilterChangeCallbackType, TimeFilter } from "../types";
+import { useMemo } from "react";
 
 type EventPageFiltersProps = {
-   timePerspectiveFilterValue: TimePerspectiveFilter;
-   timeFilterValue: TimeFilter;
+   filters: DashboardEventsFilters;
    visuallyDivide?: boolean;
+   onFilterChange: FilterChangeCallbackType;
 }
 
 const timePerspectiveFilterOptions: Array<TimePerspectiveFilter> = [
@@ -26,21 +22,27 @@ const timeFilterOptions: Array<TimeFilter> = [
    TimeFilter.Day,
 ];
 
-export const EventPageFilters = (props: EventPageFiltersProps) => {
+export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: EventPageFiltersProps) => {
    const { t } = useTranslation();
 
+   const showTimePeriosFilter = useMemo(() => {
+      return [TimePerspectiveFilter.Future, TimePerspectiveFilter.Past].includes(filters.timePerspective);
+   }, [filters.timePerspective]);
+
    return (
-      <Stack direction="row" alignItems="center" spacing={1} justifyContent={props.visuallyDivide ? "space-between" : undefined}>
-         <Select value={props.timePerspectiveFilterValue}>
+      <Stack direction="row" alignItems="center" spacing={1} justifyContent={visuallyDivide ? "space-between" : undefined}>
+         <Select value={filters.timePerspective} onChange={(e) => onFilterChange('timePerspective', e.target.value as TimePerspectiveFilter)}>
             {timePerspectiveFilterOptions.map(option => {
                return <MenuItem key={option} value={option}>{t(`dashboard-meeting-details-page-${option}`)}</MenuItem>
             })}
          </Select>
-         <Select value={props.timeFilterValue}>
-            {timeFilterOptions.map(option => {
-               return <MenuItem key={option} value={option}>{t(`global-${option}`)}</MenuItem>
-            })}
-         </Select>
+         {showTimePeriosFilter && (
+            <Select value={filters.timePeriod} onChange={(e) => onFilterChange('timePeriod', e.target.value as TimeFilter)}>
+               {timeFilterOptions.map(option => {
+                  return <MenuItem key={option} value={option}>{t(`global-${option}`)}</MenuItem>
+               })}
+            </Select>
+         )}
       </Stack>
    );
 }

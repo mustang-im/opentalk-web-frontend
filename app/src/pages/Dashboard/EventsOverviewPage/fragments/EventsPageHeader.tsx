@@ -6,39 +6,19 @@ import { InviteIcon, FavoriteIcon, SearchIcon, AddIcon, Toggle } from '@opentalk
 import { DateTime } from '@opentalk/rest-api-rtk-query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { DashboardEventsFilters } from '../EventsOverviewPage';
-import { EventPageFilters, TimeFilter } from './EventPageFilters';
+import { EventPageFilters } from './EventPageFilters';
 import { EventPageFilterButtons } from './EventPageFilterButtons';
 import { CreateNewMeetingButton } from './CreateNewButton';
+import { DashboardEventsFilters, FilterChangeCallbackType, TimeFilter } from '../types';
 
 export { TimeFilter };
 
-export interface DashboardEventsFilters {
-  timePeriod: TimeFilter;
-  timeMin?: DateTime;
-  timeMax?: DateTime;
-  openInvitedMeeting?: boolean;
-  favoriteMeetings?: boolean;
-}
-
-export enum TimeFilter {
-  Month = 'month',
-  Week = 'week',
-  Day = 'day',
-}
-
-interface ToggleOptionsProps {
-  value: DashboardEventsFilters['timePeriod'];
-  label: string;
-}
-
 interface EventsPageHeaderProps {
-  filter: DashboardEventsFilters;
-  onFilterChange: <K extends keyof DashboardEventsFilters>(key: K, value?: DashboardEventsFilters[K]) => void;
+  filters: DashboardEventsFilters;
+  onFilterChange: FilterChangeCallbackType;
 }
 
-const EventsPageHeader = ({ onFilterChange, filter }: EventsPageHeaderProps) => {
+const EventsPageHeader = ({ onFilterChange, filters }: EventsPageHeaderProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
@@ -59,12 +39,12 @@ const EventsPageHeader = ({ onFilterChange, filter }: EventsPageHeaderProps) => 
             {t('dashboard-events-my-meetings')}
           </Typography>
           <EventPageFilters
-            timePerspectiveFilterValue={filter.timePerspective}
-            timeFilterValue={filter.timePeriod}
+            filters={filters}
+            onFilterChange={onFilterChange}
           />
         </Grid>
         <Grid item display="flex" justifyContent="space-between" flex={1} zeroMinWidth>
-          <EventPageFilterButtons />
+          <EventPageFilterButtons filters={filters} onFilterChange={onFilterChange} />
           <CreateNewMeetingButton />
         </Grid>
       </Grid>
@@ -83,12 +63,12 @@ const EventsPageHeader = ({ onFilterChange, filter }: EventsPageHeaderProps) => 
         <Grid item container columns={12} xs={12} rowSpacing={0} columnSpacing={1}>
           <Grid item xs="auto">
             <EventPageFilters
-              timePerspectiveFilterValue={filter.timePerspective}
-              timeFilterValue={filter.timePeriod}
+              filters={filters}
+              onFilterChange={onFilterChange}
             />
           </Grid>
           <Grid item display="flex" justifyContent="space-between" flex={1}>
-            <EventPageFilterButtons />
+            <EventPageFilterButtons filters={filters} onFilterChange={onFilterChange} />
             <CreateNewMeetingButton />
           </Grid>
         </Grid>
@@ -110,7 +90,7 @@ const EventsPageHeader = ({ onFilterChange, filter }: EventsPageHeaderProps) => 
       columns={12}
     >
       <Grid item xs={12} display="flex" justifyContent="space-between">
-        <EventPageFilterButtons />
+        <EventPageFilterButtons filters={filters} onFilterChange={onFilterChange} />
         <CreateNewMeetingButton />
       </Grid>
       <Grid item xs={12}>
@@ -120,9 +100,9 @@ const EventsPageHeader = ({ onFilterChange, filter }: EventsPageHeaderProps) => 
       </Grid>
       <Grid item xs={12}>
         <EventPageFilters
-          timePerspectiveFilterValue={filter.timePerspective}
-          timeFilterValue={filter.timePeriod}
+          filters={filters}
           visuallyDivide
+          onFilterChange={onFilterChange}
         />
       </Grid>
     </Grid>

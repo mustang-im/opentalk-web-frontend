@@ -26,19 +26,11 @@ import {
   TimePerspectiveFilter,
 } from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
-import EventsPageHeader, { DashboardEventsFilters, TimeFilter } from './fragments/EventsPageHeader';
+import EventsPageHeader from './fragments/EventsPageHeader';
+import { DashboardEventsFilters, TimeFilter } from './types';
 
 interface MeetingsPageProps {
   header?: React.ReactNode;
-}
-
-export interface DashboardEventsFilters {
-  timePeriod: TimeFilter;
-  timeMin?: DateTime;
-  timeMax?: DateTime;
-  openInvitedMeeting?: boolean;
-  favoriteMeetings?: boolean;
-  timePerspective: TimePerspectiveFilter;
 }
 
 const ArrowDownButton = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{
@@ -196,7 +188,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
       {/* Parent stack is messing up with the MUI Grid styles, therefore this wrapper is a workaround for it. */}
       <div>
         <EventsPageHeader
-          filter={filter}
+          filters={filter}
           onFilterChange={(key, value) =>
             setFilter((prevFilters) => ({ ...prevFilters, [key]: value ? value : !prevFilters[key] }))
           }

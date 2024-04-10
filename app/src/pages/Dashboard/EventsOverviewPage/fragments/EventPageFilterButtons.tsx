@@ -3,6 +3,7 @@ import { SearchIcon } from "@opentalk/common";
 import { FavoriteIcon } from "@opentalk/common";
 import { InviteIcon } from "@opentalk/common";
 import { useTranslation } from "react-i18next";
+import { DashboardEventsFilters, FilterChangeCallbackType } from "../types";
 
 const IconButtonBig = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{ active?: boolean }>(
    ({ theme, active }) => ({
@@ -14,7 +15,12 @@ const IconButtonBig = styled(IconButton, { shouldForwardProp: (prop) => prop !==
    })
 );
 
-export const EventPageFilterButtons = () => {
+type EventPageFilterButtonsProps = {
+   filters: DashboardEventsFilters;
+   onFilterChange: FilterChangeCallbackType;
+}
+
+export const EventPageFilterButtons = ({ filters, onFilterChange }: EventPageFilterButtonsProps) => {
    const { t } = useTranslation();
 
    return (
@@ -23,9 +29,10 @@ export const EventPageFilterButtons = () => {
             <IconButtonBig
                data-testid="filter-by-invites"
                color="secondary"
-               active={false}
+               active={filters.openInvitedMeeting}
+               aria-pressed={filters.openInvitedMeeting}
                size="large"
-               onClick={undefined}
+               onClick={() => onFilterChange('openInvitedMeeting', !filters.openInvitedMeeting)}
             >
                <InviteIcon />
             </IconButtonBig>
@@ -33,10 +40,11 @@ export const EventPageFilterButtons = () => {
          <Tooltip placement="top" title={t('dashboard-events-filter-by-favorites')}>
             <IconButtonBig
                data-testid="favoriteMeeting"
-               active={false}
+               active={filters.favoriteMeetings}
+               aria-pressed={filters.favoriteMeetings}
                color="secondary"
                size="large"
-               onClick={undefined}
+               onClick={() => onFilterChange('favoriteMeetings', !filters.favoriteMeetings)}
             >
                <FavoriteIcon />
             </IconButtonBig>

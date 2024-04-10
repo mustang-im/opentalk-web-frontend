@@ -21,14 +21,14 @@ describe('Events Page Header tests', () => {
   };
   test('page will not crash', async () => {
     const { store } = configureStore();
-    await render(<EventsPageHeader onFilterChange={onFilterChange} filter={filter} />, store);
+    await render(<EventsPageHeader onFilterChange={onFilterChange} filters={filter} />, store);
     expect(screen.getAllByRole('button')).toHaveLength(6);
     expect(screen.getAllByRole('link')).toHaveLength(1);
   });
 
   test('click on filter will call onFilterChange function', async () => {
     const { store } = configureStore();
-    await render(<EventsPageHeader onFilterChange={onFilterChange} filter={filter} />, store);
+    await render(<EventsPageHeader onFilterChange={onFilterChange} filters={filter} />, store);
     const favoriteMeeting = screen.getByTestId('favoriteMeeting');
     expect(favoriteMeeting).toBeInTheDocument();
     fireEvent.click(favoriteMeeting);
