@@ -4,6 +4,8 @@
 
 ### Improvements to the user experience
 
+- Moderator can mute participant through the context menu from the participant list. ([#1635](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1635))
+
 ### Bug Fixes
 
 - Fix glitchtip error for unhandled message upon successful room deletion ([#1750](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1750))

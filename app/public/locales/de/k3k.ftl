@@ -146,6 +146,7 @@ participant-menu-accept-participant = Teilnehmer aufnehmen
 participant-menu-accept-participant-mobile = Aufnehmen
 participant-menu-accepted-participant = Teilnehmer aufgenommen
 participant-menu-accepted-participant-mobile = Aufgenommen
+participant-menu-mute = Teilnehmer stummschalten
 button-new-message = Neue Nachricht
 empty-messages = Sie haben zur Zeit keine Nachrichten. Erstellen Sie eine und starten Sie eine Private- oder Gruppenkonversation.
 encrypted-messages = Dies ist der Anfang Ihres Chatverlaufs. Niemand hat Zugriff auf den Inhalt Ihres Chats außer den Personen, die im Chat sind.

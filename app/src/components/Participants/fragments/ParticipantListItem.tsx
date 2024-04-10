@@ -31,7 +31,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Role } from '../../../api/types/incoming/control';
 import { grantModeratorRole, revokeModeratorRole } from '../../../api/types/outgoing/control';
-import { grantPresenterRole, revokePresenterRole } from '../../../api/types/outgoing/media';
+import { grantPresenterRole, requestMute, revokePresenterRole } from '../../../api/types/outgoing/media';
 import { banParticipant, kickParticipant, enableWaitingRoom } from '../../../api/types/outgoing/moderation';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
@@ -183,18 +183,31 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
       : dispatch(grantPresenterRole.action({ participantIds: [participant.id] }));
   };
 
-  const moderatorRights = () => {
+  const handleMuting = () => {
+    dispatch(requestMute.action({ targets: [participant.id], force: true }));
+  };
+
+  const muteOption = audioActive && {
+    i18nKey: 'participant-menu-mute',
+    action: handleMuting,
+    disabled: !audioActive, // In case we want to show option always, but want to disable it.
+  };
+
+  const moderatorRights = (): IMenuOptionItem[] => {
+    let options: (IMenuOptionItem | false)[] = [];
     switch (participant.role) {
       case Role.Moderator:
-        return [
+        options = [
           {
             i18nKey: 'participant-menu-revoke-moderator',
             action: handleModerationRight,
             disabled: participant.isRoomOwner,
           },
+          muteOption,
         ];
+        break;
       case Role.User:
-        return [
+        options = [
           {
             i18nKey: 'participant-menu-grant-moderator',
             action: handleModerationRight,
@@ -203,17 +216,23 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
             i18nKey: participant.isPresenter ? 'revoke-presenter-role' : 'grant-presenter-role',
             action: handlePresenterRoleRight,
           },
+          muteOption,
         ];
+        break;
       case Role.Guest:
-        return [
+        options = [
           {
             i18nKey: participant.isPresenter ? 'revoke-presenter-role' : 'grant-presenter-role',
             action: handlePresenterRoleRight,
           },
+          muteOption,
         ];
+        break;
       default:
-        return [];
+        options = [];
     }
+
+    return options.filter(Boolean) as IMenuOptionItem[]; // Remove conditionally excluded menu options.
   };
 
   const participantMenuOptionItems: IMenuOptionItem[] = [
