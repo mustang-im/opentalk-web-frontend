@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
 import { Button, useMediaQuery, useTheme } from '@mui/material';
 import { AddIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';

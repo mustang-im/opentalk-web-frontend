@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
 import { MenuItem, Select, Stack } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
