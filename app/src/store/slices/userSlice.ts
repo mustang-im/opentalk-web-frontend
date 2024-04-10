@@ -151,11 +151,12 @@ export const selectIsPresenter = createSelector(userState, (state) => state.isPr
 export const selectUserProtocolAccess = createSelector(userState, (state) => state.protocolAccess);
 export const selectIsModerator = createSelector(userState, (state) => state.role === Role.Moderator);
 export const selectIsGuest = createSelector(userState, (state) => state.role === Role.Guest);
+export const selectRole = createSelector(userState, (state) => state.role);
 
 export const selectUserAsPartialParticipant = createSelector(
   userState,
   (state): Omit<Participant, 'breakoutRoomId' | 'handIsUp' | 'handUpdatedAt'> | undefined => {
-    const { displayName, avatarUrl, groups, joinedAt, lastActive, isRoomOwner } = state;
+    const { displayName, avatarUrl, groups, joinedAt, lastActive, isRoomOwner, role } = state;
 
     if (state.uuid === null || joinedAt === undefined || lastActive === undefined) {
       return undefined;
@@ -178,6 +179,7 @@ export const selectUserAsPartialParticipant = createSelector(
       isPresenter: state.isPresenter,
       isSpeaking: false,
       isRoomOwner,
+      role,
     };
   }
 );
