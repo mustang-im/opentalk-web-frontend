@@ -37,7 +37,7 @@ const TimerDuration = ({ alignItems, style }: TimerCounterProps) => {
   return (
     <Content alignItems={alignItems}>
       <Typography>{getDisplayText()}</Typography>
-      <Typography>{remainingTime?.durationString}</Typography>
+      <Typography data-testid="timer-display">{remainingTime?.durationString}</Typography>
     </Content>
   );
 };
