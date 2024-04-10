@@ -10,6 +10,8 @@
 
 ### Internal
 
+- Add resolution for tar package ([#1827](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1245))
+
 ## 1.13.0-rc.1
 
 ### New Features
