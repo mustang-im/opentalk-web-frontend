@@ -204,17 +204,17 @@ const DashboardTemplate = () => {
     <Container maxWidth={false} disableGutters>
       <Stack direction={{ xs: 'column', md: 'row' }} height={'100%'}>
         <DashboardNavigation routes={getRoutes(isProviderActive)} />
-        <Stack component={Main} spacing={{ xs: 2, md: 5 }} maxHeight={'100%'} overflow={'auto'}>
-          <Grid spacing={2} container direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-            {!isDesktop && (
+        <Stack component={Main} spacing={{ xs: 2, md: 5 }} maxHeight={'100%'} height={{ xs: 0, sm: 0, md: '100%' }}>
+          {isDesktop && (
+            <Grid spacing={2} container direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
               <Grid item alignSelf={'flex-end'}>
                 <DashboardLogo />
               </Grid>
-            )}
-            <Grid item xs>
-              {header}
+              <Grid item xs>
+                {header}
+              </Grid>
             </Grid>
-          </Grid>
+          )}
           <Outlet context={{ setHeader }} />
         </Stack>
       </Stack>

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Skeleton, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Grid, Skeleton, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { AddIcon, AddWithRectangleIcon, CameraOnIcon } from '@opentalk/common';
 import { DateTime, Event, EventException, RoomId } from '@opentalk/rest-api-rtk-query';
 import { formatRFC3339 } from 'date-fns';
@@ -32,15 +32,19 @@ const Container = styled('div')(({ theme }) => ({
 }));
 
 const HeaderContainer = styled(Stack)(({ theme }) => ({
-  flexDirection: 'column-reverse',
-  justifyContent: 'space-between',
-  alignItems: 'flex-end',
   gap: theme.spacing(2),
-
+  flexDirection: 'column-reverse',
   [theme.breakpoints.up('md')]: {
     flexDirection: 'row',
     gridColumnStart: 2,
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
+}));
+
+const HeaderButtonsContainer = styled(Grid)(({ theme }) => ({
+  rowGap: theme.spacing(2),
+  justifyContent: 'space-between',
 }));
 
 const Home = () => {
@@ -217,12 +221,14 @@ const Home = () => {
     <Container>
       <HeaderContainer>
         <Typography>{t('dashboard-meeting-card-title-next-meetings')}</Typography>
-        {renderNewMeetingButton()}
-        {!isDesktop && (
-          <>
-            <JoinMeetingDialog />
+        {!isDesktop ? (
+          <HeaderButtonsContainer container>
             {renderStartDirectMeetingButton()}
-          </>
+            <JoinMeetingDialog />
+            {renderNewMeetingButton()}
+          </HeaderButtonsContainer>
+        ) : (
+          renderNewMeetingButton()
         )}
       </HeaderContainer>
       {isDesktop && renderLogoAndFavoriteBar()}
