@@ -153,7 +153,7 @@ export const JoinMeetingDialog = ({ openButtonProps, ...props }: JoinMeetingDial
   return (
     <>
       <Button
-        color="primary"
+        color="secondary"
         fullWidth
         {...openButtonProps}
         //Props that can't be overriden
