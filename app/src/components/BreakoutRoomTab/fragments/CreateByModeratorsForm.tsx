@@ -9,6 +9,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
+import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 import TextWithDivider from '../../TextWithDivider';
 
 const GridItem = styled(Grid)({
@@ -33,7 +34,9 @@ const CreateByModeratorsForm = ({ formik, handleNext, formName }: ICreateByModer
   return (
     <Grid container direction={'column'} spacing={1}>
       <GridItem item xs>
-        <DurationField {...formikDurationFieldProps(getFormName('duration'), formik, 0)} min={0} />
+        <DurationFieldWrapper>
+          <DurationField {...formikDurationFieldProps(getFormName('duration'), formik, 0)} min={0} />
+        </DurationFieldWrapper>
       </GridItem>
       <GridItem item xs>
         <CommonFormItem

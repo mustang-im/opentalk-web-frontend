@@ -18,6 +18,7 @@ import CommonFormItem from '../../../commonComponents/CommonFormItem';
 import TextField from '../../../commonComponents/TextField';
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
+import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 import TextWithDivider from '../../TextWithDivider';
 
 const NumberInput = styled(TextField)(({ theme }) => ({
@@ -29,10 +30,6 @@ const NumberInput = styled(TextField)(({ theme }) => ({
 }));
 
 const CreateButton = styled(Button)({
-  alignSelf: 'flex-start',
-});
-
-const DurationFieldAligned = styled(DurationField)({
   alignSelf: 'flex-start',
 });
 
@@ -54,13 +51,15 @@ const CreateByRoomsForm = ({ handleNext, formName }: ICreateByRoomsFormProps) =>
 
   return (
     <Stack spacing={2} direction="column" justifyContent="flex-start">
-      <DurationFieldAligned
-        {...formikDurationFieldProps(getFormName('duration'), formik, 0)}
-        ButtonProps={{
-          size: 'small',
-        }}
-        min={0}
-      />
+      <DurationFieldWrapper>
+        <DurationField
+          {...formikDurationFieldProps(getFormName('duration'), formik, 0)}
+          ButtonProps={{
+            size: 'small',
+          }}
+          min={0}
+        />
+      </DurationFieldWrapper>
       <CommonFormItem
         {...formikProps(getFormName('rooms'), formik)}
         label={t('breakout-room-form-field-rooms')}

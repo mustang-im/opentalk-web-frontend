@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Stack, styled, Switch, Typography } from '@mui/material';
+import { Button, Stack, styled, Switch } from '@mui/material';
 import {
   formikDurationFieldProps,
   formikProps,
@@ -20,6 +20,7 @@ import { startTimer } from '../../../api/types/outgoing/timer';
 import { TextField } from '../../../commonComponents';
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
 import { useAppDispatch } from '../../../hooks';
+import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 
 const Container = styled(Stack)({
   display: 'flex',
@@ -113,16 +114,17 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
   return (
     <Container>
       <Stack spacing={2} mb={2}>
-        <Typography>{t('global-duration')}</Typography>
-        <DurationField
-          {...formikDurationFieldProps('duration', formik, defaultValue)}
-          durationOptions={durationOptions}
-          ButtonProps={{
-            size: 'small',
-          }}
-          min={min}
-          allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
-        />
+        <DurationFieldWrapper>
+          <DurationField
+            {...formikDurationFieldProps('duration', formik, defaultValue)}
+            durationOptions={durationOptions}
+            ButtonProps={{
+              size: 'small',
+            }}
+            min={min}
+            allowEmpty={timerStyle === TimerStyle.CoffeeBreak}
+          />
+        </DurationFieldWrapper>
 
         {timerStyle === TimerStyle.Normal && (
           <>
