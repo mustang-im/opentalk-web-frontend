@@ -27,9 +27,9 @@ const SideBar = styled('aside')(({ theme }) => ({
 
 const ProfileWindow = styled('div', {
   shouldForwardProp: (prop) => prop !== 'isModerator',
-})<{ isModerator?: boolean }>(({ theme }) => ({
+})<{ isModerator?: boolean }>(({ theme, isModerator }) => ({
   display: 'flex',
-  flexDirection: 'column-reverse',
+  flexDirection: isModerator ? 'column-reverse' : 'column',
   borderRadius: theme.borderRadius.medium,
   padding: theme.spacing(2),
   transform: 'translateZ(0)',
