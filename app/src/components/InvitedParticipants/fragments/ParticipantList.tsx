@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { styled } from '@mui/system';
 import { EventInvite, InviteStatus } from '@opentalk/rest-api-rtk-query';
 import { EventId } from '@opentalk/rest-api-rtk-query/src/types';
@@ -18,12 +18,6 @@ const ParticipantListBox = styled(Stack)({
   width: '100%',
 });
 
-const ParticipantsContainer = styled(Stack)(({ theme }) => ({
-  paddingRight: theme.spacing(2),
-  width: '100%',
-  marginTop: 2,
-}));
-
 type ParticipantListProps = {
   status: InviteStatus;
   invitees: Array<EventInvite>;
@@ -36,6 +30,8 @@ const ParticipantList = ({ isUpdatable, status, invitees, removeSelectedUser, ev
   const [revokeUserInvite] = useRevokeEventUserInviteMutation();
   const [revokeUserInviteByEmail] = useRevokeEventUserInviteByEmailMutation();
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const revokeInvitedUser = (user: EventInvite) => {
     if (isRegisteredUser(user.profile)) {
@@ -45,9 +41,9 @@ const ParticipantList = ({ isUpdatable, status, invitees, removeSelectedUser, ev
     }
   };
   return (
-    <ParticipantsContainer data-testid={'ParticipantList'}>
+    <Grid item xs={12} sm={4} data-testid={'ParticipantList'}>
       <Typography mb={1}>{t(`dashboard-meeting-details-page-participant-${status}`)}</Typography>
-      <ParticipantListBox data-testid={'ParticipantListBox'}>
+      <ParticipantListBox direction={isMobile ? 'row' : 'column'} data-testid={'ParticipantListBox'}>
         {invitees.map((eventInvite) => (
           <UserRow
             key={eventInvite.profile.email}
@@ -59,7 +55,7 @@ const ParticipantList = ({ isUpdatable, status, invitees, removeSelectedUser, ev
           />
         ))}
       </ParticipantListBox>
-    </ParticipantsContainer>
+    </Grid>
   );
 };
 

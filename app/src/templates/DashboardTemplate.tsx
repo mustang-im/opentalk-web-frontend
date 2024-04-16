@@ -206,9 +206,11 @@ const DashboardTemplate = () => {
         <DashboardNavigation routes={getRoutes(isProviderActive)} />
         <Stack component={Main} spacing={{ xs: 2, md: 5 }} maxHeight={'100%'} overflow={'auto'}>
           <Grid spacing={2} container direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-            <Grid item alignSelf={'flex-end'}>
-              <DashboardLogo />
-            </Grid>
+            {!isDesktop && (
+              <Grid item alignSelf={'flex-end'}>
+                <DashboardLogo />
+              </Grid>
+            )}
             <Grid item xs>
               {header}
             </Grid>
