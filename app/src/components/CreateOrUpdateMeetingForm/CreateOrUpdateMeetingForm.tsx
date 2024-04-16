@@ -7,7 +7,9 @@ import {
   CreateEventPayload,
   DateTime,
   Event,
+  EventException,
   isTimelessEvent,
+  RecurringEvent,
   SingleEvent,
   UpdateEventPayload,
 } from '@opentalk/rest-api-rtk-query';
@@ -30,6 +32,7 @@ import {
 import { LimitedTextField, Select } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { selectFeatures } from '../../store/slices/configSlice';
+import { appendRecurringEventInstances } from '../../utils/eventUtils';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
 import { FrequencySelect, mapFrequencySelectToRRuleFrequency, mapRRuleToFrequencySelect } from '../../utils/rruleUtils';
@@ -68,7 +71,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
 
   const navigate = useNavigate();
 
-  const [overlappingEvent, setOverlappingEvent] = useState<SingleEvent>();
+  const [overlappingEvent, setOverlappingEvent] = useState<SingleEvent | RecurringEvent>();
 
   const defaultStartDate = roundToUpper30();
   const defaultEndDate = addMinutes(defaultStartDate, DEFAULT_MINUTES_DIFFERENCE);
@@ -432,15 +435,16 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     }
   };
 
-  const checkForOverlappingEvents = async (): Promise<SingleEvent | undefined> => {
+  const checkForOverlappingEvents = async (): Promise<SingleEvent | RecurringEvent | undefined> => {
     const foundEvents = await checkForEvents({
-      perPage: 2,
       timeMin: formik.values.startDate as DateTime,
       timeMax: formik.values.endDate as DateTime,
     });
 
     if (foundEvents && foundEvents.data && !isEmpty(foundEvents.data.data)) {
-      const potentialOverlappingEvents = foundEvents.data.data as Array<SingleEvent>;
+      const potentialOverlappingEvents: Array<SingleEvent | RecurringEvent> = appendRecurringEventInstances(
+        foundEvents.data.data as Array<Event | EventException>
+      ).filter((event) => !isTimelessEvent(event)) as Array<SingleEvent | RecurringEvent>;
 
       const currentEventInterval: Interval = {
         start: new Date(formik.values.startDate),
