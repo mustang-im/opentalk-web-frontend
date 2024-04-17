@@ -25,7 +25,7 @@ const Container = styled('div')(({ theme }) => ({
     paddingLeft: 0,
     paddingRight: 0,
   },
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',

@@ -3,10 +3,9 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Pagination } from '@mui/material';
 import { WhiteboardIcon, ProtocolIcon } from '@opentalk/common';
-import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
+import React, { useMemo, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectPollsAndVotingsCount } from '../../../store/selectors';
@@ -18,7 +17,6 @@ import {
   selectCinemaLayout,
   setPaginationPage,
   selectPaginationPageState,
-  toggleDebugMode,
   selectIsCurrentProtocolHighlighted,
 } from '../../../store/slices/uiSlice';
 import { selectIsCurrentWhiteboardHighlighted } from '../../../store/slices/uiSlice';
@@ -32,28 +30,16 @@ import RoomTitle from './RoomTitle';
 import { SharedFolderPopover } from './SharedFolderPopover';
 import VotesAndPollsResultsPopover from './VotesAndPollsResultsPopover';
 
-const OpenTalkLogo = styled(Logo)(({ theme }) => ({
-  width: theme.typography.pxToRem(205),
-  height: theme.typography.pxToRem(35),
-  fill: 'white',
-}));
-
-const HeaderDivider = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignSelf: 'center',
-  height: '50%',
-  borderStyle: 'solid',
-  borderLeftWidth: theme.typography.pxToRem(2),
-  borderColor: theme.palette.background.voteResult,
-}));
-
-const HeaderPaginationContainer = styled('div')(({ theme }) => ({
-  background: theme.palette.background.video,
+const HeaderItem = styled('div')<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
+  background: highlighted ? theme.palette.primary.main : theme.palette.background.video,
   borderRadius: '0.25rem',
   display: 'inline-flex',
   height: '100%',
   justifyContent: 'center',
   alignItems: 'center',
+  '& .MuiIconButton-root .MuiSvgIcon-root': {
+    fill: highlighted ? theme.palette.background.default : theme.palette.text.primary,
+  },
 }));
 
 const HeaderPagination = styled(Pagination)(({ theme }) => ({
@@ -67,26 +53,24 @@ const HeaderPagination = styled(Pagination)(({ theme }) => ({
   },
 }));
 
-const HeaderCenterContainer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(2),
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100%',
-}));
+const HeaderContainer = styled('div')<{ lgOrder?: number; justifyContentLgDown?: string }>(
+  ({ theme, lgOrder, justifyContentLgDown }) => ({
+    display: 'flex',
+    gap: theme.spacing(2),
+    justifyContent: 'center',
+    '@media (max-width: 1060px)': {
+      order: lgOrder || 1,
+      flex: lgOrder ? '0 0 100%' : 1,
+      justifyContent: justifyContentLgDown ? justifyContentLgDown : 'center',
+    },
+  })
+);
 
 const Content = styled('header')(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
   gap: theme.spacing(1),
   justifyContent: 'space-between',
-}));
-
-const ContentItem = styled('div')<{ lgOrder?: number }>(({ theme, lgOrder }) => ({
-  [theme.breakpoints.down('lg')]: {
-    order: lgOrder,
-    flex: lgOrder ? '0 0 100%' : 1,
-  },
 }));
 
 const DesktopMeetingHeader = () => {
@@ -99,33 +83,12 @@ const DesktopMeetingHeader = () => {
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
   const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
   const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
-  const [clickCount, setClickCount] = useState(0);
-  const clickTimer = useRef<NodeJS.Timeout | null>(null);
   const votingsAndPollsCount = useAppSelector(selectPollsAndVotingsCount);
   const showVotesAndPolls = votingsAndPollsCount > 0;
   const isSharedFolderAvailable = useAppSelector(selectIsSharedFolderAvailable);
   const { t } = useTranslation();
   const isProtocolActive = selectedLayout === LayoutOptions.Protocol;
   const isWhiteboardActive = selectedLayout === LayoutOptions.Whiteboard;
-
-  const showDebugDialog = () => {
-    if (clickTimer.current) {
-      clearTimeout(clickTimer.current);
-    }
-
-    clickTimer.current = setTimeout(() => {
-      setClickCount(0);
-    }, 2000);
-
-    setClickCount((clickCount) => clickCount + 1);
-  };
-
-  useEffect(() => {
-    if (clickCount === 5) {
-      dispatch(toggleDebugMode());
-      setClickCount(0);
-    }
-  }, [dispatch, clickCount]);
 
   const pageCount = useMemo(() => {
     return Math.ceil(participants.length / MAX_GRID_TILES);
@@ -183,45 +146,39 @@ const DesktopMeetingHeader = () => {
 
   return (
     <Content>
-      <ContentItem>
-        <OpenTalkLogo onClick={showDebugDialog} aria-disabled />
-      </ContentItem>
-      <ContentItem lgOrder={2}>
-        <HeaderCenterContainer>
-          <RoomTitle />
-          <LayoutSelection />
-          {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
-            <HeaderPaginationContainer>
-              <HeaderPagination
-                count={pageCount > 1 ? pageCount : 0}
-                page={selectedPage}
-                variant="outlined"
-                shape="rounded"
-                siblingCount={1}
-                size="small"
-                hidePrevButton
-                hideNextButton
-                onChange={handleChangePage}
-              />
-            </HeaderPaginationContainer>
-          )}
-          {(showWhiteboardIcon || protocolUrl || showVotesAndPolls || isSharedFolderAvailable) && (
-            <>
-              <HeaderDivider />
-              {showWhiteboardIcon && renderWhiteboardButton()}
-              {protocolUrl && selectedLayout !== LayoutOptions.Protocol && renderProtocolButton()}
-              {isSharedFolderAvailable && <SharedFolderPopover />}
-              {showVotesAndPolls && <VotesAndPollsResultsPopover />}
-            </>
-          )}
-        </HeaderCenterContainer>
-      </ContentItem>
-      <ContentItem>
-        <HeaderCenterContainer>
-          <MeetingUtilsSection />
-          <MyMeetingMenu />
-        </HeaderCenterContainer>
-      </ContentItem>
+      <HeaderContainer justifyContentLgDown="flex-start">
+        <RoomTitle />
+        <LayoutSelection />
+      </HeaderContainer>
+      <HeaderContainer lgOrder={2}>
+        {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
+          <HeaderItem>
+            <HeaderPagination
+              count={pageCount > 1 ? pageCount : 0}
+              page={selectedPage}
+              variant="outlined"
+              shape="rounded"
+              siblingCount={1}
+              size="small"
+              hidePrevButton
+              hideNextButton
+              onChange={handleChangePage}
+            />
+          </HeaderItem>
+        )}
+        {(showWhiteboardIcon || protocolUrl || showVotesAndPolls || isSharedFolderAvailable) && (
+          <>
+            {showWhiteboardIcon && renderWhiteboardButton()}
+            {protocolUrl && selectedLayout !== LayoutOptions.Protocol && renderProtocolButton()}
+            {isSharedFolderAvailable && <SharedFolderPopover />}
+            {showVotesAndPolls && <VotesAndPollsResultsPopover />}
+          </>
+        )}
+      </HeaderContainer>
+      <HeaderContainer justifyContentLgDown="flex-end">
+        <MeetingUtilsSection />
+        <MyMeetingMenu />
+      </HeaderContainer>
     </Content>
   );
 };

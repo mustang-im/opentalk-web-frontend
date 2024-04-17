@@ -23,7 +23,7 @@ const MainContainer = styled('aside')(({ theme }) => ({
     gridAutoFlow: 'column',
     gap: theme.spacing(1.25),
   },
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     gap: theme.spacing(1),
     background: theme.palette.background.paper,
   },

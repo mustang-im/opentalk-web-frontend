@@ -44,7 +44,7 @@ const MeetingTimer = () => {
 
   return (
     <Container>
-      <Typography variant={'body2'} minWidth="4em">
+      <Typography variant={'body2'} minWidth={meetingTime.length > 7 ? '6em' : '4em'}>
         {meetingTime}
       </Typography>
     </Container>
