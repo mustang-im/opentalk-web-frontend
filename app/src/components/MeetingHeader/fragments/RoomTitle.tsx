@@ -10,7 +10,7 @@ import { useAppSelector } from '../../../hooks';
 import { selectCurrentBreakoutRoom } from '../../../store/slices/breakoutSlice';
 import { selectEventInfo } from '../../../store/slices/roomSlice';
 
-export const ROOM_TITLE_MAX_LENGTH = 25;
+export const ROOM_TITLE_MAX_LENGTH = 17;
 
 //Container is needed in order to limit text from overflowing
 const Container = styled(Stack)(({ theme }) => ({

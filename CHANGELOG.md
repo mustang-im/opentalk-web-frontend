@@ -7,6 +7,7 @@
 
 ### Improvements to the user experience
 
+- Adjust the header navigation in conference for lower resolutions ([#1767](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1767))
 - Adjust meeting details for mobile ([#1799](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1799))
 - Added summary to shortcuts table along with better shortcut description formatting for cleaner screen reader pronunciation. ([#1742](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1742))
 - Restructured dashboard meeting header with filter options as dropdowns. ([#1646](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1646))

@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import userEvent from '@testing-library/user-event';
+import { truncate } from 'lodash';
 
 import { screen, render, createStore } from '../../../utils/testUtils';
 import RoomTitle, { ROOM_TITLE_MAX_LENGTH } from './RoomTitle';
@@ -53,6 +54,7 @@ describe('Room title', () => {
   });
 
   test('should display fallback title in case room title is undefined', async () => {
+    const truncatedFallbackTitle = truncate('fallback-room-title', { length: ROOM_TITLE_MAX_LENGTH });
     const createdStore = createStore({
       initialState: {
         room: {
@@ -62,7 +64,7 @@ describe('Room title', () => {
     });
     await render(<RoomTitle />, createdStore.store);
 
-    expect(screen.getByText('fallback-room-title')).toBeInTheDocument();
+    expect(screen.getByText(truncatedFallbackTitle)).toBeInTheDocument();
 
     const title = screen.getByTitle('fallback-room-title');
     await userEvent.hover(title);
@@ -70,6 +72,7 @@ describe('Room title', () => {
     expect(tooltip).toHaveTextContent('fallback-room-title');
   });
   test('should be rendered inside an h1 tag', async () => {
+    const truncatedFallbackTitle = truncate('fallback-room-title', { length: ROOM_TITLE_MAX_LENGTH });
     const createdStore = createStore({
       initialState: {
         room: {
@@ -79,7 +82,7 @@ describe('Room title', () => {
     });
     await render(<RoomTitle />, createdStore.store);
 
-    const roomTitleElement = screen.getByText('fallback-room-title');
+    const roomTitleElement = screen.getByText(truncatedFallbackTitle);
     expect(roomTitleElement.tagName).toBe('H1');
   });
 });
