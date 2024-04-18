@@ -16,23 +16,24 @@ import {
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import { useFormik } from 'formik';
 import i18next from 'i18next';
+import { uniqueId } from 'lodash';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { ApiErrorWithBody, StartRoomError, useGetMeQuery, useGetRoomEventInfoQuery } from '../../api/rest';
-import Error from '../../commonComponents/Error';
 import SuspenseLoading from '../../commonComponents/SuspenseLoading';
 import TextField from '../../commonComponents/TextField';
+import Error from '../../components/Error';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useInviteCode } from '../../hooks/useInviteCode';
+import useNavigateToHome from '../../hooks/useNavigateToHome';
 import { startRoom } from '../../store/commonActions';
 import { selectDisallowCustomDisplayName, selectFeatures } from '../../store/slices/configSlice';
 import {
   ConnectionState,
   fetchRoomByInviteId,
-  roomReset,
   selectInviteState,
   selectPasswordRequired,
   selectRoomConnectionState,
@@ -56,6 +57,8 @@ let wrongPasswordSnackBarKey: SnackbarKey | undefined = undefined;
 const showWrongPasswordNotification = () => {
   if (wrongPasswordSnackBarKey) return;
   wrongPasswordSnackBarKey = enqueueSnackbar(`${i18next.t('joinform-wrong-room-password')}`, {
+    //Unique key is used to guarantee we will show a notification if user repeatedly inputs a wrong password
+    key: uniqueId(),
     variant: 'error',
     persist: true,
     onClose: () => (wrongPasswordSnackBarKey = undefined),
@@ -81,6 +84,7 @@ const LobbyView: FC = () => {
   const [inviteCodeError, setInviteCodeError] = useState<FetchRequestError>();
   const connectionState = useAppSelector(selectRoomConnectionState);
   const navigate = useNavigate();
+  const navigateToHome = useNavigateToHome();
   const passwordRequired = useAppSelector(selectPasswordRequired);
   const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
   const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId, inviteCode: inviteCode }, { skip: !roomId });
@@ -100,10 +104,15 @@ const LobbyView: FC = () => {
     }
   }, [inviteCode]);
 
-  const handleExitAndNavigateTo = (path: string) => {
-    dispatch(roomReset());
-    navigate(path);
-  };
+  //Cleans up wrong password notification on dismount
+  useEffect(() => {
+    return () => {
+      if (wrongPasswordSnackBarKey) {
+        closeSnackbar(wrongPasswordSnackBarKey);
+        wrongPasswordSnackBarKey = undefined;
+      }
+    };
+  }, []);
 
   const enterRoom = useCallback(
     async (displayName: string, password: string) => {
@@ -122,12 +131,6 @@ const LobbyView: FC = () => {
         })
       )
         .unwrap()
-        .then(() => {
-          if (wrongPasswordSnackBarKey) {
-            closeSnackbar(wrongPasswordSnackBarKey);
-            wrongPasswordSnackBarKey = undefined;
-          }
-        })
         .catch((e) => {
           if ('code' in e) {
             const error = e as ApiErrorWithBody<StartRoomError>;
@@ -144,15 +147,14 @@ const LobbyView: FC = () => {
               case StartRoomError.WrongRoomPassword:
               case StartRoomError.InvalidCredentials:
                 showWrongPasswordNotification();
-                navigate(composeRoomPath(roomId, inviteCode, breakoutRoomId));
                 break;
               case StartRoomError.NotFound:
                 notifications.error(t('joinform-room-not-found'));
-                handleExitAndNavigateTo('/dashboard');
+                navigateToHome();
                 break;
               case StartRoomError.Forbidden:
                 notifications.error(t('joinform-access-denied'));
-                handleExitAndNavigateTo('/dashboard');
+                navigateToHome();
                 break;
               default:
                 console.error(`unknown error code ${e.code} in startRoom`, e);
@@ -191,6 +193,9 @@ const LobbyView: FC = () => {
     },
   });
 
+  const disableSubmitButton =
+    !(isLoggedIn || inviteCode !== undefined) || connectionState === ConnectionState.Starting || !formik.isValid;
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -206,62 +211,50 @@ const LobbyView: FC = () => {
   return (
     <>
       <Container>
-        <Stack direction={'column'} spacing={4} justifyContent={'center'} alignItems={'center'}>
-          <SelfTest
-            actionButton={
-              <Button
-                form={JOIN_FORM_ID}
-                type={'submit'}
-                disabled={
-                  !(isLoggedIn || inviteCode !== undefined) ||
-                  connectionState === ConnectionState.Starting ||
-                  !formik.isValid
-                }
-              >
-                {t('joinform-enter-now')}
-              </Button>
-            }
-            title={roomData?.title}
-          >
-            <form id={JOIN_FORM_ID} onSubmit={formik.handleSubmit}>
-              <Stack direction={'row'} spacing={1}>
-                <ContitionalToolTip
-                  showToolTip={Boolean(disableDisplayNameField)}
-                  title={t('joinform-display-name-field-disabled-tooltip')}
-                  children={
-                    <CustomTextField
-                      {...formikProps('name', formik)}
-                      color={'secondary'}
-                      placeholder={t('joinform-enter-name')}
-                      autoComplete="username"
-                      disabled={disableDisplayNameField}
-                    />
-                  }
+        <SelfTest
+          actionButton={
+            <Button form={JOIN_FORM_ID} type={'submit'} disabled={disableSubmitButton}>
+              {t('joinform-enter-now')}
+            </Button>
+          }
+          title={roomData?.title}
+        >
+          <Stack direction={'row'} spacing={1} component={'form'} id={JOIN_FORM_ID} onSubmit={formik.handleSubmit}>
+            <ContitionalToolTip
+              showToolTip={Boolean(disableDisplayNameField)}
+              title={t('joinform-display-name-field-disabled-tooltip')}
+              children={
+                <CustomTextField
+                  {...formikProps('name', formik)}
+                  color={'secondary'}
+                  placeholder={t('joinform-enter-name')}
+                  autoComplete="username"
+                  disabled={disableDisplayNameField}
                 />
-                {showPasswordField && (
-                  <TextField
-                    {...formikProps('password', formik)}
-                    color={'secondary'}
-                    placeholder={t('joinform-enter-password')}
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete="current-password"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label={t('toggle-password-visibility')}
-                          onClick={handleClickShowPassword}
-                          edge="end"
-                        >
-                          {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                )}
-              </Stack>
-            </form>
-          </SelfTest>
-        </Stack>
+              }
+            />
+            {showPasswordField && (
+              <TextField
+                {...formikProps('password', formik)}
+                color={'secondary'}
+                placeholder={t('joinform-enter-password')}
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={t('toggle-password-visibility')}
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            )}
+          </Stack>
+        </SelfTest>
       </Container>
       <ImprintContainer />
     </>

@@ -1,19 +1,20 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Container as MuiContainer, Grid, Stack, styled, Typography, Button } from '@mui/material';
+import { Grid, Stack, styled, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
-import { HelpIcon } from '@opentalk/common';
+import { HelpIcon, CloseIcon, Logo, BackIcon, CircularIconButton } from '@opentalk/common';
 import React, { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import arrowImage from '../../assets/images/arrow-illustration.png';
 import LocalVideo from '../../components/LocalVideo';
 import { useAppSelector } from '../../hooks';
+import useNavigateToHome from '../../hooks/useNavigateToHome';
 import { selectFeatures } from '../../store/slices/configSlice';
 import { selectVideoEnabled } from '../../store/slices/mediaSlice';
-import QuickStartPopper from '../QuickStartPopover';
-import SpeedTest from '../SpeedTest';
+import QuickStartPopover from '../QuickStartPopover';
+import SpeedTestDialog from '../SpeedTestDialog';
 import { EchoPlayBack } from './fragments/EchoPlayback';
 import { SelfTestToolbar } from './fragments/SelfTestToolbar';
 
@@ -30,28 +31,19 @@ const SelfTestContainer = styled('div')(() => ({
   backgroundSize: '10rem',
 }));
 
-const SpeedTestContainer = styled(MuiContainer)(({ theme }) => ({
-  top: 0,
-  left: 0,
-  position: 'relative',
-  padding: theme.spacing(6),
-  [theme.breakpoints.up('md')]: {
-    position: 'absolute',
-  },
+const Header = styled('header')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  padding: theme.spacing(2, 2, 0),
 }));
 
-const HelpIconButton = styled(Button)(({ theme }) => ({
-  borderRadius: '50%',
-  padding: theme.spacing(0.5),
-  margin: theme.spacing(1, 1, 0, 0),
-  minWidth: '10px',
-  borderColor: theme.palette.common.white,
-  zIndex: 2,
-  '& .MuiSvgIcon-root': {
-    color: theme.palette.common.white,
-    fontSize: theme.typography.pxToRem(30),
-  },
+const UtilitiesContainer = styled(Stack)(({ theme }) => ({
+  flexDirection: 'row',
+  gap: theme.spacing(1),
 }));
+
+const BOTTOM_CONTAINER_Z_INDEX = 1;
 
 const BottomContainer = styled('nav')(({ theme }) => ({
   width: '100%',
@@ -59,7 +51,7 @@ const BottomContainer = styled('nav')(({ theme }) => ({
   bottom: 0,
   left: 0,
   position: 'relative',
-  zIndex: 1,
+  zIndex: BOTTOM_CONTAINER_Z_INDEX,
   [theme.breakpoints.up('md')]: {
     position: 'absolute',
   },
@@ -76,6 +68,26 @@ const MonitorContainer = styled('main')(({ theme }) => ({
     color: theme.palette.secondary.contrastText,
   },
 }));
+
+const MobileBackButton = styled(CircularIconButton)(({ theme }) => ({
+  position: 'absolute',
+  zIndex: BOTTOM_CONTAINER_Z_INDEX,
+  bottom: theme.spacing(2),
+  left: theme.spacing(2),
+}));
+
+//Upscale and add margin to help icon, since the svg is just smaller than others and is offcenter.
+//Should move into icon definition if it is also required elsewhere.
+const AdjustedHelpIcon = styled(HelpIcon)(({ theme }) => ({
+  transform: 'scale(1.3)',
+  marginLeft: theme.typography.pxToRem(2),
+}));
+
+const BackButtonContainer = styled(Grid)(({ theme }) => ({
+  position: 'absolute',
+  left: theme.spacing(1),
+}));
+
 interface SelftestProps {
   children: ReactNode;
   actionButton?: ReactNode;
@@ -85,32 +97,28 @@ interface SelftestProps {
 const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
   const videoEnabled = useAppSelector(selectVideoEnabled);
   const { joinWithoutMedia } = useAppSelector(selectFeatures);
-  const [showQuickStart, setShowQuickStart] = useState(false);
-  const quickTestIconRef = useRef(null);
   const { t } = useTranslation();
   const theme = useTheme();
+  const [isQuickStartPopoverOpen, setIsQuickStartPopoverOpen] = useState(false);
+  const anchorElement = useRef<HTMLButtonElement>(null);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigateToHome = useNavigateToHome();
 
   return (
     <SelfTestContainer>
-      <Stack component="header" direction="row-reverse">
-        <HelpIconButton
-          aria-label={t('conference-quick-start-open')}
-          variant="outlined"
-          onClick={() => setShowQuickStart(true)}
-          ref={quickTestIconRef}
-        >
-          <HelpIcon />
-        </HelpIconButton>
-        <QuickStartPopper
-          onClose={() => setShowQuickStart(false)}
-          open={showQuickStart}
-          variant="lobby"
-          anchorEl={quickTestIconRef.current}
-        />
-        <SpeedTestContainer>
-          <SpeedTest />
-        </SpeedTestContainer>
-      </Stack>
+      <Header>
+        <Logo onClick={navigateToHome} />
+        <UtilitiesContainer>
+          <SpeedTestDialog />
+          <CircularIconButton
+            ref={anchorElement}
+            onClick={() => setIsQuickStartPopoverOpen((value) => !value)}
+            aria-label={isQuickStartPopoverOpen ? t('conference-quick-start-close') : t('conference-quick-start-open')}
+          >
+            {isQuickStartPopoverOpen ? <CloseIcon /> : <AdjustedHelpIcon />}
+          </CircularIconButton>
+        </UtilitiesContainer>
+      </Header>
       <MonitorContainer>
         {videoEnabled ? (
           <LocalVideo noRoundedCorners hideUserName />
@@ -147,12 +155,32 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
       </MonitorContainer>
       <BottomContainer>
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
+          {!isMobile && (
+            <BackButtonContainer item>
+              <CircularIconButton aria-label={t('global-back')} onClick={navigateToHome}>
+                <BackIcon />
+              </CircularIconButton>
+            </BackButtonContainer>
+          )}
           <Grid item>{children}</Grid>
           <Grid item>
             <SelfTestToolbar actionButton={actionButton} />
           </Grid>
         </Grid>
       </BottomContainer>
+
+      {isMobile && (
+        <MobileBackButton aria-label={t('global-back')} onClick={navigateToHome}>
+          <BackIcon />
+        </MobileBackButton>
+      )}
+
+      <QuickStartPopover
+        open={isQuickStartPopoverOpen}
+        anchorEl={anchorElement.current}
+        onClose={() => setIsQuickStartPopoverOpen(false)}
+        variant={'lobby'}
+      />
     </SelfTestContainer>
   );
 };

@@ -29,6 +29,7 @@
 
 ### Improvements to the user experience
 
+- Restructure conference lobby page ([#1741](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1741))
 - Enable keyboard navigation through participants sort option list. ([#1753](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1753))
 - Prevent moderation right revoke from the room owner. ([#1729](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1729))
 - Improved vote and poll underlying HTML structure, so it can be better navigated using the screen readers. ([#1708](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1708))

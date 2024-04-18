@@ -6,7 +6,7 @@ import CommonFormItem from './CommonFormItem';
 import { DurationField, DurationValueOptions } from './DurationField';
 import { ErrorFormMessage } from './ErrorFormMessage';
 import { FormWrapper, FormProps } from './FormWrapper';
-import { IconButton, AdornmentIconButton } from './IconButtons';
+import { IconButton, AdornmentIconButton, CircularIconButton } from './IconButtons';
 import { ParticipantAvatar, setLibravatarOptions } from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
 import SortPopoverMenu from './SortPopoverMenu';
@@ -39,6 +39,7 @@ export {
   ToolbarMenuUtils,
   IconButton,
   AdornmentIconButton,
+  CircularIconButton,
   SortPopoverMenu,
   Toggle,
   VisuallyHiddenTitle,

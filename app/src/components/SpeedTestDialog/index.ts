@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import SpeedTest from './SpeedTest';
+import SpeedTestDialog from './SpeedTestDialog';
 
-export default SpeedTest;
+export default SpeedTestDialog;

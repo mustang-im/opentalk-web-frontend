@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Error from '../../commonComponents/Error';
 import SuspenseLoading from '../../commonComponents/SuspenseLoading';
+import Error from '../../components/Error';
 import { useAppDispatch } from '../../hooks';
 import { fetchRoomByInviteId, InviteRoomVerifyResponse } from '../../store/slices/roomSlice';
 import { composeRoomPath } from '../../utils/apiUtils';
