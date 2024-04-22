@@ -2,17 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Stack, MenuList } from '@mui/material';
-import { MoreIcon, notificationAction, notifications, IconButton } from '@opentalk/common';
+import { MoreIcon, notifications, IconButton } from '@opentalk/common';
 import { Event, EventException, EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
-import React, { KeyboardEvent, useRef, useState } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
   useLazyGetRoomInvitesQuery,
   useDeclineEventInviteMutation,
-  useDeleteEventMutation,
-  useDeleteEventSharedFolderMutation,
   useMarkFavoriteEventMutation,
   useUnmarkFavoriteEventMutation,
 } from '../../../api/rest';
@@ -20,7 +18,7 @@ import { useAppSelector } from '../../../hooks';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
 import { composeInviteUrl } from '../../../utils/apiUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
-import ConfirmDialog from '../../ConfirmDialog';
+import { ConfirmDeleteDialog } from './ConfirmDeleteDialog';
 
 export interface MeetingCardBaseProps {
   event: Event | EventException;
@@ -70,12 +68,9 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
 
   const [markEvent] = useMarkFavoriteEventMutation();
   const [unmarkEvent] = useUnmarkFavoriteEventMutation();
-  const [deleteEvent] = useDeleteEventMutation();
   const [declineEventInvitation] = useDeclineEventInviteMutation();
   const [isConfirmDialogVisible, showConfirmDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
-  const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
-  const isFirstTryToDeleteSharedFolder = useRef(true);
   const baseUrl = useAppSelector(selectBaseUrl);
 
   const [getRoomInvites, { data: invites, isLoading: isGetInvitesLoading }] = useLazyGetRoomInvitesQuery();
@@ -153,44 +148,6 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
     showConfirmDialog(true);
   };
 
-  const deleteMeeting = async () => {
-    if ('sharedFolder' in event) {
-      try {
-        await deleteSharedFolder({ eventId, forceDeletion: false }).unwrap();
-      } catch (error) {
-        if (isFirstTryToDeleteSharedFolder.current) {
-          showConfirmDialog(false);
-          setAnchorEl(undefined);
-          notificationAction({
-            msg: t('dashboard-meeting-shared-folder-delete-error-message'),
-            variant: 'error',
-            actionBtnText: t('dashboard-meeting-shared-folder-error-retry-button'),
-            cancelBtnText: t('dashboard-meeting-shared-folder-error-cancel-button'),
-            persist: true,
-            onAction: () => {
-              isFirstTryToDeleteSharedFolder.current = false;
-              deleteMeeting();
-            },
-            onCancel: () => {
-              isFirstTryToDeleteSharedFolder.current = true;
-              showConfirmDialog(false);
-              setAnchorEl(undefined);
-            },
-          });
-          return;
-        } else {
-          isFirstTryToDeleteSharedFolder.current = true;
-          notifications.error(t('dashboard-meeting-shared-folder-delete-retry-error-message'));
-          return;
-        }
-      }
-    }
-
-    deleteEvent(eventId);
-    showConfirmDialog(false);
-    setAnchorEl(undefined);
-  };
-
   const meetingOptionItems: IMeetingCardOptionItem[] = [
     isFavorite
       ? {
@@ -261,6 +218,11 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
     }
   };
 
+  const handleCloseConfirmDeleteDialog = () => {
+    showConfirmDialog(false);
+    setAnchorEl(undefined);
+  };
+
   return (
     <Stack flexDirection={'row'}>
       <MoreButton
@@ -289,20 +251,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
       >
         <MenuList autoFocusItem={true}>{renderMenuOptionItems()}</MenuList>
       </MuiPopover>
-      <ConfirmDialog
-        open={isConfirmDialogVisible}
-        onConfirm={deleteMeeting}
-        onCancel={() => {
-          showConfirmDialog(false);
-        }}
-        message={t(`dashboard-meeting-card-delete-dialog-message`, {
-          subject: title,
-        })}
-        title={t('dashboard-meeting-card-delete-dialog-title')}
-        submitButtonText={t('dashboard-meeting-card-delete-dialog-ok')}
-        cancelButtonText={t('dashboard-meeting-card-delete-dialog-cancel')}
-        onMouseDown={stopPropagation}
-      />
+      <ConfirmDeleteDialog open={isConfirmDialogVisible} onClose={handleCloseConfirmDeleteDialog} event={event} />
       <Button
         color="secondary"
         variant={highlighted ? 'contained' : 'outlined'}

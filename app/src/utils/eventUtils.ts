@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { RRule } from '@heinlein-video/rrule';
 import {
+  DateTimeWithTimezone,
   Event,
   EventException,
+  EventInstanceId,
   InviteStatus,
   isEvent,
   isEventException,
@@ -21,6 +23,11 @@ export enum TimePerspectiveFilter {
   TimeIndependent = 'timeindependent',
   Future = 'future',
   Past = 'past',
+}
+
+export enum EventDeletionType {
+  One = 'one',
+  All = 'all', // all events + corresponding data
 }
 
 const DEFAULT_MONTHS_CONSIDERED = 3;
@@ -133,4 +140,32 @@ export const appendRecurringEventInstances = (
     });
 
   return events;
+};
+
+/**
+ * The function `generateInstanceId` creates a unique event instance ID based on the provided start
+ * time.
+ * @param {DateTimeWithTimezone} startTime - The `generateInstanceId` function takes a parameter
+ * `startTime` of type `DateTimeWithTimezone`. This parameter represents the starting time of an event
+ * with both date and time information.
+ * @returns The function `generateInstanceId` returns a string that represents a unique event instance
+ * ID based on the provided `startTime` parameter. The format of the returned string is a combination
+ * of the date and time components extracted from the `startTime` parameter in UTC format.
+ */
+export const generateInstanceId = (startTime: DateTimeWithTimezone): EventInstanceId => {
+  const formatTimeString = (number: number) => String(number).padStart(2, '0');
+
+  const startDate = new Date(startTime.datetime);
+
+  const hours = formatTimeString(startDate.getUTCHours());
+  const minutes = formatTimeString(startDate.getUTCMinutes());
+  const seconds = formatTimeString(startDate.getUTCSeconds());
+  const month = formatTimeString(startDate.getUTCMonth() + 1);
+  const day = formatTimeString(startDate.getUTCDate());
+  const year = startDate.getUTCFullYear();
+
+  const timeString = `${hours}${minutes}${seconds}Z`;
+  const dateString = `${year}${month}${day}T`;
+
+  return `${dateString}${timeString}` as EventInstanceId;
 };

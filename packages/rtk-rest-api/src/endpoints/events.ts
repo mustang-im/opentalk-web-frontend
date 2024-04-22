@@ -202,7 +202,10 @@ export const addEventsEndpoints = <
       method: 'PATCH',
       body: payload,
     }),
-    invalidatesTags: (result, error, { eventId, instanceId }) => [{ type: Tag.EventInstance, eventId, instanceId }],
+    invalidatesTags: (result, error, { eventId, instanceId }) => [
+      { type: Tag.EventInstance, id: instanceId },
+      { type: Tag.Event, id: eventId },
+    ],
   }),
   /**
    * Get invites for an specific Event

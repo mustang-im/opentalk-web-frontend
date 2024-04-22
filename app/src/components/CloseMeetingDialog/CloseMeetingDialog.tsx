@@ -20,8 +20,7 @@ import {
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
-import { DateTimeWithTimezone, Event, EventType, RoomId, EventStatus } from '@opentalk/rest-api-rtk-query';
-import { EventInstanceId } from '@opentalk/rest-api-rtk-query/src/types/event';
+import { Event, EventType, RoomId, EventStatus } from '@opentalk/rest-api-rtk-query';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -31,6 +30,7 @@ import { useAppDispatch } from '../../hooks';
 import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { hangUp } from '../../store/commonActions';
 import { deleteRoomMetaData } from '../../store/slices/internalSlice';
+import { EventDeletionType, generateInstanceId } from '../../utils/eventUtils';
 
 export interface CloseMeetingDialogProps {
   open: boolean;
@@ -38,37 +38,6 @@ export interface CloseMeetingDialogProps {
   container: HTMLElement | null;
   eventData?: Event;
 }
-
-enum DeletionType {
-  One = 'one',
-  All = 'all',
-}
-
-/**
- * Generates an instanceId by using todays date combined
- * with the starting time of the event. Takes into account the
- * current timezone of the user clicking the End Call button.
- * @param startTime
- * @returns a string formatted as a valid instanceId
- */
-export const generateInstanceId = (startTime: DateTimeWithTimezone): EventInstanceId => {
-  const formatTimeString = (number: number) => String(number).padStart(2, '0');
-
-  const startDate = new Date(startTime.datetime);
-  const now = new Date();
-
-  const hours = formatTimeString(startDate.getUTCHours());
-  const minutes = formatTimeString(startDate.getUTCMinutes());
-  const seconds = formatTimeString(startDate.getUTCSeconds());
-  const month = formatTimeString(now.getUTCMonth() + 1);
-  const day = formatTimeString(now.getUTCDate());
-  const year = now.getUTCFullYear();
-
-  const timeString = `${hours}${minutes}${seconds}Z`;
-  const dateString = `${year}${month}${day}T`;
-
-  return `${dateString}${timeString}` as EventInstanceId;
-};
 
 export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDialogProps) => {
   const { t } = useTranslation();
@@ -80,14 +49,14 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
   const [updateEventInstance] = useUpdateEventInstanceMutation();
 
   const [disableLeaveAndDeleteButton, setDisableLeaveAndDeleteButton] = useState(true);
-  const [deletionMode, setDeletionMode] = useState<DeletionType | null>(null);
+  const [deletionMode, setDeletionMode] = useState<EventDeletionType | null>(null);
 
   const handleCheckbox = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setDisableLeaveAndDeleteButton(!event.target.checked);
   }, []);
 
   const handleDeletionModeChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setDeletionMode((event.target as HTMLInputElement).value as DeletionType);
+    setDeletionMode((event.target as HTMLInputElement).value as EventDeletionType);
     setDisableLeaveAndDeleteButton(!event.target.checked);
   }, []);
 
@@ -100,13 +69,13 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
           await dispatch(deleteRoomMetaData(roomId));
           break;
         case EventType.Recurring:
-          if (deletionMode === 'one') {
+          if (deletionMode === EventDeletionType.One) {
             updateEventInstance({
               eventId: eventData.id,
               instanceId: generateInstanceId(eventData.startsAt),
               status: EventStatus.Cancelled,
             });
-          } else if (deletionMode === 'all') {
+          } else if (deletionMode === EventDeletionType.All) {
             await dispatch(deleteRoomMetaData(roomId));
           }
           break;
@@ -140,12 +109,12 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
           <FormLabel></FormLabel>
           <RadioGroup onChange={handleDeletionModeChange}>
             <FormControlLabel
-              value={DeletionType.One}
+              value={EventDeletionType.One}
               control={<Radio />}
               label={t('meeting-delete-recurring-dialog-radio-single')}
             />
             <FormControlLabel
-              value={DeletionType.All}
+              value={EventDeletionType.All}
               control={<Radio />}
               label={t('meeting-delete-recurring-dialog-radio-all')}
             />
