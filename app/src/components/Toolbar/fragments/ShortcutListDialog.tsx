@@ -47,13 +47,13 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
       <Stack component="header">
         <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
-          <DialogTitle sx={{ p: 0 }}>{t('more-menu-keyboard-shortcuts')}</DialogTitle>
+          <DialogTitle sx={{ p: 0 }}>{t('my-meeting-menu-keyboard-shortcuts')}</DialogTitle>
           <CloseButton aria-label="close-button" onClick={onClose}>
             <CloseIcon />
           </CloseButton>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
-          <SwitchLabel htmlFor={switchId}>{t('more-menu-keyboard-shortcuts')}</SwitchLabel>
+          <SwitchLabel htmlFor={switchId}>{t('my-meeting-menu-keyboard-shortcuts')}</SwitchLabel>
           <Switch
             id={switchId}
             checked={hotkeysEnabled}

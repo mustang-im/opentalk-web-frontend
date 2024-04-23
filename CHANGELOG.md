@@ -2,6 +2,8 @@
 
 ### New Features
 
+- Implement manual trigger for Glitchtip error report ([#1713](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1713))
+
 ### Improvements to the user experience
 
 - Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))

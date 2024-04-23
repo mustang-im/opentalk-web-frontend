@@ -12,12 +12,13 @@ import {
   useTheme,
   ThemeProvider,
 } from '@mui/material';
-import { BurgermenuIcon, HelpIcon, IconButton, ProtocolIcon, HelpSquareIcon } from '@opentalk/common';
-import { useRef, useState } from 'react';
+import { BurgermenuIcon, HelpIcon, IconButton, ProtocolIcon, HelpSquareIcon, BugIcon } from '@opentalk/common';
+import { useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
-import QuickStartPopper from '../../QuickStartPopover/QuickStartPopover';
+import { triggerGlitchtipManually } from '../../../utils/glitchtipUtils';
+import QuickStartPopover from '../../QuickStartPopover/QuickStartPopover';
 import ShortcutListDialog from '../../Toolbar/fragments/ShortcutListDialog';
 
 const ViewPopperContainer = styled(Stack)(({ theme }) => ({
@@ -74,26 +75,15 @@ const MenuItem = styled(MuiMenuItem, {
 enum MenuItemsKey {
   QuickStart = 'quick-start',
   KeyboardShortcuts = 'keyboard-shortcuts',
+  GlitchtipTrigger = 'glitchtip-trigger',
 }
 
 interface MenuItemProps {
   key: MenuItemsKey;
   name: string;
   icon: JSX.Element;
+  onClick: () => void;
 }
-
-const menuItems: Array<MenuItemProps> = [
-  {
-    key: MenuItemsKey.QuickStart,
-    name: 'conference-quick-start-menu-item',
-    icon: <HelpIcon />,
-  },
-  {
-    key: MenuItemsKey.KeyboardShortcuts,
-    name: 'more-menu-keyboard-shortcuts',
-    icon: <HelpSquareIcon />,
-  },
-];
 
 const MyMeetingMenu = () => {
   const { t } = useTranslation();
@@ -105,6 +95,38 @@ const MyMeetingMenu = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const menuItems: Array<MenuItemProps> = useMemo(() => {
+    return [
+      {
+        key: MenuItemsKey.QuickStart,
+        name: 'my-meeting-menu-quick-guide',
+        icon: <HelpIcon />,
+        onClick: () => {
+          setAnchorElement(null);
+          setActiveMenu(MenuItemsKey.QuickStart);
+        },
+      },
+      {
+        key: MenuItemsKey.KeyboardShortcuts,
+        name: 'my-meeting-menu-keyboard-shortcuts',
+        icon: <HelpSquareIcon />,
+        onClick: () => {
+          setAnchorElement(null);
+          setActiveMenu(MenuItemsKey.KeyboardShortcuts);
+        },
+      },
+      {
+        key: MenuItemsKey.GlitchtipTrigger,
+        name: 'my-meeting-menu-glitchtip-trigger',
+        icon: <BugIcon />,
+        onClick: () => {
+          setAnchorElement(null);
+          triggerGlitchtipManually();
+        },
+      },
+    ];
+  }, []);
 
   return (
     <>
@@ -142,10 +164,7 @@ const MyMeetingMenu = () => {
             {menuItems.map((menu) => (
               <MenuItem
                 key={menu.key}
-                onClick={() => {
-                  setAnchorElement(null);
-                  setActiveMenu(menu.key);
-                }}
+                onClick={menu.onClick}
                 onKeyDown={(event) => {
                   if (event.code === 'Space') {
                     event.stopPropagation();
@@ -173,7 +192,7 @@ const MyMeetingMenu = () => {
       </ViewPopperContainer>
       <ThemeProvider theme={createOpenTalkTheme()}>
         <ShortcutListDialog open={activeMenu === MenuItemsKey.KeyboardShortcuts} onClose={() => setActiveMenu(null)} />
-        <QuickStartPopper
+        <QuickStartPopover
           onClose={() => setActiveMenu(null)}
           open={activeMenu === MenuItemsKey.QuickStart}
           variant="room"
