@@ -9,7 +9,6 @@ import { useAppSelector } from '../../../hooks';
 import { selectRecordingState } from '../../../store/slices/recordingSlice';
 import { selectIsModerator } from '../../../store/slices/userSlice';
 import MeetingTimer from './MeetingTimer';
-import ResultsPopover from './ResultsPopover';
 import SecureConnectionField from './SecureConnectionField';
 import WaitingParticipantsPopover from './WaitingParticipantsPopover';
 
@@ -48,7 +47,6 @@ const MeetingUtilsSection = () => {
     <Container spacing={1} direction={'row'}>
       {isModerator && <WaitingParticipantsPopover />}
       <ContainerWithBackground spacing={1} direction={'row'}>
-        <ResultsPopover />
         <DurationIcon />
         <MeetingTimer aria-label="current time" />
         {showSecurityIcon && <SecureConnectionField />}

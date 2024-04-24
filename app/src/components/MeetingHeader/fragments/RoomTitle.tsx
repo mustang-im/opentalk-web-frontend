@@ -16,9 +16,12 @@ export const ROOM_TITLE_MAX_LENGTH = 25;
 const Container = styled(Stack)(({ theme }) => ({
   background: theme.palette.background.video,
   borderRadius: '0.25rem',
-  height: '100%',
   justifyContent: 'center',
   alignItems: 'center',
+  height: theme.spacing(5),
+  [theme.breakpoints.down('md')]: {
+    height: '100%',
+  },
 }));
 
 const RoomTitleTypograhy = styled(Typography)(({ theme }) => ({

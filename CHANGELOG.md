@@ -6,6 +6,7 @@
 
 ### Improvements to the user experience
 
+- Extract "Poll and Vote" button outside of the clock. ([#1791](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1791))
 - Improve accessibility of the emoji button ([#1680](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1680))
 - Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))
 - After navigating to the tab as a moderator, related tab content gets focused and pronounced using a screenreader. ([#1754](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1754))

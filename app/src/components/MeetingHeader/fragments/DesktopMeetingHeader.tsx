@@ -1,23 +1,18 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Popover, styled, Pagination, MenuItem } from '@mui/material';
-import { WhiteboardIcon, ProtocolIcon, SharedFolderIcon, IconButton } from '@opentalk/common';
+import { styled, Pagination } from '@mui/material';
+import { WhiteboardIcon, ProtocolIcon } from '@opentalk/common';
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { selectPollsAndVotingsCount } from '../../../store/selectors';
 import { selectAllOnlineParticipants } from '../../../store/slices/participantsSlice';
 import { selectProtocolUrl } from '../../../store/slices/protocolSlice';
-import {
-  selectSharedFolderPassword,
-  selectSharedFolderUrl,
-  selectIsSharedFolderAvailable,
-  selectIsSharedFolderOpened,
-  sharedFolderOpened,
-} from '../../../store/slices/sharedFolderSlice';
+import { selectIsSharedFolderAvailable } from '../../../store/slices/sharedFolderSlice';
 import {
   updatedCinemaLayout,
   selectCinemaLayout,
@@ -30,26 +25,17 @@ import { selectIsCurrentWhiteboardHighlighted } from '../../../store/slices/uiSl
 import { selectIsWhiteboardAvailable } from '../../../store/slices/whiteboardSlice';
 import { MAX_GRID_TILES } from '../../GridView/GridView';
 import LayoutSelection from './LayoutSelection';
+import { MeetingHeaderButton } from './MeetingHeaderButton';
 import MeetingUtilsSection from './MeetingUtilsSection';
 import MyMeetingMenu from './MyMeetingMenu';
 import RoomTitle from './RoomTitle';
+import { SharedFolderPopover } from './SharedFolderPopover';
+import VotesAndPollsResultsPopover from './VotesAndPollsResultsPopover';
 
 const OpenTalkLogo = styled(Logo)(({ theme }) => ({
   width: theme.typography.pxToRem(205),
   height: theme.typography.pxToRem(35),
   fill: 'white',
-}));
-
-const HeaderItem = styled('div')<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
-  background: highlighted ? theme.palette.primary.main : theme.palette.background.video,
-  borderRadius: '0.25rem',
-  display: 'inline-flex',
-  height: '100%',
-  justifyContent: 'center',
-  alignItems: 'center',
-  '& .MuiIconButton-root .MuiSvgIcon-root': {
-    fill: highlighted ? theme.palette.background.default : theme.palette.text.primary,
-  },
 }));
 
 const HeaderDivider = styled('div')(({ theme }) => ({
@@ -59,6 +45,15 @@ const HeaderDivider = styled('div')(({ theme }) => ({
   borderStyle: 'solid',
   borderLeftWidth: theme.typography.pxToRem(2),
   borderColor: theme.palette.background.voteResult,
+}));
+
+const HeaderPaginationContainer = styled('div')(({ theme }) => ({
+  background: theme.palette.background.video,
+  borderRadius: '0.25rem',
+  display: 'inline-flex',
+  height: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
 }));
 
 const HeaderPagination = styled(Pagination)(({ theme }) => ({
@@ -76,6 +71,7 @@ const HeaderCenterContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(2),
   justifyContent: 'center',
+  alignItems: 'center',
   height: '100%',
 }));
 
@@ -94,8 +90,6 @@ const ContentItem = styled('div')<{ lgOrder?: number }>(({ theme, lgOrder }) => 
 }));
 
 const DesktopMeetingHeader = () => {
-  const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const selectedLayout = useAppSelector(selectCinemaLayout);
   const participants = useAppSelector(selectAllOnlineParticipants);
@@ -107,10 +101,12 @@ const DesktopMeetingHeader = () => {
   const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
   const [clickCount, setClickCount] = useState(0);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
-  const isSharedFolderOpened = useAppSelector(selectIsSharedFolderOpened);
-  const sharedFolderUrl = useAppSelector(selectSharedFolderUrl);
-  const sharedFolderPassword = useAppSelector(selectSharedFolderPassword);
+  const votingsAndPollsCount = useAppSelector(selectPollsAndVotingsCount);
+  const showVotesAndPolls = votingsAndPollsCount > 0;
   const isSharedFolderAvailable = useAppSelector(selectIsSharedFolderAvailable);
+  const { t } = useTranslation();
+  const isProtocolActive = selectedLayout === LayoutOptions.Protocol;
+  const isWhiteboardActive = selectedLayout === LayoutOptions.Whiteboard;
 
   const showDebugDialog = () => {
     if (clickTimer.current) {
@@ -155,59 +151,16 @@ const DesktopMeetingHeader = () => {
     }
   }, [selectedLayout, handleSelectedView]);
 
-  const renderProtocolIcon = () => {
+  const renderProtocolButton = () => {
     return (
-      <HeaderItem highlighted={isCurrentProtocolHighlighted}>
-        <IconButton aria-describedby={'view-select'} onClick={handleProtocolClick}>
-          <ProtocolIcon />
-        </IconButton>
-      </HeaderItem>
-    );
-  };
-
-  const renderSharedFolderIcon = () => {
-    return (
-      <HeaderItem highlighted={!isSharedFolderOpened}>
-        <IconButton aria-describedby={'view-select'} onClick={(event) => setAnchorElement(event.currentTarget)}>
-          <SharedFolderIcon />
-        </IconButton>
-        <Popover
-          open={Boolean(anchorElement)}
-          anchorEl={anchorElement}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          onClose={() => setAnchorElement(null)}
-          disablePortal
-        >
-          {sharedFolderUrl && (
-            <MenuItem
-              onClick={() => {
-                dispatch(sharedFolderOpened());
-                window.open(sharedFolderUrl, 'sharedFolder');
-                setAnchorElement(null);
-              }}
-            >
-              {t('shared-folder-open-label')}
-            </MenuItem>
-          )}
-          {sharedFolderPassword && (
-            <MenuItem
-              onClick={() => {
-                navigator.clipboard.writeText(sharedFolderPassword);
-                setAnchorElement(null);
-              }}
-            >
-              {t('shared-folder-password-label')}
-            </MenuItem>
-          )}
-        </Popover>
-      </HeaderItem>
+      <MeetingHeaderButton
+        active={isCurrentProtocolHighlighted}
+        onClick={handleProtocolClick}
+        aria-label={t('protocol-button-show')}
+        aria-pressed={isProtocolActive}
+      >
+        <ProtocolIcon />
+      </MeetingHeaderButton>
     );
   };
 
@@ -217,12 +170,15 @@ const DesktopMeetingHeader = () => {
     }
   }, [selectedLayout, handleSelectedView]);
 
-  const renderWhiteboardIcon = () => (
-    <HeaderItem highlighted={isCurrentWhiteboardHighlighted}>
-      <IconButton onClick={handleWhiteboardClick}>
-        <WhiteboardIcon />
-      </IconButton>
-    </HeaderItem>
+  const renderWhiteboardButton = () => (
+    <MeetingHeaderButton
+      active={isCurrentWhiteboardHighlighted}
+      onClick={handleWhiteboardClick}
+      aria-label={t('whiteboard-start-whiteboard-button')}
+      aria-pressed={isWhiteboardActive}
+    >
+      <WhiteboardIcon />
+    </MeetingHeaderButton>
   );
 
   return (
@@ -235,7 +191,7 @@ const DesktopMeetingHeader = () => {
           <RoomTitle />
           <LayoutSelection />
           {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
-            <HeaderItem>
+            <HeaderPaginationContainer>
               <HeaderPagination
                 count={pageCount > 1 ? pageCount : 0}
                 page={selectedPage}
@@ -247,16 +203,17 @@ const DesktopMeetingHeader = () => {
                 hideNextButton
                 onChange={handleChangePage}
               />
-            </HeaderItem>
+            </HeaderPaginationContainer>
           )}
-          {(showWhiteboardIcon || protocolUrl) && (
+          {(showWhiteboardIcon || protocolUrl || showVotesAndPolls || isSharedFolderAvailable) && (
             <>
               <HeaderDivider />
-              {showWhiteboardIcon && renderWhiteboardIcon()}
-              {protocolUrl && selectedLayout !== LayoutOptions.Protocol && renderProtocolIcon()}
+              {showWhiteboardIcon && renderWhiteboardButton()}
+              {protocolUrl && selectedLayout !== LayoutOptions.Protocol && renderProtocolButton()}
+              {isSharedFolderAvailable && <SharedFolderPopover />}
+              {showVotesAndPolls && <VotesAndPollsResultsPopover />}
             </>
           )}
-          {isSharedFolderAvailable && renderSharedFolderIcon()}
         </HeaderCenterContainer>
       </ContentItem>
       <ContentItem>
