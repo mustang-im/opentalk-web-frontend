@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled } from '@mui/material';
 import { EndCallIcon } from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import { EventId, RoomId } from '@opentalk/rest-api-rtk-query';
@@ -37,19 +36,6 @@ const EndCallButton = () => {
   const fullscreenContext = useFullscreenContext();
   const { data: eventData } = useGetEventQuery({ eventId: eventInfo?.id as EventId }, { skip: !requiresConfirmDialog });
 
-  const StyledEndCallButton = styled(ToolbarButton)(({ theme }) => ({
-    background: theme.palette.error.main,
-    svg: {
-      fill: theme.palette.common.white,
-    },
-    ':hover': {
-      background: theme.palette.common.white,
-      svg: {
-        fill: theme.palette.error.main,
-      },
-    },
-  }));
-
   const hangUpHandler = useCallback(() => dispatch(hangUp()), [dispatch]);
 
   const onClose = useCallback(() => {
@@ -67,14 +53,15 @@ const EndCallButton = () => {
 
   return (
     <>
-      <StyledEndCallButton
+      <ToolbarButton
         tooltipTitle={t('toolbar-button-end-call-tooltip-title')}
         onClick={handleEndCall}
         active={false}
         data-testid="toolbarEndCallButton"
+        color="error"
       >
-        <EndCallIcon color="error" />
-      </StyledEndCallButton>
+        <EndCallIcon />
+      </ToolbarButton>
 
       {isConfirmDialogVisible && (
         <CloseMeetingDialog

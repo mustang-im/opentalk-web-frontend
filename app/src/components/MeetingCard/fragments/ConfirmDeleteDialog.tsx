@@ -158,7 +158,7 @@ export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
   };
 
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth disablePortal onMouseDown={stopPropagation}>
+    <Dialog open={open} maxWidth="sm" fullWidth onMouseDown={stopPropagation} onClose={onClose}>
       <DialogTitle sx={{ textAlign: 'left' }}>{contentBasedOnEventType.title}</DialogTitle>
       <Box position="absolute" top={0} right={0}>
         <IconButton onClick={onClose}>

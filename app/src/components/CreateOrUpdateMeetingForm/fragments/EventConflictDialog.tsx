@@ -25,7 +25,7 @@ export const EventConflictDialog = ({ onConfirm, onCancel, event, isUpdate }: Ev
   const eventTime = `${startDate} ${startTime} - ${endTime}`;
 
   return (
-    <Dialog open maxWidth="sm" fullWidth disablePortal>
+    <Dialog open maxWidth="sm" fullWidth disablePortal onClose={onCancel}>
       <DialogTitle sx={{ textAlign: 'left' }}>{t('dashboard-create-meeting-dialog-title')}</DialogTitle>
       <Box position="absolute" top={0} right={0}>
         <IconButton onClick={onCancel}>

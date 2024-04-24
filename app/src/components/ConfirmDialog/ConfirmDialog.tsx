@@ -28,11 +28,12 @@ export const ConfirmDialog = ({
   open,
   onMouseDown,
 }: ConfirmDialogProps) => {
+  const handleClose = onClose || onCancel;
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth disablePortal onMouseDown={onMouseDown}>
+    <Dialog open={open} maxWidth="sm" fullWidth onMouseDown={onMouseDown} onClose={handleClose}>
       <DialogTitle sx={{ textAlign: 'left' }}>{title}</DialogTitle>
       <Box position="absolute" top={0} right={0}>
-        <IconButton onClick={onClose || onCancel}>
+        <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </Box>

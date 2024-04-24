@@ -121,7 +121,7 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   };
 
   return (
-    <Dialog {...props} fullWidth PaperComponent={Paper} aria-labelledby="dialog-invite-guest-title">
+    <Dialog {...props} fullWidth PaperComponent={Paper} aria-labelledby="dialog-invite-guest-title" onClose={onClose}>
       <InviteDialogTitle id="dialog-invite-guest-title" onClose={onClose}>
         {t('dialog-invite-guest-title')}
       </InviteDialogTitle>
