@@ -26,6 +26,7 @@ export const avatarColorTable: Array<string> = [
 
 const lightPalette: PaletteOptions = {
   primary: {
+    light: '#DEED7B',
     main: '#D1E545',
     dark: '#C6D941',
     contrastText: '#20434F',
@@ -40,9 +41,10 @@ const lightPalette: PaletteOptions = {
   },
   outline: '#DBE0E2',
   error: {
-    main: '#F1554C',
+    light: '#EA8F8F',
+    main: '#D32F2F',
     contrastText: '#FFF',
-    dark: '#D32F2F',
+    dark: '#BB1F1F',
   },
   warning: {
     main: '#FF9300',
@@ -113,24 +115,25 @@ const lightPalette: PaletteOptions = {
 
 const darkPalette: PaletteOptions = {
   primary: {
+    light: '#E3EAB0',
     main: '#D1E545',
     dark: '#C6D941',
     contrastText: '#DBE0E2',
   },
   secondary: {
-    main: '#DBE0E2',
-    dark: '#CFD4D6',
-    light: '#C5CACB',
+    light: '#E0E5E6',
+    main: '#C6CCCE',
+    dark: '#A8AFB1',
     lightest: '#1F3E49',
     lighter: '#1F3E49',
     contrastText: '#17313A',
   },
   outline: '#DBE0E2',
   error: {
-    main: '#F1554C',
+    main: '#EF3E33',
     contrastText: '#FFF',
     dark: '#D32F2F',
-    light: '#8B999E',
+    light: '#FE6363',
   },
   warning: {
     main: '#FF9300',
