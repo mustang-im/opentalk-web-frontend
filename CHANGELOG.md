@@ -16,8 +16,8 @@
 
 ### Bug Fixes
 
+- Fix layout of "Setting" and "Update meeting" pages in the dashboard for tablets ([#1644](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1644))
 - Fix: When creating a meeting, colliding events would not always be properly detected ([#1794](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1794))
-
 - Fix glitchtip error for unhandled message upon successful room deletion ([#1750](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1750))
 
 ### Internal

@@ -204,7 +204,7 @@ const DashboardTemplate = () => {
     <Container maxWidth={false} disableGutters>
       <Stack direction={{ xs: 'column', md: 'row' }} height={'100%'}>
         <DashboardNavigation routes={getRoutes(isProviderActive)} />
-        <Stack component={Main} spacing={{ xs: 2, md: 5 }} maxHeight={'100%'} height={{ xs: 0, sm: '100%' }}>
+        <Stack component={Main} spacing={{ xs: 2, md: 5 }} maxHeight={'100%'} overflow={'auto'}>
           <Grid spacing={2} container direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
             <Grid item alignSelf={'flex-end'}>
               <DashboardLogo />
