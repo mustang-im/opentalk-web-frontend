@@ -125,7 +125,6 @@ chat-error-invalid-participant-selection = Der Empfänger der Nachricht ist nich
 chat-new-private-message = Sie haben eine neue Nachricht
 chat-new-group-message = Sie haben eine neue Nachricht
 chat-message-error-max-input = Die Nachricht ist zu lang (max {$maxCharacters} Zeichen)
-event_chat = Event Chat
 chatinput-placeholder = Nachricht schreiben...
 chat-input-error-required = Die Nachricht darf nicht leer sein
 chat-no-search-results = Keine Nachrichten, die den Kriterien entsprechen
@@ -134,7 +133,6 @@ chat-delete-global-messages-success = Der globale Chat wurde durch den Moderator
 chat-open-emoji-picker = emoji picker öffnen
 chat-close-emoji-picker = emoji picker schließen
 chat-submit-button = Chat Nachricht absenden
-chat-smiley-label = lächelndes Gesicht-Emoji
 
 no-group-participants-label = Ohne Gruppe
 button-back-messages = zurück
