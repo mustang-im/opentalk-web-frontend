@@ -1,3 +1,9 @@
+# 1.0.26
+
+### Bug fixes
+
+- Fixed issue with sorting order of hand raised participants. ([#1819](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1819))
+
 # 1.0.25
 
 ### UI/UX Fixes

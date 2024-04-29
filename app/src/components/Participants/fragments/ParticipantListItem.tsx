@@ -19,7 +19,6 @@ import {
   ProtocolIcon,
   MediaSessionType,
   ParticipationKind,
-  useDateFormat,
   ChatScope,
   PhoneIcon,
   TelephoneStrokeIcon,
@@ -27,6 +26,8 @@ import {
   ModeratorIcon,
 } from '@opentalk/common';
 import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
+import { format } from 'date-fns';
+import { isEmpty } from 'lodash';
 import React, { CSSProperties, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { batch } from 'react-redux';
@@ -309,18 +310,29 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const getContextText = () => {
     switch (sortType) {
       case SortOption.RaisedHandFirst: {
-        const handUpTimestamp = new Date(participant?.handUpdatedAt ?? new Date());
-        const formattedHandUpTime = useDateFormat(handUpTimestamp, 'time');
-        return t('participant-hand-raise-text', { handUpdated: formattedHandUpTime });
+        const handUpTimestamp =
+          participant && !isEmpty(participant.handUpdatedAt)
+            ? new Date(participant.handUpdatedAt as string)
+            : new Date();
+        const formattedHandUpTime = format(handUpTimestamp, 'HH:mm');
+        const joinedTimestamp =
+          participant && !isEmpty(participant.joinedAt) ? new Date(participant.joinedAt as string) : new Date();
+        const formattedJoinedTime = format(joinedTimestamp, 'HH:mm');
+        if (participant?.handUpdatedAt && participant.handIsUp) {
+          return t('participant-hand-raise-text', { handUpdated: formattedHandUpTime });
+        }
+        return t('participant-joined-text', { joinedTime: formattedJoinedTime });
       }
       case SortOption.LastActive: {
-        const lastActiveTimestamp = new Date(participant?.lastActive ?? new Date());
-        const formattedLastActiveTime = useDateFormat(lastActiveTimestamp, 'time');
+        const lastActiveTimestamp =
+          participant && !isEmpty(participant.lastActive) ? new Date(participant.lastActive as string) : new Date();
+        const formattedLastActiveTime = format(lastActiveTimestamp, 'HH:mm');
         return t('participant-last-active-text', { lastActive: formattedLastActiveTime });
       }
       default: {
-        const joinedTimestamp = new Date(participant?.joinedAt ?? new Date());
-        const formattedJoinedTime = useDateFormat(joinedTimestamp, 'time');
+        const joinedTimestamp =
+          participant && !isEmpty(participant.joinedAt) ? new Date(participant.joinedAt as string) : new Date();
+        const formattedJoinedTime = format(joinedTimestamp, 'HH:mm');
         return t('participant-joined-text', { joinedTime: formattedJoinedTime });
       }
     }
