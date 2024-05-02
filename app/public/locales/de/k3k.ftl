@@ -6,9 +6,6 @@ SPDX-License-Identifier: EUPL-1.2
 
 messages = Nachrichten
 dismiss = Verwerfen
-title-filename = Dateiname
-state-created = Erstellt
-title-actions = Aktionen
 action-delete = löschen
 action-download = Download
 global-calendar-week = KW
@@ -551,6 +548,10 @@ error-session-expired-message = Die Anmeldesitzung ist abgelaufen. Wenn Sie dies
 error-oidc-configuration = Falsche OIDC-Konfiguration
 error-oidc-configuration-message = Fehler beim Laden einer korrekten OIDC-Konfiguration. Bitte wenden Sie sich an Ihren Administrator.
 
+asset-table-filename = Dateiname
+asset-table-created = Erstellt
+asset-table-actions = Aktionen
+asset-table-size = Größe
 asset-download-error = Asset kann nicht heruntergeladen werden.
 asset-delete-error = Inhalt kann nicht gelöscht werden.
 
@@ -611,17 +612,13 @@ dashboard-home = Startseite
 dashboard-meetings = Meetings
 dashboard-meetings-create = Meeting erstellen
 dashboard-meetings-update = Meeting aktualisieren
-dashboard-statistics = Statistik
-dashboard-recordings = Aufzeichnungen
 dashboard-settings = Einstellungen
 dashboard-my-profile = Mein Profil
 dashboard-settings-general = Allgemein
 dashboard-settings-account = Benutzerkonto
 dashboard-settings-profile = Mein Profil
-dashboard-settings-video = Video
-dashboard-settings-audio = Audio
-dashboard-settings-accessibility = Zugänglichkeit
-dashboard-settings-logout = Abmelden
+dashboard-settings-storage = Speicher
+dashboard-logout = Abmelden
 dashboard-account-management = Accountverwaltung
 dashboard-legal = Rechtliches
 dashboard-legal-imprint = Impressum
@@ -638,7 +635,6 @@ conference-quick-start-close = Schließen die Kurzanleitung
 quick-start-loading = Kurzanleitung wird geladen
 quick-start-error = Kurzanleitung konnte nicht geladen werden
 
-dashboard-FAQ = faq
 dashboard-close-navbar= Navigation schließen
 dashboard-open-navbar = Navigation aufklappen
 dashboard-join-meeting = Nehmen Sie an der Besprechung teil
@@ -658,6 +654,12 @@ dashboard-settings-profile-name = Profilname
 dashboard-settings-profile-input-hint = Geben Sie einen Namen ein, der anderen auf OpenTalk angezeigt wird (z.B. Vorname, vollständiger Name oder Spitzname).
 dashboard-settings-profile-button-save = Änderungen speichern
 dashboard-settings-profile-input-required = Das Feld darf nicht leer sein
+
+dashboard-settings-storage-usage-limited-free = {$usedStorage} von {$maxStorage} belegt
+dashboard-settings-storage-usage-limited-full = {$usedStorage} von {$maxStorage} belegt - Speicher voll. Bitte löschen Sie Dateien oder machen Sie ein Tarifupgrade <planUpgradeLink>HIER</planUpgradeLink>
+dashboard-settings-storage-usage-unlimited = {$usedStorage} belegt
+dashboard-settings-storage-usage-loading = Speicherbelegung wird geladen
+dashboard-settings-storage-assets = Meine Dateien
 
 dashboard-meeting-card-error = Fehler beim ermitteln des Meeting-Zeitraumes
 dashboard-meeting-card-all-day = ganztags

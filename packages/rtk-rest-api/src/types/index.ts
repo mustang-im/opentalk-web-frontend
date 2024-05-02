@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 export * from './common';
-export type { UserMe, BaseUser, UpdateMePayload, User, RegisteredUser } from './user';
+export type { UserMe, BaseUser, UpdateMePayload, User, RegisteredUser, UserOwnedAssets, UserOwnedAsset } from './user';
 export { UserRole } from './user';
 export type {
   Event,
@@ -23,7 +23,6 @@ export type {
 } from './event';
 export type {
   RoomId,
-  AssetId,
   PublicRoom,
   PrivateRoom,
   UpdateRoomPayload,

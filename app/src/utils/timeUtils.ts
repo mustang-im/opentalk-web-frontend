@@ -25,6 +25,6 @@ export const getRemainingTimeForInterval = (interval: Interval) => ({
   durationString: getIntervalToDurationString(interval),
 });
 
-export const sleep = (ms: number) => {
+export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };

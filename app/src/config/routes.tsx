@@ -15,6 +15,7 @@ import {
   SettingsProfilePage,
   SettingsGeneralPage,
   SettingsAccountPage,
+  SettingsStoragePage,
   CreateEventsPage,
   EditEventsPage,
   Home,
@@ -156,6 +157,7 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
           { path: 'general', element: <SettingsGeneralPage /> },
           { path: 'account', element: <SettingsAccountPage /> },
           { path: 'profile', element: <SettingsProfilePage /> },
+          { path: 'storage', element: <SettingsStoragePage /> },
         ],
       },
       {

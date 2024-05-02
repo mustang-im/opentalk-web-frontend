@@ -124,6 +124,10 @@ const getRoutes = (useProviderSettings: boolean) => {
           path: 'account',
           name: 'dashboard-settings-account',
         },
+        {
+          path: 'storage',
+          name: 'dashboard-settings-storage',
+        },
       ],
     };
     routes.push(communityUsers);

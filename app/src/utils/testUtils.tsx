@@ -15,6 +15,7 @@ import {
   ParticipationKind,
   VideoSetting,
   InviteCode,
+  AssetId,
 } from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
 import { AuthProvider } from '@opentalk/redux-oidc';
@@ -30,6 +31,7 @@ import {
   RecurringEvent,
   SingleEvent,
   RoomInvite,
+  BaseAsset,
 } from '@opentalk/rest-api-rtk-query';
 import { SipId } from '@opentalk/rest-api-rtk-query/src/types/room';
 import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
@@ -59,7 +61,7 @@ export const loadLanguage = async (lng: string) => {
       }
 
       i18n.loadNamespaces('k3k', () => {
-        const bundle = ftl2js(data);
+        const bundle = ftl2js(data ? data : '');
         i18n.addResourceBundle(lng, 'k3k', bundle);
         resolve(data);
       });
@@ -409,3 +411,30 @@ export const mockedSingleEvent: SingleEvent = {
   inviteStatus: InviteStatus.Accepted,
   isFavorite: false,
 };
+
+export const mockedRoomAssets: Array<BaseAsset> = [
+  {
+    id: '5091eba6-f5e2-48dc-b44b-3e6b690339eb' as AssetId,
+    filename: 'recording.mkv',
+    namespace: 'recording',
+    createdAt: '2024-04-24T09:34:29.108740Z' as DateTime,
+    kind: 'recording-render',
+    size: 4297704,
+  },
+  {
+    id: 'bde00435-61c0-4b8d-8889-ce0688000c9f' as AssetId,
+    filename: 'vote_protocol_2023-04-12_11-18-02-UTC.pdf',
+    namespace: 'legal_vote',
+    createdAt: '2023-04-12T11:18:03.207053Z' as DateTime,
+    kind: 'protocol_pdf',
+    size: 500000,
+  },
+  {
+    id: '988d6b02-6920-482a-9d99-edbba918b3c4' as AssetId,
+    filename: 'vote_protocol_2023-04-19_13-53-24-UTC.pdf',
+    namespace: 'legal_vote',
+    createdAt: '2023-04-19T13:53:25.326494Z' as DateTime,
+    kind: 'protocol_pdf',
+    size: 0,
+  },
+];

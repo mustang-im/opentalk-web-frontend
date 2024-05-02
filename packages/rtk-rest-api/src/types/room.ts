@@ -4,12 +4,11 @@
 import { InviteCode, RoomId } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
-import { CallIn, DateTime } from './common';
+import { CallIn, DateTime, BaseAsset } from './common';
 import { BaseUser } from './user';
 
 export type { RoomId };
 export type SipId = Opaque<string, 'sipId'>;
-export type AssetId = Opaque<string, 'assetId'>;
 
 // RequestBodies
 
@@ -72,21 +71,7 @@ export type RoomSipConfigResponse = {
   lobby: boolean;
 };
 
-/*
- * Types relating to room assets
- * An asset is a file object like document or recording that was created for or during a conference session.
- */
-
-export type RoomAssetNamespace = 'whiteboard';
-
-export interface RoomAsset {
-  id: AssetId;
-  filename: string;
-  createdAt: DateTime;
-  namespace: RoomAssetNamespace;
-}
-
-export type RoomAssets = Array<RoomAsset>;
+export type RoomAssets = Array<BaseAsset>;
 
 export type RoomInvite = {
   inviteCode: InviteCode;

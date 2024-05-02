@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { StatisticsIcon, FaqIcon, HomeIcon, MeetingsIcon, RecordingsIcon, SettingsIcon } from '@opentalk/common';
+import { HomeIcon, MeetingsIcon, SettingsIcon } from '@opentalk/common';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
@@ -20,16 +20,6 @@ const routes = [
     name: 'dashboard-meetings',
   },
   {
-    icon: <StatisticsIcon />,
-    path: 'statistics',
-    name: 'dashboard-statistics',
-  },
-  {
-    icon: <RecordingsIcon />,
-    path: 'recordings',
-    name: 'dashboard-recordings',
-  },
-  {
     icon: <SettingsIcon />,
     path: 'settings',
     name: 'dashboard-settings',
@@ -46,32 +36,7 @@ const routes = [
         path: 'profile',
         name: 'dashboard-settings-profile',
       },
-      {
-        path: 'video',
-        name: 'dashboard-settings-video',
-      },
-      {
-        path: 'audio',
-        name: 'dashboard-settings-audio',
-      },
-      {
-        path: 'recordings',
-        name: 'dashboard-recordings',
-      },
-      {
-        path: 'statistics',
-        name: 'dashboard-statistics',
-      },
-      {
-        path: 'accessibility',
-        name: 'dashboard-settings-accessibility',
-      },
     ],
-  },
-  {
-    icon: <FaqIcon />,
-    path: 'faq',
-    name: 'dashboard-faq',
   },
 ];
 

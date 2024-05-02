@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { StreamingPlatform, StreamingTargetId, Tariff, StreamingTargetInfo } from '@opentalk/common';
+import { StreamingPlatform, StreamingTargetId, Tariff, StreamingTargetInfo, AssetId } from '@opentalk/common';
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
 import { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { BaseQueryFn, FetchArgs } from '@reduxjs/toolkit/query';
@@ -9,7 +9,6 @@ import snakecaseKeys from 'snakecase-keys';
 
 import { PublicRoom, PrivateRoom, UpdateRoomPayload, CreateRoomPayload, Tags, Tag, Event } from '../types';
 import {
-  AssetId,
   RoomAssets,
   RoomSipConfigResponse,
   UpdateRoomSipConfigPayload,
@@ -148,6 +147,8 @@ export const addRoomEndpoints = <
     invalidatesTags: (result, error, { assetId }) => [
       { type: Tag.Asset, assetId },
       { type: Tag.Asset, assetId: 'PARTIAL-LIST' },
+      // need for re-calcualtion of the used storage
+      { type: Tag.User, id: 'ME' },
     ],
   }),
   /**

@@ -31,7 +31,6 @@ import EditIcon from './EditIcon';
 import EmojiIcon from './EmojiIcon';
 import EndCallIcon from './EndCallIcon';
 import ErrorIcon from './ErrorIcon';
-import FaqIcon from './FaqIcon';
 import FavoriteIcon from './FavoriteIcon';
 import FeedbackIcon from './FeedbackIcon';
 import ForwardIcon from './ForwardIcon';
@@ -82,7 +81,6 @@ import SortIcon from './SortIcon';
 import SpeakerQueueIcon from './SpeakerQueueIcon';
 import SpeakerViewIcon from './SpeakerViewIcon';
 import SpeedTestIcon from './SpeedTestIcon';
-import StatisticsIcon from './StatisticsIcon';
 import TalkingStickIcon from './TalkingStickIcon';
 import TelephoneStrokeIcon from './TelephoneStrokeIcon';
 import TimerIcon from './TimerIcon';
@@ -124,7 +122,6 @@ export {
   EmojiIcon,
   EndCallIcon,
   ErrorIcon,
-  FaqIcon,
   FavoriteIcon,
   FeedbackIcon,
   ForwardIcon,
@@ -173,7 +170,6 @@ export {
   SpeakerQueueIcon,
   SpeakerViewIcon,
   SpeedTestIcon,
-  StatisticsIcon,
   TalkingStickIcon,
   TimerIcon,
   TrashIcon,

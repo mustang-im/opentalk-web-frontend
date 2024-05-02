@@ -6,9 +6,6 @@ SPDX-License-Identifier: EUPL-1.2
 
 messages = Messages
 dismiss = Dismiss
-title-filename = Filename
-state-created = Created
-title-actions = Actions
 action-delete = Delete
 action-download = Download
 global-calendar-week = CW
@@ -551,6 +548,10 @@ error-session-expired-message = Login session has expired, if you want to contin
 error-oidc-configuration = Incorrect OIDC configuration
 error-oidc-configuration-message = Failed to load correct OIDC configuration. Please, contact your administrator.
 
+asset-table-filename = Filename
+asset-table-created = Created
+asset-table-actions = Actions
+asset-table-size = Size
 asset-download-error = Unable to download asset.
 asset-delete-error = Unable to delete asset.
 
@@ -611,17 +612,13 @@ dashboard-home = Home
 dashboard-meetings = Meetings
 dashboard-meetings-create = Create meeting
 dashboard-meetings-update = Update meeting
-dashboard-statistics = Statistics
-dashboard-recordings = Recordings
 dashboard-settings = Settings
 dashboard-my-profile = My Profile
 dashboard-settings-general = General
 dashboard-settings-account = Account
 dashboard-settings-profile = Profile
-dashboard-settings-video = Video
-dashboard-settings-audio = Audio
-dashboard-settings-accessibility = Accessibility
-dashboard-settings-logout = Logout
+dashboard-settings-storage = Storage
+dashboard-logout = Logout
 dashboard-account-management = Account management
 dashboard-legal = Legal
 dashboard-legal-imprint = Imprint
@@ -638,7 +635,6 @@ conference-quick-start-close = Close quick guide
 quick-start-loading = Loading the quick guide
 quick-start-error = Couldn't load the quick guide
 
-dashboard-faq = FAQ
 dashboard-close-navbar = Close navigation
 dashboard-open-navbar = Open navigation
 dashboard-join-meeting = Join the meeting
@@ -658,6 +654,12 @@ dashboard-settings-profile-name = Profile Name
 dashboard-settings-profile-input-hint = Enter a name (such as your first name, full name, or a nickname) that will be visible to others on OpenTalk.
 dashboard-settings-profile-button-save = Save
 dashboard-settings-profile-input-required = The field cannot be empty
+
+dashboard-settings-storage-usage-limited-free = {$usedStorage} of {$maxStorage} used 
+dashboard-settings-storage-usage-limited-full = {$usedStorage} of {$maxStorage} used - storage full. Please delete files or make a plan upgrade <planUpgradeLink>HERE</planUpgradeLink>
+dashboard-settings-storage-usage-unlimited = {$usedStorage} used
+dashboard-settings-storage-usage-loading = Loading storage usage
+dashboard-settings-storage-assets = My Files
 
 dashboard-meeting-card-error = Error detecting the meeting duration
 dashboard-meeting-card-all-day = All-day

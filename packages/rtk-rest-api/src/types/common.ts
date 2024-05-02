@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { Namespaces, AssetId } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { SipId } from './room';
@@ -81,4 +82,13 @@ export interface CallIn {
   tel: string;
   password: string;
   uri?: string;
+}
+
+export interface BaseAsset {
+  id: AssetId;
+  filename: string;
+  createdAt: DateTime;
+  namespace: Namespaces;
+  kind: string;
+  size: number;
 }

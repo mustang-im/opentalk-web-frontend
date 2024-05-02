@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { notifications } from '@opentalk/common';
-import { AssetId, RoomId } from '@opentalk/rest-api-rtk-query';
+import { notifications, AssetId } from '@opentalk/common';
+import { RoomId } from '@opentalk/rest-api-rtk-query';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
