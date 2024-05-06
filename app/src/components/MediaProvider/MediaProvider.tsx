@@ -23,8 +23,8 @@ import {
   setSpeakerActivity,
   setVideoEnable,
 } from '../../store/slices/mediaSlice';
-import { selectNeedRecordingConsent } from '../../store/slices/recordingSlice';
-import { showConsentNotification } from '../../utils/showConsentNotification';
+import { selectNeedRecordingConsent } from '../../store/slices/streamingSlice';
+import { showConsentNotification } from '../ConsentNotification';
 
 export interface MediaContextValue {
   getDeviceDetails: (constraints: { audio?: boolean; video?: boolean }) => Promise<void>;

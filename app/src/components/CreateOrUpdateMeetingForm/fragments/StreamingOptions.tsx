@@ -77,14 +77,14 @@ const StreamingOptions = ({ formik }: StreamingOptionsProps) => {
             placeholder={t('dashboard-meeting-livestream-platform-name-placeholder')}
           />
           <TextField
-            {...formikProps('streaming.platform.streamingEndpoint', formik)}
-            label={t('dashboard-meeting-livestream-streaming-endpoint-label')}
-            placeholder={t('dashboard-meeting-livestream-streaming-endpoint-placeholder')}
-          />
-          <TextField
             {...formikProps('streaming.platform.publicURL', formik)}
             label={t('dashboard-meeting-livestream-public-url-label')}
             placeholder={t('dashboard-meeting-livestream-public-url-placeholder')}
+          />
+          <TextField
+            {...formikProps('streaming.platform.streamingEndpoint', formik)}
+            label={t('dashboard-meeting-livestream-streaming-endpoint-label')}
+            placeholder={t('dashboard-meeting-livestream-streaming-endpoint-placeholder')}
           />
           <TextField
             {...formikProps('streaming.platform.streamingKey', formik)}

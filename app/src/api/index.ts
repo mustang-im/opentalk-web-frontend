@@ -29,6 +29,8 @@ import {
   setLibravatarOptions,
   ParticipantId,
   Speaker,
+  StreamingStatus,
+  StreamingKind,
 } from '@opentalk/common';
 import {
   AutomodEventType,
@@ -41,6 +43,8 @@ import { login } from '@opentalk/redux-oidc';
 import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
+import { showConsentNotification } from '../components/ConsentNotification';
+import { createStreamUpdatedNotification } from '../components/StreamUpdatedNotification/StreamUpdatedNotification';
 import { startTimeLimitNotification } from '../components/TimeLimitNotification';
 import LayoutOptions from '../enums/LayoutOptions';
 import i18n from '../i18n';
@@ -94,7 +98,6 @@ import {
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
-import { recordingStopped, recordingStarted } from '../store/slices/recordingSlice';
 import {
   enteredWaitingRoom,
   readyToEnter,
@@ -105,13 +108,12 @@ import {
   joinBlocked,
 } from '../store/slices/roomSlice';
 import { sharedFolderUpdated } from '../store/slices/sharedFolderSlice';
+import { streamUpdated } from '../store/slices/streamingSlice';
 import { updateParticipantsReady } from '../store/slices/timerSlice';
 import { updatedCinemaLayout } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
 import { initSentryReportWithUser } from '../utils/glitchtipUtils';
-import { showConsentNotification } from '../utils/showConsentNotification';
-import { showRecordingStoppedNotification } from '../utils/showRecordingStoppedNotification';
 import { restApi } from './rest';
 import {
   breakout,
@@ -124,7 +126,7 @@ import {
   whiteboard,
   chat,
   timer,
-  recording,
+  streaming,
   sharedFolder,
 } from './types/incoming';
 import { Role } from './types/incoming/control';
@@ -329,10 +331,6 @@ const handleControlMessage = (
         joinedParticipants = joinedParticipants.concat(waitingParticipants);
       }
 
-      if (data.recording?.state === 'recording') {
-        showConsentNotification(dispatch); // ignore consent result
-      }
-
       if (data.breakout !== undefined) {
         joinedParticipants = data.breakout.participants
           .map((participant) => mapBreakoutToUiParticipant(state, participant, timestamp))
@@ -419,6 +417,23 @@ const handleControlMessage = (
         const participantLimit = data.tariff.quotas?.roomParticipantLimit;
         if (onlineParticipantsNumberPlusMe >= participantLimit) {
           notifications.error(i18next.t('meeting-notification-participant-limit-reached', { participantLimit }));
+        }
+      }
+
+      //Show notification for active streaming target
+      const activeTarget =
+        data.recording &&
+        Object.values(data.recording.targets).find((target) => target.status === StreamingStatus.Active);
+      if (activeTarget) {
+        createStreamUpdatedNotification({
+          kind: activeTarget.streamingKind,
+          status: activeTarget.status,
+          publicUrl: activeTarget.streamingKind === StreamingKind.Livestream ? activeTarget.publicUrl : undefined,
+          eventId: state.room.eventInfo?.id,
+        });
+
+        if (state.streaming.consent === undefined) {
+          showConsentNotification(dispatch);
         }
       }
 
@@ -1006,16 +1021,31 @@ const handleChatMessage = (dispatch: AppDispatch, data: chat.ChatMessage, timest
   }
 };
 
-const handleRecordingMessage = (dispatch: AppDispatch, data: recording.Message) => {
+const handleStreamingMessage = (dispatch: AppDispatch, data: streaming.Message, state: RootState) => {
   switch (data.message) {
-    case 'started':
-      dispatch(recordingStarted(data.recordingId));
-      showConsentNotification(dispatch); // ignore consent result
+    //Not tested yet
+    case 'stream_updated': {
+      dispatch(streamUpdated(data));
+
+      const streamTarget = state.streaming.streams.entities[data.targetId];
+      if (streamTarget) {
+        const publicUrl =
+          streamTarget.streamingKind === StreamingKind.Livestream && streamTarget.publicUrl
+            ? streamTarget.publicUrl
+            : undefined;
+        //Add notification handler based on status
+        createStreamUpdatedNotification({
+          kind: streamTarget.streamingKind,
+          status: data.status,
+          publicUrl,
+          eventId: state.room.eventInfo?.id,
+        });
+      }
+      if (data.status === StreamingStatus.Active && state.streaming.consent === undefined) {
+        showConsentNotification(dispatch);
+      }
       break;
-    case 'stopped':
-      dispatch(recordingStopped());
-      showRecordingStoppedNotification();
-      break;
+    }
     default: {
       const dataString = JSON.stringify(data, null, 2);
       console.error(`Unknown recording message type: ${dataString}`);
@@ -1084,7 +1114,7 @@ const onMessage =
         handleWhiteboardMessage(dispatch, message.payload);
         break;
       case 'recording':
-        handleRecordingMessage(dispatch, message.payload);
+        handleStreamingMessage(dispatch, message.payload, getState());
         break;
       case 'shared_folder':
         handleSharedFolderMessage(dispatch, message.payload);

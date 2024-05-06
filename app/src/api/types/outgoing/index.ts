@@ -17,8 +17,8 @@ import * as poll from './poll';
 import PollMessage from './poll';
 import * as protocol from './protocol';
 import ProtocolMessage from './protocol';
-import * as recording from './recording';
-import RecordingMessage from './recording';
+import * as recording from './streaming';
+import RecordingMessage from './streaming';
 import * as timer from './timer';
 import TimerMessage from './timer';
 import * as whiteboard from './whiteboard';
@@ -35,7 +35,7 @@ export * as media from './media';
 export * as protocol from './protocol';
 export * as timer from './timer';
 export * as whiteboard from './whiteboard';
-export * as recording from './recording';
+export * as recording from './streaming';
 
 export type Action =
   | AutomodCommandType

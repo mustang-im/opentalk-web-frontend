@@ -12,11 +12,8 @@ import { InitialPoll } from '../poll';
 import { SharedFolderData } from '../sharedFolder';
 import { Tariff } from '../tariff';
 import { WhiteboardState } from '../whiteboard';
+import { StreamingState } from '../streaming';
 
-export interface RecordingState {
-  state: 'recording';
-  recordingId?: string;
-}
 
 export interface JoinSuccessInternalState {
   participantId: ParticipantId;
@@ -40,7 +37,7 @@ export interface JoinSuccessInternalState {
     waitingRoomParticipants: Array<BackendParticipant>;
   };
   isPresenter?: boolean;
-  recording?: null | RecordingState;
+  recording?: StreamingState;
   serverTimeOffset: number;
   tariff: Tariff;
   timer?: TimerState;
@@ -67,7 +64,7 @@ export interface JoinSuccessIncoming {
     waitingRoomEnabled: boolean;
   };
   media?: ParticipantMediaState;
-  recording: null | RecordingState;
+  recording?: StreamingState;
   timer?: TimerState;
   tariff: Tariff;
   closesAt: Timestamp;
