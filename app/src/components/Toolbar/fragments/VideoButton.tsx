@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks';
 import { selectMediaChangeInProgress, selectVideoEnabled } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';
+import { ToolbarButtonIds } from '../Toolbar';
 import ToolbarButton from './ToolbarButton';
 import VideoMenu from './VideoMenu';
 
@@ -62,6 +63,7 @@ const VideoButton = ({ isLobby }: { isLobby?: boolean }) => {
         }}
         isLobby={isLobby}
         data-testid="toolbarVideoButton"
+        id={ToolbarButtonIds.Video}
       >
         {isCameraOn ? <CameraOnIcon /> : <CameraOffIcon />}
       </ToolbarButton>

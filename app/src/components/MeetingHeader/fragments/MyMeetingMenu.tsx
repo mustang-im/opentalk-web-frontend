@@ -21,6 +21,8 @@ import { triggerGlitchtipManually } from '../../../utils/glitchtipUtils';
 import QuickStartPopover from '../../QuickStartPopover/QuickStartPopover';
 import ShortcutListDialog from '../../Toolbar/fragments/ShortcutListDialog';
 
+export const MY_MEETING_MENU_BUTTON_ID = 'my-meeting-menu-button';
+
 const ViewPopperContainer = styled(Stack)(({ theme }) => ({
   position: 'relative',
   background: theme.palette.background.video,
@@ -134,7 +136,7 @@ const MyMeetingMenu = () => {
         <BurgerIconButton
           aria-expanded={isMenuOpen}
           aria-haspopup="true"
-          id="my-meeting-menu-button"
+          id={MY_MEETING_MENU_BUTTON_ID}
           aria-controls={isMenuOpen ? 'my-meeting-menu' : undefined}
           aria-label={t('my-meeting-menu')}
           onClick={(event) => setAnchorElement(event.currentTarget)}

@@ -6,6 +6,7 @@ import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
+import { ToolbarButtonIds } from '../Toolbar';
 import MoreMenu from './MoreMenu';
 import ToolbarButton from './ToolbarButton';
 
@@ -30,6 +31,7 @@ const MenuButton = () => {
         active={showMenu}
         onClick={openMenu}
         data-testid="toolbarMenuButton"
+        id={ToolbarButtonIds.More}
       >
         <MoreIcon />
       </ToolbarButton>

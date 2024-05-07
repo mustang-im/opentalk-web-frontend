@@ -33,6 +33,8 @@ import { saveDefaultChatMessage, selectDefaultChatMessage } from '../../../store
 import { formikGetValue, formikProps } from '../../../utils/formikUtils';
 import yup from '../../../utils/yupUtils';
 
+export const CHAT_INPUT_ID = 'chat-input';
+
 const Form = styled('form')({
   position: 'relative',
 });
@@ -245,6 +247,7 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
         showLimitAt={MAX_CHAT_CHARS / 2}
         {...formikProps('message', formik)}
         size={'small'}
+        id={CHAT_INPUT_ID}
         placeholder={t('chatinput-placeholder')}
         onKeyDown={handleSubmitOnEnter}
         onFocus={() => setFocus(true)}

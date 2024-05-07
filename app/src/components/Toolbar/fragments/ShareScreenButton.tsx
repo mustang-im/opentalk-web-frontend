@@ -9,6 +9,7 @@ import { useAppSelector } from '../../../hooks';
 import { selectMediaChangeInProgress, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectIsModerator, selectIsPresenter } from '../../../store/slices/userSlice';
 import { useMediaContext } from '../../MediaProvider';
+import { ToolbarButtonIds } from '../Toolbar';
 import ToolbarButton from './ToolbarButton';
 
 const ShareScreenButton = () => {
@@ -43,6 +44,7 @@ const ShareScreenButton = () => {
       active={screenSharing && isModeratorOrPresenter}
       disabled={isLoadingMedia || !isModeratorOrPresenter}
       data-testid="toolbarBlurScreenButton"
+      id={ToolbarButtonIds.ShareScreen}
     >
       {screenSharing ? <ShareScreenOnIcon /> : <ShareScreenOffIcon />}
     </ToolbarButton>

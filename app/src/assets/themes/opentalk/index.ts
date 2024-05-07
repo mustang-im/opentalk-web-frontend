@@ -12,6 +12,9 @@ import { getPalette } from './palette';
 export function createOpenTalkTheme(mode: PaletteMode = 'light') {
   const palette = getPalette(mode);
   const theme = createTheme({
+    zIndex: {
+      jumpLink: 1501,
+    },
     borderRadius: {
       small: 2,
       medium: 8,
