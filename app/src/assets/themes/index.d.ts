@@ -89,3 +89,8 @@ declare module '@mui/material/styles/createPalette' {
     lightest?: string;
   }
 }
+declare module '@mui/material/styles' {
+  interface ZIndex {
+    jumpLink: number;
+  }
+}

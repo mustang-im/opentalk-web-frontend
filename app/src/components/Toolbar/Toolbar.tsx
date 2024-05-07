@@ -12,7 +12,14 @@ import ShareScreenButton from './fragments/ShareScreenButton';
 import VideoButton from './fragments/VideoButton';
 
 type LayoutTypes = 'fullscreen';
-
+export enum ToolbarButtonIds {
+  Handraise = 'toolbar-handraise',
+  ShareScreen = 'toolbar-share-screen',
+  Audio = 'toolbar-audio',
+  Video = 'toolbar-video',
+  More = 'toolbar-more',
+  EndCall = 'toolbar-endcall',
+}
 const MainContainer = styled('aside')(({ theme }) => ({
   display: 'flex',
   background: 'transparent',

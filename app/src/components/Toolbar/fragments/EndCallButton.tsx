@@ -15,6 +15,7 @@ import { hangUp } from '../../../store/commonActions';
 import { selectEventInfo } from '../../../store/slices/roomSlice';
 import { isRegisteredUser } from '../../../utils/typeGuardUtils';
 import CloseMeetingDialog from '../../CloseMeetingDialog';
+import { ToolbarButtonIds } from '../Toolbar';
 import ToolbarButton from './ToolbarButton';
 
 const EndCallButton = () => {
@@ -59,6 +60,7 @@ const EndCallButton = () => {
         active={false}
         data-testid="toolbarEndCallButton"
         color="error"
+        id={ToolbarButtonIds.EndCall}
       >
         <EndCallIcon />
       </ToolbarButton>
