@@ -86,8 +86,8 @@ export type RevokeEmailUserPayload = { email: Email };
 export type UserOwnedAsset = BaseAsset & {
   roomId: RoomId;
   eventId: EventId;
-}
+};
 
 export type UserOwnedAssets = {
   ownedAssets: Array<UserOwnedAsset>;
-}
+};
