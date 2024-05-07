@@ -7,6 +7,7 @@
 
 ### Improvements to the user experience
 
+- Added summary to shortcuts table along with better shortcut description formatting for cleaner screen reader pronunciation. ([#1742](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1742))
 - Restructured dashboard meeting header with filter options as dropdowns. ([#1646](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1646))
 - Added focus effect for buttons and improved contrast for hover effect. ([#1752](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1752))
 - Improved user experience with dialogs. Most dialogs should be closeable by clicking away or pressing the escape key now. ([#1755](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1755))

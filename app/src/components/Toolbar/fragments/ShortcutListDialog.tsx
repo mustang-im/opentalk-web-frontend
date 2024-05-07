@@ -1,7 +1,19 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Dialog, DialogTitle, IconButton, Paper, Stack, Box, styled, Switch, FormLabel } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  IconButton,
+  Paper,
+  Stack,
+  Box,
+  styled,
+  Switch,
+  FormLabel,
+  Typography,
+} from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import { CloseIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
@@ -44,11 +56,21 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
   const hotkeysEnabled = useAppSelector(selectHotkeysEnabled);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth={'xs'} PaperComponent={Paper}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="xs"
+      PaperComponent={Paper}
+      aria-describedby="shortcut-dialog-description"
+    >
+      <Typography id="shortcut-dialog-description" sx={visuallyHidden}>
+        {t('shortcut-table-summary')}
+      </Typography>
       <Stack component="header">
         <Box display="flex" alignItems="center" justifyContent="space-between" p={2} position="relative">
           <DialogTitle sx={{ p: 0 }}>{t('my-meeting-menu-keyboard-shortcuts')}</DialogTitle>
-          <CloseButton aria-label="close-button" onClick={onClose}>
+          <CloseButton aria-label={t('global-close-dialog')} onClick={onClose}>
             <CloseIcon />
           </CloseButton>
         </Box>
@@ -60,6 +82,10 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
             onChange={() => dispatch(setHotkeysEnabled(!hotkeysEnabled))}
             onKeyDown={(e) => e.stopPropagation()}
             onKeyUp={(e) => e.stopPropagation()}
+            /* eslint-disable jsx-a11y/no-autofocus */
+            // We want screen reader to jump to the first interactive element
+            // upon reveal and start pronouncing content of the dialog.
+            autoFocus={true}
           />
         </Box>
       </Stack>

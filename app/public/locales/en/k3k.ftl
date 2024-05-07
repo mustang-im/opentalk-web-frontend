@@ -906,6 +906,7 @@ whiteboard-hide = Hide whiteboard
 shortcut-hold-to-speak = Hold to speak
 shortcut-pass-talking-stick = Pass on talking stick
 shortcut-deactive-message = Shortcuts deactivated
+shortcut-table-summary = Table of available shortcuts
 
 meeting-required-start-date = Start date is required
 meeting-required-end-date = End date is required
