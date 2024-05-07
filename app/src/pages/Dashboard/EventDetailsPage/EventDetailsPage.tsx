@@ -58,7 +58,7 @@ const EventDetailsPage = () => {
 
   const getTimeInformationString = () => {
     if (event.isTimeIndependent) {
-      return t('dashboard-meeting-details-page-time-independent');
+      return t('dashboard-meeting-details-page-timeindependent');
     }
     const startDate = new Date(event.startsAt.datetime);
     if (event.isAllDay) {

@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { IconButton, Skeleton, Stack, styled, Typography } from '@mui/material';
-import { ArrowDownIcon, formatDate, Toggle, ToggleOptions } from '@opentalk/common';
+import { formatDate } from '@opentalk/common';
 import {
   CursorPaginated,
   DateTime,
@@ -14,11 +13,10 @@ import {
 import { endOfISOWeek, formatRFC3339, getWeek, startOfISOWeek } from 'date-fns';
 import i18n, { t } from 'i18next';
 import { groupBy } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetEventsQuery } from '../../../api/rest';
-import { useHeader } from '../../../templates/DashboardTemplate';
 import {
   appendRecurringEventInstances,
   SortDirection,
@@ -26,26 +24,11 @@ import {
   TimePerspectiveFilter,
 } from '../../../utils/eventUtils';
 import EventsOverview from './fragments/EventsOverview';
-import EventsPageHeader, { DashboardEventsFilters, TimeFilter } from './fragments/EventsPageHeader';
+import EventsPageHeader from './fragments/EventsPageHeader';
+import { DashboardEventsFilters, FilterChangeCallbackType, MeetingsProp, TimeFilter } from './types';
 
-interface MeetingsPageProps {
-  header?: React.ReactNode;
-}
-
-const ArrowDownButton = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{
-  active?: boolean;
-}>(({ active }) => ({
-  background: 'transparent',
-  svg: {
-    width: 40,
-    height: 24,
-    transition: 'transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-    transform: active ? 'rotate(180deg)' : 'none',
-  },
-  '&:hover': {
-    background: 'transparent',
-  },
-}));
+const EMPTY_MEETING_PROP_ARRAY: Array<MeetingsProp> = [];
+const CachedEventsPageHeader = memo(EventsPageHeader);
 
 export const filterByTimePeriod = (timePeriod: DashboardEventsFilters['timePeriod'], date: DateTime) => {
   const createDate = new Date(date);
@@ -72,50 +55,17 @@ export const filterByTimePeriod = (timePeriod: DashboardEventsFilters['timePerio
 
 const EVENTS_PER_REQUEST = 100;
 
-const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
+const EventsOverviewPage = () => {
   const [expandAccordion, setExpandAccordion] = useState<string>('');
   const [filter, setFilter] = useState<DashboardEventsFilters>({
     timePeriod: TimeFilter.Month,
     timeMin: new Date().toTimeString() as DateTime,
     openInvitedMeeting: false,
     favoriteMeetings: false,
+    timePerspective: TimePerspectiveFilter.TimeIndependent,
   });
 
-  const [timePeriodFilter, setTimePeriodFilter] = useState<TimePerspectiveFilter>(
-    TimePerspectiveFilter.TimeIndependent
-  );
-
   const { t } = useTranslation();
-  const toggleOptions: Array<ToggleOptions<TimePerspectiveFilter>> = [
-    {
-      value: TimePerspectiveFilter.TimeIndependent,
-      label: t('dashboard-meeting-details-page-time-independent'),
-    },
-    {
-      value: TimePerspectiveFilter.Future,
-      label: t('dashboard-meeting-details-page-future'),
-    },
-    {
-      value: TimePerspectiveFilter.Past,
-      label: t('dashboard-meeting-details-page-past'),
-    },
-  ];
-
-  const { setHeader } = useHeader();
-
-  useEffect(() => {
-    setHeader(
-      <EventsPageHeader
-        filter={filter}
-        onFilterChange={(key, value) =>
-          setFilter((prevFilters) => ({ ...prevFilters, [key]: value ? value : !prevFilters[key] }))
-        }
-      />
-    );
-    return () => {
-      setHeader(undefined);
-    };
-  }, [header, setHeader, filter]);
 
   const formatEventsByHeaderChange = useCallback(
     (events: Array<Event>) => {
@@ -131,18 +81,18 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
   );
 
   const timeMinFilter = useMemo(() => {
-    if (timePeriodFilter === TimePerspectiveFilter.Future) {
+    if (filter.timePerspective === TimePerspectiveFilter.Future) {
       // setSecond to 0 to optimize the request and not ask data on every second when switching timePeriodFilter
       return formatRFC3339(new Date().setSeconds(0, 0)) as DateTime;
     }
-  }, [timePeriodFilter]);
+  }, [filter.timePerspective]);
 
   const timeMaxFilter = useMemo(() => {
-    if (timePeriodFilter === TimePerspectiveFilter.Past) {
+    if (filter.timePerspective === TimePerspectiveFilter.Past) {
       // setSecond to 0 to optimize the request and not ask data on every second when switching timePeriodFilter
       return formatRFC3339(new Date().setSeconds(0, 0)) as DateTime;
     }
-  }, [timePeriodFilter]);
+  }, [filter.timePerspective]);
 
   /**
    * Returns memoized function to optimize the performance (acts like a memoized selector)
@@ -165,7 +115,7 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
 
       if (timePerspectiveFilter === TimePerspectiveFilter.TimeIndependent) {
         const constructMeetingProp = {
-          title: t('dashboard-meeting-details-page-time-independent'),
+          title: t('dashboard-meeting-details-page-timeindependent'),
           events: orderedEventsWithRecurringInstances,
         };
         setExpandAccordion('all');
@@ -192,54 +142,38 @@ const EventsOverviewPage = ({ header }: MeetingsPageProps) => {
       favorites: filter.favoriteMeetings,
       perPage: EVENTS_PER_REQUEST,
       adhoc: false,
-      timeIndependent: timePeriodFilter === TimePerspectiveFilter.TimeIndependent,
+      timeIndependent: filter.timePerspective === TimePerspectiveFilter.TimeIndependent,
       timeMin: timeMinFilter,
       timeMax: timeMaxFilter,
     },
     {
       selectFromResult: ({ data, isLoading, isFetching }) => ({
-        events: selectAndTransformToMeetingProps(data, timePeriodFilter),
+        events: selectAndTransformToMeetingProps(data, filter.timePerspective),
         isLoading,
         isFetching,
       }),
     }
   );
 
-  if (isLoading) {
-    return (
-      <Stack spacing={3}>
-        <Skeleton variant="text" width={'20%'} height={40} />
-        <Skeleton variant="rectangular" height={50} />
-        <Skeleton variant="rectangular" height={50} />
-        <Skeleton variant="rectangular" height={50} />
-      </Stack>
-    );
-  }
-  return (
-    <Stack spacing={3} height={'100%'}>
-      <Stack direction={'row'} flex={'0 1 auto'} spacing={3} justifyContent={'space-between'} alignItems="flex-end">
-        <Typography variant={'h1'} component={'h2'}>
-          {t('dashboard-events-my-meetings')}
-        </Typography>
-        <Toggle options={toggleOptions} onChange={setTimePeriodFilter} />
-        <ArrowDownButton
-          active={expandAccordion === 'all'}
-          onClick={() => setExpandAccordion((prev) => (prev === 'all' ? '' : 'all'))}
-        >
-          <ArrowDownIcon color="secondary" />
-        </ArrowDownButton>
-      </Stack>
+  const onFilterChange: FilterChangeCallbackType = useCallback((key, value) => {
+    setFilter((prevFilters) => ({ ...prevFilters, [key]: value ? value : !prevFilters[key] }));
+  }, []);
 
-      {isFetching ? (
-        <Stack spacing={3}>
-          <Skeleton variant="rectangular" height={50} />
-          <Skeleton variant="rectangular" height={50} />
-          <Skeleton variant="rectangular" height={50} />
-        </Stack>
-      ) : (
-        <EventsOverview entries={events || []} expandAccordion={expandAccordion} />
-      )}
-    </Stack>
+  return (
+    <>
+      <CachedEventsPageHeader
+        entries={events || EMPTY_MEETING_PROP_ARRAY}
+        filters={filter}
+        onFilterChange={onFilterChange}
+      />
+      <EventsOverview
+        entries={events || EMPTY_MEETING_PROP_ARRAY}
+        expandAccordion={expandAccordion}
+        setExpandAccordion={setExpandAccordion}
+        isLoading={isLoading}
+        isFetching={isFetching}
+      />
+    </>
   );
 };
 

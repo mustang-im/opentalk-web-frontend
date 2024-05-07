@@ -77,6 +77,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
 
   const openPopupMenu = (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
     stopPropagation(mouseEvent);
+    mouseEvent.currentTarget.focus();
     setAnchorEl(mouseEvent.currentTarget);
   };
 

@@ -4,6 +4,7 @@
 import { DateTime } from '@opentalk/rest-api-rtk-query';
 import React from 'react';
 
+import { TimePerspectiveFilter } from '../../../../utils/eventUtils';
 import { configureStore, render, screen, fireEvent } from '../../../../utils/testUtils';
 import { TimeFilter } from './EventsPageHeader';
 import EventsPageHeader from './EventsPageHeader';
@@ -16,17 +17,19 @@ describe('Events Page Header tests', () => {
     timeMin: new Date().toTimeString() as DateTime,
     openInvitedMeeting: false,
     favoriteMeetings: false,
+    timePerspective: TimePerspectiveFilter.TimeIndependent,
   };
   test('page will not crash', async () => {
     const { store } = configureStore();
-    await render(<EventsPageHeader onFilterChange={onFilterChange} filter={filter} />, store);
-    expect(screen.getAllByRole('button')).toHaveLength(6);
+    await render(<EventsPageHeader entries={[]} onFilterChange={onFilterChange} filters={filter} />, store);
+    // Two filter buttons along with the create meeting link that has a role=button
+    expect(screen.getAllByRole('button')).toHaveLength(3);
     expect(screen.getAllByRole('link')).toHaveLength(1);
   });
 
   test('click on filter will call onFilterChange function', async () => {
     const { store } = configureStore();
-    await render(<EventsPageHeader onFilterChange={onFilterChange} filter={filter} />, store);
+    await render(<EventsPageHeader entries={[]} onFilterChange={onFilterChange} filters={filter} />, store);
     const favoriteMeeting = screen.getByTestId('favoriteMeeting');
     expect(favoriteMeeting).toBeInTheDocument();
     fireEvent.click(favoriteMeeting);
