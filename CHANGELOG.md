@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Display notification after recorder timeout ([#1861](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1861))
 - Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
 - Adjust mobile header for dashboard - startpage ([#1798](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
 - Adjust the header navigation in conference for lower resolutions ([#1767](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1767))

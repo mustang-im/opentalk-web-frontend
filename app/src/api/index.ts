@@ -1090,7 +1090,6 @@ const handleChatMessage = (dispatch: AppDispatch, data: chat.ChatMessage, timest
 
 const handleStreamingMessage = (dispatch: AppDispatch, data: streaming.Message, state: RootState) => {
   switch (data.message) {
-    //Not tested yet
     case 'stream_updated': {
       dispatch(streamUpdated(data));
 
@@ -1110,6 +1109,12 @@ const handleStreamingMessage = (dispatch: AppDispatch, data: streaming.Message, 
       }
       if (data.status === StreamingStatus.Active && state.streaming.consent === undefined) {
         showConsentNotification(dispatch);
+      }
+      break;
+    }
+    case 'recorder_error': {
+      if (data.error === 'timeout') {
+        notifications.error(i18next.t('livestream-start-error', { error: data.error }));
       }
       break;
     }
