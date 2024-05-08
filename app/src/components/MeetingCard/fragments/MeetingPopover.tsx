@@ -4,7 +4,7 @@
 import { Button, MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Stack, MenuList } from '@mui/material';
 import { MoreIcon, notifications, IconButton } from '@opentalk/common';
 import { Event, EventException, EventId, InviteStatus } from '@opentalk/rest-api-rtk-query';
-import React, { KeyboardEvent, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -70,15 +70,15 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   const [unmarkEvent] = useUnmarkFavoriteEventMutation();
   const [declineEventInvitation] = useDeclineEventInviteMutation();
   const [isConfirmDialogVisible, showConfirmDialog] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
+  const moreButtonRef = useRef<HTMLButtonElement>(null);
   const baseUrl = useAppSelector(selectBaseUrl);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const [getRoomInvites, { data: invites, isLoading: isGetInvitesLoading }] = useLazyGetRoomInvitesQuery();
 
   const openPopupMenu = (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
     stopPropagation(mouseEvent);
-    mouseEvent.currentTarget.focus();
-    setAnchorEl(mouseEvent.currentTarget);
+    setPopoverOpen(true);
   };
 
   const stopPropagation = (mouseEvent: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLAnchorElement>) => {
@@ -86,7 +86,6 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   };
 
   const navigate = useNavigate();
-  const open = Boolean(anchorEl);
   const updateMeeting = () => {
     navigate(`/dashboard/meetings/update/${eventId}/0`, { state: { ...getReferrerRouterState(window.location) } });
   };
@@ -95,7 +94,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   };
 
   const copyMeetingLink = (): void => {
-    setAnchorEl(undefined);
+    setPopoverOpen(false);
     const link = `${baseUrl}/room/${roomId}`;
     navigator.clipboard.writeText(link);
     notifications.success(t('global-copy-link-success'));
@@ -108,10 +107,10 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
         const permanentInvite = invitesList.find((invite) => invite.active && invite.expiration === null);
 
         if (permanentInvite) {
+          setPopoverOpen(false);
           const inviteURLString = composeInviteUrl(baseUrl, roomId, permanentInvite.inviteCode).toString();
           navigator.clipboard.writeText(inviteURLString);
           notifications.success(t('global-copy-link-success'));
-          setAnchorEl(undefined);
         } else {
           notifications.error(t('global-copy-permanent-guest-link-error'), { persist: true });
         }
@@ -122,7 +121,7 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
   };
 
   const handleClose = () => {
-    setAnchorEl(undefined);
+    setPopoverOpen(false);
   };
 
   const declineInvite = async () => {
@@ -140,12 +139,9 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
         })
       );
     }
-
-    setAnchorEl(undefined);
   };
 
   const showDialog = () => {
-    setAnchorEl(undefined);
     showConfirmDialog(true);
   };
 
@@ -155,14 +151,14 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
           i18nKey: 'dashboard-meeting-card-popover-remove',
           action: () => {
             unmarkEvent(eventId);
-            setAnchorEl(undefined);
+            setPopoverOpen(false);
           },
         }
       : {
           i18nKey: 'dashboard-meeting-card-popover-add',
           action: () => {
             markEvent(eventId);
-            setAnchorEl(undefined);
+            setPopoverOpen(false);
           },
         },
     ...((event as Event).inviteStatus !== InviteStatus.Declined && !isMeetingCreator
@@ -204,24 +200,8 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
       </MenuItem>
     ));
 
-  const handleMoreButtonKeyDownEvent = (event: KeyboardEvent) => {
-    const { code } = event;
-    if (code === 'ArrowDown') {
-      event.preventDefault(); // prevent scrolling
-      setAnchorEl(event.target as HTMLButtonElement);
-    }
-  };
-
-  const handleMoreButtonKeyUpEvent = (event: KeyboardEvent) => {
-    const { code } = event;
-    if (code === 'Enter' || code === 'Space' || code === 'ArrowDown') {
-      setAnchorEl(event.target as HTMLButtonElement);
-    }
-  };
-
   const handleCloseConfirmDeleteDialog = () => {
     showConfirmDialog(false);
-    setAnchorEl(undefined);
   };
 
   return (
@@ -231,14 +211,14 @@ const MeetingPopover = ({ event, isMeetingCreator, highlighted }: MeetingCardFra
         aria-label={t('toolbar-button-more-tooltip-title')}
         size={'small'}
         onMouseDown={openPopupMenu}
-        onKeyDown={handleMoreButtonKeyDownEvent}
-        onKeyUp={handleMoreButtonKeyUpEvent}
+        onClick={openPopupMenu}
+        ref={moreButtonRef}
       >
         <MoreIcon />
       </MoreButton>
       <MuiPopover
-        open={open}
-        anchorEl={anchorEl}
+        open={popoverOpen}
+        anchorEl={moreButtonRef.current}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
