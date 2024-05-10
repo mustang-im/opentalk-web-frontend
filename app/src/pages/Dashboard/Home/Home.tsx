@@ -94,7 +94,9 @@ const Home = () => {
         ...getReferrerRouterState(window.location),
       }}
     >
-      {t('dashboard-meeting-card-button-start-direct')}
+      {isDesktop
+        ? t('dashboard-meeting-card-button-start-direct')
+        : t('dashboard-meeting-card-button-start-direct-mobile')}
     </Button>
   );
 
@@ -109,7 +111,7 @@ const Home = () => {
         ...getReferrerRouterState(window.location),
       }}
     >
-      {t('dashboard-plan-new-meeting')}
+      {isDesktop ? t('dashboard-plan-new-meeting') : t('dashboard-plan-new-meeting-mobile')}
     </Button>
   );
 
