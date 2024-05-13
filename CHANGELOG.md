@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 
 ### Internal
 
+- E2E dependency - Added data-id to micOff and On elements (https://git.opentalk.dev/opentalk/qa/reports/-/issues/27)
 - Add resolution for tar package ([#1827](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1245))
 
 ## 1.13.0

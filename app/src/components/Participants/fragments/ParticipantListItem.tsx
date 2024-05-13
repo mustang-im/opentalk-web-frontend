@@ -276,9 +276,9 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
     } else if (isScreenShareEnabled) {
       return <ShareScreenOnIcon />;
     } else if (isAudioEnabled) {
-      return isSipParticipant ? <PhoneIcon /> : <MicOnIcon />;
+      return isSipParticipant ? <PhoneIcon /> : <MicOnIcon data-testid="MicOn" />;
     }
-    return isSipParticipant ? <PhoneOffIconStyled /> : <MicOffIconStyled />;
+    return isSipParticipant ? <PhoneOffIconStyled /> : <MicOffIconStyled data-testid="MicOff" />;
   }, [
     participant.handIsUp,
     participant.id,

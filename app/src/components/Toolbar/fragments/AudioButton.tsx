@@ -43,10 +43,10 @@ const AudioButton = ({ isLobby }: { isLobby?: boolean }) => {
       isAudioOn ? (
         <>
           <AudioIndicator shape={'circle'} />
-          <MicOnStyled />
+          <MicOnStyled data-testid="toolbarAudioButtonOn" />
         </>
       ) : (
-        <MicOffIcon />
+        <MicOffIcon data-testid="toolbarAudioButtonOff" />
       ),
     [isAudioOn]
   );
