@@ -106,7 +106,7 @@ const StorageUsage = () => {
   // casual case: user has limited storage
   const realOccupancyInPercents = Math.floor((usedStorage / maxStorage) * 100);
   const displayedOccupancy = Math.min(realOccupancyInPercents, 100);
-  const isFull = displayedOccupancy === 100;
+  const isFull = displayedOccupancy >= 100;
   return (
     <Stack spacing={1}>
       <Typography variant="body1" color={(theme) => (isFull ? theme.palette.error.main : theme.palette.secondary.main)}>

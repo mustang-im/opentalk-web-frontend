@@ -10,6 +10,7 @@ action-delete = löschen
 action-download = Download
 global-calendar-week = KW
 global-error = Fehler
+global-upgrade = Upgrade
 
 error-fetch-4xx = Ladefehler
 error-general = Ups, hier ist leider etwas schiefgelaufen. Bitte versuche es erneut.
@@ -660,6 +661,8 @@ dashboard-settings-storage-usage-limited-full = {$usedStorage} von {$maxStorage}
 dashboard-settings-storage-usage-unlimited = {$usedStorage} belegt
 dashboard-settings-storage-usage-loading = Speicherbelegung wird geladen
 dashboard-settings-storage-assets = Meine Dateien
+
+dashboard-storage-almost-full-message = Achtung: Ihr Speicher ist fast voll. Funktionen wie das Aufzeichnen und Erstellen von PDFs funktionieren möglicherweise nicht.<br /> Bitte löschen Sie Dateien oder führen Sie eine Tarifupgrade durch.
 
 dashboard-meeting-card-error = Fehler beim ermitteln des Meeting-Zeitraumes
 dashboard-meeting-card-all-day = ganztags

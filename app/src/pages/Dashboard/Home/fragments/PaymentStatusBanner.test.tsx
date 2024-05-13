@@ -1,15 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-// import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { useGetMeQuery } from '../../api/rest';
-import { configureStore, render, screen } from '../../utils/testUtils';
-import PaymentStatusBanner from './PaymentStatusBanner';
+import { useGetMeQuery } from '../../../../api/rest';
+import { configureStore, render, screen } from '../../../../utils/testUtils';
+import { PaymentStatusBanner } from './PaymentStatusBanner';
 
-jest.mock('../../api/rest', () => ({
-  ...jest.requireActual('../../api/rest'),
+jest.mock('../../../../api/rest', () => ({
+  ...jest.requireActual('../../../../api/rest'),
   useGetMeTariffQuery: () => ({
     data: {
       name: 'OpenTalkStandard',
