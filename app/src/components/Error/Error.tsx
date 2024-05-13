@@ -1,11 +1,18 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Container as MuiContainer, styled, IconButton as MuiIconButton } from '@mui/material';
+import {
+  Container as MuiContainer,
+  styled,
+  IconButton as MuiIconButton,
+  ThemeProvider,
+  CssBaseline,
+} from '@mui/material';
 import { BackIcon, WarningIcon as DefaultWarningIcon } from '@opentalk/common';
 import { ErrorInfo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { createOpenTalkTheme } from '../../assets/themes/opentalk';
 import useNavigateToHome from '../../hooks/useNavigateToHome';
 import LobbyTemplate from '../../templates/LobbyTemplate';
 import DiagnosticDetails from './fragments/DiagnosticDetails';
@@ -69,19 +76,24 @@ const Error = ({ title, description, error, errorInfo, isCrashError }: ErrorProp
   const navigateToHome = useNavigateToHome();
 
   return (
-    <LobbyTemplate blur={isCrashError}>
-      <Container>
-        {isCrashError && <WarningIcon />}
+    //Explicitly provide theme and css baseline
+    //Potentially should be hoisted up to a root level
+    <ThemeProvider theme={createOpenTalkTheme()}>
+      <CssBaseline />
+      <LobbyTemplate blur={isCrashError}>
+        <Container>
+          {isCrashError && <WarningIcon />}
 
-        <ErrorText title={title} description={description} />
+          <ErrorText title={title} description={description} />
 
-        {error && <DiagnosticDetails error={error} errorInfo={errorInfo} />}
+          {error && <DiagnosticDetails error={error} errorInfo={errorInfo} />}
 
-        <IconButton aria-label={t('global-back')} onClick={navigateToHome}>
-          <BackIcon />
-        </IconButton>
-      </Container>
-    </LobbyTemplate>
+          <IconButton aria-label={t('global-back')} onClick={navigateToHome}>
+            <BackIcon />
+          </IconButton>
+        </Container>
+      </LobbyTemplate>
+    </ThemeProvider>
   );
 };
 

@@ -46,7 +46,7 @@ const DiagnosticDetails = ({ error, errorInfo }: DiagnosticDetailsProps) => {
   };
 
   return (
-    <Stack spacing={1}>
+    <Stack spacing={1} alignItems="center">
       <CollapseButton
         disableRipple
         size="large"

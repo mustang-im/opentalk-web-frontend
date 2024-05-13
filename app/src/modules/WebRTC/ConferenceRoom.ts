@@ -19,6 +19,7 @@ import {
   WebRtcSlow,
   WebRtcUp,
 } from '../../api/types/incoming/media';
+import { Message as ModerationMessage } from '../../api/types/incoming/moderation';
 import { Message as OutgoingMessage } from '../../api/types/outgoing';
 import { RoomCredentials } from '../../store/commonActions';
 import { ConfigState } from '../../store/slices/configSlice';
@@ -251,6 +252,14 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
     }
   }
 
+  private async handleModerationMessage({ message }: ModerationMessage) {
+    switch (message) {
+      case 'sent_to_waiting_room':
+        this.webRtc.closeConnections();
+        break;
+    }
+  }
+
   private signalingMessageHandler = (message: IncomingMessage) => {
     // TODO consume media messages
     // inspect join_success for participantId
@@ -278,6 +287,9 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
       }
       case 'control':
         this.handleControlMessage(payload);
+        break;
+      case 'moderation':
+        this.handleModerationMessage(payload);
         break;
       default:
         //let the react app take care

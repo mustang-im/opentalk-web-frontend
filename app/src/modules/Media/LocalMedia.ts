@@ -249,7 +249,7 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
     this.levelNode?.close();
     this.levelNode = undefined;
     this.speechDetectionNode?.close();
-    this.levelNode = undefined;
+    this.speechDetectionNode = undefined;
 
     await Promise.allSettled([this.haltVideo(), this.haltAudio()])
       .catch((e) => console.error('failed to release media devices:', e))
@@ -260,6 +260,7 @@ export class LocalMedia extends BaseEventEmitter<LocalMediaEvent> {
         });
         this._deviceTracks = [];
       });
+
     this._audioContext?.then((ctx) => ctx.close());
     this._audioContext = undefined;
   }

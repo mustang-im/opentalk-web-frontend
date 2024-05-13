@@ -854,6 +854,13 @@ const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message
       dispatch(hangUp());
       notifications.warning(i18next.t('meeting-notification-banned'));
       break;
+    case 'sent_to_waiting_room':
+      dispatch(enteredWaitingRoom());
+      notifications.warning(i18next.t('meeting-notification-moved-to-waiting-room'));
+      //We release user media, unsubscribing from other participants' media is handled in ConferenceRoom.ts
+      localMediaContext.release();
+      localScreenContext.release();
+      break;
     case 'waiting_room_enabled':
       dispatch(enableWaitingRoom());
       break;

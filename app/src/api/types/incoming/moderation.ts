@@ -11,6 +11,10 @@ export interface BannedParticipant {
   message: 'banned';
 }
 
+export interface SentToWaitingRoom {
+  message: 'sent_to_waiting_room';
+}
+
 export interface InWaitingRoom {
   message: 'in_waiting_room';
 }
@@ -60,6 +64,7 @@ export interface leftWaitingRoom extends BackendParticipant {
 export type Message =
   | KickedParticipant
   | BannedParticipant
+  | SentToWaitingRoom
   | InWaitingRoom
   | WaitingRoomEnabled
   | WaitingRoomDisabled

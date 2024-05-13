@@ -36,7 +36,12 @@ import { batch } from 'react-redux';
 import { Role } from '../../../api/types/incoming/control';
 import { grantModeratorRole, revokeModeratorRole } from '../../../api/types/outgoing/control';
 import { grantPresenterRole, requestMute, revokePresenterRole } from '../../../api/types/outgoing/media';
-import { banParticipant, kickParticipant, enableWaitingRoom } from '../../../api/types/outgoing/moderation';
+import {
+  banParticipant,
+  kickParticipant,
+  enableWaitingRoom,
+  sendParticipantToWaitingRoom,
+} from '../../../api/types/outgoing/moderation';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
@@ -135,6 +140,10 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const ownHandRaised = useAppSelector(selectHandUp);
   const [openRenameDialog, setOpenRenameDialog] = useState(false);
 
+  const closePopover = () => {
+    setAnchorEl(undefined);
+  };
+
   const { active: audioActive } = useAppSelector(
     selectSubscriberStateById(
       {
@@ -177,16 +186,27 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
         notifications.info(t('meeting-notification-user-was-kicked', { user: participant.displayName }));
         break;
       default:
-        setAnchorEl(undefined);
         notifications.error(t('dashboard-meeting-notification-error'));
     }
+    closePopover();
+  };
+
+  const handleMoveToWaitingRoom = () => {
+    closePopover();
+    if (participant.participationKind) {
+      dispatch(sendParticipantToWaitingRoom.action({ target: participant.id }));
+      notifications.info(t('meeting-notification-user-moved-to-waiting-room'));
+      return;
+    }
+
+    notifications.error(t('dashboard-meeting-notification-error'));
   };
 
   const handleModerationRight = () => {
     participant?.role === Role.Moderator
       ? dispatch(revokeModeratorRole.action({ target: participant.id }))
       : dispatch(grantModeratorRole.action({ target: participant.id }));
-    setAnchorEl(undefined);
+    closePopover();
   };
 
   const handlePresenterRoleRight = () => {
@@ -274,6 +294,11 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
     {
       i18nKey: 'participant-menu-remove-participant',
       action: handleRemoval,
+      disabled: participant.isRoomOwner,
+    },
+    {
+      i18nKey: 'participant-menu-move-to-waiting-room',
+      action: handleMoveToWaitingRoom,
       disabled: participant.isRoomOwner,
     },
     ...moderatorRights(),
