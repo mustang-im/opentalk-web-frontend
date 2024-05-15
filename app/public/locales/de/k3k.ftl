@@ -197,6 +197,11 @@ breakout-notification-joined-session-button = Zu Breakout-Raum {$roomName} wechs
 breakout-notification-session-ended-header = Breakout Session beended
 breakout-notification-session-ended-cta = Die Breakout Session wurde beendet. Bitte gehen Sie zurück in den Hauptraum. Nach {$timeInSeconds} Sekunden werden Sie automatisch zurückgeführt.
 
+jumplink-nav-label = Sprunglinks
+jumplink-skip-to = Direkt zu
+jumplink-chat = Chat
+jumplink-my-meeting-menu = Mein Meeting Menü
+
 toolbar-button-audio-turn-on-tooltip-title = Mikrofon aktivieren
 toolbar-button-audio-turn-off-tooltip-title = Mikrofon deaktivieren
 toolbar-button-audio-context-title = Zusatzoptionen Mikrofon

@@ -10,6 +10,7 @@ import { selectRoomConnectionState, ConnectionState } from '../../../store/slice
 import { selectShowCoffeeBreakCurtain, selectVotePollIdToShow } from '../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../store/slices/userSlice';
 import { CoffeeBreakView } from '../../CoffeeBreakView/CoffeeBreakView';
+import JumpLinkContainer from '../../JumpLinkContainer';
 import MeetingHeader from '../../MeetingHeader';
 import MeetingSidebar from '../../MeetingSidebar/index';
 import VoteResultContainer from '../../VoteResult/VoteResultContainer';
@@ -42,6 +43,7 @@ const DesktopInnerLayout = () => {
 
   return (
     <InnerContainer>
+      <JumpLinkContainer />
       <MeetingSidebar />
 
       {showCoffeeBreakCurtain && isModerator ? (

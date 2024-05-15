@@ -197,6 +197,11 @@ breakout-notification-joined-session-button = Switch to Room {$roomName}
 breakout-notification-session-ended-header = Breakout Session Ended
 breakout-notification-session-ended-cta = The Breakout Session you were part of ended. Please return to the main conference. You got {$timeInSeconds} seconds before you will be moved automatically.
 
+jumplink-nav-label = Skip links
+jumplink-skip-to = Skip to
+jumplink-chat = Chat
+jumplink-my-meeting-menu = My meeting menu
+
 toolbar-button-audio-turn-on-tooltip-title = Turn On Audio
 toolbar-button-audio-turn-off-tooltip-title = Turn Off Audio
 toolbar-button-audio-context-title = additional options microphone

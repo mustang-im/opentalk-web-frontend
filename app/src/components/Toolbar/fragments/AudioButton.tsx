@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectMediaChangeInProgress } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';
+import { ToolbarButtonIds } from '../Toolbar';
 import AudioIndicator from './AudioIndicator';
 import AudioMenu from './AudioMenu';
 import ToolbarButton from './ToolbarButton';
@@ -77,6 +78,7 @@ const AudioButton = ({ isLobby }: { isLobby?: boolean }) => {
         contextTitle={contextTitle}
         contextMenuId="audio-context-menu"
         contextMenuExpanded={showMenu}
+        id={ToolbarButtonIds.Audio}
       >
         {indicator}
       </ToolbarButton>
