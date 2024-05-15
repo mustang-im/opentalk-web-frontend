@@ -153,7 +153,7 @@ export const JoinMeetingDialog = ({ openButtonProps, ...props }: JoinMeetingDial
   return (
     <>
       <Button
-        color="primary"
+        color="secondary"
         fullWidth
         {...openButtonProps}
         //Props that can't be overriden
@@ -161,7 +161,7 @@ export const JoinMeetingDialog = ({ openButtonProps, ...props }: JoinMeetingDial
         aria-haspopup="dialog"
         aria-expanded={isDialogOpen}
       >
-        {t('dashboard-join-meeting-button')}
+        {isMediumDevice ? t('dashboard-join-meeting-button') : t('dashboard-join-meeting-button-mobile')}
       </Button>
       <Dialog
         {...props}

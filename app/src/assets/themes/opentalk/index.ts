@@ -83,6 +83,13 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
                 fontSize: theme.typography.pxToRem(16),
               },
             },
+            [theme.breakpoints.down('sm')]: {
+              fontSize: theme.typography.pxToRem(12),
+              padding: theme.spacing(1, 1.5),
+              '& .MuiButton-startIcon > *:nth-of-type(1), & .MuiButton-endIcon > *:nth-of-type(1)': {
+                fontSize: theme.typography.pxToRem(14),
+              },
+            },
           }),
           containedPrimary: ({ theme }) => ({
             color: mode === 'light' ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText,

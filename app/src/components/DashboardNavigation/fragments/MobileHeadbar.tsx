@@ -83,22 +83,20 @@ const MobileHeadbar = ({ activeNavbar, toggleNavbar, path }: HeadbarProps) => {
   return (
     <HeadbarWrapper>
       <SideContainer>
-        {!activeNavbar && (
-          <ToggleButton variant="text" onClick={toggleNavbar} aria-label={t(`dashboard-open-navbar`)}>
-            <MoreIcon />
-          </ToggleButton>
-        )}
+        <ProfileChip collapsed={true} />
       </SideContainer>
       <Typography variant={'h1'} textAlign={'center'} textTransform={'capitalize'}>
         {getTitle()}
       </Typography>
       <SideContainer>
-        {activeNavbar ? (
+        {!activeNavbar ? (
+          <ToggleButton variant="text" onClick={toggleNavbar} aria-label={t(`dashboard-open-navbar`)}>
+            <MoreIcon />
+          </ToggleButton>
+        ) : (
           <ToggleButton variant="text" onClick={toggleNavbar} aria-label={t(`dashboard-close-navbar`)}>
             <CloseIcon />
           </ToggleButton>
-        ) : (
-          <ProfileChip collapsed={true} />
         )}
       </SideContainer>
     </HeadbarWrapper>
