@@ -1,3 +1,9 @@
+# 1.0.25
+
+### UI/UX Fixes
+
+- Add missing role and aria label to the duration field. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
+
 ## 1.0.24
 
 ### Stability Improvements

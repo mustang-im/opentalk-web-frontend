@@ -134,6 +134,8 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
 
   const renderPicker = () => (
     <Popover
+      role="dialog"
+      aria-label="Emoji picker"
       open={openPicker}
       anchorEl={emojiButton.current}
       anchorOrigin={{

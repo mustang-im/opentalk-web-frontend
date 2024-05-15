@@ -379,6 +379,8 @@ legal-vote-token-copy-success = The token was copied to your clipboard
 legal-vote-share-token-active = The token will be displayed here after the end of vote.
 legal-vote-share-token-inactive = Do not share this token with others and keep it in a safe place!
 
+legal-vote-10-seconds-remaining = 10 seconds remaining
+
 poll-participant-list-button-select = Select
 poll-participant-list-button-close = Close
 poll-participant-list-button-save = Save

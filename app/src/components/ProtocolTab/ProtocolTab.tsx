@@ -64,6 +64,7 @@ const ProtocolTab = () => {
   const [participants, setParticipants] = useState<ProtocolParticipant[]>([]);
   const allProtocolParticipants = useAppSelector(selectAllProtocolParticipants);
   const [searchMask, setSearchMask] = useState('');
+  const salt = Date.now();
 
   useEffect(() => {
     setParticipants((prevParticipants) => mergeParticipants(allProtocolParticipants, prevParticipants));
@@ -213,6 +214,7 @@ const ProtocolTab = () => {
           sx={{ width: '100%' }}
           onClick={openParticipantsListPanel}
           aria-label={protocolUrl ? t('protocol-edit-invite-button') : t('protocol-invite-button')}
+          id={`protocol-popover-trigger-${salt}`}
         >
           {protocolUrl ? t('protocol-edit-invite-button') : t('protocol-invite-button')}
         </Button>
@@ -234,6 +236,8 @@ const ProtocolTab = () => {
         </Button>
       </Stack>
       <Popover
+        role="dialog"
+        aria-labelledby={`protocol-popover-trigger-${salt}`}
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: 'top',

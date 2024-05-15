@@ -379,6 +379,8 @@ legal-vote-token-copy-success = Der Verifikation-Code wurde erfolgreich kopiert
 legal-vote-share-token-active = Der Token wird nach Ende der Abstimmung hier angezeigt.
 legal-vote-share-token-inactive = Diesen Code nicht mit Anderen teilen und an einem sicheren Ort aufbewahren!
 
+legal-vote-10-seconds-remaining = Noch 10 Sekunden übrig
+
 poll-participant-list-button-select = Auswählen
 poll-participant-list-button-close = Schließen
 poll-participant-list-button-save = Speichern

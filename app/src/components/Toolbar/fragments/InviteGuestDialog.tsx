@@ -46,12 +46,15 @@ interface DialogTitleProps {
 }
 
 const InviteDialogTitle = (props: DialogTitleProps) => {
-  const { children, onClose, ...other } = props;
+  const { t } = useTranslation();
+  const { children, onClose, id, ...other } = props;
   return (
-    <DialogTitle {...other}>
-      <Typography style={{ color: theme.palette.secondary.dark }}>{children}</Typography>
+    <DialogTitle {...other} aria-labelledby={id}>
+      <Typography id={id} style={{ color: theme.palette.secondary.dark }}>
+        {children}
+      </Typography>
       {onClose && (
-        <IconButton aria-label="close-button" onClick={onClose}>
+        <IconButton aria-label={t('global-close-dialog')} onClick={onClose}>
           <CloseIcon />
         </IconButton>
       )}
@@ -121,7 +124,13 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   };
 
   return (
-    <Dialog {...props} fullWidth PaperComponent={Paper} aria-labelledby="dialog-invite-guest-title" onClose={onClose}>
+    <Dialog
+      {...props}
+      fullWidth
+      PaperComponent={Paper}
+      PaperProps={{ 'aria-labelledby': 'dialog-invite-guest-title' }}
+      onClose={onClose}
+    >
       <InviteDialogTitle id="dialog-invite-guest-title" onClose={onClose}>
         {t('dialog-invite-guest-title')}
       </InviteDialogTitle>

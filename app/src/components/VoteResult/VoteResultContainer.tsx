@@ -310,7 +310,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const showResultTable = (isLiveVote || showResults) && currentLegalVote && allowedToVote;
 
   return (
-    <MainContainer maxWidth="sm">
+    <MainContainer maxWidth="sm" role="dialog" aria-labelledby="vote-result-legend">
       <Grid container rowSpacing={1.4}>
         <Grid item xs={12} style={{ scrollBehavior: 'smooth' }}>
           <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1}>
@@ -331,14 +331,23 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
                 />
               )}
             </Box>
-            <IconButton onClick={closeResultWindow} aria-label={t('global-close-dialog')}>
+            <IconButton
+              onClick={closeResultWindow}
+              aria-label={t('global-close-dialog')}
+              // When we open up vote result dialog, we want to place a focus
+              // inside of it, so the content can be read by the screenreader.
+              // FIXME: there is an issue with starting new votes without closing old ones
+              // because component never unmounts, so autofocus is no re-applied.
+              /* eslint-disable jsx-a11y/no-autofocus */
+              autoFocus
+            >
               <CloseIcon />
             </IconButton>
           </Stack>
         </Grid>
         <CustomForm onSubmit={submitLegalVoteOption} method="POST">
           <CustomFieldset>
-            <legend>
+            <legend id="vote-result-legend">
               {vote?.name && (
                 <Typography variant="h2" component="h3">
                   {vote.name}

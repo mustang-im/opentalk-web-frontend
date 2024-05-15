@@ -125,6 +125,8 @@ const SpeedTestDialog = ({ ...props }: SpeedTestDialogProps) => {
     setIsDialogOpen(false);
   };
 
+  const openDialog = useCallback(() => setIsDialogOpen(true), []);
+
   useEffect(() => {
     if (isDialogOpen) {
       startTest();
@@ -248,13 +250,26 @@ const SpeedTestDialog = ({ ...props }: SpeedTestDialogProps) => {
 
   return (
     <>
-      <CircularIconButton onClick={() => setIsDialogOpen(true)} aria-label={t('speed-meter-button')}>
-        <SpeedTestIcon />
+      <CircularIconButton
+        key="speed-meter-button"
+        onClick={openDialog}
+        aria-label={t('speed-meter-button')}
+        aria-haspopup="dialog"
+        aria-controls="speed-meter-dialog"
+        aria-expanded={isDialogOpen}
+      >
+        <SpeedTestIcon aria-hidden="true" />
       </CircularIconButton>
-      <Dialog {...props} onClose={handleCloseDialog} aria-labelledby="speed-meter-title" open={isDialogOpen}>
-        <DialogTitle>
+      <Dialog
+        {...props}
+        id="speed-meter-dialog"
+        onClose={handleCloseDialog}
+        aria-labelledby="speed-meter-title"
+        open={isDialogOpen}
+      >
+        <DialogTitle id="speed-meter-title" aria-label={t('speed-meter-title')}>
           {t('speed-meter-title')}
-          <CloseIconButton aria-label="close" onClick={handleCloseDialog} size="small">
+          <CloseIconButton aria-label={t('global-close-dialog')} onClick={handleCloseDialog} size="small">
             <CloseIcon />
           </CloseIconButton>
         </DialogTitle>

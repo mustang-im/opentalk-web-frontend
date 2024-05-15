@@ -377,6 +377,12 @@ const handleControlMessage = (
               i18next.t('talking-stick-started-second-line'),
             ]),
             variant: 'info',
+            SnackbarProps: {
+              role: 'alert',
+              'aria-label': `${i18next.t('talking-stick-started-first-line')} ${i18next.t(
+                'talking-stick-started-second-line'
+              )}`,
+            },
           });
         }
       }
@@ -388,6 +394,10 @@ const handleControlMessage = (
           variant: 'info',
           actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
           onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Whiteboard)),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': i18next.t('whiteboard-new-whiteboard-message'),
+          },
         });
       }
 
@@ -531,13 +541,18 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
           i18next.t('media-received-force-mute', { origin: participants[data.issuer]?.displayName || 'admin' })
         );
       } else {
+        const message = i18next.t('media-received-request-mute', {
+          origin: participants[data.issuer]?.displayName || 'admin',
+        });
         notificationAction({
-          msg: i18next.t('media-received-request-mute', {
-            origin: participants[data.issuer]?.displayName || 'admin',
-          }),
+          msg: message,
           variant: 'warning',
           actionBtnText: i18next.t('media-received-request-mute-ok'),
           onAction: () => localMediaContext.reconfigure({ audio: false }),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': message,
+          },
         });
       }
       dispatch(mediaStore.notificationShown());
@@ -552,7 +567,14 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
       const error = data.error;
       switch (error) {
         case 'invalid_end_of_candidates':
-          notificationPersistent({ msg: i18next.t('media-ice-connection-not-possible'), variant: 'error' });
+          notificationPersistent({
+            msg: i18next.t('media-ice-connection-not-possible'),
+            variant: 'error',
+            SnackbarProps: {
+              role: 'alert',
+              'aria-label': i18next.t('media-ice-connection-not-possible'),
+            },
+          });
           break;
         case 'invalid_request_offer':
           dispatch(subscriberFailed(data));
@@ -564,7 +586,11 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
         case 'invalid_configure_request':
         case 'permission_denied':
           console.error(`Media Error: ${data}`);
-          notifications.error(i18next.t('error-general'));
+          notifications.error(i18next.t('error-general'), {
+            SnackbarProps: {
+              role: 'alert',
+            },
+          });
           throw new Error(`Media Error: ${error}`);
         default:
           console.error(`Media Error: ${data}`);
@@ -646,7 +672,12 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
 
       const totalParticipants = selectParticipantsTotal(state);
       if (totalParticipants < MIN_RECOMMENDED_TALKING_STICK_PARTICIPANTS) {
-        notifications.warning(i18next.t('talking-stick-participant-amount-notification'));
+        notifications.warning(i18next.t('talking-stick-participant-amount-notification'), {
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': i18next.t('talking-stick-participant-amount-notification'),
+          },
+        });
       }
 
       if (data.selectionStrategy === AutomodSelectionStrategy.Playlist) {
@@ -657,6 +688,12 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
             i18next.t('talking-stick-started-second-line'),
           ]),
           variant: 'info',
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': `${i18next.t('talking-stick-started-first-line')} ${i18next.t(
+              'talking-stick-started-second-line'
+            )}`,
+          },
         });
 
         if (data.issuedBy === state.user.uuid) {
@@ -675,6 +712,10 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
         key: stoppedId,
         msg: i18next.t('talking-stick-finished'),
         variant: 'info',
+        SnackbarProps: {
+          role: 'alert',
+          'aria-label': i18next.t('talking-stick-finished'),
+        },
       });
       break;
     // case 'start_animation':
@@ -697,6 +738,10 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
           msg: i18next.t('talking-stick-next-announcement'),
           variant: 'warning',
           persist: true,
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': i18next.t('talking-stick-next-announcement'),
+          },
         });
       }
       if (data.speaker === state.user.uuid && state.automod.speakerState === 'inactive') {
@@ -714,6 +759,10 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
             lastSpeaker: Boolean(data.remaining && data.remaining.length === 0),
             isUnmuted: state.media.audioEnabled,
           }),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': 'TODO',
+          },
         });
       }
       dispatch(automodStore.speakerUpdated(data));
@@ -892,26 +941,36 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
       break;
     case 'write_url':
       if (state.user.protocolAccess === ProtocolAccess.None) {
+        const message = i18next.t(
+          state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
+        );
         notificationAction({
-          msg: i18next.t(
-            state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
-          ),
+          msg: message,
           variant: 'info',
           actionBtnText: i18next.t('protocol-new-protocol-message-button'),
           onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': message,
+          },
         });
       }
       dispatch(setProtocolWriteUrl(data.url));
       break;
     case 'read_url':
       if (state.user.protocolAccess === ProtocolAccess.None) {
+        const message = i18next.t(
+          state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
+        );
         notificationAction({
-          msg: i18next.t(
-            state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
-          ),
+          msg: message,
           variant: 'info',
           actionBtnText: i18next.t('protocol-new-protocol-message-button'),
           onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': message,
+          },
         });
       }
       dispatch(setProtocolReadUrl(data.url));
@@ -969,6 +1028,10 @@ const handleWhiteboardMessage = (dispatch: AppDispatch, data: whiteboard.Message
         variant: 'info',
         actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
         onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Whiteboard)),
+        SnackbarProps: {
+          role: 'alert',
+          'aria-label': i18next.t('whiteboard-new-whiteboard-message'),
+        },
       });
 
       break;
@@ -977,6 +1040,10 @@ const handleWhiteboardMessage = (dispatch: AppDispatch, data: whiteboard.Message
       notificationAction({
         msg: i18next.t('whiteboard-new-pdf-message'),
         variant: 'info',
+        SnackbarProps: {
+          role: 'alert',
+          'aria-label': i18next.t('whiteboard-new-pdf-message'),
+        },
       });
 
       break;

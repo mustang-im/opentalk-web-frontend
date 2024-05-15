@@ -251,6 +251,10 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           variant: 'success',
           cancelBtnText: 'Dismiss',
           onCancel: () => alert('Callback fnc to handle click, Action Cancel Btn Success'),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': 'You just triggered this notification. Success!',
+          },
         }),
       icon: <ErrorIcon />,
     },
@@ -264,6 +268,10 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           cancelBtnText: 'Dismiss',
           onAction: () => alert('Callback fnc to handle click, User Agree'),
           onCancel: () => alert('Callback fnc to handle click, User Dismissed'),
+          SnackbarProps: {
+            role: 'alert',
+            'aria-label': 'Ooops...you just triggered a warning.',
+          },
         }),
       icon: <ErrorIcon />,
     },
@@ -345,6 +353,9 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         onClose={onClose}
         data-testid="moreMenu"
         container={fullscreenHandle.rootElement}
+        PaperProps={{
+          'aria-label': t('toolbar-button-more-tooltip-title'),
+        }}
       >
         <MenuTitleContainer direction="row" spacing={2}>
           <Box display="flex" alignItems="center">
