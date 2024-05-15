@@ -15,6 +15,7 @@ const HeaderContainer = styled(Stack)(({ theme }) => ({
   columnGap: '0.25rem',
   margin: theme.spacing(1, 0),
   marginInline: '0.5rem',
+  height: 'fit-content',
 }));
 
 const MobileMeetingHeader = () => {
