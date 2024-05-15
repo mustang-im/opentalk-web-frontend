@@ -55,10 +55,6 @@ const UserRow = ({ isUpdatable, eventInvite, onRevokeUserInvite, onRemoveUser, e
   const { data: userMe, isLoading: isLoadingUserMe } = useGetMeQuery();
   const { t } = useTranslation();
 
-  if (isLoadingEvent || isLoadingUserMe) {
-    return null;
-  }
-
   const isCreator = event && userMe && event.createdBy.id === userMe.id;
 
   const color = convertStringToColorHex('');
@@ -161,6 +157,10 @@ const UserRow = ({ isUpdatable, eventInvite, onRevokeUserInvite, onRemoveUser, e
     ) : (
       <ParticipantAvatar style={{ fontSize: '1.2rem', color: color }} specialCharacter="@" />
     );
+
+  if (isLoadingEvent || isLoadingUserMe) {
+    return null;
+  }
 
   return (
     <StyledChip

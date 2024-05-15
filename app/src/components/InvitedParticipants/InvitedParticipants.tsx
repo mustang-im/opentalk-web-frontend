@@ -17,6 +17,13 @@ type InvitedParticipantsProps = {
   eventId: EventId;
 };
 
+// //Defines statuses that will be displayed
+type DisplayedInviteStatuses = Extract<
+  InviteStatus,
+  InviteStatus.Pending | InviteStatus.Accepted | InviteStatus.Declined
+>;
+type InviteeMap = { [key in DisplayedInviteStatuses]: Array<EventInvite> };
+
 const inviteeSorter = (user: EventInvite) =>
   isRegisteredUser(user.profile) ? user.profile.displayName.toUpperCase() : user.profile.email.toUpperCase();
 
@@ -28,25 +35,18 @@ const InvitedParticipants = ({
 }: InvitedParticipantsProps) => {
   const { data: invitees = [] } = useGetEventInvitesQuery({ eventId }, { refetchOnMountOrArgChange: true });
 
-  const inviteeMap = invitees.reduce(
-    (acc, event) => {
-      switch (event.status) {
-        case InviteStatus.Pending:
-          acc[InviteStatus.Pending].push(event);
-          break;
-        case InviteStatus.Accepted:
-          acc[InviteStatus.Accepted].push(event);
-          break;
-        case InviteStatus.Declined:
-          acc[InviteStatus.Declined].push(event);
-          break;
+  const inviteeMap: InviteeMap = invitees.reduce(
+    (acc: InviteeMap, event) => {
+      if (event.status in acc) {
+        acc[event.status as DisplayedInviteStatuses].push(event);
       }
+
       return acc;
     },
     {
-      [InviteStatus.Pending]: [] as Array<EventInvite>,
-      [InviteStatus.Accepted]: [] as Array<EventInvite>,
-      [InviteStatus.Declined]: [] as Array<EventInvite>,
+      [InviteStatus.Pending]: [],
+      [InviteStatus.Accepted]: [],
+      [InviteStatus.Declined]: [],
     }
   );
 
@@ -79,35 +79,21 @@ const InvitedParticipants = ({
 
   return (
     <Grid container spacing={2} data-testid="InvitedParticipants">
-      <Grid item xs={4}>
+      {/* Type assertion, since Object.keys assumes that key is of type string */}
+      {(Object.keys(inviteeMap) as Array<keyof typeof inviteeMap>).map((inviteStatus) => (
         <ParticipantList
+          key={`${inviteStatus}-invitees`}
           eventId={eventId}
           isUpdatable={isUpdatable}
-          key="pending-invitees"
-          status={InviteStatus.Pending}
-          invitees={mergedEventInvites}
-          removeSelectedUser={removeSelectedUser}
+          status={inviteStatus}
+          removeSelectedUser={inviteStatus !== InviteStatus.Declined ? removeSelectedUser : undefined}
+          invitees={
+            inviteStatus === InviteStatus.Pending
+              ? mergedEventInvites
+              : sortBy(inviteeMap[inviteStatus], [inviteeSorter])
+          }
         />
-      </Grid>
-      <Grid item xs={4}>
-        <ParticipantList
-          eventId={eventId}
-          isUpdatable={isUpdatable}
-          key="accepted-invitees"
-          status={InviteStatus.Accepted}
-          invitees={sortBy(inviteeMap[InviteStatus.Accepted], inviteeSorter)}
-          removeSelectedUser={removeSelectedUser}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <ParticipantList
-          eventId={eventId}
-          isUpdatable={false}
-          key="declined-invitees"
-          status={InviteStatus.Declined}
-          invitees={sortBy(inviteeMap[InviteStatus.Declined], inviteeSorter)}
-        />
-      </Grid>
+      ))}
     </Grid>
   );
 };

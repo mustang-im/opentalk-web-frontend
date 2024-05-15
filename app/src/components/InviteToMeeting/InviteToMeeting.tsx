@@ -93,7 +93,7 @@ const InviteToMeeting = ({
     : t('dashboard-direct-meeting-label-select-participants-fallback');
 
   return (
-    <Grid container justifyContent={'space-between'} flexDirection={'column'} spacing={2}>
+    <Grid container justifyContent={'space-between'} direction={'column'} spacing={2} overflow="auto" wrap="nowrap">
       <Grid container item spacing={3} direction={'row'}>
         <MeetingLinksAndPasswords event={existingEvent} />
         {!showOnlyLinkFields && features.userSearch && (
