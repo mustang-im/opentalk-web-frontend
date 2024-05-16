@@ -52,6 +52,45 @@ describe('Room title', () => {
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toHaveTextContent(exceedingMaxLengthName);
   });
+  test('should render the info button if the eventInfo contains meeting details and if the room has roomInfo', async () => {
+    const createdStore = createStore({
+      initialState: {
+        room: {
+          eventInfo: {
+            title: 'some title',
+            meetingDetails: {
+              inviteCode: 'invite this',
+              streamingLinks: [
+                {
+                  name: 'twitch',
+                  url: 'http://twitch.tv/some-streamer',
+                },
+              ],
+              callIn: {
+                id: '1138',
+                tel: '4815162342',
+                password: 'password',
+              },
+            },
+          },
+          roomInfo: {
+            id: '2320891fsd',
+            password: '1234',
+            createdBy: {
+              firstname: 'Jan',
+              lastname: 'Janssen',
+              displayName: 'Awesome Jan',
+              title: 'Doctor',
+              avatarUrl: '',
+            },
+          },
+        },
+      },
+    });
+    await render(<RoomTitle />, createdStore.store);
+    const InfoButton = screen.getByRole('button', { name: 'room-title-info-button-aria-label' });
+    expect(InfoButton).toBeVisible();
+  });
 
   test('should display fallback title in case room title is undefined', async () => {
     const truncatedFallbackTitle = truncate('fallback-room-title', { length: ROOM_TITLE_MAX_LENGTH });

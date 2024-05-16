@@ -5,15 +5,14 @@ import { InitialAutomod } from '../automod';
 import { InitialBreakout } from '../breakout';
 import { ChatMessage, InitialChat } from '../chat';
 import { BackendParticipant, GroupId, ParticipantId, ParticipantMediaState, Role, Timestamp } from '../common';
-import { TimerState } from '../timer';
-import { EventInfo } from '../eventInfo';
+import { EventInfo, RoomInfo } from '../eventInfo';
 import { Participant } from '../participant';
 import { InitialPoll } from '../poll';
 import { SharedFolderData } from '../sharedFolder';
-import { Tariff } from '../tariff';
-import { WhiteboardState } from '../whiteboard';
 import { StreamingState } from '../streaming';
-
+import { Tariff } from '../tariff';
+import { TimerState } from '../timer';
+import { WhiteboardState } from '../whiteboard';
 
 export interface JoinSuccessInternalState {
   participantId: ParticipantId;
@@ -43,7 +42,8 @@ export interface JoinSuccessInternalState {
   timer?: TimerState;
   sharedFolder: SharedFolderData;
   eventInfo?: EventInfo;
-  participantsReady: ParticipantId[],
+  roomInfo?: RoomInfo;
+  participantsReady: ParticipantId[];
   isRoomOwner: boolean;
 }
 
@@ -70,5 +70,6 @@ export interface JoinSuccessIncoming {
   closesAt: Timestamp;
   sharedFolder: SharedFolderData;
   eventInfo?: EventInfo;
+  roomInfo?: RoomInfo;
   isRoomOwner: boolean;
 }

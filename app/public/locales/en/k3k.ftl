@@ -405,6 +405,8 @@ legal-vote-save-form-error = Saving failed, you need to specify a topic and a na
 
 no-votes-in-conference = There are no votes for this conference at the moment.
 
+room-title-info-button-aria-label = Share meeting details
+
 breakout-room-tab-title = Create Breakout Rooms
 breakout-room-form-field-rooms = number of rooms
 breakout-room-form-field-participants-per-room = participants per room
@@ -589,11 +591,7 @@ global-save-changes = Save changes
 global-password = Password
 global-beta = Beta
 global-me = Me
-global-create-link-success = The link was created successfully
-global-copy-link-success = The link was copied to your clipboard
 global-copy-permanent-guest-link-error = No permanent guest link for this meeting has been created yet! Please, open the "Participants" section of this meeting and copy guest link from there.
-global-password-link-success = The password was copied to your clipboard
-global-dial-in-link-success = The telephone dial-in was copied to the clipboard
 global-textfield-max-characters = {$remainingCharacters} characters remaining
 global-textfield-max-characters-error = {$remainingCharacters} characters too many
 global-duration = Duration
@@ -616,6 +614,16 @@ global-no-result = No result
 global-close-dialog = Close dialog
 global-back = Back
 global-submit = Submit
+global-call-in = Telephone dial-in
+global-call-in-number = Number
+global-call-in-id = Conference-ID
+global-call-in-pin = Conference-PIN
+global-meeting-link = Meeting-Link
+global-streaming-link = { $count -> 
+    [one] Livestream-Link
+    *[other] Livestream-Links
+}
+
 
 dashboard-home = Home
 dashboard-meetings = Meetings
@@ -903,6 +911,27 @@ meeting-delete-metadata-submit-error =
     An error occurred while deleting the data.
     Please try again later!
 meeting-delete-successfully-deleted = Meeting has been deleted.
+
+meeting-details-dialog-copy-success = Details were copied to your clipboard
+meeting-details-dialog-copy-invite-link-success = The link was copied to your clipboard
+meeting-details-dialog-copy-livestream-link-success = The link was copied to your clipboard
+meeting-details-dialog-copy-room-password-success = The password was copied to your clipboard
+meeting-details-dialog-copy-sip-link-success = The telephone dial-in was copied to the clipboard
+meeting-details-dialog-label-sip-link = Dial-in Number
+meeting-details-dialog-label-invite-link = Invite Link
+meeting-details-dialog-label-room-password = Password
+meeting-details-dialog-label-livestream-link = Streaming-Links
+meeting-details-dialog-aria-label-sip-link = Copy Dial-in Number
+meeting-details-dialog-aria-label-invite-link = Copy Invite Link
+meeting-details-dialog-aria-label-room-password = Copy Password
+meeting-details-dialog-aria-label-livestream-link = Copy {$name} Streaming-Link
+meeting-details-dialog-title = Details: {$title}
+meeting-details-dialog-subtitle = <subtitle>Created by <strong>{$roomOwner}</strong></subtitle>
+meeting-details-dialog-copy-button = Clipboard
+meeting-details-dialog-mail-button = E-Mail
+meeting-details-dialog-button-header = Share meeting details
+meeting-details-dialog-invite-line = {$name} invites you to an OpenTalk meeting
+meeting-details-dialog-join-line = You can join the meeting using one of the following means
 
 send-error-button-text = Send diagnostic data
 hide-diagnostic-data-button = Hide diagnostic data

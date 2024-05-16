@@ -42,6 +42,7 @@ import HelpSquareIcon from './HelpSquareIcon';
 import HiddenIcon from './HiddenIcon';
 import HomeIcon from './HomeIcon';
 import InfoIcon from './InfoIcon';
+import InfoOutlinedIcon from './InfoOutlinedIcon';
 import InviteIcon from './InviteIcon';
 import LegalBallotIcon from './LegalBallotIcon';
 import LegalLinksIcon from './LegalLinksIcon';
@@ -133,6 +134,7 @@ export {
   HiddenIcon,
   HomeIcon,
   InfoIcon,
+  InfoOutlinedIcon,
   InviteIcon,
   LegalBallotIcon,
   LegalLinksIcon,

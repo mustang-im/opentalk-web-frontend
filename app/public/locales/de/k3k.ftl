@@ -405,6 +405,8 @@ legal-vote-save-form-error = Fehler beim Speichern, es müssen Thema und Name ge
 
 no-votes-in-conference = Es gibt keine Abstimmungen in dieser Konferenz im Moment.
 
+room-title-info-button-aria-label = Meetingdetails teilen
+
 breakout-room-tab-title = Breakout-Räume erstellen
 breakout-room-form-field-rooms = Anzahl der Räume
 breakout-room-form-field-participants-per-room = Anzahl der Teilnehmer
@@ -589,11 +591,7 @@ global-save-changes = Änderungen speichern
 global-password = Passwort
 global-beta = Beta
 global-me = Ich
-global-create-link-success = Der Link wurde erfolgreich erstellt
-global-copy-link-success = Der Link wurde erfolgreich kopiert
 global-copy-permanent-guest-link-error = Es wurde noch keinen permanenten Gast-Link für dieses Meeting erstellt! Bitte, öffnen Sie den "Teilnehmer" Einstellungen von diesem Meeting und kopieren Sie den Gast-Link von dort aus.
-global-password-link-success = Das Passwort wurde erfolgreich kopiert
-global-dial-in-link-success = Die Telefoneinwahl wurde in die Zwischenablage kopiert
 global-textfield-max-characters = {$remainingCharacters} Zeichen übrig
 global-textfield-max-characters-error = {$remainingCharacters} Zeichen zu viel
 global-duration = Dauer
@@ -616,6 +614,15 @@ global-no-result = Keine Ergebnisse
 global-close-dialog = Dialog schließen
 global-back = Zurück
 global-submit = Senden
+global-call-in = Telefoneinwahl
+global-call-in-number = Telefonnummer
+global-call-in-id = Konferenz-ID
+global-call-in-pin = Konferenz-PIN
+global-meeting-link = Meeting-Link
+global-streaming-link = { $count -> 
+    [one] Livestream-Link
+    *[other] Livestream-Links
+}
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings
@@ -638,8 +645,8 @@ dashboard-help-support = Support
 
 dashboard-quick-start-title = Kurzanleitung für das OpenTalk-Dashboard
 conference-quick-start-title = Kurzanleitung für die OpenTalk-Konferenz
-conference-quick-start-open = Öffnen die Kurzanleitung
-conference-quick-start-close = Schließen die Kurzanleitung
+conference-quick-start-open = Kurzanleitung öffnen
+conference-quick-start-close = Kurzanleitung schließen
 
 quick-start-loading = Kurzanleitung wird geladen
 quick-start-error = Kurzanleitung konnte nicht geladen werden
@@ -903,6 +910,27 @@ meeting-delete-metadata-submit-error =
     Beim löschen der Daten ist ein Fehler aufgetreten.
     Bitte versuchen sie es später nochmal!
 meeting-delete-successfully-deleted = Das Meeting wurde gelöscht.
+
+meeting-details-dialog-copy-success = Details wurden erfolgreich in die Zwischenablage kopiert
+meeting-details-dialog-copy-invite-link-success = Der Link wurde erfolgreich kopiert
+meeting-details-dialog-copy-room-password-success = Das Passwort wurde erfolgreich kopiert
+meeting-details-dialog-copy-sip-link-success = Die Telefoneinwahl wurde in die Zwischenablage kopiert
+meeting-details-dialog-copy-livestream-link-success = Der Link wurde erfolgreich kopiert
+meeting-details-dialog-label-sip-link = Telefoneinwahlnummer
+meeting-details-dialog-label-invite-link = Einladungslink
+meeting-details-dialog-label-room-password = Passwort
+meeting-details-dialog-label-livestream-link = Streaminglinks
+meeting-details-dialog-aria-label-sip-link = Telefoneinwahlnummer kopieren
+meeting-details-dialog-aria-label-invite-link = Einladungslink kopieren
+meeting-details-dialog-aria-label-room-password = Passwort kopieren
+meeting-details-dialog-aria-label-livestream-link = {$name} Streaminglink kopieren
+meeting-details-dialog-title = Details: {$title}
+meeting-details-dialog-subtitle = <subtitle>Erstellt von <strong>{$roomOwner}</strong></subtitle>
+meeting-details-dialog-copy-button = Zwischenablage
+meeting-details-dialog-mail-button = E-Mail
+meeting-details-dialog-button-header = Meetingdetails teilen
+meeting-details-dialog-invite-line = {$name} lädt Sie zu einem OpenTalk-Meeting ein
+meeting-details-dialog-join-line = Sie können auf eine der folgenden Arten beitreten
 
 send-error-button-text = Diagnosedaten senden
 hide-diagnostic-data-button = Diagnosedaten verbergen
