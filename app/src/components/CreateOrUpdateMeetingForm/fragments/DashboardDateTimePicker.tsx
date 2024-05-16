@@ -27,6 +27,7 @@ export interface CreateOrUpdateMeetingFormikValues {
   isAdhoc?: boolean;
   sharedFolder: boolean;
   streaming: Streaming;
+  showMeetingDetails: boolean;
 }
 
 type DashboardDateTimePickerProps = {

@@ -278,6 +278,7 @@ export const eventMockedData: TimelessEvent = {
   },
   updatedAt: '2022-04-06T13:57:38.793602Z' as DateTime,
   isAdhoc: false,
+  showMeetingDetails: false,
 };
 
 export const mockedExpiringDateRoomInvite: RoomInvite = {
