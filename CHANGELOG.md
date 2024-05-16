@@ -1,10 +1,13 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
 ## Unreleased
 
 ### New Features
 
 - Added jump links for keyboard users to quickly access certain elements in the conference ([#1253](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1253))
 - Implement streaming in conference ([#1586](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1586))
-- Implement manual trigger for Glitchtip error report ([#1713](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1713))
 
 ### Improvements to the user experience
 
@@ -13,11 +16,20 @@
 - Adjust meeting details for mobile ([#1799](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1799))
 - Added summary to shortcuts table along with better shortcut description formatting for cleaner screen reader pronunciation. ([#1742](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1742))
 - Restructured dashboard meeting header with filter options as dropdowns. ([#1646](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1646))
+- Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))
+
+## 1.14.0
+
+### New Features
+
+- Implement manual trigger for Glitchtip error report ([#1713](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1713))
+
+### Improvements to the user experience
+
 - Added focus effect for buttons and improved contrast for hover effect. ([#1752](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1752))
 - Improved user experience with dialogs. Most dialogs should be closeable by clicking away or pressing the escape key now. ([#1755](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1755))
 - Extract "Poll and Vote" button outside of the clock. ([#1791](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1791))
 - Improve accessibility of the emoji button ([#1680](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1680))
-- Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))
 - After navigating to the tab as a moderator, related tab content gets focused and pronounced using a screenreader. ([#1754](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1754))
 - Improve room UI for medium screen size ([#1242](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1242))
 - Add moderator badge to the moderator in the participant list. ([#1768](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1768))
