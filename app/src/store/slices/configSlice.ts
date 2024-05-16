@@ -185,6 +185,7 @@ export const initialState: ConfigState = {
     name: '',
     quotas: {},
     enabledModules: [],
+    modules: {},
   },
   glitchtip: {
     dsn: undefined,
@@ -231,6 +232,7 @@ export const selectErrorReportEmail = (state: RootState) => state.config.errorRe
 export const selectDisallowCustomDisplayName = (state: RootState) => state.config.disallowCustomDisplayName;
 export const selectChangePassword = (state: RootState) => state.config.changePassword;
 export const selectEnabledModules = (state: RootState) => state.config.tariff.enabledModules;
+export const selectModules = (state: RootState) => state.config.tariff.modules;
 export const selectAccountManagementUrl = (state: RootState) => state.config.provider.accountManagementUrl;
 export const selectImprintUrl = (state: RootState) => state.config.imprintUrl;
 export const selectIsProviderActive = (state: RootState) => state.config.provider.active;

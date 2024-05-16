@@ -28,9 +28,11 @@ import {
   useCreateEventSharedFolderMutation,
   useDeleteEventSharedFolderMutation,
   useAddStreamingTargetsMutation,
+  useGetMeTariffQuery,
 } from '../../api/rest';
 import { LimitedTextField, Select } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
+import { isFeatureInModulesPredicate } from '../../hooks/enabledModules';
 import { selectFeatures } from '../../store/slices/configSlice';
 import { appendRecurringEventInstances } from '../../utils/eventUtils';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
@@ -68,6 +70,9 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const [createSharedFolder] = useCreateEventSharedFolderMutation();
   const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
   const [addStreamingTargets] = useAddStreamingTargetsMutation();
+
+  const { data: tariff } = useGetMeTariffQuery();
+  const isStreamingEnabled = tariff && isFeatureInModulesPredicate('stream', tariff.modules);
 
   const navigate = useNavigate();
 
@@ -550,7 +555,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             />
           )}
 
-          {!existingEvent && <StreamingOptions formik={formik} />}
+          {!existingEvent && isStreamingEnabled && <StreamingOptions formik={formik} />}
         </Stack>
         <Grid container item justifyContent={'space-between'} spacing={2}>
           <Grid item xs={12} sm={'auto'}>
