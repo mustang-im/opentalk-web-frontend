@@ -9,6 +9,7 @@ import {
   Typography,
   Box,
   Badge,
+  ThemeProvider,
 } from '@mui/material';
 import {
   MicOffIcon,
@@ -36,6 +37,7 @@ import { Role } from '../../../api/types/incoming/control';
 import { grantModeratorRole, revokeModeratorRole } from '../../../api/types/outgoing/control';
 import { grantPresenterRole, requestMute, revokePresenterRole } from '../../../api/types/outgoing/media';
 import { banParticipant, kickParticipant, enableWaitingRoom } from '../../../api/types/outgoing/moderation';
+import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
@@ -43,6 +45,7 @@ import { selectHandUp } from '../../../store/slices/moderationSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
+import RenameParticipantDialog from './RenameParticipantDialog';
 
 const Avatar = styled(ParticipantAvatar)({
   width: '2.25rem',
@@ -130,6 +133,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const ownScreenShareEnabled = useAppSelector(selectShareScreenEnabled);
   const userProtocolAccess = useAppSelector(selectUserProtocolAccess);
   const ownHandRaised = useAppSelector(selectHandUp);
+  const [openRenameDialog, setOpenRenameDialog] = useState(false);
 
   const { active: audioActive } = useAppSelector(
     selectSubscriberStateById(
@@ -195,6 +199,11 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
     dispatch(requestMute.action({ targets: [participant.id], force: true }));
   };
 
+  const handleRenameParticipantDialog = () => {
+    setOpenRenameDialog(!openRenameDialog);
+    setAnchorEl(undefined);
+  };
+
   const muteOption = audioActive && {
     i18nKey: 'participant-menu-mute',
     action: handleMuting,
@@ -229,6 +238,10 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
         break;
       case Role.Guest:
         options = [
+          {
+            i18nKey: 'participant-menu-rename',
+            action: handleRenameParticipantDialog,
+          },
           {
             i18nKey: participant.isPresenter ? 'revoke-presenter-role' : 'grant-presenter-role',
             action: handlePresenterRoleRight,
@@ -395,6 +408,13 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
         )}
         <IconsContainer>{renderIcon()}</IconsContainer>
       </Box>
+      <ThemeProvider theme={createOpenTalkTheme('light')}>
+        <RenameParticipantDialog
+          open={openRenameDialog}
+          onClose={handleRenameParticipantDialog}
+          participant={participant}
+        />
+      </ThemeProvider>
     </ListItem>
   );
 };

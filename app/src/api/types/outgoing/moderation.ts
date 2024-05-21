@@ -44,6 +44,12 @@ export interface Debrief {
   kickScope: KickScope;
 }
 
+export interface ChangeDisplayName {
+  action: 'change_display_name';
+  target: ParticipantId;
+  newName: string;
+}
+
 export type Action =
   | KickParticipant
   | BanParticipant
@@ -53,7 +59,8 @@ export type Action =
   | ResetRaisedHands
   | EnableRaiseHands
   | DisableRaiseHands
-  | Debrief;
+  | Debrief
+  | ChangeDisplayName;
 
 export type Moderation = Namespaced<Action, 'moderation'>;
 
@@ -69,6 +76,7 @@ export const resetRaisedHands = createSignalingApiCall<ResetRaisedHands>('modera
 export const enableRaiseHands = createSignalingApiCall<EnableRaiseHands>('moderation', 'enable_raise_hands');
 export const disableRaiseHands = createSignalingApiCall<DisableRaiseHands>('moderation', 'disable_raise_hands');
 export const debrief = createSignalingApiCall<Debrief>('moderation', 'debrief');
+export const changeDisplayName = createSignalingApiCall<ChangeDisplayName>('moderation', 'change_display_name');
 
 export const handler = createModule<RootState>((builder) => {
   builder
@@ -98,6 +106,9 @@ export const handler = createModule<RootState>((builder) => {
     })
     .addCase(debrief.action, (_state, action) => {
       sendMessage(debrief(action.payload));
+    })
+    .addCase(changeDisplayName.action, (_state, action) => {
+      sendMessage(changeDisplayName(action.payload));
     });
 });
 
