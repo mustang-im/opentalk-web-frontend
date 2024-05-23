@@ -915,9 +915,7 @@ debug-panel-remote-count-label = Connection count:
 whiteboard-tab-title = Whiteboard
 whiteboard-create-pdf-button = Create pdf
 whiteboard-start-whiteboard-button = Show whiteboard
-whiteboard-new-whiteboard-message = Whiteboard is created
 whiteboard-new-pdf-message = A new whiteboard pdf is available
-whiteboard-new-whiteboard-message-button = Open
 whiteboard-hide = Hide whiteboard
 
 shortcut-hold-to-speak = Hold to speak
