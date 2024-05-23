@@ -1,10 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, styled, Typography, BoxProps } from '@mui/material';
-import { MicOffIcon } from '@opentalk/common';
-import React from 'react';
+import { Box, BoxProps, Stack, styled, Typography } from '@mui/material';
+import { CameraOffIcon, MediaSessionType, MicOffIcon, ParticipantId } from '@opentalk/common';
+import { omit } from 'lodash';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useAppSelector } from '../../hooks';
+import { selectSubscriberStateById } from '../../store/slices/mediaSubscriberSlice';
 
 const NameBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -29,7 +33,7 @@ const NameBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const MicBox = styled(Box)(({ theme }) => ({
+const IconBox = styled(Stack)(({ theme }) => ({
   paddingRight: theme.spacing(0.5),
   '& svg': {
     fontSize: 'inherit',
@@ -42,25 +46,65 @@ const StyledMicOffIcon = styled(MicOffIcon)(({ theme }) => ({
   },
 }));
 
-interface NameTileProps extends BoxProps {
-  audioOn: boolean;
+type NameTileBaseProps = {
   displayName: string;
-}
+} & BoxProps;
 
-const NameTile = ({ audioOn, displayName, ...props }: NameTileProps) => {
+type LocalNameTileProps = {
+  localVideoOn: boolean;
+  localAudioOn: boolean;
+} & NameTileBaseProps;
+
+type RemoteNameTileProps = {
+  participantId: ParticipantId;
+} & NameTileBaseProps;
+
+type NameTileProps = LocalNameTileProps | RemoteNameTileProps;
+
+const NameTile = ({ displayName, ...props }: NameTileProps) => {
+  const isVideoActive = useRef(false);
+  const isAudioActive = useRef(false);
   const { t } = useTranslation();
+
+  if ('participantId' in props) {
+    const { participantId } = props;
+    const subscriberVideoState = useAppSelector(
+      selectSubscriberStateById({ participantId, mediaType: MediaSessionType.Video }, 'video')
+    );
+    const subscriberAudioState = useAppSelector(
+      selectSubscriberStateById({ participantId, mediaType: MediaSessionType.Video }, 'audio')
+    );
+
+    isVideoActive.current = subscriberVideoState && subscriberVideoState.active;
+    isAudioActive.current = subscriberAudioState && subscriberAudioState.active;
+  } else {
+    const { localVideoOn, localAudioOn } = props;
+    isVideoActive.current = Boolean(localVideoOn);
+    isAudioActive.current = Boolean(localAudioOn);
+  }
+
+  const renderCameraOffIcon = () => !isVideoActive.current && <CameraOffIcon data-testid="camOff" />;
+  const renderAudioOffIcon = () => !isAudioActive.current && <StyledMicOffIcon data-testid="micOff" />;
+  const renderIconBox = () =>
+    !(isAudioActive.current && isVideoActive.current) && (
+      <IconBox
+        data-testid="iconBox"
+        direction={'row'}
+        spacing={0.5}
+        aria-label={t('indicator-has-audio-off', {
+          participantName: displayName,
+        })}
+      >
+        {renderCameraOffIcon()}
+        {renderAudioOffIcon()}
+      </IconBox>
+    );
+
+  const boxProps = omit(props, 'participantId', 'localVideoOn', 'localAudioOn');
+
   return (
-    <NameBox data-testid="nameTile" {...props}>
-      {!audioOn && (
-        <MicBox
-          display={'flex'}
-          aria-label={t('indicator-has-audio-off', {
-            participantName: displayName,
-          })}
-        >
-          <StyledMicOffIcon data-testid="micOff" />
-        </MicBox>
-      )}
+    <NameBox data-testid="nameTile" {...boxProps}>
+      {renderIconBox()}
       <Typography variant={'body2'} noWrap py={0} translate="no">
         {displayName}
       </Typography>

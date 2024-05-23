@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Adjust mobile header for dashboard - start page ([#1798](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
 - Display notification after recorder timeout ([#1861](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1861))
 - Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
 - Adjust mobile header for dashboard - startpage ([#1798](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
@@ -28,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Restructured dashboard meeting header with filter options as dropdowns. ([#1646](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1646))
 - Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))
 - Remove `/join` path to restore old user flow ([#1877](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1877))
+- Add the indicator for disabled camera in conference for local and remote video tile ([#1849](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1849))
 
 ### Bug Fixes
 

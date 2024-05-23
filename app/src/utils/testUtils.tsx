@@ -439,3 +439,28 @@ export const mockedRoomAssets: Array<BaseAsset> = [
     size: 0,
   },
 ];
+
+type MockSubscriberState = {
+  descriptor: string;
+  participantId: ParticipantId;
+  audioOn: boolean;
+  videoOn: boolean;
+};
+
+export const mockSubscriberState = ({ descriptor, participantId, videoOn, audioOn }: MockSubscriberState) => ({
+  ids: [descriptor],
+  entities: {
+    [descriptor]: {
+      participantId,
+      mediaType: MediaSessionType.Video,
+      audio: audioOn,
+      video: videoOn,
+      subscriberState: {
+        videoRunning: videoOn,
+        audioRunning: audioOn,
+        connection: 'connected',
+      },
+      limit: 2,
+    },
+  },
+});
