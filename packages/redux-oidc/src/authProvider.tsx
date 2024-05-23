@@ -15,7 +15,7 @@ import {
 
 export interface AuthContextValues {
   configuration: AuthAdapterConfiguration;
-  signIn: (redirectUrl?: string) => void;
+  signIn: (redirectUrl?: string, codeChallenge?: string) => void;
   signOut: (signOutRedirectUrl?: string) => void;
   getConfigurationEndpoints: () => Promise<AuthenticationProviderUrls>;
   getBaseUrl: () => string;
@@ -39,8 +39,8 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
   const isRefresTokenLoading = useSelector(selectIsRefreshTokenLoading);
 
   // default is window.location.href
-  const signIn = async (redirectUrl?: string) => {
-    authAdapter.startOidcSignIn(redirectUrl);
+  const signIn = async (redirectUrl?: string, codeChallenge?: string) => {
+    authAdapter.startOidcSignIn(redirectUrl, codeChallenge);
   };
 
   const signOut = (signOutRedirectUrl?: string) => {

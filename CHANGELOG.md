@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Added PKCE to the auth flow ([#1859](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1859))
 - Add meeting details switch in the dashboard ([#1808](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1808))
 - Implement storage section in the dashboard navigation ([#1682](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1682))
 - Added jump links for keyboard users to quickly access certain elements in the conference ([#1253](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1253))

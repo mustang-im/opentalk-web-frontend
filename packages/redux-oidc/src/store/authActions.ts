@@ -56,16 +56,18 @@ export const codeCallback = createAsyncThunk(
   'auth/code_callback',
   async (payload: CodeCallBackProps, { rejectWithValue, dispatch }) => {
     try {
+      const codeVerifier = sessionStorage.getItem('code_verifier');
+      const urlSearchParams = {
+        grantType: 'authorization_code',
+        clientId: payload.clientId,
+        redirectUri: payload.redirectUri,
+        code: payload.code,
+        codeVerifier: codeVerifier || '',
+      };
+
       const response = await fetch(payload.tokenEndpoint, {
         method: 'POST',
-        body: new URLSearchParams(
-          convertToSnakeCase({
-            grantType: 'authorization_code',
-            clientId: payload.clientId,
-            redirectUri: payload.redirectUri,
-            code: payload.code,
-          })
-        ),
+        body: new URLSearchParams(convertToSnakeCase(urlSearchParams)),
       });
 
       if (!response.ok) {
