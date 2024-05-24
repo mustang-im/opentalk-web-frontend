@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Grid, styled, Typography, Collapse, Stack } from '@mui/material';
+import { Button, Grid, styled, Typography, Collapse, Stack, Tooltip, Hidden } from '@mui/material';
 import { FavoriteIcon, InviteIcon, notifications } from '@opentalk/common';
 import { Event, EventId, isTimelessEvent, isEventException } from '@opentalk/rest-api-rtk-query';
+import { Property } from 'csstype';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -59,6 +60,10 @@ const DeclineButton = styled(Button)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
+const MaxWidthTypography = styled(Typography)<{ maxWidth: Property.MaxWidth }>(({ maxWidth }) => ({
+  maxWidth,
+}));
+
 const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragmentProps) => {
   const { createdBy, isFavorite, title } = event;
   const eventId = event.id as EventId;
@@ -111,7 +116,7 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
     }
 
     return (
-      <Typography variant={'body1'} fontWeight={400}>
+      <Typography variant="body1" fontWeight={400}>
         {t('dashboard-meeting-card-time-independent')}
       </Typography>
     );
@@ -120,10 +125,10 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
   const getActionButtons = () => {
     if ((event as Event).inviteStatus === 'pending') {
       return (
-        <Stack flexDirection={'row'}>
+        <Stack flexDirection="row">
           <DeclineButton
             color="secondary"
-            variant={'outlined'}
+            variant="outlined"
             onClick={declineInvite}
             onMouseDown={(mouseEvent) => mouseEvent.stopPropagation()}
           >
@@ -187,38 +192,42 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
 
   return (
     <CardWrapper
-      data-testid={'MeetingOverviewCard'}
+      data-testid="MeetingOverviewCard"
       container
       columns={16}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
-      <Grid item margin={'auto'} xs={'auto'} sm={1}>
+      <Grid item margin="auto" xs="auto" sm={1}>
         {getIcons()}
       </Grid>
-      <Grid item margin={'auto'} xs={12} sm={3}>
+      <Grid item margin="auto" xs={12} sm={3}>
         {getTimePreview()}
       </Grid>
-      <Grid item margin={'auto'} xs={16} sm={3}>
-        <Typography sx={{ maxWidth: '50ch' }} variant={'body1'} noWrap>
-          {title}
-        </Typography>
+      <Grid item margin="auto" xs={16} sm={3}>
+        <Tooltip translate="no" title={title || ''} describeChild placement="bottom-start">
+          <MaxWidthTypography maxWidth="50ch" variant="body1" noWrap>
+            {title}
+          </MaxWidthTypography>
+        </Tooltip>
       </Grid>
-      <Grid item margin={'auto'} xs={3} sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <Typography sx={{ maxWidth: '50ch' }} variant={'body1'} fontWeight={400} noWrap translate="no">
-          {t('dashboard-home-created-by', { author: createdBy.displayName })}
-        </Typography>
-      </Grid>
+      <Hidden xsDown>
+        <Grid item margin="auto" xs={3}>
+          <MaxWidthTypography maxWidth="50ch" variant="body1" fontWeight={400} noWrap translate="no">
+            {t('dashboard-home-created-by', { author: createdBy.displayName })}
+          </MaxWidthTypography>
+        </Grid>
+      </Hidden>
       <Grid
         item
         xs={16}
         sm={4}
-        display={'flex'}
-        alignItems={'center'}
+        display="flex"
+        alignItems="center"
         gap={2}
-        justifyContent={'flex-end'}
+        justifyContent="flex-end"
         paddingRight={0}
-        textAlign={'end'}
+        textAlign="end"
       >
         {getActionButtons()}
       </Grid>
