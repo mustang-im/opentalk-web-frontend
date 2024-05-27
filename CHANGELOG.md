@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Bug Fixes
+
+- Add the logo to desktop view for conference ([#1879](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1879))
+
 ### New Features
 
 - Implement storage section in the dashboard navigation ([#1682](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1682))
