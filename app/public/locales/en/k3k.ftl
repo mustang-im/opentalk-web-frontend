@@ -704,6 +704,8 @@ dashboard-meeting-card-delete-dialog-message = Do you really want to delete the 
 dashboard-meeting-card-delete-dialog-ok = Delete
 dashboard-meeting-card-delete-dialog-cancel = Cancel
 
+dashboard-meeting-card-delete-offline-failure = Unfortunately, the action cannot be performed as there is currently no connection to OpenTalk. Please try again later.
+
 dashboard-recurrence-meeting-card-delete-dialog-message = This meeting is part of a meetings series. You can delete the entire series, including all data (recordings, meeting minutes and voting results) or just one meeting occurrence where all data is preserved.
 dashboard-recurrence-meeting-card-delete-dialog-one = This one meeting
 dashboard-reccurence-meeting-card-delete-dialog-all = The entire meeting series
