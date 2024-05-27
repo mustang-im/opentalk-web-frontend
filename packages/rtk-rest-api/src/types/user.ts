@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Email, UserId } from './common';
+import { Email, UserId, BaseAsset } from './common';
+import { EventId } from './event';
+import { RoomId } from './room';
 
 // FIXME: This needs an overhaul after we added all ne new settings related endpoints
 // Request Bodies
@@ -74,8 +76,18 @@ export type UserMe = BaseUser & {
   dashboardTheme: string;
   language: string;
   tariffStatus: TariffStatus;
+  usedStorage: number;
 };
 
 type TariffStatus = 'paid' | 'downgraded' | 'default';
 
 export type RevokeEmailUserPayload = { email: Email };
+
+export type UserOwnedAsset = BaseAsset & {
+  roomId: RoomId;
+  eventId: EventId;
+}
+
+export type UserOwnedAssets = {
+  ownedAssets: Array<UserOwnedAsset>;
+}

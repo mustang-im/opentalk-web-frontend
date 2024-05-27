@@ -20,8 +20,8 @@ import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
 import EventTimePreview from '../../../components/EventTimePreview';
 import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting';
 import InvitedParticipants from '../../../components/InvitedParticipants';
-import AssetTable from './fragments/AssetTable';
 import ButtonBack from './fragments/ButtonBack';
+import RoomAssetTable from './fragments/RoomAssetTable';
 
 const ButtonContainer = styled(Stack)(({ theme }) => ({
   gap: theme.spacing(3),
@@ -140,7 +140,7 @@ const EventDetailsPage = () => {
 
         {event.invitees && event.invitees.length > 0 && <InvitedParticipants eventId={event.id} isUpdatable={false} />}
 
-        <AssetTable roomId={event.room.id} isMeetingCreator={isMeetingCreator} />
+        <RoomAssetTable roomId={event.room.id} isMeetingCreator={isMeetingCreator} />
       </Stack>
 
       <ButtonContainer>

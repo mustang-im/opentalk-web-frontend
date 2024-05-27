@@ -18,6 +18,8 @@ export type ChoiceId = number & { readonly __tag: unique symbol };
 
 export type RoomId = string & { readonly __tag: unique symbol };
 
+export type AssetId = string & { readonly __tag: unique symbol };
+
 // (r.floren) Currently the Signaling API sends numbers as breakoutRoomIds.
 // This is about to change in the near future.
 export type BreakoutRoomId = string & { readonly __tag: unique symbol };

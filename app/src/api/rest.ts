@@ -184,4 +184,5 @@ export const {
   useGetStreamingTargetsQuery,
   useAddStreamingTargetsMutation,
   useGetEventInstanceQuery,
+  useGetUserOwnedAssetsQuery,
 } = restApi;

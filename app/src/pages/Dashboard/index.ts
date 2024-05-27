@@ -11,11 +11,13 @@ import Home from './Home';
 import SettingsAccountPage from './SettingsAccountPage';
 import SettingsGeneralPage from './SettingsGeneral';
 import SettingsProfilePage from './SettingsProfilePage';
+import SettingsStoragePage from './SettingsStoragePage';
 
 export {
   SettingsAccountPage,
   SettingsGeneralPage,
   SettingsProfilePage,
+  SettingsStoragePage,
   Home,
   CreateDirectMeeting,
   EventDetailsPage,

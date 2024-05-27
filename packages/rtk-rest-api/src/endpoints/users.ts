@@ -6,8 +6,7 @@ import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import snakeCaseKeys from 'snakecase-keys';
 
-import { UserMe, UpdateMePayload, BaseUser, EventId, Tag, Tags, UserId } from '../types';
-import { User } from '../types/user';
+import { UserMe, UpdateMePayload, BaseUser, EventId, Tag, Tags, User, UserId, UserOwnedAssets } from '../types';
 
 export type FindUsersParams = {
   /**
@@ -43,6 +42,13 @@ export const addUserEndpoints = <
   getUser: builder.query<BaseUser, UserId>({
     query: (id) => `users/${id}`,
     providesTags: (result) => (result ? [{ type: Tag.User, id: result.id }] : []),
+  }),
+  getUserOwnedAssets: builder.query<UserOwnedAssets, void>({
+    query: () => 'users/me/assets',
+    providesTags: (result) =>
+      result?.ownedAssets
+        ? [...result.ownedAssets.map(({ id }) => ({ type: Tag.Asset, id })), { type: Tag.Asset, id: 'PARTIAL-LIST' }]
+        : [{ type: Tag.Asset, id: 'PARTIAL-LIST' }],
   }),
   // TODO(r.floren) we could implement a debounce based ratelimit here I guess as a safeguard, else this should realisticly
   // be included in the caller, else this would create a bad UX with jittering all over the place.
