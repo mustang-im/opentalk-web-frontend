@@ -22,6 +22,12 @@ const VideoButton = ({ isLobby }: { isLobby?: boolean }) => {
 
   const { t } = useTranslation();
 
+  const toggleVideo = () => {
+    if (!isLoadingMedia) {
+      mediaContext.trySetVideo(!videoEnabled);
+    }
+  };
+
   const tooltipText = () => {
     if (mediaContext.permissionDenied) {
       return t('device-permission-denied');
@@ -38,19 +44,7 @@ const VideoButton = ({ isLobby }: { isLobby?: boolean }) => {
     <div ref={menuRef}>
       <ToolbarButton
         tooltipTitle={tooltipText()}
-        onClick={(event) => {
-          /* Firefox fix!
-			When button is focused firefox enables when hitting space to click the button
-		  	event?.detail === 0 -> means that the click is not made with mouse - keep in mind for hotkeys
-		  */
-          if (event?.detail === 0) {
-            event.preventDefault();
-            return;
-          }
-          if (!isLoadingMedia) {
-            mediaContext.trySetVideo(!videoEnabled);
-          }
-        }}
+        onClick={toggleVideo}
         hasContext
         contextDisabled={!mediaContext.hasCamera}
         contextTitle={contextTitle}

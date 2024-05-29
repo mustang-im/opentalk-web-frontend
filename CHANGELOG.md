@@ -20,6 +20,10 @@ All notable changes to this project will be documented in this file.
 - Restructured dashboard meeting header with filter options as dropdowns. ([#1646](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1646))
 - Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))
 
+### Bug Fixes
+
+- Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
+
 ## 1.14.0
 
 ### New Features
