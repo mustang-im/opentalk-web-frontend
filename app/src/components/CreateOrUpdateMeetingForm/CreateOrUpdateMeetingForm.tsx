@@ -190,10 +190,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       isTimeDependent: !existingEvent?.isTimeIndependent,
       startDate:
         (existingEvent && !isTimelessEvent(existingEvent) && existingEvent.startsAt?.datetime) ||
-        formatRFC3339(defaultStartDate),
+        defaultStartDate.toISOString(),
       endDate:
         (existingEvent && !isTimelessEvent(existingEvent) && existingEvent.endsAt?.datetime) ||
-        formatRFC3339(defaultEndDate),
+        defaultEndDate.toISOString(),
       recurrencePattern:
         (existingEvent &&
           !isEmpty(existingEvent.recurrencePattern) &&
