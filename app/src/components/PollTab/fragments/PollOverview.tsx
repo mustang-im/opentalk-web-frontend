@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { ReactComponent as NoPollsIcon } from '../../../assets/images/no-poll-illustration.svg';
 import AccordionItem from '../../../commonComponents/AccordionItem';
 import { useAppSelector } from '../../../hooks';
-import { selectAllPollVotes, selectAllSavedPolls } from '../../../store/slices/pollSlice';
+import { selectAllPolls, selectAllSavedPolls } from '../../../store/slices/pollSlice';
 import PollOverviewPanel from './PollOverviewPanel';
 
 interface IPollOverview {
@@ -53,7 +53,7 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
     savedPolls: true,
     createdPolls: true,
   });
-  const polls = useAppSelector(selectAllPollVotes);
+  const polls = useAppSelector(selectAllPolls);
   const savedPolls = useAppSelector(selectAllSavedPolls);
 
   if (polls.length === 0 && savedPolls.length === 0) {

@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Implement votes and polls as dialogs ([#1726](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1726))
 - Add missing aria labels to close buttons and improve markup structure of dialogs ([#1815](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1815))
 - Attempt to delete meeting while offline results in error message being visible ([#1821](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
 - Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))

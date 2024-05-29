@@ -46,38 +46,38 @@ const pollAdapter = createEntityAdapter<Poll>({
 });
 
 interface State {
-  activeVote?: PollId;
-  currentShownVote?: PollId;
-  votes: EntityState<Poll>;
+  activePoll?: PollId;
+  pollIdToShow?: PollId;
+  polls: EntityState<Poll>;
   savedPolls: PollFormValues[];
-  showResultWindow: boolean;
+  showResult: boolean;
 }
 
 export const pollSlice = createSlice({
   name: 'poll',
   initialState: {
-    votes: pollAdapter.getInitialState(),
+    polls: pollAdapter.getInitialState(),
     savedPolls: [],
-    showResultWindow: false,
+    showResult: false,
   } as State,
   reducers: {
     started: (state, { payload }: PayloadAction<Started>) => {
-      state.currentShownVote = payload.id;
-      state.activeVote = payload.id;
-      state.showResultWindow = true;
+      state.pollIdToShow = payload.id;
+      state.activePoll = payload.id;
+      state.showResult = true;
 
       const vote: Poll = newPollFromApiType(payload);
-      pollAdapter.addOne(state.votes, vote);
+      pollAdapter.addOne(state.polls, vote);
     },
     done: (state, { payload }: PayloadAction<Done>) => {
-      state.activeVote = undefined;
-      pollAdapter.updateOne(state.votes, {
+      state.activePoll = undefined;
+      pollAdapter.updateOne(state.polls, {
         id: payload.id,
         changes: { stopTime: new Date().toISOString(), state: 'finished', results: payload.results },
       });
     },
     liveUpdated: (state, { payload }: PayloadAction<LiveUpdate>) => {
-      pollAdapter.updateOne(state.votes, {
+      pollAdapter.updateOne(state.polls, {
         id: payload.id,
         changes: { results: payload.results },
       });
@@ -96,11 +96,11 @@ export const pollSlice = createSlice({
         ...payload,
       });
     },
-    closeResultWindow: (state) => {
-      state.showResultWindow = false;
+    closedResult: (state) => {
+      state.showResult = false;
     },
     voted: (state, { payload }: PayloadAction<{ id: PollId; selectedChoiceId: Choice['id'] }>) => {
-      pollAdapter.updateOne(state.votes, {
+      pollAdapter.updateOne(state.polls, {
         id: payload.id,
         changes: { voted: true, selectedChoiceId: payload.selectedChoiceId },
       });
@@ -116,35 +116,35 @@ export const pollSlice = createSlice({
           state: 'active',
           voted: false,
         } as Poll;
-        state.showResultWindow = true;
-        state.currentShownVote = polls.id;
-        pollAdapter.upsertOne(state.votes, poll);
+        state.showResult = true;
+        state.pollIdToShow = polls.id;
+        pollAdapter.upsertOne(state.polls, poll);
       }
     });
   },
 });
 
-export const { started, liveUpdated, done, savePollFormValues, closeResultWindow, voted } = pollSlice.actions;
+export const { started, liveUpdated, done, savePollFormValues, closedResult, voted } = pollSlice.actions;
 export const actions = pollSlice.actions;
 
-const voteSelectors = pollAdapter.getSelectors<RootState>((state) => state.poll.votes);
+const pollSelectors = pollAdapter.getSelectors<RootState>((state) => state.poll.polls);
 
-export const selectPollVoteById = (id: EntityId) => (state: RootState) => voteSelectors.selectById(state, id);
-export const selectPollVoteIds = (state: RootState) => voteSelectors.selectIds(state);
-export const selectAllPollVotes = (state: RootState) => voteSelectors.selectAll(state);
-export const selectPollVotes = (state: RootState) => voteSelectors.selectEntities(state);
+export const selectPollById = (id: EntityId) => (state: RootState) => pollSelectors.selectById(state, id);
+export const selectPollIds = (state: RootState) => pollSelectors.selectIds(state);
+export const selectAllPolls = (state: RootState) => pollSelectors.selectAll(state);
+export const selectPollVotes = (state: RootState) => pollSelectors.selectEntities(state);
 
-export const selectCurrentShownPollVoteId = (state: RootState) => state.poll.currentShownVote;
-export const selectCurrentShownPollVote = (state: RootState) =>
-  state.poll.currentShownVote ? selectPollVoteById(state.poll.currentShownVote)(state) : undefined;
+export const selectPollIdToShow = (state: RootState) => state.poll.pollIdToShow;
+export const selectPollToShow = (state: RootState) =>
+  state.poll.pollIdToShow ? selectPollById(state.poll.pollIdToShow)(state) : undefined;
 
-export const selectActivePollVoteId = (state: RootState) => state.poll.activeVote;
-export const selectActivePollVote = (state: RootState) =>
-  state.poll.activeVote ? selectPollVoteById(state.poll.activeVote)(state) : undefined;
+export const selectActivePollId = (state: RootState) => state.poll.activePoll;
+export const selectActivePoll = (state: RootState) =>
+  state.poll.activePoll ? selectPollById(state.poll.activePoll)(state) : undefined;
 
 export const selectAllSavedPolls = (state: RootState) => state.poll.savedPolls;
 export const selectSavedPollPerId = (id: number | undefined) => (state: RootState) =>
   state.poll.savedPolls.find((savedPoll) => savedPoll.id === id);
 
-export const selectShowPollWindow = (state: RootState) => state.poll.showResultWindow;
+export const selectShowResult = (state: RootState) => state.poll.showResult;
 export default pollSlice.reducer;

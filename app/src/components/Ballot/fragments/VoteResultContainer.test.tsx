@@ -13,7 +13,7 @@ import {
   fireEvent,
   waitFor,
   mockedParticipant,
-} from '../../utils/testUtils';
+} from '../../../utils/testUtils';
 import VoteResultContainer from './VoteResultContainer';
 
 const testId = 'vote_testid_$)(*&%*';
@@ -47,6 +47,8 @@ const votesData: LegalVoteType = {
   localStartTime: new Date().toISOString(),
   token: 'abcd',
 };
+
+const onClose = jest.fn();
 
 jest.mock('@opentalk/common', () => {
   const originalModule = jest.requireActual('@opentalk/common');
@@ -97,7 +99,7 @@ describe('VoteResultContainer', () => {
       },
     });
 
-    await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
+    await render(<VoteResultContainer voteOrPollId={votesData.id} onClose={onClose} />, store);
 
     expect(screen.getByText(testName)).toBeInTheDocument();
     expect(screen.getByText(testTopic)).toBeInTheDocument();
@@ -124,7 +126,7 @@ describe('VoteResultContainer', () => {
       },
     });
 
-    await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
+    await render(<VoteResultContainer voteOrPollId={votesData.id} onClose={onClose} />, store);
 
     const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
     const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
@@ -136,7 +138,7 @@ describe('VoteResultContainer', () => {
   });
 
   test('click on vote checkbox should dispatch action signaling/legal_vote/vote with selected option', async () => {
-    await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
+    await render(<VoteResultContainer voteOrPollId={votesData.id} onClose={onClose} />, store);
 
     const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
     const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
@@ -196,7 +198,7 @@ describe('VoteResultContainer', () => {
   });
 
   test('should display proper percentages of vote result and on mouse over field should show additional info for users votes', async () => {
-    await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
+    await render(<VoteResultContainer voteOrPollId={votesData.id} onClose={onClose} />, store);
 
     const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
     const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
@@ -226,7 +228,7 @@ describe('VoteResultContainer', () => {
       },
     });
 
-    await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
+    await render(<VoteResultContainer voteOrPollId={votesData.id} onClose={onClose} />, store);
 
     expect(screen.getByText(testName)).toBeInTheDocument();
     expect(screen.getByText(testTopic)).toBeInTheDocument();
@@ -255,7 +257,7 @@ describe('VoteResultContainer', () => {
       },
     });
 
-    await render(<VoteResultContainer legalVoteId={votesData.id} />, store);
+    await render(<VoteResultContainer voteOrPollId={votesData.id} onClose={onClose} />, store);
 
     const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
     const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });

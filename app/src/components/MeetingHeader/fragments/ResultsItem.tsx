@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from '../../../hooks';
 import { Poll } from '../../../store/slices/pollSlice';
-import { setVotePollIdToShow } from '../../../store/slices/uiSlice';
+import { setVoteOrPollIdToShow } from '../../../store/slices/uiSlice';
 
 const Chip = styled(MuiChip)(({ theme }) => ({
   marginLeft: theme.spacing(1),
@@ -38,7 +38,7 @@ const ResultsItem = ({ item }: ResultsItemProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const openItem = (item: LegalVoteType | Poll) => {
-    dispatch(setVotePollIdToShow(item.id));
+    dispatch(setVoteOrPollIdToShow(item.id));
   };
 
   const label = Object.hasOwn(item, 'name') ? (item as LegalVoteType).name : (item as Poll).topic;
