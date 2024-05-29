@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Collapse as MuiCollapse, Grid, styled, Typography } from '@mui/material';
+import { Collapse as MuiCollapse, Grid, Stack, styled, Tooltip, Typography } from '@mui/material';
 import { FavoriteIcon } from '@opentalk/common';
 import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
 import { useTranslation } from 'react-i18next';
@@ -37,12 +37,6 @@ const Favorite = styled(FavoriteIcon)(({ theme }) => ({
   },
 }));
 
-const InnerContainer = styled(Grid)(() => ({
-  '& .MuiGrid-item': {
-    width: '100%',
-  },
-}));
-
 const StandardCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragmentProps) => {
   const { t } = useTranslation();
   const { title, isFavorite } = event;
@@ -65,17 +59,20 @@ const StandardCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
     }
 
     return (
-      <Typography variant={'body2'} noWrap>
+      <Typography variant="body2" noWrap>
         {timeString}
       </Typography>
     );
   };
 
   const renderCreator = () => {
-    if (isMeetingCreator) {
-      return t('dashboard-home-created-by', { author: `${author} (${t('global-me')})` });
-    }
-    return t('dashboard-home-created-by', { author });
+    const authorWithPrefix = isMeetingCreator ? `${author} (${t('global-me')})` : author;
+
+    return (
+      <Typography variant="body2" noWrap>
+        {t('dashboard-home-created-by', { author: authorWithPrefix })}
+      </Typography>
+    );
   };
 
   return (
@@ -84,20 +81,18 @@ const StandardCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
         <Favorite aria-label={t('global-favorite')} />
       </Collapse>
       <Grid container alignItems={'flex-end'} justifyContent={'space-between'} spacing={2}>
-        <InnerContainer item container xs={12} lg={8} xl={9} direction={'column'} spacing={1}>
-          <Grid item>{renderTimeString()}</Grid>
-          <Grid item mt={1}>
-            <Typography variant={'h1'} component={'h2'} fontWeight={600} noWrap>
-              {title}
-            </Typography>
-          </Grid>
-          <Grid item mt={1}>
-            <Typography variant={'body2'} noWrap>
-              {renderCreator()}
-            </Typography>
-          </Grid>
-        </InnerContainer>
-        <Grid container item spacing={2} xs={12} lg={'auto'} justifyContent={'flex-end'} alignItems={'center'}>
+        <Grid item>
+          <Stack spacing={2}>
+            {renderTimeString()}
+            <Tooltip translate="no" title={title || ''} describeChild placement="bottom-start">
+              <Typography variant="h1" component="h2" fontWeight={600} noWrap>
+                {title}
+              </Typography>
+            </Tooltip>
+            {renderCreator()}
+          </Stack>
+        </Grid>
+        <Grid item>
           <MeetingPopover event={event} isMeetingCreator={isMeetingCreator} highlighted={highlighted} />
         </Grid>
       </Grid>
