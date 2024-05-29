@@ -183,7 +183,7 @@ export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
     <Dialog open={open} maxWidth="sm" fullWidth onMouseDown={stopPropagation} onClose={onClose}>
       <DialogTitle sx={{ textAlign: 'left' }}>{contentBasedOnEventType.title}</DialogTitle>
       <Box position="absolute" top={0} right={0}>
-        <IconButton onClick={onClose}>
+        <IconButton aria-label={t('global-close-dialog')} onClick={onClose}>
           <CloseIcon />
         </IconButton>
       </Box>

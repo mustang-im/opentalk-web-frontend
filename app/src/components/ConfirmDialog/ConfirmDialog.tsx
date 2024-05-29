@@ -4,6 +4,7 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface ConfirmDialogProps {
   submitButtonText: string;
@@ -28,12 +29,13 @@ export const ConfirmDialog = ({
   open,
   onMouseDown,
 }: ConfirmDialogProps) => {
+  const { t } = useTranslation();
   const handleClose = onClose || onCancel;
   return (
     <Dialog open={open} maxWidth="sm" fullWidth onMouseDown={onMouseDown} onClose={handleClose}>
       <DialogTitle sx={{ textAlign: 'left' }}>{title}</DialogTitle>
       <Box position="absolute" top={0} right={0}>
-        <IconButton onClick={handleClose}>
+        <IconButton aria-label={t('global-close-dialog')} onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </Box>

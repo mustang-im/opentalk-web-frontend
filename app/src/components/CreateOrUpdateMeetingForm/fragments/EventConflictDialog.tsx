@@ -28,7 +28,7 @@ export const EventConflictDialog = ({ onConfirm, onCancel, event, isUpdate }: Ev
     <Dialog open maxWidth="sm" fullWidth disablePortal onClose={onCancel}>
       <DialogTitle sx={{ textAlign: 'left' }}>{t('dashboard-create-meeting-dialog-title')}</DialogTitle>
       <Box position="absolute" top={0} right={0}>
-        <IconButton onClick={onCancel}>
+        <IconButton aria-label={t('global-close-dialog')} onClick={onCancel}>
           <CloseIcon />
         </IconButton>
       </Box>

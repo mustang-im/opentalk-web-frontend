@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogActions,
   DialogProps,
+  Box,
 } from '@mui/material';
 import { CircularIconButton, CloseIcon, SpeedTestIcon } from '@opentalk/common';
 import React, { useCallback, useState, Fragment, useEffect } from 'react';
@@ -267,12 +268,13 @@ const SpeedTestDialog = ({ ...props }: SpeedTestDialogProps) => {
         aria-labelledby="speed-meter-title"
         open={isDialogOpen}
       >
-        <DialogTitle id="speed-meter-title" aria-label={t('speed-meter-title')}>
-          {t('speed-meter-title')}
+        <Box display="flex" justifyContent="space-between">
+          <DialogTitle id="speed-meter-title">{t('speed-meter-title')}</DialogTitle>
+
           <CloseIconButton aria-label={t('global-close-dialog')} onClick={handleCloseDialog} size="small">
             <CloseIcon />
           </CloseIconButton>
-        </DialogTitle>
+        </Box>
 
         <Grid container>
           <Grid container direction="column" alignItems="center" spacing={2}>

@@ -127,7 +127,7 @@ export const TimeLimitNotification = forwardRef<HTMLDivElement, TimeLimitNotific
           {minutes > 1 && (
             <>
               <span>{t('time-limit-more-than-one-minute-remained', { minutes })}</span>
-              <IconButton onClick={handleClose}>
+              <IconButton aria-label={t('global-close')} onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
             </>

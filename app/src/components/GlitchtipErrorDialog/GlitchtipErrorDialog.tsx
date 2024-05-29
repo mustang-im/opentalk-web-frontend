@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -146,12 +147,12 @@ const GlitchtipErrorDialog = () => {
 
   const renderFormContent = () => (
     <>
-      <DialogTitle>
-        {t('glitchtip-crash-report-title')}
-        <IconButton aria-label="close-button" onClick={handleCloseDialog}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" pr={2.5}>
+        <DialogTitle>{t('glitchtip-crash-report-title')}</DialogTitle>
+        <IconButton aria-label={t('global-close-dialog')} onClick={handleCloseDialog}>
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
+      </Box>
       <DialogContent>
         <Stack spacing={2}>
           {renderEventInfos()}
@@ -171,12 +172,12 @@ const GlitchtipErrorDialog = () => {
 
   const renderDataHasSentContent = () => (
     <>
-      <DialogTitle>
-        {t('glitchtip-crash-report-send-successful-title')}
-        <IconButton aria-label="close-button" onClick={handleCloseDialog}>
+      <Box display="flex" justifyContent="space-between">
+        <DialogTitle>{t('glitchtip-crash-report-send-successful-title')}</DialogTitle>
+        <IconButton aria-label={t('global-close-dialog')} onClick={handleCloseDialog}>
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
+      </Box>
       <DialogContent>{t('glitchtip-crash-report-successMessage')}</DialogContent>
       <DialogActions>
         <Button color={'primary'} onClick={handleCloseDialog}>
