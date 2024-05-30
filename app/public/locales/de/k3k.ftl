@@ -18,6 +18,10 @@ error-invite-link = Dieser Einladungs-Link ist nicht mehr aktiv.
 signaling-subscription-failed = Die Verbindung zu einen Teilnehmer ist leider fehlgeschlagen.
 media-subscription-failed = Keine Verbindung zum Teilnehmer
 
+error-invalid-invitation-code = Dieser Einladungscode ist ungültig
+
+error-invalid-invitation-link = Dieser Einladungs-Link ist ungültig
+
 error-system-currently-unavailable = Das System ist zur Zeit nicht erreichbar, bitte versuchen sie es später nochmal.
 error-unauthorized = Sie haben leider keinen Zugriff, bitte kontaktieren Sie den Moderator des Meetings.
 

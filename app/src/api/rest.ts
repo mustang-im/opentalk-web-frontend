@@ -47,6 +47,11 @@ export enum StartRoomError {
   NotFound = 'not_found',
   Forbidden = 'forbidden',
   Unathorized = 'unauthorized',
+  BadRequest = 'bad_request',
+}
+
+export enum AuthTypeErrorMessage {
+  InvalidTokenOrInvite = 'Unable to parse access token or invite code',
 }
 
 export const addRoom = createAsyncThunk<Room, NewRoom, { state: RootState; rejectValue: FetchRequestError }>(
@@ -115,11 +120,15 @@ export const rtkQueryErrorLoggerMiddlware: Middleware =
     // If rtk query get rejected dispatch auth error
     if (isRejectedWithValue(action)) {
       if (action.payload.status === 401) {
+        if (action.payload.data.message === AuthTypeErrorMessage.InvalidTokenOrInvite) {
+          // Don't dispatch any auth error since this is an exeption. Is not auth error, it's wrong Url and or/invite code.
+          return next(action);
+        }
         dispatch(
           authError({
             status: action.payload.status,
             name: AuthTypeError.SessionExpired,
-            message: AuthTypeError.SessionExpired,
+            message: action.payload.data.message,
           })
         );
         return next(action);
