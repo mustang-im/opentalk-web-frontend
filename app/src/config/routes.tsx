@@ -24,7 +24,6 @@ import {
   EventDetailsPage,
   DocumentationPage,
 } from '../pages/Dashboard';
-import LandingPage from '../pages/LandingPage';
 import RoomPage from '../pages/RoomPage';
 import DashboardSettingsTemplate from '../templates/DashboardSettingsTemplate';
 import DashboardTemplate from '../templates/DashboardTemplate';
@@ -41,7 +40,7 @@ export type Routes = {
   [key: string]: RouteValue;
 };
 
-type ProtectedRouteProps = PropsWithChildren<{ isDashboard?: boolean }>;
+type ProtectedRouteProps = PropsWithChildren;
 
 const AuthRedirect = ({ label }: { label: string }) => {
   return (
@@ -66,17 +65,13 @@ const Redirect = ({ to }: { to: To }) => {
   return null;
 };
 
-const ProtectedRoute = ({ children, isDashboard }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const auth = useAuthContext();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAuthPending = useAppSelector(selectAuthIsPending);
   const inviteCode = useInviteCode();
 
   if (!isAuthenticated && !inviteCode && !isAuthPending) {
-    if (isDashboard) {
-      return <Redirect to={'/join'} />;
-    }
-
     auth?.signIn();
     return null;
   }
@@ -132,16 +127,18 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
     children: [{ index: true, element: <InvitePage /> }],
     key: 'invite',
   },
+  /*
+  Just disabled for now, we need this page later for the desktop. https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1877
   {
     path: '/join',
     element: <LobbyTemplate />,
     children: [{ index: true, element: <LandingPage /> }],
     key: 'join',
-  },
+  }, */
   {
     path: '/dashboard',
     element: (
-      <ProtectedRoute isDashboard>
+      <ProtectedRoute>
         <DashboardTemplate />
       </ProtectedRoute>
     ),

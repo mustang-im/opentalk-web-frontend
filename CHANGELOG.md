@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Added summary to shortcuts table along with better shortcut description formatting for cleaner screen reader pronunciation. ([#1742](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1742))
 - Restructured dashboard meeting header with filter options as dropdowns. ([#1646](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1646))
 - Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))
+- Remove `/join` path to restore old user flow ([#1877](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1877))
 
 ### Bug Fixes
 
