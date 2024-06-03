@@ -61,19 +61,22 @@ const HeaderPagination = styled(Pagination)(({ theme }) => ({
   },
 }));
 
-const HeaderContainer = styled('div')<{ lgOrder?: number; fullWidth?: boolean; justifyContentLgDown?: string }>(
-  ({ theme, lgOrder, justifyContentLgDown, fullWidth }) => ({
-    display: 'flex',
-    gap: theme.spacing(1),
-    justifyContent: 'center',
-    width: fullWidth ? '100%' : 'none',
-    [theme.breakpoints.down('lg')]: {
-      order: lgOrder,
-      flex: lgOrder ? '0 0 100%' : '0',
-      justifyContent: justifyContentLgDown ? justifyContentLgDown : 'center',
-    },
-  })
-);
+const HeaderContainer = styled('div', {
+  shouldForwardProp: (prop) => !['lgOrder', 'fullWidth', 'justifyContentLgDown', 'wrap'].includes(prop as string),
+})<{
+  justifyContentLgDown?: string;
+  wrap?: boolean;
+  flex?: number;
+}>(({ theme, justifyContentLgDown, wrap, flex }) => ({
+  display: 'flex',
+  gap: theme.spacing(1),
+  justifyContent: 'center',
+  flexWrap: wrap ? 'wrap' : 'nowrap',
+  flex,
+  [theme.breakpoints.down('lg')]: {
+    justifyContent: justifyContentLgDown ? justifyContentLgDown : 'center',
+  },
+}));
 
 const LogoContainer = styled(HeaderContainer)(({ theme }) => ({
   [theme.breakpoints.down('lg')]: {
@@ -89,6 +92,14 @@ const Content = styled('header')(({ theme }) => ({
   alignItems: 'flex-start',
   [theme.breakpoints.down('lg')]: {
     flexWrap: 'wrap',
+  },
+}));
+
+const RoomTitleContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(1),
+  [theme.breakpoints.down('lg')]: {
+    justifyContent: 'flex-start',
   },
 }));
 
@@ -154,7 +165,9 @@ const DesktopMeetingHeader = () => {
     }
   }, [selectedLayout, handleSelectedView]);
 
-  const isAnyFeatureActive = showWhiteboardIcon || protocolUrl || showVotesAndPolls || isSharedFolderAvailable;
+  const isAnyFeatureActive = Boolean(showWhiteboardIcon || protocolUrl || showVotesAndPolls || isSharedFolderAvailable);
+
+  const isPaginationVisible = pageCount > 1;
 
   const renderProtocolButton = () => {
     return (
@@ -191,15 +204,15 @@ const DesktopMeetingHeader = () => {
       <LogoContainer>
         <OpenTalkLogo onClick={showDebugDialog} aria-disabled />
       </LogoContainer>
-      <HeaderContainer justifyContentLgDown="flex-start" fullWidth={!isAnyFeatureActive}>
-        <RoomTitle />
-        <LayoutSelection />
-      </HeaderContainer>
-      <HeaderContainer lgOrder={2}>
-        {selectedLayout === LayoutOptions.Grid && pageCount > 1 && (
+      <HeaderContainer justifyContentLgDown={'flex-start'} wrap flex={1}>
+        <RoomTitleContainer>
+          <RoomTitle />
+          <LayoutSelection />
+        </RoomTitleContainer>
+        {selectedLayout === LayoutOptions.Grid && isPaginationVisible && (
           <HeaderItem>
             <HeaderPagination
-              count={pageCount > 1 ? pageCount : 0}
+              count={isPaginationVisible ? pageCount : 0}
               page={selectedPage}
               variant="outlined"
               shape="rounded"
