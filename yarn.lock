@@ -4260,12 +4260,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@opentalk/components@npm:^1.0.35":
-  version: 1.0.35
-  resolution: "@opentalk/components@npm:1.0.35::__archiveUrl=https%3A%2F%2Fgit.opentalk.dev%2Fapi%2Fv4%2Fprojects%2F434%2Fpackages%2Fnpm%2F%40opentalk%2Fcomponents%2F-%2F%40opentalk%2Fcomponents-1.0.35.tgz"
+"@opentalk/components@npm:^1.0.38":
+  version: 1.0.38
+  resolution: "@opentalk/components@npm:1.0.38::__archiveUrl=https%3A%2F%2Fgit.opentalk.dev%2Fapi%2Fv4%2Fprojects%2F434%2Fpackages%2Fnpm%2F%40opentalk%2Fcomponents%2F-%2F%40opentalk%2Fcomponents-1.0.38.tgz"
   peerDependencies:
     "@emotion/react": ^11.10.4
     "@emotion/styled": ^11.8.1
+    "@mui/base": 5.0.0-alpha.80
     "@mui/material": ^5.10.5
     "@mui/styles": ^5.10.3
     "@opentalk/common": ^1.0.17
@@ -4281,7 +4282,7 @@ __metadata:
     react-redux: ^7.2.8
     typescript: ^4.9.4
     yup: ^0.32.11
-  checksum: 038a5551b408f92bad7fa09c9a7d16432a9fd93d00055ae11b6ef77b896636c4c5cf64334f9583ce92cd5e94de76c2b03b9501c4b125ab6910805002a8ac3c85
+  checksum: 082294d1fb7937a226fde2957c435fb33d13f2d5ba448f7de51c13acfb1019fa8b1152adfc558e50c0caf8066437612010f1ddaac0181e00317df2ccb42a00f1
   languageName: node
   linkType: hard
 
@@ -4393,7 +4394,7 @@ __metadata:
     "@mui/styles": ^5.10.3
     "@mui/x-date-pickers": ^6.14.0
     "@opentalk/common": "workspace:*"
-    "@opentalk/components": ^1.0.35
+    "@opentalk/components": ^1.0.38
     "@opentalk/fluent_conv": "workspace:*"
     "@opentalk/i18next-fluent": "workspace:*"
     "@opentalk/redux-oidc": "workspace:*"
