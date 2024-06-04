@@ -729,7 +729,7 @@ dashboard-meeting-card-delete-offline-failure = Unfortunately, the action cannot
 
 dashboard-recurrence-meeting-card-delete-dialog-message = This meeting is part of a meetings series. You can delete the entire series, including all data (recordings, meeting minutes and voting results) or just one meeting occurrence where all data is preserved.
 dashboard-recurrence-meeting-card-delete-dialog-one = This one meeting
-dashboard-reccurence-meeting-card-delete-dialog-all = The entire meeting series
+dashboard-recurrence-meeting-card-delete-dialog-all = The entire meeting series
 dashboard-recurrence-meeting-card-delete-dialog-cancel = Cancel
 
 dashboard-create-meeting-dialog-title = Please confirm
@@ -854,6 +854,34 @@ dashboard-meeting-recurrence-daily = Daily
 dashboard-meeting-recurrence-weekly = Weekly
 dashboard-meeting-recurrence-bi-weekly = Bi-Weekly
 dashboard-meeting-recurrence-monthly = Monthly
+dashboard-meeting-recurrence-custom = Custom ...
+
+dashboard-recurrence-dialog-title = Custom meeting repetition
+dashboard-recurrence-dialog-frequency-label = Repeat every
+<#-- Since this is fluent it handles plurals in a different way than the i18n documentation -->
+dashboard-recurrence-dialog-frequency-day = { $count ->
+    [one] Day
+   *[other] Days
+}
+dashboard-recurrence-dialog-frequency-week = { $count ->
+    [one] Week
+   *[other] Weeks
+}
+dashboard-recurrence-dialog-frequency-month = { $count ->
+    [one] Month
+   *[other] Months
+}
+dashboard-recurrence-dialog-frequency-year = { $count ->
+    [one] Year
+   *[other] Years
+}
+dashboard-recurrence-dialog-frequency-details-label = Repeat on
+dashboard-recurrence-dialog-frequency-details-monthly-on = Monthly on {$date}
+dashboard-recurrence-dialog-end-label = Recurrence end
+dashboard-recurrence-dialog-end-option-never = Never
+dashboard-recurrence-dialog-end-option-on = On
+dashboard-recurrence-dialog-save-button = Save
+dashboard-recurrence-dialog-close-button = Cancel
 
 dashboard-payment-status-downgraded = Attention: There is currently no valid payment method stored for your account.<br /> Currently you are restricted to the {$tariffName} plan.
 dashboard-add-payment-button = Add payment

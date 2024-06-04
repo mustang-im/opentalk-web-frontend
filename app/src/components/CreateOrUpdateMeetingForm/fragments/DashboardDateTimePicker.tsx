@@ -5,10 +5,10 @@ import { Stack } from '@mui/material';
 import { StreamingPlatform, generateUniquedId } from '@opentalk/common';
 import { FormWrapper } from '@opentalk/common';
 import { formikDateTimePickerProps } from '@opentalk/common';
+import { RecurrencePattern } from '@opentalk/rest-api-rtk-query';
 import { FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { FrequencySelect } from '../../../utils/rruleUtils';
 import DateTimePicker from '../../DateTimePicker';
 
 interface Streaming {
@@ -23,7 +23,7 @@ export interface CreateOrUpdateMeetingFormikValues {
   isTimeDependent: boolean;
   startDate: string;
   endDate: string;
-  recurrencePattern: FrequencySelect;
+  recurrencePattern: RecurrencePattern;
   isAdhoc?: boolean;
   sharedFolder: boolean;
   streaming: Streaming;

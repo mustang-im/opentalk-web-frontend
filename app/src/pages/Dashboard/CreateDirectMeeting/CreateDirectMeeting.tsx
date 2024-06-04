@@ -39,7 +39,6 @@ const CreateDirectMeeting = () => {
         description: '',
         isTimeIndependent: true,
         waitingRoom: false,
-        recurrencePattern: [],
         isAdhoc: true,
       }).unwrap();
     } catch (err) {

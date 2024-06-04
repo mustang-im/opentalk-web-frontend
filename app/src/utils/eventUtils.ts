@@ -85,7 +85,11 @@ const createRecurringEventInstances = (
   const partialRule = RRule.parseString(event.recurrencePattern[0]);
 
   partialRule.dtstart = recurrenceStartDate;
-  partialRule.until = windowEndDate;
+  if (!partialRule.until) {
+    partialRule.until = windowEndDate;
+  } else if (windowEndDate < partialRule.until) {
+    partialRule.until = windowEndDate;
+  }
 
   const rule = new RRule({
     ...partialRule,

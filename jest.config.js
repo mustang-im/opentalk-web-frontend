@@ -50,10 +50,7 @@ module.exports = {
         '@mui/styled-engine': '<rootDir>/app/node_modules/@mui/styled-engine',
       },
       modulePaths: [],
-      transformIgnorePatterns: [
-        '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
-        '^.+\\.module\\.(css|sass|scss)$',
-      ],
+      transformIgnorePatterns: ['<rootDir>/app/node_modules/@heinlein-video/rrule/'],
       resetMocks: true,
     },
     {
