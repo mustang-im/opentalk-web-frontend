@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Pagination on leftright corner broken ([#1888](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1888))
 - Add the logo to desktop view for conference ([#1879](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1879))
 
 ### New Features
