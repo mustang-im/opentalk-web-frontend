@@ -4500,6 +4500,7 @@ __metadata:
     eslint-config-react-app: ^7.0.1
     eslint-plugin-jsx-a11y: ^6.6.1
     jwt-decode: ^4.0.0
+    pkce-challenge: ^4.1.0
     react-redux: ^7.2.8
     react-router-dom: ^6.4.0
     rollup: ^4.3.0
@@ -21157,6 +21158,13 @@ __metadata:
   version: 4.0.5
   resolution: "pirates@npm:4.0.5"
   checksum: c9994e61b85260bec6c4fc0307016340d9b0c4f4b6550a957afaaff0c9b1ad58fbbea5cfcf083860a25cb27a375442e2b0edf52e2e1e40e69934e08dcc52d227
+  languageName: node
+  linkType: hard
+
+"pkce-challenge@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "pkce-challenge@npm:4.1.0"
+  checksum: b85c50cefe3d9586ed77f5fde0c0832717c8cb3c88ab4470961306e78d84522a0f040a684d74907bd3b0c3c259f0aafbb6ff9f1f7c39bbad1ca180ac3750adb0
   languageName: node
   linkType: hard
 

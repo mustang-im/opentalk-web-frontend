@@ -60,7 +60,7 @@ export class AuthAdapter {
 
   public async fetchOidcConfig() {
     try {
-      const response = await fetch(new URL(this._configuration.authority + '/.well-known/openid-configuration'));
+      const response = await fetch(new URL(`${this._configuration.authority}/.well-known/openid-configuration`));
 
       if (!response.ok) {
         throw `OIDC config not available. Status: ${response.status} ${response.statusText}`;
@@ -91,9 +91,21 @@ export class AuthAdapter {
     return this._configuration.baseUrl;
   }
 
-  public async getLoginUrl() {
+  public async getLoginUrl(codeChallenge?: string) {
     const { authorizationEndpoint } = await this.getConfigurationEndpoints();
-    return `${authorizationEndpoint}?response_type=code&client_id=${this._configuration.clientId}&redirect_uri=${this._configuration.redirectUri}&scope=${this._configuration.scope}`;
+
+    const authorizationEndpointURL = new URL(authorizationEndpoint);
+    authorizationEndpointURL.searchParams.append('response_type', 'code');
+    authorizationEndpointURL.searchParams.append('client_id', this._configuration.clientId);
+    authorizationEndpointURL.searchParams.append('redirect_uri', this._configuration.redirectUri);
+    authorizationEndpointURL.searchParams.append('scope', this._configuration.scope);
+
+    if (codeChallenge) {
+      authorizationEndpointURL.searchParams.append('code_challenge', codeChallenge);
+      authorizationEndpointURL.searchParams.append('code_challenge_method', 'S256');
+    }
+
+    return authorizationEndpointURL;
   }
 
   public getSavedLocation = () => sessionStorage.getItem('saved_location') || undefined;
@@ -102,9 +114,9 @@ export class AuthAdapter {
   /**
    * Redirect user to sign in provider
    */
-  public async startOidcSignIn(redirectUrl = window.location.pathname) {
+  public async startOidcSignIn(redirectUrl = window.location.pathname, codeChallenge?: string) {
     this.saveLocationForRedirect(redirectUrl);
-    window.location.replace(await this.getLoginUrl());
+    window.location.replace(await this.getLoginUrl(codeChallenge));
   }
 
   public getAccessToken = () => localStorage.getItem('access_token');
