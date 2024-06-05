@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { MediaSessionState, MediaSessionType, VideoSetting } from '@opentalk/common';
-import { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types';
 import { debounce, isEqual, some } from 'lodash';
 
 import { BandwidthController } from './BandwidthController';
@@ -33,8 +32,8 @@ export class SubscriberConnection extends BaseWebRtcConnection {
   private lossCount = 0;
   private expectRestart = false;
 
-  private reconnectTimerHandle?: TimeoutId;
-  private closeTimerHandle?: TimeoutId;
+  private reconnectTimerHandle?: ReturnType<typeof setTimeout>;
+  private closeTimerHandle?: ReturnType<typeof setTimeout>;
 
   public readonly updateQualityTarget: (target: VideoSetting) => void;
 

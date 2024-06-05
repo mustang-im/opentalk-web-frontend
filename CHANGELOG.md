@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+
+### Stability Improvements
+
+- Implement IceRestart when publisher connections is disconnected. ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1583), [#1747](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1747))
+
 ### New Features
 
 - Whiteboard automatically open by creating ([#1814](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1814))

@@ -23,6 +23,8 @@ const bitrateFromSetting = (quality: VideoSetting, maxVideoBandwidth: number) =>
   }
 };
 
+const RECOVERY_TIMEOUT = 10_000; //ms
+
 /* Note that `active` is only supported in Firefox v110
  * see https://bugzilla.mozilla.org/show_bug.cgi?id=1676855#c0
  * the workaround results in 3x5px videos.
@@ -68,7 +70,7 @@ export class PublisherConnection extends BaseWebRtcConnection {
   private announcedMediaState?: MediaSessionInfo;
   private maxVideoBandwidth: number;
   private parkedTrack?: string;
-
+  private reconnectTimerHandle?: ReturnType<typeof setTimeout>;
   private mediaStatus: Omit<MediaSessionState, 'videoSettings'> = { audio: false, video: false };
   private publishComplete = false;
 
@@ -106,9 +108,15 @@ export class PublisherConnection extends BaseWebRtcConnection {
         if (this.publishComplete) {
           this.publishComplete = true;
           console.warn('initiating ICE restart');
-          this.peerConnection.restartIce();
+          this.iceRestart();
         } else {
           console.error('ICE restart failed');
+        }
+      } else if (state === 'disconnected') {
+        this.setIceRestartReconnectTimer();
+      } else if (state === 'connected') {
+        if (this.reconnectTimerHandle !== undefined) {
+          this.stopIceRestartReconnectTimer();
         }
       }
     });
@@ -117,6 +125,28 @@ export class PublisherConnection extends BaseWebRtcConnection {
       console.warn(`PublishingConnection ${this.descriptor.mediaType} unhanded local ontrack`, ev);
     });
     this.publish();
+  }
+
+  private iceRestart() {
+    this.stopIceRestartReconnectTimer();
+    this.peerConnection.restartIce();
+  }
+
+  private setIceRestartReconnectTimer() {
+    if (this.reconnectTimerHandle !== undefined) {
+      console.warn('PublishingConnection reconnect timer is already set');
+      return;
+    }
+    console.debug(`Set reconnect timer for PublishingConnection ${this.descriptor.mediaType} `);
+    this.reconnectTimerHandle = setTimeout(() => this.iceRestart(), RECOVERY_TIMEOUT);
+  }
+
+  private stopIceRestartReconnectTimer() {
+    if (this.reconnectTimerHandle) {
+      console.debug(`clear reconnect timer for PublishingConnection ${this.descriptor.mediaType}`);
+      clearTimeout(this.reconnectTimerHandle);
+      this.reconnectTimerHandle = undefined;
+    }
   }
 
   private publish() {
