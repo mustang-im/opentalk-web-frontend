@@ -2,14 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box as MuiBox } from '@mui/material';
-import { MediaSessionType, ParticipantId } from '@opentalk/common';
+import { ParticipantId } from '@opentalk/common';
 import React from 'react';
 import { useMemo, useState } from 'react';
 
 import NameTile from '../../commonComponents/NameTile/NameTile';
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../hooks/useFullscreenContext';
-import { selectSubscriberStateById } from '../../store/slices/mediaSubscriberSlice';
 import { selectParticipantName } from '../../store/slices/participantsSlice';
 import HandRaisedIndicator from './fragments/HandRaisedIndicator';
 import ParticipantVideo from './fragments/ParticipantVideo';
@@ -56,12 +55,6 @@ const ParticipantWindow = ({
   const displayName = useAppSelector(selectParticipantName(participantId));
   const [activeOverlay, setActiveOverlay] = useState<boolean>(!!alwaysShowOverlay);
 
-  const videoDescriptor = useMemo(
-    () => ({ participantId: participantId, mediaType: MediaSessionType.Video }),
-    [participantId]
-  );
-  const { active: audioActive } = useAppSelector(selectSubscriberStateById(videoDescriptor, 'audio'));
-
   const handleDisplayOverlay = (show: boolean) => !alwaysShowOverlay && setActiveOverlay(show);
 
   const videoTile = useMemo(() => {
@@ -84,7 +77,7 @@ const ParticipantWindow = ({
       {videoTile}
       <VideoOverlay participantId={participantId} active={activeOverlay && !fullscreenHandle.active} />
       {!fullscreenHandle.active && (
-        <NameTile audioOn={audioActive} displayName={displayName || ''} className="positionBottom" />
+        <NameTile displayName={displayName || ''} participantId={participantId} className="positionBottom" />
       )}
       <HandRaisedBox>
         <HandRaisedIndicator participantId={participantId} />

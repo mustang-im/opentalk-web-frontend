@@ -87,7 +87,7 @@ const LocalVideo = ({
   hideUserName,
   ...props
 }: LocalVideoProps) => {
-  const videoEnabled = useAppSelector(selectVideoEnabled);
+  const isVideoEnabled = useAppSelector(selectVideoEnabled);
   const screenShareEnabled = useAppSelector(selectShareScreenEnabled);
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -96,14 +96,14 @@ const LocalVideo = ({
   const outgoingVideoStream = mediaContext.outgoingMediaStream;
   const outgoingScreenStream = mediaContext.outgoingScreenStream;
   const displayName = useAppSelector(selectDisplayName);
-  const isAudioOn = useAppSelector(selectAudioEnabled) && !!mediaContext.hasMicrophone;
+  const isAudioEnabled = useAppSelector(selectAudioEnabled) && !!mediaContext.hasMicrophone;
   const mirroredVideoEnabled = useAppSelector(selectMirroredVideoEnabled);
   const isLoadingMedia = useAppSelector(selectMediaChangeInProgress);
 
   const isVideoRunning =
     outgoingVideoStream?.getVideoTracks().find((t) => t.enabled && t.readyState === 'live') !== undefined;
 
-  const isVideoMissing = videoEnabled && !isLoadingMedia && !isVideoRunning;
+  const isVideoMissing = isVideoEnabled && !isLoadingMedia && !isVideoRunning;
 
   const attachVideo = useCallback((refObject: RefObject<HTMLVideoElement>, stream: MediaStream) => {
     if (refObject.current !== null) {
@@ -126,12 +126,12 @@ const LocalVideo = ({
   }, [isVideoMissing, t]);
 
   useEffect(() => {
-    if (screenShareEnabled && videoEnabled) {
+    if (screenShareEnabled && isVideoEnabled) {
       attachVideo(videoThumbnailRef, outgoingVideoStream);
       attachVideo(videoRef, outgoingScreenStream);
       return;
     }
-    if (videoEnabled) {
+    if (isVideoEnabled) {
       attachVideo(videoRef, outgoingVideoStream);
       detachVideo(videoThumbnailRef);
       return;
@@ -143,11 +143,11 @@ const LocalVideo = ({
     }
     detachVideo(videoRef);
     detachVideo(videoThumbnailRef);
-  }, [outgoingVideoStream, outgoingScreenStream, screenShareEnabled, attachVideo, detachVideo, videoEnabled]);
+  }, [outgoingVideoStream, outgoingScreenStream, screenShareEnabled, attachVideo, detachVideo, isVideoEnabled]);
 
   return (
     <Container container justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
-      {(videoEnabled || screenShareEnabled) && (
+      {(isVideoEnabled || screenShareEnabled) && (
         <>
           {fullscreenMode && (
             <PinIconButton
@@ -168,7 +168,7 @@ const LocalVideo = ({
             mirroringEnabled={mirroredVideoEnabled && !screenShareEnabled}
             {...props}
           />
-          {screenShareEnabled && videoEnabled && (
+          {screenShareEnabled && isVideoEnabled && (
             <ThumbnailVideo
               ref={videoThumbnailRef}
               autoPlay
@@ -178,7 +178,14 @@ const LocalVideo = ({
               {...props}
             />
           )}
-          {!hideUserName && <NameTile audioOn={isAudioOn} displayName={displayName || ''} className="positionBottom" />}
+          {!hideUserName && (
+            <NameTile
+              localAudioOn={isAudioEnabled}
+              localVideoOn={isVideoEnabled}
+              displayName={displayName || ''}
+              className="positionBottom"
+            />
+          )}
         </>
       )}
       {isVideoMissing && <NoVideoText>{t('localvideo-no-device')}</NoVideoText>}
