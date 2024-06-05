@@ -10,6 +10,7 @@ action-delete = Delete
 action-download = Download
 global-calendar-week = CW
 global-error = Error
+global-upgrade = Upgrade
 
 error-fetch-4xx = error loading resource
 error-general = Ups, something went wrong. Please try again.
@@ -660,6 +661,8 @@ dashboard-settings-storage-usage-limited-full = {$usedStorage} of {$maxStorage} 
 dashboard-settings-storage-usage-unlimited = {$usedStorage} used
 dashboard-settings-storage-usage-loading = Loading storage usage
 dashboard-settings-storage-assets = My Files
+
+dashboard-storage-almost-full-message = Attention: Your storage is almost full. Functions like recording and creating PDF may not work.<br /> Please delete files or make a plan upgrade. 
 
 dashboard-meeting-card-error = Error detecting the meeting duration
 dashboard-meeting-card-all-day = All-day

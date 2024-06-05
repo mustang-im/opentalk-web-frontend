@@ -1,26 +1,15 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Alert, Button, styled } from '@mui/material';
+import { Button } from '@mui/material';
 import { useTranslation, Trans } from 'react-i18next';
 
-import { useGetMeTariffQuery, useGetMeQuery } from '../../api/rest';
-import { useAppSelector } from '../../hooks';
-import { selectAccountManagementUrl } from '../../store/slices/configSlice';
+import { useGetMeTariffQuery, useGetMeQuery } from '../../../../api/rest';
+import { useAppSelector } from '../../../../hooks';
+import { selectAccountManagementUrl } from '../../../../store/slices/configSlice';
+import { AlertBanner } from './AlertBanner';
 
 const FALLBACK_TARIFF_NAME = '';
-
-const PaymentAlert = styled(Alert)(({ theme }) => ({
-  borderRadius: theme.borderRadius.medium,
-  marginLeft: theme.spacing(19.5),
-  lineHeight: theme.spacing(2.5),
-  '& .MuiButton-root': {
-    marginTop: theme.spacing(0.5),
-  },
-  '& .MuiAlert-message': {
-    marginLeft: theme.spacing(1),
-  },
-}));
 
 const TariffDowngradedBanner = () => {
   const { t } = useTranslation();
@@ -28,7 +17,7 @@ const TariffDowngradedBanner = () => {
   const { data: tariff } = useGetMeTariffQuery();
   const tariffName = tariff?.name ?? FALLBACK_TARIFF_NAME;
   return (
-    <PaymentAlert
+    <AlertBanner
       icon={false}
       variant="filled"
       severity="error"
@@ -47,11 +36,11 @@ const TariffDowngradedBanner = () => {
       }
     >
       <Trans i18nKey={'dashboard-payment-status-downgraded'} values={{ tariffName }} />
-    </PaymentAlert>
+    </AlertBanner>
   );
 };
 
-const PaymentStatusBanner = () => {
+export const PaymentStatusBanner = () => {
   const { data: me } = useGetMeQuery();
   const tariffStatus = me?.tariffStatus;
 
@@ -61,5 +50,3 @@ const PaymentStatusBanner = () => {
 
   return null;
 };
-
-export default PaymentStatusBanner;

@@ -14,11 +14,11 @@ import { useGetEventsQuery } from '../../../api/rest';
 import FavoriteMeetingsCard, { FavoriteMeetingProps } from '../../../components/FavoriteMeetingsCard';
 import { default as DefaultJoinMeetingDialog } from '../../../components/JoinMeetingDialog';
 import MeetingCard from '../../../components/MeetingCard';
-import PaymentStatusBanner from '../../../components/PaymentStatusBanner';
 import StartMeetingImage from '../../../components/StartMeetingImage';
 import { useHeader } from '../../../templates/DashboardTemplate';
 import { appendRecurringEventInstances, TimePerspectiveFilter } from '../../../utils/eventUtils';
 import getReferrerRouterState from '../../../utils/getReferrerRouterState';
+import { BannerContainer } from './fragments/BannerContainer';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -75,7 +75,7 @@ const Home = () => {
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   useEffect(() => {
-    setHeader(<PaymentStatusBanner />);
+    setHeader(<BannerContainer />);
     return () => {
       setHeader(undefined);
     };
