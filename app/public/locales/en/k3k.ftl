@@ -807,6 +807,8 @@ dashboard-meeting-livestream-streaming-key-label = Streaming key
 dashboard-meeting-livestream-streaming-key-placeholder = Add Streaming key
 dashboard-meeting-livestream-streaming-key-required = This is a mandatory field
 dashboard-meeting-waiting-room-switch = Waiting room
+dashboard-meeting-details-switch = Show meeting details
+dashboard-meeting-details-tooltip = Meeting details visible / shareable to / for all participants (also password if set).
 
 streaming-targets-request-error = Could not add streaming target
 

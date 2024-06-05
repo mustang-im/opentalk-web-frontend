@@ -59,6 +59,7 @@ export interface CreateBaseEventPayload {
   waitingRoom: boolean;
   password?: string;
   isAdhoc?: boolean;
+  showMeetingDetails?: boolean;
 }
 
 /**
@@ -129,6 +130,7 @@ export interface UpdateEventPayload {
   waitingRoom?: boolean;
   password?: string;
   isAdhoc?: boolean;
+  showMeetingDetails?: boolean;
 }
 
 /**
@@ -199,6 +201,7 @@ interface AbstractEvent extends BaseEvent {
   invitees?: Array<EventInvite>;
   inviteStatus: InviteStatus;
   sharedFolder?: SharedFolderData;
+  showMeetingDetails?: boolean;
 }
 
 /**

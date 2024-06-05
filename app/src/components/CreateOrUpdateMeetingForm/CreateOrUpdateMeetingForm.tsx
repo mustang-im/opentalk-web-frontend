@@ -145,6 +145,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       }),
     isAdhoc: yup.boolean().optional(),
     sharedFolder: yup.boolean().optional(),
+    showMeetingDetails: yup.boolean().optional(),
     streaming: yup.object().shape({
       enabled: yup.boolean().required(),
       platform: yup.object().when('enabled', (value: boolean) => {
@@ -200,6 +201,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
         FrequencySelect.NONE,
       isAdhoc: existingEvent && Boolean(existingEvent.isAdhoc),
       sharedFolder: (existingEvent?.sharedFolder && Boolean(existingEvent.sharedFolder)) || false,
+      showMeetingDetails: existingEvent?.showMeetingDetails || false,
       streaming: {
         enabled: false,
       },
@@ -261,6 +263,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       title: values.title.trim() || '',
       description: values.description.trim() || '',
       waitingRoom: values.waitingRoom,
+      showMeetingDetails: values.showMeetingDetails,
       password: values.password?.trim() !== '' ? values.password?.trim() : null,
       isTimeIndependent: !values.isTimeDependent,
       recurrencePattern: [],
@@ -554,6 +557,12 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               switchValueLabel={t(`dashboard-meeting-shared-folder-switch`)}
             />
           )}
+          <MeetingFormSwitch
+            checked={formik.values.showMeetingDetails}
+            switchProps={formikMinimalProps('showMeetingDetails', formik)}
+            switchValueLabel={t(`dashboard-meeting-details-switch`)}
+            tooltipTitle={t(`dashboard-meeting-details-tooltip`)}
+          />
 
           {!existingEvent && isStreamingEnabled && <StreamingOptions formik={formik} />}
         </Stack>
