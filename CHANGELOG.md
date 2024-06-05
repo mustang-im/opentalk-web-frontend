@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Whiteboard automatically open by creating ([#1814](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1814))
 - Show banner in the dashboard for almost full storage ([#1683](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1683))
 - Added PKCE to the auth flow ([#1859](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1859))
 - Add meeting details switch in the dashboard ([#1808](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1808))

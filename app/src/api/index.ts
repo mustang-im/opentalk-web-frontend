@@ -389,16 +389,6 @@ const handleControlMessage = (
 
       if (data.whiteboard?.status === 'initialized') {
         dispatch(setWhiteboardAvailable({ showWhiteboard: true, url: data.whiteboard.url }));
-        notificationAction({
-          msg: i18next.t('whiteboard-new-whiteboard-message'),
-          variant: 'info',
-          actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
-          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Whiteboard)),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': i18next.t('whiteboard-new-whiteboard-message'),
-          },
-        });
       }
 
       if (data.closesAt) {
@@ -1023,17 +1013,6 @@ const handleWhiteboardMessage = (dispatch: AppDispatch, data: whiteboard.Message
   switch (data.message) {
     case 'space_url':
       dispatch(setWhiteboardAvailable({ showWhiteboard: true, url: data.url }));
-      notificationAction({
-        msg: i18next.t('whiteboard-new-whiteboard-message'),
-        variant: 'info',
-        actionBtnText: i18next.t('whiteboard-new-whiteboard-message-button'),
-        onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Whiteboard)),
-        SnackbarProps: {
-          role: 'alert',
-          'aria-label': i18next.t('whiteboard-new-whiteboard-message'),
-        },
-      });
-
       break;
     case 'pdf_asset':
       dispatch(addWhiteboardAsset({ asset: { assetId: data.assetId, filename: data.filename } }));

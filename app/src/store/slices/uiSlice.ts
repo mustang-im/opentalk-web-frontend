@@ -226,6 +226,7 @@ export const uiSlice = createSlice({
     });
     builder.addCase(setWhiteboardAvailable, (state) => {
       state.isCurrentWhiteboardHighlighted = true;
+      state.cinemaLayout = LayoutOptions.Whiteboard;
     });
     builder.addCase(setProtocolReadUrl, (state) => {
       state.isCurrentProtocolHighlighted = true;
