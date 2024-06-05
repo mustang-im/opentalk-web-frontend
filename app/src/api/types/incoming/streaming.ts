@@ -3,9 +3,11 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { NamespacedIncoming, StreamUpdatedMessage } from '@opentalk/common';
 
-type StreamingErrorType = 'insufficient_permissions' | 'invalid_recording_id' | 'already_recording';
+type StreamingErrorMessage = 'error' | 'recorder_error';
+type StreamingErrorType = 'insufficient_permissions' | 'invalid_recording_id' | 'already_recording' | 'timeout';
+
 export interface StreamingError {
-  message: 'error';
+  message: StreamingErrorMessage;
   error: StreamingErrorType;
 }
 
