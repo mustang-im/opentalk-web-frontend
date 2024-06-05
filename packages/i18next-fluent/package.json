@@ -40,8 +40,6 @@
     "lint:tests": "eslint test/ --ext .js,.jsx,.ts,.tsx",
     "watch": "parcel watch --no-hmr",
     "build": "parcel build",
-    "ci": "yarn lint && yarn build && yarn jest",
-    "test": " yarn jest",
     "fmt": "yarn run prettier --write \"src/*.{tsx,ts}\" \"src/**/*.{tsx,ts}\" \"test/**/*.{tsx,ts}\"",
     "fmt:ci": "yarn run prettier --check \"src/*.{tsx,ts}\" \"src/**/*.{tsx,ts}\" \"test/**/*.{tsx,ts}\""
   },

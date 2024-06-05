@@ -9,13 +9,13 @@ import ProfileNameForm from './ProfileNameForm';
 
 const mockUpdateMe = jest.fn();
 
-const DISPLAY_NAME = 'Test User';
+const MOCK_DISPLAY_NAME = 'Test User';
 
 jest.mock('../../../../api/rest', () => ({
   ...jest.requireActual('../../../../api/rest'),
   useGetMeQuery: () => ({
     data: {
-      displayName: DISPLAY_NAME,
+      displayName: MOCK_DISPLAY_NAME,
       avatarUrl: 'TestURL',
     },
   }),
@@ -47,7 +47,7 @@ describe('ProfileNameForm', () => {
 
     expect(screen.queryByText('dashboard-settings-profile-input-required')).not.toBeInTheDocument();
 
-    const input = screen.getByDisplayValue(DISPLAY_NAME);
+    const input = screen.getByDisplayValue(MOCK_DISPLAY_NAME);
     fireEvent.change(input, { target: { value: '' } });
 
     await waitFor(() => {
@@ -75,7 +75,7 @@ describe('ProfileNameForm', () => {
 
     expect(mockUpdateMe).toHaveBeenCalledTimes(0);
 
-    const input = screen.getByDisplayValue(DISPLAY_NAME);
+    const input = screen.getByDisplayValue(MOCK_DISPLAY_NAME);
     const submitButton = screen.getByText('dashboard-settings-profile-button-save');
     fireEvent.change(input, { target: { value: '' } });
     fireEvent.click(submitButton);

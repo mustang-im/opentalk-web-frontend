@@ -26,6 +26,10 @@ All notable changes to this project will be documented in this file.
 
 - Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
 
+### Internal
+
+- Add test coverage and unit test summary to ci pipelines
+
 ## 1.15.0
 
 ### New Features

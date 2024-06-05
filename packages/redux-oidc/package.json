@@ -10,8 +10,7 @@
     "hot-reload:remove-build": "node -e \"if (require('fs').readFileSync('../../app/hotReload/packages.tsconfig.json', {encoding: 'utf8'}).includes('@opentalk/redux-oidc')){process.exit(1)}\" || shx rm -rf ./dist",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "lint": "eslint . --ext .tsx --ext .ts",
-    "test": "jest --passWithNoTests"
+    "lint": "eslint . --ext .tsx --ext .ts"
   },
   "types": "dist/index.d.ts",
   "declaration": true,

@@ -34,7 +34,7 @@ exports[`<SortPopoverMenu /> should render given items. 1`] = `
           tabindex="-1"
         >
           <li
-            class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters Mui-focusVisible css-4f940q-MuiButtonBase-root-MuiMenuItem-root"
+            class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters css-4f940q-MuiButtonBase-root-MuiMenuItem-root"
             role="menuitem"
             tabindex="0"
           >
@@ -53,7 +53,13 @@ exports[`<SortPopoverMenu /> should render given items. 1`] = `
                 aria-hidden="true"
                 class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                 focusable="false"
-              />
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.68 19.28A1.09 1.09 0 0 1 8 19l-5.68-5.42a1 1 0 0 1 1.44-1.51l4.9 4.7L20.22 5a1 1 0 0 1 1.48 1.49L9.43 19a1.05 1.05 0 0 1-.75.28Z"
+                />
+              </svg>
             </svg>
             <span
               class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
@@ -79,7 +85,13 @@ exports[`<SortPopoverMenu /> should render given items. 1`] = `
                 aria-hidden="true"
                 class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                 focusable="false"
-              />
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.68 19.28A1.09 1.09 0 0 1 8 19l-5.68-5.42a1 1 0 0 1 1.44-1.51l4.9 4.7L20.22 5a1 1 0 0 1 1.48 1.49L9.43 19a1.05 1.05 0 0 1-.75.28Z"
+                />
+              </svg>
             </svg>
             <span
               class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"

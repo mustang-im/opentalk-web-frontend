@@ -86,7 +86,15 @@ test:unit-tests:
     - apk add --no-cache git
     - yarn install
   script:
-    - yarn test
+    - yarn test:ci
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+      junit:
+        - junit.xml
+  coverage: /All files[^\|]*\|[^\|]*\s+([\d\.]+)/
 
 prepare-artifact:build:
   stage: prepare-artifact

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button } from '@mui/material';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useGetMeTariffQuery, useGetMeQuery } from '../../../../api/rest';
 import { useAppSelector } from '../../../../hooks';
