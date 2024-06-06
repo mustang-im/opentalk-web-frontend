@@ -2,13 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Collapse as MuiCollapse, MenuItem, Stack, styled } from '@mui/material';
-import { TextField, formikMinimalProps, formikProps } from '@opentalk/common';
-import { PlatformKind } from '@opentalk/common';
+import { CommonTextField, formikMinimalProps, formikProps, PlatformKind } from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Select } from '../../../commonComponents';
 import { CreateOrUpdateMeetingFormikValues } from './DashboardDateTimePicker';
 import MeetingFormSwitch from './MeetingFormSwitch';
 
@@ -63,30 +61,32 @@ const StreamingOptions = ({ formik }: StreamingOptionsProps) => {
 
       <Collapse orientation="vertical" in={streamingEnabled} unmountOnExit mountOnEnter>
         <OptionsRow>
-          <Select
-            {...formikProps('streaming.platform.kind', formik)}
+          <CommonTextField
+            id="platform-select"
             label={t('dashboard-meeting-livestream-platform-label')}
+            select
+            defaultValue=""
           >
             <MenuItem key={PlatformKind.Custom} value={PlatformKind.Custom}>
-              {'Custom'}
+              {t('dashboard-meeting-livestream-platform-custom')}
             </MenuItem>
-          </Select>
-          <TextField
+          </CommonTextField>
+          <CommonTextField
             {...formikProps('streaming.platform.name', formik)}
             label={t('dashboard-meeting-livestream-platform-name-label')}
             placeholder={t('dashboard-meeting-livestream-platform-name-placeholder')}
           />
-          <TextField
+          <CommonTextField
             {...formikProps('streaming.platform.publicURL', formik)}
             label={t('dashboard-meeting-livestream-public-url-label')}
-            placeholder={t('dashboard-meeting-livestream-public-url-placeholder')}
+            placeholder={t('global-URL-placeholder')}
           />
-          <TextField
+          <CommonTextField
             {...formikProps('streaming.platform.streamingEndpoint', formik)}
             label={t('dashboard-meeting-livestream-streaming-endpoint-label')}
             placeholder={t('dashboard-meeting-livestream-streaming-endpoint-placeholder')}
           />
-          <TextField
+          <CommonTextField
             {...formikProps('streaming.platform.streamingKey', formik)}
             label={t('dashboard-meeting-livestream-streaming-key-label')}
             placeholder={t('dashboard-meeting-livestream-streaming-key-placeholder')}

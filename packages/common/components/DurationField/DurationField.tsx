@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ClockIcon } from '../../assets/icons';
 import { IFormikCustomFieldPropsReturnDurationValue } from '../../utils';
+import CommonTextField from '../CommonTextField';
 import { ErrorFormMessage } from '../ErrorFormMessage';
-import { TextField } from '../TextField';
 import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils';
 
 export type DurationValueOptions = number | 'custom' | null;
@@ -32,7 +32,7 @@ interface DurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue 
 
 const DURATION_OPTIONS: Array<DurationValueOptions> = [null, 5, 10, 15, 30, 'custom'];
 
-const NumberInput = styled(TextField)({
+const NumberInput = styled(CommonTextField)({
   maxWidth: '4rem',
   '& input': {
     paddingRight: 0,

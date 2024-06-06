@@ -15,11 +15,11 @@ import {
   Select,
   styled,
 } from '@mui/material';
+import { CommonTextField } from '@opentalk/common';
 import { RecurrencePattern } from '@opentalk/rest-api-rtk-query';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { TextField } from '../../../../commonComponents';
 import {
   PartialRRuleOptions,
   RRuleObject,
@@ -39,9 +39,9 @@ export interface RecurringEventDialogProps extends DialogProps {
   initialRRule?: string;
 }
 
-const NumberInput = styled(TextField)(({ theme }) => ({
+const NumberInput = styled(CommonTextField)(({ theme }) => ({
   maxWidth: '4rem',
-  '& input': {
+  '& .MuiInputBase-input.MuiOutlinedInput-input': {
     paddingRight: theme.spacing(0),
     textAlign: 'center',
   },
@@ -56,7 +56,11 @@ const DialogContent = styled(MuiDialogContent)(({ theme }) => ({
   },
 }));
 
-const EndOptionLabel = styled(InputLabel)(({ theme }) => ({
+const CommonLabel = styled(InputLabel)(({ theme }) => ({
+  color: theme.palette.primary.contrastText,
+}));
+
+const EndOptionLabel = styled(CommonLabel)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     paddingTop: theme.spacing(1.5),
   },
@@ -174,14 +178,14 @@ export const RecurringEventDialog = ({
         <Grid container rowGap={2}>
           <Grid container alignItems="center">
             <Grid item sm={4}>
-              <InputLabel>{t('dashboard-recurrence-dialog-frequency-label')}</InputLabel>
+              <CommonLabel>{t('dashboard-recurrence-dialog-frequency-label')}</CommonLabel>
             </Grid>
 
             <Grid container item sm={8} justifyItems="baseline" alignItems="center" spacing={2}>
               <Grid item sm="auto">
                 <NumberInput
                   type="number"
-                  value={rruleObject.interval}
+                  value={rruleObject.interval?.toString()}
                   onChange={handleIntervalChange}
                   inputProps={{ min: 1 }}
                 />

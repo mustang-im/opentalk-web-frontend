@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Theme, useMediaQuery } from '@mui/material';
+import { Theme, useMediaQuery, Typography, styled } from '@mui/material';
 import { useTheme } from '@mui/material';
 import { DateTimePicker as MuiDateTimePicker, PickersActionBarAction, PickersLocaleText } from '@mui/x-date-pickers';
 import { ErrorFormMessage } from '@opentalk/common';
@@ -12,6 +12,13 @@ import React, { useState } from 'react';
 import PickerLocalizationProvider from '../../provider/PickerLocalizationProvider';
 import { IFormikCustomFieldPropsReturnValue } from '../../utils/formikUtils';
 
+type PickerTextFieldProps = {
+  placeholder?: string;
+  id?: string;
+  startAdornment?: string;
+  fullWidth?: boolean;
+};
+
 type DateTimePickerProps = {
   value: string | number;
   ampm?: boolean;
@@ -20,9 +27,15 @@ type DateTimePickerProps = {
   clearButtonLabel?: string;
   okButtonLabel?: string;
   cancelButtonLabel?: string;
-  placeholder?: string;
-  id?: string;
+  textField?: PickerTextFieldProps;
 } & Pick<IFormikCustomFieldPropsReturnValue, 'onChange' | 'helperText' | 'error'>;
+
+const StartAdornmentTypography = styled(Typography)(({ theme }) => ({
+  paddingRight: theme.spacing(2),
+  flex: '1',
+  display: 'block',
+  whiteSpace: 'nowrap',
+}));
 
 const DateTimePicker = ({
   value,
@@ -34,10 +47,10 @@ const DateTimePicker = ({
   okButtonLabel = 'OK',
   cancelButtonLabel = 'Cancel',
   ampm = false,
-  placeholder,
   error,
-  id,
+  textField,
 }: DateTimePickerProps) => {
+  const { placeholder, id, startAdornment, fullWidth } = textField || {};
   const [focused, setFocused] = useState(false);
   const [opened, setOpened] = useState(false);
   const isScreenHeightTooSmall = useMediaQuery((theme: Theme) => {
@@ -92,6 +105,14 @@ const DateTimePicker = ({
     setFocused(false);
   };
 
+  // as adornment for input fields of the picker we want to have just text (no icons or such)
+  const getStartAdornment = () => {
+    if (startAdornment) {
+      return <StartAdornmentTypography>{startAdornment}</StartAdornmentTypography>;
+    }
+    return null;
+  };
+
   return (
     // This provider is needed to customize and translate action button labels
     // Another option would be to introduce custom action components, which will make more work at the moment
@@ -106,7 +127,15 @@ const DateTimePicker = ({
           minDate={minTimeDate}
           minTime={minTime}
           slotProps={{
-            textField: { placeholder, error, id, onFocus, onBlur },
+            textField: {
+              placeholder,
+              error,
+              id,
+              fullWidth,
+              onFocus,
+              onBlur,
+              InputProps: { startAdornment: getStartAdornment() },
+            },
             actionBar: { actions },
             popper: { placement: 'bottom-start', modifiers: [getOffsetModifier()] },
             openPickerButton: {

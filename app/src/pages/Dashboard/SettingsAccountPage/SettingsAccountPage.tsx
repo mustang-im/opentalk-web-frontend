@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Divider, Grid, Typography } from '@mui/material';
+import { CommonTextField } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetMeQuery } from '../../../api/rest';
-import TextField from '../../../commonComponents/TextField';
 import { useAppSelector } from '../../../hooks';
 import { selectChangePassword } from '../../../store/slices/configSlice';
 
@@ -24,10 +24,10 @@ const SettingsAccountPage = () => {
           </Typography>
         </Grid>
         <Grid xs={12} item>
-          <TextField label={t('dashboard-settings-account-email-label')} value={data?.email} disabled fullWidth />
+          <CommonTextField label={t('dashboard-settings-account-email-label')} value={data?.email} disabled fullWidth />
         </Grid>
         <Grid xs={6} item>
-          <TextField
+          <CommonTextField
             label={t('dashboard-settings-account-firstname-label')}
             value={data?.firstname}
             disabled
@@ -35,7 +35,7 @@ const SettingsAccountPage = () => {
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField
+          <CommonTextField
             label={t('dashboard-settings-account-familyname-label')}
             value={data?.lastname}
             disabled

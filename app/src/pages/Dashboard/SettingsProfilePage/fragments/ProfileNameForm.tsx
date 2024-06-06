@@ -2,14 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, Typography } from '@mui/material';
-import { notifications } from '@opentalk/common';
+import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
-import TextField from '../../../../commonComponents/TextField';
 import { useAppSelector } from '../../../../hooks';
 import { selectDisallowCustomDisplayName } from '../../../../store/slices/configSlice';
 import { formikProps } from '../../../../utils/formikUtils';
@@ -19,10 +18,12 @@ const ProfileNameForm = () => {
   const { data } = useGetMeQuery();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
   const disallowCustomDisplayName = useAppSelector(selectDisallowCustomDisplayName);
-  const profileNameFieldId = 'profile-name';
 
   const validationSchema = yup.object({
-    displayName: yup.string().trim().required(t('dashboard-settings-profile-input-required')),
+    displayName: yup
+      .string()
+      .trim()
+      .required(t('field-error-required', { fieldName: t('dashboard-settings-profile-name-label') })),
   });
 
   const formik = useFormik({
@@ -45,31 +46,25 @@ const ProfileNameForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container spacing={3} direction={'column'}>
-        <Grid item>
-          <Typography id={profileNameFieldId} variant={'h1'} component={'label'}>
-            {t('dashboard-settings-profile-name')}
-          </Typography>
-        </Grid>
-        <Grid item container spacing={1} direction={'column'}>
+      <Grid container spacing={3} direction="column">
+        <Grid item container spacing={1} direction="column">
           <Grid item>
-            <TextField
+            <CommonTextField
               disabled={disallowCustomDisplayName}
               {...formikProps('displayName', formik)}
               fullWidth
               // Autocomplete attribute on a disabled field makes no sense in terms of the UX and A11Y so we omit it.
               autoComplete={!disallowCustomDisplayName ? 'name' : undefined}
-              inputProps={{
-                'aria-labelledby': profileNameFieldId,
-              }}
+              label={t('dashboard-settings-profile-name-label')}
+              placeholder={t('global-name-placeholder')}
             />
           </Grid>
           <Grid item>
-            <Typography variant={'caption'}>{t('dashboard-settings-profile-input-hint')}</Typography>
+            <Typography variant="caption">{t('dashboard-settings-profile-input-hint')}</Typography>
           </Grid>
         </Grid>
         <Grid item>
-          <Button type={'submit'} disabled={isLoading || disallowCustomDisplayName}>
+          <Button type="submit" disabled={isLoading || disallowCustomDisplayName}>
             {t('dashboard-settings-profile-button-save')}
           </Button>
         </Grid>

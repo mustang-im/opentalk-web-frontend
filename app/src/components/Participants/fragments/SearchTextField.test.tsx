@@ -12,9 +12,8 @@ describe('SearchTextField', () => {
   test('render SearchTextField component without crashing', async () => {
     await render(<SearchTextField onSearch={mockOnSearch} />, store);
 
-    const searchInput = screen.getByPlaceholderText('input-search-placehoder');
+    const searchInput = screen.getByRole('textbox', { name: 'participant-search-label' });
     expect(searchInput).toBeInTheDocument();
-    expect(searchInput).toHaveAttribute('type', 'text');
     expect(screen.queryByRole('button', { name: /sort-by/i })).not.toBeInTheDocument();
   });
 
@@ -26,7 +25,7 @@ describe('SearchTextField', () => {
 
   test('add value into input should trigger onSearch()', async () => {
     await render(<SearchTextField onSearch={mockOnSearch} showSort />, store);
-    const searchInput = screen.getByPlaceholderText('input-search-placehoder');
+    const searchInput = screen.getByRole('textbox', { name: 'participant-search-label' });
     expect(searchInput).toBeInTheDocument();
     expect(searchInput).toHaveValue('');
 

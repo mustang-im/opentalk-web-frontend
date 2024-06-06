@@ -1,12 +1,19 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { InputAdornment } from '@mui/material';
-import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu, AdornmentIconButton } from '@opentalk/common';
+import { InputAdornment, useTheme } from '@mui/material';
+import {
+  SearchIcon,
+  SortIcon,
+  SortItem,
+  SortOption,
+  SortPopoverMenu,
+  AdornmentIconButton,
+  CommonTextField,
+} from '@opentalk/common';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import TextField from '../../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsSortOption, setParticipantsSortOption } from '../../../store/slices/uiSlice';
 
@@ -47,6 +54,7 @@ export const items: SortItem[] = [
 const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: SearchFieldProps) => {
   const id = 'sort-search-participants';
   const { t } = useTranslation();
+  const theme = useTheme();
   const anchorEl = useRef(null);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [hasFocus, setFocus] = useState<boolean>(false);
@@ -72,7 +80,7 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
   };
 
   return (
-    <TextField
+    <CommonTextField
       fullWidth={fullWidth}
       value={searchValue}
       onKeyDown={(event) => {
@@ -82,17 +90,19 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
         event.stopPropagation();
       }}
       onChange={handleSearchChange}
-      size={'small'}
+      size="small"
       onFocus={handleFocus}
       onBlur={handleBlur}
-      placeholder={t('input-search-placehoder')}
-      startAdornment={
-        <InputAdornment position="start">
-          <SearchIcon />
-        </InputAdornment>
-      }
-      endAdornment={
-        showSort && (
+      label={t('participant-search-label')}
+      placeholder={t('global-name-placeholder')}
+      multiline
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+        endAdornment: showSort && (
           <InputAdornment position="end">
             <AdornmentIconButton
               ref={anchorEl}
@@ -120,8 +130,9 @@ const SearchTextField = ({ onSearch, fullWidth, showSort, searchValue = '' }: Se
               />
             )}
           </InputAdornment>
-        )
-      }
+        ),
+      }}
+      InputLabelProps={{ sx: { fontWeight: theme.typography.fontWeightRegular } }}
     />
   );
 };

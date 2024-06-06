@@ -24,7 +24,7 @@ describe('MuteParticipantsTab', () => {
 
     expect(muteAllButton).toBeInTheDocument();
     expect(muteSelectedButton).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('input-search-placehoder')).toBeInTheDocument();
+    expect(screen.getByLabelText('participant-search-label')).toBeInTheDocument();
 
     const participantsList = screen.getAllByRole('listitem');
     expect(participantsList).toHaveLength(UNMUTED_PARTICIPANTS);

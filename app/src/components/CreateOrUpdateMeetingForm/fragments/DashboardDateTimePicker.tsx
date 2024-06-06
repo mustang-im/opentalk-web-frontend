@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack } from '@mui/material';
 import { StreamingPlatform, generateUniquedId } from '@opentalk/common';
-import { FormWrapper } from '@opentalk/common';
 import { formikDateTimePickerProps } from '@opentalk/common';
 import { RecurrencePattern } from '@opentalk/rest-api-rtk-query';
 import { FormikProps } from 'formik';
@@ -42,16 +41,17 @@ export const DashboardDateTimePicker = (props: DashboardDateTimePickerProps) => 
   const { t } = useTranslation();
 
   return (
-    <FormWrapper label={t(`dashboard-meeting-date-${props.type}`)} fullWidth htmlFor={id}>
-      <Stack spacing={2}>
-        <DateTimePicker
-          {...formikDateTimePickerProps(`${props.type}Date`, {
-            ...props.formik,
-            handleChange: props.onChange as never,
-          })}
-          id={id}
-        />
-      </Stack>
-    </FormWrapper>
+    <Stack spacing={2}>
+      <DateTimePicker
+        {...formikDateTimePickerProps(`${props.type}Date`, {
+          ...props.formik,
+          handleChange: props.onChange as never,
+        })}
+        textField={{
+          id: id,
+          startAdornment: t(`dashboard-meeting-date-${props.type}`),
+        }}
+      />
+    </Stack>
   );
 };

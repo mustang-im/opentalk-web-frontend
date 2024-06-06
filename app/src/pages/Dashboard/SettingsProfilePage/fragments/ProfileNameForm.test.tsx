@@ -38,20 +38,20 @@ describe('ProfileNameForm', () => {
     const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
-    expect(screen.getByText('dashboard-settings-profile-name')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'dashboard-settings-profile-name-label' }));
   });
 
   test('empty displayName will show error', async () => {
     const { store } = configureStore();
     await render(<ProfileNameForm />, store);
 
-    expect(screen.queryByText('dashboard-settings-profile-input-required')).not.toBeInTheDocument();
+    expect(screen.queryByText(/field-error-required/i)).not.toBeInTheDocument();
 
     const input = screen.getByDisplayValue(MOCK_DISPLAY_NAME);
     fireEvent.change(input, { target: { value: '' } });
 
     await waitFor(() => {
-      expect(screen.getByText('dashboard-settings-profile-input-required')).toBeInTheDocument();
+      expect(screen.getByText(/field-error-required/i)).toBeInTheDocument();
     });
   });
 

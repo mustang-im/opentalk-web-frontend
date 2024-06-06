@@ -4,11 +4,11 @@
 
 /* eslint-disable jsx-a11y/no-autofocus */
 import { Stack, Typography } from '@mui/material';
+import { CommonTextField } from '@opentalk/common';
 import { FormikProps } from 'formik';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import TextField from '../../../commonComponents/TextField';
 import { formikProps } from '../../../utils/formikUtils';
 
 interface UserFeedbackFormFieldsProps<Values> {
@@ -21,11 +21,21 @@ function UserFeedbackFormFields<Values>({ formik }: UserFeedbackFormFieldsProps<
   return (
     <Stack spacing={2}>
       <Typography>{t('glitchtip-crash-report-subtitle')}</Typography>
-      <TextField {...formikProps('name', formik)} placeholder={t('glitchtip-crash-report-labelName')} autoFocus />
-      <TextField {...formikProps('email', formik)} placeholder={t('glitchtip-crash-report-labelEmail')} />
-      <TextField
+      <CommonTextField
+        {...formikProps('name', formik)}
+        label={t('glitchtip-crash-report-labelName')}
+        placeholder={t('global-name-placeholder')}
+        autoFocus
+      />
+      <CommonTextField
+        {...formikProps('email', formik)}
+        label={t('glitchtip-crash-report-labelEmail')}
+        placeholder={t('global-email-placeholder')}
+      />
+      <CommonTextField
         {...formikProps('comments', formik)}
-        placeholder={t('glitchtip-crash-report-labelComments')}
+        label={t('glitchtip-crash-report-labelComments')}
+        placeholder={t('glitchtip-crash-report-placeholderComments')}
         minRows={4}
         maxRows={6}
         multiline

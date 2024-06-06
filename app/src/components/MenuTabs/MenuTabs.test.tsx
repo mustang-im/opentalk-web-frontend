@@ -33,7 +33,7 @@ describe('MenuTabs Component', () => {
 
     expect(screen.getByRole('button', { name: /chat-open-emoji-picker/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /chat-submit-button/i })).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('chatinput-placeholder')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('chat-input-placeholder')).toBeInTheDocument();
   });
 
   test('click on MessageTab should mark tab as selected', async () => {

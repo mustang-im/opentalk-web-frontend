@@ -104,7 +104,7 @@ describe('Chat component', () => {
 
     await render(<Chat />, store);
 
-    const message = screen.getByPlaceholderText('chatinput-placeholder');
+    const message = screen.getByPlaceholderText('chat-input-placeholder');
 
     fireEvent.change(message, { target: { value: 'Test' } });
 
@@ -125,7 +125,7 @@ describe('Chat component', () => {
   test('should display error if input is empty on sumbit', async () => {
     await render(<Chat />, store);
 
-    const message = screen.getByPlaceholderText('chatinput-placeholder');
+    const message = screen.getByPlaceholderText('chat-input-placeholder');
 
     fireEvent.change(message, { target: { value: '' } });
 
@@ -134,7 +134,7 @@ describe('Chat component', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(screen.getByText('chat-input-error-required')).toBeInTheDocument();
+      expect(screen.getByText(/chat-input-error-required/i)).toBeInTheDocument();
     });
   });
 

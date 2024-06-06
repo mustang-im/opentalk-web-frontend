@@ -29,21 +29,9 @@ const AutocompleteTextField = styled(TextField)(({ theme }) => ({
   '.MuiInputBase-root': {
     backgroundColor: theme.palette.background.default,
     color: theme.palette.secondary.dark,
-    padding: theme.spacing(0.5),
-    borderRadius: 0,
   },
   '& .MuiSvgIcon-root': {
     color: `${theme.palette.secondary.dark} !important`,
-  },
-  '& fieldset': {
-    display: 'none',
-  },
-  '.MuiFormLabel-root': {
-    fontSize: '1rem',
-    transformOrigin: 'unset',
-    position: 'relative',
-    transform: 'unset',
-    paddingBottom: theme.spacing(1.5),
   },
 }));
 

@@ -12,6 +12,7 @@ import {
   closeSnackbar,
   enqueueSnackbar,
   SnackbarKey,
+  CommonTextField,
 } from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import { useFormik } from 'formik';
@@ -24,7 +25,6 @@ import * as yup from 'yup';
 
 import { ApiErrorWithBody, StartRoomError, useGetMeQuery, useGetRoomEventInfoQuery } from '../../api/rest';
 import SuspenseLoading from '../../commonComponents/SuspenseLoading';
-import TextField from '../../commonComponents/TextField';
 import Error from '../../components/Error';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useInviteCode } from '../../hooks/useInviteCode';
@@ -46,7 +46,7 @@ import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider';
 import SelfTest from '../SelfTest';
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
+const CustomTextField = styled(CommonTextField)(({ theme }) => ({
   '& .MuiInputBase-input.Mui-disabled': {
     WebkitTextFillColor: theme.palette.secondary.main,
     backgroundColor: theme.palette.secondary.contrastText,
@@ -221,44 +221,46 @@ const LobbyView: FC = () => {
       <Container>
         <SelfTest
           actionButton={
-            <Button form={JOIN_FORM_ID} type={'submit'} disabled={disableSubmitButton}>
+            <Button form={JOIN_FORM_ID} type="submit" disabled={disableSubmitButton}>
               {t('joinform-enter-now')}
             </Button>
           }
           title={roomData?.title}
         >
-          <Stack direction={'row'} spacing={1} component={'form'} id={JOIN_FORM_ID} onSubmit={formik.handleSubmit}>
+          <Stack direction="row" spacing={1} component="form" id={JOIN_FORM_ID} onSubmit={formik.handleSubmit}>
             <ContitionalToolTip
               showToolTip={Boolean(disableDisplayNameField)}
               title={t('joinform-display-name-field-disabled-tooltip')}
               children={
                 <CustomTextField
                   {...formikProps('name', formik)}
-                  color={'secondary'}
-                  placeholder={t('joinform-enter-name')}
+                  color="secondary"
+                  placeholder={t('global-name')}
                   autoComplete="username"
                   disabled={disableDisplayNameField}
                 />
               }
             />
             {showPasswordField && (
-              <TextField
+              <CommonTextField
                 {...formikProps('password', formik)}
-                color={'secondary'}
-                placeholder={t('joinform-enter-password')}
+                color="secondary"
+                placeholder={t('global-password')}
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label={t('toggle-password-visibility')}
-                      onClick={handleClickShowPassword}
-                      edge="end"
-                    >
-                      {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label={t('toggle-password-visibility')}
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             )}
           </Stack>

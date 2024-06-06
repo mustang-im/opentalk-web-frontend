@@ -4,7 +4,7 @@
 
 /* eslint-disable jsx-a11y/no-autofocus */
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, IconButton, styled } from '@mui/material';
-import { Participant, TextField, formikProps, CloseIcon } from '@opentalk/common';
+import { Participant, formikProps, CommonTextField, CloseIcon } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -73,14 +73,14 @@ const RenameParticipantDialog = ({ open, onClose, participant }: RenameParticipa
         <CloseIcon />
       </CloseIconButton>
       <DialogContent>
-        <TextField
+        <CommonTextField
           {...formikProps('name', formik)}
           autoFocus
           name="name"
-          placeholder={t('participant-menu-rename-new-name')}
+          placeholder={t('global-name-placeholder')}
+          label={t('participant-menu-rename-new-name')}
           type="text"
           fullWidth
-          variant="standard"
         />
       </DialogContent>
       <DialogActions>

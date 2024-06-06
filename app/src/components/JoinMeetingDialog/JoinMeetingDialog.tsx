@@ -18,7 +18,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { RoomId, formikProps, TextField, CloseIcon } from '@opentalk/common';
+import { RoomId, formikProps, CommonTextField, CloseIcon } from '@opentalk/common';
 import { InviteCode } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { ClipboardEvent, useState, ChangeEvent, FormEvent } from 'react';
@@ -60,7 +60,7 @@ export const JoinMeetingDialog = ({ openButtonProps, ...props }: JoinMeetingDial
     roomId: yup
       .string()
       .trim()
-      .required(t('field-error-required', { fieldName: t('dashboard-join-meeting-dialog-placeholder') }))
+      .required(t('field-error-required', { fieldName: t('dashboard-join-meeting-dialog-label') }))
       .test('is valid', t('dashboard-join-meeting-dialog-invalid-id'), function (value) {
         if (value && validateUUID(value)) {
           return true;
@@ -190,7 +190,7 @@ export const JoinMeetingDialog = ({ openButtonProps, ...props }: JoinMeetingDial
           <InputLabel htmlFor={inputFieldId} sx={visuallyHidden}>
             {t('dashboard-join-meeting-dialog-input-field')}
           </InputLabel>
-          <TextField
+          <CommonTextField
             {...formikProps('roomId', formik)}
             //Because the dialog will trap the focus and this input field is the expected starting point -
             //this is the perfect use case for an exception to the no-autofocus rule.
@@ -201,7 +201,7 @@ export const JoinMeetingDialog = ({ openButtonProps, ...props }: JoinMeetingDial
             id={inputFieldId}
             type="text"
             autoComplete="off"
-            placeholder={t('dashboard-join-meeting-dialog-placeholder')}
+            label={t('dashboard-join-meeting-dialog-label')}
           />
         </DialogContent>
 

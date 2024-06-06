@@ -3,7 +3,14 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { RRule } from '@heinlein-video/rrule';
 import { Button, Collapse, Grid, MenuItem, SelectChangeEvent, Stack, styled } from '@mui/material';
-import { formikProps, ForwardIcon, notificationAction, notifications, formikMinimalProps } from '@opentalk/common';
+import {
+  formikProps,
+  ForwardIcon,
+  notificationAction,
+  notifications,
+  formikMinimalProps,
+  CommonTextField,
+} from '@opentalk/common';
 import {
   CreateEventPayload,
   DateTime,
@@ -33,7 +40,6 @@ import {
   useAddStreamingTargetsMutation,
   useGetMeTariffQuery,
 } from '../../api/rest';
-import { LimitedTextField, Select as CommonSelect } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { isFeatureInModulesPredicate } from '../../hooks/enabledModules';
 import { selectFeatures } from '../../store/slices/configSlice';
@@ -61,7 +67,7 @@ const Form = styled('form')({
   justifyContent: 'space-between',
 });
 
-const Select = styled(CommonSelect)(({ theme }) => ({
+const Select = styled(CommonTextField)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     '& .MuiInputBase-input': {
       maxWidth: theme.typography.pxToRem(285),
@@ -540,7 +546,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     <>
       <Form onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
-          <LimitedTextField
+          <CommonTextField
             {...formikProps('title', formik)}
             label={t('dashboard-meeting-textfield-title')}
             placeholder={t('dashboard-meeting-textfield-title-placeholder')}
@@ -548,18 +554,16 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             maxCharacters={MAX_CHARACTERS_TITLE}
           />
 
-          <LimitedTextField
+          <CommonTextField
             {...formikProps('description', formik)}
             label={t('dashboard-meeting-textfield-details')}
             fullWidth
-            variant="standard"
             multiline
-            maxRows={5}
             placeholder={t('dashboard-meeting-textfield-details-placeholder')}
             maxCharacters={MAX_CHARACTERS_DESCRIPTION}
           />
 
-          <LimitedTextField
+          <CommonTextField
             {...formikProps('password', formik)}
             label={t('dashboard-direct-meeting-password-label')}
             fullWidth
@@ -586,19 +590,24 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
                 {/* TODO: Separate in own component and move related logic */}
                 <Select
                   {...formikProps('recurrencePattern', formik)}
-                  open={isRecurrenceSelectOpen}
-                  onOpen={() => setIsRecurrenceSelectOpen(true)}
-                  onClose={() => setIsRecurrenceSelectOpen(false)}
-                  //Type is not getting infered so we have to manually assert
-                  onChange={(event) => handleRecurrenceChange(event as SelectChangeEvent)}
-                  MenuProps={{
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'left',
+                  select
+                  label={t('dashboard-meeting-recurrence-label')}
+                  hideLabel
+                  SelectProps={{
+                    open: isRecurrenceSelectOpen,
+                    onOpen: () => setIsRecurrenceSelectOpen(true),
+                    onClose: () => setIsRecurrenceSelectOpen(false),
+                    //Type is not getting infered so we have to manually assert
+                    onChange: (event) => handleRecurrenceChange(event as SelectChangeEvent),
+                    MenuProps: {
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      },
                     },
                   }}
                 >

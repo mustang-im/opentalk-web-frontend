@@ -32,9 +32,8 @@ describe('LanguageSelector component', () => {
     await render(<LanguageSelector />, store);
 
     expect(screen.getByDisplayValue('en-US')).toBeInTheDocument();
-    expect(screen.getByTestId('languageSelect')).toBeInTheDocument();
-    expect(screen.getByText('dashboard-settings-profile-button-save')).toBeInTheDocument();
-    expect(screen.getByText('dashboard-settings-general-language')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'dashboard-settings-profile-button-save' })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: 'dashboard-settings-general-language' })).toBeInTheDocument();
   });
 
   test('click on Save button should trigger mockUpdateMe', async () => {

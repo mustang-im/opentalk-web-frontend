@@ -8,6 +8,7 @@ import {
   formikSwitchProps,
   DurationField,
   generateUniquedId,
+  CommonTextField,
 } from '@opentalk/common';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
@@ -15,13 +16,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
-import TextField from '../../../commonComponents/TextField';
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
 import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 import TextWithDivider from '../../TextWithDivider';
 
-const NumberInput = styled(TextField)(({ theme }) => ({
+const NumberInput = styled(CommonTextField)(({ theme }) => ({
   maxWidth: '4rem',
   '& input': {
     paddingRight: theme.spacing(0),

@@ -64,7 +64,7 @@ const Chat = ({ target, scope, autoFocusMessageInput }: ChatProps) => {
   };
 
   return (
-    <Container data-testid={'chat'} spacing={1}>
+    <Container data-testid="chat" spacing={1} sx={{ pt: 0.7 }}>
       <ChatSearch value={searchValue} onChange={onChangeMiddleware} ref={chatSearchInputReference} />
       <ChatList scope={scope} targetId={target} onReset={resetSearch} />
       <ChatForm scope={scope} targetId={target} autoFocusMessageInput={autoFocusMessageInput} />

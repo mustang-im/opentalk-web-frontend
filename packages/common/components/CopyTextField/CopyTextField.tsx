@@ -5,9 +5,9 @@ import { InputAdornment, CircularProgress, styled } from '@mui/material';
 import React from 'react';
 
 import { CopyIcon } from '../../assets/icons';
+import CommonTextField from '../CommonTextField';
 import { AdornmentIconButton } from '../IconButtons';
 import { notifications } from '../Notistack';
-import { TextField } from '../TextField';
 
 interface LinkFieldProps {
   label: string;
@@ -41,32 +41,31 @@ const CopyTextField = ({ label, checked, value, onClick, ariaLabel, isLoading, n
     }
   };
 
+  const renderEndAdornment = () => {
+    if (isLoading) {
+      return (
+        <SpinnerAdornment position="end">
+          <LoadingSpinner />
+        </SpinnerAdornment>
+      );
+    }
+
+    return (
+      <InputAdornment position="end">
+        <AdornmentIconButton aria-label={ariaLabel} onClick={handleClick} edge="end" disabled={!value} parentDisabled>
+          <CopyIcon />
+        </AdornmentIconButton>
+      </InputAdornment>
+    );
+  };
+
   return (
-    <TextField
+    <CommonTextField
       label={label}
       fullWidth
-      checked={checked}
       value={value ? value.toString() : '-'}
       disabled
-      endAdornment={
-        isLoading ? (
-          <SpinnerAdornment position="end">
-            <LoadingSpinner />
-          </SpinnerAdornment>
-        ) : (
-          <InputAdornment position="end">
-            <AdornmentIconButton
-              aria-label={ariaLabel}
-              onClick={handleClick}
-              edge="end"
-              disabled={!value}
-              parentDisabled
-            >
-              <CopyIcon />
-            </AdornmentIconButton>
-          </InputAdornment>
-        )
-      }
+      InputProps={{ endAdornment: renderEndAdornment(), checked: checked }}
     />
   );
 };

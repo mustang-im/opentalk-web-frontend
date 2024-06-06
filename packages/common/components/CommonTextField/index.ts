@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import LimitedTextField from './LimitedTextField';
+import CommonTextField from './CommonTextField';
 
-export default LimitedTextField;
+export default CommonTextField;
