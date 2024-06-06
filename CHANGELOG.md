@@ -4,11 +4,6 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Bug Fixes
-
-- Pagination on leftright corner broken ([#1888](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1888))
-- Add the logo to desktop view for conference ([#1879](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1879))
-
 ### New Features
 
 - Whiteboard automatically open by creating ([#1814](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1814))
@@ -16,26 +11,37 @@ All notable changes to this project will be documented in this file.
 - Added PKCE to the auth flow ([#1859](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1859))
 - Add meeting details switch in the dashboard ([#1808](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1808))
 - Implement storage section in the dashboard navigation ([#1682](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1682))
+
+### Improvements to the user experience
+
+- Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
+- Add the indicator for disabled camera in conference for local and remote video tile ([#1849](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1849))
+
+### Bug Fixes
+
+- Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
+
+## 1.15.0
+
+### New Features
+
 - Added jump links for keyboard users to quickly access certain elements in the conference ([#1253](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1253))
 - Implement streaming in conference ([#1586](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1586))
 
 ### Improvements to the user experience
 
-- Adjust mobile header for dashboard - start page ([#1798](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
-- Display notification after recorder timeout ([#1861](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1861))
-- Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
+- Remove `/join` path to restore old user flow ([#1877](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1877))
 - Adjust mobile header for dashboard - startpage ([#1798](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
 - Adjust the header navigation in conference for lower resolutions ([#1767](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1767))
 - Adjust meeting details for mobile ([#1799](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1799))
 - Added summary to shortcuts table along with better shortcut description formatting for cleaner screen reader pronunciation. ([#1742](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1742))
 - Restructured dashboard meeting header with filter options as dropdowns. ([#1646](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1646))
 - Add label to the duration pickers accross the app with the horizontal alignment. ([#1711](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1711))
-- Remove `/join` path to restore old user flow ([#1877](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1877))
-- Add the indicator for disabled camera in conference for local and remote video tile ([#1849](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1849))
 
 ### Bug Fixes
 
-- Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
+- Pagination on leftright corner broken ([#1888](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1888))
+- Add the logo to desktop view for conference ([#1879](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1879))
 
 ## 1.14.0
 
