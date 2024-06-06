@@ -615,6 +615,7 @@ global-ok = Ok
 global-no-result = Keine Ergebnisse
 global-close-dialog = Dialog schließen
 global-back = Zurück
+global-submit = Senden
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings

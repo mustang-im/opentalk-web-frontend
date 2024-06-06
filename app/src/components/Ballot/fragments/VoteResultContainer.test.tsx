@@ -143,7 +143,7 @@ describe('VoteResultContainer', () => {
     const checkboxYes = screen.getByRole('radio', { name: 'legal-vote-yes-label' });
     const checkboxNo = screen.getByRole('radio', { name: 'legal-vote-no-label' });
     const checkboxAbstain = screen.getByRole('radio', { name: 'legal-vote-abstain-label' });
-    const saveButton = screen.getByTestId('legal-vote-save-button');
+    const saveButton = screen.getByRole('button', { name: 'global-submit' });
 
     expect(checkboxYes).toBeInTheDocument();
     expect(checkboxYes).not.toBeChecked();

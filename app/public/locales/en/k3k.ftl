@@ -615,6 +615,7 @@ global-ok = Ok
 global-no-result = No result
 global-close-dialog = Close dialog
 global-back = Back
+global-submit = Submit
 
 dashboard-home = Home
 dashboard-meetings = Meetings
@@ -669,7 +670,7 @@ dashboard-settings-storage-usage-unlimited = {$usedStorage} used
 dashboard-settings-storage-usage-loading = Loading storage usage
 dashboard-settings-storage-assets = My Files
 
-dashboard-storage-almost-full-message = Attention: Your storage is almost full. Functions like recording and creating PDF may not work.<br /> Please delete files or make a plan upgrade. 
+dashboard-storage-almost-full-message = Attention: Your storage is almost full. Functions like recording and creating PDF may not work.<br /> Please delete files or make a plan upgrade.
 
 dashboard-meeting-card-error = Error detecting the meeting duration
 dashboard-meeting-card-all-day = All-day

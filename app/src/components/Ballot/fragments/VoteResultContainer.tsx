@@ -11,6 +11,7 @@ import {
   Choice,
   ChoiceResult,
   getCurrentTimezone,
+  ChoiceId,
 } from '@opentalk/common';
 import {
   LegalVoteType,
@@ -100,16 +101,25 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
   const startTime = new Date(currentLegalVote?.startTime ?? new Date());
   const formattedTime = useDateFormat(startTime, 'time');
   const [showResults, setShowResults] = useState(false);
+  const [selectedPollOption, setSelectedPollOption] = useState<{
+    id?: PollId;
+    choiceId?: ChoiceId;
+  }>({});
   const isLiveVote = currentLegalVote?.kind === 'live_roll_call' || currentLegalVote?.kind === 'roll_call';
 
   const vote: Vote | LegalVoteType | undefined = currentLegalVote || currentPoll;
+  const isVoteActive = vote?.state === 'active';
   const [selectedLegalVoteOption, setSelectedLegalVoteOption] = useState<VoteOption | undefined>(
     currentLegalVote?.selectedOption
   );
 
+  const submittedLegalVoteOption = Boolean(currentLegalVote?.votedAt);
+  const submittedPollOption = Boolean(currentPoll?.voted);
+
   // to uncheck all checkboxes on every new voting
   useEffect(() => {
     setSelectedLegalVoteOption(undefined);
+    setSelectedPollOption({});
   }, [voteOrPollId]);
 
   let numberOfVotes = 0;
@@ -128,7 +138,14 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
     numberOfVotes = (isVote(vote) && vote?.results?.reduce((acc, result) => acc + result.count, 0)) || 0;
   }
 
-  const allowedToVote = ourUuid ? currentLegalVote?.allowedParticipants?.includes(ourUuid as ParticipantId) : false;
+  const isSubmitButtonDisabled =
+    !isVoteActive ||
+    submittedLegalVoteOption ||
+    submittedPollOption ||
+    (!selectedPollOption.id && !selectedLegalVoteOption);
+  const isRenderingLegalVote = currentLegalVote && currentLegalVote.votes !== undefined;
+  const allowedToVote = ourUuid ? Boolean(currentLegalVote?.allowedParticipants?.includes(ourUuid)) : false;
+  const showSubmitButton = isRenderingLegalVote ? allowedToVote : true; // We hide submit button only for users that cannot place a legal vote.
 
   useEffect(() => {
     vote && setVoteOrPollIdToShow(vote.id);
@@ -143,24 +160,36 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
     if (!currentLegalVote || !currentLegalVote.id || !selectedLegalVoteOption) {
       return;
     }
-    dispatch(
-      legalVoteStore.actions.saveSelectedOption({
-        legalVoteId: currentLegalVote.id,
-        selectedOption: selectedLegalVoteOption,
-      })
-    );
-    dispatch(
-      legalVoteSignaling.actions.vote.action({
-        legalVoteId: currentLegalVote?.id as LegalVoteId,
-        option: selectedLegalVoteOption,
-        token: currentLegalVote?.token || '',
-        timezone: getCurrentTimezone(),
-      })
-    );
+    batch(() => {
+      dispatch(
+        legalVoteStore.actions.saveSelectedOption({
+          legalVoteId: currentLegalVote.id,
+          selectedOption: selectedLegalVoteOption,
+        })
+      );
+      dispatch(
+        legalVoteSignaling.actions.vote.action({
+          legalVoteId: currentLegalVote.id,
+          option: selectedLegalVoteOption,
+          token: currentLegalVote?.token || '',
+          timezone: getCurrentTimezone(),
+        })
+      );
+    });
+  };
+
+  const submitPollVoteOption = (event: FormEvent) => {
+    event.preventDefault();
+    batch(() => {
+      if (selectedPollOption.id && selectedPollOption.choiceId !== undefined) {
+        dispatch(voted({ id: selectedPollOption.id as PollId, selectedChoiceId: selectedPollOption.choiceId }));
+        dispatch(pollVote.action({ pollId: selectedPollOption.id as PollId, choiceId: selectedPollOption.choiceId }));
+      }
+    });
   };
 
   const renderVoteResult = () => {
-    if (currentLegalVote && currentLegalVote.votes !== undefined) {
+    if (isRenderingLegalVote) {
       return (
         <>
           {Object.keys(currentLegalVote.votes).map(
@@ -178,7 +207,7 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
                         : 0,
                     numberOfVotes,
                     currentVotes: currentLegalVote.votes ? currentLegalVote.votes[voteKey as VoteOption] : 0,
-                    isVotable: Boolean(allowedToVote) && Boolean(currentLegalVote.state === 'active'),
+                    isVotable: isVoteActive && allowedToVote,
                     legalVoteId: currentLegalVote.id as LegalVoteId,
                   }}
                   isChecked={voteKey === selectedLegalVoteOption}
@@ -208,17 +237,14 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
                   votePercentage: result !== undefined ? (result.count / numberOfVotes) * 100 : 0,
                   numberOfVotes,
                   currentVotes: result !== undefined ? result.count : 0,
-                  isVotable:
-                    typeof currentPoll.voted === 'boolean'
-                      ? !currentPoll.voted
-                      : Boolean(currentPoll.state === 'active'),
+                  isVotable: isVoteActive,
                   legalVoteId: currentPoll.id,
                 }}
-                isChecked={currentPoll.selectedChoiceId === choice.id}
+                isChecked={selectedPollOption.choiceId === choice.id || currentPoll.selectedChoiceId === choice.id}
                 onVote={() => {
-                  batch(() => {
-                    dispatch(voted({ id: currentPoll.id as PollId, selectedChoiceId: choice.id }));
-                    dispatch(pollVote.action({ pollId: currentPoll.id as PollId, choiceId: choice.id }));
+                  setSelectedPollOption({
+                    id: currentPoll.id,
+                    choiceId: choice.id,
                   });
                 }}
                 showResult={currentPoll.live || currentPoll.state === 'finished'}
@@ -311,7 +337,7 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
           </IconButton>
         </Stack>
       </Grid>
-      <CustomForm onSubmit={submitLegalVoteOption} method="POST">
+      <CustomForm onSubmit={isRenderingLegalVote ? submitLegalVoteOption : submitPollVoteOption} method="POST">
         <CustomFieldset>
           <legend id="vote-result-legend">
             {vote?.name && (
@@ -340,14 +366,10 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
             </Typography>
           </Grid>
         )}
-        {currentLegalVote && allowedToVote && currentLegalVote.state === 'active' && (
-          <Grid item xs={12} my={1} container justifyContent="flex-end">
-            <Button
-              data-testid="legal-vote-save-button"
-              type="submit"
-              disabled={Boolean(currentLegalVote?.votedAt) || !allowedToVote}
-            >
-              {t('legal-vote-form-button-save')}
+        {showSubmitButton && (
+          <Grid item xs={12} my={1} container justifyContent="stretch">
+            <Button type="submit" disabled={isSubmitButtonDisabled} fullWidth>
+              {t('global-submit')}
             </Button>
           </Grid>
         )}
