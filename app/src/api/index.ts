@@ -481,7 +481,7 @@ const handleControlMessage = (
     case 'role_updated':
       dispatch(updateRole(data.newRole));
       if (data.newRole === Role.Moderator) {
-        notifications.success(i18next.t('moderation-rights-granted'));
+        notifications.info(i18next.t('moderation-rights-granted'));
       } else {
         notifications.warning(i18next.t('moderation-rights-revoked'));
       }
@@ -517,10 +517,18 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
   switch (data.message) {
     case 'presenter_granted':
       dispatch(setPresenterRole());
+      notifications.close('control-participant-presenter-role-revoked');
+      notifications.info(i18next.t('control-participant-presenter-role-granted'), {
+        key: 'control-participant-presenter-role-granted',
+      });
       break;
     case 'presenter_revoked':
       dispatch(revokePresenterRole());
       localScreenContext.release();
+      notifications.close('control-participant-presenter-role-granted');
+      notifications.warning(i18next.t('control-participant-presenter-role-revoked'), {
+        key: 'control-participant-presenter-role-revoked',
+      });
       break;
     case 'request_mute': {
       dispatch(mediaStore.requestMute(data));

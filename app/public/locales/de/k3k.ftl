@@ -1002,3 +1002,6 @@ my-meeting-menu = Mein Meeting
 my-meeting-menu-keyboard-shortcuts = Tastaturkürzel
 my-meeting-menu-quick-guide = Kurzanleitung
 my-meeting-menu-glitchtip-trigger = Fehler melden
+
+control-participant-presenter-role-revoked = Ihnen wurden die Rolle des Präsentators entzogen
+control-participant-presenter-role-granted = Sie haben die Rolle des Präsentators erhalten
