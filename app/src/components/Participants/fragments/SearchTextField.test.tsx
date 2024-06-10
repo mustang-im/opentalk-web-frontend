@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { render, screen, fireEvent, waitFor, createStore, cleanup } from '../../utils/testUtils';
+import { render, screen, fireEvent, waitFor, createStore, cleanup } from '../../../utils/testUtils';
 import SearchTextField, { items } from './SearchTextField';
 
 describe('SearchTextField', () => {

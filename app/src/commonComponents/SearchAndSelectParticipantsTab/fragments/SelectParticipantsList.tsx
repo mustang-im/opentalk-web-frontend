@@ -5,23 +5,23 @@ import { List } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
 import React from 'react';
 
-import MuteParticipantsItem, { MutedParticipant } from './MuteParticipantsItem';
+import SelectParticipantsItem, { SelectableParticipant } from './SelectParticipantsItem';
 
-type MuteParticipantsListProps = {
-  participantsList: MutedParticipant[];
+type SelectParticipantsListProps = {
+  participantsList: SelectableParticipant[];
   onCheck: (checked: boolean, participantId: ParticipantId) => void;
 };
 
-const MuteParticipantsList = ({ participantsList, onCheck }: MuteParticipantsListProps) => (
+const SelectParticipantsList = ({ participantsList, onCheck }: SelectParticipantsListProps) => (
   <List>
     {participantsList.map((participant) => (
-      <MuteParticipantsItem
+      <SelectParticipantsItem
         participant={participant}
-        onCheck={(checked) => onCheck(checked, participant.id)}
+        onCheck={(checked: boolean) => onCheck(checked, participant.id)}
         key={participant.id}
       />
     ))}
   </List>
 );
 
-export default MuteParticipantsList;
+export default SelectParticipantsList;

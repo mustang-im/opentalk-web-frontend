@@ -6,9 +6,9 @@ import { SearchIcon, SortIcon, SortItem, SortOption, SortPopoverMenu, AdornmentI
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import TextField from '../../commonComponents/TextField';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectParticipantsSortOption, setParticipantsSortOption } from '../../store/slices/uiSlice';
+import TextField from '../../../commonComponents/TextField';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { selectParticipantsSortOption, setParticipantsSortOption } from '../../../store/slices/uiSlice';
 
 interface SearchFieldProps {
   onSearch: (search: string) => void;

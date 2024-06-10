@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { mockStore, render, screen, fireEvent, waitFor, mockedParticipant } from '../../../utils/testUtils';
-import MuteParticipantsItem from './MuteParticipantsItem';
+import SelectParticipantsItem from './SelectParticipantsItem';
 
-describe('MuteParticipantsItem', () => {
+describe('SelectParticipantsItem', () => {
   const handleCheck = jest.fn();
   const { store } = mockStore(1, { video: true, screen: true });
   const participant = mockedParticipant(0);
 
-  test('MuteParticipantsItem should render properly without crashing', async () => {
+  test('SelectParticipantsItem should render properly without crashing', async () => {
     await render(
-      <MuteParticipantsItem participant={{ ...participant, selected: false }} onCheck={handleCheck} />,
+      <SelectParticipantsItem participant={{ ...participant, selected: false }} onCheck={handleCheck} />,
       store
     );
 
@@ -20,9 +20,9 @@ describe('MuteParticipantsItem', () => {
     expect(screen.getByLabelText(participant.displayName)).toBeInTheDocument();
   });
 
-  test('click on checkoBox should trigger onCheck()', async () => {
+  test('click on checkBox should trigger onCheck()', async () => {
     await render(
-      <MuteParticipantsItem participant={{ ...participant, selected: false }} onCheck={handleCheck} />,
+      <SelectParticipantsItem participant={{ ...participant, selected: false }} onCheck={handleCheck} />,
       store
     );
 

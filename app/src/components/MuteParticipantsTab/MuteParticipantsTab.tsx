@@ -2,25 +2,25 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ParticipantId } from '@opentalk/common';
-import { useMemo, useState } from 'react';
+import { useState, useMemo } from 'react';
 
-import { resetRaisedHands } from '../../api/types/outgoing/moderation';
+import { requestMute } from '../../api/types/outgoing/media';
 import { SearchAndSelectParticipantsTab } from '../../commonComponents/SearchAndSelectParticipantsTab';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectParticipantsWithRaisedHands } from '../../store/selectors';
+import { selectUnmutedParticipants } from '../../store/selectors';
 
-const ResetHandraisesTab = () => {
+const MuteParticipantsTab = () => {
   const dispatch = useAppDispatch();
-  const activeParticipants = useAppSelector(selectParticipantsWithRaisedHands);
+  const unmutedParticipants = useAppSelector(selectUnmutedParticipants);
 
   const [search, setSearch] = useState<string>('');
   const [selectedParticipants, setSelectedParticipants] = useState<ParticipantId[]>([]);
 
-  const searchFilteredParticipantsList = useMemo(() => {
-    return activeParticipants
+  const participantsList = useMemo(() => {
+    return unmutedParticipants
       .filter((participant) => participant.displayName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
       .map((participant) => ({ ...participant, selected: selectedParticipants.includes(participant.id) }));
-  }, [search, activeParticipants, selectedParticipants]);
+  }, [search, unmutedParticipants, selectedParticipants]);
 
   const handleSelectParticipant = (checked: boolean, participantId: ParticipantId) => {
     if (checked) {
@@ -30,27 +30,26 @@ const ResetHandraisesTab = () => {
     }
   };
 
-  const resetAllHandraises = () => {
-    dispatch(resetRaisedHands.action({}));
+  const muteAll = () => {
+    const unmutedParticipantIds = unmutedParticipants.map((participant) => participant.id);
+    dispatch(requestMute.action({ targets: unmutedParticipantIds, force: true }));
   };
 
-  const resetSelectedHandraises = () => {
-    if (selectedParticipants.length > 0) {
-      dispatch(resetRaisedHands.action({ target: selectedParticipants }));
-      setSelectedParticipants([]);
-    }
+  const muteSelected = () => {
+    dispatch(requestMute.action({ targets: selectedParticipants, force: true }));
+    setSelectedParticipants([]);
   };
 
   return (
     <SearchAndSelectParticipantsTab
-      handleAllClick={resetAllHandraises}
-      handleSelectedClick={resetSelectedHandraises}
+      handleAllClick={muteAll}
+      handleSelectedClick={muteSelected}
       handleSelectParticipant={handleSelectParticipant}
       handleSearchChange={setSearch}
       searchValue={search}
-      participantsList={searchFilteredParticipantsList}
+      participantsList={participantsList}
     />
   );
 };
 
-export default ResetHandraisesTab;
+export default MuteParticipantsTab;

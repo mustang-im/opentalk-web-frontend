@@ -219,6 +219,13 @@ export const selectUnmutedParticipants = createSelector(
   }
 );
 
+export const selectParticipantsWithRaisedHands = createSelector(
+  selectAllOnlineParticipants,
+  (participants): Participant[] => {
+    return participants.filter((participant) => participant.handIsUp);
+  }
+);
+
 export const selectVotingUsers = createSelector(selectCombinedParticipantsAndUser, (records) => {
   return records.filter((record) => {
     return record.role === 'user' || record.participationKind === 'user';

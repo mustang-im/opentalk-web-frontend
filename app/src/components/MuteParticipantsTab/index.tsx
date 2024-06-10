@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import SearchTextField from './SearchTextField';
+import MuteParticipantsTab from './MuteParticipantsTab';
 
-export default SearchTextField;
+export default MuteParticipantsTab;

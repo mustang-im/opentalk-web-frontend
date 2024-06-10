@@ -275,8 +275,6 @@ moderationbar-button-talking-stick-tooltip = Talking stick
 moderationbar-button-waiting-room-tooltip = Participants in waiting room
 
 mute-participants-tab-title = Mute participants
-mute-participants-button-all = All
-mute-participants-button-selected = Selected
 
 talking-stick-tab-title = Talking stick
 talking-stick-skip-speaker = Skip speaker
@@ -292,8 +290,7 @@ talking-stick-unmuted-notification = You are unmuted. When you're done, please p
 talking-stick-unmuted-notification-last-participant = You are unmuted. You are the last person, when you're done, please hand over the talking stick.
 
 reset-handraises-tab-title = Reset raised hands
-reset-handraises-button = All
-reset-handraises-notification = All raised hands were reset by the moderator
+reset-handraises-notification = Your raised hand was reset by the moderator
 
 debriefing-tab-title = Debriefing
 debriefing-button-all = End of the conference
@@ -613,6 +610,8 @@ global-ok = Ok
 global-no-result = No result
 global-close-dialog = Close dialog
 global-back = Back
+global-all = All
+global-selected = Selected
 global-submit = Submit
 global-call-in = Telephone dial-in
 global-call-in-number = Number

@@ -13,12 +13,12 @@ import {
 import { ParticipantAvatar, Participant } from '@opentalk/common';
 import React from 'react';
 
-export interface MutedParticipant extends Participant {
+export interface SelectableParticipant extends Participant {
   selected: boolean;
 }
 
-type MuteParticipantsItemProps = {
-  participant: MutedParticipant;
+type SelectParticipantsItemProps = {
+  participant: SelectableParticipant;
   onCheck: (checked: boolean) => void;
 };
 
@@ -43,9 +43,9 @@ const FormControlLabel = styled(MuiFormControlLabel)(() => ({
   margin: 0,
 }));
 
-const MuteParticipantsItem = ({ participant, onCheck }: MuteParticipantsItemProps) => (
+const SelectParticipantsItem = ({ participant, onCheck }: SelectParticipantsItemProps) => (
   <ListItem alignItems="flex-start">
-    <Grid container direction={'row'} wrap={'nowrap'}>
+    <Grid container direction="row" wrap="nowrap">
       <Grid item>
         <ListItemAvatar>
           <Avatar src={participant.avatarUrl}>{participant.displayName}</Avatar>
@@ -62,11 +62,11 @@ const MuteParticipantsItem = ({ participant, onCheck }: MuteParticipantsItemProp
             />
           }
           label={<ListItemText translate="no">{participant.displayName}</ListItemText>}
-          labelPlacement={'start'}
+          labelPlacement="start"
         />
       </Grid>
     </Grid>
   </ListItem>
 );
 
-export default MuteParticipantsItem;
+export default SelectParticipantsItem;
