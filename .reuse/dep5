@@ -4,12 +4,16 @@ Upstream-Contact: OpenTalk GmbH <mail@opentalk.eu>
 Source: https://git.opentalk.dev/opentalk/k3k-web-frontend/
 
 Files:
+ .parcelrc
+ babel.config.js
+ jest.config.js
  yarn.lock
  .yarnrc.yml
  README.md
  CHANGELOG.md
  package.json
  tsconfig.base.json
+ mocks/fileMock.js
  app/tsconfig.dev.json
  app/tsconfig.hot.json
  app/hotReload/packages.tsconfig.example.json
@@ -95,4 +99,3 @@ Copyright:
  2020 Jan Mühlemann <jan.muehlemann@gmail.com>
  2022 OpenTalk GmbH <mail@opentalk.eu>
 License: LicenseRef-MIT-fluent_conv
-

@@ -56,12 +56,12 @@ const SelectedParticipantsList = styled(List)({
 });
 
 const ProtocolTab = () => {
+  const [participants, setParticipants] = useState<ProtocolParticipant[]>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const protocolUrl = useAppSelector(selectProtocolUrl);
   const [selectedParticipants, setSelectedParticipants] = useState<ProtocolParticipant[]>([]);
-  const [participants, setParticipants] = useState<ProtocolParticipant[]>([]);
   const allProtocolParticipants = useAppSelector(selectAllProtocolParticipants);
   const [searchMask, setSearchMask] = useState('');
   const salt = Date.now();

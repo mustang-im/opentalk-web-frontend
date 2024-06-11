@@ -13,9 +13,6 @@
     "build": "yarn run create:dev && BUILD_PATH=../dist REACT_APP_VERSION=$(git rev-parse --short HEAD) craco build",
     "build:profiler": "yarn run create:dev && BUILD_PATH=../dist-profiler REACT_APP_VERSION=$(git rev-parse --short HEAD) craco build",
     "build-react-scripts": "yarn run create:dev && REACT_APP_VERSION=$(git rev-parse --short HEAD) react-scripts build",
-    "test": "yarn run create:dev && craco test",
-    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
-    "test-react-scripts": "react-scripts test",
     "analyze": "REACT_APP_INTERACTIVE_ANALYZE=1 craco build",
     "eject": "react-scripts eject",
     "ci": "yarn fmt && yarn lint && yarn test",
@@ -72,7 +69,7 @@
     "snakecase-keys": "^5.4.4",
     "use-elapsed-time": "^3.0.4",
     "use-sound": "^4.0.1",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.1",
     "web-vitals": "^3.0.2",
     "webrtc-adapter": "^8.1.2",
     "yup": "^0.32.11"

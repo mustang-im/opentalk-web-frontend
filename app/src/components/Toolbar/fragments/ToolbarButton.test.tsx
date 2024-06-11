@@ -6,9 +6,10 @@ import { MicOnIcon } from '@opentalk/common';
 import { render, screen, cleanup, fireEvent } from '../../../utils/testUtils';
 import ToolbarButton from './ToolbarButton';
 
+const handleClick = jest.fn();
+
 describe('<ToolbarButton />', () => {
   afterEach(() => cleanup());
-  const handleClick = jest.fn();
 
   const ToolbarButtonProps = {
     hasContext: true,

@@ -9,7 +9,10 @@ import { TariffId } from '@opentalk/common';
 import '@testing-library/jest-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import React from 'react';
 import { TextEncoder } from 'util';
+
+global.React = React;
 
 global.console = {
   ...console,
@@ -132,6 +135,19 @@ jest.mock('./modules/WebRTC', () => {
     descriptorFromId,
     MediaStreamState,
   };
+});
+jest.mock('@opentalk/i18next-fluent', () => {
+  class Fluent {
+    constructor() {
+      this.init();
+    }
+
+    init() {
+      // Validate backendOptions
+    }
+  }
+  Fluent.type = 'fluent';
+  return Fluent;
 });
 
 global.beforeEach(() => {

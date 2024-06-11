@@ -25,9 +25,9 @@ const mockCreateSipConfig = jest.fn();
 const mockCreateStreamingTarget = jest.fn();
 
 const ROOM_ID = 'ROOM_ID' as RoomId;
-const INVITE_CODE = 'INVITE_CODE';
+const MOCK_INVITE_CODE = 'MOCK_INVITE_CODE';
 const INVITE_LINK = `${window.location.origin}/room/${ROOM_ID}`;
-const INVITE_GUEST_LINK = `${window.location.origin}/room/${ROOM_ID}?invite=${INVITE_CODE}`;
+const INVITE_GUEST_LINK = `${window.location.origin}/room/${ROOM_ID}?invite=${MOCK_INVITE_CODE}`;
 
 const createMockEvent = () => ({
   ...eventMockedData,
@@ -39,7 +39,7 @@ const createMockEvent = () => ({
 const createMockedPermanentRoomInvites = () => [
   {
     ...mockedPermanentRoomInvite,
-    inviteCode: INVITE_CODE,
+    inviteCode: MOCK_INVITE_CODE,
   },
 ];
 
@@ -70,7 +70,7 @@ jest.mock('../../../api/rest', () => ({
   useGetRoomInvitesQuery: () => ({
     data: [
       {
-        inviteCode: INVITE_CODE,
+        inviteCode: MOCK_INVITE_CODE,
         expiration: null,
         active: true,
       },

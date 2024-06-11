@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import React from 'react';
 
-import { render, screen, configureStore, fireEvent } from '../../utils/testUtils';
+import { render, screen, configureStore, fireEvent, cleanup } from '../../utils/testUtils';
 import NumberInput from './NumberInput';
 
 const inputProps: {
@@ -14,8 +14,12 @@ const inputProps: {
   max: 10,
 };
 
+const mockOnChange = jest.fn();
+
 describe('custom number input', () => {
-  const mockOnChange = jest.fn();
+  beforeEach(() => {
+    cleanup();
+  });
   test('render all elements', async () => {
     const { store } = configureStore();
     await render(<NumberInput inputProps={inputProps} onChange={mockOnChange} />, store);
