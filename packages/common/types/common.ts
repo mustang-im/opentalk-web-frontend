@@ -117,11 +117,20 @@ export interface IParticipantControl {
   role?: Role;
   isRoomOwner: boolean;
 }
+export enum ForceMuteType {
+  Enabled = 'enabled',
+  Disabled = 'disabled',
+}
+export interface ForceMute {
+  type: ForceMuteType;
+  allowList: Array<ParticipantId>;
+}
 
 export type ParticipantMediaState = PresenterRoleState & {
   screen?: MediaSessionState;
   video?: MediaSessionState;
   speakers?: Speaker[];
+  forceMute: ForceMute;
 };
 
 type TimerIsReady = Pick<TimerState, 'readyStatus'>;

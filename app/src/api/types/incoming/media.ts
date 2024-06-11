@@ -76,6 +76,15 @@ export interface SpeakerUpdated extends SpeakingState {
   participant: ParticipantId;
 }
 
+export interface ForceMuteEnabled {
+  message: 'force_mute_enabled';
+  allowList: Array<ParticipantId>;
+}
+
+export interface ForceMuteDisabled {
+  message: 'force_mute_disabled';
+}
+
 export type Message =
   | SdpAnswer
   | SdpOffer
@@ -87,7 +96,9 @@ export type Message =
   | RequestMute
   | PresenterRoleGranted
   | PresenterRoleRevoked
-  | SpeakerUpdated;
+  | SpeakerUpdated
+  | ForceMuteEnabled
+  | ForceMuteDisabled;
 
 export type Media = NamespacedIncoming<Message, 'media'>;
 

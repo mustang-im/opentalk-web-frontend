@@ -31,6 +31,7 @@ import {
   Speaker,
   StreamingStatus,
   StreamingKind,
+  ForceMuteType,
 } from '@opentalk/common';
 import { login } from '@opentalk/redux-oidc';
 import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
@@ -94,6 +95,8 @@ import {
   enableRaisedHands,
   loweredHand,
   raisedHand,
+  forceMuteDisabled,
+  forceMuteEnabled,
 } from '../store/slices/moderationSlice';
 import {
   breakoutJoined,
@@ -292,7 +295,7 @@ const startedId = 'handleAutomodMessage-started-id';
  * @param {control.Message} data control message content
  * @param {Timestamp} timestamp of the message
  */
-const handleControlMessage = (
+const handleControlMessage = async (
   dispatch: AppDispatch,
   state: RootState,
   conference: ConferenceRoom, //TODO remove and handle stuff in the webrtc context directly
@@ -369,6 +372,7 @@ const handleControlMessage = (
           participants: joinedParticipants,
           moderation: data.moderation,
           isPresenter: data.media?.isPresenter,
+          forceMute: data.media?.forceMute,
           recording: data.recording,
           serverTimeOffset,
           tariff: data.tariff,
@@ -406,6 +410,15 @@ const handleControlMessage = (
 
       if (data.closesAt) {
         startTimeLimitNotification(data.closesAt);
+      }
+
+      //Mutes the user if microphones are disabled in conference
+      if (
+        data.media?.forceMute.type === ForceMuteType.Enabled &&
+        !data.media.forceMute.allowList.includes(data.id) &&
+        localMediaContext.isAudioRunning()
+      ) {
+        await localMediaContext.reconfigure({ audio: false });
       }
 
       localMediaContext.updateConferenceContext(conference).catch((e: Error) => {
@@ -542,6 +555,21 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
       notifications.warning(i18next.t('control-participant-presenter-role-revoked'), {
         key: 'control-participant-presenter-role-revoked',
       });
+      break;
+    case 'force_mute_enabled':
+      dispatch(forceMuteEnabled({ allowList: data.allowList }));
+      if (state.user.uuid !== null && !data.allowList.includes(state.user.uuid)) {
+        if (localMediaContext.isAudioEnabled()) {
+          await localMediaContext.reconfigure({ audio: false });
+        }
+        notifications.info(i18next.t('microphones-disabled-notification'));
+      }
+      break;
+    case 'force_mute_disabled':
+      dispatch(forceMuteDisabled());
+      if (state.user.uuid && !state.moderation.forceMute.allowList.includes(state.user.uuid)) {
+        notifications.info(i18next.t('microphones-enabled-notification'));
+      }
       break;
     case 'request_mute': {
       dispatch(mediaStore.requestMute(data));

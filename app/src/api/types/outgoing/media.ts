@@ -104,6 +104,15 @@ export interface UpdateSpeakingState {
   isSpeaking: boolean;
 }
 
+export interface EnableForceMute {
+  action: 'moderator_enable_force_mute';
+  allowList: Array<ParticipantId>;
+}
+
+export interface DisableForceMute {
+  action: 'moderator_disable_force_mute';
+}
+
 export type Action =
   | Publish
   | PublishComplete
@@ -118,7 +127,9 @@ export type Action =
   | GrantPresenterRole
   | RevokePresenterRole
   | ModeratorMute
-  | UpdateSpeakingState;
+  | UpdateSpeakingState
+  | EnableForceMute
+  | DisableForceMute;
 
 export type Media = Namespaced<Action, 'media'>;
 
@@ -126,6 +137,8 @@ export const requestMute = createSignalingApiCall<ModeratorMute>('media', 'moder
 export const grantPresenterRole = createSignalingApiCall<GrantPresenterRole>('media', 'grant_presenter_role');
 export const revokePresenterRole = createSignalingApiCall<RevokePresenterRole>('media', 'revoke_presenter_role');
 export const updateSpeakingState = createSignalingApiCall<UpdateSpeakingState>('media', 'update_speaking_state');
+export const disableMicrophones = createSignalingApiCall<EnableForceMute>('media', 'moderator_enable_force_mute');
+export const enableMicrophones = createSignalingApiCall<DisableForceMute>('media', 'moderator_disable_force_mute');
 
 export const handler = createModule<RootState>((builder) => {
   builder.addCase(requestMute.action, (_state, action) => {
@@ -139,6 +152,12 @@ export const handler = createModule<RootState>((builder) => {
   });
   builder.addCase(updateSpeakingState.action, (_state, action) => {
     sendMessage(updateSpeakingState(action.payload));
+  });
+  builder.addCase(enableMicrophones.action, (_state, action) => {
+    sendMessage(enableMicrophones(action.payload));
+  });
+  builder.addCase(disableMicrophones.action, (_state, action) => {
+    sendMessage(disableMicrophones(action.payload));
   });
 });
 

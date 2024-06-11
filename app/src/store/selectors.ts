@@ -13,6 +13,7 @@ import {
   ChatScope,
   FilterableParticipant,
   ProtocolParticipant,
+  ForceMuteType,
 } from '@opentalk/common';
 import { createSelector } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
@@ -25,7 +26,7 @@ import { selectChatMessagesByScope } from './slices/chatSlice';
 import { selectGlobalEvents, RoomEvent } from './slices/eventSlice';
 import { selectAllVotes } from './slices/legalVoteSlice';
 import { selectUnmutedSubscribers } from './slices/mediaSubscriberSlice';
-import { selectHandUp, selectHandUpdatedAt } from './slices/moderationSlice';
+import { selectForceMute, selectHandUp, selectHandUpdatedAt } from './slices/moderationSlice';
 import {
   selectAllOnlineParticipants,
   selectAllOnlineParticipantsInConference,
@@ -39,7 +40,7 @@ import {
   selectPinnedParticipantId,
   selectFocusedSpeaker,
 } from './slices/uiSlice';
-import { selectGroups, selectUserAsPartialParticipant } from './slices/userSlice';
+import { selectGroups, selectOurUuid, selectUserAsPartialParticipant } from './slices/userSlice';
 
 export const selectUserAsParticipant = createSelector(
   selectUserAsPartialParticipant,
@@ -259,4 +260,8 @@ export const selectActivePollsAndVotingsCount = createSelector(selectAllVotes, s
     votings.filter((voting) => voting.state === 'active').length +
     polls.filter((poll) => poll.state === 'active').length
   );
+});
+
+export const selectIsUserMicDisabled = createSelector(selectForceMute, selectOurUuid, (forceMute, userId) => {
+  return forceMute.type === ForceMuteType.Enabled && (userId === null || !forceMute.allowList.includes(userId));
 });

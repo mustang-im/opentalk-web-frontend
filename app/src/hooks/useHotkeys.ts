@@ -10,6 +10,7 @@ import { useAppSelector } from '.';
 import { pass } from '../api/types/outgoing/automod';
 import { useMediaContext } from '../components/MediaProvider';
 import { useFullscreenContext } from '../hooks/useFullscreenContext';
+import { selectIsUserMicDisabled } from '../store/selectors';
 import { selectSpeakerState, setAsTransitioningSpeaker } from '../store/slices/automodSlice';
 import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../store/slices/mediaSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
@@ -38,6 +39,7 @@ export const useHotkeys = () => {
   const videoEnabled = useAppSelector(selectVideoEnabled);
   const roomMode = useAppSelector(selectCurrentRoomMode);
   const speakerState = useAppSelector(selectSpeakerState);
+  const hasMicrophoneDisabledByModerator = useAppSelector(selectIsUserMicDisabled);
   const dispatch = useDispatch();
 
   const isLoadingMedia = useAppSelector(selectMediaChangeInProgress);
@@ -71,6 +73,9 @@ export const useHotkeys = () => {
   // between audio en-/disabling actions in mediaContext
   const pushToTalk = (type: 'keyup' | 'keydown') => {
     const startAudio = async () => {
+      if (hasMicrophoneDisabledByModerator) {
+        return;
+      }
       await switchAudio(true);
       startingAudio.current = undefined;
     };
@@ -125,7 +130,7 @@ export const useHotkeys = () => {
 
         switch (key) {
           case HOTKEY_MICROPHONE:
-            if (type === 'keyup' && mediaContext.hasMicrophone) {
+            if (type === 'keyup' && mediaContext.hasMicrophone && !hasMicrophoneDisabledByModerator) {
               toggleAudio();
             }
             break;

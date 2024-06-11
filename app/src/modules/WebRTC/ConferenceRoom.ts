@@ -274,7 +274,9 @@ export class ConferenceRoom extends BaseEventEmitter<ConferenceEvent> {
           subType === 'request_mute' ||
           subType === 'presenter_granted' ||
           subType === 'presenter_revoked' ||
-          subType === 'speaker_updated'
+          subType === 'speaker_updated' ||
+          subType === 'force_mute_enabled' ||
+          subType === 'force_mute_disabled'
         ) {
           break;
         } else {
