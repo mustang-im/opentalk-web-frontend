@@ -77,6 +77,11 @@ module.exports = {
             testMatch: ['<rootDir>/packages/i18next-fluent/**/?(*.)+(spec|test).[jt]s?(x)'],
         },
         {
+          displayName: 'packages/redux-oidc',
+          testEnvironment: 'jsdom',
+          testMatch: ['<rootDir>/packages/redux-oidc/**/?(*.)+(spec|test).[jt]s?(x)'],
+        },
+        {
             displayName: 'packages/rtk-rest-api',
             testEnvironment: 'jsdom',
             setupFilesAfterEnv: ['./packages/rtk-rest-api/src/setupTests.js'],

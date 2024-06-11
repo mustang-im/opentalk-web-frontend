@@ -16,7 +16,7 @@ export function hasActiveSession() {
   if (!accessToken || !refreshToken || !refreshExpiresIn) {
     return false;
   }
-  if (!Number(refreshExpiresIn) || isNaN(Number(refreshExpiresIn))) {
+  if (!Number(refreshExpiresIn) || Number.isNaN(Number(refreshExpiresIn))) {
     return false;
   }
 
@@ -49,10 +49,12 @@ export const storeToken = (payload: CodeResponse | RefreshTokenResponse) => {
   localStorage.setItem('refresh_token', refreshToken);
 };
 
-export const removeTokens = () => {
+export const clearApplicationStorage = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('id_token');
+
+  sessionStorage.removeItem('code_verifier');
 };
 
 export enum AuthTypeError {
@@ -93,4 +95,39 @@ export const generateSerilizadError = (payload: SerializedError) => {
     status: payload.status || 503,
     stack: payload.stack,
   };
+};
+
+// must be between 43 and 128 according to the PKCE extension (RFC 7636)
+const PKCE_VERIFIER_LENGTH = 43;
+export const pkceChallenge = {
+  async generate(): Promise<string> {
+    let codeVerifier = sessionStorage.getItem('code_verifier');
+
+    if (!codeVerifier) {
+      codeVerifier = this.generateVerifier(PKCE_VERIFIER_LENGTH);
+      sessionStorage.setItem('code_verifier', codeVerifier);
+    }
+
+    return this.generateChallenge(codeVerifier);
+  },
+
+  async generateChallenge(codeVerifier: string): Promise<string> {
+    const buffer = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifier));
+    return urlSafeBase64Encode(new Uint8Array(buffer));
+  },
+
+  generateVerifier(length: number): string {
+    const mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~';
+    const randomUints = window.crypto.getRandomValues(new Uint8Array(length));
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += mask[randomUints[i] % mask.length];
+    }
+    return result;
+  },
+};
+
+export const urlSafeBase64Encode = (buffer: Uint8Array) => {
+  const base64String = Array.from(new Uint8Array(buffer), (byte) => String.fromCharCode(byte)).join('');
+  return window.btoa(base64String).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
 };

@@ -1,6 +1,6 @@
 import convertToCamelCase from 'camelcase-keys';
 
-import { removeTokens } from './utils';
+import { clearApplicationStorage } from './utils';
 
 export interface AuthAdapterConfiguration {
   authority: string;
@@ -134,9 +134,9 @@ export class AuthAdapter {
     }
     logoutUrl.searchParams.append(
       'post_logout_redirect_uri',
-      signOutUrl ? signOutUrl : this._configuration.signOutRedirectUri
+      signOutUrl ? signOutUrl : this._configuration.signOutRedirectUri,
     );
     window.location.replace(logoutUrl);
-    removeTokens();
+    clearApplicationStorage();
   }
 }

@@ -36,7 +36,7 @@ export const login = createAsyncThunk('user/login', async (payload: LoginProps, 
           name: AuthTypeError.LoginUserFailed,
           message: response.statusText,
           status: response.status,
-        })
+        }),
       );
     }
     return convertToCamelCase(await response.json(), { deep: true });
@@ -47,7 +47,7 @@ export const login = createAsyncThunk('user/login', async (payload: LoginProps, 
       throw new Error(String(error));
     }
     return rejectWithValue(
-      generateSerilizadError({ name: AuthTypeError.LoginUserFailed, message: error, status: 503 })
+      generateSerilizadError({ name: AuthTypeError.LoginUserFailed, message: error, status: 503 }),
     );
   }
 });
@@ -76,7 +76,7 @@ export const codeCallback = createAsyncThunk(
             name: AuthTypeError.CodeCallbackFailed,
             message: response.statusText,
             status: response.status,
-          })
+          }),
         );
       }
 
@@ -97,10 +97,10 @@ export const codeCallback = createAsyncThunk(
           name: AuthTypeError.CodeCallbackFailed,
           message: 'Unable to fetch code callback api',
           status: 503,
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 interface RefreshTokenInterface {
@@ -119,7 +119,7 @@ export const getNewToken = createAsyncThunk(
           name: AuthTypeError.RefreshTokenFailed,
           message: 'Refresh token not present',
           status: 503,
-        })
+        }),
       );
     }
     try {
@@ -129,7 +129,7 @@ export const getNewToken = createAsyncThunk(
             grantType: 'refresh_token',
             clientId: payload.clientId,
             refreshToken: refreshToken,
-          })
+          }),
         ),
         method: 'POST',
       });
@@ -139,7 +139,7 @@ export const getNewToken = createAsyncThunk(
             name: AuthTypeError.RefreshTokenFailed,
             message: response.statusText,
             status: response.status,
-          })
+          }),
         );
       }
       const data = convertToCamelCase(await response.json(), { deep: true });
@@ -159,8 +159,8 @@ export const getNewToken = createAsyncThunk(
           name: AuthTypeError.RefreshTokenFailed,
           message: 'Refresh token not present',
           status: 503,
-        })
+        }),
       );
     }
-  }
+  },
 );
