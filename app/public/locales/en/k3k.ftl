@@ -18,6 +18,10 @@ error-invite-link = This invite-link is not active anymore.
 signaling-subscription-failed = The connection to a participant failed.
 media-subscription-failed = No connection to the participant
 
+error-invalid-invitation-code = This invite code is invalid
+
+error-invalid-invitation-link = This invitation link is invalid
+
 error-system-currently-unavailable = The system is currently unavailable, please try again later.
 error-unauthorized = Unfortunately you do not have access, please contact the meeting moderator.
 
@@ -658,7 +662,7 @@ dashboard-settings-profile-input-hint = Enter a name (such as your first name, f
 dashboard-settings-profile-button-save = Save
 dashboard-settings-profile-input-required = The field cannot be empty
 
-dashboard-settings-storage-usage-limited-free = {$usedStorage} of {$maxStorage} used 
+dashboard-settings-storage-usage-limited-free = {$usedStorage} of {$maxStorage} used
 dashboard-settings-storage-usage-limited-full = {$usedStorage} of {$maxStorage} used - storage full. Please delete files or make a plan upgrade <planUpgradeLink>HERE</planUpgradeLink>
 dashboard-settings-storage-usage-unlimited = {$usedStorage} used
 dashboard-settings-storage-usage-loading = Loading storage usage

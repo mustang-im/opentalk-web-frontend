@@ -33,6 +33,7 @@ import { startRoom } from '../../store/commonActions';
 import { selectDisallowCustomDisplayName, selectFeatures } from '../../store/slices/configSlice';
 import {
   ConnectionState,
+  InviteCodeErrorEnum,
   fetchRoomByInviteId,
   selectInviteState,
   selectPasswordRequired,
@@ -156,6 +157,10 @@ const LobbyView: FC = () => {
                 notifications.error(t('joinform-access-denied'));
                 navigateToHome();
                 break;
+              case StartRoomError.BadRequest:
+                notifications.error(t('error-invalid-invitation-code'));
+                navigateToHome();
+                break;
               default:
                 console.error(`unknown error code ${e.code} in startRoom`, e);
                 notifications.error(t('error-general'));
@@ -205,6 +210,9 @@ const LobbyView: FC = () => {
   }
 
   if (inviteCodeError) {
+    if (inviteCodeError?.statusText === InviteCodeErrorEnum.InvalidJson) {
+      return <Error title={t('error-invalid-invitation-link')} />;
+    }
     return <Error title={t('error-invite-link')} />;
   }
 

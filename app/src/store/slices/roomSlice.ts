@@ -78,6 +78,7 @@ const reconnectExceptionErrorList: Array<string> = [
   StartRoomError.WrongRoomPassword,
   StartRoomError.Forbidden,
   StartRoomError.NotFound,
+  StartRoomError.BadRequest,
 ];
 
 interface RoomState {
@@ -125,6 +126,10 @@ const initialState: RoomState = {
   isOwnedByCurrentUser: false,
 };
 
+export enum InviteCodeErrorEnum {
+  InvalidJson = 'invalid_json',
+}
+
 export const fetchRoomByInviteId = createAsyncThunk<
   InviteRoomVerifyResponse,
   InviteCode,
@@ -144,9 +149,10 @@ export const fetchRoomByInviteId = createAsyncThunk<
     });
 
     if (!response.ok) {
+      const errorResponse = await response.json();
       return rejectWithValue({
         status: response.status,
-        statusText: await response.text(),
+        statusText: errorResponse.code,
       });
     }
 
