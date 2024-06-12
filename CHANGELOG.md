@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Renaming of participants from the list ([#1790](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1790))
 - Added jump links for keyboard users to quickly access certain elements in the conference ([#1253](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1253))
 - Implement streaming in conference ([#1586](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1586))
 
