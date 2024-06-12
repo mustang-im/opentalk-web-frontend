@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Fix crash on BrowserSupport check (safari) ([#1309](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1309))
 - Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
 
 ### Internal
