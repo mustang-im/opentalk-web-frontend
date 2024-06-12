@@ -709,6 +709,8 @@ dashboard-recurrence-meeting-card-delete-dialog-one = Das einzelne Meeting
 dashboard-reccurence-meeting-card-delete-dialog-all = Die ganze Meetingserie
 dashboard-recurrence-meeting-card-delete-dialog-cancel = Abbrechen
 
+dashboard-meeting-card-delete-offline-failure = Leider kann die Aktion nicht durchgeführt werden, derzeit ist keine Verbindung zu OpenTalk möglich. Bitte versuchen Sie es später noch einmal.
+
 dashboard-create-meeting-dialog-title = Bitte bestätigen
 dashboard-create-meeting-dialog-message = Sie haben bereits ein Meeting in der angegebenen Zeit: <eventTitle>{$eventTitle} <eventTime>{$eventTime}</eventTime></eventTitle> Möchten Sie dieses Meeting dennoch erstellen?
 dashboard-update-meeting-dialog-message = Sie haben bereits ein Meeting in der angegebenen Zeit: <eventTitle>{$eventTitle} <eventTime>{$eventTime}</eventTime></eventTitle> Möchten Sie dieses Meeting bearbeiten?

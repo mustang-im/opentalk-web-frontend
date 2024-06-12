@@ -13,7 +13,15 @@ import {
   Typography,
 } from '@mui/material';
 import { CloseIcon, notificationAction, notifications } from '@opentalk/common';
-import { Event, EventException, EventId, EventStatus, EventType, isRecurringEvent } from '@opentalk/rest-api-rtk-query';
+import {
+  Event,
+  EventException,
+  EventId,
+  EventStatus,
+  EventType,
+  RecurringEvent,
+  isRecurringEvent,
+} from '@opentalk/rest-api-rtk-query';
 import { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -88,9 +96,27 @@ export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
     }
   };
 
+  const hasFetchError = (response: Awaited<ReturnType<typeof deleteEvent>>) => {
+    return 'error' in response && 'status' in response.error && response.error.status === 'FETCH_ERROR';
+  };
+
   const deleteMeeting = async () => {
     await handleDeleteSharedFolder();
-    await deleteEvent(eventId);
+    const response = await deleteEvent(eventId);
+    if (hasFetchError(response)) {
+      notifications.error(t('dashboard-meeting-card-delete-offline-failure'));
+    }
+  };
+
+  const deleteMeetingInstance = async (event: RecurringEvent) => {
+    const response = await updateEventInstance({
+      eventId: event.id,
+      instanceId: generateInstanceId(event.startsAt),
+      status: EventStatus.Cancelled,
+    });
+    if ('error' in response && 'status' in response.error && response.error.status === 'FETCH_ERROR') {
+      notifications.error(t('dashboard-meeting-card-delete-offline-failure'));
+    }
   };
 
   const contentBasedOnEventType: ContentBasedOnEventTypeProps = useMemo(() => {
@@ -143,11 +169,7 @@ export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
     switch (action) {
       case EventDeletionType.One:
         if (isRecurringEvent(event)) {
-          await updateEventInstance({
-            eventId: event.id,
-            instanceId: generateInstanceId(event.startsAt),
-            status: EventStatus.Cancelled,
-          });
+          await deleteMeetingInstance(event);
         }
         break;
       case EventDeletionType.All:

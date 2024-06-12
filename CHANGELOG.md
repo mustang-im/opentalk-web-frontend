@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Attempt to delete meeting while offline results in error message being visible ([#1821](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
 - Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
 - Add the indicator for disabled camera in conference for local and remote video tile ([#1849](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1849))
 
