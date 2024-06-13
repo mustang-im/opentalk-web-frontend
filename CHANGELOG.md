@@ -7,13 +7,15 @@ All notable changes to this project will be documented in this file.
 ### New Features
 
 - Add automatic join from waiting room ([#1467](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1467))
-- Re-design text fields ([#1772](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1772)) 
+- Re-design text fields ([#1772](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1772))
 - Show disconnected users during Voting ([#1902](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1902))
 - Implement custom recurrence dialog ([#1862](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1862))
 - Implement disabling microphones ([#1615](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1615))
 
 ### Improvements to the user experience
 
+- Removed nested roles from the notifications. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
+- Apply autofocus on the breakout room notification. ([#1751](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1751))
 - Add tooltip for recorder ([#1971](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1971))
 - Changed english "Protocol" label to the "Meeting notes" accross the app ([#1884](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1884))
 - Fix shaking meeting timer ([#1702](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1702))

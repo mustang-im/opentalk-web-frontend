@@ -8,18 +8,14 @@ import { selectTimerStyle } from '../../store/slices/timerSlice';
 import CoffeeBreakPopover from './fragments/CoffeeBreakPopover';
 import NormalTimerPopover from './fragments/NormalTimerPopover';
 
-const TimerPopover = ({ anchorEl }: { anchorEl: HTMLElement | null }) => {
+const TimerPopover = () => {
   const timerStyle = useAppSelector(selectTimerStyle);
 
   if (!timerStyle) {
     return null;
   }
 
-  return timerStyle === TimerStyle.CoffeeBreak ? (
-    <CoffeeBreakPopover anchorEl={anchorEl} />
-  ) : (
-    <NormalTimerPopover anchorEl={anchorEl} />
-  );
+  return timerStyle === TimerStyle.CoffeeBreak ? <CoffeeBreakPopover /> : <NormalTimerPopover />;
 };
 
 export default TimerPopover;

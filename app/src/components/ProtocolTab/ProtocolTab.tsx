@@ -209,7 +209,7 @@ const ProtocolTab = () => {
     <Stack data-testid="protocol-tab" spacing={2} direction="column" alignItems="center" flex={1} overflow="hidden">
       <Stack spacing={2} flex={1} width="100%" overflow="hidden">
         <Button
-          sx={{ width: '100%' }}
+          fullWidth
           onClick={openParticipantsListPanel}
           aria-label={protocolUrl ? t('protocol-edit-invite-button') : t('protocol-invite-button')}
           id={`protocol-popover-trigger-${salt}`}
@@ -218,14 +218,14 @@ const ProtocolTab = () => {
         </Button>
         {renderSelectedParticipantListItems()}
       </Stack>
-      <Stack direction="column" sx={{ width: '100%' }} spacing={1} alignItems="center">
+      <Stack direction="column" width="100%" spacing={1} alignItems="center">
         {protocolUrl && (
-          <Button sx={{ width: '100%' }} onClick={uploadPdfAction} aria-label={t('protocol-upload-pdf-button')}>
+          <Button fullWidth onClick={uploadPdfAction} aria-label={t('protocol-upload-pdf-button')}>
             {t('protocol-upload-pdf-button')}
           </Button>
         )}
         <Button
-          sx={{ width: '100%' }}
+          fullWidth
           aria-label={protocolUrl ? t('protocol-update-invite-send-button') : t('protocol-invite-send-button')}
           disabled={!hasSelectedParticipants}
           onClick={sendInvitations}
@@ -234,8 +234,6 @@ const ProtocolTab = () => {
         </Button>
       </Stack>
       <Popover
-        role="dialog"
-        aria-labelledby={`protocol-popover-trigger-${salt}`}
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: 'top',
@@ -247,6 +245,12 @@ const ProtocolTab = () => {
         }}
         open={open}
         onClose={closeParticipantsListPanel}
+        slotProps={{
+          paper: {
+            role: 'dialog',
+            'aria-labelledby': `protocol-popover-trigger-${salt}`,
+          },
+        }}
       >
         <ParticipantSelectContainer disableGutters>
           <Stack spacing={2}>
@@ -259,11 +263,12 @@ const ProtocolTab = () => {
                     <SearchIcon />
                   </InputAdornment>
                 ),
+                autoFocus: true,
               }}
               fullWidth
             />
             <Stack direction={'row'}>
-              <Button size={'small'} sx={{ width: '100%' }} onClick={checkAllHandler}>
+              <Button size={'small'} fullWidth onClick={checkAllHandler}>
                 {t('poll-participant-list-button-select-all')}
               </Button>
             </Stack>

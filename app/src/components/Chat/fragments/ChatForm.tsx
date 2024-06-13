@@ -164,8 +164,6 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
 
   const renderPicker = () => (
     <Popover
-      role="dialog"
-      aria-label="Emoji picker"
       open={openPicker}
       anchorEl={emojiButton.current}
       anchorOrigin={{
@@ -177,6 +175,12 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
         horizontal: 'left',
       }}
       onClose={() => setOpenPicker(false)}
+      slotProps={{
+        paper: {
+          role: 'dialog',
+          'aria-label': 'Emoji picker',
+        },
+      }}
     >
       <PickerContainer
         onBlur={blurHandler}

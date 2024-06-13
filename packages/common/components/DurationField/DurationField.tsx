@@ -151,8 +151,6 @@ export const DurationField = ({
         {renderButtonText()}
       </Button>
       <Popover
-        role="dialog"
-        aria-labelledby="duration-field-popover-title"
         open={open}
         onClose={handlePopoverClose}
         anchorEl={anchorEl}
@@ -163,6 +161,12 @@ export const DurationField = ({
         transformOrigin={{
           vertical: 118,
           horizontal: 'left',
+        }}
+        slotProps={{
+          paper: {
+            role: 'dialog',
+            'aria-labelledby': 'duration-field-popover-title',
+          },
         }}
       >
         <Container spacing={2}>

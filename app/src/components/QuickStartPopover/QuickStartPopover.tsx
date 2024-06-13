@@ -110,8 +110,11 @@ const QuickStartPopover = (props: QuickStartPopoverProps) => {
         vertical: 'top',
         horizontal: 'right',
       }}
-      PaperProps={{
-        'aria-label': t('conference-quick-start-title'),
+      slotProps={{
+        paper: {
+          role: 'dialog',
+          'aria-label': t('conference-quick-start-title'),
+        },
       }}
     >
       <CloseButton aria-label={t('global-close-dialog')} onClick={onClose}>

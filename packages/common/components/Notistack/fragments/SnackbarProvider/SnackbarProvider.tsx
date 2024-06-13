@@ -55,7 +55,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
 
   return (
     <>
-      {/* 
+      {/*
           The only found possibility till now to customize snackbar container of Notistack is to use the `classes` API.
           Therefor we need to generate custom CSS classes and apply them to the `SnackbarProvider`.
           Using GlobalStyles seems to be a better alternative, than creating an external *.css file.

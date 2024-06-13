@@ -72,25 +72,21 @@ export const notificationPersistent = ({ msg, variant, ...options }: ISnackbarPe
     ...options,
     action: null,
     persist: true,
-    SnackbarProps: {
-      role: 'alert',
-      'aria-label': msg,
-    },
   });
 };
 
 export const notifications = {
   success(msg: string, options: OptionsObject = {}): void {
-    this.toast(msg, { ...options, variant: 'success', SnackbarProps: { role: 'alert', 'aria-label': msg } });
+    this.toast(msg, { ...options, variant: 'success' });
   },
   warning(msg: string, options: OptionsObject = {}): void {
-    this.toast(msg, { ...options, variant: 'warning', SnackbarProps: { role: 'alert', 'aria-label': msg } });
+    this.toast(msg, { ...options, variant: 'warning' });
   },
   info(msg: string, options: OptionsObject = {}): void {
-    this.toast(msg, { ...options, variant: 'info', SnackbarProps: { role: 'alert', 'aria-label': msg } });
+    this.toast(msg, { ...options, variant: 'info' });
   },
   error(msg: string, options: OptionsObject = {}): void {
-    this.toast(msg, { ...options, variant: 'error', SnackbarProps: { role: 'alert', 'aria-label': msg } });
+    this.toast(msg, { ...options, variant: 'error' });
   },
   toast(msg: string, options: OptionsObject = {}): void {
     enqueueSnackbar(msg, options);
@@ -108,17 +104,39 @@ export const notifications = {
       closable?: boolean;
     } = {}
   ) => {
-    return enqueueSnackbar({
-      ...options,
-      message,
-      variant: 'binaryAction',
-      SnackbarProps: { role: 'alert', 'aria-label': message },
-    });
+    return enqueueSnackbar({ ...options, message, variant: 'binaryAction' });
   },
   close(key: SnackbarKey): void {
     closeSnackbar(key);
   },
   closeAll(): void {
     closeSnackbar();
+  },
+  consent: (options: { onAcceptButton: () => void; onDeclineButton: () => void; key?: SnackbarKey }) => {
+    return enqueueSnackbar({
+      variant: 'consent',
+      onAcceptButton: options.onAcceptButton,
+      onDeclineButton: options.onDeclineButton,
+      persist: true,
+      key: options.key,
+    });
+  },
+  showTalkingStickMutedNotification: (options: { onUnmute: () => void; onNext: () => void; key?: SnackbarKey }) => {
+    return enqueueSnackbar({
+      variant: 'talkingStickMuted',
+      key: options.key,
+      persist: true,
+      onUnmute: options.onUnmute,
+      onNext: options.onNext,
+    });
+  },
+  showTalkingStickUnmutedNotification: (options: { onNext: () => void; isLastSpeaker: boolean; key?: SnackbarKey }) => {
+    return enqueueSnackbar({
+      variant: 'talkingStickUnmuted',
+      persist: true,
+      key: options.key,
+      isLastSpeaker: options.isLastSpeaker,
+      onNext: options.onNext,
+    });
   },
 };

@@ -301,7 +301,7 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
   const showResultTable = (isLiveVote || showResults) && currentLegalVote && allowedToVote;
 
   return (
-    <Grid container rowSpacing={1.4} sx={{ width: '100%' }}>
+    <Grid container rowSpacing={1.4} width="100%">
       <Grid item xs={12} style={{ scrollBehavior: 'smooth' }}>
         <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1}>
           <Box display="flex" alignItems="center" flex={1} gap={1}>
