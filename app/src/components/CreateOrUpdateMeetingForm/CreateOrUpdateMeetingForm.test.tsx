@@ -83,6 +83,7 @@ describe('Dashboard CreateOrUpdateMeetingForm', () => {
         waitingRoom: mockEvent.room.waitingRoom,
         isAdhoc: mockEvent.isAdhoc,
         showMeetingDetails: mockEvent.showMeetingDetails,
+        hasSharedFolder: false,
       });
     });
   });

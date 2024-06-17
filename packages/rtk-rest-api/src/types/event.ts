@@ -60,6 +60,7 @@ export interface CreateBaseEventPayload {
   password?: string;
   isAdhoc?: boolean;
   showMeetingDetails?: boolean;
+  hasSharedFolder?: boolean;
 }
 
 /**
@@ -131,6 +132,7 @@ export interface UpdateEventPayload {
   password?: string;
   isAdhoc?: boolean;
   showMeetingDetails?: boolean;
+  hasSharedFolder?: boolean;
 }
 
 /**
