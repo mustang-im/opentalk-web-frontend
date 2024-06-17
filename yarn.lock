@@ -5908,7 +5908,7 @@ __metadata:
     eslint-config-react-app: ^7.0.1
     eslint-plugin-jsx-a11y: ^6.6.1
     jwt-decode: ^4.0.0
-    pkce-challenge: ^4.1.0
+    prettier: ^3.3.2
     react-redux: ^7.2.8
     react-router-dom: ^6.4.0
     rollup: ^4.3.0
@@ -23106,13 +23106,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pkce-challenge@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "pkce-challenge@npm:4.1.0"
-  checksum: b85c50cefe3d9586ed77f5fde0c0832717c8cb3c88ab4470961306e78d84522a0f040a684d74907bd3b0c3c259f0aafbb6ff9f1f7c39bbad1ca180ac3750adb0
-  languageName: node
-  linkType: hard
-
 "pkg-dir@npm:^3.0.0":
   version: 3.0.0
   resolution: "pkg-dir@npm:3.0.0"
@@ -24254,6 +24247,15 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "prettier@npm:3.3.2"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 5557d8caed0b182f68123c2e1e370ef105251d1dd75800fadaece3d061daf96b1389141634febf776050f9d732c7ae8fd444ff0b4a61b20535e7610552f32c69
   languageName: node
   linkType: hard
 

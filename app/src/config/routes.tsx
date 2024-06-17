@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { notifications } from '@opentalk/common';
 import { AuthCallbackComponent, selectAuthIsPending } from '@opentalk/redux-oidc';
 import { useAuthContext, selectIsAuthenticated } from '@opentalk/redux-oidc';
 import i18next from 'i18next';
@@ -71,12 +72,15 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const isAuthPending = useAppSelector(selectAuthIsPending);
   const inviteCode = useInviteCode();
 
-  if (!isAuthenticated && !inviteCode && !isAuthPending) {
-    auth?.signIn();
+  if (isAuthPending) {
     return null;
   }
 
-  if (isAuthPending) {
+  if (!isAuthenticated && !inviteCode) {
+    auth?.signIn().catch((error) => {
+      console.error('failed to signIn:', error);
+      notifications.error(i18next.t('error-general'));
+    });
     return null;
   }
 

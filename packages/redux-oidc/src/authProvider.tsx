@@ -1,7 +1,6 @@
 import React, { createContext, FC, PropsWithChildren, useContext, useEffect } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
-import { AuthTypeError, calculateTokenRenewalTime, hasValidToken } from '.';
 import { AuthAdapter, AuthAdapterConfiguration, AuthenticationProviderUrls } from './authAdapter';
 import { getNewToken } from './store/authActions';
 import {
@@ -12,10 +11,11 @@ import {
   selectRefreshError,
   startLoading,
 } from './store/authSlice';
+import { AuthTypeError, calculateTokenRenewalTime, hasValidToken, pkceChallenge } from './utils';
 
 export interface AuthContextValues {
   configuration: AuthAdapterConfiguration;
-  signIn: (redirectUrl?: string, codeChallenge?: string) => void;
+  signIn: (redirectUrl?: string, codeChallenge?: string) => Promise<void>;
   signOut: (signOutRedirectUrl?: string) => void;
   getConfigurationEndpoints: () => Promise<AuthenticationProviderUrls>;
   getBaseUrl: () => string;
@@ -39,15 +39,16 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
   const isRefresTokenLoading = useSelector(selectIsRefreshTokenLoading);
 
   // default is window.location.href
-  const signIn = async (redirectUrl?: string, codeChallenge?: string) => {
-    authAdapter.startOidcSignIn(redirectUrl, codeChallenge);
+  const signIn = async (redirectUrl?: string): Promise<void> => {
+    const codeChallenge = await pkceChallenge.generate();
+    return authAdapter.startOidcSignIn(redirectUrl, codeChallenge);
   };
 
   const signOut = (signOutRedirectUrl?: string) => {
     authAdapter.signOut(signOutRedirectUrl);
   };
 
-  const getConfigurationEndpoints = async () => await authAdapter.getConfigurationEndpoints();
+  const getConfigurationEndpoints = () => authAdapter.getConfigurationEndpoints();
   const getBaseUrl = () => authAdapter.getBaseUrl();
   const getSavedRedirectUrl = () => authAdapter.getSavedLocation();
 
@@ -58,7 +59,7 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
           clientId: configuration.clientId,
           tokenEndpoint: config.tokenEndpoint,
           baseUrl: configuration.baseUrl,
-        })
+        }),
       );
     });
   };

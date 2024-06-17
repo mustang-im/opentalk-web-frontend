@@ -4,8 +4,6 @@
 import { Button, Stack, styled } from '@mui/material';
 import { Logo } from '@opentalk/common';
 import { useAuthContext } from '@opentalk/redux-oidc';
-import pkceChallenge from 'pkce-challenge';
-import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ImprintContainer from '../../components/ImprintContainer';
@@ -32,24 +30,9 @@ export const LandingPage = () => {
   const auth = useAuthContext();
   const { t } = useTranslation();
 
-  const [codeChallenge, setCodeChallenge] = useState<string | undefined>();
-
-  useEffect(() => {
-    const generateCodeChallenge = async () => {
-      try {
-        const { code_challenge, code_verifier } = await pkceChallenge();
-        sessionStorage.setItem('code_verifier', code_verifier);
-        setCodeChallenge(code_challenge);
-      } catch (error) {
-        console.error('Error generating code challenge:', error);
-      }
-    };
-    generateCodeChallenge();
-  }, []);
-
-  const handleSignIn = useCallback(() => {
-    auth?.signIn('/dashboard', codeChallenge);
-  }, [auth, codeChallenge]);
+  const handleSignIn = () => {
+    auth?.signIn('/dashboard');
+  };
 
   return (
     <>

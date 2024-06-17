@@ -10,7 +10,9 @@
     "hot-reload:remove-build": "node -e \"if (require('fs').readFileSync('../../app/hotReload/packages.tsconfig.json', {encoding: 'utf8'}).includes('@opentalk/redux-oidc')){process.exit(1)}\" || shx rm -rf ./dist",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "lint": "eslint . --ext .tsx --ext .ts"
+    "lint": "eslint . --ext .tsx --ext .ts --ext .js",
+    "fmt": "yarn run prettier --write \"src/*.{tsx,ts,js}\" \"src/**/*.{tsx,ts,js}\" \"test/**/*.{tsx,ts,js}\"",
+    "fmt:ci": "yarn run prettier --check \"src/*.{tsx,ts,js}\" \"src/**/*.{tsx,ts,js}\" \"test/**/*.{tsx,ts,js}\""
   },
   "types": "dist/index.d.ts",
   "declaration": true,
@@ -25,6 +27,7 @@
     "eslint": "^8.43.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-jsx-a11y": "^6.6.1",
+    "prettier": "^3.3.2",
     "react-redux": "^7.2.8",
     "react-router-dom": "^6.4.0",
     "rollup": "^4.3.0",
@@ -42,7 +45,6 @@
     "react-router-dom": "^6.4.0"
   },
   "dependencies": {
-    "jwt-decode": "^4.0.0",
-    "pkce-challenge": "^4.1.0"
+    "jwt-decode": "^4.0.0"
   }
 }

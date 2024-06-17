@@ -36,7 +36,7 @@ const AuthCallbackComponent = ({ children, redirectUrl = '/' }: AuthCallbackCont
             tokenEndpoint: config.tokenEndpoint,
             baseUrl,
             code,
-          })
+          }),
         );
       });
     }
