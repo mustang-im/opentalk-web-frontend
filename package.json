@@ -17,6 +17,7 @@
     "test": "yarn build:libs && jest",
     "test:watch": "yarn build:libs && jest --watchAll",
     "test:ci": "yarn build:libs && jest --coverage --no-cache --silent --ci",
+    "test:ide": "jest",
     "ci": "yarn run fmt && yarn run lint && yarn run test",
     "storybook": "yarn workspace @opentalk/opentalk storybook",
     "clean": " del-cli app/node_modules packages/*/node_modules dist/app node_modules .parcel-cache",
