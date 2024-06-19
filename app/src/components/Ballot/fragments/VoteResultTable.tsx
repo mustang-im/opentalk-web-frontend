@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { legalVoteStore } from '@opentalk/components';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../hooks';
+import { useAppSelector } from '../../../hooks';
+import { selectVoteById } from '../../../store/slices/legalVoteSlice';
 import VoteEmptyRow from './VoteEmptyRow';
 import VoteResultCountRow from './VoteResultCountRow';
 import VoteResultRow from './VoteResultRow';
@@ -27,7 +27,7 @@ interface VoteResultTableProps {
 
 function VoteResultTable(props: VoteResultTableProps) {
   const { t } = useTranslation();
-  const vote = useAppSelector(legalVoteStore.selectVoteById(props.voteId));
+  const vote = useAppSelector(selectVoteById(props.voteId));
 
   if (!vote) {
     return null;

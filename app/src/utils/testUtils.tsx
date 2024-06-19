@@ -16,6 +16,7 @@ import {
   VideoSetting,
   InviteCode,
   AssetId,
+  AutomodSelectionStrategy,
 } from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
 import { AuthProvider } from '@opentalk/redux-oidc';
@@ -51,6 +52,26 @@ import { MediaProvider } from '../components/MediaProvider';
 import { idFromDescriptor, MediaId, SubscriberStateChanged, SubscriberConfig } from '../modules/WebRTC';
 import FullscreenProvider from '../provider/FullscreenProvider';
 import { appReducers } from '../store';
+import { AutomodState, SpeakerState } from '../store/slices/automodSlice';
+
+const automodState: AutomodState = {
+  active: false,
+  selectionStrategy: AutomodSelectionStrategy.Playlist,
+  history: {
+    ids: [],
+    entities: {},
+  },
+  remaining: {
+    ids: [],
+    entities: {},
+  },
+  animationOnRandom: false,
+  allowDoubleSelection: false,
+  timeLimit: null,
+  showList: false,
+  speakerState: SpeakerState.Inactive,
+  considerHandRaise: false,
+};
 
 export const loadLanguage = async (lng: string) => {
   const filename = 'public/locales/' + lng + '/k3k.ftl';
@@ -160,7 +181,10 @@ export const jwtVariables = {
   @returns mocked redux store for testing
 */
 
-export const mockStore = (participantCount: number, options?: { video?: boolean; screen?: boolean; sip?: boolean }) => {
+export const mockStore = (
+  participantCount: number,
+  options?: { video?: boolean; screen?: boolean; sip?: boolean; raiseHands?: number; automodActive?: boolean }
+) => {
   const participantsIds = range(participantCount);
   const participants = participantsIds.map((index) =>
     mockedParticipant(index, options?.sip ? ParticipationKind.Sip : undefined)
@@ -210,6 +234,10 @@ export const mockStore = (participantCount: number, options?: { video?: boolean;
         },
         {}
       ),
+    },
+    automod: {
+      ...automodState,
+      active: options?.automodActive,
     },
   };
 

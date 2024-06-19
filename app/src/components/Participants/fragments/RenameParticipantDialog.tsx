@@ -4,9 +4,7 @@
 
 /* eslint-disable jsx-a11y/no-autofocus */
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, IconButton, styled } from '@mui/material';
-import { TextField, formikProps } from '@opentalk/common';
-import { CloseIcon } from '@opentalk/common';
-import { Participant } from '@opentalk/components';
+import { Participant, TextField, formikProps, CloseIcon } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 

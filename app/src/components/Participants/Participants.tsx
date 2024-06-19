@@ -2,15 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack } from '@mui/material';
-import { automodStore, TalkingStickParticipantList } from '@opentalk/components';
 import React from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { selectTalkingStickParticipants } from '../../store/selectors';
+import { selectAutomodActiveState } from '../../store/slices/automodSlice';
+import { TalkingStickParticipantList } from '../TalkingStickParticipantList';
 import ParticipantsContainer from './fragments/ParticipantsContainer';
 
 const Participants = () => {
-  const isAutomodActive = useAppSelector(automodStore.selectAutomodActiveState);
+  const isAutomodActive = useAppSelector(selectAutomodActiveState);
   const talkingStickParticipants = useAppSelector(selectTalkingStickParticipants);
 
   return (

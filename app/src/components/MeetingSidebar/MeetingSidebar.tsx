@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 
 import { ModerationTabKey } from '../../config/moderationTabs';
 import { useAppDispatch, useAppSelector, useTabs as useSidebarTabs } from '../../hooks';
-import { EnterpriseProvider } from '../../provider/EnterpriseProvider';
 import { selectActiveTab, setActiveTab } from '../../store/slices/uiSlice';
 import { selectIsModerator } from '../../store/slices/userSlice';
 import LocalVideo from '../LocalVideo/index';
@@ -65,7 +64,7 @@ const MeetingSidebar = () => {
             hidden={activeTab !== tab.key}
             tabTitle={tab.titleKey ? t(tab.titleKey) : ''}
           >
-            <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
+            {tab.component}
           </SideTabPanel>
         );
       }

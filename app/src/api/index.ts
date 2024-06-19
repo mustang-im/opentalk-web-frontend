@@ -32,19 +32,13 @@ import {
   StreamingStatus,
   StreamingKind,
 } from '@opentalk/common';
-import {
-  AutomodEventType,
-  LegalVoteMessageType,
-  automodStore,
-  createTalkingStickNotification,
-  legalVoteStore,
-} from '@opentalk/components';
 import { login } from '@opentalk/redux-oidc';
 import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
 import { showConsentNotification } from '../components/ConsentNotification';
 import { createStreamUpdatedNotification } from '../components/StreamUpdatedNotification/StreamUpdatedNotification';
+import { createTalkingStickNotification } from '../components/TalkingStickNotification';
 import { startTimeLimitNotification } from '../components/TimeLimitNotification';
 import LayoutOptions from '../enums/LayoutOptions';
 import i18n from '../i18n';
@@ -64,10 +58,26 @@ import {
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
 import { AppDispatch, RootState } from '../store';
 import { hangUp, startRoom } from '../store/commonActions';
+import {
+  started as automodStarted,
+  stopped as automodStopped,
+  remainingUpdated as automodRemainingUpdated,
+  setAsInactiveSpeaker,
+  setAsActiveSpeaker,
+  speakerUpdated as automodSpeakerUpdated,
+} from '../store/slices/automodSlice';
 import * as breakoutStore from '../store/slices/breakoutSlice';
 import { clearGlobalChat, received as chatReceived, setChatSettings } from '../store/slices/chatSlice';
 import { selectLibravatarDefaultImage } from '../store/slices/configSlice';
 import { statsUpdated as subscriberStatsUpdate } from '../store/slices/connectionStatsSlice';
+import {
+  started as legalVoteStarted,
+  stopped as legalVoteStopped,
+  updated as legalVoteUpdated,
+  canceled as legalVoteCanceled,
+  voted as legalVoteVoted,
+  initialized as legalVoteInitialized,
+} from '../store/slices/legalVoteSlice';
 import * as mediaStore from '../store/slices/mediaSlice';
 import { setUpstreamLimit } from '../store/slices/mediaSlice';
 import {
@@ -129,7 +139,9 @@ import {
   streaming,
   sharedFolder,
 } from './types/incoming';
+import { AutomodEventType } from './types/incoming/automod';
 import { Role } from './types/incoming/control';
+import { LegalVoteMessageType } from './types/incoming/legalVote';
 import { Action as OutgoingActionType, automod } from './types/outgoing';
 import * as outgoing from './types/outgoing';
 import { ClearGlobalMessages } from './types/outgoing/chat';
@@ -667,7 +679,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
       notifications.close(nextId);
       notifications.close(currentId);
       notifications.close(unmutedId);
-      dispatch(automodStore.started(data));
+      dispatch(automodStarted(data));
 
       const totalParticipants = selectParticipantsTotal(state);
       if (totalParticipants < MIN_RECOMMENDED_TALKING_STICK_PARTICIPANTS) {
@@ -696,7 +708,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
         });
 
         if (data.issuedBy === state.user.uuid) {
-          dispatch(automod.actions.selectNext.action());
+          dispatch(automod.selectNext.action());
         }
       }
       break;
@@ -706,7 +718,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
       notifications.close(nextId);
       notifications.close(currentId);
       notifications.close(unmutedId);
-      dispatch(automodStore.stopped());
+      dispatch(automodStopped());
       notificationAction({
         key: stoppedId,
         msg: i18next.t('talking-stick-finished'),
@@ -721,12 +733,12 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
     //   dispatch(slotStore.initLottery({ winner: data.result, pool: data.pool }));
     //   break;
     case 'remaining_updated':
-      dispatch(automodStore.remainingUpdated(data));
+      dispatch(automodRemainingUpdated(data));
       break;
     case 'speaker_updated':
       if (data.speaker !== state.user.uuid) {
         localMediaContext.reconfigure({ audio: false });
-        dispatch(automodStore.actions.setAsInactiveSpeaker());
+        dispatch(setAsInactiveSpeaker());
       }
       notifications.close(nextId);
       notifications.close(currentId);
@@ -744,7 +756,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
         });
       }
       if (data.speaker === state.user.uuid && state.automod.speakerState === 'inactive') {
-        dispatch(automodStore.actions.setAsActiveSpeaker());
+        dispatch(setAsActiveSpeaker());
         notificationAction({
           key: currentId,
           persist: true,
@@ -754,7 +766,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
             localMediaContext,
             currentId,
             unmutedId,
-            passTalkingStick: () => dispatch(automod.actions.pass.action()),
+            passTalkingStick: () => dispatch(automod.pass.action()),
             lastSpeaker: Boolean(data.remaining && data.remaining.length === 0),
             isUnmuted: state.media.audioEnabled,
           }),
@@ -764,7 +776,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
           },
         });
       }
-      dispatch(automodStore.speakerUpdated(data));
+      dispatch(automodSpeakerUpdated(data));
       break;
     case 'error':
       dispatchError(data.error.replace('_', '-'));
@@ -788,22 +800,22 @@ const handleLegalVoteMessage = (dispatch: AppDispatch, data: LegalVoteMessageTyp
       //TODO implement pdf asset handling
       break;
     case 'started':
-      dispatch(legalVoteStore.started(data));
+      dispatch(legalVoteStarted(data));
       break;
     case 'stopped':
-      dispatch(legalVoteStore.stopped(data));
+      dispatch(legalVoteStopped(data));
       notifications.info(i18next.t('legal-vote-stopped'));
       break;
     case 'updated':
-      dispatch(legalVoteStore.updated(data));
+      dispatch(legalVoteUpdated(data));
       break;
     case 'canceled':
-      dispatch(legalVoteStore.canceled(data));
+      dispatch(legalVoteCanceled(data));
       notifications.error(i18next.t('legal-vote-canceled'));
       break;
     case 'voted':
       if (data.response === 'success') {
-        dispatch(legalVoteStore.voted(data));
+        dispatch(legalVoteVoted(data));
       } else {
         notifications.error(i18next.t('legal-vote-error'));
       }
@@ -1259,7 +1271,7 @@ export const apiMiddleware: Middleware = ({
         }
       })
       .addCase(hangUp.pending, () => {
-        dispatch(legalVoteStore.initialize());
+        dispatch(legalVoteInitialized());
       })
       .addModule((builder) => outgoing.automod.handler(builder, dispatch))
       .addModule((builder) => outgoing.chat.handler(builder, dispatch))

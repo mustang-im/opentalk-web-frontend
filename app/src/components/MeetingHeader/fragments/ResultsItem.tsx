@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Chip as MuiChip, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
-import { PollIcon, LegalBallotIcon } from '@opentalk/common';
-import { LegalVoteType } from '@opentalk/components';
+import { PollIcon, LegalBallotIcon, LegalVoteType } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from '../../../hooks';

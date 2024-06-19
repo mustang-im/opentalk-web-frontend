@@ -14,16 +14,17 @@ import {
   timerStarted,
   timerStopped,
 } from '@opentalk/common';
-import { legalVoteStore, VoteStarted } from '@opentalk/components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Event } from '@sentry/react';
 
 import { RootState } from '../';
+import { VoteStarted } from '../../api/types/incoming/legalVote';
 import { Started as PollStartedInterface } from '../../api/types/incoming/poll';
 import { ModerationTabKey } from '../../config/moderationTabs';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { MediaDescriptor } from '../../modules/WebRTC';
 import { hangUp } from '../commonActions';
+import { started as legalVoteStarted } from './legalVoteSlice';
 import { removed } from './mediaSubscriberSlice';
 import { leave, breakoutLeft } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
@@ -234,7 +235,7 @@ export const uiSlice = createSlice({
     builder.addCase(setProtocolWriteUrl, (state) => {
       state.isCurrentProtocolHighlighted = true;
     });
-    builder.addCase(legalVoteStore.started, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
+    builder.addCase(legalVoteStarted, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
       state.voteOrPollIdToShow = vote.legalVoteId;
       state.haveSeenMobilePollsAndVotes = state.isDrawerOpen && state.activeTab === ModerationTabKey.PollsAndLegalVote;
     });

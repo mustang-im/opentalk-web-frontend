@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { legalVoteStore, automodStore } from '@opentalk/components';
 import { authReducer } from '@opentalk/redux-oidc';
 import { configureStore, Middleware, MiddlewareAPI, Dispatch, AnyAction } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
@@ -9,12 +8,14 @@ import { merge } from 'lodash';
 
 import { apiMiddleware } from '../api';
 import { restApi, rtkQueryErrorLoggerMiddlware } from '../api/rest';
+import automodReducer from './slices/automodSlice';
 import breakoutReducer from './slices/breakoutSlice';
 import chatReducer from './slices/chatSlice';
 import { initialState as initialConfig } from './slices/configSlice';
 import configReducer from './slices/configSlice';
 import connectionStatsReducer from './slices/connectionStatsSlice';
 import eventReducer from './slices/eventSlice';
+import legalVoteReducer from './slices/legalVoteSlice';
 import mediaReducer, { mediaMiddleware } from './slices/mediaSlice';
 import subscribersReducer, { mediaSubscriberMiddleware } from './slices/mediaSubscriberSlice';
 import moderationReducer from './slices/moderationSlice';
@@ -70,12 +71,12 @@ if (process.env.NODE_ENV === 'development') {
 
 export const appReducers = {
   auth: authReducer,
-  automod: automodStore.automodReducer,
+  automod: automodReducer,
   breakout: breakoutReducer,
   chat: chatReducer,
   config: configReducer,
   participants: participantsReducer,
-  legalVote: legalVoteStore.legalVoteReducer,
+  legalVote: legalVoteReducer,
   media: mediaReducer,
   moderation: moderationReducer,
   room: roomReducer,

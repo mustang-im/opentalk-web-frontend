@@ -20,3 +20,4 @@ export * from './sharedFolder';
 export * from './eventInfo';
 export * from './streaming';
 export * from './protocol';
+export * from './legalVote';

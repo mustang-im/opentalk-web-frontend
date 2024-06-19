@@ -5657,32 +5657,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@opentalk/components@npm:^1.0.38":
-  version: 1.0.38
-  resolution: "@opentalk/components@npm:1.0.38::__archiveUrl=https%3A%2F%2Fgit.opentalk.dev%2Fapi%2Fv4%2Fprojects%2F434%2Fpackages%2Fnpm%2F%40opentalk%2Fcomponents%2F-%2F%40opentalk%2Fcomponents-1.0.38.tgz"
-  peerDependencies:
-    "@emotion/react": ^11.10.4
-    "@emotion/styled": ^11.8.1
-    "@mui/base": 5.0.0-alpha.80
-    "@mui/material": ^5.10.5
-    "@mui/styles": ^5.10.3
-    "@opentalk/common": ^1.0.17
-    date-fns: ^2.29.3
-    formik: ^2.2.9
-    formik-wizard-form: ^2.1.0
-    i18next: ^21.9.1
-    lodash: ^4.17.21
-    notistack: ^3.0.1
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-i18next: ^11.18.6
-    react-redux: ^7.2.8
-    typescript: ^4.9.4
-    yup: ^0.32.11
-  checksum: 082294d1fb7937a226fde2957c435fb33d13f2d5ba448f7de51c13acfb1019fa8b1152adfc558e50c0caf8066437612010f1ddaac0181e00317df2ccb42a00f1
-  languageName: node
-  linkType: hard
-
 "@opentalk/example-rest-api-rt-query@workspace:packages/rtk-rest-api/example":
   version: 0.0.0-use.local
   resolution: "@opentalk/example-rest-api-rt-query@workspace:packages/rtk-rest-api/example"
@@ -5802,7 +5776,6 @@ __metadata:
     "@mui/styles": ^5.10.3
     "@mui/x-date-pickers": ^6.14.0
     "@opentalk/common": "workspace:*"
-    "@opentalk/components": ^1.0.38
     "@opentalk/fluent_conv": "workspace:*"
     "@opentalk/i18next-fluent": "workspace:*"
     "@opentalk/redux-oidc": "workspace:*"

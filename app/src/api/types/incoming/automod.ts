@@ -1,0 +1,62 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import {
+  ErrorStruct,
+  isEnumErrorStruct,
+  NamespacedIncoming,
+  ParticipantId,
+  AutomodStartConfig,
+} from '@opentalk/common';
+
+export interface AutomodStartedEvent extends AutomodStartConfig {
+  message: 'started';
+}
+
+export interface AutomodStoppedEvent {
+  message: 'stopped';
+}
+
+export interface AutomodStartAnimationEvent {
+  message: 'start_animation';
+  pool: Array<ParticipantId>;
+  result: ParticipantId;
+}
+
+export interface AutomodSpeakerUpdatedEvent {
+  message: 'speaker_updated';
+  speaker: ParticipantId;
+  history?: Array<ParticipantId>;
+  remaining?: Array<ParticipantId>;
+}
+
+export interface AutomodRemainingUpdatedEvent {
+  message: 'remaining_updated';
+  remaining: Array<ParticipantId>;
+}
+
+export interface Error {
+  message: 'error';
+  error: 'invalid_selection' | 'insufficient_permissions';
+}
+
+export enum AutomodError {
+  VoteAlreadyActive = 'vote_already_active',
+  NoVoteActive = 'no_vote_active',
+  InvalidVoteId = 'invalid_vote_id',
+  Ineligible = 'ineligible',
+  Internal = 'internal',
+}
+
+export const isError = isEnumErrorStruct(AutomodError);
+
+export type AutomodEventType =
+  | AutomodStartedEvent
+  | AutomodStoppedEvent
+  | AutomodSpeakerUpdatedEvent
+  | AutomodRemainingUpdatedEvent
+  | AutomodStartAnimationEvent
+  | ErrorStruct<AutomodError>;
+export type AutomodEvent = NamespacedIncoming<AutomodEventType, 'automod'>;
+
+export default AutomodEvent;

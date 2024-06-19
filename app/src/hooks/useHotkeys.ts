@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { RoomMode, TimerStyle } from '@opentalk/common';
-import { automodStore } from '@opentalk/components';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '.';
-import { automod } from '../api/types/outgoing';
+import { pass } from '../api/types/outgoing/automod';
 import { useMediaContext } from '../components/MediaProvider';
 import { useFullscreenContext } from '../hooks/useFullscreenContext';
+import { selectSpeakerState, setAsTransitioningSpeaker } from '../store/slices/automodSlice';
 import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } from '../store/slices/mediaSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
@@ -37,7 +37,7 @@ export const useHotkeys = () => {
   const audioEnabled = useAppSelector(selectAudioEnabled);
   const videoEnabled = useAppSelector(selectVideoEnabled);
   const roomMode = useAppSelector(selectCurrentRoomMode);
-  const speakerState = useAppSelector(automodStore.selectSpeakerState);
+  const speakerState = useAppSelector(selectSpeakerState);
   const dispatch = useDispatch();
 
   const isLoadingMedia = useAppSelector(selectMediaChangeInProgress);
@@ -150,8 +150,8 @@ export const useHotkeys = () => {
               // to define `pass.action` case twice as it is already defined in the ee-components.
               // We would need to extract case definition from ee-components to the middleware,
               // which then brings same sequential updates like in here, just in the different place.
-              dispatch(automodStore.actions.setAsTransitioningSpeaker());
-              dispatch(automod.actions.pass.action());
+              dispatch(setAsTransitioningSpeaker());
+              dispatch(pass.action());
             }
             break;
           default:

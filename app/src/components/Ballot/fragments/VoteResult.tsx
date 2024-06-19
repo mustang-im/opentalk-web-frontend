@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Radio, InputLabel } from '@mui/material';
 import { PollId, LegalVoteId } from '@opentalk/common';
-import { legalVoteStore } from '@opentalk/components';
 import React, { useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
+import { selectCurrentShownVote } from '../../../store/slices/legalVoteSlice';
 import { selectPollToShow } from '../../../store/slices/pollSlice';
 
 export enum VoteType {
@@ -79,7 +79,7 @@ const ProgressLabel = styled('span')(({ theme }) => ({
 const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, voteType, optionIndex }: IVoteResult) => {
   const didVote =
     voteType === VoteType.LegalVote
-      ? Boolean(useAppSelector(legalVoteStore.selectCurrentShownVote)?.votedAt)
+      ? Boolean(useAppSelector(selectCurrentShownVote)?.votedAt)
       : Boolean(useAppSelector(selectPollToShow)?.voted);
   const id = voteData.legalVoteId + '-' + optionIndex;
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);

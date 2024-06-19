@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ### Internal
 
+- Moved enterprise components to the main repository ([#1920](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1920))
 - Add test coverage and unit test summary to ci pipelines
 
 ## 1.15.0

@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack, MenuList, Typography } from '@mui/material';
-import { legalVoteStore } from '@opentalk/components';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
+import { selectAllVotes } from '../../../store/slices/legalVoteSlice';
 import { selectAllPolls } from '../../../store/slices/pollSlice';
 import ResultsItem from './ResultsItem';
 
 const ResultsList = () => {
   const { t } = useTranslation();
-  const votes = useAppSelector(legalVoteStore.selectAllVotes);
+  const votes = useAppSelector(selectAllVotes);
   const polls = useAppSelector(selectAllPolls);
 
   return (

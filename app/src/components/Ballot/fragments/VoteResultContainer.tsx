@@ -12,27 +12,25 @@ import {
   ChoiceResult,
   getCurrentTimezone,
   ChoiceId,
-} from '@opentalk/common';
-import {
   LegalVoteType,
   VoteOption,
-  legalVoteStore,
-  LegalVoteCountdown,
-  LegalVoteTokenClipboard,
-} from '@opentalk/components';
+} from '@opentalk/common';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { batch } from 'react-redux';
 
-import legalVoteSignaling from '../../../api/types/outgoing/legal-vote';
+import { vote as legalVote } from '../../../api/types/outgoing/legalVote';
 import { vote as pollVote } from '../../../api/types/outgoing/poll';
-import VoteResultTable from '../../../features/VoteResultTable';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { selectVoteById, saveSelectedOption } from '../../../store/slices/legalVoteSlice';
 import { selectPollById, voted } from '../../../store/slices/pollSlice';
 import { setVoteOrPollIdToShow } from '../../../store/slices/uiSlice';
 import { selectOurUuid } from '../../../store/slices/userSlice';
+import LegalVoteCountdown from '../../LegalVoteCountdown';
+import { LegalVoteTokenClipboard } from '../../LegalVoteTokenClipboard';
 import VoteResult, { VoteType } from './VoteResult';
 import VoteResultDate from './VoteResultDate';
+import VoteResultTable from './VoteResultTable';
 
 const TooltipIcon = styled('div')(({ color }) => ({
   width: '1rem',
@@ -96,7 +94,7 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
   const dispatch = useAppDispatch();
   const ourUuid = useAppSelector(selectOurUuid);
   const { t } = useTranslation();
-  const currentLegalVote = useAppSelector(legalVoteStore.selectVoteById(voteOrPollId));
+  const currentLegalVote = useAppSelector(selectVoteById(voteOrPollId));
   const currentPoll = useAppSelector(selectPollById(voteOrPollId));
   const startTime = new Date(currentLegalVote?.startTime ?? new Date());
   const formattedTime = useDateFormat(startTime, 'time');
@@ -162,14 +160,14 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
     }
     batch(() => {
       dispatch(
-        legalVoteStore.actions.saveSelectedOption({
+        saveSelectedOption({
           legalVoteId: currentLegalVote.id,
           selectedOption: selectedLegalVoteOption,
         })
       );
       dispatch(
-        legalVoteSignaling.actions.vote.action({
-          legalVoteId: currentLegalVote.id,
+        legalVote.action({
+          legalVoteId: currentLegalVote?.id as LegalVoteId,
           option: selectedLegalVoteOption,
           token: currentLegalVote?.token || '',
           timezone: getCurrentTimezone(),
@@ -361,7 +359,7 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
         </CustomFieldset>
         {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
           <Grid item xs={12} container justifyContent="flex-start">
-            <Typography color={'primary'} textAlign={'center'}>
+            <Typography color="primary" textAlign="center">
               {t('legal-vote-not-selected')}
             </Typography>
           </Grid>
@@ -402,5 +400,4 @@ const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps
     </Grid>
   );
 };
-
 export default VoteResultContainer;

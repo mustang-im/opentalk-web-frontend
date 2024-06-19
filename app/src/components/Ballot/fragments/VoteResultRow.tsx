@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { TableCell, TableRow, Typography } from '@mui/material';
-import { VoteOption } from '@opentalk/components';
+import { VoteOption } from '@opentalk/common';
 import { memo } from 'react';
 
-import { useAppSelector } from '../hooks';
-import { selectUserAsParticipant } from '../store/selectors';
-import { selectParticipantById } from '../store/slices/participantsSlice';
+import { useAppSelector } from '../../../hooks';
+import { selectUserAsParticipant } from '../../../store/selectors';
+import { selectParticipantById } from '../../../store/slices/participantsSlice';
 
 interface VoteResultRowProps {
   participantId: string;
