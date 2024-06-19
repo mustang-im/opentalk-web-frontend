@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, styled } from '@mui/material';
 
-export const MeetingHeaderButton = styled(IconButton)<{ active?: boolean }>(({ theme, active }) => ({
+export const MeetingHeaderButton = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{
+  active?: boolean;
+}>(({ theme, active }) => ({
   background: active ? theme.palette.primary.main : theme.palette.background.video,
   borderRadius: '0.25rem',
   '& .MuiSvgIcon-root': {

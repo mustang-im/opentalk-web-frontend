@@ -6,13 +6,13 @@ import { legalVoteStore } from '@opentalk/components';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
-import { selectAllPollVotes } from '../../../store/slices/pollSlice';
+import { selectAllPolls } from '../../../store/slices/pollSlice';
 import ResultsItem from './ResultsItem';
 
 const ResultsList = () => {
   const { t } = useTranslation();
   const votes = useAppSelector(legalVoteStore.selectAllVotes);
-  const polls = useAppSelector(selectAllPollVotes);
+  const polls = useAppSelector(selectAllPolls);
 
   return (
     <MenuList>

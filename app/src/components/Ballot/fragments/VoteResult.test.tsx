@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { LegalVoteId } from '@opentalk/common';
 
-import { configureStore, render, screen, cleanup, fireEvent } from '../../utils/testUtils';
+import { configureStore, render, screen, cleanup, fireEvent } from '../../../utils/testUtils';
 import VoteResult, { IVoteResult, VoteType } from './VoteResult';
 
 describe('testing vote results', () => {

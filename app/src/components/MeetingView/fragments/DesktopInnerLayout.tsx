@@ -2,18 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, CircularProgress } from '@mui/material';
-import { legalVoteStore } from '@opentalk/components';
 
 import { useAppSelector } from '../../../hooks';
-import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../../store/slices/pollSlice';
 import { selectRoomConnectionState, ConnectionState } from '../../../store/slices/roomSlice';
-import { selectShowCoffeeBreakCurtain, selectVotePollIdToShow } from '../../../store/slices/uiSlice';
+import { selectShowCoffeeBreakCurtain } from '../../../store/slices/uiSlice';
 import { selectIsModerator } from '../../../store/slices/userSlice';
+import Ballot from '../../Ballot';
 import { CoffeeBreakView } from '../../CoffeeBreakView/CoffeeBreakView';
 import JumpLinkContainer from '../../JumpLinkContainer';
 import MeetingHeader from '../../MeetingHeader';
 import MeetingSidebar from '../../MeetingSidebar/index';
-import VoteResultContainer from '../../VoteResult/VoteResultContainer';
 import Cinema from './Cinema';
 
 const InnerContainer = styled('div')(({ theme }) => ({
@@ -31,13 +29,7 @@ const CircularProgressBar = styled(CircularProgress)({
 });
 
 const DesktopInnerLayout = () => {
-  const currentVoteId = useAppSelector(legalVoteStore.selectCurrentShownVoteId);
-  const showVoteResultContainer = useAppSelector(legalVoteStore.selectShowLegalVoteWindow);
-  const showPollResultContainer = useAppSelector(selectShowPollWindow);
-  const currentShownPollVoteId = useAppSelector(selectCurrentShownPollVoteId);
-  const votePollIdToShow = useAppSelector(selectVotePollIdToShow);
   const connectionState = useAppSelector(selectRoomConnectionState);
-
   const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
   const isModerator = useAppSelector(selectIsModerator);
 
@@ -56,13 +48,7 @@ const DesktopInnerLayout = () => {
           ) : (
             <>
               <Cinema />
-              {votePollIdToShow && <VoteResultContainer legalVoteId={votePollIdToShow} />}
-              {!votePollIdToShow && currentVoteId && showVoteResultContainer && (
-                <VoteResultContainer legalVoteId={currentVoteId} />
-              )}
-              {!votePollIdToShow && currentShownPollVoteId && showPollResultContainer && (
-                <VoteResultContainer legalVoteId={currentShownPollVoteId} />
-              )}
+              <Ballot />
             </>
           )}
         </>

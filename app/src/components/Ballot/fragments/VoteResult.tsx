@@ -6,8 +6,8 @@ import { PollId, LegalVoteId } from '@opentalk/common';
 import { legalVoteStore } from '@opentalk/components';
 import React, { useState } from 'react';
 
-import { useAppSelector } from '../../hooks';
-import { selectCurrentShownPollVote } from '../../store/slices/pollSlice';
+import { useAppSelector } from '../../../hooks';
+import { selectPollToShow } from '../../../store/slices/pollSlice';
 
 export enum VoteType {
   Poll = 'Poll',
@@ -38,9 +38,7 @@ const ProgressContainer = styled('div')(({ theme }) => ({
   alignItems: 'center',
   backgroundColor: theme.palette.secondary.main,
   borderRadius: '0.5em',
-  '&:not(:first-child)': {
-    marginTop: theme.spacing(1),
-  },
+  marginTop: theme.spacing(1),
   '& .MuiInputLabel-root': {
     color: theme.palette.secondary.contrastText,
     flex: 1,
@@ -82,7 +80,7 @@ const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, vot
   const didVote =
     voteType === VoteType.LegalVote
       ? Boolean(useAppSelector(legalVoteStore.selectCurrentShownVote)?.votedAt)
-      : Boolean(useAppSelector(selectCurrentShownPollVote)?.voted);
+      : Boolean(useAppSelector(selectPollToShow)?.voted);
   const id = voteData.legalVoteId + '-' + optionIndex;
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 

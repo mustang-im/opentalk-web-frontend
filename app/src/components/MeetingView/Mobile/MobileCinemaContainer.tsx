@@ -2,13 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { CircularProgress, Stack, styled } from '@mui/material';
-import { legalVoteStore } from '@opentalk/components';
 
 import { useAppSelector } from '../../../hooks';
-import { selectCurrentShownPollVoteId, selectShowPollWindow } from '../../../store/slices/pollSlice';
 import { ConnectionState, selectRoomConnectionState } from '../../../store/slices/roomSlice';
-import { selectVotePollIdToShow } from '../../../store/slices/uiSlice';
-import VoteResultContainer from '../../VoteResult/VoteResultContainer';
+import Ballot from '../../Ballot';
 import Cinema from '../fragments/Cinema';
 
 const Container = styled(Stack)(() => ({
@@ -27,11 +24,6 @@ const CircularProgressBar = styled(CircularProgress)({
 });
 
 const MobileCinemaContainer = () => {
-  const currentVoteId = useAppSelector(legalVoteStore.selectCurrentShownVoteId);
-  const showVoteResultContainer = useAppSelector(legalVoteStore.selectShowLegalVoteWindow);
-  const showPollResultContainer = useAppSelector(selectShowPollWindow);
-  const currentShownPollVoteId = useAppSelector(selectCurrentShownPollVoteId);
-  const votePollIdToShow = useAppSelector(selectVotePollIdToShow);
   const connectionState = useAppSelector(selectRoomConnectionState);
 
   return (
@@ -41,13 +33,7 @@ const MobileCinemaContainer = () => {
       ) : (
         <InnerContainer>
           <Cinema />
-          {votePollIdToShow && <VoteResultContainer legalVoteId={votePollIdToShow} />}
-          {!votePollIdToShow && currentVoteId && showVoteResultContainer && (
-            <VoteResultContainer legalVoteId={currentVoteId} />
-          )}
-          {!votePollIdToShow && currentShownPollVoteId && showPollResultContainer && (
-            <VoteResultContainer legalVoteId={currentShownPollVoteId} />
-          )}
+          <Ballot />
         </InnerContainer>
       )}
     </Container>

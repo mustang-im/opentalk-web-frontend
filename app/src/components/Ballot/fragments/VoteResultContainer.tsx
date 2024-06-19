@@ -1,18 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  styled,
-  Typography,
-  Container,
-  IconButton,
-  Grid,
-  Stack,
-  Tooltip,
-  Box,
-  Chip as MuiChip,
-  Button,
-} from '@mui/material';
+import { styled, Typography, IconButton, Grid, Stack, Tooltip, Box, Chip as MuiChip, Button } from '@mui/material';
 import {
   ParticipantId,
   PollId,
@@ -34,15 +23,15 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { batch } from 'react-redux';
 
-import legalVoteSignaling from '../../api/types/outgoing/legal-vote';
-import { vote as pollVote } from '../../api/types/outgoing/poll';
-import VoteResultTable from '../../features/VoteResultTable';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectPollVoteById, closeResultWindow as closePollResultWindow, voted } from '../../store/slices/pollSlice';
-import { setVotePollIdToShow } from '../../store/slices/uiSlice';
-import { selectOurUuid } from '../../store/slices/userSlice';
+import legalVoteSignaling from '../../../api/types/outgoing/legal-vote';
+import { vote as pollVote } from '../../../api/types/outgoing/poll';
+import VoteResultTable from '../../../features/VoteResultTable';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { selectPollById, voted } from '../../../store/slices/pollSlice';
+import { setVoteOrPollIdToShow } from '../../../store/slices/uiSlice';
+import { selectOurUuid } from '../../../store/slices/userSlice';
 import VoteResult, { VoteType } from './VoteResult';
-import VoteResultDate from './fragments/VoteResultDate';
+import VoteResultDate from './VoteResultDate';
 
 const TooltipIcon = styled('div')(({ color }) => ({
   width: '1rem',
@@ -50,23 +39,6 @@ const TooltipIcon = styled('div')(({ color }) => ({
   borderRadius: '100%',
   marginRight: '1rem',
   background: color,
-}));
-
-const MainContainer = styled(Container)(({ theme }) => ({
-  background: theme.palette.background.voteResult,
-  position: 'fixed',
-  top: '8rem',
-  left: '25rem',
-  borderRadius: '1rem',
-  display: 'block',
-  gap: '1rem',
-  padding: theme.spacing(2),
-  justifyContent: 'space-evenly',
-  flexDirection: 'column',
-  zIndex: 1000,
-  maxHeight: '34rem',
-  overflowY: 'auto',
-  scrollBehavior: 'smooth',
 }));
 
 const Chip = styled(MuiChip)(() => ({
@@ -101,8 +73,9 @@ const CustomForm = styled('form')(() => ({
   width: '100%',
 }));
 
-interface IVoteResultContainerProps {
-  legalVoteId: PollId | LegalVoteId;
+interface VoteResultContainerProps {
+  voteOrPollId: PollId | LegalVoteId;
+  onClose: () => void;
 }
 
 export interface Vote {
@@ -118,22 +91,16 @@ export interface Vote {
   live?: boolean;
 }
 
-const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
+const VoteResultContainer = ({ voteOrPollId, onClose }: VoteResultContainerProps) => {
   const dispatch = useAppDispatch();
   const ourUuid = useAppSelector(selectOurUuid);
   const { t } = useTranslation();
-  const currentLegalVote = useAppSelector(legalVoteStore.selectVoteById(legalVoteId));
-  const currentPoll = useAppSelector(selectPollVoteById(legalVoteId));
+  const currentLegalVote = useAppSelector(legalVoteStore.selectVoteById(voteOrPollId));
+  const currentPoll = useAppSelector(selectPollById(voteOrPollId));
   const startTime = new Date(currentLegalVote?.startTime ?? new Date());
   const formattedTime = useDateFormat(startTime, 'time');
   const [showResults, setShowResults] = useState(false);
   const isLiveVote = currentLegalVote?.kind === 'live_roll_call' || currentLegalVote?.kind === 'roll_call';
-
-  const closeResultWindow = () => {
-    dispatch(closePollResultWindow());
-    dispatch(legalVoteStore.closeResultWindow());
-    dispatch(setVotePollIdToShow(undefined));
-  };
 
   const vote: Vote | LegalVoteType | undefined = currentLegalVote || currentPoll;
   const [selectedLegalVoteOption, setSelectedLegalVoteOption] = useState<VoteOption | undefined>(
@@ -143,7 +110,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   // to uncheck all checkboxes on every new voting
   useEffect(() => {
     setSelectedLegalVoteOption(undefined);
-  }, [legalVoteId]);
+  }, [voteOrPollId]);
 
   let numberOfVotes = 0;
 
@@ -164,7 +131,7 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const allowedToVote = ourUuid ? currentLegalVote?.allowedParticipants?.includes(ourUuid as ParticipantId) : false;
 
   useEffect(() => {
-    vote && setVotePollIdToShow(vote.id);
+    vote && setVoteOrPollIdToShow(vote.id);
   }, [vote]);
 
   const mapVoteKey = (key: string) => {
@@ -310,110 +277,107 @@ const VoteResultContainer = ({ legalVoteId }: IVoteResultContainerProps) => {
   const showResultTable = (isLiveVote || showResults) && currentLegalVote && allowedToVote;
 
   return (
-    <MainContainer maxWidth="sm" role="dialog" aria-labelledby="vote-result-legend">
-      <Grid container rowSpacing={1.4}>
-        <Grid item xs={12} style={{ scrollBehavior: 'smooth' }}>
-          <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1}>
-            <Box display="flex" alignItems="center" flex={1} gap={1}>
-              <Chip
-                size="medium"
-                label={t(`legal-vote-overview-panel-status-${vote?.state}`)}
-                color={vote?.state === 'active' ? 'success' : 'error'}
-                variant="filled"
-                clickable={false}
+    <Grid container rowSpacing={1.4} sx={{ width: '100%' }}>
+      <Grid item xs={12} style={{ scrollBehavior: 'smooth' }}>
+        <Stack width="100%" direction="row" alignItems="center" justifyContent="space-between" gap={1}>
+          <Box display="flex" alignItems="center" flex={1} gap={1}>
+            <Chip
+              size="medium"
+              label={t(`legal-vote-overview-panel-status-${vote?.state}`)}
+              color={vote?.state === 'active' ? 'success' : 'error'}
+              variant="filled"
+              clickable={false}
+            />
+            {currentLegalVote && <Box>{formattedTime}</Box>}
+            {currentLegalVote && currentLegalVote.duration && currentLegalVote.startTime && (
+              <LegalVoteCountdown
+                duration={currentLegalVote.duration}
+                startTime={currentLegalVote.startTime}
+                active={currentLegalVote.state === 'active'}
               />
-              {currentLegalVote && <Box>{formattedTime}</Box>}
-              {currentLegalVote && currentLegalVote.duration && currentLegalVote.startTime && (
-                <LegalVoteCountdown
-                  duration={currentLegalVote.duration}
-                  startTime={currentLegalVote.startTime}
-                  active={currentLegalVote.state === 'active'}
-                />
-              )}
-            </Box>
-            <IconButton
-              onClick={closeResultWindow}
-              aria-label={t('global-close-dialog')}
-              // When we open up vote result dialog, we want to place a focus
-              // inside of it, so the content can be read by the screenreader.
-              // FIXME: there is an issue with starting new votes without closing old ones
-              // because component never unmounts, so autofocus is no re-applied.
-              /* eslint-disable jsx-a11y/no-autofocus */
-              autoFocus
-            >
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-        </Grid>
-        <CustomForm onSubmit={submitLegalVoteOption} method="POST">
-          <CustomFieldset>
-            <legend id="vote-result-legend">
-              {vote?.name && (
-                <Typography variant="h2" component="h3">
-                  {vote.name}
-                </Typography>
-              )}
-              {getSubtitle(vote as LegalVoteType) && (
-                <Typography variant="body1" component="h4">
-                  {getSubtitle(vote as LegalVoteType)}
-                </Typography>
-              )}
-              {vote?.topic && (
-                <Typography variant="body1" component="h4">
-                  {vote.topic}
-                </Typography>
-              )}
-            </legend>
-            {renderLiveIndicator(vote as Vote)}
-            {renderVoteResult()}
-          </CustomFieldset>
-          {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
-            <Grid item xs={12} container justifyContent="flex-start">
-              <Typography color={'primary'} textAlign={'center'}>
-                {t('legal-vote-not-selected')}
-              </Typography>
-            </Grid>
-          )}
-          {currentLegalVote && allowedToVote && currentLegalVote.state === 'active' && (
-            <Grid item xs={12} my={1} container justifyContent="flex-end">
-              <Button
-                data-testid="legal-vote-save-button"
-                type="submit"
-                disabled={Boolean(currentLegalVote?.votedAt) || !allowedToVote}
-              >
-                {t('legal-vote-form-button-save')}
-              </Button>
-            </Grid>
-          )}
-        </CustomForm>
-        {currentLegalVote?.votedAt && allowedToVote && (
-          <Grid item xs={12}>
-            <VoteResultDate
-              date={new Date(currentLegalVote?.votedAt)}
-              state={currentLegalVote.state}
-              showTableHint={isTableHintVisible()}
-              showResultsHandler={showResultsHandler}
-            />
-          </Grid>
-        )}
-        {currentLegalVote && currentLegalVote.votedAt && currentLegalVote.state === 'finished' && allowedToVote && (
-          <Grid item xs={12}>
-            <LegalVoteTokenClipboard
-              name={currentLegalVote.name}
-              timestamp={currentLegalVote.votedAt || ''}
-              token={currentLegalVote.token || ''}
-              vote={t(`legal-vote-${selectedLegalVoteOption}-label`) as string}
-            />
-          </Grid>
-        )}
-
-        {showResultTable && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
-          <Grid ref={resultsRef} item xs={12}>
-            <VoteResultTable scrollToResults={scrollToResults} voteId={currentLegalVote.id} />
-          </Grid>
-        )}
+            )}
+          </Box>
+          <IconButton
+            onClick={onClose}
+            aria-label={t('global-close-dialog')}
+            // When we open up vote result dialog, we want to place a focus
+            // inside of it, so the content can be read by the screenreader.
+            // FIXME: there is an issue with starting new votes without closing old ones
+            // because component never unmounts, so autofocus is no re-applied.
+            /* eslint-disable jsx-a11y/no-autofocus */
+            autoFocus
+          >
+            <CloseIcon />
+          </IconButton>
+        </Stack>
       </Grid>
-    </MainContainer>
+      <CustomForm onSubmit={submitLegalVoteOption} method="POST">
+        <CustomFieldset>
+          <legend id="vote-result-legend">
+            {vote?.name && (
+              <Typography variant="h2" component="h3">
+                {vote.name}
+              </Typography>
+            )}
+            {getSubtitle(vote as LegalVoteType) && (
+              <Typography variant="body1" component="h4">
+                {getSubtitle(vote as LegalVoteType)}
+              </Typography>
+            )}
+            {vote?.topic && (
+              <Typography variant="body1" component="h4">
+                {vote.topic}
+              </Typography>
+            )}
+          </legend>
+          {renderLiveIndicator(vote as Vote)}
+          {renderVoteResult()}
+        </CustomFieldset>
+        {!allowedToVote && (vote as LegalVoteType)?.allowedParticipants?.length && (
+          <Grid item xs={12} container justifyContent="flex-start">
+            <Typography color={'primary'} textAlign={'center'}>
+              {t('legal-vote-not-selected')}
+            </Typography>
+          </Grid>
+        )}
+        {currentLegalVote && allowedToVote && currentLegalVote.state === 'active' && (
+          <Grid item xs={12} my={1} container justifyContent="flex-end">
+            <Button
+              data-testid="legal-vote-save-button"
+              type="submit"
+              disabled={Boolean(currentLegalVote?.votedAt) || !allowedToVote}
+            >
+              {t('legal-vote-form-button-save')}
+            </Button>
+          </Grid>
+        )}
+      </CustomForm>
+      {currentLegalVote?.votedAt && allowedToVote && (
+        <Grid item xs={12}>
+          <VoteResultDate
+            date={new Date(currentLegalVote?.votedAt)}
+            state={currentLegalVote.state}
+            showTableHint={isTableHintVisible()}
+            showResultsHandler={showResultsHandler}
+          />
+        </Grid>
+      )}
+      {currentLegalVote && currentLegalVote.votedAt && currentLegalVote.state === 'finished' && allowedToVote && (
+        <Grid item xs={12}>
+          <LegalVoteTokenClipboard
+            name={currentLegalVote.name}
+            timestamp={currentLegalVote.votedAt || ''}
+            token={currentLegalVote.token || ''}
+            vote={t(`legal-vote-${selectedLegalVoteOption}-label`) as string}
+          />
+        </Grid>
+      )}
+      {showResultTable && Object.keys(currentLegalVote?.votingRecord || {}).length !== 0 && (
+        <Grid ref={resultsRef} item xs={12}>
+          <VoteResultTable scrollToResults={scrollToResults} voteId={currentLegalVote.id} />
+        </Grid>
+      )}
+    </Grid>
   );
 };
 

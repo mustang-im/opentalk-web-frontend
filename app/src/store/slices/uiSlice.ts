@@ -50,8 +50,8 @@ interface UIState {
   paginationPage: number;
   pinnedParticipantId?: ParticipantId;
   localVideoMirroringEnabled: boolean;
-  showPollVoteResultWindow: boolean;
-  votesPollIdToShow?: LegalVoteId | PollId;
+  showVoteOrPollResult: boolean;
+  voteOrPollIdToShow?: LegalVoteId | PollId;
   debugMode: boolean;
   chatSearchValue: string;
   isCurrentWhiteboardHighlighted?: boolean;
@@ -83,8 +83,8 @@ const initialState: UIState = {
   paginationPage: 1,
   pinnedParticipantId: undefined,
   localVideoMirroringEnabled: true,
-  showPollVoteResultWindow: false,
-  votesPollIdToShow: undefined,
+  showVoteOrPollResult: false,
+  voteOrPollIdToShow: undefined,
   debugMode: false,
   chatSearchValue: '',
   isCurrentWhiteboardHighlighted: undefined,
@@ -141,11 +141,11 @@ export const uiSlice = createSlice({
     mirroredVideoSet: (state, { payload: enabled }: PayloadAction<boolean>) => {
       state.localVideoMirroringEnabled = enabled;
     },
-    setShowPollVoteResultWindow(state, { payload: showPollVoteResultWindow }: PayloadAction<boolean>) {
-      state.showPollVoteResultWindow = showPollVoteResultWindow;
+    setShowVoteOrPollResult(state, { payload: showVoteOrPollResult }: PayloadAction<boolean>) {
+      state.showVoteOrPollResult = showVoteOrPollResult;
     },
-    setVotePollIdToShow(state, { payload: votesPollIdToShow }: PayloadAction<PollId | LegalVoteId | undefined>) {
-      state.votesPollIdToShow = votesPollIdToShow;
+    setVoteOrPollIdToShow(state, { payload: voteOrPollIdToShow }: PayloadAction<PollId | LegalVoteId | undefined>) {
+      state.voteOrPollIdToShow = voteOrPollIdToShow;
     },
     toggleDebugMode(state) {
       state.debugMode = !state.debugMode;
@@ -214,7 +214,7 @@ export const uiSlice = createSlice({
       }
     });
     builder.addCase(hangUp.pending, (state) => {
-      state.votesPollIdToShow = undefined;
+      state.voteOrPollIdToShow = undefined;
     });
     builder.addCase(connectionClosed, (state) => {
       state.chatConversationState = initialState.chatConversationState;
@@ -235,11 +235,11 @@ export const uiSlice = createSlice({
       state.isCurrentProtocolHighlighted = true;
     });
     builder.addCase(legalVoteStore.started, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
-      state.votesPollIdToShow = vote.legalVoteId;
+      state.voteOrPollIdToShow = vote.legalVoteId;
       state.haveSeenMobilePollsAndVotes = state.isDrawerOpen && state.activeTab === ModerationTabKey.PollsAndLegalVote;
     });
     builder.addCase(PollStarted, (state, { payload: vote }: PayloadAction<PollStartedInterface>) => {
-      state.votesPollIdToShow = vote.id;
+      state.voteOrPollIdToShow = vote.id;
       state.haveSeenMobilePollsAndVotes = state.isDrawerOpen && state.activeTab === ModerationTabKey.PollsAndLegalVote;
     });
     builder.addCase(timerStarted, (state, { payload }) => {
@@ -275,8 +275,8 @@ export const {
   setPaginationPage,
   pinnedParticipantIdSet,
   mirroredVideoSet,
-  setShowPollVoteResultWindow,
-  setVotePollIdToShow,
+  setShowVoteOrPollResult,
+  setVoteOrPollIdToShow,
   toggleDebugMode,
   setChatSearchValue,
   setProtocolHighlight,
@@ -301,8 +301,8 @@ export const selectChatConversationState = (state: RootState) => state.ui.chatCo
 export const selectPaginationPageState = (state: RootState) => state.ui.paginationPage;
 export const selectPinnedParticipantId = (state: RootState) => state.ui.pinnedParticipantId;
 export const selectMirroredVideoEnabled = (state: RootState) => state.ui.localVideoMirroringEnabled;
-export const selectShowPollVoteResultWindow = (state: RootState) => state.ui.showPollVoteResultWindow;
-export const selectVotePollIdToShow = (state: RootState) => state.ui.votesPollIdToShow;
+export const selectShowPollOrVoteResult = (state: RootState) => state.ui.showVoteOrPollResult;
+export const selectVoteOrPollIdToShow = (state: RootState) => state.ui.voteOrPollIdToShow;
 export const selectDebugMode = (state: RootState) => state.ui.debugMode;
 export const selectChatSearchValue = (state: RootState) => state.ui.chatSearchValue;
 export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.ui.isCurrentWhiteboardHighlighted;

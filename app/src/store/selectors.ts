@@ -30,7 +30,7 @@ import {
   selectAllOnlineParticipantsInConference,
   selectAllParticipants,
 } from './slices/participantsSlice';
-import { selectAllPollVotes } from './slices/pollSlice';
+import { selectAllPolls } from './slices/pollSlice';
 import { selectParticipantsReady } from './slices/timerSlice';
 import {
   selectParticipantsSearchValue,
@@ -244,7 +244,7 @@ export const selectTalkingStickParticipants = createSelector(
 
 export const selectPollsAndVotingsCount = createSelector(
   legalVoteStore.selectAllVotes,
-  selectAllPollVotes,
+  selectAllPolls,
   (votings, polls) => {
     return votings.length + polls.length;
   }
@@ -252,7 +252,7 @@ export const selectPollsAndVotingsCount = createSelector(
 
 export const selectActivePollsAndVotingsCount = createSelector(
   legalVoteStore.selectAllVotes,
-  selectAllPollVotes,
+  selectAllPolls,
   (votings, polls) => {
     return (
       votings.filter((voting) => voting.state === 'active').length +
