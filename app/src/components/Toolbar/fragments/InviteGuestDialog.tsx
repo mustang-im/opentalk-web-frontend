@@ -39,29 +39,6 @@ const IconButton = styled(MuiIconButton)(({ theme }) => ({
   right: theme.spacing(1),
 }));
 
-interface DialogTitleProps {
-  id: string;
-  children: React.ReactNode;
-  onClose?: () => void;
-}
-
-const InviteDialogTitle = (props: DialogTitleProps) => {
-  const { t } = useTranslation();
-  const { children, onClose, id, ...other } = props;
-  return (
-    <DialogTitle {...other} aria-labelledby={id}>
-      <Typography id={id} style={{ color: theme.palette.secondary.dark }}>
-        {children}
-      </Typography>
-      {onClose && (
-        <IconButton aria-label={t('global-close-dialog')} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      )}
-    </DialogTitle>
-  );
-};
-
 const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   const dateFns = new DateFnsAdapter();
   const { t } = useTranslation();
@@ -124,16 +101,13 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
   };
 
   return (
-    <Dialog
-      {...props}
-      fullWidth
-      PaperComponent={Paper}
-      PaperProps={{ 'aria-labelledby': 'dialog-invite-guest-title' }}
-      onClose={onClose}
-    >
-      <InviteDialogTitle id="dialog-invite-guest-title" onClose={onClose}>
+    <Dialog {...props} fullWidth PaperComponent={Paper} onClose={onClose}>
+      <DialogTitle variant="body1" style={{ color: theme.palette.secondary.dark }}>
         {t('dialog-invite-guest-title')}
-      </InviteDialogTitle>
+      </DialogTitle>
+      <IconButton aria-label={t('global-close-dialog')} onClick={onClose}>
+        <CloseIcon />
+      </IconButton>
       {inviteUrl ? (
         <Stack>
           <DialogContent>

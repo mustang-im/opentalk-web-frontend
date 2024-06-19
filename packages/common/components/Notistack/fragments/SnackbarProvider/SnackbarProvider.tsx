@@ -14,6 +14,7 @@ import { CloseIcon } from '../../../../assets/icons';
 import { IconButton } from '../../../IconButtons';
 import { notifications } from '../utils';
 import { getNotistackComponents } from '../variations';
+import { useTranslation } from 'react-i18next';
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   marginRight: theme.spacing(2),
@@ -57,6 +58,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
     notifications.close(key);
   };
   const { children, Components, domRoot } = props;
+  const { t } = useTranslation();
 
   return (
     <SnackbarProviderDefault
@@ -72,7 +74,10 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
         horizontal: 'right',
       }}
       action={(snackbarKey: SnackbarKey) => (
-        <StyledIconButton onClick={() => onClickDismiss(snackbarKey)}>
+        <StyledIconButton
+          aria-label={t("global-close")}
+          onClick={() => onClickDismiss(snackbarKey)}
+        >
           <CloseIcon />
         </StyledIconButton>
       )}

@@ -7,6 +7,7 @@ import React from 'react';
 import { CloseIcon } from '../../../../assets/icons';
 import { IconButton } from '../../../IconButtons';
 import { ISnackbarActionButtonProps } from '../utils';
+import { useTranslation } from 'react-i18next';
 
 const SnackbarActionButtons = ({
   onCancel,
@@ -17,6 +18,8 @@ const SnackbarActionButtons = ({
   actionBtnAttributes = {},
   cancelBtnAttributes = {},
 }: Omit<ISnackbarActionButtonProps, 'msg'>) => {
+  const { t } = useTranslation();
+
   return (
     <Box display="flex" gap={1}>
       {actionBtnText && (
@@ -32,7 +35,7 @@ const SnackbarActionButtons = ({
             </Button>
           )}
           {!cancelBtnText && (
-            <IconButton onClick={onCancel}>
+            <IconButton aria-label={t('global-close')} onClick={onCancel}>
               <CloseIcon />
             </IconButton>
           )}
