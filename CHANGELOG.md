@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Stability Improvements
 
+- Field validation error message for setting a meeting date should now behave correctly ([#1873](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1873))
 - Implement IceRestart when publisher connections is disconnected. ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1583), [#1747](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1747))
 
 ### New Features

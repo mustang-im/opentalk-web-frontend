@@ -106,7 +106,7 @@ const DateTimePicker = ({
           minDate={minTimeDate}
           minTime={minTime}
           slotProps={{
-            textField: { helperText, placeholder, error, id, onFocus, onBlur },
+            textField: { placeholder, error, id, onFocus, onBlur },
             actionBar: { actions },
             popper: { placement: 'bottom-start', modifiers: [getOffsetModifier()] },
             openPickerButton: {
