@@ -58,7 +58,7 @@ export const addEventsEndpoints = <
     BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, Record<string, unknown>, FetchBaseQueryMeta>,
     Tags,
     'api'
-  >
+  >,
 >(
   builder: RoomEndpointBuilder
 ) => ({

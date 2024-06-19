@@ -50,24 +50,24 @@ type DelimiterCasedPropertiesDeep<Value, Delimiter extends string> = Value exten
   | Opaque<unknown>
   ? Value
   : Value extends Array<infer U>
-  ? Array<DelimiterCasedPropertiesDeep<U, Delimiter>>
-  : Value extends Set<infer U>
-  ? Set<DelimiterCasedPropertiesDeep<U, Delimiter>>
-  : {
-      [K in keyof Value as DelimiterCase<K, Delimiter>]: DelimiterCasedPropertiesDeep<Value[K], Delimiter>;
-    };
+    ? Array<DelimiterCasedPropertiesDeep<U, Delimiter>>
+    : Value extends Set<infer U>
+      ? Set<DelimiterCasedPropertiesDeep<U, Delimiter>>
+      : {
+          [K in keyof Value as DelimiterCase<K, Delimiter>]: DelimiterCasedPropertiesDeep<Value[K], Delimiter>;
+        };
 
 export type SnakeCasedPropertiesDeep<Value> = DelimiterCasedPropertiesDeep<Value, '_'>;
 
 export type CamelCasedPropertiesDeep<Value> = Value extends Function | Opaque<unknown>
   ? Value
   : Value extends Array<infer U>
-  ? Array<CamelCasedPropertiesDeep<U>>
-  : Value extends Set<infer U>
-  ? Set<CamelCasedPropertiesDeep<U>>
-  : {
-      [K in keyof Value as CamelCase<K>]: CamelCasedPropertiesDeep<Value[K]>;
-    };
+    ? Array<CamelCasedPropertiesDeep<U>>
+    : Value extends Set<infer U>
+      ? Set<CamelCasedPropertiesDeep<U>>
+      : {
+          [K in keyof Value as CamelCase<K>]: CamelCasedPropertiesDeep<Value[K]>;
+        };
 
 /*
 FIXME: the CamelCaseKeys type from camelcase-keys has problems with opaque types. Thus we overwrite the result type Replace when fixed.

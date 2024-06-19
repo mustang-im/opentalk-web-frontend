@@ -59,7 +59,7 @@ const AuthProvider: FC<PropsWithChildren<AuthProviderValues>> = ({ children, con
           clientId: configuration.clientId,
           tokenEndpoint: config.tokenEndpoint,
           baseUrl: configuration.baseUrl,
-        }),
+        })
       );
     });
   };

@@ -8,8 +8,8 @@ import React from 'react';
 import SnackbarActionButtons from '../SnackbarActionButtons';
 
 export interface AdditionalButtonAttributes {
-  variant?: "text" | "outlined" | "contained";
-  color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
+  variant?: 'text' | 'outlined' | 'contained';
+  color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
 }
 
 export interface ISnackbarActionButtonProps {
@@ -23,7 +23,7 @@ export interface ISnackbarActionButtonProps {
   hideCloseButton?: boolean;
 }
 
-export interface ISnackActionsProps extends OptionsObject, ISnackbarActionButtonProps { }
+export interface ISnackActionsProps extends OptionsObject, ISnackbarActionButtonProps {}
 
 export interface ISnackbarPersistentProps extends Omit<OptionsObject, 'persist' | 'action' | 'autoHideDuration'> {
   msg: string;
@@ -75,7 +75,7 @@ export const notificationPersistent = ({ msg, variant, ...options }: ISnackbarPe
     SnackbarProps: {
       role: 'alert',
       'aria-label': msg,
-    }
+    },
   });
 };
 
@@ -97,7 +97,7 @@ export const notifications = {
   },
   binaryAction: (
     message: string,
-    options: OptionsObject<"binaryAction"> & {
+    options: OptionsObject<'binaryAction'> & {
       type?: 'info' | 'warning' | 'error' | 'success';
       primaryBtnText?: string;
       secondaryBtnText?: string;
@@ -108,7 +108,12 @@ export const notifications = {
       closable?: boolean;
     } = {}
   ) => {
-    return enqueueSnackbar({ ...options, message, variant: 'binaryAction', SnackbarProps: { role: 'alert', 'aria-label': message } });
+    return enqueueSnackbar({
+      ...options,
+      message,
+      variant: 'binaryAction',
+      SnackbarProps: { role: 'alert', 'aria-label': message },
+    });
   },
   close(key: SnackbarKey): void {
     closeSnackbar(key);

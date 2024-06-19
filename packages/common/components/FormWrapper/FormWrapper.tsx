@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-
 import { FormControl, Stack, styled } from '@mui/material';
 import type { CSSObject } from '@mui/material';
 import React, { useMemo } from 'react';
+
 import { ErrorFormMessage } from '../ErrorFormMessage';
 
 export type FormProps = {

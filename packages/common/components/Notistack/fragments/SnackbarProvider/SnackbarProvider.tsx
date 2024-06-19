@@ -9,12 +9,12 @@ import {
   SnackbarProviderProps as SnackbarProviderPropsDefault,
 } from 'notistack';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CloseIcon } from '../../../../assets/icons';
 import { IconButton } from '../../../IconButtons';
 import { notifications } from '../utils';
 import { getNotistackComponents } from '../variations';
-import { useTranslation } from 'react-i18next';
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   marginRight: theme.spacing(2),
@@ -74,10 +74,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
         horizontal: 'right',
       }}
       action={(snackbarKey: SnackbarKey) => (
-        <StyledIconButton
-          aria-label={t("global-close")}
-          onClick={() => onClickDismiss(snackbarKey)}
-        >
+        <StyledIconButton aria-label={t('global-close')} onClick={() => onClickDismiss(snackbarKey)}>
           <CloseIcon />
         </StyledIconButton>
       )}

@@ -16,7 +16,7 @@ export function setupApiStore<
     middleware: Middleware;
     util: { resetApiState(): any };
   },
-  R extends Record<string, Reducer<any, any>> = Record<never, never>
+  R extends Record<string, Reducer<any, any>> = Record<never, never>,
 >(api: A, extraReducers?: R, withoutListeners?: boolean) {
   const getStore = () =>
     configureStore({

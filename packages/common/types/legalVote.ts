@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { EntityState } from '@reduxjs/toolkit';
-import { LegalVoteId, ParticipantId } from './common';
 
+import { LegalVoteId, ParticipantId } from './common';
 
 export interface VoteParameters {
   /// The name of the vote

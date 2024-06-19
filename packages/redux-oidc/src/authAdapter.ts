@@ -134,7 +134,7 @@ export class AuthAdapter {
     }
     logoutUrl.searchParams.append(
       'post_logout_redirect_uri',
-      signOutUrl ? signOutUrl : this._configuration.signOutRedirectUri,
+      signOutUrl ? signOutUrl : this._configuration.signOutRedirectUri
     );
     window.location.replace(logoutUrl);
     clearApplicationStorage();

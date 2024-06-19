@@ -38,13 +38,18 @@ const SortPopoverMenuItem = ({ i18nKey, selected, onSelect, value, ...props }: S
 
   const preventPropagationOnSpaceKey = (event: KeyboardEvent) => {
     // Prevent conflict between selecting sorting option and push to talk.
-    if (event.code === "Space") {
+    if (event.code === 'Space') {
       event.stopPropagation();
     }
-  }
+  };
 
   return (
-    <ContainerMenuItem {...props} onClick={onClickHandler} onKeyUp={preventPropagationOnSpaceKey} onKeyDown={preventPropagationOnSpaceKey}>
+    <ContainerMenuItem
+      {...props}
+      onClick={onClickHandler}
+      onKeyUp={preventPropagationOnSpaceKey}
+      onKeyDown={preventPropagationOnSpaceKey}
+    >
       <Typography>{t(i18nKey)}</Typography>
       <DoneIconStyledWrapper fontSize="inherit" isActive={selected}>
         <DoneIcon />

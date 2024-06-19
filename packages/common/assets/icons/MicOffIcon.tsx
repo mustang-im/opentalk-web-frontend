@@ -11,12 +11,14 @@ interface MicOffIconExtraProps {
 }
 
 const StyledSvgIcon = styled(SvgIcon)<MicOffIconExtraProps>(({ theme, disabled }) => ({
-    color: disabled && theme.palette.text.disabled,
-    '& .mic-off_svg__mic-off-line': {
-        fill: disabled ? theme.palette.text.disabled : theme.palette.warning.main,
-    }
-}))
+  color: disabled && theme.palette.text.disabled,
+  '& .mic-off_svg__mic-off-line': {
+    fill: disabled ? theme.palette.text.disabled : theme.palette.warning.main,
+  },
+}));
 
-const MicOffIcon = (props: SvgIconProps & MicOffIconExtraProps) => <StyledSvgIcon {...props} component={MicOff} inheritViewBox />;
+const MicOffIcon = (props: SvgIconProps & MicOffIconExtraProps) => (
+  <StyledSvgIcon {...props} component={MicOff} inheritViewBox />
+);
 
 export default MicOffIcon;

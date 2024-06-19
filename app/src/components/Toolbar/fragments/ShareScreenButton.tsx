@@ -22,13 +22,18 @@ const ShareScreenButton = () => {
 
   const isModeratorOrPresenter = isModerator || isPresenter;
 
-  const tooltipText = !isModeratorOrPresenter
-    ? t('toolbar-button-screen-share-tooltip-request-moderator-presenter-role')
-    : mediaContext.permissionDenied
-    ? t('device-permission-denied')
-    : screenSharing
-    ? t('toolbar-button-screen-share-turn-off-tooltip-title')
-    : t('toolbar-button-screen-share-turn-on-tooltip-title');
+  const getToolTipTitle = () => {
+    if (!isModeratorOrPresenter) {
+      return t('toolbar-button-screen-share-tooltip-request-moderator-presenter-role');
+    }
+    if (mediaContext.permissionDenied) {
+      return t('device-permission-denied');
+    }
+    if (screenSharing) {
+      return t('toolbar-button-screen-share-turn-off-tooltip-title');
+    }
+    return t('toolbar-button-screen-share-turn-on-tooltip-title');
+  };
 
   return (
     <ToolbarButton
@@ -40,7 +45,7 @@ const ShareScreenButton = () => {
           });
         }
       }}
-      tooltipTitle={tooltipText}
+      tooltipTitle={getToolTipTitle()}
       active={screenSharing && isModeratorOrPresenter}
       disabled={isLoadingMedia || !isModeratorOrPresenter}
       data-testid="toolbarBlurScreenButton"

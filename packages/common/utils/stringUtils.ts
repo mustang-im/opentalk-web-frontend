@@ -34,4 +34,4 @@ export const getEnumKey = <T>(enumType: Record<string, T>, value: T) => {
 
 export const generateUniquedId = () => {
   return uniqueId('ot-');
-}
+};

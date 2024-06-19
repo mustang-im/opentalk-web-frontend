@@ -25,7 +25,7 @@ export const addRoomEndpoints = <
     BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, Record<string, unknown>, FetchBaseQueryMeta>,
     Tags,
     'api'
-  >
+  >,
 >(
   builder: RoomEndpointBuilder
 ) => ({
