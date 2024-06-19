@@ -40,6 +40,7 @@ export interface CloseMeetingDialogProps {
 }
 
 const DIALOG_DESCRIPTION_ID = 'close-meeting-dialog-description-id';
+const DIALOG_TITLE_ID = 'close-meeting-dialog-label-id';
 
 export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDialogProps) => {
   const { t } = useTranslation();
@@ -152,9 +153,13 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
       container={handleFullscreen.rootElement}
       onClose={onClose}
       aria-describedby={DIALOG_DESCRIPTION_ID}
+      aria-labelledby={DIALOG_TITLE_ID}
       ref={(node) => node?.focus()}
+      role="dialog"
     >
-      <DialogTitle sx={{ textAlign: 'left' }}>{t('meeting-delete-metadata-dialog-title')}</DialogTitle>
+      <DialogTitle id={DIALOG_TITLE_ID} aria-hidden="true" sx={{ textAlign: 'left' }}>
+        {t('meeting-delete-metadata-dialog-title')}
+      </DialogTitle>
 
       <Box position="absolute" top={0} right={0}>
         <IconButton onClick={onClose} aria-label={t('global-close-dialog')}>

@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Improve accessibility of the Dashboard Delete Meeting Dialog ([#1809](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1809))
 - Remove `/join` path to restore old user flow ([#1877](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1877))
 - Adjust mobile header for dashboard - startpage ([#1798](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
 - Adjust the header navigation in conference for lower resolutions ([#1767](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1767))

@@ -50,6 +50,9 @@ interface ContentBasedOnEventTypeProps {
   }[];
 }
 
+const DIALOG_DESCRIPTION_ID = 'dashboard-confirm-delete-dialog-description-id';
+const DIALOG_TITLE_ID = 'dashboard-confirm-delete-dialog-label-id';
+
 export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
   const { t } = useTranslation();
   const { open, event, onClose } = props;
@@ -180,8 +183,19 @@ export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
   };
 
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth onMouseDown={stopPropagation} onClose={onClose}>
-      <DialogTitle sx={{ textAlign: 'left' }}>{contentBasedOnEventType.title}</DialogTitle>
+    <Dialog
+      open={open}
+      maxWidth="sm"
+      fullWidth
+      onMouseDown={stopPropagation}
+      onClose={onClose}
+      aria-describedby={DIALOG_DESCRIPTION_ID}
+      aria-labelledby={DIALOG_TITLE_ID}
+      role="dialog"
+    >
+      <DialogTitle id={DIALOG_TITLE_ID} aria-hidden="true" sx={{ textAlign: 'left' }}>
+        {contentBasedOnEventType.title}
+      </DialogTitle>
       <Box position="absolute" top={0} right={0}>
         <IconButton aria-label={t('global-close-dialog')} onClick={onClose}>
           <CloseIcon />
@@ -197,6 +211,8 @@ export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
             color={button.color}
             variant="contained"
             key={`${button.text}-${index}`}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus={index === 0}
           >
             {button.text}
           </Button>
