@@ -1,79 +1,20 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { closeSnackbar, notificationAction } from '@opentalk/common';
-import { differenceInMonths } from 'date-fns';
-import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Provider as StoreProvider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Provider from './Provider';
 import Routes from './Routes';
-import { createOpenTalkTheme } from './assets/themes/opentalk';
-import ConfirmBrowserDialog, { isBrowserConfirmed } from './components/ConfirmBrowserDialog/ConfirmBrowserDialog';
 import GlitchtipErrorDialog from './components/GlitchtipErrorDialog';
-import { localStorageItems } from './config/storage';
 import AppErrorBoundary from './errorBoundaries/AppErrorBoundary';
-import browser from './modules/BrowserSupport';
 import ErrorConfigPage from './pages/ErrorConfigPage';
 import store from './store';
 import { checkConfigError } from './utils/configUtils';
 
-let safariWarningNotificationKey: string | undefined = undefined;
-
 const App = () => {
-  const signature = browser.getBrowserSignature();
-  const [isConfirmed, setBrowserConfirmed] = useState(isBrowserConfirmed());
   const hasConfigError = checkConfigError();
-  const { t, i18n } = useTranslation();
   if (hasConfigError) return <ErrorConfigPage />;
-
-  const handleClick = useCallback(() => {
-    localStorage.setItem(localStorageItems.browserConfirmed, signature);
-    setBrowserConfirmed(true);
-  }, []);
-
-  useEffect(() => {
-    const isSafari = browser.isSafari();
-    if (isSafari) {
-      const safariNotificationLastSeenTimestamp = localStorage.getItem(localStorageItems.safariNotificationKey);
-      const now = new Date();
-      const lastSeenDate = safariNotificationLastSeenTimestamp
-        ? new Date(safariNotificationLastSeenTimestamp)
-        : undefined;
-      const showNotification = !lastSeenDate || differenceInMonths(now, lastSeenDate) > 0;
-      if (showNotification) {
-        if (safariWarningNotificationKey) {
-          closeSnackbar(safariWarningNotificationKey);
-        }
-        safariWarningNotificationKey = `${localStorageItems.safariNotificationKey}-${i18n.language}`;
-        const message = t('safari-warning-notification');
-        notificationAction({
-          msg: message,
-          variant: 'warning',
-          cancelBtnText: t('global-ok'),
-          persist: true,
-          key: safariWarningNotificationKey,
-          onCancel: () => localStorage.setItem(localStorageItems.safariNotificationKey, now.toISOString()),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': message,
-          },
-        });
-      }
-    }
-  }, [t]);
-
-  if (!isConfirmed) {
-    return (
-      <ThemeProvider theme={createOpenTalkTheme()}>
-        <CssBaseline />
-        <ConfirmBrowserDialog handleClick={handleClick} />
-      </ThemeProvider>
-    );
-  }
 
   return (
     <Router basename={new URL(window.config.baseUrl).pathname}>

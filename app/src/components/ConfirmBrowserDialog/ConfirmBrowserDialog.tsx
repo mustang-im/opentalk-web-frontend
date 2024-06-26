@@ -5,14 +5,6 @@ import { Button } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import browser from '../../modules/BrowserSupport';
-
-const signature = browser.getBrowserSignature();
-
-export const isBrowserConfirmed = () => {
-  return browser.isSupported() || localStorage.getItem('browser-confirmed') == signature || false;
-};
-
 interface IProps {
   handleClick: () => void;
 }
@@ -20,14 +12,14 @@ interface IProps {
 const ConfirmBrowserDialog = ({ handleClick }: IProps): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <Dialog open aria-labelledby={t('wrong-browser-dialog-message')} fullWidth maxWidth={'xs'}>
+    <Dialog open aria-labelledby={t('wrong-browser-dialog-message')} fullWidth maxWidth="xs">
       <DialogTitle>{t('wrong-browser-dialog-title')}</DialogTitle>
       <DialogContent>
-        <Typography variant={'body2'}>{t('wrong-browser-dialog-message')}</Typography>
+        <Typography variant="body2">{t('wrong-browser-dialog-message')}</Typography>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleClick} fullWidth>
+        <Button onClick={handleClick} fullWidth aria-label={t('wrong-browser-dialog-ok')} type="submit">
           {t('wrong-browser-dialog-ok')}
         </Button>
       </DialogActions>

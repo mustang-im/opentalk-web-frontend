@@ -20,6 +20,7 @@ import { ReactComponent as Logo } from '../assets/images/logoGradient.svg';
 import DashboardNavigation, { PrimaryRoute } from '../components/DashboardNavigation';
 import { useAppSelector } from '../hooks';
 import { selectIsProviderActive } from '../store/slices/configSlice';
+import BrowserCompatibilityInfo from './fragments/BrowserCompatibilityInfo';
 
 const DashboardLogo = styled(Logo)({
   gridArea: 'Logo',
@@ -54,6 +55,14 @@ const LoadingNavbarContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   width: 256,
 }));
+
+const MainStack = styled(Stack)(({ theme }) => ({
+  maxHeight: '100%',
+  height: 0,
+  [theme.breakpoints.up('md')]: {
+    height: '100%',
+  },
+})) as typeof Stack;
 
 type DashboardTemplateContext = {
   header: React.ReactNode;
@@ -162,67 +171,71 @@ const DashboardTemplate = () => {
 
   if (!isAuthenticated) {
     return (
-      <Container maxWidth={false} disableGutters>
-        <Stack direction={{ xs: 'column', md: 'row' }} height={'100%'}>
-          {isDesktop && (
-            <LoadingNavbarContainer elevation={0}>
-              <Stack spacing={12}>
-                <Grid container spacing={1} alignItems={'center'}>
-                  <Grid item>
-                    <Skeleton variant="circular" width={40} height={40} />
+      <BrowserCompatibilityInfo>
+        <Container maxWidth={false} disableGutters>
+          <Stack direction={{ xs: 'column', md: 'row' }} height="100%">
+            {isDesktop && (
+              <LoadingNavbarContainer elevation={0}>
+                <Stack spacing={12}>
+                  <Grid container spacing={1} alignItems="center">
+                    <Grid item>
+                      <Skeleton variant="circular" width={40} height={40} />
+                    </Grid>
+                    <Grid item xs>
+                      <Skeleton variant="text" />
+                    </Grid>
                   </Grid>
-                  <Grid item xs>
-                    <Skeleton variant="text" />
-                  </Grid>
-                </Grid>
-                <Stack spacing={1}>
-                  <Skeleton variant="text" width={208} height={56} />
-                  <Skeleton variant="text" width={208} height={56} />
-                  <Skeleton variant="text" width={208} height={56} />
-                  <Skeleton variant="text" width={208} height={56} />
-                  <Skeleton variant="text" width={208} height={56} />
-                  <Skeleton variant="text" width={208} height={56} />
+                  <Stack spacing={1}>
+                    <Skeleton variant="text" width={208} height={56} />
+                    <Skeleton variant="text" width={208} height={56} />
+                    <Skeleton variant="text" width={208} height={56} />
+                    <Skeleton variant="text" width={208} height={56} />
+                    <Skeleton variant="text" width={208} height={56} />
+                    <Skeleton variant="text" width={208} height={56} />
+                  </Stack>
                 </Stack>
-              </Stack>
-            </LoadingNavbarContainer>
-          )}
-          <Main>
-            <Grid container spacing={4}>
-              <Grid item>
-                <DashboardLogo />
+              </LoadingNavbarContainer>
+            )}
+            <Main>
+              <Grid container spacing={4}>
+                <Grid item>
+                  <DashboardLogo />
+                </Grid>
               </Grid>
-            </Grid>
-            <div>
-              <Stack spacing={2}>
-                <Skeleton variant="text" />
-                <Skeleton />
-                <Skeleton variant="rectangular" width={'100%'} height={400} />
-              </Stack>
-            </div>
-          </Main>
-        </Stack>
-      </Container>
+              <div>
+                <Stack spacing={2}>
+                  <Skeleton variant="text" />
+                  <Skeleton />
+                  <Skeleton variant="rectangular" width="100%" height={400} />
+                </Stack>
+              </div>
+            </Main>
+          </Stack>
+        </Container>
+      </BrowserCompatibilityInfo>
     );
   }
   return (
-    <Container maxWidth={false} disableGutters>
-      <Stack direction={{ xs: 'column', md: 'row' }} height={'100%'}>
-        <DashboardNavigation routes={getRoutes(isProviderActive)} />
-        <Stack component={Main} spacing={{ xs: 2, md: 5 }} maxHeight={'100%'} height={{ xs: 0, sm: 0, md: '100%' }}>
-          {isDesktop && (
-            <Grid spacing={2} container direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-              <Grid item alignSelf={'flex-end'}>
-                <DashboardLogo />
+    <BrowserCompatibilityInfo>
+      <Container maxWidth={false} disableGutters>
+        <Stack direction={{ xs: 'column', md: 'row' }} height="100%">
+          <DashboardNavigation routes={getRoutes(isProviderActive)} />
+          <MainStack component={Main} spacing={{ xs: 2, md: 5 }}>
+            {isDesktop && (
+              <Grid spacing={2} container direction="row" alignItems="center" justifyContent="space-between">
+                <Grid item alignSelf="flex-end">
+                  <DashboardLogo />
+                </Grid>
+                <Grid item xs>
+                  {header}
+                </Grid>
               </Grid>
-              <Grid item xs>
-                {header}
-              </Grid>
-            </Grid>
-          )}
-          <Outlet context={{ setHeader }} />
+            )}
+            <Outlet context={{ setHeader }} />
+          </MainStack>
         </Stack>
-      </Stack>
-    </Container>
+      </Container>
+    </BrowserCompatibilityInfo>
   );
 };
 

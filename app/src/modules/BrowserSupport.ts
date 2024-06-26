@@ -69,6 +69,11 @@ class BrowserSupport {
     return `name: ${this._name}, version: ${this._version}`;
   }
 
+  isBrowserConfirmed = () => {
+    const signature = this.getBrowserSignature();
+    return this.isSupported() || localStorage.getItem('browser-confirmed') == signature || false;
+  };
+
   isWebKitBased() {
     // https://trac.webkit.org/changeset/236144/webkit/trunk/LayoutTests/webrtc/video-addLegacyTransceiver.html
     return (

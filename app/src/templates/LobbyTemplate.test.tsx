@@ -2,10 +2,17 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { cleanup, render } from '@testing-library/react';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { screen } from '../utils/testUtils';
 import LobbyTemplate from './LobbyTemplate';
+
+jest.mock('./fragments/BrowserCompatibilityInfo', () => ({
+  __esModule: true,
+  default: ({ children }: PropsWithChildren) => {
+    return <>{children}</>;
+  },
+}));
 
 describe('LobbyTemplate', () => {
   afterEach(() => cleanup());

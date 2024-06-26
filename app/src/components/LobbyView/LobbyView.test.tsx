@@ -2,13 +2,19 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InviteCode } from '@opentalk/common';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { Role } from '../../api/types/incoming/control';
 import * as UseInviteCodeModule from '../../hooks/useInviteCode';
 import { render, screen, fireEvent, waitFor, cleanup, configureStore } from '../../utils/testUtils';
 import LobbyView from './LobbyView';
 
+jest.mock('../../templates/fragments/BrowserCompatibilityInfo', () => ({
+  __esModule: true,
+  default: ({ children }: PropsWithChildren) => {
+    return <div>{children}</div>;
+  },
+}));
 jest.mock('../../api/rest', () => ({
   ...jest.requireActual('../../api/rest'),
   useGetMeQuery: () => ({

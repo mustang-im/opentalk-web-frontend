@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import LegalContainer from '../components/LegalContainer';
+import BrowserCompatibilityInfo from './fragments/BrowserCompatibilityInfo';
 
 const Container = styled('div', { shouldForwardProp: (prop) => prop !== 'withBlur' })<{ withBlur?: boolean }>(
   ({ withBlur }) => ({
@@ -31,10 +32,12 @@ interface TemplateProps {
 
 const LobbyTemplate = ({ children, blur, legal }: TemplateProps) => {
   return (
-    <Container withBlur={blur}>
-      {children ? children : <Outlet />}
-      {legal && <LegalContainer />}
-    </Container>
+    <BrowserCompatibilityInfo>
+      <Container withBlur={blur}>
+        {children ? children : <Outlet />}
+        {legal && <LegalContainer />}
+      </Container>
+    </BrowserCompatibilityInfo>
   );
 };
 

@@ -40,6 +40,7 @@ lib-cov
 coverage
 *.lcov
 junit.xml
+test-results
 
 # nyc test coverage
 .nyc_output
