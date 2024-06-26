@@ -17,8 +17,9 @@ const ButtonContainer = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.borderRadius.large,
 }));
+
 const keyboardFocusStyle = (theme: Theme, isActive: boolean | undefined) => ({
-  '& .MuiTouchRipple-child': {
+  '& .MuiTouchRipple-ripple .MuiTouchRipple-childPulsate': {
     background: isActive ? theme.palette.secondary.light : theme.palette.secondary.lightest,
   },
 });
