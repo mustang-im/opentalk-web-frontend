@@ -4,7 +4,7 @@
 import { styled, Badge, Popover } from '@mui/material';
 import { keyframes } from '@mui/system';
 import { IconButton, SpeakerQueueIcon } from '@opentalk/common';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsWaitingCount } from '../../../store/slices/participantsSlice';
@@ -37,10 +37,20 @@ const WaitingParticipantsPopover = () => {
   const isPopoverOpen = Boolean(anchorElement);
 
   const participantsInWaitingRoomCount = useAppSelector(selectParticipantsWaitingCount);
+  const isWaitingRoomEmpty = participantsInWaitingRoomCount === 0;
 
-  return participantsInWaitingRoomCount === 0 ? (
-    <>{null}</>
-  ) : (
+  //onClose is not called when participants reach 0 so we explicitly reset the anchor
+  useEffect(() => {
+    if (isWaitingRoomEmpty) {
+      setAnchorElement(null);
+    }
+  }, [participantsInWaitingRoomCount]);
+
+  if (isWaitingRoomEmpty) {
+    return null;
+  }
+
+  return (
     <StyledBadge
       badgeContent={participantsInWaitingRoomCount}
       anchorOrigin={{

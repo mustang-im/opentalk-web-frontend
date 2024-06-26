@@ -559,6 +559,16 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
   }
 
   /**
+   * Used for scenarios, where we need to remove subscribers without shutting down everything.
+   *
+   * Example: send_to_waiting_room, where we keep the signaling socket alive, but want to remove active publishers/subscribers.
+   */
+  public closeConnections() {
+    this.publishers.forEach((publisher) => publisher.close());
+    this.subscribers.forEach((subscriber) => this.removeSubscriber(subscriber.state));
+  }
+
+  /**
    * This function cancels the connection to each subscriber in case of a shutdown.
    **/
   public close() {

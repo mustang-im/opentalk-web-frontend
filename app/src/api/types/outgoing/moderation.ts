@@ -15,6 +15,10 @@ export interface BanParticipant {
   action: 'ban';
   target: ParticipantId;
 }
+export interface SendParticipantToWaitingRoom {
+  action: 'send_to_waiting_room';
+  target: ParticipantId;
+}
 export interface EnableWaitingRoom {
   action: 'enable_waiting_room';
 }
@@ -53,6 +57,7 @@ export interface ChangeDisplayName {
 export type Action =
   | KickParticipant
   | BanParticipant
+  | SendParticipantToWaitingRoom
   | EnableWaitingRoom
   | DisableWaitingRoom
   | AcceptParticipantFromWaitingRoomToRoom
@@ -66,6 +71,10 @@ export type Moderation = Namespaced<Action, 'moderation'>;
 
 export const kickParticipant = createSignalingApiCall<KickParticipant>('moderation', 'kick');
 export const banParticipant = createSignalingApiCall<BanParticipant>('moderation', 'ban');
+export const sendParticipantToWaitingRoom = createSignalingApiCall<SendParticipantToWaitingRoom>(
+  'moderation',
+  'send_to_waiting_room'
+);
 export const enableWaitingRoom = createSignalingApiCall<EnableWaitingRoom>('moderation', 'enable_waiting_room');
 export const disableWaitingRoom = createSignalingApiCall<DisableWaitingRoom>('moderation', 'disable_waiting_room');
 export const acceptParticipantFromWaitingRoomToRoom = createSignalingApiCall<AcceptParticipantFromWaitingRoomToRoom>(
@@ -85,6 +94,9 @@ export const handler = createModule<RootState>((builder) => {
     })
     .addCase(banParticipant.action, (_state, action) => {
       sendMessage(banParticipant(action.payload));
+    })
+    .addCase(sendParticipantToWaitingRoom.action, (_state, action) => {
+      sendMessage(sendParticipantToWaitingRoom(action.payload));
     })
     .addCase(enableWaitingRoom.action, () => {
       sendMessage(enableWaitingRoom());
