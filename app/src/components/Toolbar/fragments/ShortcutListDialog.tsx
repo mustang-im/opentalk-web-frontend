@@ -85,7 +85,7 @@ const ShortcutListDialog = (props: ShortcutListDialogProps) => {
             /* eslint-disable jsx-a11y/no-autofocus */
             // We want screen reader to jump to the first interactive element
             // upon reveal and start pronouncing content of the dialog.
-            autoFocus={true}
+            autoFocus
           />
         </Box>
       </Stack>

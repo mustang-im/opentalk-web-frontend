@@ -1,25 +1,16 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Chip as MuiChip,
-  Popover,
-  Stack,
-  styled,
-  Typography,
-} from '@mui/material';
+import { Box, Button, ButtonProps, Chip as MuiChip, Popover, Stack, styled, Typography } from '@mui/material';
 import { isNumber } from 'lodash';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ClockIcon } from '../../assets/icons';
 import { IFormikCustomFieldPropsReturnDurationValue } from '../../utils';
-import TextField from '../TextField';
-import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils';
 import { ErrorFormMessage } from '../ErrorFormMessage';
+import { TextField } from '../TextField';
+import { MenuTitle } from '../ToolbarMenuUtils/ToolbarMenuUtils';
 
 export type DurationValueOptions = number | 'custom' | null;
 interface DurationFieldProps extends IFormikCustomFieldPropsReturnDurationValue {
@@ -98,7 +89,8 @@ export const DurationField = ({
   };
 
   const renderButtonText = () => (value ? `${value} min` : t('field-duration-unlimited-time'));
-  const getButtonAriaLabel = () => `${t('global-duration')} ${(value ? `${value} minute` : t('field-duration-unlimited-time')) }`;
+  const getButtonAriaLabel = () =>
+    `${t('global-duration')} ${value ? `${value} minute` : t('field-duration-unlimited-time')}`;
 
   const getChipLabel = (duration: DurationValueOptions) => {
     switch (duration) {
@@ -150,7 +142,7 @@ export const DurationField = ({
   return (
     <Box>
       <Button
-        variant='text'
+        variant="text"
         onClick={handlePopoverOpen}
         {...ButtonProps}
         startIcon={<StyledClockIcon />}
@@ -179,7 +171,7 @@ export const DurationField = ({
           {showCustomDurationField && (
             <Stack spacing={1}>
               <NumberInput
-                type='number'
+                type="number"
                 inputProps={{ min }}
                 onChange={handleInputChange}
                 value={customDurationFieldValue}

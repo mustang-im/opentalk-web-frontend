@@ -14,6 +14,7 @@ import {
   timerStarted,
   timerStopped,
   notifications,
+  RoomInfo,
 } from '@opentalk/common';
 import { automodStore } from '@opentalk/components';
 import { AuthTypeError, authError } from '@opentalk/redux-oidc';
@@ -94,6 +95,7 @@ interface RoomState {
   participantLimit: number;
   currentMode?: RoomMode;
   eventInfo?: EventInfo;
+  roomInfo?: RoomInfo;
   reconnectTimerId: ReturnType<typeof setTimeout> | null;
   hotkeysEnabled: boolean;
   isOwnedByCurrentUser: boolean;
@@ -271,6 +273,7 @@ export const roomSlice = createSlice({
         }
       }
       state.eventInfo = payload.eventInfo;
+      state.roomInfo = payload.roomInfo;
     });
     builder.addCase(hangUp.pending, (state) => {
       state.connectionState = ConnectionState.Leaving;
@@ -328,6 +331,7 @@ export const selectPasswordRequired = (state: RootState) => state.room.passwordR
 export const selectParticipantLimit = (state: RootState) => state.room.participantLimit;
 export const selectCurrentRoomMode = (state: RootState) => state.room.currentMode;
 export const selectEventInfo = (state: RootState) => state.room.eventInfo;
+export const selectRoomInfo = (state: RootState) => state.room.roomInfo;
 export const selectHotkeysEnabled = (state: RootState) => state.room.hotkeysEnabled;
 
 export default roomSlice.reducer;

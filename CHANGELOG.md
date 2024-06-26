@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Add share meeting details dialog to conference ([#1685](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1685))
 - Implement send to waiting room feature([#1775](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1775))
 - Whiteboard automatically open by creating ([#1814](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1814))
 - Show banner in the dashboard for almost full storage ([#1683](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1683))

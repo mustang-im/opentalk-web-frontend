@@ -4,5 +4,6 @@
 import AdornmentIconButton from './AdornmentIconButton';
 import CircularIconButton from './CircularIconButton';
 import IconButton from './IconButton';
+import InfoButton from './InfoButton';
 
-export { IconButton, AdornmentIconButton, CircularIconButton };
+export { IconButton, AdornmentIconButton, CircularIconButton, InfoButton };

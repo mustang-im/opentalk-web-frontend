@@ -364,6 +364,7 @@ const handleControlMessage = (
           participantsReady: participantsReady,
           sharedFolder: data.sharedFolder,
           eventInfo: data.eventInfo,
+          roomInfo: data.roomInfo,
           isRoomOwner: data.isRoomOwner,
         })
       );
