@@ -1,9 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Container, Typography, useTheme } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  Container,
+  Grid,
+  FormControlLabel as MuiFormControlLabel,
+  Typography,
+  styled,
+} from '@mui/material';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetRoomEventInfoQuery } from '../../api/rest';
@@ -16,9 +24,29 @@ import ImprintContainer from '../ImprintContainer';
 import { useMediaContext } from '../MediaProvider/MediaProvider';
 import SelfTest from '../SelfTest';
 
+const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
+  '&.MuiFormControlLabel-root, .MuiButtonBase-root.MuiCheckbox-root': {
+    color: theme.palette.text.secondary,
+  },
+  '& .MuiButtonBase-root.MuiCheckbox-root.Mui-checked': {
+    color: theme.palette.primary.main,
+  },
+}));
+
+const WaitingRoomText = styled(Typography)(({ theme }) => ({
+  textAlign: 'center',
+  fontSize: '1.37rem',
+  color: theme.palette.text.secondary,
+  justifyContent: 'center',
+  width: '100%',
+}));
+
+const ActionButton = styled(Button)({
+  height: '100%',
+});
+
 const WaitingView = () => {
   const connectionState = useAppSelector(selectRoomConnectionState);
-  const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const mediaContext = useMediaContext();
@@ -26,6 +54,8 @@ const WaitingView = () => {
   const inviteCode = useInviteCode();
   const roomId = useAppSelector(selectRoomId);
   const { data: roomData } = useGetRoomEventInfoQuery({ id: roomId as RoomId, inviteCode }, { skip: !roomId });
+
+  const [isAutoJoinEnabled, setIsAutoJoinEnabled] = useState(true);
 
   const readyToEnter = connectionState === ConnectionState.ReadyToEnter;
 
@@ -37,27 +67,38 @@ const WaitingView = () => {
     dispatch(enterRoom.action());
   }, [dispatch, joinWithoutMedia, mediaContext]);
 
+  useEffect(() => {
+    if (readyToEnter && isAutoJoinEnabled) {
+      moveToRoom();
+    }
+  }, [readyToEnter]);
+
   return (
     <>
       <Container>
         <SelfTest
           actionButton={
-            <Button onClick={moveToRoom} disabled={!readyToEnter}>
-              {readyToEnter ? t('joinform-enter-now') : t('joinform-waiting-room-enter')}
-            </Button>
+            !isAutoJoinEnabled && (
+              <ActionButton onClick={moveToRoom} disabled={!readyToEnter}>
+                {readyToEnter ? t('joinform-enter-now') : t('joinform-waiting-room-enter')}
+              </ActionButton>
+            )
           }
           title={roomData?.title}
         >
-          <Typography
-            variant="body1"
-            textAlign={'center'}
-            fontSize={'1.37rem'}
-            color={theme.palette.text.secondary}
-            justifyContent="center"
-            width={'100%'}
-          >
-            {readyToEnter ? t('in-waiting-room-ready') : t('in-waiting-room')}
-          </Typography>
+          <Grid container item alignItems="center" direction="column" sm={12} md="auto" mt={0}>
+            <WaitingRoomText variant="body1">
+              {readyToEnter ? t('in-waiting-room-ready') : t('in-waiting-room')}
+            </WaitingRoomText>
+            {!readyToEnter && (
+              <FormControlLabel
+                control={
+                  <Checkbox checked={isAutoJoinEnabled} onChange={() => setIsAutoJoinEnabled((state) => !state)} />
+                }
+                label={t(`waiting-room-auto-join-label`)}
+              />
+            )}
+          </Grid>
         </SelfTest>
       </Container>
       <ImprintContainer />

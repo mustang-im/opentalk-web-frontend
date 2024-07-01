@@ -161,10 +161,8 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
               </CircularIconButton>
             </BackButtonContainer>
           )}
-          <Grid item>{children}</Grid>
-          <Grid item>
-            <SelfTestToolbar actionButton={actionButton} />
-          </Grid>
+          {children}
+          <SelfTestToolbar actionButton={actionButton} />
         </Grid>
       </BottomContainer>
 

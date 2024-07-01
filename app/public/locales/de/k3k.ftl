@@ -259,6 +259,7 @@ turn-handraises-on-notification = Der Moderator hat das Handheben aktiviert
 
 in-waiting-room = Sie befinden sich gerade im Warteraum
 in-waiting-room-ready = Sie sind freigeschaltet
+waiting-room-auto-join-label = Meeting automatisch betreten ohne Bestätigung
 
 waiting-room-participant-list-label = Warteraum
 approve-all-participants-from-waiting = Alles genehmigen

@@ -259,6 +259,7 @@ turn-handraises-on-notification = Handraises were enabled by the moderator
 
 in-waiting-room = You are currently in the waiting room
 in-waiting-room-ready = You are enabled to join the room
+waiting-room-auto-join-label = Join meeting automatically without confirmation
 
 waiting-room-participant-list-label = Waiting room
 approve-all-participants-from-waiting = Approve all
