@@ -22,7 +22,7 @@ import Picker, {
   Categories,
 } from 'emoji-picker-react';
 import { useFormik } from 'formik';
-import { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef, useLayoutEffect } from 'react';
+import { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef, useLayoutEffect, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
@@ -137,6 +137,30 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
     }
   };
 
+  const onEmojiPickerContainerKeyDown = (event: KeyboardEvent) => {
+    event.stopPropagation();
+    /**
+     * Since we don't have direct access to the library's search field, we depend on event bubbling and identify the source element of the event.
+     *
+     * With only one nested input field, we can safely rely on this check.
+     */
+    if (event.key === 'Escape' && 'tagName' in event.target && (event.target as HTMLElement).tagName === 'INPUT') {
+      setOpenPicker(false);
+      /**
+       * The emoji picker state is managed within the same component as the emoji button, leading to re-renders.
+       * When the state changes, it overrides the focused button, causing it to lose focus. Therefore,
+       * this workaround ensures the emoji button regains focus in the next painting cycle after the re-render completes.
+       *
+       * Focusing the triggering button is necessary for accessibility compliance (A11Y).
+       */
+      requestAnimationFrame(() => {
+        if (emojiButton.current) {
+          emojiButton.current.focus();
+        }
+      });
+    }
+  };
+
   const renderPicker = () => (
     <Popover
       role="dialog"
@@ -155,12 +179,12 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
     >
       <PickerContainer
         onBlur={blurHandler}
-        onKeyDown={(event) => event.stopPropagation()}
+        onKeyDown={onEmojiPickerContainerKeyDown}
         onKeyUp={(event) => event.stopPropagation()}
       >
         <Picker
           onEmojiClick={handleEmojiClick}
-          autoFocusSearch={false}
+          autoFocusSearch={true}
           defaultSkinTone={SkinTones.MEDIUM_LIGHT}
           lazyLoadEmojis={true}
           emojiVersion="11"
