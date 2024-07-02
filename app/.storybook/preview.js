@@ -4,11 +4,10 @@
 
 import { initialize, mswDecorator } from 'msw-storybook-addon'
 import { createOpenTalkTheme } from '../src/assets/themes/opentalk';
-import {CssBaseline, ThemeProvider} from '@mui/material';
+import {CssBaseline, ThemeProvider, StylesProvider} from '@mui/material';
 import {Provider} from "react-redux";
 import store from "../src/store";
 import {i18n} from './i18next'
-import {StylesProvider} from "@mui/styles";
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DateFnsUtils from "@date-io/date-fns";

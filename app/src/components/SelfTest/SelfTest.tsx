@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Grid, Stack, styled, Typography, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/styles';
+import { Grid, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { HelpIcon, CloseIcon, Logo, BackIcon, CircularIconButton } from '@opentalk/common';
 import React, { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

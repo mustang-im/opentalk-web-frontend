@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Chip as MuiChip, Grid } from '@mui/material';
-import { styled } from '@mui/styles';
+import { Button, Chip as MuiChip, Grid, styled } from '@mui/material';
 import { AddIcon } from '@opentalk/common';
 import { FieldArray, Field, FieldProps, useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';

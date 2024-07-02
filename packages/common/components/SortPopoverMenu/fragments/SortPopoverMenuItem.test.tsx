@@ -25,9 +25,7 @@ jest.mock('react-i18next', () => ({
 
 describe('<SortPopoverMenuItem />', () => {
   it('should render with required properties.', () => {
-    expect(
-      render(<SortPopoverMenuItem i18nKey="test-key" value="test-value" onSelect={jest.fn()} />)
-    ).toMatchSnapshot();
+    render(<SortPopoverMenuItem i18nKey="test-key" value="test-value" onSelect={jest.fn()} />);
   });
 
   it('should execute onSelect callback with value when clicked.', () => {

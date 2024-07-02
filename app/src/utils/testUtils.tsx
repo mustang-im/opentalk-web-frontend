@@ -4,7 +4,6 @@
 import '@emotion/styled';
 import { ThemeProvider } from '@mui/material';
 import '@mui/material';
-import '@mui/styles';
 import {
   SnackbarProvider,
   Participant,

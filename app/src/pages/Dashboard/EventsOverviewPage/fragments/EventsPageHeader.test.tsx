@@ -22,8 +22,8 @@ describe('Events Page Header tests', () => {
   test('page will not crash', async () => {
     const { store } = configureStore();
     await render(<EventsPageHeader entries={[]} onFilterChange={onFilterChange} filters={filter} />, store);
-    // Two filter buttons along with the create meeting link that has a role=button
-    expect(screen.getAllByRole('button')).toHaveLength(3);
+    // Two filter buttonsand one link
+    expect(screen.getAllByRole('button')).toHaveLength(2);
     expect(screen.getAllByRole('link')).toHaveLength(1);
   });
 
