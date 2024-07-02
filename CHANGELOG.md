@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Fix: Copy meeting link messsage is deleted ([#1941](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1941))
 - O logo is cutted in Safari browser on zoom in ([#1825](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1825))
 - Fix keyboard focus styling for the toolbar buttons ([#1810](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1810))
 - Fix crash on BrowserSupport check (safari) ([#1309](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1309))

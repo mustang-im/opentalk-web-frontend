@@ -588,6 +588,7 @@ global-save-changes = Änderungen speichern
 global-password = Passwort
 global-beta = Beta
 global-me = Ich
+global-copy-link-success = Der Link wurde erfolgreich kopiert
 global-copy-permanent-guest-link-error = Es wurde noch keinen permanenten Gast-Link für dieses Meeting erstellt! Bitte, öffnen Sie den "Teilnehmer" Einstellungen von diesem Meeting und kopieren Sie den Gast-Link von dort aus.
 global-textfield-max-characters = {$remainingCharacters} Zeichen übrig
 global-textfield-max-characters-error = {$remainingCharacters} Zeichen zu viel
@@ -618,7 +619,7 @@ global-call-in-number = Telefonnummer
 global-call-in-id = Konferenz-ID
 global-call-in-pin = Konferenz-PIN
 global-meeting-link = Meeting-Link
-global-streaming-link = { $count -> 
+global-streaming-link = { $count ->
     [one] Livestream-Link
     *[other] Livestream-Links
 }
