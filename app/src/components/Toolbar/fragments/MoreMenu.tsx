@@ -53,6 +53,7 @@ import {
   selectRecordingTarget,
 } from '../../../store/slices/streamingSlice';
 import { selectIsModerator, selectDisplayName, selectAvatarUrl } from '../../../store/slices/userSlice';
+import { isDevMode } from '../../../utils/devMode';
 import InviteGuestDialog from './InviteGuestDialog';
 import { ToolbarMenuProps, ToolbarMenuItem, ToolbarMenu } from './ToolbarMenuUtils';
 
@@ -78,7 +79,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const enabledModules = useEnabledModules();
   const hasRecordingFeatureOn = enabledModules.has(BackendModules.Recording);
   const fullscreenHandle = useFullscreenContext();
-  const isDevMode: boolean = JSON.parse(localStorage.getItem('devMode') ?? 'false');
 
   const toggleWaitingRoomItem = isWaitingRoomActive
     ? {
@@ -366,7 +366,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         </MenuTitleContainer>
         <Divider />
         {isModerator && renderMenuItems(moderatorMenuItems)}
-        {isDevMode && renderMenuItems(devMenuItems)}
+        {isDevMode() && renderMenuItems(devMenuItems)}
       </ToolbarMenu>
       <InviteGuestDialog open={showInviteModal} onClose={() => setShowInviteModal(false)} />
     </ThemeProvider>
