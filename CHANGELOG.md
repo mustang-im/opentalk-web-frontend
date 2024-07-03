@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Added shared folder option when creating event ([#1805](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1805))
 - Users have to confirm their choice when participating in the poll using the submit button ([#1850](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1850))
 - Add participant notification when granted or revoked presenter rights ([#1779](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1779))
 - Implement votes and polls as dialogs ([#1726](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1726))

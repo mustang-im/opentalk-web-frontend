@@ -268,6 +268,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       isTimeIndependent: !values.isTimeDependent,
       recurrencePattern: [],
       isAdhoc: values.isAdhoc || false,
+      hasSharedFolder: values.sharedFolder || false,
     };
 
     if (values.recurrencePattern && values.recurrencePattern !== FrequencySelect.NONE) {
@@ -308,11 +309,6 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
         await addStreamingTargets({ roomId: event.current.room.id, target: values.streaming.platform })
           .unwrap()
           .catch(() => notifications.error(t('streaming-targets-request-error')));
-      }
-
-      const goToNextStep = await handleCreateDeleteSharedFolder(event.current, values);
-      if (goToNextStep === false) {
-        return;
       }
 
       notifications.success(t('dashboard-meeting-notification-success-create', { event: event.current.title }));
