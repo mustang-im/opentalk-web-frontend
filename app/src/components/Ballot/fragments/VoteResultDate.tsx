@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, styled, Typography, useTheme } from '@mui/material';
-import { useDateFormat } from '@opentalk/common';
-import { LegalVoteType } from '@opentalk/components';
+import { useDateFormat, LegalVoteType } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 interface VoteResultDateProps {
@@ -25,7 +24,7 @@ const VoteResultDate = ({ state, date, showTableHint, showResultsHandler }: Vote
 
   return (
     <>
-      <TokenTypography color={'primary'}>
+      <TokenTypography color="primary">
         {t('legal-vote-success', {
           atVoteTime: useDateFormat(date, 'time'),
           onVoteDate: useDateFormat(date, 'date'),

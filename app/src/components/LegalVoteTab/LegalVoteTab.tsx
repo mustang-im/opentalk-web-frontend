@@ -1,0 +1,57 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+import { Button, Stack } from '@mui/material';
+import { RoomMode } from '@opentalk/common';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
+import { selectSavedLegalVotePerId } from '../../store/slices/legalVoteSlice';
+import CreateLegalVoteForm from './fragments/CreateLegalVoteForm';
+import LegalVoteOverview from './fragments/LegalVoteOverview';
+
+interface ILegalVoteParams {
+  currentRoomMode: () => RoomMode | undefined;
+}
+
+const LegalVoteTab = ({ currentRoomMode }: ILegalVoteParams) => {
+  const [showLegalVoteForm, setShowLegalVoteForm] = useState(false);
+  const [savedLegalVoteFormId, setSavedLegalVoteFormId] = useState<number | undefined>();
+  const isCoffeeBreakActive = currentRoomMode() === 'coffee-break';
+  const formValues = useSelector(selectSavedLegalVotePerId(savedLegalVoteFormId));
+  const { t } = useTranslation();
+
+  const handleOnClickSavedLegalVoteItem = (id: number | undefined) => {
+    setSavedLegalVoteFormId(id);
+    setShowLegalVoteForm(true);
+  };
+
+  const handleOnClose = () => {
+    setSavedLegalVoteFormId(undefined);
+    setShowLegalVoteForm(false);
+  };
+
+  const renderLegalVoteOverview = () => {
+    return (
+      <Stack flex={1} spacing={1} overflow="hidden">
+        <LegalVoteOverview onClickItem={handleOnClickSavedLegalVoteItem} />
+        <Button onClick={() => setShowLegalVoteForm(true)}>{t('legal-vote-overview-button-create-vote')}</Button>
+      </Stack>
+    );
+  };
+
+  const renderCreateLegalVoteForm = () => {
+    return (
+      <CreateLegalVoteForm
+        isCoffeeBreakActive={isCoffeeBreakActive}
+        initialValues={formValues}
+        onClose={handleOnClose}
+      />
+    );
+  };
+
+  return showLegalVoteForm ? renderCreateLegalVoteForm() : renderLegalVoteOverview();
+};
+
+export default LegalVoteTab;

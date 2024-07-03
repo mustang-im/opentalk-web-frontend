@@ -14,15 +14,16 @@ import {
   FilterableParticipant,
   ProtocolParticipant,
 } from '@opentalk/common';
-import { automodStore, legalVoteStore } from '@opentalk/components';
 import { createSelector } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
 import _, { intersection } from 'lodash';
 import { some } from 'lodash';
 
+import { selectAutomoderationParticipantIds } from './slices/automodSlice';
 import { selectCurrentBreakoutRoomId } from './slices/breakoutSlice';
 import { selectChatMessagesByScope } from './slices/chatSlice';
 import { selectGlobalEvents, RoomEvent } from './slices/eventSlice';
+import { selectAllVotes } from './slices/legalVoteSlice';
 import { selectUnmutedSubscribers } from './slices/mediaSubscriberSlice';
 import { selectHandUp, selectHandUpdatedAt } from './slices/moderationSlice';
 import {
@@ -226,7 +227,7 @@ export const selectVotingUsers = createSelector(selectCombinedParticipantsAndUse
 
 export const selectTalkingStickParticipants = createSelector(
   selectCombinedParticipantsAndUserInCoference,
-  automodStore.selectAutomoderationParticipantIds,
+  selectAutomoderationParticipantIds,
   (onlineParticipants, talkingStickIds): Participant[] => {
     const participantsInTalkingStick: Participant[] = [];
 
@@ -242,21 +243,13 @@ export const selectTalkingStickParticipants = createSelector(
   }
 );
 
-export const selectPollsAndVotingsCount = createSelector(
-  legalVoteStore.selectAllVotes,
-  selectAllPolls,
-  (votings, polls) => {
-    return votings.length + polls.length;
-  }
-);
+export const selectPollsAndVotingsCount = createSelector(selectAllVotes, selectAllPolls, (votings, polls) => {
+  return votings.length + polls.length;
+});
 
-export const selectActivePollsAndVotingsCount = createSelector(
-  legalVoteStore.selectAllVotes,
-  selectAllPolls,
-  (votings, polls) => {
-    return (
-      votings.filter((voting) => voting.state === 'active').length +
-      polls.filter((poll) => poll.state === 'active').length
-    );
-  }
-);
+export const selectActivePollsAndVotingsCount = createSelector(selectAllVotes, selectAllPolls, (votings, polls) => {
+  return (
+    votings.filter((voting) => voting.state === 'active').length +
+    polls.filter((poll) => poll.state === 'active').length
+  );
+});

@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { LegalVoteMessage, AutomodEvent } from '@opentalk/components';
-
+import AutomodMessage from './automod';
 import BreakoutMessage from './breakout';
 import ChatMessage from './chat';
 import ControlMessage from './control';
+import LegalVoteMessage from './legalVote';
 import MediaMessage from './media';
 import ModerationMessage from './moderation';
 import PollMessage from './poll';
@@ -26,9 +26,11 @@ export * as whiteboard from './whiteboard';
 export * as media from './media';
 export * as streaming from './streaming';
 export * as sharedFolder from './sharedFolder';
+export * as legalVote from './legalVote';
+export * as automod from './automod';
 
 export type Message =
-  | AutomodEvent
+  | AutomodMessage
   | BreakoutMessage
   | ChatMessage
   | ControlMessage

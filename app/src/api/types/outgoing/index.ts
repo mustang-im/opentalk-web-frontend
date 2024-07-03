@@ -1,14 +1,16 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { AutomodCommand, AutomodCommandType, LegalVoteAction, LegalVoteMessage } from '@opentalk/components';
-
+import * as automod from './automod';
+import AutomodMessage from './automod';
 import * as breakout from './breakout';
 import BreakoutMessage from './breakout';
 import * as chat from './chat';
 import ChatMessage from './chat';
 import * as control from './control';
 import ControlMessage from './control';
+import * as legalVote from './legalVote';
+import LegalVoteMessage from './legalVote';
 import * as media from './media';
 import MediaMessage from './media';
 import * as moderation from './moderation';
@@ -24,8 +26,8 @@ import TimerMessage from './timer';
 import * as whiteboard from './whiteboard';
 import WhiteboardMessage from './whiteboard';
 
-export { default as automod } from './automod';
-export { default as legalVote } from './legal-vote';
+export * as automod from './automod';
+export * as legalVote from './legalVote';
 export * as breakout from './breakout';
 export * as control from './control';
 export * as moderation from './moderation';
@@ -38,12 +40,12 @@ export * as whiteboard from './whiteboard';
 export * as recording from './streaming';
 
 export type Action =
-  | AutomodCommandType
+  | automod.Action
   | breakout.Action
   | chat.Action
   | control.Action
   | moderation.Action
-  | LegalVoteAction
+  | legalVote.Action
   | media.Action
   | poll.Action
   | protocol.Action
@@ -52,7 +54,7 @@ export type Action =
   | recording.Action;
 
 export type Message =
-  | AutomodCommand
+  | AutomodMessage
   | BreakoutMessage
   | ChatMessage
   | ControlMessage

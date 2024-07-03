@@ -3,12 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { createAction, PayloadActionCreator } from '@reduxjs/toolkit';
-import { DefaultRootState, DistributiveOmit } from 'react-redux';
+import { DistributiveOmit } from 'react-redux';
 
 import { Namespaced, Namespaces } from './common';
-import { MiddlewareMapBuilder } from './matchBuilder';
 import { IfVoid, IsAny, IsEmptyObj, IsUnknownOrNonInferrable, Property } from './tsHelper';
 
 export interface Action {
@@ -101,20 +99,3 @@ export function createSignalingApiCall<P extends Action>(namespace: Namespaces, 
   prepareMessage.action = action;
   return prepareMessage;
 }
-
-export type SendMessageType = (message: Namespaced<Action, Namespaces>) => void;
-export type CreateModuleType = <S>(
-  inner: (builder: MiddlewareMapBuilder<S>, dispatch: Dispatch) => void
-) => (matchBuilder: MiddlewareMapBuilder<S>, dispatch: Dispatch) => void;
-
-export type CreateSignalingApiCallType = typeof createSignalingApiCall
-export type ActionsObjectType = (payload: never) => never;
-
-//We pass the type of the actions from the respective module. Possibly there is a definination which covers all types.
-export type createOutgoingType<T> = (
-  createModule: CreateModuleType,
-  sendMessage: SendMessageType
-) => {
-  handler: (matchBuilder: MiddlewareMapBuilder<DefaultRootState>, dispatch: Dispatch<AnyAction>) => void;
-  actions: T;
-};

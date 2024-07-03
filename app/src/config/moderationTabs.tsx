@@ -35,12 +35,8 @@ import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 
 const MenuTabs = React.lazy(() => import('../components/MenuTabs'));
 const BreakoutRoomTab = React.lazy(() => import('../components/BreakoutRoomTab'));
-const LegalVote = React.lazy(() =>
-  import('@opentalk/components').then((module) => ({ default: module.LegalVoteComponent }))
-);
-const TalkingStickTabPanel = React.lazy(() =>
-  import('@opentalk/components').then((module) => ({ default: module.TalkingStickTabPanel }))
-);
+const LegalVoteTab = React.lazy(() => import('../components/LegalVoteTab'));
+const TalkingStickTabPanel = React.lazy(() => import('../components/TalkingStickTabPanel/TalkingStickTabPanel'));
 const PollTab = React.lazy(() => import('../components/PollTab'));
 const MuteParticipantsTab = React.lazy(() => import('../components/MuteParticipants'));
 const ProtocolTab = React.lazy(() => import('../components/ProtocolTab'));
@@ -163,7 +159,7 @@ export const tabs: Array<Tab> = [
     icon: <LegalBallotIcon />,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
-        <LegalVote currentRoomMode={currentRoomMode} />
+        <LegalVoteTab currentRoomMode={currentRoomMode} />
       </Suspense>
     ),
     tooltipTranslationKey: 'moderationbar-button-ballot-tooltip',

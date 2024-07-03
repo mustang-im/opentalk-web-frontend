@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { createModule, Namespaced, ParticipantId } from '@opentalk/common';
 
+import { sendMessage } from '../../';
 import { RootState } from '../../../store';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
-import { sendMessage } from '../../index';
 
 export type DisplayName = string;
 

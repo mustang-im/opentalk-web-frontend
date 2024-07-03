@@ -5,7 +5,7 @@ import { createModule, Namespaced, ChoiceId, CommonPoll, PollId } from '@opental
 
 import { RootState } from '../../../store';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
-import sendMessage from '../../sendMessage';
+import { sendMessage } from '../../index';
 
 export interface Start extends CommonPoll {
   action: 'start';

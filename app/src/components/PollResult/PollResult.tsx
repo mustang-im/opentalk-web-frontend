@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
-import { VoteOption } from '@opentalk/components';
+import { ParticipantId, VoteOption } from '@opentalk/common';
 import React from 'react';
 
 import LinearProgressWithLabel from './LinearProgressWithLabel';

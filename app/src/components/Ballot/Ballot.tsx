@@ -2,10 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Dialog, styled, Paper } from '@mui/material';
-import { legalVoteStore } from '@opentalk/components';
 import { batch } from 'react-redux';
 
 import { useAppSelector, useAppDispatch } from '../../hooks';
+import {
+  closeResultWindow,
+  selectCurrentShownVoteId,
+  selectShowLegalVoteWindow,
+} from '../../store/slices/legalVoteSlice';
 import {
   selectPollIdToShow,
   selectShowResult as selectShowPollResult,
@@ -22,8 +26,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 export default function Ballot() {
   const dispatch = useAppDispatch();
-  const showVoteResult = useAppSelector(legalVoteStore.selectShowLegalVoteWindow);
-  const voteIdToShow = useAppSelector(legalVoteStore.selectCurrentShownVoteId);
+  const showVoteResult = useAppSelector(selectShowLegalVoteWindow);
+  const voteIdToShow = useAppSelector(selectCurrentShownVoteId);
   const showPollResult = useAppSelector(selectShowPollResult);
   const pollIdToShow = useAppSelector(selectPollIdToShow);
   const voteOrPollIdToShow = useAppSelector(selectVoteOrPollIdToShow);
@@ -43,7 +47,7 @@ export default function Ballot() {
   const handleClose = () => {
     batch(() => {
       dispatch(setVoteOrPollIdToShow(undefined));
-      dispatch(legalVoteStore.closeResultWindow());
+      dispatch(closeResultWindow());
       dispatch(closedPollResult());
     });
   };

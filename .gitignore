@@ -183,3 +183,6 @@ public/*config.js
 
 ### Sentry/Glitchtip Config
 .sentryclirc
+
+### Testreport
+junit.xml

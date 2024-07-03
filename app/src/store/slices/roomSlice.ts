@@ -16,7 +16,6 @@ import {
   notifications,
   RoomInfo,
 } from '@opentalk/common';
-import { automodStore } from '@opentalk/components';
 import { AuthTypeError, authError } from '@opentalk/redux-oidc';
 import {
   createAsyncThunk,
@@ -33,6 +32,7 @@ import { AppDispatch, RootState } from '../';
 import { StartRoomError } from '../../api/rest';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
 import { hangUp, startRoom } from '../commonActions';
+import { started as automodStarted, stopped as automodStopped } from './automodSlice';
 
 interface InviteState extends FetchRequestState {
   active?: boolean;
@@ -296,12 +296,12 @@ export const roomSlice = createSlice({
         state.currentMode = undefined;
       }
     });
-    builder.addCase(automodStore.started, (state, { payload: { selectionStrategy } }) => {
+    builder.addCase(automodStarted, (state, { payload: { selectionStrategy } }) => {
       if (selectionStrategy === AutomodSelectionStrategy.Playlist) {
         state.currentMode = RoomMode.TalkingStick;
       }
     });
-    builder.addCase(automodStore.stopped, (state) => {
+    builder.addCase(automodStopped, (state) => {
       state.currentMode = undefined;
     });
   },

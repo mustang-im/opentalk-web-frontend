@@ -8,7 +8,6 @@ import { batch } from 'react-redux';
 
 import { ModerationTabKey, PollsAndVotesMobileTab, Tab, WaitingRoomMobileTab } from '../../../../config/moderationTabs';
 import { useAppDispatch, useAppSelector, useTabs } from '../../../../hooks';
-import { EnterpriseProvider } from '../../../../provider/EnterpriseProvider';
 import { selectActivePollsAndVotingsCount, selectPollsAndVotingsCount } from '../../../../store/selectors';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../../../store/slices/chatSlice';
 import { selectParticipantsWaitingCount } from '../../../../store/slices/participantsSlice';
@@ -134,9 +133,7 @@ const Drawer = () => {
             handleClick={() => handleSetActiveTab(tab.key)}
             showIndicator={showIndicator}
           >
-            {/* As part of follow-up issue creating tabs this should either be included as a wrapper to each tab component
-          or some other way to prevent duplication with MeetingSidebar.tsx */}
-            <EnterpriseProvider moduleKey={tab.moduleKey}>{tab.component}</EnterpriseProvider>
+            {tab.component}
           </DrawerTab>
         );
       }

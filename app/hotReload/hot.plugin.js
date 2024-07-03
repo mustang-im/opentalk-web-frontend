@@ -44,12 +44,6 @@ module.exports = {
             ? configTs.compilerOptions.paths['@opentalk/common'][0]
             : '../../node_modules/@opentalk/common'
         ),
-        '@opentalk/components': path.resolve(
-          __dirname,
-          configTs.compilerOptions.paths['@opentalk/components']
-            ? configTs.compilerOptions.paths['@opentalk/components'][0]
-            : '../node_modules/@opentalk/components'
-        ),
         '@opentalk/rest-api-rtk-query': path.resolve(
           __dirname,
           configTs.compilerOptions.paths['@opentalk/rest-api-rtk-query']
