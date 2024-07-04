@@ -80,13 +80,28 @@ export interface VoteOutgoing {
   timezone: string;
 }
 
-export type Action = VoteStartOutgoing | VoteStopOutgoing | VoteCancelOutgoing | VoteOutgoing;
+export enum ReportIssueKind {
+  Screenshare = 'screenshare',
+  Audio = 'audio',
+  Video = 'video',
+  Other = 'other',
+}
+
+export interface VoteReportIssueOutgoing {
+  action: 'report_issue';
+  legal_vote_id: LegalVoteId;
+  kind?: ReportIssueKind;
+  description?: string;
+}
+
+export type Action = VoteStartOutgoing | VoteStopOutgoing | VoteCancelOutgoing | VoteOutgoing | VoteReportIssueOutgoing;
 export type LegalVote = Namespaced<Action, 'legal_vote'>;
 
 export const start = createSignalingApiCall<VoteStartOutgoing>('legal_vote', 'start');
 export const stop = createSignalingApiCall<VoteStopOutgoing>('legal_vote', 'stop');
 export const cancel = createSignalingApiCall<VoteCancelOutgoing>('legal_vote', 'cancel');
 export const vote = createSignalingApiCall<VoteOutgoing>('legal_vote', 'vote');
+export const reportIssue = createSignalingApiCall<VoteReportIssueOutgoing>('legal_vote', 'report_issue');
 
 export const handler = createModule((builder: MiddlewareMapBuilder<RootStateOrAny>) => {
   builder.addCase(start.action, (_state, action: AnyAction) => {
@@ -100,6 +115,9 @@ export const handler = createModule((builder: MiddlewareMapBuilder<RootStateOrAn
   });
   builder.addCase(vote.action, (_state, action: AnyAction) => {
     sendMessage(vote(action.payload));
+  });
+  builder.addCase(reportIssue.action, (_state, action: AnyAction) => {
+    sendMessage(reportIssue(action.payload));
   });
 });
 

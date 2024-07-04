@@ -369,9 +369,9 @@ legal-vote-form-button-continue = Fortsetzen
 
 legal-vote-overview-panel-button-cancel = Abbrechen
 legal-vote-overview-panel-button-end = Beenden
-legal-vote-overview-panel-status-active = Aktiv
-legal-vote-overview-panel-status-finished = Beendet
-legal-vote-overview-panel-status-canceled = Abgebrochen
+ballot-overview-panel-status-active = Aktiv
+ballot-overview-panel-status-finished = Beendet
+ballot-overview-panel-status-canceled = Abgebrochen
 legal-vote-select-participants-title = Teilnehmer auswählen
 
 legal-vote-form-duration = Abstimmungsdauer
@@ -643,6 +643,8 @@ global-streaming-link = { $count ->
     [one] Livestream-Link
     *[other] Livestream-Links
 }
+global-other = Sonstiges
+global-someone = Jemand
 
 dashboard-home = Startseite
 dashboard-meetings = Meetings
@@ -993,8 +995,8 @@ votes-poll-overview-live-label = Live
 votes-poll-overview-not-live-label = Nicht live
 votes-poll-button-show = Liste der Umfragen und Abstimmungen anzeigen
 
-votes-result-not-live-tooltip = Diese Umfrage ist nicht live, die Ergebnisse werden nach Ende der Umfrage bekannt gegeben.
-votes-result-live-tooltip = Diese Umfrage ist live, die Ergebnisse werden kontinuierlich bekannt gegeben.
+live-indicator-not-live-tooltip = Diese Umfrage ist nicht live, die Ergebnisse werden nach Ende der Umfrage bekannt gegeben.
+live-indicator-live-tooltip = Diese Umfrage ist live, die Ergebnisse werden kontinuierlich bekannt gegeben.
 
 debug-panel-inbound-label = Eingehende (aktuell, durchschn., max):
 debug-panel-outbound-label = Ausgehend (aktuell, durchschn., max):
@@ -1084,3 +1086,13 @@ my-meeting-menu-glitchtip-trigger = Fehler melden
 
 control-participant-presenter-role-revoked = Ihnen wurden die Rolle des Präsentators entzogen
 control-participant-presenter-role-granted = Sie haben die Rolle des Präsentators erhalten
+
+legal-vote-report-issue-title = Technische Störung melden
+legal-vote-report-issue-kind-audio = Kein Audio
+legal-vote-report-issue-kind-video = Kein Video
+legal-vote-report-issue-kind-screenshare = Keine Bildschirmfreigabe
+legal-vote-report-issue-inform-moderator = Moderator informieren
+legal-vote-report-issue-kind-notification = {displayName} meldet ein {kind} Problem
+legal-vote-report-issue-description-notification = {displayName} meldet ein Problem: "{description}"
+legal-vote-report-issue-inform-moderator-success = Die Störung wurde an den Moderator gesendet
+legal-vote-report-issue-description-placeholder = Beschreiben Sie das Problem...

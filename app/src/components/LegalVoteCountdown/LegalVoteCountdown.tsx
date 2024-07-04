@@ -39,6 +39,10 @@ export default function LegalVoteCountdown({ active, duration, startTime, ...box
     const endDate = new Date(startDate);
     endDate.setSeconds(startDate.getSeconds() + duration);
 
+    const interval = setInterval(() => {
+      updateCounter();
+    }, 1000);
+
     function updateCounter() {
       const delta = Number(endDate) - Date.now();
 
@@ -54,10 +58,6 @@ export default function LegalVoteCountdown({ active, duration, startTime, ...box
     }
 
     updateCounter();
-
-    const interval = setInterval(() => {
-      updateCounter();
-    }, 1000);
 
     return () => {
       clearInterval(interval);
