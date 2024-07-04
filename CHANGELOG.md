@@ -4,21 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-
 ### Stability Improvements
 
 - Field validation error message for setting a meeting date should now behave correctly ([#1873](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1873))
-- Implement IceRestart when publisher connections is disconnected. ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1583), [#1747](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1747))
 
 ### New Features
 
 - Add share meeting details dialog to conference ([#1685](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1685))
 - Implement send to waiting room feature([#1775](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1775))
-- Whiteboard automatically open by creating ([#1814](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1814))
-- Show banner in the dashboard for almost full storage ([#1683](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1683))
-- Added PKCE to the auth flow ([#1859](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1859))
 - Add meeting details switch in the dashboard ([#1808](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1808))
-- Implement storage section in the dashboard navigation ([#1682](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1682))
 
 ### Improvements to the user experience
 
@@ -27,21 +21,44 @@ All notable changes to this project will be documented in this file.
 - Add participant notification when granted or revoked presenter rights ([#1779](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1779))
 - Implement votes and polls as dialogs ([#1726](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1726))
 - Add missing aria labels to close buttons and improve markup structure of dialogs ([#1815](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1815))
-- Attempt to delete meeting while offline results in error message being visible ([#1821](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
-- Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
-- Add the indicator for disabled camera in conference for local and remote video tile ([#1849](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1849))
+- Attempt to delete meeting while offline results in error message being visible ([#1821](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1821))
 
 ### Bug Fixes
 
 - O logo is cutted in Safari browser on zoom in ([#1825](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1825))
 - Fix keyboard focus styling for the toolbar buttons ([#1810](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1810))
 - Fix crash on BrowserSupport check (safari) ([#1309](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1309))
-- Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
 
 ### Internal
 
 - Moved enterprise components to the main repository ([#1920](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1920))
-- Add test coverage and unit test summary to ci pipelines
+- Add test coverage and unit test summary to ci pipelines ([!1302](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1302))
+
+## 1.16.0
+
+### New Features
+
+- Whiteboard automatically open by creating ([#1814](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1814))
+- Show banner in the dashboard for almost full storage ([#1683](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1683))
+- Added PKCE to the auth flow ([#1859](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1859))
+- Implement storage section in the dashboard navigation ([#1682](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1682))
+
+### Improvements to the user experience
+
+- Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
+- Add the indicator for disabled camera in conference for local and remote video tile ([#1849](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1849))
+
+### Stability Improvements
+
+- Implement IceRestart when publisher connections is disconnected. ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1583), [#1747](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1747))
+
+### Bug Fixes
+
+- Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
+
+### Internal
+
+- Replaced external PKCE library with an internal solution ([#1909](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1909))
 
 ## 1.15.0
 
