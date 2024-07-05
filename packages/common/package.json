@@ -85,6 +85,9 @@
     "react-redux": "^7.2.8",
     "yup": "^0.32.11"
   },
+  "resolutions": {
+    "ws": "^8.17.1"
+  },
   "publishConfig": {
     "access": "restricted",
     "@opentalk:registry": "https://git.opentalk.dev/api/v4/projects/434/packages/npm/"

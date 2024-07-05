@@ -125,7 +125,8 @@
   "resolutions": {
     "json5/@emotion/react": "^2.2.2",
     "json5/@emotion/styled": "^2.2.2",
-    "json5/@mui/material": "^2.2.2"
+    "json5/@mui/material": "^2.2.2",
+    "ws": "^8.17.1"
   },
   "eslintConfig": {
     "extends": [

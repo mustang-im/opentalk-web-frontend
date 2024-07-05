@@ -55,6 +55,9 @@
       "optional": true
     }
   },
+  "resolutions": {
+    "ws": "^8.17.1"
+  },
   "sideEffects": false,
   "files": [
     "src/**",
