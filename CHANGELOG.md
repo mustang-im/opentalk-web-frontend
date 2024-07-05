@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### Internal
 
+- Add conventional commit job to ci pipelines ([!1330](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1330))
 - Moved enterprise components to the main repository ([#1920](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1920))
 - Add test coverage and unit test summary to ci pipelines ([!1302](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1302))
 
