@@ -116,10 +116,13 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
   );
 
   const emojiPickerCategories = useMemo(() => {
-    return Object.values(Categories).reduce((categories, category) => {
-      if (category === Categories.SUGGESTED) return categories;
-      return categories.concat({ category, name: t(`emoji-category-${category}`) });
-    }, [] as Array<{ category: Categories; name: string }>);
+    return Object.values(Categories).reduce(
+      (categories, category) => {
+        if (category === Categories.SUGGESTED) return categories;
+        return categories.concat({ category, name: t(`emoji-category-${category}`) });
+      },
+      [] as Array<{ category: Categories; name: string }>
+    );
   }, [t]);
 
   const handleEmojiClick = (data: EmojiClickData) => {

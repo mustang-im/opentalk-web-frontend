@@ -11,7 +11,9 @@ interface IFormikCommonPropsReturnValue {
   name: string;
   onChange: {
     (e: React.ChangeEvent<HTMLInputElement>): void;
-    <T_1 = string | React.ChangeEvent<HTMLInputElement>>(field: T_1): T_1 extends React.ChangeEvent<HTMLInputElement>
+    <T_1 = string | React.ChangeEvent<HTMLInputElement>>(
+      field: T_1
+    ): T_1 extends React.ChangeEvent<HTMLInputElement>
       ? void
       : (e: string | React.ChangeEvent<HTMLInputElement>) => void;
   };

@@ -11,8 +11,7 @@
     "watch": "rollup -c --watch",
     "build": "rollup -c",
     "lint": "eslint src/**/*.ts",
-    "hot-reload:remove-build": "node -e \"if (require('fs').readFileSync('../../app/hotReload/packages.tsconfig.json', {encoding: 'utf8'}).includes('@opentalk/rest-api-rtk-query')){process.exit(1)}\" || shx rm -rf ./dist",
-    "fmt": "prettier --write \"src/*.ts\" \"src/**/*.ts\""
+    "hot-reload:remove-build": "node -e \"if (require('fs').readFileSync('../../app/hotReload/packages.tsconfig.json', {encoding: 'utf8'}).includes('@opentalk/rest-api-rtk-query')){process.exit(1)}\" || shx rm -rf ./dist"
   },
   "dependencies": {
     "@opentalk/common": "workspace:^",
@@ -28,13 +27,11 @@
     "@swc/helpers": "^0.5.11",
     "@testing-library/react": "^12.1.5",
     "@testing-library/react-hooks": "^7.0.2",
-    "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/react-test-renderer": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
     "eslint": "^8.43.0",
     "msw": "^0.47.3",
-    "prettier": "^2.7.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.8",

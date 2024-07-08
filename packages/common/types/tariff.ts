@@ -22,8 +22,8 @@ export enum BackendModules {
 }
 
 export type Modules = {
-  [value in BackendModules]?: { features: Array<string> }
-}
+  [value in BackendModules]?: { features: Array<string> };
+};
 
 /**
  * Union type that contains features from modules. Has to be manually extended for each feature.

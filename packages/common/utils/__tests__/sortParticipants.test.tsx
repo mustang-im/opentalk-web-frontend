@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-
 import { SortOption } from '../../types';
 import { SortableParticipant, sortParticipantsWithConfig } from '../sortParticipants';
 

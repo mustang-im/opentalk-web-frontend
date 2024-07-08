@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { styled } from '@mui/material';
 
-import { styled } from "@mui/material";
-import IconButton from "./IconButton";
+import IconButton from './IconButton';
 
 const CircularIconButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(1),
@@ -19,7 +19,7 @@ const CircularIconButton = styled(IconButton)(({ theme }) => ({
     width: '1.5em',
     height: '1.5em',
   },
-    
+
   '&&:hover, &&:focus': {
     background: theme.palette.secondary.lightest,
     '& .MuiSvgIcon-root': {

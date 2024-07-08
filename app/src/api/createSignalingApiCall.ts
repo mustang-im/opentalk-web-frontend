@@ -71,7 +71,7 @@ export type PrepareMessageCreator<P = void, OP = void, N extends string = Namesp
 export function createSignalingApiCall<
   P extends Action,
   N extends string = Namespaces,
-  A extends string = Property<P, 'action'>
+  A extends string = Property<P, 'action'>,
 >(namespace: N, actionType: A): PrepareMessageCreator<P, DistributiveOmit<P, 'action'>, N>;
 
 export function createSignalingApiCall<P extends Action>(namespace: Namespaces, actionType: string) {

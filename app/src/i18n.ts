@@ -35,7 +35,7 @@ i18n
       escapeValue: false, // not needed for react as it escapes by default
     },
     backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.ftl',
+      loadPath: `${window.location.protocol}//${window.location.host}/locales/{{lng}}/{{ns}}.ftl`,
       parse: (data) => {
         return ftl2jsParse(data);
       },

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { RoomId } from "./common";
+import { RoomId } from './common';
 
 export type StreamingTargetId = string & { readonly __tag: unique symbol };
 
@@ -38,8 +38,8 @@ interface BuiltInPlatform extends BasePlatform {
 export type StreamingPlatform = ProviderPlatform | CustomPlatform | BuiltInPlatform;
 
 interface BaseStreamingTargetInfo {
-  id: StreamingTargetId,
-  roomId: RoomId,
+  id: StreamingTargetId;
+  roomId: RoomId;
 }
 
 type CustomTargetInfo = CustomPlatform & BaseStreamingTargetInfo;
@@ -82,7 +82,7 @@ export type StreamingTargetStatusInfo = StreamingTargetNonErrorStatus | Streamin
 //Type used for the update message
 export type StreamUpdatedMessage = StreamingTargetStatusInfo & {
   message: 'stream_updated';
-}
+};
 
 export enum StreamingKind {
   Recording = 'recording',

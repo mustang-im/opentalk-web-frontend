@@ -30,7 +30,7 @@ export const tags = Object.entries(Tag).map(([, value]) => value);
 /**
  * This extracts all possible elements of tags as
  */
-export type Tags = typeof tags[number];
+export type Tags = (typeof tags)[number];
 
 export type DateTimeWithTimezone = {
   /**

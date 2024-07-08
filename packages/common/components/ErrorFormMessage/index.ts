@@ -2,4 +2,5 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ErrorFormMessage } from './ErrorFormMessage';
+
 export { ErrorFormMessage };

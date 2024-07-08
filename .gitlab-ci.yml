@@ -14,6 +14,7 @@ stages:
   - build
   - deploy
   - cleanup
+  - e2e
 
 analyze:code_review:
   stage: analyze
@@ -34,11 +35,10 @@ lint:prettier+eslint:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
-    - apk add --no-cache git
     - yarn install
   script:
     - yarn lint --max-warnings 0
-    - yarn workspaces foreach -pA run fmt:ci
+    - yarn fmt:ci
 
 lint:yaml:
   stage: lint
@@ -97,7 +97,7 @@ test:unit-tests:
     - apk add --no-cache git
     - yarn install
   script:
-    - yarn test:ci
+    - yarn test:unit:ci
   artifacts:
     reports:
       coverage_report:
@@ -311,8 +311,58 @@ deploy:review-app:
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
       --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
-      -n review-latest --create-namespace
+      -n review-latest --create-namespace --wait
     - echo "https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run"
+
+e2e:test:
+  image: mcr.microsoft.com/playwright:v1.44.1-jammy
+  stage: e2e
+  variables:
+    INSTANCE_URL: https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run
+    USERNAME: ${BASIC_AUTH_USER}
+    USER_EMAIL: ${BASIC_USER_EMAIL}
+    PASSWORD: ${BASIC_AUTH_PASS}
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG && $CI_PROJECT_ROOT_NAMESPACE == 'opentalk'
+  allow_failure: true
+  parallel:
+    matrix:
+      - PROJECT:
+          - chromium
+          - webkit
+          - firefox
+  before_script:
+    - yarn install
+  script:
+    - npx playwright install --with-deps
+    - npx playwright test --project=$PROJECT --shard=$SHARD
+
+e2e:smoke:
+  image: mcr.microsoft.com/playwright:v1.44.1-jammy
+  stage: e2e
+  variables:
+    INSTANCE_URL: https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run
+    USERNAME: ${BASIC_AUTH_USER}
+    USER_EMAIL: ${BASIC_USER_EMAIL}
+    PASSWORD: ${BASIC_AUTH_PASS}
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG && $CI_PROJECT_ROOT_NAMESPACE == 'opentalk'
+  allow_failure: true
+  parallel:
+    matrix:
+      - PROJECT:
+          - chromium
+          - webkit
+          - firefox
+  before_script:
+    - yarn install
+  script:
+    - npx playwright install --with-deps
+    - npx playwright test --project=smoke-$PROJECT --shard=$SHARD
 
 cleanup:review-app:
   stage: cleanup
