@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Popover, styled, Typography, Stack } from '@mui/material';
-import { SecureIcon as DefaultSecureIcon } from '@opentalk/common';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { SecureIcon as DefaultSecureIcon } from '../../../assets/icons';
 
 const SecureIconSmall = styled(DefaultSecureIcon)(({ theme }) => ({
   color: theme.palette.primary.main,

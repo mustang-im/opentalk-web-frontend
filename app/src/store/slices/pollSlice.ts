@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { PollId, ChoiceResult, Choice, joinSuccess } from '@opentalk/common';
 import { createEntityAdapter, createSlice, EntityId, EntityState, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
 import { Started, LiveUpdate, Done } from '../../api/types/incoming/poll';
+import { Choice, ChoiceResult, PollId } from '../../types';
+import { joinSuccess } from '../commonActions';
 
 export interface Poll {
   id: PollId;

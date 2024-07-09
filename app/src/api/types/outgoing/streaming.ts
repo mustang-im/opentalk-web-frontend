@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createModule, Namespaced } from '@opentalk/common';
-import { StreamingTargetId } from '@opentalk/common';
+import { StreamingTargetId } from '@opentalk/rest-api-rtk-query';
 
 import { sendMessage } from '../..';
 import { RootState } from '../../../store';
+import { createModule, Namespaced } from '../../../types';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
 
 interface BaseTargets {

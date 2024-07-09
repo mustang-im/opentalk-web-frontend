@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, styled } from '@mui/material';
-import { PinIcon, FullscreenViewIcon, ParticipantId, MediaSessionType } from '@opentalk/common';
 import { MouseEventHandler, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FullscreenViewIcon, PinIcon } from '../../../assets/icons';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
@@ -13,6 +13,7 @@ import { selectStatsPacketLossByDescriptor } from '../../../store/slices/connect
 import { selectIsSubscriberOnlineByDescriptor } from '../../../store/slices/mediaSubscriberSlice';
 import { selectParticipantName } from '../../../store/slices/participantsSlice';
 import { pinnedParticipantIdSet, selectCinemaLayout, selectPinnedParticipantId } from '../../../store/slices/uiSlice';
+import { MediaSessionType, ParticipantId } from '../../../types';
 import BrokenSubscriberIndicator from './BrokenSubscriberIndicator';
 import { OverlayIconButton } from './OverlayIconButton';
 import Statistics from './Statistics';

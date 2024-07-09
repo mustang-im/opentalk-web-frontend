@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { StreamingKind, StreamingStatus, enqueueSnackbar } from '@opentalk/common';
-import { EventId } from '@opentalk/rest-api-rtk-query';
+import { EventId, StreamingKind, StreamingStatus } from '@opentalk/rest-api-rtk-query';
 import { Trans } from 'react-i18next';
 
+import { notifications } from '../../commonComponents';
 import { useInviteCode } from '../../hooks/useInviteCode';
 
 const Link = styled('a')(({ theme }) => ({
@@ -23,9 +23,12 @@ interface NotificationProps {
  * Used for notifications for all different types of streams (currently recording and livestream).
  */
 export const createStreamUpdatedNotification = ({ kind, status, publicUrl, eventId }: NotificationProps): void => {
-  enqueueSnackbar(<StreamUpdatedNotification kind={kind} status={status} publicUrl={publicUrl} eventId={eventId} />, {
-    variant: 'info',
-  });
+  notifications.toast(
+    <StreamUpdatedNotification kind={kind} status={status} publicUrl={publicUrl} eventId={eventId} />,
+    {
+      variant: 'info',
+    }
+  );
 };
 
 const StreamUpdatedNotification = ({ kind, status, publicUrl, eventId }: NotificationProps) => {

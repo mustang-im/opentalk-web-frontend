@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ListItemIcon, ListItemText, MenuList, Typography } from '@mui/material';
-import { DoneIcon } from '@opentalk/common';
 
+import { DoneIcon } from '../../../assets/icons';
 import { DeviceId } from '../../../modules/Media/MediaUtils';
 import { ToolbarMenuItem } from './ToolbarMenuUtils';
 

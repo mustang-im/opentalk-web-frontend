@@ -14,15 +14,15 @@ import {
   ThemeProvider,
   Typography,
 } from '@mui/material';
-import { IconButton } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { pick } from 'lodash';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { CloseIcon } from '../../../../packages/common';
+import { CloseIcon } from '../../assets/icons';
 import { createOpenTalkTheme } from '../../assets/themes/opentalk';
+import { IconButton } from '../../commonComponents';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { selectGlitchtipConfig, selectIsGlitchtipConfigured } from '../../store/slices/configSlice';
 import { selectErrorDialogEvent, selectShowErrorDialog, setShowErrorDialog } from '../../store/slices/uiSlice';

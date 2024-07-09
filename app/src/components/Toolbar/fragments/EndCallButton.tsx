@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { EndCallIcon } from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import { EventId, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useCallback, useState } from 'react';
@@ -9,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useGetMeQuery, useGetRoomQuery, useGetEventQuery } from '../../../api/rest';
+import { EndCallIcon } from '../../../assets/icons';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { hangUp } from '../../../store/commonActions';

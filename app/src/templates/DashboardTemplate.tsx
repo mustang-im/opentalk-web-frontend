@@ -11,11 +11,11 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon, HelpSquareIcon } from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
 import React, { useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
+import { HomeIcon, SettingsIcon, MeetingsIcon, MyAccountIcon, LegalLinksIcon, HelpSquareIcon } from '../assets/icons';
 import { ReactComponent as Logo } from '../assets/images/logoGradient.svg';
 import DashboardNavigation, { PrimaryRoute } from '../components/DashboardNavigation';
 import { useAppSelector } from '../hooks';

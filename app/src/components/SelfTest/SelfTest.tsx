@@ -2,11 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { HelpIcon, CloseIcon, Logo, BackIcon, CircularIconButton } from '@opentalk/common';
 import { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { BackIcon, CloseIcon, HelpIcon, Logo } from '../../assets/icons';
 import arrowImage from '../../assets/images/arrow-illustration.png';
+import { CircularIconButton } from '../../commonComponents';
 import LocalVideo from '../../components/LocalVideo';
 import { useAppSelector } from '../../hooks';
 import useNavigateToHome from '../../hooks/useNavigateToHome';

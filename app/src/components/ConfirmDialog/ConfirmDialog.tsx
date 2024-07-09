@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { CloseIcon } from '../../assets/icons';
 
 export interface ConfirmDialogProps {
   submitButtonText: string;

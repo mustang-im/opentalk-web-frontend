@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Avatar, Chip, Container } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { CloseIcon } from '../assets/icons';
 import hansolo from '../assets/logo.svg';
 
 export default {

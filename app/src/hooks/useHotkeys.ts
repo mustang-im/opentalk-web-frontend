@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { RoomMode, TimerStyle } from '@opentalk/common';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -16,6 +15,7 @@ import { selectAudioEnabled, selectMediaChangeInProgress, selectVideoEnabled } f
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
 import { selectHotkeysEnabled } from '../store/slices/uiSlice';
+import { RoomMode, TimerStyle } from '../types';
 
 export const HOTKEY_MICROPHONE = 'm';
 export const HOTKEY_VIDEO = 'v';

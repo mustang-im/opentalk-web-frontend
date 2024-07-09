@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 import { useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { pinnedParticipantIdSet, selectPinnedParticipantId } from '../../../store/slices/uiSlice';
+import { ParticipantId } from '../../../types';
 import ParticipantWindow from '../../ParticipantWindow';
 
 const ThumbnailContainer = styled('div')<{ width: number }>(({ width, theme }) => ({

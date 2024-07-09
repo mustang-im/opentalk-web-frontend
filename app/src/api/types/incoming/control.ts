@@ -4,11 +4,11 @@
 import {
   BackendParticipant,
   ErrorStruct,
-  isErrorStruct,
   NamespacedIncoming,
   ParticipantId,
   JoinSuccessIncoming,
-} from '@opentalk/common';
+} from '../../../types';
+import { isErrorStruct } from '../../../utils/tsUtils';
 
 interface AssociatedParticipant {
   id: ParticipantId;

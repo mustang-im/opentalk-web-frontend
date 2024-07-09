@@ -3,12 +3,13 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Badge, Popover } from '@mui/material';
 import { keyframes } from '@mui/system';
-import { IconButton, SpeakerQueueIcon } from '@opentalk/common';
 import { useEffect, useState } from 'react';
 
+import { SpeakerQueueIcon } from '../../../assets/icons';
+import { IconButton } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsWaitingCount } from '../../../store/slices/participantsSlice';
-import WaitingParticipantsList from './WaitingParticipantsList';
+import WaitingParticipantsList from '../../WaitingParticipantsList';
 
 const blink = keyframes`from { opacity: 1; } to { opacity: 0.3; }`;
 

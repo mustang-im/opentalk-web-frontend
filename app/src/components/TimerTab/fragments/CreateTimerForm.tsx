@@ -2,24 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Switch } from '@mui/material';
-import {
-  formikDurationFieldProps,
-  formikProps,
-  formikSwitchProps,
-  DurationField,
-  TimerKind,
-  TimerStyle,
-  CommonTextField,
-  DurationValueOptions,
-} from '@opentalk/common';
 import { FormikValues, useFormik } from 'formik';
 import { useCallback, useMemo } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { startTimer } from '../../../api/types/outgoing/timer';
-import CommonFormItem from '../../../commonComponents/CommonFormItem';
+import { DurationField, CommonTextField, CommonFormItem, DurationValueOptions } from '../../../commonComponents';
 import { useAppDispatch } from '../../../hooks';
+import { TimerKind, TimerStyle } from '../../../types';
+import { formikDurationFieldProps, formikProps, formikSwitchProps } from '../../../utils/formikUtils';
 import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 
 const Container = styled(Stack)({

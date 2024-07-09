@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { SharedFolderData, StreamingPlatform } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { CallIn, DateTimeWithTimezone, EntityBase, InviteStatus } from './common';
 import { EventInvite } from './eventInvite';
 import { RoomId } from './room';
+import { StreamingPlatform } from './streaming';
 
 export type EventId = Opaque<string, 'eventId'>;
 export type EventInstanceId = Opaque<string, 'eventInstanceId'>;
@@ -24,6 +24,15 @@ export type EventAndInstanceId = Opaque<string, 'eventAndInstanceId'>;
  * more readable version of https://www.ietf.org/rfc/rfc2445.txt
  */
 export type RecurrencePattern = string & { readonly __tag: unique symbol };
+
+interface SharedFolderCredentials {
+  url: string;
+  password: string;
+}
+export interface SharedFolderData {
+  read: SharedFolderCredentials;
+  readWrite?: SharedFolderCredentials;
+}
 
 /**
  * EventRoomInfo in an Event object

@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { ParticipantAvatar, setLibravatarOptions } from '@opentalk/common';
 
 import { useGetMeQuery } from '../../api/rest';
+import { ParticipantAvatar, setLibravatarOptions } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 

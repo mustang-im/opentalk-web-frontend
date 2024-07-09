@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Radio, InputLabel } from '@mui/material';
-import { PollId, LegalVoteId } from '@opentalk/common';
 import { useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectCurrentShownVote } from '../../../store/slices/legalVoteSlice';
 import { selectPollToShow } from '../../../store/slices/pollSlice';
+import { PollId, LegalVoteId } from '../../../types';
 
 export enum VoteType {
   Poll = 'Poll',
@@ -37,18 +37,18 @@ const ProgressContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   backgroundColor: theme.palette.secondary.main,
-  borderRadius: '0.5em',
+  borderRadius: theme.borderRadius.medium,
   marginTop: theme.spacing(1),
   '& .MuiInputLabel-root': {
     color: theme.palette.secondary.contrastText,
     flex: 1,
     height: '100%',
     lineHeight: '3em',
+    borderRadius: theme.borderRadius.medium,
   },
   '& .MuiRadio-root.MuiRadio-colorPrimary': {
     marginLeft: 0,
     aspectRatio: '1/1',
-    borderRadius: '0',
     color: theme.palette.secondary.contrastText,
     '&.Mui-checked': {
       color: theme.palette.secondary.contrastText,

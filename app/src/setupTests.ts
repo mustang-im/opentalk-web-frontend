@@ -5,12 +5,13 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import { TariffId } from '@opentalk/common';
 import '@testing-library/jest-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import React from 'react';
 import { TextEncoder } from 'util';
+
+import { TariffId } from './types/tariff';
 
 global.React = React;
 
@@ -38,6 +39,9 @@ window.config = {
     active: false,
     url: 'DUMMY',
   },
+  provider: {
+    active: false,
+  },
   speedTest: {
     ndtDownloadWorkerJs: '',
     ndtServer: '',
@@ -60,6 +64,7 @@ window.config = {
     name: '',
     quotas: {},
     enabledModules: [],
+    modules: {},
   },
 };
 
@@ -138,6 +143,7 @@ jest.mock('./modules/WebRTC', () => {
 });
 jest.mock('@opentalk/i18next-fluent', () => {
   class Fluent {
+    static type: string;
     constructor() {
       this.init();
     }

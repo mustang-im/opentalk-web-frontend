@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Typography } from '@mui/material';
-import { ArrowLeftIcon } from '@opentalk/common';
 import React, { useState, ReactNode, useEffect, FunctionComponentElement, useCallback } from 'react';
+
+import { ArrowLeftIcon } from '../../assets/icons';
 
 const MainContainer = styled('div')(() => ({
   width: '100%',

@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Namespaced, Namespaces } from '@opentalk/common';
+import { Namespaces } from '@opentalk/rest-api-rtk-query';
 import { createAction, PayloadActionCreator } from '@reduxjs/toolkit';
 import { DistributiveOmit } from 'react-redux';
 
 import { IfVoid, IsAny, IsEmptyObj, IsUnknownOrNonInferrable, Property } from '../tsHelper';
+import { Namespaced } from '../types';
 
 export interface Action {
   action: string;

@@ -2,19 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import {
-  BackendParticipant,
-  ChatMessage,
-  ParticipantId,
-  Participant,
-  WaitingState,
-  ProtocolAccess,
-  ParticipantInOtherRoom,
-  joinSuccess,
-  Speaker,
-  notifications,
-  Role,
-} from '@opentalk/common';
-import {
   createEntityAdapter,
   createSelector,
   createSlice,
@@ -27,6 +14,19 @@ import {
 import i18next from 'i18next';
 
 import { RootState, AppDispatch } from '../';
+import { notifications } from '../../commonComponents';
+import {
+  BackendParticipant,
+  ChatMessage,
+  Participant,
+  ParticipantId,
+  ParticipantInOtherRoom,
+  ProtocolAccess,
+  Role,
+  Speaker,
+  WaitingState,
+} from '../../types';
+import { joinSuccess } from '../commonActions';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
 import { received } from './chatSlice';
 import { connectionClosed } from './roomSlice';

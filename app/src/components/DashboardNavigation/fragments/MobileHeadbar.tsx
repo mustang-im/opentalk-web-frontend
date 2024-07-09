@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, styled, Typography } from '@mui/material';
-import { CloseIcon, MoreIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { CloseIcon, MoreIcon } from '../../../assets/icons';
 import ProfileChip from './ProfileChip';
 
 interface HeadbarProps {

@@ -2,13 +2,17 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Stack, Typography, Button, Box } from '@mui/material';
-import { ProgressBar, LegalBallotIcon, useDateFormat, getCurrentTimezone, LegalVoteType } from '@opentalk/common';
 import { truncate } from 'lodash';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { cancel, stop } from '../../../api/types/outgoing/legalVote';
+import { LegalBallotIcon } from '../../../assets/icons';
+import { ProgressBar } from '../../../commonComponents';
+import { useDateFormat } from '../../../hooks';
+import { LegalVoteType } from '../../../types';
+import { getCurrentTimezone } from '../../../utils/timeFormatUtils';
 import LegalVoteCountdown from '../../LegalVoteCountdown';
 
 const MainContainer = styled(Stack)(({ theme }) => ({

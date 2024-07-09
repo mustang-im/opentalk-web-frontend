@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, Stack } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { ParticipantId } from '../../types';
 import SearchInput from './fragments/SearchInput';
 import { SelectableParticipant } from './fragments/SelectParticipantsItem';
 import SelectParticipantsList from './fragments/SelectParticipantsList';

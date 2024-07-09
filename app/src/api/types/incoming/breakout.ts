@@ -6,11 +6,11 @@ import {
   BreakoutRoom,
   BreakoutRoomId,
   ErrorStruct,
-  isEnumErrorStruct,
   NamespacedIncoming,
   ParticipantId,
   ParticipantInOtherRoom,
-} from '@opentalk/common';
+} from '../../../types';
+import { isEnumErrorStruct } from '../../../utils/tsUtils';
 
 export interface AssocParticipantInOtherRoom {
   // BreakoutRoomId or null, null means the participant was in the parent room.

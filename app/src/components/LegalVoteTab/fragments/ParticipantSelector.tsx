@@ -15,14 +15,16 @@ import {
   FormHelperText,
   ListItemAvatar as MuiListItemAvatar,
 } from '@mui/material';
-import { ParticipantAvatar, ParticipantId, SearchIcon, CommonTextField } from '@opentalk/common';
 import { useFormikContext } from 'formik';
 import { get, find, debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { SearchIcon } from '../../../assets/icons';
+import { ParticipantAvatar, CommonTextField } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectVotingUsers } from '../../../store/selectors';
+import { ParticipantId } from '../../../types';
 
 interface IParticipantSelectorProps {
   name: string;

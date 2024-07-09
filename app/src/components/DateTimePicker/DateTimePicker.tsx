@@ -4,13 +4,13 @@
 import { Theme, useMediaQuery, Typography, styled } from '@mui/material';
 import { useTheme } from '@mui/material';
 import { DateTimePicker as MuiDateTimePicker, PickersActionBarAction, PickersLocaleText } from '@mui/x-date-pickers';
-import { ErrorFormMessage } from '@opentalk/common';
 import { isSameDay } from 'date-fns';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
 
+import { ErrorFormMessage } from '../../commonComponents';
 import PickerLocalizationProvider from '../../provider/PickerLocalizationProvider';
-import { IFormikCustomFieldPropsReturnValue } from '../../utils/formikUtils';
+import { IFormikDateTimePickerPropsReturnValue } from '../../utils/formikUtils';
 
 type PickerTextFieldProps = {
   placeholder?: string;
@@ -28,7 +28,7 @@ type DateTimePickerProps = {
   okButtonLabel?: string;
   cancelButtonLabel?: string;
   textField?: PickerTextFieldProps;
-} & Pick<IFormikCustomFieldPropsReturnValue, 'onChange' | 'helperText' | 'error'>;
+} & Pick<IFormikDateTimePickerPropsReturnValue, 'onChange' | 'helperText' | 'error'>;
 
 const StartAdornmentTypography = styled(Typography)(({ theme }) => ({
   paddingRight: theme.spacing(2),

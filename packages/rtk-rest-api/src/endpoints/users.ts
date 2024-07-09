@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Tariff } from '@opentalk/common';
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions';
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import snakeCaseKeys from 'snakecase-keys';
 
 import { UserMe, UpdateMePayload, BaseUser, EventId, Tag, Tags, User, UserId, UserOwnedAssets } from '../types';
+import { Tariff } from '../types/tariff';
 
 export type FindUsersParams = {
   /**

@@ -11,14 +11,15 @@ import {
   AccordionSummary as MuiAccordionSummary,
   Stack,
 } from '@mui/material';
-import { BreakoutRoomId, ParticipationKind, Participant, ParticipantAvatar } from '@opentalk/common';
-import { ArrowDownIcon } from '@opentalk/common';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ArrowDownIcon } from '../../../assets/icons';
+import { ParticipantAvatar } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectBreakoutRoomById, selectCurrentBreakoutRoomId } from '../../../store/slices/breakoutSlice';
 import { selectOurUuid } from '../../../store/slices/userSlice';
+import { BreakoutRoomId, ParticipationKind, Participant } from '../../../types';
 
 const Avatar = styled(ParticipantAvatar)({
   width: '2.25rem',

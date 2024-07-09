@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Skeleton, Stack, Step, StepButton as MuiStepButton, Stepper, styled } from '@mui/material';
-import { EditIcon } from '@opentalk/common';
 import { EventId } from '@opentalk/rest-api-rtk-query';
 import { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useLazyGetEventQuery } from '../../../api/rest';
+import { EditIcon } from '../../../assets/icons';
 import CreateOrUpdateMeetingForm from '../../../components/CreateOrUpdateMeetingForm';
 import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting';
 

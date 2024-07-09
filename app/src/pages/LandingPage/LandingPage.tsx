@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled } from '@mui/material';
-import { Logo } from '@opentalk/common';
 import { useAuthContext } from '@opentalk/redux-oidc';
 import { useTranslation } from 'react-i18next';
 
+import { Logo } from '../../assets/icons';
 import ImprintContainer from '../../components/ImprintContainer';
 import JoinMeetingDialog from '../../components/JoinMeetingDialog';
 

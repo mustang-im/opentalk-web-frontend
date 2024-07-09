@@ -2,18 +2,17 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import {
-  joinSuccess,
-  StreamingTargetId,
   StreamingKind,
-  StreamingTargetStatusInfo,
-  StreamingTargetEntity,
   StreamingStatus,
-} from '@opentalk/common';
+  StreamingTargetEntity,
+  StreamingTargetId,
+  StreamingTargetStatusInfo,
+} from '@opentalk/rest-api-rtk-query';
 import { createEntityAdapter, createSelector, createSlice, EntityState, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
 import { sendStreamConsentSignal } from '../../api/types/outgoing/streaming';
-import { hangUp } from '../commonActions';
+import { hangUp, joinSuccess } from '../commonActions';
 
 interface StreamingTargetFilter {
   status?: StreamingStatus;

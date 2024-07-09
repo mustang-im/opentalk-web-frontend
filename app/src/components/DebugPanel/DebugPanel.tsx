@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { AppBar, Stack, Typography } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 import { EntityState } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
 import { useMemo } from 'react';
@@ -11,6 +10,7 @@ import { useAppSelector } from '../../hooks';
 import { StatsEvent } from '../../modules/WebRTC/Statistics/ConnectionStats';
 import { selectStats, State } from '../../store/slices/connectionStatsSlice';
 import { selectOurUuid } from '../../store/slices/userSlice';
+import { ParticipantId } from '../../types';
 
 const aggregateTimeline = (reports: StatsEvent[]) => {
   const statsAggregate = reports.reduce(

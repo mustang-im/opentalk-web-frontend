@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, useMediaQuery, useTheme } from '@mui/material';
-import { AddIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { AddIcon } from '../../../../assets/icons';
 import getReferrerRouterState from '../../../../utils/getReferrerRouterState';
 
 export const CreateNewMeetingButton = () => {

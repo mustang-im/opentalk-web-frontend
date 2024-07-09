@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ForceMuteType } from '@opentalk/common';
-
+import { ForceMuteType } from '../../../types';
 import { configureStore, render, screen } from '../../../utils/testUtils';
 import { useMediaContext } from '../../MediaProvider';
 import AudioButton from './AudioButton';

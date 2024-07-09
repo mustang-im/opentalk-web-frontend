@@ -1,9 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
-
 import { leave } from '../../../store/slices/participantsSlice';
+import { ParticipantId } from '../../../types';
 import { render, screen, cleanup, mockStore, fireEvent, waitFor } from '../../../utils/testUtils';
 import ThumbsRow from './ThumbsRow';
 

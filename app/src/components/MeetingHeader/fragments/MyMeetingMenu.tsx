@@ -12,11 +12,12 @@ import {
   useTheme,
   ThemeProvider,
 } from '@mui/material';
-import { BurgermenuIcon, HelpIcon, IconButton, ProtocolIcon, HelpSquareIcon, BugIcon } from '@opentalk/common';
 import { useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { BurgermenuIcon, HelpIcon, ProtocolIcon, HelpSquareIcon, BugIcon } from '../../../assets/icons';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import { IconButton } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectIsGlitchtipConfigured } from '../../../store/slices/configSlice';
 import { triggerGlitchtipManually } from '../../../utils/glitchtipUtils';

@@ -2,9 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputAdornment, useTheme } from '@mui/material';
-import { SearchIcon, CommonTextField } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { SearchIcon } from '../../../assets/icons';
+import CommonTextField from '../../CommonTextField';
 
 type SearchInputProps = {
   onSearch: (searchValue: string) => void;

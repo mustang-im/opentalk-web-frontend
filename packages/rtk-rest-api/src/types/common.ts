@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Namespaces, AssetId } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { SipId } from './room';
@@ -10,7 +9,26 @@ import { BaseUser } from './user';
 export type UserId = Opaque<string, 'userId'>;
 export type Email = Opaque<string, 'email'>;
 
+export type AssetId = Opaque<string, 'assetId'>;
+
 export type DateTime = Opaque<string, 'dateTime'>;
+
+export type Namespaces =
+  | 'automod'
+  | 'breakout'
+  | 'chat'
+  | 'control'
+  | 'ee_chat'
+  | 'legal_vote'
+  | 'polls'
+  | 'media'
+  | 'moderation'
+  | 'protocol'
+  | 'timer'
+  | 'recording'
+  | 'whiteboard'
+  | 'shared_folder'
+  | 'echo';
 
 export enum Tag {
   Room = 'Room',

@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, Tooltip } from '@mui/material';
-import { CopyTextField } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
+
+import { CopyTextField } from '../../../commonComponents';
 
 export enum FieldKeys {
   InviteLink = 'invite-link',

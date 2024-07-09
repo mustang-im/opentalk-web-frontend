@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { RaiseHandOffIcon, RaiseHandOnIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 import { lowerHand, raiseHand } from '../../../api/types/outgoing/control';
+import { RaiseHandOffIcon, RaiseHandOnIcon } from '../../../assets/icons';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectRaiseHandsEnabled, selectHandUp } from '../../../store/slices/moderationSlice';
 import { ToolbarButtonIds } from '../Toolbar';

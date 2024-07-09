@@ -1,19 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  LegalVoteId,
-  ParticipantId,
-  PollId,
-  TargetId,
-  SortOption,
-  ChatScope,
-  TimerStyle,
-  joinSuccess,
-  MediaSessionType,
-  timerStarted,
-  timerStopped,
-} from '@opentalk/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Event } from '@sentry/react';
 
@@ -23,13 +10,24 @@ import { Started as PollStartedInterface } from '../../api/types/incoming/poll';
 import { ModerationTabKey } from '../../config/moderationTabs';
 import LayoutOptions from '../../enums/LayoutOptions';
 import { MediaDescriptor } from '../../modules/WebRTC';
-import { hangUp } from '../commonActions';
+import {
+  ChatScope,
+  LegalVoteId,
+  MediaSessionType,
+  ParticipantId,
+  PollId,
+  SortOption,
+  TargetId,
+  TimerStyle,
+} from '../../types';
+import { hangUp, joinSuccess } from '../commonActions';
 import { started as legalVoteStarted } from './legalVoteSlice';
 import { removed } from './mediaSubscriberSlice';
 import { leave, breakoutLeft } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
 import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
+import { timerStarted, timerStopped } from './timerSlice';
 import { setWhiteboardAvailable } from './whiteboardSlice';
 
 export interface IChatConversationState {

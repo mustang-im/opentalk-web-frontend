@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack, Tooltip, Zoom } from '@mui/material';
-import { WarningIcon } from '@opentalk/common';
 import { ReactNode } from 'react';
+
+import { WarningIcon } from '../../../assets/icons';
 
 export const FailureBadge = ({ title, children }: { title: string; children: ReactNode }) => (
   <Tooltip title={title}>

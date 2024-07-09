@@ -1,15 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BreakoutRoomId, InviteCode, RoomId, notifications } from '@opentalk/common';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { InviteCode, RoomId } from '@opentalk/rest-api-rtk-query';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
-import { stopTimeLimitNotification } from '../components/TimeLimitNotification';
+import { stopTimeLimitNotification, notifications } from '../commonComponents';
 import localMediaContext from '../modules/Media/LocalMedia';
 import localScreenContext from '../modules/Media/LocalScreen';
 import { ConferenceRoom, shutdownConferenceContext } from '../modules/WebRTC';
+import { BreakoutRoomId } from '../types';
+import { JoinSuccessInternalState } from '../types/actions/joinSuccess';
 import { getControllerBaseUrl } from '../utils/apiUtils';
 import { RootState } from './index';
 import { ConnectionState } from './slices/roomSlice';
@@ -67,3 +69,5 @@ export const hangUp = createAsyncThunk<void, void, { state: RootState }>('room/h
   localScreenContext.release();
   return localMediaContext.release();
 });
+
+export const joinSuccess = createAction<JoinSuccessInternalState>('signaling/control/join_success');

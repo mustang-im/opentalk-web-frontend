@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { LegalVoteId, LegalVoteType } from '@opentalk/common';
-
+import { LegalVoteId, LegalVoteType } from '../../../types';
 import {
   render,
   screen,
@@ -49,16 +48,10 @@ const votesData: LegalVoteType = {
 
 const onClose = jest.fn();
 
-jest.mock('@opentalk/common', () => {
-  const originalModule = jest.requireActual('@opentalk/common');
-
-  //Mock the default export and named export 'foo'
-  return {
-    __esModule: true,
-    ...originalModule,
-    getCurrentTimezone: () => 'Europe/Belgrade',
-  };
-});
+jest.mock('../../../utils/timeFormatUtils', () => ({
+  ...jest.requireActual('../../../utils/timeFormatUtils'),
+  getCurrentTimezone: () => 'Europe/Belgrade',
+}));
 
 describe('VoteResultContainer', () => {
   afterEach(() => cleanup());

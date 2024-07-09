@@ -1,22 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  FetchRequestError,
-  FetchRequestState,
-  InviteCode,
-  RoomId,
-  joinSuccess,
-  TimerStyle,
-  RoomMode,
-  AutomodSelectionStrategy,
-  EventInfo,
-  timerStarted,
-  timerStopped,
-  notifications,
-  RoomInfo,
-} from '@opentalk/common';
 import { AuthTypeError, authError } from '@opentalk/redux-oidc';
+import { InviteCode, RoomId } from '@opentalk/rest-api-rtk-query';
 import {
   createAsyncThunk,
   createSlice,
@@ -30,9 +16,20 @@ import convertToSnakeCase from 'snakecase-keys';
 
 import { AppDispatch, RootState } from '../';
 import { StartRoomError } from '../../api/rest';
+import { notifications } from '../../commonComponents';
+import {
+  AutomodSelectionStrategy,
+  EventInfo,
+  FetchRequestError,
+  FetchRequestState,
+  RoomInfo,
+  RoomMode,
+  TimerStyle,
+} from '../../types';
 import { fetchWithAuth, getControllerBaseUrl } from '../../utils/apiUtils';
-import { hangUp, startRoom } from '../commonActions';
+import { hangUp, joinSuccess, startRoom } from '../commonActions';
 import { started as automodStarted, stopped as automodStopped } from './automodSlice';
+import { timerStarted, timerStopped } from './timerSlice';
 
 interface InviteState extends FetchRequestState {
   active?: boolean;

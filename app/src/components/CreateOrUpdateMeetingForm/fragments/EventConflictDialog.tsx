@@ -2,10 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import { CloseIcon, formatDate } from '@opentalk/common';
 import { RecurringEvent, SingleEvent } from '@opentalk/rest-api-rtk-query';
 import { truncate } from 'lodash';
 import { Trans, useTranslation } from 'react-i18next';
+
+import { CloseIcon } from '../../../assets/icons';
+import { formatDate } from '../../../utils/timeFormatUtils';
 
 interface EventConflictDialogProps {
   onConfirm: () => void;

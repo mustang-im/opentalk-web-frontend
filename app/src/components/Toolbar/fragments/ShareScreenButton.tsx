@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ShareScreenOffIcon, ShareScreenOnIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { ShareScreenOffIcon, ShareScreenOnIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectMediaChangeInProgress, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectIsModerator, selectIsPresenter } from '../../../store/slices/userSlice';

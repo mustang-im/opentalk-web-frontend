@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, Stack, styled, Switch, Typography, FormControlLabel as MuiFormControlLabel } from '@mui/material';
-import { SortOption, sortParticipantsWithConfig } from '@opentalk/common';
 import { memo, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +9,8 @@ import { selectNext, talkingStickStart, stop as talkingStickStop } from '../../a
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { selectCombinedUserFirstAndParticipantsInConference } from '../../store/selectors';
 import { selectAutomodActiveState, selectAutomoderationParticipantIds } from '../../store/slices/automodSlice';
+import { SortOption } from '../../types';
+import { sortParticipantsWithConfig } from '../../utils/sortParticipants';
 import { TalkingStickParticipantList } from '../TalkingStickParticipantList';
 import { TalkingStickSortButton } from '../TalkingStickSortButton';
 

@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BreakoutRoomId, ParticipantId, joinSuccess } from '@opentalk/common';
 import {
   createEntityAdapter,
   createSelector,
@@ -13,7 +12,8 @@ import {
 
 import { RootState } from '../';
 import { Started } from '../../api/types/incoming/breakout';
-import { startRoom } from '../commonActions';
+import { BreakoutRoomId, ParticipantId } from '../../types';
+import { joinSuccess, startRoom } from '../commonActions';
 
 export interface Room {
   id: BreakoutRoomId;

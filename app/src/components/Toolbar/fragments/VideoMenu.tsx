@@ -17,19 +17,12 @@ import {
   FormGroup,
   MenuList,
 } from '@mui/material';
-import {
-  CameraOnIcon,
-  ErrorIcon,
-  SettingsIcon,
-  WarningIcon,
-  CloseIcon,
-  VideoSetting,
-  notifications,
-} from '@opentalk/common';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CameraOnIcon, ErrorIcon, SettingsIcon, WarningIcon, CloseIcon } from '../../../assets/icons';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import { notifications } from '../../../commonComponents';
 import { useAppSelector, useAppDispatch } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import browser from '../../../modules/BrowserSupport';
@@ -37,6 +30,7 @@ import { DeviceId } from '../../../modules/Media/MediaUtils';
 import { selectVideoBackgrounds } from '../../../store/slices/configSlice';
 import { selectQualityCap, selectVideoDeviceId, selectVideoBackgroundEffects } from '../../../store/slices/mediaSlice';
 import { mirroredVideoSet, selectMirroredVideoEnabled } from '../../../store/slices/uiSlice';
+import { VideoSetting } from '../../../types';
 import { useMediaContext } from '../../MediaProvider';
 import DeviceList from './DeviceList';
 import { ToolbarMenu, ToolbarMenuProps, MenuSectionTitle } from './ToolbarMenuUtils';

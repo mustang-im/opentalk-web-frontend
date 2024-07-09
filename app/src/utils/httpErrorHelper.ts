@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { notifications } from '@opentalk/common';
 import i18next from 'i18next';
 
 import { StartRoomError } from '../api/rest';
+import { notifications } from '../commonComponents';
 
 interface IErrorHandlerMessage {
   status: number;

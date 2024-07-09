@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 import { useMemo } from 'react';
 import { DraggableProvided } from 'react-beautiful-dnd';
 
 import { useDisplayName } from '../../../hooks';
+import { ParticipantId } from '../../../types';
 
 interface EntryProps {
   id: ParticipantId;

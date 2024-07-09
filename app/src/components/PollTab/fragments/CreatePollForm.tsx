@@ -2,18 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, styled, Switch, Typography, Tooltip, Box } from '@mui/material';
-import {
-  Seconds,
-  BackIcon,
-  notifications,
-  RoomMode,
-  ErrorFormMessage,
-  formikDurationFieldProps,
-  formikProps,
-  formikSwitchProps,
-  DurationField,
-  CommonTextField,
-} from '@opentalk/common';
 import { FormikValues, Formik } from 'formik';
 import i18next from 'i18next';
 import { isEmpty } from 'lodash';
@@ -22,11 +10,16 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { start } from '../../../api/types/outgoing/poll';
-import CommonFormItem from '../../../commonComponents/CommonFormItem';
+import { BackIcon } from '../../../assets/icons';
+import { CommonFormItem, DurationField, ErrorFormMessage, notifications } from '../../../commonComponents';
+import { CommonTextField } from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
 import { PollFormValues, savePollFormValues } from '../../../store/slices/pollSlice';
 import { selectCurrentRoomMode } from '../../../store/slices/roomSlice';
+import { RoomMode } from '../../../types';
+import { formikDurationFieldProps, formikSwitchProps, formikProps } from '../../../utils/formikUtils';
+import { Seconds } from '../../../utils/tsUtils';
 import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 import AnswersFormElement from './AnswersFormElement';
 

@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Dialog, styled, Typography, DialogTitle } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
+
+import { CloseIcon } from '../../assets/icons';
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {

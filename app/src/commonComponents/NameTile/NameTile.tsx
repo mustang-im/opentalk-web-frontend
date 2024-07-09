@@ -2,13 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, BoxProps, Stack, styled, Typography } from '@mui/material';
-import { CameraOffIcon, MediaSessionType, MicOffIcon, ParticipantId } from '@opentalk/common';
 import { omit } from 'lodash';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CameraOffIcon, MicOffIcon } from '../../assets/icons';
 import { useAppSelector } from '../../hooks';
 import { selectSubscriberStateById } from '../../store/slices/mediaSubscriberSlice';
+import { MediaSessionType, ParticipantId } from '../../types';
 
 const NameBox = styled(Box)(({ theme }) => ({
   display: 'flex',

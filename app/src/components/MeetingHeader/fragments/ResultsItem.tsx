@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Chip as MuiChip, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
-import { PollIcon, LegalBallotIcon, LegalVoteType } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { LegalBallotIcon, PollIcon } from '../../../assets/icons';
 import { useAppDispatch } from '../../../hooks';
 import { Poll } from '../../../store/slices/pollSlice';
 import { setVoteOrPollIdToShow } from '../../../store/slices/uiSlice';
+import { LegalVoteType } from '../../../types';
 
 const Chip = styled(MuiChip)(({ theme }) => ({
   marginLeft: theme.spacing(1),

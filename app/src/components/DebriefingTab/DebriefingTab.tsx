@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, Typography } from '@mui/material';
-import { KickScope } from '@opentalk/common';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { debrief } from '../../api/types/outgoing/moderation';
 import { useAppDispatch } from '../../hooks';
+import { KickScope } from '../../types';
 
 const DebriefingTab = () => {
   const { t } = useTranslation();

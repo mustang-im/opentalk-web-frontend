@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ErrorStruct, isEnumErrorStruct, NamespacedIncoming } from '@opentalk/common';
+import { ErrorStruct, NamespacedIncoming } from '../../../types';
+import { isEnumErrorStruct } from '../../../utils/tsUtils';
 
 interface IncomingProtocolSuccess {
   message: 'write_url' | 'read_url';

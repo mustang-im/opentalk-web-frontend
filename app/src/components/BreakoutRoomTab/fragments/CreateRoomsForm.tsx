@@ -2,15 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Button, Box } from '@mui/material';
-import {
-  BackIcon,
-  NoOfParticipantsIcon,
-  NoOfRoomsIcon,
-  Participant,
-  notifications,
-  ErrorFormMessage,
-  Seconds,
-} from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { Step, FormikWizard } from 'formik-wizard-form';
 import { FormikValues } from 'formik/dist/types';
@@ -21,10 +12,13 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { start } from '../../../api/types/outgoing/breakout';
-import AccordionItem from '../../../commonComponents/AccordionItem';
+import { BackIcon, NoOfParticipantsIcon, NoOfRoomsIcon } from '../../../assets/icons';
+import { AccordionItem, ErrorFormMessage, notifications } from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectCombinedParticipantsAndUser, selectCombinedParticipantsAndUserCount } from '../../../store/selectors';
+import { Participant } from '../../../types';
 import { spliceIntoChunks } from '../../../utils/arrayUtils';
+import { Seconds } from '../../../utils/tsUtils';
 import CreateByParticipantsForm from './CreateByParticipantsForm';
 import CreateByRoomsForm from './CreateByRoomsForm';
 import ParticipantsSelector, { BreakoutRoomWithFullParticipants, AccordionOptions } from './ParticipantsSelector';

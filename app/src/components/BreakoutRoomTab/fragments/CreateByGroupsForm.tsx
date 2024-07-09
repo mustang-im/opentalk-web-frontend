@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, styled, Switch as MuiSwitch } from '@mui/material';
-import { formikDurationFieldProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { FormikValues } from 'formik/dist/types';
 import { useTranslation } from 'react-i18next';
 
-import CommonFormItem from '../../../commonComponents/CommonFormItem';
+import { DurationField, CommonFormItem } from '../../../commonComponents';
+import { formikDurationFieldProps, formikSwitchProps } from '../../../utils/formikUtils';
 import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 
 const GridItem = styled(Grid)({

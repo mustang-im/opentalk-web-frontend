@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, ButtonProps, styled } from '@mui/material';
-import { ArrowLeftIcon, ArrowRightIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
+
+import { ArrowLeftIcon, ArrowRightIcon } from '../../../assets/icons';
 
 const SlideButton = styled(Button)<{ direction: 'left' | 'right' }>(({ theme, direction }) => ({
   width: theme.spacing(4),

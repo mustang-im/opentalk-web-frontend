@@ -2,14 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Grid } from '@mui/material';
-import { ParticipantAvatar, ParticipantId, ParticipationKind } from '@opentalk/common';
 
+import { ParticipantAvatar } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import {
   selectParticipantAvatarUrl,
   selectParticipantName,
   selectParticipationKind,
 } from '../../../store/slices/participantsSlice';
+import { ParticipantId, ParticipationKind } from '../../../types';
 
 const Container = styled(Grid)({
   transition: 'all 300ms linear',

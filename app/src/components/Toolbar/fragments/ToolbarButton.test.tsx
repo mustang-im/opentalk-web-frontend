@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MicOnIcon } from '@opentalk/common';
-
+import { MicOnIcon } from '../../../assets/icons';
 import { render, screen, cleanup, fireEvent } from '../../../utils/testUtils';
 import ToolbarButton from './ToolbarButton';
 

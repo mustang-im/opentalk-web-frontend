@@ -4,19 +4,6 @@
 import '@emotion/styled';
 import { ThemeProvider } from '@mui/material';
 import '@mui/material';
-import {
-  SnackbarProvider,
-  Participant,
-  ProtocolAccess,
-  WaitingState,
-  MediaSessionType,
-  ParticipantId,
-  ParticipationKind,
-  VideoSetting,
-  InviteCode,
-  AssetId,
-  AutomodSelectionStrategy,
-} from '@opentalk/common';
 import { ftl2js } from '@opentalk/fluent_conv';
 import { AuthProvider } from '@opentalk/redux-oidc';
 import {
@@ -33,10 +20,17 @@ import {
   RoomInvite,
   BaseAsset,
   RecurrencePattern,
+  InviteCode,
+  AssetId,
+  SipId,
 } from '@opentalk/rest-api-rtk-query';
-import { SipId } from '@opentalk/rest-api-rtk-query/src/types/room';
-import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
-import { createStore as createStoreTlk, configureStore as configureStoreTlk } from '@reduxjs/toolkit';
+import {
+  combineReducers,
+  ConfigureStoreOptions,
+  Store,
+  createStore as createStoreTlk,
+  configureStore as configureStoreTlk,
+} from '@reduxjs/toolkit';
 import { act, render as rtlRender, RenderOptions, RenderResult } from '@testing-library/react';
 import fs from 'fs';
 import i18n from 'i18next';
@@ -48,11 +42,22 @@ import { MemoryRouter } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { createOpenTalkTheme } from '../assets/themes/opentalk';
+import { SnackbarProvider } from '../commonComponents';
 import { MediaProvider } from '../components/MediaProvider';
 import { idFromDescriptor, MediaId, SubscriberStateChanged, SubscriberConfig } from '../modules/WebRTC';
 import FullscreenProvider from '../provider/FullscreenProvider';
 import { appReducers } from '../store';
 import { AutomodState, SpeakerState } from '../store/slices/automodSlice';
+import {
+  Participant,
+  ProtocolAccess,
+  WaitingState,
+  MediaSessionType,
+  ParticipantId,
+  ParticipationKind,
+  VideoSetting,
+  AutomodSelectionStrategy,
+} from '../types';
 
 const automodState: AutomodState = {
   active: false,
@@ -128,7 +133,9 @@ export const render = async (ui: React.ReactElement, store?: Store, options?: Re
       return (
         <ThemeProvider theme={createOpenTalkTheme()}>
           <I18nextProvider i18n={i18n}>
-            <SnackbarProvider>{children}</SnackbarProvider>
+            <FullscreenProvider>
+              <SnackbarProvider>{children}</SnackbarProvider>
+            </FullscreenProvider>
           </I18nextProvider>
         </ThemeProvider>
       );
@@ -148,11 +155,11 @@ export const render = async (ui: React.ReactElement, store?: Store, options?: Re
               }}
             >
               <I18nextProvider i18n={i18n}>
-                <SnackbarProvider>
-                  <MediaProvider>
-                    <FullscreenProvider>{children}</FullscreenProvider>
-                  </MediaProvider>
-                </SnackbarProvider>
+                <FullscreenProvider>
+                  <SnackbarProvider>
+                    <MediaProvider>{children}</MediaProvider>
+                  </SnackbarProvider>
+                </FullscreenProvider>
               </I18nextProvider>
             </AuthProvider>
           </MemoryRouter>

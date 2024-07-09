@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { formatDate } from '@opentalk/common';
 import {
   CursorPaginated,
   DateTime,
@@ -23,6 +22,7 @@ import {
   orderEventsByDate,
   TimePerspectiveFilter,
 } from '../../../utils/eventUtils';
+import { formatDate } from '../../../utils/timeFormatUtils';
 import EventsOverview from './fragments/EventsOverview';
 import EventsPageHeader from './fragments/EventsPageHeader';
 import { DashboardEventsFilters, FilterChangeCallbackType, MeetingsProp, TimeFilter } from './types';

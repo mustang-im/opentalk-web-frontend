@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { IconButton as DefaultIconButton, LogoSmallIcon } from '@opentalk/common';
 
+import { LogoSmallIcon } from '../../../../assets/icons';
+import { IconButton as DefaultIconButton } from '../../../../commonComponents';
 import { useAppSelector } from '../../../../hooks';
 import { selectPollsAndVotingsCount } from '../../../../store/selectors';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../../../store/slices/chatSlice';

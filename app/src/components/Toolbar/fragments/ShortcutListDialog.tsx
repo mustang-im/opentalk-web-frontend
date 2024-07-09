@@ -14,9 +14,9 @@ import {
   Typography,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { CloseIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { CloseIcon } from '../../../assets/icons';
 import { useAppDispatch, useAppSelector } from '../../../hooks/index';
 import { selectHotkeysEnabled, setHotkeysEnabled } from '../../../store/slices/uiSlice';
 import { ShortcutTable } from './ShortcutTable';

@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { NamespacedIncoming, StreamUpdatedMessage } from '@opentalk/common';
+import { StreamUpdatedMessage } from '@opentalk/rest-api-rtk-query';
+
+import { NamespacedIncoming } from '../../../types';
 
 type StreamingErrorMessage = 'error' | 'recorder_error';
 type StreamingErrorType = 'insufficient_permissions' | 'invalid_recording_id' | 'already_recording' | 'timeout';

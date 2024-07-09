@@ -18,15 +18,17 @@ import {
   useTheme,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { RoomId, formikProps, CommonTextField, CloseIcon } from '@opentalk/common';
-import { InviteCode } from '@opentalk/common';
+import { InviteCode, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useFormik } from 'formik';
 import { ClipboardEvent, useState, ChangeEvent, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { validate as validateUUID } from 'uuid';
 
+import { CloseIcon } from '../../assets/icons';
+import { CommonTextField } from '../../commonComponents';
 import { composeRoomPath } from '../../utils/apiUtils';
+import { formikProps } from '../../utils/formikUtils';
 import yup from '../../utils/yupUtils';
 
 const CloseIconButton = styled(IconButton)({

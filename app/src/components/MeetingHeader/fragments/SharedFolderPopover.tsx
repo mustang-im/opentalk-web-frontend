@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { MenuItem, Popover } from '@mui/material';
-import { SharedFolderIcon } from '@opentalk/common';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { SharedFolderIcon } from '../../../assets/icons';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import {
   selectIsSharedFolderOpened,

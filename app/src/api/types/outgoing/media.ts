@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { RootState } from '../../../store';
 import {
   MediaSessionState,
   MediaSessionType,
@@ -9,9 +10,7 @@ import {
   TrickleCandidate,
   VideoSetting,
   createModule,
-} from '@opentalk/common';
-
-import { RootState } from '../../../store';
+} from '../../../types';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
 import { sendMessage } from '../../index';
 

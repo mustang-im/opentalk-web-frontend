@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { HomeIcon, MeetingsIcon, SettingsIcon } from '@opentalk/common';
 import { setTimeout } from 'timers';
 
 import DashboardNavigation from '.';
+import { HomeIcon, MeetingsIcon, SettingsIcon } from '../../assets/icons';
 import { screen, render, fireEvent, configureStore } from '../../utils/testUtils';
 
 const routes = [

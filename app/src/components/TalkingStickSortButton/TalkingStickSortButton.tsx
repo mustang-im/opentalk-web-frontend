@@ -2,9 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button } from '@mui/material';
-import { SortOption, SortPopoverMenu, SortItem } from '@opentalk/common';
 import { memo, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { SortPopoverMenu } from '../../commonComponents';
+import { SortItem, SortOption } from '../../types';
 
 const items: Array<SortItem> = [
   {

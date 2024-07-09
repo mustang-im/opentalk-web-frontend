@@ -14,7 +14,6 @@
     "hot-reload:remove-build": "node -e \"if (require('fs').readFileSync('../../app/hotReload/packages.tsconfig.json', {encoding: 'utf8'}).includes('@opentalk/rest-api-rtk-query')){process.exit(1)}\" || shx rm -rf ./dist"
   },
   "dependencies": {
-    "@opentalk/common": "workspace:^",
     "camelcase-keys": "^7.0.2",
     "date-fns": "^2.29.3",
     "date-fns-tz": "^1.3.7",

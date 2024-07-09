@@ -4,12 +4,15 @@
 
 /* eslint-disable jsx-a11y/no-autofocus */
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, IconButton, styled } from '@mui/material';
-import { Participant, formikProps, CommonTextField, CloseIcon } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { changeDisplayName } from '../../../api/types/outgoing/moderation';
+import { CloseIcon } from '../../../assets/icons';
+import { CommonTextField } from '../../../commonComponents';
 import { useAppDispatch } from '../../../hooks';
+import { Participant } from '../../../types';
+import { formikProps } from '../../../utils/formikUtils';
 import yup from '../../../utils/yupUtils';
 
 const CloseIconButton = styled(IconButton)({

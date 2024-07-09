@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendParticipant, NamespacedIncoming, ParticipantId } from '@opentalk/common';
+import { BackendParticipant, NamespacedIncoming, ParticipantId } from '../../../types';
 
 export interface KickedParticipant {
   message: 'kicked';

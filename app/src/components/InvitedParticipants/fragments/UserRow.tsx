@@ -3,22 +3,17 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Chip, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import {
-  CloseIcon,
-  convertStringToColorHex,
-  ModeratorIcon as CommonModeratorIcon,
-  MoreIcon,
-  ParticipantAvatar,
-  setLibravatarOptions,
-} from '@opentalk/common';
 import { EventId, EventInvite, InviteStatus, UserRole } from '@opentalk/rest-api-rtk-query';
 import { RegisteredUser } from '@opentalk/rest-api-rtk-query/src/types/user';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetEventQuery, useGetMeQuery, useUpdateEventInviteMutation } from '../../../api/rest';
+import { CloseIcon, ModeratorIcon as CommonModeratorIcon, MoreIcon } from '../../../assets/icons';
+import { ParticipantAvatar, setLibravatarOptions } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectLibravatarDefaultImage } from '../../../store/slices/configSlice';
+import { convertStringToColorHex } from '../../../utils/colorUtils';
 import { isRegisteredUser } from '../../../utils/typeGuardUtils';
 import { isModerator } from '../../../utils/userUtils';
 

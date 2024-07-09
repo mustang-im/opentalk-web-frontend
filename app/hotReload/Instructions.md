@@ -10,7 +10,7 @@ e.g.
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@opentalk/common": ["../../packages/common"]
+      "@opentalk/redux-oidc": ["../../packages/redux-oidc"]
       // ... insert more, if you like
     }
   }
@@ -19,6 +19,5 @@ e.g.
 
 For now avaliable packages for hot reload are:
 
-1. @opentalk/common
-2. @opentalk/rest-api-rtk-query
-3. @opentalk/redux-oidc
+1. @opentalk/rest-api-rtk-query
+2. @opentalk/redux-oidc

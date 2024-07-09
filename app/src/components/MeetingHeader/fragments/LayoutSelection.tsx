@@ -12,10 +12,11 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { FullscreenViewIcon, GridViewIcon, IconButton, ProtocolIcon, SpeakerViewIcon } from '@opentalk/common';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FullscreenViewIcon, GridViewIcon, ProtocolIcon, SpeakerViewIcon } from '../../../assets/icons';
+import { IconButton } from '../../../commonComponents';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';

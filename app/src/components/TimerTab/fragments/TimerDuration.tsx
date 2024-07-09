@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, styled, Typography } from '@mui/material';
-import { TimerStyle } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector, useRemainingDurationOfTimer } from '../../../hooks';
 import { selectTimerEndsAt } from '../../../store/slices/timerSlice';
+import { TimerStyle } from '../../../types';
 
 type AlignItems = 'center' | 'initial';
 export interface TimerCounterProps {

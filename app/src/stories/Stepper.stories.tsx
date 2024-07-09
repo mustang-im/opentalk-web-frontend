@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stepper, Step, StepLabel, Button, Typography, Box, StepButton, Container } from '@mui/material';
-import { EditIcon } from '@opentalk/common';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
+
+import { EditIcon } from '../assets/icons';
 
 const steps = [
   {

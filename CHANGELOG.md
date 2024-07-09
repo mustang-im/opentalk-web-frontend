@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 
 ### Internal
 
+- Move content of common package to main repo ([#1921](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1921))
 - Removed internal delete rooms endpoint ([#1845](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1845))
 - Fix audit: ws affected by a DoS when handling a request with many HTTP headers ([#1948](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1948))
 - Update @mui/material and remove deprecated @mui/styles ([#1939](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1939))

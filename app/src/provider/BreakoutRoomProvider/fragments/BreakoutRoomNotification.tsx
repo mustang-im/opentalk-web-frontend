@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, Typography, Box, styled } from '@mui/material';
-import { notifications, SnackbarKey, SnackbarMessage, SnackbarContent } from '@opentalk/common';
 import { isEmpty } from 'lodash';
+import { SnackbarKey, SnackbarMessage, SnackbarContent } from 'notistack';
 import React, { useState } from 'react';
 
+import { notifications } from '../../../commonComponents';
 import Countdown from './Countdown';
 
 export interface Action {

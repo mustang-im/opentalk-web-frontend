@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Drawer as MuiDrawer, Stack, styled } from '@mui/material';
-import { BackendModules } from '@opentalk/common';
+import { BackendModules } from '@opentalk/rest-api-rtk-query';
 import { useTranslation } from 'react-i18next';
 import { batch } from 'react-redux';
 

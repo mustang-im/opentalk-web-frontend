@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { notifications, AssetId } from '@opentalk/common';
-import { RoomId } from '@opentalk/rest-api-rtk-query';
+import { RoomId, AssetId } from '@opentalk/rest-api-rtk-query';
 import { useTranslation } from 'react-i18next';
 
 import { useGetRoomAssetsQuery, useDeleteRoomAssetMutation } from '../../../../api/rest';
-import SuspenseLoading from '../../../../commonComponents/SuspenseLoading';
+import { notifications } from '../../../../commonComponents';
+import SuspenseLoading from '../../../../commonComponents/SuspenseLoading/SuspenseLoading';
 import AssetTable from '../../../../components/AssetTable';
 import { useDownloadAction } from '../../../../hooks/download';
 

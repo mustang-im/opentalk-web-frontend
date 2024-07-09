@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { RoomMode, TimerStyle } from '@opentalk/common';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '.';
@@ -11,6 +10,7 @@ import { selectCurrentRoomMode } from '../store/slices/roomSlice';
 import { selectTimerStyle } from '../store/slices/timerSlice';
 import { selectActiveTab, setActiveTab } from '../store/slices/uiSlice';
 import { selectIsModerator } from '../store/slices/userSlice';
+import { RoomMode, TimerStyle } from '../types';
 import { useEnabledModules } from './enabledModules';
 
 const useTabs = () => {

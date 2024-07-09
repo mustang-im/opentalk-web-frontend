@@ -13,8 +13,7 @@ import {
   styled,
   Stack,
 } from '@mui/material';
-import { AssetId } from '@opentalk/common';
-import { BaseAsset } from '@opentalk/rest-api-rtk-query';
+import { AssetId, BaseAsset } from '@opentalk/rest-api-rtk-query';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { format } from 'date-fns';

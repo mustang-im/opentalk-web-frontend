@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
 import { useMemo, useState } from 'react';
 
 import { resetRaisedHands } from '../../api/types/outgoing/moderation';
 import { SearchAndSelectParticipantsTab } from '../../commonComponents/SearchAndSelectParticipantsTab';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectParticipantsWithRaisedHands } from '../../store/selectors';
+import { ParticipantId } from '../../types';
 
 const ResetHandraisesTab = () => {
   const dispatch = useAppDispatch();

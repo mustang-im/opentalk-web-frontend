@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendParticipant, MediaSessionType, ParticipantId, Timestamp, VideoSetting } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import convertToSnakeCase from 'snakecase-keys';
 
@@ -23,6 +22,7 @@ import { Message as ModerationMessage } from '../../api/types/incoming/moderatio
 import { Message as OutgoingMessage } from '../../api/types/outgoing';
 import { RoomCredentials } from '../../store/commonActions';
 import { ConfigState } from '../../store/slices/configSlice';
+import { BackendParticipant, MediaSessionType, ParticipantId, Timestamp, VideoSetting } from '../../types';
 import { fetchWithAuth, getControllerBaseUrl, getSignalingUrl } from '../../utils/apiUtils';
 import { BaseEventEmitter } from '../EventListener';
 import { MediaSignaling } from './MediaSignaling';

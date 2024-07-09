@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
 import fscreen from 'fscreen';
 import React, { createContext, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+
+import { ParticipantId } from '../../types';
 
 export interface ExtendedFullScreenHandle {
   node: React.MutableRefObject<HTMLDivElement | null>;

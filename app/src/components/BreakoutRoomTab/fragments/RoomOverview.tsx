@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button as MuiButton, styled, Box, Typography } from '@mui/material';
-import { BreakoutRoomId, RoomId } from '@opentalk/common';
-import { ClockIcon } from '@opentalk/common';
+import { RoomId } from '@opentalk/rest-api-rtk-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { stop } from '../../../api/types/outgoing/breakout';
+import { ClockIcon } from '../../../assets/icons';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useInviteCode } from '../../../hooks/useInviteCode';
 import { startRoom } from '../../../store/commonActions';
@@ -16,6 +16,7 @@ import { selectCombinedParticipantsAndUserInCoference } from '../../../store/sel
 import { selectAllBreakoutRooms, selectExpiredDate } from '../../../store/slices/breakoutSlice';
 import { selectRoomPassword } from '../../../store/slices/roomSlice';
 import { selectDisplayName, selectOurUuid } from '../../../store/slices/userSlice';
+import { BreakoutRoomId } from '../../../types';
 import { composeRoomPath } from '../../../utils/apiUtils';
 import RoomOverviewListItem from './RoomOverviewListItem';
 

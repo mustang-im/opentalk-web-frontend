@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 //! Incoming Breakout Room related actions
-import { Namespaced, ParticipantId, Seconds, createModule } from '@opentalk/common';
 import { createAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../../../store';
+import { Namespaced, ParticipantId, createModule } from '../../../types';
+import { Seconds } from '../../../utils/tsUtils';
 import { Action as IAction, createSignalingApiCall } from '../../createSignalingApiCall';
 import { sendMessage } from '../../index';
 

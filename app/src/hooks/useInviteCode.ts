@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { InviteCode } from '@opentalk/common';
+import { InviteCode } from '@opentalk/rest-api-rtk-query';
 import { useSearchParams } from 'react-router-dom';
 
 /**

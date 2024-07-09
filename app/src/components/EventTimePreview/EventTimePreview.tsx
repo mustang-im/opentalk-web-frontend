@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Typography } from '@mui/material';
-import { useDateFormat } from '@opentalk/common';
 import { isSameDay } from 'date-fns';
+
+import { useDateFormat } from '../../hooks';
 
 interface EventTimePreviewProps {
   startDate: Date;

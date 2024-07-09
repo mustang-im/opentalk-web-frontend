@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { LegalVoteId } from '@opentalk/common';
-
+import { LegalVoteId } from '../../../types';
 import { configureStore, render, screen, cleanup, fireEvent } from '../../../utils/testUtils';
 import VoteResult, { IVoteResult, VoteType } from './VoteResult';
 

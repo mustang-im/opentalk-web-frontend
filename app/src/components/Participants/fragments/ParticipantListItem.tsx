@@ -11,22 +11,6 @@ import {
   Badge,
   ThemeProvider,
 } from '@mui/material';
-import {
-  MicOffIcon,
-  MicOnIcon,
-  RaiseHandOnIcon,
-  ShareScreenOnIcon,
-  MoreIcon,
-  ProtocolIcon,
-  MediaSessionType,
-  ParticipationKind,
-  ChatScope,
-  PhoneIcon,
-  TelephoneStrokeIcon,
-  IconButton,
-  ModeratorIcon,
-} from '@opentalk/common';
-import { notifications, Participant, ProtocolAccess, SortOption, ParticipantAvatar } from '@opentalk/common';
 import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
 import React, { CSSProperties, useCallback, useState } from 'react';
@@ -42,13 +26,33 @@ import {
   enableWaitingRoom,
   sendParticipantToWaitingRoom,
 } from '../../../api/types/outgoing/moderation';
+import {
+  MicOffIcon,
+  MicOnIcon,
+  ModeratorIcon,
+  MoreIcon,
+  PhoneIcon,
+  ProtocolIcon,
+  RaiseHandOnIcon,
+  ShareScreenOnIcon,
+  TelephoneStrokeIcon,
+} from '../../../assets/icons';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import { IconButton, ParticipantAvatar, notifications } from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/slices/mediaSlice';
 import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
 import { selectHandUp } from '../../../store/slices/moderationSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
 import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
+import {
+  ChatScope,
+  MediaSessionType,
+  Participant,
+  ParticipationKind,
+  ProtocolAccess,
+  SortOption,
+} from '../../../types';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
 import RenameParticipantDialog from './RenameParticipantDialog';
 

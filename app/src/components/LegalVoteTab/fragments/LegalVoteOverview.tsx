@@ -11,11 +11,12 @@ import {
   ListItemButton as MuiListItemButton,
   Stack,
 } from '@mui/material';
-import { AccordionItem, NoVotesIcon } from '@opentalk/common';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import { NoVotesIcon } from '../../../assets/icons';
+import { AccordionItem } from '../../../commonComponents';
 import { selectAllSavedLegalVotes, selectAllVotes } from '../../../store/slices/legalVoteSlice';
 import LegalVoteOverviewPanel from './LegalVoteOverviewPanel';
 

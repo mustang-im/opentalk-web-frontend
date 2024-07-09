@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Popover } from '@mui/material';
-import { ConnectionGoodIcon, ConnectionMediumIcon } from '@opentalk/common';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ConnectionGoodIcon, ConnectionMediumIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { MediaDescriptor } from '../../../modules/WebRTC';
 import { selectStatsPacketLossByDescriptor } from '../../../store/slices/connectionStatsSlice';

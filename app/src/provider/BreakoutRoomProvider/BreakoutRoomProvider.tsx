@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { SnackbarKey, notifications } from '@opentalk/common';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
+import { SnackbarKey } from 'notistack';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as BreakoutRoomIcon } from '../../assets/images/subroom-illustration.svg';
+import { notifications } from '../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useInviteCode } from '../../hooks/useInviteCode';
 import { startRoom } from '../../store/commonActions';

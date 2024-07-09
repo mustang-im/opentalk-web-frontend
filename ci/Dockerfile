@@ -18,8 +18,6 @@ COPY packages/i18next-fluent/tsconfig.json ./packages/i18next-fluent/tsconfig.js
 COPY packages/rtk-rest-api/package.json ./packages/rtk-rest-api/package.json
 COPY packages/rtk-rest-api/tsconfig.json ./packages/rtk-rest-api/tsconfig.json
 COPY packages/rtk-rest-api/example/package.json ./packages/rtk-rest-api/example/package.json
-COPY packages/common/package.json ./packages/common/package.json
-COPY packages/common/tsconfig.json ./packages/common/tsconfig.json
 
 RUN yarn install --silent
 COPY app ./app

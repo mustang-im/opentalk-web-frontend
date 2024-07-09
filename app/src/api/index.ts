@@ -1,45 +1,21 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  BackendParticipant,
-  BreakoutRoomId,
-  GroupId,
-  Namespaced,
-  Namespaces,
-  Timestamp,
-  VideoSetting,
-  matchBuilder,
-  ProtocolState,
-  ChatMessage,
-  notificationAction,
-  notificationPersistent,
-  notifications,
-  Participant,
-  ProtocolAccess,
-  WaitingState,
-  ParticipantInOtherRoom,
-  InitialChatHistory,
-  ChatScope,
-  joinSuccess,
-  AutomodSelectionStrategy,
-  createStackedMessages,
-  timerStarted,
-  timerStopped,
-  setLibravatarOptions,
-  ParticipantId,
-  Speaker,
-  StreamingStatus,
-  StreamingKind,
-  ForceMuteType,
-} from '@opentalk/common';
 import { login } from '@opentalk/redux-oidc';
+import { Namespaces, StreamingKind, StreamingStatus } from '@opentalk/rest-api-rtk-query';
 import { Middleware, AnyAction, freeze } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
-import { showConsentNotification } from '../components/ConsentNotification';
+import {
+  notificationAction,
+  notifications,
+  createStackedMessages,
+  setLibravatarOptions,
+  notificationPersistent,
+  startTimeLimitNotification,
+  showConsentNotification,
+} from '../commonComponents';
 import { createStreamUpdatedNotification } from '../components/StreamUpdatedNotification/StreamUpdatedNotification';
-import { startTimeLimitNotification } from '../components/TimeLimitNotification';
 import LayoutOptions from '../enums/LayoutOptions';
 import i18n from '../i18n';
 import localMediaContext from '../modules/Media/LocalMedia';
@@ -57,7 +33,7 @@ import {
 } from '../modules/WebRTC';
 import { StatsEvent } from '../modules/WebRTC/Statistics/ConnectionStats';
 import { AppDispatch, RootState } from '../store';
-import { hangUp, startRoom } from '../store/commonActions';
+import { hangUp, joinSuccess, startRoom } from '../store/commonActions';
 import {
   started as automodStarted,
   stopped as automodStopped,
@@ -121,10 +97,31 @@ import {
 } from '../store/slices/roomSlice';
 import { sharedFolderUpdated } from '../store/slices/sharedFolderSlice';
 import { streamUpdated } from '../store/slices/streamingSlice';
-import { updateParticipantsReady } from '../store/slices/timerSlice';
+import { updateParticipantsReady, timerStarted, timerStopped } from '../store/slices/timerSlice';
 import { updatedCinemaLayout } from '../store/slices/uiSlice';
 import { revokePresenterRole, setPresenterRole, updateRole, selectIsModerator } from '../store/slices/userSlice';
 import { addWhiteboardAsset, setWhiteboardAvailable } from '../store/slices/whiteboardSlice';
+import {
+  BackendParticipant,
+  BreakoutRoomId,
+  GroupId,
+  Namespaced,
+  Timestamp,
+  VideoSetting,
+  matchBuilder,
+  ProtocolState,
+  ChatMessage,
+  Participant,
+  ProtocolAccess,
+  WaitingState,
+  ParticipantInOtherRoom,
+  InitialChatHistory,
+  ChatScope,
+  AutomodSelectionStrategy,
+  ParticipantId,
+  Speaker,
+  ForceMuteType,
+} from '../types';
 import { initSentryReportWithUser } from '../utils/glitchtipUtils';
 import { restApi } from './rest';
 import {

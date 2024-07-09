@@ -2,11 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Chip as MuiChip, Grid, styled } from '@mui/material';
-import { AddIcon, CommonTextField } from '@opentalk/common';
 import { FieldArray, Field, FieldProps, useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { AddIcon } from '../../../assets/icons';
+import { CommonTextField } from '../../../commonComponents';
 
 interface IAnswersFormElementProps {
   name: string;

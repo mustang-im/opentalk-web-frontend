@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, joinSuccess, AutomodSelectionStrategy, MilliSeconds } from '@opentalk/common';
 import { EntityState, PayloadAction, createEntityAdapter, createSelector, createSlice } from '@reduxjs/toolkit';
 import type { WritableDraft } from 'immer/dist/internal';
 
@@ -10,6 +9,9 @@ import {
   AutomodSpeakerUpdatedEvent,
   AutomodStartedEvent,
 } from '../../api/types/incoming/automod';
+import { AutomodSelectionStrategy, ParticipantId } from '../../types';
+import { MilliSeconds } from '../../utils/tsUtils';
+import { joinSuccess } from '../commonActions';
 
 export enum SpeakerState {
   Active = 'active',

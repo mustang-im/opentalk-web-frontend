@@ -11,6 +11,17 @@ declare module '@mui/material/InputBase' {
   }
 }
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    custom: true;
+  }
+}
+declare module '@mui/material/Box' {
+  interface ButtonPropsColorOverrides {
+    custom: true;
+  }
+}
+
 declare module '@mui/system' {
   interface Theme {
     borderRadius: {
@@ -51,7 +62,7 @@ type NotistackPalette = {
   secondary: NotificationVariant;
 };
 
-declare module '@mui/material/styles/createPalette' {
+declare module '@mui/material/styles' {
   interface TypeBackground {
     overlay?: string;
     defaultGradient?: string;
@@ -64,6 +75,7 @@ declare module '@mui/material/styles/createPalette' {
   interface Palette {
     outline: TypeOutline;
     avatar: AvatarPalette;
+    notistack: NotistackPalette;
   }
 
   interface PaletteOptions {
@@ -81,8 +93,7 @@ declare module '@mui/material/styles/createPalette' {
     lighter?: string;
     lightest?: string;
   }
-}
-declare module '@mui/material/styles' {
+
   interface ZIndex {
     jumpLink: number;
   }

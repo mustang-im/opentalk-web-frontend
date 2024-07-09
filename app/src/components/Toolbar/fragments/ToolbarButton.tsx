@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Tooltip, ThemeProvider, Theme, IconButtonProps } from '@mui/material';
-import { ArrowDownIcon, IconButton } from '@opentalk/common';
 import { MouseEvent, ReactNode } from 'react';
 
+import { ArrowDownIcon } from '../../../assets/icons';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import { IconButton } from '../../../commonComponents';
 
 interface IButtonProps {
   isActive?: boolean;

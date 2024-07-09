@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, Typography, MenuItem, Button } from '@mui/material';
-import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
+import { CommonTextField, notifications } from '../../../../commonComponents';
 import { dashboardLanguages } from '../../../../config/dashboardSettings';
 import { formikProps } from '../../../../utils/formikUtils';
 

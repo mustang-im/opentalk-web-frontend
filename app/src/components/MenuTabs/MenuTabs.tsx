@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Tabs as MuiTabs, styled, Typography, Badge, Tab as MuiTab } from '@mui/material';
-import { ChatScope, RoomMode } from '@opentalk/common';
-import { VisuallyHiddenTitle } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { VisuallyHiddenTitle } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../store/slices/chatSlice';
 import { selectParticipantsTotal } from '../../store/slices/participantsSlice';
 import { selectCurrentRoomMode } from '../../store/slices/roomSlice';
 import { selectChatConversationState } from '../../store/slices/uiSlice';
+import { ChatScope, RoomMode } from '../../types';
 import Chat from '../Chat';
 import ChatOverview from '../ChatOverview';
 import Participants from '../Participants';

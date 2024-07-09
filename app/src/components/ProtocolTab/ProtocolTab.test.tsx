@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, ProtocolParticipant } from '@opentalk/common';
 import React from 'react';
 
+import { ParticipantId, ProtocolParticipant } from '../../types';
 import { render, configureStore, screen, fireEvent, cleanup, act } from '../../utils/testUtils';
 import ProtocolTab from './ProtocolTab';
 

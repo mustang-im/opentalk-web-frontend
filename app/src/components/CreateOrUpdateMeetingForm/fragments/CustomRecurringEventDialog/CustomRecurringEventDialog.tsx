@@ -15,11 +15,11 @@ import {
   Select,
   styled,
 } from '@mui/material';
-import { CommonTextField } from '@opentalk/common';
 import { RecurrencePattern } from '@opentalk/rest-api-rtk-query';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CommonTextField } from '../../../../commonComponents';
 import {
   PartialRRuleOptions,
   RRuleObject,

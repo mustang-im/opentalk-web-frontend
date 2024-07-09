@@ -9,7 +9,7 @@ import {
   LegalVoteId,
   NamespacedIncoming,
   ParticipantId,
-} from '@opentalk/common';
+} from '../../../types';
 
 export interface VoteStarted extends VoteParameters {
   message: 'started';

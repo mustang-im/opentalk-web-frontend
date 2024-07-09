@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Pagination } from '@mui/material';
-import { WhiteboardIcon, ProtocolIcon } from '@opentalk/common';
 import React, { useMemo, useEffect, useCallback, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { WhiteboardIcon, ProtocolIcon } from '../../../assets/icons';
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';

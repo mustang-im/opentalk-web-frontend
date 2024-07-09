@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, styled } from '@mui/material';
-import { BackIcon, MediaSessionType, ParticipantId, PinIcon } from '@opentalk/common';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { BackIcon, PinIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantName } from '../../../store/slices/participantsSlice';
+import { MediaSessionType, ParticipantId } from '../../../types';
 import { OverlayIconButton } from './OverlayIconButton';
 import Statistics from './Statistics';
 

@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Badge, styled } from '@mui/material';
-import { HomeIcon } from '@opentalk/common';
 
+import { HomeIcon } from '../../assets/icons';
 import { ModerationTabKey } from '../../config/moderationTabs';
 import { useAppSelector } from '../../hooks';
 import { selectUnreadGlobalMessageCount, selectUnreadPersonalMessageCount } from '../../store/slices/chatSlice';

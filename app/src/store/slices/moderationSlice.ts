@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ForceMute, ForceMuteType } from '@opentalk/common';
-import { joinSuccess } from '@opentalk/common';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '..';
+import { ForceMute, ForceMuteType } from '../../types';
+import { joinSuccess } from '../commonActions';
 
 interface ModerationState {
   hasHandUp: boolean;

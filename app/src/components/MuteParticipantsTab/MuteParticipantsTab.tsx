@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
 import { useState, useMemo } from 'react';
 
 import { requestMute } from '../../api/types/outgoing/media';
 import { SearchAndSelectParticipantsTab } from '../../commonComponents/SearchAndSelectParticipantsTab';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectUnmutedParticipants } from '../../store/selectors';
+import { ParticipantId } from '../../types';
 
 const MuteParticipantsTab = () => {
   const dispatch = useAppDispatch();

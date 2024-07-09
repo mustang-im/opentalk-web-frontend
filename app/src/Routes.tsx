@@ -4,7 +4,7 @@
 import { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
 
-import SuspenseLoading from './commonComponents/SuspenseLoading';
+import { SuspenseLoading } from './commonComponents';
 import BetaBadge from './components/BetaBadge';
 import routeArray from './config/routes';
 import { useAppSelector } from './hooks';

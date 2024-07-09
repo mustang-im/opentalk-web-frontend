@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, Skeleton, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { AddIcon, AddWithRectangleIcon, CameraOnIcon } from '@opentalk/common';
 import { DateTime, Event, EventException, RoomId } from '@opentalk/rest-api-rtk-query';
 import { formatRFC3339 } from 'date-fns';
 import { isEmpty } from 'lodash';
@@ -11,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { useGetEventsQuery } from '../../../api/rest';
+import { AddIcon, AddWithRectangleIcon, CameraOnIcon } from '../../../assets/icons';
 import FavoriteMeetingsCard, { FavoriteMeetingProps } from '../../../components/FavoriteMeetingsCard';
 import { default as DefaultJoinMeetingDialog } from '../../../components/JoinMeetingDialog';
 import MeetingCard from '../../../components/MeetingCard';

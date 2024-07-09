@@ -11,26 +11,7 @@ import {
   Stack,
   Box,
 } from '@mui/material';
-import {
-  ErrorIcon,
-  AddUserIcon,
-  TimerIcon,
-  RaiseHandOffIcon,
-  RaiseHandOnIcon,
-  CloseIcon,
-  DoneIcon,
-  TrashIcon,
-  RecordingsIcon,
-  notifications,
-  notificationAction,
-  notificationPersistent,
-  ParticipantAvatar,
-  LiveIcon,
-  BackendModules,
-  StreamingStatus,
-  MicOffIcon,
-  MicOnIcon,
-} from '@opentalk/common';
+import { BackendModules, StreamingStatus } from '@opentalk/rest-api-rtk-query';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -43,7 +24,27 @@ import {
   enableWaitingRoom,
 } from '../../../api/types/outgoing/moderation';
 import { sendStartStreamSignal, sendStopStreamSignal } from '../../../api/types/outgoing/streaming';
+import {
+  AddUserIcon,
+  CloseIcon,
+  DoneIcon,
+  ErrorIcon,
+  LiveIcon,
+  MicOffIcon,
+  MicOnIcon,
+  RaiseHandOffIcon,
+  RaiseHandOnIcon,
+  RecordingsIcon,
+  TimerIcon,
+  TrashIcon,
+} from '../../../assets/icons';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import {
+  ParticipantAvatar,
+  notificationAction,
+  notificationPersistent,
+  notifications,
+} from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useEnabledModules } from '../../../hooks/enabledModules';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';

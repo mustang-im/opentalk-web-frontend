@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { TrickleCandidate, VideoSetting } from '@opentalk/common';
-
+import { TrickleCandidate, VideoSetting } from '../../types';
 import { BaseEventEmitter } from '../EventListener';
 import { MediaSignaling } from './MediaSignaling';
 import ConnectionStats, { StatsEvent } from './Statistics/ConnectionStats';

@@ -2,20 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputAdornment, useTheme } from '@mui/material';
-import {
-  SearchIcon,
-  SortIcon,
-  SortItem,
-  SortOption,
-  SortPopoverMenu,
-  AdornmentIconButton,
-  CommonTextField,
-} from '@opentalk/common';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { SearchIcon, SortIcon } from '../../../assets/icons';
+import { AdornmentIconButton, CommonTextField, SortPopoverMenu } from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsSortOption, setParticipantsSortOption } from '../../../store/slices/uiSlice';
+import { SortItem, SortOption } from '../../../types';
 
 interface SearchFieldProps {
   onSearch: (search: string) => void;
