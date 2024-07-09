@@ -9,10 +9,10 @@ import {
   selectShowParticipantGroups,
   setParticipantsSearchValue,
 } from '../../../store/slices/uiSlice';
-import SearchTextField from '../../SearchTextField';
 import ParticipantGroupingForm from './ParticipantGroupingForm';
 import ParticipantGroups from './ParticipantGroups';
 import ParticipantNoGroups from './ParticipantNoGroups';
+import SearchTextField from './SearchTextField';
 
 const CachedSearchTextField = memo(SearchTextField);
 

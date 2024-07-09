@@ -269,14 +269,12 @@ moderationbar-button-speaker-queue-tooltip = Diese Funktion befindet sich noch i
 moderationbar-button-wheel-tooltip = Diese Funktion befindet sich noch in der Entwicklung - Wer beginnt oder ist als Nächstes dran? Unser "Wheel of Names", das gute klassische Glücksrad, lässt den Zufall entscheiden. Abwechslung, Spaß, Spannung -- eine Gamification, die nicht nur im Schulunterricht für Abwechslung und Kurzweiligkeit sorgt.
 moderationbar-button-protocol-tooltip = Protokoll
 moderationbar-button-whiteboard-tooltip = Whiteboard
-moderationbar-button-reset-handraises-tooltip = Gehobene Hände zurücksetzen
+moderationbar-button-reset-handraises-tooltip = Handheben zurücksetzen
 moderationbar-button-debriefing = Nachbesprechung
 moderationbar-button-talking-stick-tooltip = Redestab
 moderationbar-button-waiting-room-tooltip = Teilnehmer im Warteraum
 
 mute-participants-tab-title = Teilnehmer stummschalten
-mute-participants-button-all = Alle
-mute-participants-button-selected = Nach Auswahl
 
 talking-stick-tab-title = Redestab
 talking-stick-skip-speaker = Redner überspringen
@@ -291,9 +289,8 @@ talking-stick-notification-next-speaker = Weitergeben
 talking-stick-unmuted-notification = Die Teilnehmenden hören Sie jetzt. Wenn Sie fertig sind, geben Sie bitte den Redestab weiter.
 talking-stick-unmuted-notification-last-participant = Die Teilnehmenden hören Sie jetzt. Sie sind der letzte Teilnehmer, wenn Sie fertig sind, geben Sie bitte den Redestab ab.
 
-reset-handraises-tab-title = Gehobene Hände zurücksetzen
-reset-handraises-button = Alle
-reset-handraises-notification = Alle gehobene Hände wurden vom Moderator zurückgesetzt
+reset-handraises-tab-title = Handheben zurücksetzen
+reset-handraises-notification = Ihre gehobene Hand wurde vom Moderator zurückgesetzt
 
 debriefing-tab-title = Nachbesprechung
 debriefing-button-all = Konferenz beenden
@@ -613,6 +610,8 @@ global-ok = Ok
 global-no-result = Keine Ergebnisse
 global-close-dialog = Dialog schließen
 global-back = Zurück
+global-all = Alle
+global-selected = Auswahl
 global-submit = Senden
 global-call-in = Telefoneinwahl
 global-call-in-number = Telefonnummer

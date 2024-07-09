@@ -85,7 +85,7 @@ export interface SdpEndOfCandidates extends Target {
 
 export interface ModeratorMute {
   action: 'moderator_mute';
-  targets: Array<ParticipantId>;
+  targets?: Array<ParticipantId>;
   force: boolean;
 }
 

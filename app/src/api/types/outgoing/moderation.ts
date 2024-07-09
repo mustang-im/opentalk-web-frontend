@@ -41,6 +41,7 @@ export interface DisableRaiseHands {
 
 export interface ResetRaisedHands {
   action: 'reset_raised_hands';
+  target?: Array<ParticipantId>;
 }
 
 export interface Debrief {
@@ -107,8 +108,8 @@ export const handler = createModule<RootState>((builder) => {
     .addCase(acceptParticipantFromWaitingRoomToRoom.action, (_state, action) => {
       sendMessage(acceptParticipantFromWaitingRoomToRoom(action.payload));
     })
-    .addCase(resetRaisedHands.action, () => {
-      sendMessage(resetRaisedHands());
+    .addCase(resetRaisedHands.action, (_state, action) => {
+      sendMessage(resetRaisedHands(action.payload));
     })
     .addCase(enableRaiseHands.action, () => {
       sendMessage(enableRaiseHands());

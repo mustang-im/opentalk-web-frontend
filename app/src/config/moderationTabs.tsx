@@ -38,7 +38,7 @@ const BreakoutRoomTab = React.lazy(() => import('../components/BreakoutRoomTab')
 const LegalVoteTab = React.lazy(() => import('../components/LegalVoteTab'));
 const TalkingStickTabPanel = React.lazy(() => import('../components/TalkingStickTabPanel/TalkingStickTabPanel'));
 const PollTab = React.lazy(() => import('../components/PollTab'));
-const MuteParticipantsTab = React.lazy(() => import('../components/MuteParticipants'));
+const MuteParticipantsTab = React.lazy(() => import('../components/MuteParticipantsTab'));
 const ProtocolTab = React.lazy(() => import('../components/ProtocolTab'));
 const ResetHandraisesTab = React.lazy(() => import('../components/ResetHandraisesTab'));
 const TimerTab = React.lazy(() => import('../components/TimerTab'));

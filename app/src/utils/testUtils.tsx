@@ -183,25 +183,38 @@ export const jwtVariables = {
 
 export const mockStore = (
   participantCount: number,
-  options?: { video?: boolean; screen?: boolean; sip?: boolean; raiseHands?: number; automodActive?: boolean }
+  options?: {
+    video?: boolean;
+    screen?: boolean;
+    sip?: boolean;
+    raiseHands?: number;
+    automodActive?: boolean;
+    audio?: number;
+  }
 ) => {
   const participantsIds = range(participantCount);
-  const participants = participantsIds.map((index) =>
-    mockedParticipant(index, options?.sip ? ParticipationKind.Sip : undefined)
-  );
+  const participants = participantsIds.map((index) => {
+    const handIsUp = index < (options?.raiseHands || 0);
+    const participant = {
+      ...mockedParticipant(index, options?.sip ? ParticipationKind.Sip : undefined),
+      handIsUp,
+    };
+    return participant;
+  });
 
   const subscribers: Array<SubscriberConfig & SubscriberStateChanged> = [];
   if (options?.video) {
-    participants.forEach(({ id }) =>
+    participants.forEach(({ id }, index) => {
+      const audio = index < (options?.audio || 0);
       subscribers.push({
         participantId: id,
         mediaType: MediaSessionType.Video,
         video: true,
-        audio: true,
-        subscriberState: { audioRunning: true, videoRunning: true, connection: 'connected' },
+        audio,
+        subscriberState: { audioRunning: audio, videoRunning: true, connection: 'connected' },
         videoSettings: VideoSetting.High,
-      })
-    );
+      });
+    });
   }
 
   if (options?.screen) {
