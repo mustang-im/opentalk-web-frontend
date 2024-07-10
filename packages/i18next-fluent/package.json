@@ -34,6 +34,9 @@
     "parcel": "~2.5.0",
     "typescript": "~4.7.4"
   },
+  "resolutions": {
+    "ws": "^8.17.1"
+  },
   "scripts": {
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint:tests": "eslint test/ --ext .js,.jsx,.ts,.tsx",

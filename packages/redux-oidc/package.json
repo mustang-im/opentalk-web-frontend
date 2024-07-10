@@ -43,5 +43,8 @@
   },
   "dependencies": {
     "jwt-decode": "^4.0.0"
+  },
+  "resolutions": {
+    "ws": "^8.17.1"
   }
 }
