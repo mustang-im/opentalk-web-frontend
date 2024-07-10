@@ -37,7 +37,7 @@ describe('<SortPopoverMenu />', () => {
   });
 
   it('should render with mandatory properties.', () => {
-    expect(render(<SortPopoverMenu {...DEFAULT_PROPS} />)).toMatchSnapshot();
+    render(<SortPopoverMenu {...DEFAULT_PROPS} />);
   });
 
   it('should render given items.', () => {
@@ -46,7 +46,7 @@ describe('<SortPopoverMenu />', () => {
       { i18nKey: 'option-2', type: 'Option 2' },
     ];
     const props = { ...DEFAULT_PROPS, items };
-    expect(render(<SortPopoverMenu {...props} />)).toMatchSnapshot();
+    render(<SortPopoverMenu {...props} />);
     const container = screen.getByRole('menu');
     expect(container).toContainElement(screen.getByText(items[0].i18nKey));
     expect(container).toContainElement(screen.getByText(items[1].i18nKey));

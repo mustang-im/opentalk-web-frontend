@@ -6,12 +6,6 @@ import '@mui/material/ButtonBase';
 import '@mui/material/InputBase';
 import '@mui/material/styles/createTheme';
 
-declare module '@mui/styles/defaultTheme' {
-  interface DefaultTheme extends Theme {
-    noEmptyExtends: boolean;
-  }
-}
-
 declare module '@mui/material/InputBase' {
   interface InputBaseProps {
     checked?: boolean;

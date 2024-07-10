@@ -1,13 +1,24 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Button } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CloseIcon } from '../../../../assets/icons';
 import { IconButton } from '../../../IconButtons';
 import { ISnackbarActionButtonProps } from '../utils';
+
+// a hack to fix for https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1323#note_111313
+// theoretically, those colors should come from the notistack itself for the `inherit` button color
+// but for some reason they are being overwritten by our dark palette, so we have to explicitily set the colors here...
+const CustomButton = styled(Button)(() => ({
+  backgroundColor: '#e0e0e0',
+  color: '#20434F',
+  ':hover': {
+    backgroundColor: '#FFF',
+  },
+}));
 
 const SnackbarActionButtons = ({
   onCancel,
@@ -23,16 +34,16 @@ const SnackbarActionButtons = ({
   return (
     <Box display="flex" gap={1}>
       {actionBtnText && (
-        <Button onClick={onAction} variant={'text'} color={'inherit'} {...actionBtnAttributes}>
+        <CustomButton onClick={onAction} {...actionBtnAttributes}>
           {actionBtnText}
-        </Button>
+        </CustomButton>
       )}
       {!hideCloseButton && (
         <>
           {cancelBtnText && (
-            <Button onClick={onCancel} color={'inherit'} {...cancelBtnAttributes}>
+            <CustomButton onClick={onCancel} {...cancelBtnAttributes}>
               {cancelBtnText}
-            </Button>
+            </CustomButton>
           )}
           {!cancelBtnText && (
             <IconButton aria-label={t('global-close')} onClick={onCancel}>

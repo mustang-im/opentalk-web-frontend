@@ -1,3 +1,9 @@
+# 1.0.27
+
+### Internal
+
+- Update @mui/material and remove deprecated @mui/styles ([#1939](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1939))
+
 # 1.0.26
 
 ### Bug fixes

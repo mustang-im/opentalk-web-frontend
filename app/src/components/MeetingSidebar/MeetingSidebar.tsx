@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/styles';
+import { styled, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
