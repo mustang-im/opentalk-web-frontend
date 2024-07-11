@@ -588,6 +588,7 @@ global-save-changes = Save changes
 global-password = Password
 global-beta = Beta
 global-me = Me
+global-copy-link-success = The link was copied to your clipboard
 global-copy-permanent-guest-link-error = No permanent guest link for this meeting has been created yet! Please, open the "Participants" section of this meeting and copy guest link from there.
 global-textfield-max-characters = {$remainingCharacters} characters remaining
 global-textfield-max-characters-error = {$remainingCharacters} characters too many
@@ -618,7 +619,7 @@ global-call-in-number = Number
 global-call-in-id = Conference-ID
 global-call-in-pin = Conference-PIN
 global-meeting-link = Meeting-Link
-global-streaming-link = { $count -> 
+global-streaming-link = { $count ->
     [one] Livestream-Link
     *[other] Livestream-Links
 }
