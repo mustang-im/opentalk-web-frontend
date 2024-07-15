@@ -6,6 +6,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectJoinedFirstTimestamp } from '../../../store/selectors';
+import { isDevMode } from '../../../utils/devMode';
 import { getIntervalToDurationString } from '../../../utils/timeUtils';
 
 const Container = styled(Stack)(({ theme }) => ({
@@ -17,11 +18,10 @@ const Container = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     background: theme.palette.background.video,
     borderRadius: '0.25rem',
-    '& .MuiTypography-root': {
-      textAlign: 'center',
-    },
   },
 }));
+
+const MEETING_TIMER_UNDER_HOUR_FORMAT_LENGTH = 7; // we have two space characters, one : character and 4 digits, summing up to 7.
 
 const MeetingTimer = () => {
   const [meetingTime, setMeetingTime] = useState<string>('00 : 00');
@@ -42,10 +42,19 @@ const MeetingTimer = () => {
     return () => clearInterval(interval);
   }, [getDuration, meetingTime]);
 
+  let renderedTime = meetingTime;
+  if (isDevMode() && window.DEBUG) {
+    // #1702
+    renderedTime = meetingTime.length <= MEETING_TIMER_UNDER_HOUR_FORMAT_LENGTH ? '00 : ' + meetingTime : meetingTime;
+  }
+
   return (
     <Container>
-      <Typography variant={'body2'} minWidth={meetingTime.length > 7 ? '6em' : '4em'}>
-        {meetingTime}
+      <Typography
+        variant="body2"
+        minWidth={renderedTime.length > MEETING_TIMER_UNDER_HOUR_FORMAT_LENGTH ? '5.5em' : '3.5em'}
+      >
+        {renderedTime}
       </Typography>
     </Container>
   );

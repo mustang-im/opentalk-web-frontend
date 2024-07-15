@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Fix shaking meeting timer ([#1702](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1702))
 - Emoji picker can be closed using the escape (ESC) key. ([#1898](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1898))
 - Added shared folder option when creating event ([#1805](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1805))
 - Users have to confirm their choice when participating in the poll using the submit button ([#1850](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1850))
