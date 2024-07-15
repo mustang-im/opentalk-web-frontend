@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Changed english "Protocol" label to the "Meeting notes" accross the app ([#1884](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1884))
 - Fix shaking meeting timer ([#1702](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1702))
 - Emoji picker can be closed using the escape (ESC) key. ([#1898](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1898))
 - Added shared folder option when creating event ([#1805](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1805))
