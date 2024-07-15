@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Removed nested roles from the notifications. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
 - Apply autofocus on the breakout room notification. ([#1751](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1751))
 - Add tooltip for recorder ([#1971](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1971))
+- Increment and decrement buttons respect the specified bounds (e.g. inside the breakout room form) ([#1974](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1974))
 
 ### Bug Fixes
 
