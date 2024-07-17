@@ -4,7 +4,15 @@
 import { InitialAutomod } from '../automod';
 import { InitialBreakout } from '../breakout';
 import { ChatMessage, InitialChat } from '../chat';
-import { BackendParticipant, GroupId, ParticipantId, ParticipantMediaState, Role, Timestamp } from '../common';
+import {
+  BackendParticipant,
+  ForceMute,
+  GroupId,
+  ParticipantId,
+  ParticipantMediaState,
+  Role,
+  Timestamp,
+} from '../common';
 import { EventInfo, RoomInfo } from '../eventInfo';
 import { Participant } from '../participant';
 import { InitialPoll } from '../poll';
@@ -36,6 +44,7 @@ export interface JoinSuccessInternalState {
     waitingRoomParticipants: Array<BackendParticipant>;
   };
   isPresenter?: boolean;
+  forceMute?: ForceMute;
   recording?: StreamingState;
   serverTimeOffset: number;
   tariff: Tariff;

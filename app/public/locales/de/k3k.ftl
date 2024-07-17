@@ -209,6 +209,7 @@ jumplink-my-meeting-menu = Mein Meeting Menü
 
 toolbar-button-audio-turn-on-tooltip-title = Mikrofon aktivieren
 toolbar-button-audio-turn-off-tooltip-title = Mikrofon deaktivieren
+toolbar-button-audio-disabled-tooltip = Der Moderator hat die Mikrofone deaktiviert
 toolbar-button-audio-context-title = Zusatzoptionen Mikrofon
 toolbar-button-video-turn-on-tooltip-title = Kamera aktivieren
 toolbar-button-video-turn-off-tooltip-title = Kamera deaktivieren
@@ -238,6 +239,8 @@ more-menu-turn-handraises-off = Handheben deaktivieren
 more-menu-delete-global-chat = globalen Chat leeren
 waiting-room-enabled-message = Warteraum ist aktiviert
 waiting-room-disabled-message = Warteraum ist deaktiviert
+more-menu-enable-microphones = Mikrofone einschalten
+more-menu-disable-microphones = Mikrofone ausschalten
 more-menu-enable-chat = Chat aktivieren
 more-menu-disable-chat = Chat deaktivieren
 more-menu-moderator-aria-label = Öffne Menu für mehr Optionen
@@ -247,6 +250,8 @@ chat-disabled-tooltip = Der Chat wurde durch den Moderator deaktiviert
 more-menu-start-streaming = Livestream starten
 more-menu-stop-streaming = Livestream beenden
 
+microphones-enabled-notification = Der Moderator hat die Mikrofone wieder aktiviert
+microphones-disabled-notification = Der Moderator hat die Mikrofone deaktiviert
 turn-handraises-off-notification = Der Moderator hat das Handheben deaktiviert
 turn-handraises-on-notification = Der Moderator hat das Handheben aktiviert
 

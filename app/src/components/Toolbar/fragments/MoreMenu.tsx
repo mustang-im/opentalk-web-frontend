@@ -28,11 +28,14 @@ import {
   LiveIcon,
   BackendModules,
   StreamingStatus,
+  MicOffIcon,
+  MicOnIcon,
 } from '@opentalk/common';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { enableChat, disableChat, clearGlobalChatMessages } from '../../../api/types/outgoing/chat';
+import { disableMicrophones, enableMicrophones } from '../../../api/types/outgoing/media';
 import {
   disableRaiseHands,
   disableWaitingRoom,
@@ -45,14 +48,14 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useEnabledModules } from '../../../hooks/enabledModules';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
-import { selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
+import { selectMicrophonesEnabled, selectRaiseHandsEnabled } from '../../../store/slices/moderationSlice';
 import { selectWaitingRoomState } from '../../../store/slices/roomSlice';
 import {
   selectActiveStreamIds,
   selectInactiveStreamIds,
   selectRecordingTarget,
 } from '../../../store/slices/streamingSlice';
-import { selectIsModerator, selectDisplayName, selectAvatarUrl } from '../../../store/slices/userSlice';
+import { selectIsModerator, selectDisplayName, selectAvatarUrl, selectOurUuid } from '../../../store/slices/userSlice';
 import { isDevMode } from '../../../utils/devMode';
 import InviteGuestDialog from './InviteGuestDialog';
 import { ToolbarMenuProps, ToolbarMenuItem, ToolbarMenu } from './ToolbarMenuUtils';
@@ -67,10 +70,12 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const { t } = useTranslation();
   const isModerator = useAppSelector(selectIsModerator);
+  const participantId = useAppSelector(selectOurUuid);
   const displayName = useAppSelector(selectDisplayName);
   const avatarUrl = useAppSelector(selectAvatarUrl);
   const isWaitingRoomActive = useAppSelector(selectWaitingRoomState);
   const hasHandraisesEnabled = useAppSelector(selectRaiseHandsEnabled);
+  const hasMicrophonesEnabled = useAppSelector(selectMicrophonesEnabled);
   const isChatEnabled = useAppSelector(selectChatEnabledState);
   const dispatch = useAppDispatch();
   const recording = useAppSelector(selectRecordingTarget);
@@ -118,6 +123,27 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         icon: <RaiseHandOnIcon />,
       };
 
+  const toggleMicrophones = hasMicrophonesEnabled
+    ? {
+        label: 'more-menu-disable-microphones',
+        action: () => {
+          if (participantId) {
+            onClose();
+            //From product - only moderator that disables the microphones can unmute
+            dispatch(disableMicrophones.action({ allowList: [participantId] }));
+          }
+        },
+        icon: <MicOffIcon />,
+      }
+    : {
+        label: 'more-menu-enable-microphones',
+        action: () => {
+          onClose();
+          dispatch(enableMicrophones.action());
+        },
+        icon: <MicOnIcon />,
+      };
+
   const toggleChatItem = isChatEnabled
     ? {
         label: 'more-menu-disable-chat',
@@ -156,6 +182,7 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
     },
     toggleWaitingRoomItem,
     toggleHandraises,
+    toggleMicrophones,
     toggleChatItem,
     deleteGlobalChatItem,
   ];

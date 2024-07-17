@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Implement disabling microphones ([#1615](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1615))
 - Add share meeting details dialog to conference ([#1685](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1685))
 - Implement send to waiting room feature([#1775](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1775))
 - Add meeting details switch in the dashboard ([#1808](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1808))
