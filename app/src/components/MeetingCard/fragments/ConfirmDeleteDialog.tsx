@@ -140,7 +140,7 @@ export const ConfirmDeleteDialog = (props: ConfirmDeleteDialogProps) => {
               color: 'secondary',
             },
             {
-              text: t('dashboard-reccurence-meeting-card-delete-dialog-all'),
+              text: t('dashboard-recurrence-meeting-card-delete-dialog-all'),
               action: EventDeletionType.All,
               color: 'secondary',
             },

@@ -1,14 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Collapse, Grid, MenuItem, Stack, styled } from '@mui/material';
+import { RRule } from '@heinlein-video/rrule';
+import { Button, Collapse, Grid, MenuItem, SelectChangeEvent, Stack, styled } from '@mui/material';
 import { formikProps, ForwardIcon, notificationAction, notifications, formikMinimalProps } from '@opentalk/common';
 import {
   CreateEventPayload,
   DateTime,
   Event,
   EventException,
+  isRecurringEvent,
   isTimelessEvent,
+  RecurrencePattern,
   RecurringEvent,
   SingleEvent,
   UpdateEventPayload,
@@ -17,7 +20,7 @@ import { addMinutes, areIntervalsOverlapping, formatRFC3339, Interval } from 'da
 import { useFormik } from 'formik';
 import { FormikValues } from 'formik/dist/types';
 import { isEmpty } from 'lodash';
-import React, { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -30,16 +33,17 @@ import {
   useAddStreamingTargetsMutation,
   useGetMeTariffQuery,
 } from '../../api/rest';
-import { LimitedTextField, Select } from '../../commonComponents';
+import { LimitedTextField, Select as CommonSelect } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { isFeatureInModulesPredicate } from '../../hooks/enabledModules';
 import { selectFeatures } from '../../store/slices/configSlice';
 import { appendRecurringEventInstances } from '../../utils/eventUtils';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
-import { FrequencySelect, mapFrequencySelectToRRuleFrequency, mapRRuleToFrequencySelect } from '../../utils/rruleUtils';
+import { CommonFrequencies, FrequencyOption, getRRuleText } from '../../utils/rruleUtils';
 import { isInvalidDate } from '../../utils/typeGuardUtils';
 import yup from '../../utils/yupUtils';
+import { RecurringEventDialog } from './fragments/CustomRecurringEventDialog/CustomRecurringEventDialog';
 import { CreateOrUpdateMeetingFormikValues, DashboardDateTimePicker } from './fragments/DashboardDateTimePicker';
 import EventConflictDialog from './fragments/EventConflictDialog';
 import MeetingFormSwitch from './fragments/MeetingFormSwitch';
@@ -56,6 +60,14 @@ const Form = styled('form')({
   flexDirection: 'column',
   justifyContent: 'space-between',
 });
+
+const Select = styled(CommonSelect)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    '& .MuiInputBase-input': {
+      maxWidth: theme.typography.pxToRem(285),
+    },
+  },
+}));
 
 const DEFAULT_MINUTES_DIFFERENCE = 30;
 const MAX_CHARACTERS_TITLE = 255;
@@ -75,6 +87,9 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const isStreamingEnabled = tariff && isFeatureInModulesPredicate('stream', tariff.modules);
 
   const navigate = useNavigate();
+
+  const [isRecurrenceDialogOpen, setIsRecurrenceDialogOpen] = useState(false);
+  const [isRecurrenceSelectOpen, setIsRecurrenceSelectOpen] = useState(false);
 
   const [overlappingEvent, setOverlappingEvent] = useState<SingleEvent | RecurringEvent>();
 
@@ -170,16 +185,60 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     }),
   });
 
-  const intervals = [
+  const recurrenceFrequencyOptions: Array<FrequencyOption> = [
     {
       label: t('dashboard-meeting-recurrence-none'),
-      value: FrequencySelect.NONE,
+      value: CommonFrequencies.NONE,
     },
-    { label: t('dashboard-meeting-recurrence-daily'), value: FrequencySelect.DAILY },
-    { label: t('dashboard-meeting-recurrence-weekly'), value: FrequencySelect.WEEKLY },
-    { label: t('dashboard-meeting-recurrence-bi-weekly'), value: FrequencySelect.BIWEEKLY },
-    { label: t('dashboard-meeting-recurrence-monthly'), value: FrequencySelect.MONTHLY },
+    { label: t('dashboard-meeting-recurrence-daily'), value: CommonFrequencies.DAILY },
+    { label: t('dashboard-meeting-recurrence-weekly'), value: CommonFrequencies.WEEKLY },
+    { label: t('dashboard-meeting-recurrence-bi-weekly'), value: CommonFrequencies.BIWEEKLY },
+    { label: t('dashboard-meeting-recurrence-monthly'), value: CommonFrequencies.MONTHLY },
   ];
+
+  const [customRecurrenceOption, setCustomRecurrenceOption] = useState<FrequencyOption>();
+
+  const handleSelectCustomRRule = async ({ label, value }: FrequencyOption) => {
+    if (value === customRecurrenceOption?.value) {
+      return;
+    }
+    setCustomRecurrenceOption({ label, value });
+    await formik.setFieldValue('recurrencePattern', value);
+  };
+
+  const mapRecurrencePattern = (existingEvent?: Event): RecurrencePattern | false => {
+    if (!existingEvent || !isRecurringEvent(existingEvent) || isEmpty(existingEvent.recurrencePattern)) {
+      return false;
+    }
+    const recurrencePattern = existingEvent.recurrencePattern[0];
+
+    if (recurrenceFrequencyOptions.some((option) => option.value === recurrencePattern)) {
+      return recurrencePattern;
+    }
+
+    const rruleOptions = RRule.parseString(recurrencePattern);
+    const rrule = new RRule({ ...rruleOptions });
+    const rruleLabel = getRRuleText(rrule);
+    const rruleValue = rrule.toString() as RecurrencePattern;
+
+    setCustomRecurrenceOption({ label: rruleLabel, value: rruleValue });
+    return rruleValue;
+  };
+
+  const memoizedRecurrencePattern = useMemo(() => mapRecurrencePattern(existingEvent), [existingEvent]);
+
+  /**
+   * In the current version of mui undefined is also set as a value of the select
+   * To avoid that we have to explicitly filter out and open the dialog when undefined is "selected"
+   */
+  const handleRecurrenceChange = (event: SelectChangeEvent) => {
+    if (event.target.value !== undefined) {
+      formik.setFieldValue('recurrencePattern', event.target.value);
+      return;
+    }
+    setIsRecurrenceDialogOpen(true);
+    setIsRecurrenceSelectOpen(false);
+  };
 
   const formik = useFormik<CreateOrUpdateMeetingFormikValues>({
     initialValues: {
@@ -194,11 +253,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       endDate:
         (existingEvent && !isTimelessEvent(existingEvent) && existingEvent.endsAt?.datetime) ||
         defaultEndDate.toISOString(),
-      recurrencePattern:
-        (existingEvent &&
-          !isEmpty(existingEvent.recurrencePattern) &&
-          mapRRuleToFrequencySelect(existingEvent.recurrencePattern[0])) ||
-        FrequencySelect.NONE,
+      recurrencePattern: memoizedRecurrencePattern || CommonFrequencies.NONE,
       isAdhoc: existingEvent && Boolean(existingEvent.isAdhoc),
       sharedFolder: (existingEvent?.sharedFolder && Boolean(existingEvent.sharedFolder)) || false,
       showMeetingDetails: existingEvent?.showMeetingDetails || false,
@@ -271,12 +326,10 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       hasSharedFolder: values.sharedFolder || false,
     };
 
-    if (values.recurrencePattern && values.recurrencePattern !== FrequencySelect.NONE) {
-      const pattern = `RRULE:${mapFrequencySelectToRRuleFrequency(values.recurrencePattern)}`;
-
+    if (values.recurrencePattern) {
       payload = {
         ...payload,
-        recurrencePattern: pattern ? [pattern] : [],
+        recurrencePattern: values.recurrencePattern !== CommonFrequencies.NONE ? [values.recurrencePattern] : undefined,
       };
     }
 
@@ -530,12 +583,43 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
               </Grid>
 
               <Grid item xs={12} sm={12} mt={2}>
-                <Select {...formikProps('recurrencePattern', formik)}>
-                  {intervals.map((entry) => (
+                {/* TODO: Separate in own component and move related logic */}
+                <Select
+                  {...formikProps('recurrencePattern', formik)}
+                  open={isRecurrenceSelectOpen}
+                  onOpen={() => setIsRecurrenceSelectOpen(true)}
+                  onClose={() => setIsRecurrenceSelectOpen(false)}
+                  //Type is not getting infered so we have to manually assert
+                  onChange={(event) => handleRecurrenceChange(event as SelectChangeEvent)}
+                  MenuProps={{
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    },
+                  }}
+                >
+                  {recurrenceFrequencyOptions.map((entry) => (
                     <MenuItem key={entry.label} value={entry.value}>
                       {entry.label}
                     </MenuItem>
                   ))}
+                  {customRecurrenceOption && (
+                    <MenuItem key={customRecurrenceOption.label} value={customRecurrenceOption.value}>
+                      {customRecurrenceOption.label}
+                    </MenuItem>
+                  )}
+                  <MenuItem
+                    onClick={() => {
+                      setIsRecurrenceDialogOpen(true);
+                      setIsRecurrenceSelectOpen(false);
+                    }}
+                  >
+                    {t('dashboard-meeting-recurrence-custom')}
+                  </MenuItem>
                 </Select>
               </Grid>
             </Grid>
@@ -590,6 +674,13 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
           </Grid>
         </Grid>
       </Form>
+      <RecurringEventDialog
+        open={isRecurrenceDialogOpen}
+        closeDialog={() => setIsRecurrenceDialogOpen(false)}
+        selectCustomFrequencyOption={handleSelectCustomRRule}
+        recurrenceStartTimestamp={formik.values.startDate}
+        initialRRule={customRecurrenceOption?.value}
+      />
       {overlappingEvent && (
         <EventConflictDialog
           onConfirm={handleConfirmSameTimeEvents}

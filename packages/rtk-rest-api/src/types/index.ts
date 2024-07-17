@@ -20,6 +20,7 @@ export type {
   UpdateEventPayload,
   UpdateEventInstancePayload,
   TimedEvent,
+  RecurrencePattern,
 } from './event';
 export type {
   RoomId,

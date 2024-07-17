@@ -726,7 +726,7 @@ dashboard-meeting-card-delete-dialog-cancel = Abbrechen
 
 dashboard-recurrence-meeting-card-delete-dialog-message = Das Meeting ist Teil einer Meetingserie. Sie können die ganze Meetingserie löschen, einschließlich aller Daten (Aufnahmen, Protokolle und Abstimmungsergebnisse) oder nur das einzelne Meeting, dabei bleiben alle Daten erhalten.
 dashboard-recurrence-meeting-card-delete-dialog-one = Das einzelne Meeting
-dashboard-reccurence-meeting-card-delete-dialog-all = Die ganze Meetingserie
+dashboard-recurrence-meeting-card-delete-dialog-all = Die ganze Meetingserie
 dashboard-recurrence-meeting-card-delete-dialog-cancel = Abbrechen
 
 dashboard-meeting-card-delete-offline-failure = Leider kann die Aktion nicht durchgeführt werden, derzeit ist keine Verbindung zu OpenTalk möglich. Bitte versuchen Sie es später noch einmal.
@@ -853,6 +853,34 @@ dashboard-meeting-recurrence-daily = Täglich
 dashboard-meeting-recurrence-weekly = Wöchentlich
 dashboard-meeting-recurrence-bi-weekly = 14-Tägig
 dashboard-meeting-recurrence-monthly = Monatlich
+dashboard-meeting-recurrence-custom = Benutzerdefiniert ...
+
+dashboard-recurrence-dialog-title = Benutzerdefinierte Meeting-Wiederholung
+dashboard-recurrence-dialog-frequency-label = Wiederholen alle
+<#-- Since this is fluent it handles plurals in a different way than the i18n documentation -->
+dashboard-recurrence-dialog-frequency-day = { $count ->
+    [one] Tag
+   *[other] Tage
+}
+dashboard-recurrence-dialog-frequency-week = { $count ->
+    [one] Woche
+   *[other] Wochen
+}
+dashboard-recurrence-dialog-frequency-month = { $count ->
+    [one] Monat
+   *[other] Monate
+}
+dashboard-recurrence-dialog-frequency-year = { $count ->
+    [one] Jahr
+   *[other] Jahre
+}
+dashboard-recurrence-dialog-frequency-details-label = Wiederholen am
+dashboard-recurrence-dialog-frequency-details-monthly-on = Monatlich am {$date}.
+dashboard-recurrence-dialog-end-label = Wiederholungs-Ende
+dashboard-recurrence-dialog-end-option-never = Nie
+dashboard-recurrence-dialog-end-option-on = Am
+dashboard-recurrence-dialog-save-button = Speichern
+dashboard-recurrence-dialog-close-button = Abbrechen
 
 dashboard-payment-status-downgraded = Achtung: Für Ihren Account ist derzeit keine gültige Zahlmethode hinterlegt.<br /> Die Nutzung ist derzeit auf den {$tariffName}-Tarif eingeschränkt.
 dashboard-add-payment-button = Jetzt auswählen

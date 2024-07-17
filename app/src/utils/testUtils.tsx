@@ -32,6 +32,7 @@ import {
   SingleEvent,
   RoomInvite,
   BaseAsset,
+  RecurrencePattern,
 } from '@opentalk/rest-api-rtk-query';
 import { SipId } from '@opentalk/rest-api-rtk-query/src/types/room';
 import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
@@ -306,7 +307,6 @@ export const eventMockedData: TimelessEvent = {
     id: uuidv4() as RoomId,
     waitingRoom: false,
   },
-  recurrencePattern: ['DUMMY'],
   type: EventType.Single,
   updatedBy: {
     displayName: 'Test User',
@@ -395,7 +395,7 @@ export const mockedRecurringEvent: RecurringEvent = {
     datetime: '2024-03-04T19:00:00Z',
     timezone: 'Europe/Berlin',
   },
-  recurrencePattern: ['RRULE:FREQ=DAILY'],
+  recurrencePattern: ['RRULE:FREQ=DAILY'] as Array<RecurrencePattern>,
   isAdhoc: false,
   type: EventType.Recurring,
   inviteStatus: InviteStatus.Accepted,

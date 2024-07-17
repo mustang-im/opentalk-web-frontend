@@ -27,7 +27,6 @@ const mockEvent = {
   isTimeIndependent: false,
   isAllDay: false,
   isFavorite: false,
-  recurrencePattern: [],
   type: 'instance' as unknown,
 } as SingleEvent;
 

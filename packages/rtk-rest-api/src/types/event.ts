@@ -17,6 +17,15 @@ export type EventInstanceId = Opaque<string, 'eventInstanceId'>;
 export type EventAndInstanceId = Opaque<string, 'eventAndInstanceId'>;
 
 /**
+ * Has to be a valid RFC string
+ *
+ * see https://icalendar.org/iCalendar-RFC-5545/3-8-5-3-recurrence-rule.html,
+ *
+ * more readable version of https://www.ietf.org/rfc/rfc2445.txt
+ */
+export type RecurrencePattern = string & { readonly __tag: unique symbol };
+
+/**
  * EventRoomInfo in an Event object
  */
 type EventRoomInfo = {
@@ -74,7 +83,7 @@ export interface CreateTimedEventPayload extends CreateBaseEventPayload {
   endsAt: DateTimeWithTimezone;
   isAllDay: boolean;
   /// Recurrence pattern per RFC5545. Only RRULE values are valid. DTSTART and DTEND are forbidden as their values are already specified in the starts_at and ends_at fields.
-  recurrencePattern?: string[];
+  recurrencePattern?: Array<RecurrencePattern>;
 }
 
 /**
@@ -84,7 +93,6 @@ export interface CreateTimedEventPayload extends CreateBaseEventPayload {
  */
 export interface CreateTimelessEventPayload extends CreateBaseEventPayload {
   isTimeIndependent: true;
-  recurrencePattern: Array<string>;
 }
 
 /**
@@ -127,7 +135,7 @@ export interface UpdateEventPayload {
   startsAt?: DateTimeWithTimezone;
   endsAt?: DateTimeWithTimezone;
   isAllDay?: boolean;
-  recurrencePattern?: Array<string>;
+  recurrencePattern?: Array<RecurrencePattern>;
   waitingRoom?: boolean;
   password?: string;
   isAdhoc?: boolean;
@@ -179,7 +187,7 @@ export interface RescheduleEventPayload {
   /**
    * Sets a different recurrence pattern for the events from time _t_
    */
-  recurrencePattern?: Array<string>;
+  recurrencePattern?: Array<RecurrencePattern>;
 }
 
 // Response Objects
@@ -213,7 +221,7 @@ export interface TimedEvent extends AbstractEvent {
   isAllDay: boolean;
   startsAt: DateTimeWithTimezone;
   endsAt: DateTimeWithTimezone;
-  recurrencePattern: string[];
+  recurrencePattern: Array<RecurrencePattern>;
 }
 
 /**
@@ -223,7 +231,6 @@ export interface TimedEvent extends AbstractEvent {
 export interface TimelessEvent extends AbstractEvent {
   type: EventType.Single;
   isTimeIndependent: true;
-  recurrencePattern: Array<string>;
 }
 
 /**
@@ -234,7 +241,6 @@ export interface TimelessEvent extends AbstractEvent {
 export interface RecurringEvent extends AbstractEvent, TimedEvent {
   type: EventType.Recurring;
   isTimeIndependent: false;
-  recurrencePattern: Array<string>;
 }
 
 /**
@@ -244,7 +250,6 @@ export interface RecurringEvent extends AbstractEvent, TimedEvent {
 export interface SingleEvent extends AbstractEvent, TimedEvent {
   type: EventType.Single;
   isTimeIndependent: false;
-  recurrencePattern: Array<string>;
 }
 
 interface EventOccurrence {

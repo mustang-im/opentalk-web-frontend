@@ -37,12 +37,6 @@ module.exports = ({ env }) => {
 				return webpackConfig;
 			},
         },
-		jest: {
-			configure: (jestConfig) => {
-				jestConfig.moduleNameMapper = { "@mui/styled-engine": "<rootDir>/node_modules/@mui/styled-engine"};
-				return jestConfig;
-			}
-		}
     };
 
 };
