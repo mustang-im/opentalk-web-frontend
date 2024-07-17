@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Show disconnected users during Voting ([#1902](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1902))
 - Implement custom recurrence dialog ([#1862](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1862))
 - Implement disabling microphones ([#1615](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1615))
 - Add share meeting details dialog to conference ([#1685](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1685))

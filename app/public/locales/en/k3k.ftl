@@ -393,6 +393,9 @@ legal-vote-share-token-inactive = Do not share this token with others and keep i
 
 legal-vote-10-seconds-remaining = 10 seconds remaining
 
+legal-vote-participant-left-the-meeting = {{participantName}} left the meeting during the vote
+legal-vote-participant-joined-the-meeting = {{participantName}} joined the meeting during the vote
+
 poll-participant-list-button-select = Select
 poll-participant-list-button-close = Close
 poll-participant-list-button-save = Save

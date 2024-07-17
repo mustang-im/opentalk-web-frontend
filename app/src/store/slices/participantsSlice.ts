@@ -11,6 +11,8 @@ import {
   ParticipantInOtherRoom,
   joinSuccess,
   Speaker,
+  notifications,
+  Role,
 } from '@opentalk/common';
 import {
   createEntityAdapter,
@@ -20,7 +22,9 @@ import {
   PayloadAction,
   createListenerMiddleware,
   TypedStartListening,
+  isAnyOf,
 } from '@reduxjs/toolkit';
+import i18next from 'i18next';
 
 import { RootState, AppDispatch } from '../';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
@@ -321,6 +325,34 @@ startAppListening({
     const isSpeaking = action.payload.isSpeaking;
     if (isSpeaking && speakerId !== ourId) {
       listenerApi.dispatch(setFocusedSpeaker(speakerId));
+    }
+  },
+});
+
+startAppListening({
+  matcher: isAnyOf(leave, join),
+  effect: ({ payload, type }, listenerApi) => {
+    const state = listenerApi.getOriginalState();
+    const { activeVote, votes } = state.legalVote;
+    if (!activeVote) {
+      return;
+    }
+    const activeVoteEntries = activeVote && votes.entities[activeVote];
+    const participantId = payload.id || payload.participant.id;
+    const participantWasAllowedToVote = activeVoteEntries?.allowedParticipants.includes(participantId);
+    const participantVoted =
+      activeVoteEntries?.votingRecord && Object.hasOwn(activeVoteEntries?.votingRecord, participantId);
+    const isModerator = state.user.role === Role.Moderator;
+
+    if (participantWasAllowedToVote && !participantVoted && isModerator) {
+      const participantName =
+        payload?.participant?.displayName || participantSelectors.selectById(state, participantId)?.displayName;
+
+      if (type.match(join)) {
+        notifications.warning(i18next.t('legal-vote-participant-joined-the-meeting', { participantName }));
+      } else {
+        notifications.warning(i18next.t('legal-vote-participant-left-the-meeting', { participantName }));
+      }
     }
   },
 });
