@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 
 ### Internal
 
+- Removed internal delete rooms endpoint ([#1845](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1845))
 - Fix audit: ws affected by a DoS when handling a request with many HTTP headers ([#1948](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1948))
 - Update @mui/material and remove deprecated @mui/styles ([#1939](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1939))
 - Integrate e2e tests into mono repo ([!1314](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1314))

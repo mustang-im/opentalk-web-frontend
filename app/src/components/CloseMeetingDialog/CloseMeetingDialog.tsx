@@ -16,7 +16,6 @@ import {
   IconButton,
   RadioGroup,
   Typography,
-  FormLabel,
 } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
@@ -25,11 +24,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useUpdateEventInstanceMutation } from '../../api/rest';
+import { useUpdateEventInstanceMutation, useDeleteRoomMutation, useDeleteEventMutation } from '../../api/rest';
 import { useAppDispatch } from '../../hooks';
 import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { hangUp } from '../../store/commonActions';
-import { deleteRoomMetaData } from '../../store/slices/internalSlice';
 import { EventDeletionType, generateInstanceId } from '../../utils/eventUtils';
 
 export interface CloseMeetingDialogProps {
@@ -50,6 +48,8 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
     roomId: RoomId;
   };
   const [updateEventInstance] = useUpdateEventInstanceMutation();
+  const [deleteRoom] = useDeleteRoomMutation();
+  const [deleteEvent] = useDeleteEventMutation();
   const [disableLeaveAndDeleteButton, setDisableLeaveAndDeleteButton] = useState(true);
   const [deletionMode, setDeletionMode] = useState<EventDeletionType | null>(null);
 
@@ -64,11 +64,24 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
 
   const handleHangUp = useCallback(() => dispatch(hangUp()), [dispatch]);
 
+  const eventId = eventData?.id;
+  const handleDelete = async () => {
+    try {
+      if (eventId) {
+        await deleteEvent(eventId).unwrap();
+      } else {
+        await deleteRoom(roomId).unwrap();
+      }
+    } catch (e) {
+      console.debug('Error while deleting room or event:', e);
+    }
+  };
+
   const handleLeaveButton = async () => {
     try {
       switch (eventData?.type) {
         case EventType.Single:
-          await dispatch(deleteRoomMetaData(roomId));
+          await handleDelete();
           break;
         case EventType.Recurring:
           if (deletionMode === EventDeletionType.One) {
@@ -78,7 +91,7 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
               status: EventStatus.Cancelled,
             });
           } else if (deletionMode === EventDeletionType.All) {
-            await dispatch(deleteRoomMetaData(roomId));
+            await handleDelete();
           }
           break;
       }
@@ -93,11 +106,11 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
 
   const singleConfigurationForm = () => (
     <DialogContent>
-      <Typography id={DIALOG_DESCRIPTION_ID}>{t(`meeting-delete-metadata-dialog-message`)}</Typography>
+      <Typography id={DIALOG_DESCRIPTION_ID}>{t('meeting-delete-metadata-dialog-message')}</Typography>
       <Grid mt={1}>
         <FormControlLabel
           control={<Checkbox checked={!disableLeaveAndDeleteButton} onChange={handleCheckbox} />}
-          label={t(`meeting-delete-metadata-dialog-checkbox`)}
+          label={t('meeting-delete-metadata-dialog-checkbox')}
           labelPlacement={'end'}
         />
       </Grid>
@@ -105,10 +118,9 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
   );
   const recurringConfigurationForm = () => (
     <DialogContent>
-      <Typography id={DIALOG_DESCRIPTION_ID}>{t(`meeting-delete-recurring-metadata-dialog-message`)}</Typography>
+      <Typography id={DIALOG_DESCRIPTION_ID}>{t('meeting-delete-recurring-metadata-dialog-message')}</Typography>
       <Grid mt={1}>
         <FormControl>
-          <FormLabel></FormLabel>
           <RadioGroup onChange={handleDeletionModeChange}>
             <FormControlLabel
               value={EventDeletionType.One}
@@ -143,7 +155,7 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
     return () => {
       handleFullscreen.setHasActiveOverlay(false);
     };
-  }, []);
+  }, [handleFullscreen]);
 
   return (
     <Dialog

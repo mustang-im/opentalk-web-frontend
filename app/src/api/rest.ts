@@ -181,6 +181,7 @@ export const {
   useGetRoomQuery,
   useGetRoomInvitesQuery,
   useGetRoomAssetsQuery,
+  useDeleteRoomMutation,
   useDeleteRoomAssetMutation,
   useCreateRoomInviteMutation,
   useLazyGetRoomInvitesQuery,
