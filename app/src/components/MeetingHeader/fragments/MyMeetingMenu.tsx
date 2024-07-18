@@ -17,6 +17,8 @@ import { useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import { useAppSelector } from '../../../hooks';
+import { selectIsGlitchtipConfigured } from '../../../store/slices/configSlice';
 import { triggerGlitchtipManually } from '../../../utils/glitchtipUtils';
 import QuickStartPopover from '../../QuickStartPopover/QuickStartPopover';
 import ShortcutListDialog from '../../Toolbar/fragments/ShortcutListDialog';
@@ -92,6 +94,7 @@ const MyMeetingMenu = () => {
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const isMenuOpen = Boolean(anchorElement);
   const [activeMenu, setActiveMenu] = useState<MenuItemsKey | null>(null);
+  const isGlitchtipConfigured = useAppSelector(selectIsGlitchtipConfigured);
 
   const myMeetingMenuRef = useRef(null);
 
@@ -99,7 +102,7 @@ const MyMeetingMenu = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const menuItems: Array<MenuItemProps> = useMemo(() => {
-    return [
+    const items: Array<MenuItemProps> = [
       {
         key: MenuItemsKey.QuickStart,
         name: 'my-meeting-menu-quick-guide',
@@ -118,7 +121,10 @@ const MyMeetingMenu = () => {
           setActiveMenu(MenuItemsKey.KeyboardShortcuts);
         },
       },
-      {
+    ];
+
+    if (isGlitchtipConfigured) {
+      items.push({
         key: MenuItemsKey.GlitchtipTrigger,
         name: 'my-meeting-menu-glitchtip-trigger',
         icon: <BugIcon />,
@@ -126,8 +132,10 @@ const MyMeetingMenu = () => {
           setAnchorElement(null);
           triggerGlitchtipManually();
         },
-      },
-    ];
+      });
+    }
+
+    return items;
   }, []);
 
   return (
@@ -162,7 +170,7 @@ const MyMeetingMenu = () => {
           }}
           onClose={() => setAnchorElement(null)}
         >
-          <MenuList id="my-meeting-menu" autoFocusItem={isMenuOpen} aria-labelledby="my-meeting-menu-button">
+          <MenuList id="my-meeting-menu" autoFocusItem={isMenuOpen} aria-labelledby={MY_MEETING_MENU_BUTTON_ID}>
             {menuItems.map((menu) => (
               <MenuItem
                 key={menu.key}
