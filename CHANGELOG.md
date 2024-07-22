@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Hide manual error report button when Glitchtip is not configured ([#1977](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1977))
 - Fix: Copy meeting link messsage is deleted ([#1941](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1941))
 - O logo is cutted in Safari browser on zoom in ([#1825](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1825))
 - Fix keyboard focus styling for the toolbar buttons ([#1810](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1810))
