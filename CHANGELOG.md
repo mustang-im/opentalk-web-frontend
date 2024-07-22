@@ -4,24 +4,48 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Stability Improvements
-
-- Field validation error message for setting a meeting date should now behave correctly ([#1873](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1873))
-
 ### New Features
 
 - Show disconnected users during Voting ([#1902](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1902))
 - Implement custom recurrence dialog ([#1862](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1862))
 - Implement disabling microphones ([#1615](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1615))
-- Add share meeting details dialog to conference ([#1685](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1685))
-- Implement send to waiting room feature([#1775](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1775))
-- Add meeting details switch in the dashboard ([#1808](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1808))
 
 ### Improvements to the user experience
 
 - Changed english "Protocol" label to the "Meeting notes" accross the app ([#1884](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1884))
 - Fix shaking meeting timer ([#1702](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1702))
 - Emoji picker can be closed using the escape (ESC) key. ([#1898](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1898))
+
+### Bug Fixes
+
+- Hide manual error report button when Glitchtip is not configured ([#1977](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1977))
+- Fix: Copy meeting link messsage is deleted ([#1941](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1941))
+
+### Internal
+
+- Removed internal delete rooms endpoint ([#1845](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1845))
+- Fix audit: ws affected by a DoS when handling a request with many HTTP headers ([#1948](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1948))
+- Update @mui/material and remove deprecated @mui/styles ([#1939](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1939))
+- Integrate e2e tests into mono repo ([!1314](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1314))
+- Add conventional commit job to ci pipelines ([!1330](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1330))
+
+## 1.17.0
+
+### Stability Improvements
+
+- Field validation error message for setting a meeting date should now behave correctly ([#1873](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1873))
+- Implement IceRestart when publisher connections is disconnected. ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1583), [#1747](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1747))
+
+### New Features
+
+- Renaming of participants from the list ([#1790](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1790))
+- Add share meeting details dialog to conference ([#1685](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1685))
+- Implement send to waiting room feature([#1775](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1775))
+- Add meeting details switch in the dashboard ([#1808](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1808))
+
+### Improvements to the user experience
+
+- Improve accessibility of the Dashboard Delete Meeting Dialog ([#1809](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1809))
 - Added shared folder option when creating event ([#1805](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1805))
 - Users have to confirm their choice when participating in the poll using the submit button ([#1850](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1850))
 - Add participant notification when granted or revoked presenter rights ([#1779](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1779))
@@ -31,19 +55,15 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Hide manual error report button when Glitchtip is not configured ([#1977](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1977))
-- Fix: Copy meeting link messsage is deleted ([#1941](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1941))
+- Fix non handraised participants being shown as handraised. ([#1819](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1819))
+- Loop before meeting if invite link is wrong ([#1820](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1820))
 - O logo is cutted in Safari browser on zoom in ([#1825](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1825))
 - Fix keyboard focus styling for the toolbar buttons ([#1810](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1810))
-- Fix crash on BrowserSupport check (safari) ([#1309](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1309))
+- Fix crash on BrowserSupport check (safari) ([#1910](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1910))
 
 ### Internal
 
-- Removed internal delete rooms endpoint ([#1845](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1845))
-- Fix audit: ws affected by a DoS when handling a request with many HTTP headers ([#1948](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1948))
-- Update @mui/material and remove deprecated @mui/styles ([#1939](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1939))
-- Integrate e2e tests into mono repo ([!1314](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1314))
-- Add conventional commit job to ci pipelines ([!1330](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1330))
+- Replaced external PKCE library with an internal solution ([#1909](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1909))
 - Moved enterprise components to the main repository ([#1920](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1920))
 - Add test coverage and unit test summary to ci pipelines ([!1302](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1302))
 
@@ -62,29 +82,19 @@ All notable changes to this project will be documented in this file.
 - Show full meeting title with tooltip in dashboard on meeting cards ([#1847](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1847))
 - Add the indicator for disabled camera in conference for local and remote video tile ([#1849](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1849))
 
-### Stability Improvements
-
-- Implement IceRestart when publisher connections is disconnected. ([#1583](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1583), [#1747](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1747))
-
 ### Bug Fixes
 
 - Fix video button trigger on Enter key ([#1857](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1857))
-
-### Internal
-
-- Replaced external PKCE library with an internal solution ([#1909](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1909))
 
 ## 1.15.0
 
 ### New Features
 
-- Renaming of participants from the list ([#1790](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1790))
 - Added jump links for keyboard users to quickly access certain elements in the conference ([#1253](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1253))
 - Implement streaming in conference ([#1586](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1586))
 
 ### Improvements to the user experience
 
-- Improve accessibility of the Dashboard Delete Meeting Dialog ([#1809](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1809))
 - Remove `/join` path to restore old user flow ([#1877](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1877))
 - Adjust mobile header for dashboard - startpage ([#1798](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1798))
 - Adjust the header navigation in conference for lower resolutions ([#1767](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1767))
@@ -118,7 +128,6 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-- Fix non handraised participants being shown as handraised. ([#1819](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1819))
 - Fix layout of "Setting" and "Update meeting" pages in the dashboard for tablets ([#1644](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1644))
 - Fix: When creating a meeting, colliding events would not always be properly detected ([#1794](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1794))
 - Fix glitchtip error for unhandled message upon successful room deletion ([#1750](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1750))
