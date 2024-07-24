@@ -9,15 +9,15 @@ import {
   DurationField,
   TimerKind,
   TimerStyle,
+  CommonTextField,
+  DurationValueOptions,
 } from '@opentalk/common';
-import { DurationValueOptions } from '@opentalk/common';
 import { FormikValues, useFormik } from 'formik';
 import { useCallback, useMemo } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { startTimer } from '../../../api/types/outgoing/timer';
-import { TextField } from '../../../commonComponents';
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
 import { useAppDispatch } from '../../../hooks';
 import { DurationFieldWrapper } from '../../DurationFieldWrapper';
@@ -128,7 +128,12 @@ const CreateTimerForm = ({ timerStyle }: { timerStyle: TimerStyle }) => {
 
         {timerStyle === TimerStyle.Normal && (
           <>
-            <TextField {...formikProps('title', formik)} placeholder={t('global-title')} fullWidth />
+            <CommonTextField
+              {...formikProps('title', formik)}
+              placeholder={t('timer-title-placeholder')}
+              fullWidth
+              label={t('global-title')}
+            />
             <Stack spacing={1}>
               <CommonFormItem
                 {...formikSwitchProps('enableReadyCheck', formik)}

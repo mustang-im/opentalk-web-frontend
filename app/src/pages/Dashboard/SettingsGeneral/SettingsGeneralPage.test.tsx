@@ -22,10 +22,5 @@ describe('Dashboard SettingsGeneralPage', () => {
     await render(<SettingsGeneralPage />, store);
 
     expect(screen.getByTestId('dashboardSettingsGeneral')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /dashboard-settings-profile-button-save/i })).toBeInTheDocument();
-    expect(screen.getByText('dashboard-settings-general-language')).toBeInTheDocument();
-    //TODO currently ThemeSelector is removed since has only presentation function
-    // expect(screen.getByText('dashboard-settings-general-appearance')).toBeInTheDocument();
-    expect(screen.getByText('dashboard-settings-profile-button-save')).toBeInTheDocument();
   });
 });

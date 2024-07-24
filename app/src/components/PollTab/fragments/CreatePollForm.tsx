@@ -2,8 +2,18 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, styled, Switch, Typography, Tooltip, Box } from '@mui/material';
-import { Seconds, BackIcon, notifications, RoomMode, ErrorFormMessage } from '@opentalk/common';
-import { formikDurationFieldProps, formikProps, formikSwitchProps, DurationField } from '@opentalk/common';
+import {
+  Seconds,
+  BackIcon,
+  notifications,
+  RoomMode,
+  ErrorFormMessage,
+  formikDurationFieldProps,
+  formikProps,
+  formikSwitchProps,
+  DurationField,
+  CommonTextField,
+} from '@opentalk/common';
 import { FormikValues, Formik } from 'formik';
 import i18next from 'i18next';
 import { isEmpty } from 'lodash';
@@ -13,7 +23,6 @@ import * as yup from 'yup';
 
 import { start } from '../../../api/types/outgoing/poll';
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
-import TextField from '../../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
 import { PollFormValues, savePollFormValues } from '../../../store/slices/pollSlice';
@@ -131,9 +140,10 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                 />
               </Box>
               <Box marginBottom={1}>
-                <TextField
+                <CommonTextField
                   {...formikProps('topic', formik)}
-                  placeholder={t('poll-input-topic-placeholder')}
+                  label={t('poll-topic-label')}
+                  placeholder={t('poll-topic-placeholder')}
                   fullWidth
                   minRows={4}
                   maxRows={6}

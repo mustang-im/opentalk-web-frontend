@@ -15,7 +15,7 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { CloseIcon, notifications, formikDateTimePickerProps, FormWrapper } from '@opentalk/common';
+import { CloseIcon, notifications, formikDateTimePickerProps } from '@opentalk/common';
 import { DateTime, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -124,20 +124,22 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
       ) : (
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
-            <FormWrapper label={t('dialog-invite-guest-expiration-date')} stacked fullWidth>
-              <DateTimePicker
-                {...formikDateTimePickerProps('expirationDate', {
-                  ...formik,
-                  handleChange: onChangeExpirationDate as never,
-                })}
-                ampm={false}
-                value={formik.values.expirationDate ? formik.values.expirationDate.toString() : ''}
-                clearable
-                clearButtonLabel={t('dialog-invite-guest-no-expiration')}
-                placeholder={t('dialog-invite-guest-no-expiration')}
-                minTimeDate={minTimeDate}
-              />
-            </FormWrapper>
+            <DateTimePicker
+              {...formikDateTimePickerProps('expirationDate', {
+                ...formik,
+                handleChange: onChangeExpirationDate as never,
+              })}
+              ampm={false}
+              value={formik.values.expirationDate ? formik.values.expirationDate.toString() : ''}
+              clearable
+              clearButtonLabel={t('dialog-invite-guest-no-expiration')}
+              minTimeDate={minTimeDate}
+              textField={{
+                placeholder: t('dialog-invite-guest-no-expiration'),
+                startAdornment: t('dialog-invite-guest-expiration-date'),
+                fullWidth: true,
+              }}
+            />
           </DialogContent>
           <DialogActions>
             <Button type={'submit'} color="primary">

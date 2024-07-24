@@ -331,19 +331,36 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
       MuiInputLabel: {
         styleOverrides: {
           root: ({ theme }) => ({
-            position: 'relative',
             fontWeight: 600,
             lineHeight: 'unset',
-            color: theme.palette.primary.contrastText,
+            color: theme.palette.text.secondary,
+            backgroundColor: 'inherit',
+            '&.Mui-error': {
+              color: theme.palette.primary.contrastText,
+            },
             '&.Mui-focused': {
               color: theme.palette.primary.contrastText,
             },
             [theme.breakpoints.down('md')]: {
               fontSize: theme.typography.pxToRem(16),
             },
-            '& > span': {
-              paddingBottom: theme.spacing(1.5),
-              display: 'inline-block',
+          }),
+          shrink: ({ theme }) => ({
+            '&:not(&.Mui-focused)': {
+              backgroundColor: mode === 'light' ? theme.palette.background.paper : theme.palette.secondary.lighter,
+              color: theme.palette.primary.contrastText,
+              padding: theme.spacing(0.2, 1),
+              borderRadius: '0.3rem',
+            },
+          }),
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            // https://stackoverflow.com/questions/76228510/mui-textfield-outline-overlaps-label
+            '& > fieldset > legend': {
+              fontSize: `calc(0.7 * ${theme.typography.pxToRem(18)})`,
             },
           }),
         },
@@ -358,7 +375,7 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
             lineHeight: 1.25,
             backgroundColor: theme.palette.secondary.main,
             color: theme.palette.secondary.contrastText,
-            border: `1px solid ${theme.palette.secondary.main}`,
+            border: `1px ${theme.palette.secondary.main}`,
             '& .MuiSvgIcon-root': {
               color:
                 ownerState.color === 'primary'
@@ -366,12 +383,12 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
                   : theme.palette.primary.contrastText,
             },
             ':hover': {
-              border: `1px solid ${theme.palette.primary.main}`,
+              border: `1px ${theme.palette.primary.main}`,
             },
             '&.Mui-focused': {
               backgroundColor: mode === 'light' ? theme.palette.common.white : theme.palette.text.secondary,
               color: theme.palette.primary.contrastText,
-              border: `1px solid ${theme.palette.primary.main}`,
+              border: `1px ${theme.palette.primary.main}`,
               '& .MuiSvgIcon-root': {
                 color: theme.palette.primary.contrastText,
               },
@@ -435,7 +452,9 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
             },
           },
           inputAdornedEnd: ({ theme }) => ({
-            padding: theme.spacing(1.5, 6, 1.5, 2),
+            '&.MuiInputBase-input': {
+              paddingRight: theme.spacing(4),
+            },
           }),
           inputSizeSmall: ({ theme }) => ({
             padding: theme.spacing(1, 4, 1, 1.5),
@@ -459,16 +478,31 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
             right: theme.spacing(2),
           }),
           positionStart: ({ theme }) => ({
-            padding: theme.spacing(1.5, 2),
+            padding: theme.spacing(1.5, 0.5),
             marginRight: 0,
           }),
         },
       },
       MuiFormHelperText: {
         styleOverrides: {
-          root: {
-            marginLeft: 3,
-          },
+          root: ({ ownerState, theme }) => ({
+            marginLeft: 0,
+            color: ownerState.error ? theme.palette.error.main : theme.palette.text.primary,
+            ...(ownerState.error && {
+              '&::before': {
+                content: "'!'",
+                display: 'inline-flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '1.25rem',
+                height: '1.25rem',
+                borderRadius: '50%',
+                backgroundColor: theme.palette.error.main,
+                color: theme.palette.error.contrastText,
+                marginRight: theme.spacing(0.5),
+              },
+            }),
+          }),
         },
       },
       MuiStepIcon: {

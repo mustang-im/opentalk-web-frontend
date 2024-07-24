@@ -58,7 +58,7 @@ describe('Dashboard CreateOrUpdateMeetingForm', () => {
   test('page will not crash', async () => {
     const { store } = configureStore();
     await render(<CreateOrUpdateMeetingForm onForwardButtonClick={mockOnForwardButtonClick} />, store);
-    expect(screen.getByText('dashboard-meeting-textfield-title')).toBeInTheDocument();
+    expect(screen.getAllByText('dashboard-meeting-textfield-title')[0]).toBeInTheDocument();
   });
 
   test('updateEvent will be called with the right payload', async () => {

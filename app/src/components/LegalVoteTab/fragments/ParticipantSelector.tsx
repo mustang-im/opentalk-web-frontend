@@ -15,7 +15,7 @@ import {
   FormHelperText,
   ListItemAvatar as MuiListItemAvatar,
 } from '@mui/material';
-import { ParticipantAvatar, ParticipantId, SearchIcon, TextField } from '@opentalk/common';
+import { ParticipantAvatar, ParticipantId, SearchIcon, CommonTextField } from '@opentalk/common';
 import { useFormikContext } from 'formik';
 import { get, find, debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -142,14 +142,16 @@ const ParticipantSelector = ({ name }: IParticipantSelectorProps) => {
 
   const renderSearchUser = (
     <Grid item xs={12}>
-      <TextField
+      <CommonTextField
         size="small"
         onChange={searchHandler}
-        startAdornment={
-          <InputAdornment position="start">
-            <SearchIcon />
-          </InputAdornment>
-        }
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
         fullWidth
       />
     </Grid>

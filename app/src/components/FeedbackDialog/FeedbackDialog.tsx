@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { notifications } from '@opentalk/common';
+import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
 import i18n from 'i18next';
 import React, { useMemo } from 'react';
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { sendFeedback } from '../../api/rest';
-import { Rating, TextField } from '../../commonComponents';
+import { Rating } from '../../commonComponents';
 import { useAppDispatch } from '../../hooks';
 import browser from '../../modules/BrowserSupport';
 import { formikProps, formikRatingProps } from '../../utils/formikUtils';
@@ -132,7 +132,7 @@ const FeedbackDialog = (props: FeedbackDialogProps) => {
               {...formikRatingProps('audioQualityRating', formik)}
               label={t('feedback-dialog-rating-audio-quality')}
             />
-            <TextField
+            <CommonTextField
               {...formikProps('likedText', formik)}
               fullWidth
               multiline
@@ -141,7 +141,7 @@ const FeedbackDialog = (props: FeedbackDialogProps) => {
               label={t('feedback-dialog-label-liked')}
               placeholder={t('feedback-dialog-description-placeholder')}
             />
-            <TextField
+            <CommonTextField
               {...formikProps('problemsText', formik)}
               fullWidth
               multiline
@@ -150,7 +150,7 @@ const FeedbackDialog = (props: FeedbackDialogProps) => {
               label={t('feedback-dialog-label-problems')}
               placeholder={t('feedback-dialog-description-placeholder')}
             />
-            <TextField
+            <CommonTextField
               {...formikProps('criticText', formik)}
               fullWidth
               multiline

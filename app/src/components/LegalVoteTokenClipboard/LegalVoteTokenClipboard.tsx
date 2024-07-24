@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box, Button } from '@mui/material';
-import { CopyIcon, TextField, useDateFormat } from '@opentalk/common';
+import { CopyIcon, CommonTextField, useDateFormat } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -43,7 +43,7 @@ ${props.token}
 
   return (
     <Container display="flex" alignItems="center" gap={2}>
-      <TextField name="token" disabled value={props.token} fullWidth />
+      <CommonTextField name="token" disabled value={props.token} fullWidth />
       <Button type="button" onClick={injectTokenIntoClipboard} aria-label="Copy token">
         <CopyIcon />
       </Button>

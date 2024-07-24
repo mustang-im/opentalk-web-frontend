@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { InputAdornment, styled, Tooltip, Popover } from '@mui/material';
+import { InputAdornment, styled, Tooltip, Popover, useTheme } from '@mui/material';
 import {
   GroupId,
   ParticipantId,
@@ -11,6 +11,7 @@ import {
   SendMessageIcon,
   EmojiIcon,
   AdornmentIconButton,
+  CommonTextField,
 } from '@opentalk/common';
 import Picker, {
   EmojiClickData,
@@ -26,7 +27,6 @@ import { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef, useLayoutE
 import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
-import { LimitedTextField } from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
 import { saveDefaultChatMessage, selectDefaultChatMessage } from '../../../store/slices/uiSlice';
@@ -89,6 +89,7 @@ const MAX_CHAT_CHARS = 4000;
 
 const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const [openPicker, setOpenPicker] = useState(false);
   const [hasFocus, setFocus] = useState(false);
@@ -265,54 +266,67 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
     }
   };
 
+  const handleEmojiKeypress: KeyboardEventHandler<HTMLButtonElement> = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      setOpenPicker(!openPicker);
+    }
+  };
+
   const renderForm = (
     <Form onSubmit={formik.handleSubmit}>
       {renderPicker()}
-      <LimitedTextField
+      <CommonTextField
         ref={messageInputReference}
         maxCharacters={MAX_CHAT_CHARS}
         showLimitAt={MAX_CHAT_CHARS / 2}
         {...formikProps('message', formik)}
-        size={'small'}
+        size="small"
         id={CHAT_INPUT_ID}
-        placeholder={t('chatinput-placeholder')}
+        placeholder={t('chat-input-placeholder')}
+        label={t('chat-input-label')}
         onKeyDown={handleSubmitOnEnter}
         onFocus={() => setFocus(true)}
         onBlur={handleFormBlur}
-        countBytes={true}
-        endAdornment={
-          <InputAdornment position="end">
-            <SendMessageButton
-              aria-label={t('chat-submit-button')}
-              type={'submit'}
-              edge="end"
-              data-testid={'send-message-button'}
-              disabled={!isChatEnabled}
-              parentHasFocus={hasFocus}
-            >
-              <SendMessageIcon />
-            </SendMessageButton>
-          </InputAdornment>
-        }
-        startAdornment={
-          <InputAdornment position="start">
-            <EmojiIconButton
-              ref={emojiButton}
-              onClick={() => setOpenPicker(!openPicker)}
-              type="button"
-              edge="start"
-              disabled={!isChatEnabled}
-              parentHasFocus={hasFocus}
-            >
-              <EmojiIcon />
-              <VisuallyHiddenTitle component="span" label={`chat-${openPicker ? 'close' : 'open'}-emoji-picker`} />
-            </EmojiIconButton>
-          </InputAdornment>
-        }
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <SendMessageButton
+                aria-label={t('chat-submit-button')}
+                type="submit"
+                edge="end"
+                data-testid={'send-message-button'}
+                disabled={!isChatEnabled}
+                parentHasFocus={hasFocus}
+              >
+                <SendMessageIcon />
+              </SendMessageButton>
+            </InputAdornment>
+          ),
+          startAdornment: (
+            <InputAdornment position="start">
+              <EmojiIconButton
+                ref={emojiButton}
+                onClick={() => setOpenPicker(!openPicker)}
+                onKeyDown={handleEmojiKeypress}
+                onKeyUp={handleEmojiKeypress}
+                type="button"
+                edge="start"
+                disabled={!isChatEnabled}
+                parentHasFocus={hasFocus}
+              >
+                <EmojiIcon />
+                <VisuallyHiddenTitle component="span" label={`chat-${openPicker ? 'close' : 'open'}-emoji-picker`} />
+              </EmojiIconButton>
+            </InputAdornment>
+          ),
+        }}
         maxRows={3}
         multiline
         fullWidth
         disabled={!isChatEnabled}
+        InputLabelProps={{ sx: { fontWeight: theme.typography.fontWeightRegular } }}
       />
     </Form>
   );

@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { InputAdornment } from '@mui/material';
-import { SearchIcon } from '@opentalk/common';
+import { InputAdornment, useTheme } from '@mui/material';
+import { SearchIcon, CommonTextField } from '@opentalk/common';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import TextField from '../../TextField';
 
 type SearchInputProps = {
   onSearch: (searchValue: string) => void;
@@ -14,27 +12,26 @@ type SearchInputProps = {
 };
 function SearchInput({ searchValue, onSearch }: SearchInputProps) {
   const { t } = useTranslation();
+  const theme = useTheme();
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(event.target.value);
   };
   return (
-    <TextField
+    <CommonTextField
       fullWidth
       value={searchValue}
-      onKeyDown={(event) => {
-        event.stopPropagation();
-      }}
-      onKeyUp={(event) => {
-        event.stopPropagation();
-      }}
       onChange={handleSearchChange}
       size="small"
-      placeholder={t('input-search-placehoder')}
-      startAdornment={
-        <InputAdornment position="start">
-          <SearchIcon />
-        </InputAdornment>
-      }
+      label={t('participant-search-label')}
+      placeholder={t('global-name-placeholder')}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+      InputLabelProps={{ sx: { fontWeight: theme.typography.fontWeightRegular } }}
     />
   );
 }

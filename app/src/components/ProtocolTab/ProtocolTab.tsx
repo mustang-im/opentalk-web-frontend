@@ -17,14 +17,12 @@ import {
   Stack,
   Grid,
 } from '@mui/material';
-import { DoneIcon, ParticipantAvatar, ProtocolParticipant, SearchIcon } from '@opentalk/common';
-import { cloneDeep, isEmpty, some, differenceBy } from 'lodash';
-import { unionBy, intersectionBy } from 'lodash';
+import { DoneIcon, ParticipantAvatar, ProtocolParticipant, SearchIcon, CommonTextField } from '@opentalk/common';
+import { cloneDeep, isEmpty, some, differenceBy, unionBy, intersectionBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { deselectWriter, selectWriter, uploadPdf } from '../../api/types/outgoing/protocol';
-import TextField from '../../commonComponents/TextField';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectAllProtocolParticipants } from '../../store/selectors';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
@@ -252,14 +250,16 @@ const ProtocolTab = () => {
       >
         <ParticipantSelectContainer disableGutters>
           <Stack spacing={2}>
-            <TextField
+            <CommonTextField
               size={'small'}
               onChange={(event) => handleSearch(event)}
-              startAdornment={
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
               fullWidth
             />
             <Stack direction={'row'}>

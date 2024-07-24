@@ -2,13 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Chip as MuiChip, Grid, styled } from '@mui/material';
-import { AddIcon } from '@opentalk/common';
+import { AddIcon, CommonTextField } from '@opentalk/common';
 import { FieldArray, Field, FieldProps, useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import TextField from '../../../commonComponents/TextField';
 
 interface IAnswersFormElementProps {
   name: string;
@@ -63,7 +61,7 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
                 <Field
                   name={`${name}.${index}`}
                   component={({ field: { value, onBlur, onChange, name } }: FieldProps) => (
-                    <TextField
+                    <CommonTextField
                       inputRef={inputRef}
                       name={name}
                       size={'small'}

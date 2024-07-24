@@ -6,7 +6,7 @@ import {
   BackIcon,
   CommonFormItem,
   DurationField,
-  TextField,
+  CommonTextField,
   formikDurationFieldProps,
   getCurrentTimezone,
 } from '@opentalk/common';
@@ -155,26 +155,29 @@ const CreateLegalVoteForm = ({
               </Select>
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <CommonTextField
                 {...formikProps('name', formik)}
-                placeholder={t('legal-vote-input-name-placeholder')}
+                label={t('legal-vote-title-label')}
+                placeholder={t('legal-vote-title-placeholder')}
                 fullWidth
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <CommonTextField
                 {...formikProps('subtitle', formik)}
-                placeholder={t('legal-vote-input-subtitle-placeholder')}
+                label={t('legal-vote-subtitle-label')}
+                placeholder={t('legal-vote-subtitle-placeholder')}
                 fullWidth
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <CommonTextField
                 {...formikProps('topic', formik)}
                 minRows={4}
                 maxRows={6}
                 multiline
-                placeholder={t('legal-vote-input-topic-placeholder')}
+                label={t('legal-vote-topic-label')}
+                placeholder={t('legal-vote-topic-placeholder')}
                 fullWidth
               />
             </Grid>

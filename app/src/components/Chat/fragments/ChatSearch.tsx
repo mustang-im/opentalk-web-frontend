@@ -1,13 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { InputAdornment, styled } from '@mui/material';
-import { AdornmentIconButton, CloseIcon, SearchIcon } from '@opentalk/common';
+import { InputAdornment, styled, useTheme } from '@mui/material';
+import { AdornmentIconButton, CloseIcon, SearchIcon, CommonTextField } from '@opentalk/common';
 import i18next from 'i18next';
 import { ChangeEvent, ForwardedRef, forwardRef, KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { TextField } from '../../../commonComponents';
 
 interface EndAdornmentProps {
   onClick(): void;
@@ -21,7 +19,7 @@ interface ChatSearchProps {
   onChange(nextValue: string): void;
 }
 
-const SearchField = styled(TextField)({
+const SearchField = styled(CommonTextField)({
   '&': {
     marginTop: 0,
   },
@@ -62,6 +60,7 @@ const DummyBlock = styled(() => <div role="presentation" aria-hidden={true} />)(
 
 const ChatSearch = (props: ChatSearchProps, ref: ForwardedRef<HTMLInputElement>) => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const hasValue = props.value !== '';
   const [focused, setFocused] = useState(false);
 
@@ -90,17 +89,19 @@ const ChatSearch = (props: ChatSearchProps, ref: ForwardedRef<HTMLInputElement>)
     <SearchField
       inputRef={ref}
       size="small"
-      placeholder={t('input-search-placehoder')}
+      label={t('chat-search-label')}
+      placeholder={t('chat-search-placeholder')}
       type="search"
       fullWidth={true}
-      startAdornment={startAdornment}
-      value={props.value}
+      multiline
       // We have to use empty adornment in order to keep layout persistant when clear icon changes visibility.
-      endAdornment={renderEndAdornment}
+      InputProps={{ startAdornment: startAdornment, endAdornment: renderEndAdornment }}
+      value={props.value}
       onChange={onChangeMiddleware}
       onKeyUp={onKeyUp}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
+      InputLabelProps={{ sx: { fontWeight: theme.typography.fontWeightRegular } }}
     />
   );
 };

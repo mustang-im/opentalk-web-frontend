@@ -15,7 +15,7 @@ const Participants = () => {
   const talkingStickParticipants = useAppSelector(selectTalkingStickParticipants);
 
   return (
-    <Stack flex={1} spacing={2} overflow="hidden">
+    <Stack flex={1} spacing={2} overflow="hidden" sx={{ pt: 0.7 }}>
       {isAutomodActive ? (
         <TalkingStickParticipantList participants={talkingStickParticipants} />
       ) : (

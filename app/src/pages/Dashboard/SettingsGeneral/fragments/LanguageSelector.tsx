@@ -2,14 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, Typography, MenuItem, Button } from '@mui/material';
-import { notifications } from '@opentalk/common';
+import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
-import Select from '../../../../commonComponents/Select/Select';
 import { dashboardLanguages } from '../../../../config/dashboardSettings';
 import { formikProps } from '../../../../utils/formikUtils';
 
@@ -51,21 +50,27 @@ const LanguageSelector = () => {
     <form onSubmit={formik.handleSubmit}>
       <Grid container item spacing={3}>
         <Grid item xs={12}>
-          <Typography variant={'h1'} component={'label'}>
+          <Typography variant="h1" component="label">
             {t('dashboard-settings-general-language')}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={5}>
-          <Select {...formikProps('language', formik)} fullWidth data-testid="languageSelect">
+          <CommonTextField
+            {...formikProps('language', formik)}
+            fullWidth
+            select
+            label={t('dashboard-settings-general-language')}
+            hideLabel
+          >
             {Object.entries(dashboardLanguages).map(([key, value]) => (
               <MenuItem key={key} value={key}>
                 {value}
               </MenuItem>
             ))}
-          </Select>
+          </CommonTextField>
         </Grid>
         <Grid item xs={12}>
-          <Button type={'submit'} disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {t('dashboard-settings-profile-button-save')}
           </Button>
         </Grid>

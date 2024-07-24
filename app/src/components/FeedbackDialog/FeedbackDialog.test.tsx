@@ -14,9 +14,9 @@ describe('FeedbackDialog', () => {
     expect(screen.getByText('feedback-dialog-rating-video-quality')).toBeInTheDocument();
     expect(screen.getByText('feedback-dialog-rating-audio-quality')).toBeInTheDocument();
     expect(screen.getByText('feedback-dialog-headline')).toBeInTheDocument();
-    expect(screen.getByText('feedback-dialog-label-liked')).toBeInTheDocument();
-    expect(screen.getByText('feedback-dialog-label-problems')).toBeInTheDocument();
-    expect(screen.getByText('feedback-dialog-label-critic')).toBeInTheDocument();
+    expect(screen.getAllByText('feedback-dialog-label-liked')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('feedback-dialog-label-problems')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('feedback-dialog-label-critic')[0]).toBeInTheDocument();
 
     const cancelButton = screen.getByRole('button', { name: /feedback-button-close/i });
     expect(cancelButton).toBeInTheDocument();
