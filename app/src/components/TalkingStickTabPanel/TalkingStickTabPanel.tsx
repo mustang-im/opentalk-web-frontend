@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, styled, Switch, Typography, FormControlLabel as MuiFormControlLabel } from '@mui/material';
 import { SortOption, sortParticipantsWithConfig } from '@opentalk/common';
 import { memo, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,12 @@ import { selectAutomodActiveState, selectAutomoderationParticipantIds } from '..
 import { TalkingStickParticipantList } from '../TalkingStickParticipantList';
 import { TalkingStickSortButton } from '../TalkingStickSortButton';
 
+const FormControlLabel = styled(MuiFormControlLabel)({
+  flex: 1,
+  margin: 0,
+  justifyContent: 'space-between',
+});
+
 const TalkingStickTabPanel = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation();
@@ -20,6 +26,7 @@ const TalkingStickTabPanel = () => {
   const isAutomodActive = useAppSelector(selectAutomodActiveState);
   const runningParticipantIds = useAppSelector(selectAutomoderationParticipantIds);
   const participantsWithoutUser = configurationParticipants.slice(1);
+  const [includeTalkingStickCreator, setIncludeTalkingStickCreator] = useState<boolean>(true);
 
   const userInitiatingTalkingStick = configurationParticipants[0];
 
@@ -41,12 +48,15 @@ const TalkingStickTabPanel = () => {
 
   const handleStart = useCallback(() => {
     const participantIdList = sortedParticipants.map((participant) => participant.id);
+    const sortedPlaylist = includeTalkingStickCreator
+      ? [userInitiatingTalkingStick.id, ...participantIdList]
+      : [...participantIdList];
     dispatch(
       talkingStickStart.action({
-        playlist: [userInitiatingTalkingStick.id, ...participantIdList],
+        playlist: sortedPlaylist,
       })
     );
-  }, [sortedParticipants]);
+  }, [sortedParticipants, includeTalkingStickCreator]);
 
   const handleStop = () => {
     dispatch(talkingStickStop.action());
@@ -59,15 +69,31 @@ const TalkingStickTabPanel = () => {
   return (
     <Stack spacing={2} flex={1} overflow="hidden">
       {!isAutomodActive && (
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography>{t('sort-label')}</Typography>
-          {/* Component auto closes when selected sort type changes. */}
-          <TalkingStickSortButton
-            key={selectedSortType}
-            selectedSortType={selectedSortType}
-            onChange={setSelectedSortType}
-          />
-        </Box>
+        <Stack spacing={2}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography>{t('sort-label')}</Typography>
+            {/* Component auto closes when selected sort type changes. */}
+            <TalkingStickSortButton
+              key={selectedSortType}
+              selectedSortType={selectedSortType}
+              onChange={setSelectedSortType}
+            />
+          </Box>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <FormControlLabel
+              control={
+                <Switch
+                  onChange={() => setIncludeTalkingStickCreator(!includeTalkingStickCreator)}
+                  value={includeTalkingStickCreator}
+                  checked={includeTalkingStickCreator}
+                  color="primary"
+                />
+              }
+              label={<Typography fontWeight="normal">{t('talking-stick-include-moderator-switch')}</Typography>}
+              labelPlacement="start"
+            />
+          </Box>
+        </Stack>
       )}
       <Stack overflow="hidden" flex={1}>
         <TalkingStickParticipantList participants={isAutomodActive ? activeParticipants : sortedParticipants} />
