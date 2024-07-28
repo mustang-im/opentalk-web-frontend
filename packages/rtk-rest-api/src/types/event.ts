@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { SharedFolderData } from '@opentalk/common';
+import { SharedFolderData, StreamingPlatform } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { CallIn, DateTimeWithTimezone, EntityBase, InviteStatus } from './common';
@@ -70,6 +70,7 @@ export interface CreateBaseEventPayload {
   isAdhoc?: boolean;
   showMeetingDetails?: boolean;
   hasSharedFolder?: boolean;
+  streamingTargets?: Array<StreamingPlatform>;
 }
 
 /**
@@ -141,6 +142,7 @@ export interface UpdateEventPayload {
   isAdhoc?: boolean;
   showMeetingDetails?: boolean;
   hasSharedFolder?: boolean;
+  streamingTargets?: Array<StreamingPlatform>;
 }
 
 /**
@@ -212,6 +214,7 @@ interface AbstractEvent extends BaseEvent {
   inviteStatus: InviteStatus;
   sharedFolder?: SharedFolderData;
   showMeetingDetails?: boolean;
+  streamingTargets?: Array<StreamingPlatform>;
 }
 
 /**

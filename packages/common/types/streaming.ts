@@ -17,7 +17,7 @@ interface BasePlatform {
 
 interface ExternalPlatformInfo {
   streamingKey: string;
-  publicUrl: URL;
+  publicUrl: string;
 }
 
 interface ProviderPlatform extends BasePlatform, ExternalPlatformInfo {
@@ -28,7 +28,7 @@ interface ProviderPlatform extends BasePlatform, ExternalPlatformInfo {
 interface CustomPlatform extends BasePlatform, ExternalPlatformInfo {
   kind: PlatformKind.Custom;
   name: string;
-  streamingEndpoint: URL;
+  streamingEndpoint: string;
 }
 
 interface BuiltInPlatform extends BasePlatform {

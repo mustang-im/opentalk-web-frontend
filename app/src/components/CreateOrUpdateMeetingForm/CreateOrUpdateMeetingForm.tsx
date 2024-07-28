@@ -37,7 +37,6 @@ import {
   useUpdateEventMutation,
   useCreateEventSharedFolderMutation,
   useDeleteEventSharedFolderMutation,
-  useAddStreamingTargetsMutation,
   useGetMeTariffQuery,
 } from '../../api/rest';
 import { useAppSelector } from '../../hooks';
@@ -87,7 +86,6 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const [checkForEvents] = useLazyGetEventsQuery();
   const [createSharedFolder] = useCreateEventSharedFolderMutation();
   const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
-  const [addStreamingTargets] = useAddStreamingTargetsMutation();
   const isWaitingRoomEnabledByDefault = useAppSelector(selectWaitingRoomDefault);
   const waitingRoomInitialValue = existingEvent?.room.waitingRoom ?? isWaitingRoomEnabledByDefault;
 
@@ -184,7 +182,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             .validateURL(t('dashboard-meeting-livestream-streaming-endpoint-invalid-url'))
             .required(t('dashboard-meeting-livestream-streaming-endpoint-required')),
           streamingKey: yup.string().required(t('dashboard-meeting-livestream-streaming-key-required')),
-          publicURL: yup
+          publicUrl: yup
             .string()
             .validateURL(t('dashboard-meeting-livestream-streaming-endpoint-invalid-url'))
             .required(t('dashboard-meeting-livestream-public-url-required')),
@@ -248,6 +246,22 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     setIsRecurrenceSelectOpen(false);
   };
 
+  const getStreamingInitialValue = () => {
+    return existingEvent?.streamingTargets
+      ? {
+          enabled: true,
+          platform: existingEvent.streamingTargets[0],
+        }
+      : {
+          enabled: false,
+        };
+  };
+
+  // We need to pass an empty array, if we want to disable streaming while updating an event
+  const getStreamingPayload = (values: FormikValues) => {
+    return values.streaming.enabled ? [values.streaming.platform] : [];
+  };
+
   const formik = useFormik<CreateOrUpdateMeetingFormikValues>({
     initialValues: {
       title: existingEvent?.title,
@@ -265,9 +279,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       isAdhoc: existingEvent && Boolean(existingEvent.isAdhoc),
       sharedFolder: (existingEvent?.sharedFolder && Boolean(existingEvent.sharedFolder)) || false,
       showMeetingDetails: existingEvent?.showMeetingDetails || false,
-      streaming: {
-        enabled: false,
-      },
+      streaming: getStreamingInitialValue(),
     },
     validationSchema,
     validateOnChange: false,
@@ -332,6 +344,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       recurrencePattern: [],
       isAdhoc: values.isAdhoc || false,
       hasSharedFolder: values.sharedFolder || false,
+      streamingTargets: getStreamingPayload(values),
     };
 
     if (values.recurrencePattern) {
@@ -366,12 +379,6 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       if (event.current === undefined) {
         event.current = await createEvent(payload).unwrap();
       }
-      if (values.streaming.enabled) {
-        await addStreamingTargets({ roomId: event.current.room.id, target: values.streaming.platform })
-          .unwrap()
-          .catch(() => notifications.error(t('streaming-targets-request-error')));
-      }
-
       notifications.success(t('dashboard-meeting-notification-success-create', { event: event.current.title }));
       navigate(`/dashboard/meetings/update/${event.current.id}/1`, {
         state: { ...getReferrerRouterState(window.location) },
@@ -647,7 +654,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
             tooltipTitle={t(`dashboard-meeting-details-tooltip`)}
           />
 
-          {!existingEvent && isStreamingEnabled && <StreamingOptions formik={formik} />}
+          {isStreamingEnabled && <StreamingOptions formik={formik} />}
         </Stack>
         <Grid container item justifyContent="space-between" spacing={2}>
           <Grid item xs={12} sm="auto">

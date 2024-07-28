@@ -4,7 +4,6 @@
 import { Collapse as MuiCollapse, MenuItem, Stack, styled } from '@mui/material';
 import { CommonTextField, formikMinimalProps, formikProps, PlatformKind } from '@opentalk/common';
 import { FormikProps } from 'formik';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CreateOrUpdateMeetingFormikValues } from './DashboardDateTimePicker';
@@ -42,15 +41,6 @@ const StreamingOptions = ({ formik }: StreamingOptionsProps) => {
   const { t } = useTranslation();
   const { enabled: streamingEnabled } = formik.values.streaming;
 
-  //Temporarily set value to Custom, since it is the only option we have.
-  useEffect(() => {
-    if (streamingEnabled) {
-      formik.setFieldValue('streaming.platform.kind', PlatformKind.Custom);
-    } else {
-      formik.setFieldValue('streaming.platform', undefined);
-    }
-  }, [streamingEnabled]);
-
   return (
     <Stack gap={2}>
       <MeetingFormSwitch
@@ -62,6 +52,7 @@ const StreamingOptions = ({ formik }: StreamingOptionsProps) => {
       <Collapse orientation="vertical" in={streamingEnabled} unmountOnExit mountOnEnter>
         <OptionsRow>
           <CommonTextField
+            {...formikProps('streaming.platform.kind', formik)}
             id="platform-select"
             label={t('dashboard-meeting-livestream-platform-label')}
             select
@@ -77,7 +68,7 @@ const StreamingOptions = ({ formik }: StreamingOptionsProps) => {
             placeholder={t('dashboard-meeting-livestream-platform-name-placeholder')}
           />
           <CommonTextField
-            {...formikProps('streaming.platform.publicURL', formik)}
+            {...formikProps('streaming.platform.publicUrl', formik)}
             label={t('dashboard-meeting-livestream-public-url-label')}
             placeholder={t('global-URL-placeholder')}
           />

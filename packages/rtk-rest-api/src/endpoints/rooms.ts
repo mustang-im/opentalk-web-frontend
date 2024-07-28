@@ -153,6 +153,8 @@ export const addRoomEndpoints = <
   }),
   /**
    * Get all streaming targets for a room
+   * IMPORTANT: All streaming-relevant data can be retrieved from the `Event` object, of
+   *            the `getEvent` response
    */
   getStreamingTargets: builder.query<Array<StreamingTargetInfo>, RoomId>({
     query: (roomId) => ({ url: `rooms/${roomId}/streaming_targets` }),
@@ -166,6 +168,7 @@ export const addRoomEndpoints = <
   }),
   /**
    * Add new streaming targets to a room. Currently accepts only one target per request.
+   * IMPORTANT: Streaming targets can be modified via `updateEvent` or `createEvent` as well.
    */
   addStreamingTargets: builder.mutation<StreamingTargetInfo, { roomId: RoomId; target: StreamingPlatform }>({
     query: ({ roomId, target }) => ({
@@ -177,6 +180,8 @@ export const addRoomEndpoints = <
   }),
   /**
    * Get specific streaming target
+   * IMPORTANT: All streaming-relevant data can be retrieved from the `Event` object, of
+   *            the `getEvent` response
    */
   getStreamingTarget: builder.query<StreamingTargetInfo, { roomId: RoomId; targetId: StreamingTargetId }>({
     query: ({ roomId, targetId: streamingTargetId }) => ({
@@ -186,6 +191,7 @@ export const addRoomEndpoints = <
   }),
   /**
    * Update specific streaming target
+   * IMPORTANT: Streaming targets can be modified via `updateEvent` or `createEvent` as well.*
    */
   updateStreamingTarget: builder.mutation<
     StreamingTargetInfo,
@@ -203,6 +209,7 @@ export const addRoomEndpoints = <
   }),
   /**
    * Delete specific streaming target
+   * IMPORTANT: Streaming targets can be modified via `updateEvent` or `createEvent` as well.
    */
   deleteStreamingTarget: builder.mutation<void, { roomId: RoomId; targetId: StreamingTargetId }>({
     query: ({ roomId, targetId: streamingTargetId }) => ({
