@@ -42,7 +42,7 @@ import {
 } from '../../api/rest';
 import { useAppSelector } from '../../hooks';
 import { isFeatureInModulesPredicate } from '../../hooks/enabledModules';
-import { selectFeatures } from '../../store/slices/configSlice';
+import { selectFeatures, selectWaitingRoomDefault } from '../../store/slices/configSlice';
 import { appendRecurringEventInstances } from '../../utils/eventUtils';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
@@ -88,6 +88,8 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
   const [createSharedFolder] = useCreateEventSharedFolderMutation();
   const [deleteSharedFolder] = useDeleteEventSharedFolderMutation();
   const [addStreamingTargets] = useAddStreamingTargetsMutation();
+  const isWaitingRoomEnabledByDefault = useAppSelector(selectWaitingRoomDefault);
+  const waitingRoomInitialValue = existingEvent?.room.waitingRoom ?? isWaitingRoomEnabledByDefault;
 
   const { data: tariff } = useGetMeTariffQuery();
   const isStreamingEnabled = tariff && isFeatureInModulesPredicate('stream', tariff.modules);
@@ -250,7 +252,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     initialValues: {
       title: existingEvent?.title,
       description: existingEvent?.description || '',
-      waitingRoom: existingEvent?.room.waitingRoom || false,
+      waitingRoom: waitingRoomInitialValue,
       password: existingEvent?.room.password?.trim() || undefined,
       isTimeDependent: !existingEvent?.isTimeIndependent,
       startDate:

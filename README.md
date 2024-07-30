@@ -62,6 +62,7 @@ frontend                                                                        
 | ACCOUNT_MANAGEMENT_URL             | no      |                                                   | The account management url for use the dashboard menu, if provider.active is true |
 | DISALLOW_CUSTOM_DISPLAY_NAME  | no  | false                                             | Disable editing of display name in profile and lobby page |
 | SENTRY_DSN  | no  |                                              | Adding a valid sentry dsn will activate error logging |
+| WAITING_ROOM_DEFAULT_VALUE | yes | Frontend { waitingRoomDefaultValue: true } | to enable waiting room switch by default
 
 ## Use yarn to build a local version
 
@@ -86,7 +87,7 @@ window.config = {
     },
     provider: {
       // indicates if we are are in the provider context
-	    active: false, 
+	    active: false,
       // The account management url for the dashboard menu, if active is true
 	    accountManagementUrl: '${ACCOUNT_MANAGEMENT_URL}',
     },
@@ -148,7 +149,10 @@ window.config = {
       "addUser": true,
       "joinWithoutMedia": false,
       "sharedFolder": false,
-    }
+    },
+	settings: {
+		waitingRoomDefaultValue: true
+	}
 }
 
 ```
@@ -218,8 +222,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `yarn build:profiler`
 
-Builds libraries and calls `yarn build:profiler` in `@opentalk/opentalk`, this build 
-can be used for profiling the application. 
+Builds libraries and calls `yarn build:profiler` in `@opentalk/opentalk`, this build
+can be used for profiling the application.
 
 ## Build the container image
 

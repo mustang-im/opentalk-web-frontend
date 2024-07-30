@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Make waiting room configurable ([#1896](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1896))
 - Removed nested roles from the notifications. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
 - Apply autofocus on the breakout room notification. ([#1751](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1751))
 - Add tooltip for recorder ([#1971](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1971))

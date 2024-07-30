@@ -44,7 +44,10 @@ window.config = {
     resetHandraises: true,
     addUser: false,
     joinWithoutMedia: false,
-    sharedFolder: false,
+    sharedFolder: false
+  },
+  settings: {
+	waitingRoomDefaultValue: true
   },
   provider: {
     active: false, // indicates if we are are in the provider context
