@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Stack } from '@mui/material';
+import { styled, Stack, Tooltip } from '@mui/material';
 import { RecordingsIcon as DefaultRecordingsIcon, DurationIcon, LiveIcon as DefaultLiveIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
@@ -47,6 +47,16 @@ const MeetingUtilsSection = () => {
 
   const showSecurityIcon = window.location.protocol === 'https:';
 
+  const renderRecordingIcon = () => {
+    return (
+      <Tooltip title={t('recording-started-tooltip')}>
+        <Stack>
+          <RecordingsIcon aria-label={t('recording-active-label')} />
+        </Stack>
+      </Tooltip>
+    );
+  };
+
   return (
     <Container spacing={1} direction={'row'}>
       {isModerator && <WaitingParticipantsPopover />}
@@ -55,7 +65,7 @@ const MeetingUtilsSection = () => {
         <MeetingTimer aria-label="current time" />
         {showSecurityIcon && <SecureConnectionField />}
       </ContainerWithBackground>
-      {isRecordingActive && <RecordingsIcon aria-label={t('recording-active-label')} />}
+      {isRecordingActive && renderRecordingIcon()}
       {isStreamingActive && <LiveIcon aria-label={t('livestream-active-label')} />}
     </Container>
   );

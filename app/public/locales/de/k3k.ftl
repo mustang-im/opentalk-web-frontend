@@ -1018,6 +1018,7 @@ consent-message = Sind Sie einverstanden, dass Ihr Audio und Video-Signal aufgez
 consent-accept = Erlauben
 consent-decline = Verweigern
 
+recording-started-tooltip = Aufnahme gestartet ...
 recording-active-label = Recording läuft
 livestream-active-label = Livestream läuft
 recording-active-message = Die Aufnahme wurde gestartet.

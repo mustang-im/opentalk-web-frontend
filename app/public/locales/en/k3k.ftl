@@ -125,7 +125,7 @@ chat-new-private-message = You have a new message
 chat-new-group-message = You have a new message
 chat-message-error-max-input = The message is too long (max {$maxCharacters} chars)
 chat-input-label = Chat
-chat-input-placeholder = Type a message 
+chat-input-placeholder = Type a message
 chat-input-error-required = Empty messages are not allowed
 chat-no-search-results = No messages matching the criteria
 chat-search-reset = Reset
@@ -134,7 +134,7 @@ chat-open-emoji-picker = open emoji picker
 chat-close-emoji-picker = close emoji picker
 chat-submit-button = submit chat message
 chat-search-label = Search in chat
-chat-search-placeholder = Enter a search term 
+chat-search-placeholder = Enter a search term
 
 participant-search-label = Search participant
 
@@ -1019,6 +1019,7 @@ consent-message = Do you consent that your audio and video is recorded?
 consent-accept = Accept
 consent-decline = Decline
 
+recording-started-tooltip = Recording started ...
 recording-active-label = Recording active
 livestream-active-label = Livestream active
 recording-active-message = The recording has started.
