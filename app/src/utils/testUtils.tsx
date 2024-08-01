@@ -37,7 +37,7 @@ import {
 import { SipId } from '@opentalk/rest-api-rtk-query/src/types/room';
 import { combineReducers, ConfigureStoreOptions, Store } from '@reduxjs/toolkit';
 import { createStore as createStoreTlk, configureStore as configureStoreTlk } from '@reduxjs/toolkit';
-import { act, render as rtlRender, RenderOptions } from '@testing-library/react';
+import { act, render as rtlRender, RenderOptions, RenderResult } from '@testing-library/react';
 import fs from 'fs';
 import i18n from 'i18next';
 import { range } from 'lodash';
@@ -122,7 +122,7 @@ export const configureStore = (options?: ConfigureStoreOptions['preloadedState']
 
 export * from '@testing-library/react';
 
-export const render = async (ui: React.ReactElement, store?: Store, options?: RenderOptions) => {
+export const render = async (ui: React.ReactElement, store?: Store, options?: RenderOptions): Promise<RenderResult> => {
   function Wrapper({ children }: { children: React.ReactElement }): React.ReactElement {
     if (store === undefined) {
       return (
@@ -160,7 +160,8 @@ export const render = async (ui: React.ReactElement, store?: Store, options?: Re
       </ThemeProvider>
     );
   }
-  let result;
+
+  let result: RenderResult = {} as RenderResult;
   await act(async () => {
     result = await rtlRender(ui, { wrapper: Wrapper, ...options });
   });

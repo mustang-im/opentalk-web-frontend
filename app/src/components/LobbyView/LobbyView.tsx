@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Container, IconButton, InputAdornment, Stack, styled } from '@mui/material';
+import { Button, Container, Grid, IconButton, InputAdornment, styled } from '@mui/material';
 import {
   BreakoutRoomId,
   HiddenIcon,
@@ -52,6 +52,10 @@ const CustomTextField = styled(CommonTextField)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.contrastText,
   },
 }));
+
+const ActionButton = styled(Button)({
+  height: '100%',
+});
 
 let wrongPasswordSnackBarKey: SnackbarKey | undefined = undefined;
 
@@ -221,49 +225,65 @@ const LobbyView: FC = () => {
       <Container>
         <SelfTest
           actionButton={
-            <Button form={JOIN_FORM_ID} type="submit" disabled={disableSubmitButton}>
+            <ActionButton form={JOIN_FORM_ID} type={'submit'} disabled={disableSubmitButton}>
               {t('joinform-enter-now')}
-            </Button>
+            </ActionButton>
           }
           title={roomData?.title}
         >
-          <Stack direction="row" spacing={1} component="form" id={JOIN_FORM_ID} onSubmit={formik.handleSubmit}>
-            <ContitionalToolTip
-              showToolTip={Boolean(disableDisplayNameField)}
-              title={t('joinform-display-name-field-disabled-tooltip')}
-              children={
-                <CustomTextField
-                  {...formikProps('name', formik)}
-                  color="secondary"
-                  placeholder={t('global-name')}
-                  autoComplete="username"
-                  disabled={disableDisplayNameField}
-                />
-              }
-            />
-            {showPasswordField && (
-              <CommonTextField
-                {...formikProps('password', formik)}
-                color="secondary"
-                placeholder={t('global-password')}
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label={t('toggle-password-visibility')}
-                        onClick={handleClickShowPassword}
-                        edge="end"
-                      >
-                        {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+          <Grid
+            container
+            item
+            spacing={1}
+            justifyContent="center"
+            flexWrap="nowrap"
+            direction="row"
+            sm={12}
+            md="auto"
+            component="form"
+            id={JOIN_FORM_ID}
+            onSubmit={formik.handleSubmit}
+          >
+            <Grid item sm={6} md="auto">
+              <ContitionalToolTip
+                showToolTip={Boolean(disableDisplayNameField)}
+                title={t('joinform-display-name-field-disabled-tooltip')}
+                children={
+                  <CustomTextField
+                    {...formikProps('name', formik)}
+                    color={'secondary'}
+                    placeholder={t('global-name')}
+                    autoComplete="username"
+                    disabled={disableDisplayNameField}
+                  />
+                }
               />
+            </Grid>
+            {showPasswordField && (
+              <Grid item sm={6} md="auto">
+                <CommonTextField
+                  {...formikProps('password', formik)}
+                  color={'secondary'}
+                  placeholder={t('global-password')}
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label={t('toggle-password-visibility')}
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {!showPassword ? <VisibleIcon /> : <HiddenIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
             )}
-          </Stack>
+          </Grid>
         </SelfTest>
       </Container>
       <ImprintContainer />
