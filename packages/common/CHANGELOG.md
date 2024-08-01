@@ -1,3 +1,9 @@
+# 1.0.28
+
+### Bug fixes
+
+- fix: tooltip not showing when combined with copy text field component ([#1951](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1951))
+
 # 1.0.27
 
 ### Internal
