@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Fix: Screen share is still active during/after coffe break ([#1803](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1803))
 - Hide manual error report button when Glitchtip is not configured ([#1977](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1977))
 - Fix: Copy meeting link messsage is deleted ([#1941](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1941))
 

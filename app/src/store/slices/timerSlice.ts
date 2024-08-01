@@ -19,6 +19,7 @@ import i18next from 'i18next';
 import { AppDispatch, RootState } from '../';
 import { ReadyToContinue } from '../../api/types/incoming/timer';
 import localMediaContext from '../../modules/Media/LocalMedia';
+import localScreenContext from '../../modules/Media/LocalScreen';
 
 interface State {
   startedAt?: Timestamp;
@@ -147,8 +148,15 @@ startAppListening({
 
     //Avoid sending reconfigure if both video and audio tracks are not active
     const isAnyMediaTrackEnabled = mediaState.audioEnabled || mediaState.videoEnabled;
-    if (action.payload.style === TimerStyle.CoffeeBreak && isAnyMediaTrackEnabled) {
-      localMediaContext.reconfigure({ audio: false, video: false });
+    const isShareScreenEnabled = mediaState.shareScreenEnabled;
+
+    if (action.payload.style === TimerStyle.CoffeeBreak) {
+      if (isAnyMediaTrackEnabled) {
+        localMediaContext.reconfigure({ audio: false, video: false });
+      }
+      if (isShareScreenEnabled) {
+        localScreenContext.release();
+      }
     }
   },
 });
