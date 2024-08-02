@@ -38,10 +38,6 @@ const BrowserCompatibilityInfo = ({ children }: PropsWithChildren) => {
           persist: true,
           preventDuplicate: true,
           onCancel: () => localStorage.setItem(localStorageItems.safariNotificationKey, now.toISOString()),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': message,
-          },
         });
       }
     }

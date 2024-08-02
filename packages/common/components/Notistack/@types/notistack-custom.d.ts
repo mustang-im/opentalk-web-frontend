@@ -19,5 +19,20 @@ declare module 'notistack' {
       secondaryBtnProps?: AdditionalButtonAttributes;
       closable?: boolean;
     };
+
+    consent: {
+      onAcceptButton(): void;
+      onDeclineButton(): void;
+    };
+
+    talkingStickMuted: {
+      onUnmute(): void;
+      onNext(): void;
+    };
+
+    talkingStickUnmuted: {
+      isLastSpeaker: boolean;
+      onNext(): void;
+    };
   }
 }

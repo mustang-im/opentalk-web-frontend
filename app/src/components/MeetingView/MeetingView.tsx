@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { useRef, useState, useEffect, memo } from 'react';
+import { useRef, memo } from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { useHotkeys } from '../../hooks/useHotkeys';
@@ -42,16 +42,10 @@ const MeetingView = () => {
   const isCoffeeBreakOpen = useAppSelector(selectShowCoffeeBreakCurtain);
   const isModerator = useAppSelector(selectIsModerator);
   const containerRef = useRef(null);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const enableAudio = isModerator || !isCoffeeBreakOpen;
   const showCoffeeBreakCurtain = useAppSelector(selectShowCoffeeBreakCurtain);
 
   useHotkeys();
-
-  useEffect(() => {
-    setAnchorEl(containerRef.current);
-    return () => setAnchorEl(null);
-  }, [containerRef]);
 
   return (
     <Container ref={containerRef}>
@@ -63,7 +57,7 @@ const MeetingView = () => {
 
           {enableAudio && <CachedRemoteAudioStreams />}
 
-          {!showCoffeeBreakCurtain && <CachedTimerPopover anchorEl={anchorEl} />}
+          {!showCoffeeBreakCurtain && <CachedTimerPopover />}
 
           <CachedInnerLayout />
         </>

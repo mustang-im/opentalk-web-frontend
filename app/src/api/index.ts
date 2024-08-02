@@ -39,7 +39,6 @@ import i18next from 'i18next';
 
 import { showConsentNotification } from '../components/ConsentNotification';
 import { createStreamUpdatedNotification } from '../components/StreamUpdatedNotification/StreamUpdatedNotification';
-import { createTalkingStickNotification } from '../components/TalkingStickNotification';
 import { startTimeLimitNotification } from '../components/TimeLimitNotification';
 import LayoutOptions from '../enums/LayoutOptions';
 import i18n from '../i18n';
@@ -394,12 +393,6 @@ const handleControlMessage = async (
               i18next.t('talking-stick-started-second-line'),
             ]),
             variant: 'info',
-            SnackbarProps: {
-              role: 'alert',
-              'aria-label': `${i18next.t('talking-stick-started-first-line')} ${i18next.t(
-                'talking-stick-started-second-line'
-              )}`,
-            },
           });
         }
       }
@@ -588,10 +581,6 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
           variant: 'warning',
           actionBtnText: i18next.t('media-received-request-mute-ok'),
           onAction: () => localMediaContext.reconfigure({ audio: false }),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': message,
-          },
         });
       }
       dispatch(mediaStore.notificationShown());
@@ -609,10 +598,6 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
           notificationPersistent({
             msg: i18next.t('media-ice-connection-not-possible'),
             variant: 'error',
-            SnackbarProps: {
-              role: 'alert',
-              'aria-label': i18next.t('media-ice-connection-not-possible'),
-            },
           });
           break;
         case 'invalid_request_offer':
@@ -625,11 +610,7 @@ const handleMediaMessage = async (dispatch: AppDispatch, data: media.Message, st
         case 'invalid_configure_request':
         case 'permission_denied':
           console.error(`Media Error: ${data}`);
-          notifications.error(i18next.t('error-general'), {
-            SnackbarProps: {
-              role: 'alert',
-            },
-          });
+          notifications.error(i18next.t('error-general'));
           throw new Error(`Media Error: ${error}`);
         default:
           console.error(`Media Error: ${data}`);
@@ -711,12 +692,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
 
       const totalParticipants = selectParticipantsTotal(state);
       if (totalParticipants < MIN_RECOMMENDED_TALKING_STICK_PARTICIPANTS) {
-        notifications.warning(i18next.t('talking-stick-participant-amount-notification'), {
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': i18next.t('talking-stick-participant-amount-notification'),
-          },
-        });
+        notifications.warning(i18next.t('talking-stick-participant-amount-notification'));
       }
 
       if (data.selectionStrategy === AutomodSelectionStrategy.Playlist) {
@@ -727,12 +703,6 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
             i18next.t('talking-stick-started-second-line'),
           ]),
           variant: 'info',
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': `${i18next.t('talking-stick-started-first-line')} ${i18next.t(
-              'talking-stick-started-second-line'
-            )}`,
-          },
         });
 
         if (data.issuedBy === state.user.uuid) {
@@ -751,10 +721,6 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
         key: stoppedId,
         msg: i18next.t('talking-stick-finished'),
         variant: 'info',
-        SnackbarProps: {
-          role: 'alert',
-          'aria-label': i18next.t('talking-stick-finished'),
-        },
       });
       break;
     // case 'start_animation':
@@ -777,31 +743,28 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
           msg: i18next.t('talking-stick-next-announcement'),
           variant: 'warning',
           persist: true,
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': i18next.t('talking-stick-next-announcement'),
-          },
         });
       }
       if (data.speaker === state.user.uuid && state.automod.speakerState === 'inactive') {
         dispatch(setAsActiveSpeaker());
-        notificationAction({
-          key: currentId,
-          persist: true,
-          variant: 'success',
-          hideCloseButton: true,
-          msg: createTalkingStickNotification({
-            localMediaContext,
-            currentId,
-            unmutedId,
-            passTalkingStick: () => dispatch(automod.pass.action()),
-            lastSpeaker: Boolean(data.remaining && data.remaining.length === 0),
-            isUnmuted: state.media.audioEnabled,
-          }),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': 'TODO',
+        notifications.showTalkingStickMutedNotification({
+          onUnmute: async () => {
+            notifications.close(currentId);
+            await localMediaContext.reconfigure({ audio: true });
+            notifications.showTalkingStickUnmutedNotification({
+              onNext: () => {
+                dispatch(automod.pass.action());
+                notifications.close(unmutedId);
+              },
+              isLastSpeaker: Boolean(data.remaining && data.remaining.length === 0),
+              key: unmutedId,
+            });
           },
+          onNext: () => {
+            dispatch(automod.pass.action());
+            notifications.close(currentId);
+          },
+          key: currentId,
         });
       }
       dispatch(automodSpeakerUpdated(data));
@@ -995,10 +958,6 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
           variant: 'info',
           actionBtnText: i18next.t('protocol-new-protocol-message-button'),
           onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': message,
-          },
         });
       }
       dispatch(setProtocolWriteUrl(data.url));
@@ -1013,10 +972,6 @@ const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingPro
           variant: 'info',
           actionBtnText: i18next.t('protocol-new-protocol-message-button'),
           onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': message,
-          },
         });
       }
       dispatch(setProtocolReadUrl(data.url));
@@ -1075,10 +1030,6 @@ const handleWhiteboardMessage = (dispatch: AppDispatch, data: whiteboard.Message
       notificationAction({
         msg: i18next.t('whiteboard-new-pdf-message'),
         variant: 'info',
-        SnackbarProps: {
-          role: 'alert',
-          'aria-label': i18next.t('whiteboard-new-pdf-message'),
-        },
       });
 
       break;

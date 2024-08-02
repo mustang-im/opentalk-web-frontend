@@ -278,10 +278,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           variant: 'success',
           cancelBtnText: 'Dismiss',
           onCancel: () => alert('Callback fnc to handle click, Action Cancel Btn Success'),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': 'You just triggered this notification. Success!',
-          },
         }),
       icon: <ErrorIcon />,
     },
@@ -295,10 +291,6 @@ const MoreMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           cancelBtnText: 'Dismiss',
           onAction: () => alert('Callback fnc to handle click, User Agree'),
           onCancel: () => alert('Callback fnc to handle click, User Dismissed'),
-          SnackbarProps: {
-            role: 'alert',
-            'aria-label': 'Ooops...you just triggered a warning.',
-          },
         }),
       icon: <ErrorIcon />,
     },

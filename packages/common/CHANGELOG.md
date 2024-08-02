@@ -4,6 +4,11 @@
 
 - Update @mui/material and remove deprecated @mui/styles ([#1939](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/work_items/1939))
 
+### UI/UX Fixes
+
+- Notifications with action buttons are marked with `alertdialog` role. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
+- Apply autofocus on the `alertdialog` action button. ([#1751](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1751))
+
 # 1.0.26
 
 ### Bug fixes

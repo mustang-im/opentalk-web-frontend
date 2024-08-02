@@ -34,7 +34,7 @@ const VoteResultDate = ({ state, date, showTableHint, showResultsHandler }: Vote
       <TokenTypography color={theme.palette.warning.main}>{t(tokenKey)}</TokenTypography>
       {showTableHint && (
         <Button
-          sx={{ width: '100%' }}
+          fullWidth
           data-testid="legal-vote-show-results-button"
           type="button"
           onClick={() => {
