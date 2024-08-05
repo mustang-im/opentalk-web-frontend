@@ -985,7 +985,7 @@ const handleMeetingNotesMessage = (
           onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.MeetingNotes)),
         });
       }
-      dispatch(setMeetingNotesWriteUrl(data.url));
+      dispatch(setMeetingNotesWriteUrl(data.url.toString()));
       break;
     case 'read_url':
       if (state.user.meetingNotesAccess === MeetingNotesAccess.None) {
@@ -1001,7 +1001,7 @@ const handleMeetingNotesMessage = (
           onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.MeetingNotes)),
         });
       }
-      dispatch(setMeetingNotesReadUrl(data.url));
+      dispatch(setMeetingNotesReadUrl(data.url.toString()));
       break;
     case 'error':
       dispatchError(data.error.replace('_', '-'));

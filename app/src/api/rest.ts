@@ -16,9 +16,9 @@ export interface ApiErrorWithBody<T extends string> {
   message: string;
 }
 
-export interface NewRoom {
+type NewRoom = {
   password?: string;
-}
+};
 
 export interface Room {
   id: RoomId;
@@ -26,11 +26,11 @@ export interface Room {
   password?: string;
 }
 
-interface FeedbackData {
+type FeedbackData = {
   lang: string;
   browser: string;
   form: Array<FeedbackFormData>;
-}
+};
 
 interface FeedbackFormData {
   name: string;

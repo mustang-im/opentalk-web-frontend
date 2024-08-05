@@ -20,9 +20,11 @@ jest.mock('../../../api/rest', () => ({
       },
     },
   }),
+  useGetEventQuery: () => ({}),
 }));
 describe('<EndCallButton />', () => {
-  const { store /*, dispatch */ } = configureStore();
+  const { store } = configureStore();
+
   beforeEach(() => {
     jest.clearAllMocks();
   });

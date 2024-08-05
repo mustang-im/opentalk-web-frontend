@@ -6,7 +6,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
 
 interface MeetingNotesState {
-  meetingNotesUrl: URL | null;
+  meetingNotesUrl: string | null;
 }
 
 const initialState: MeetingNotesState = {
@@ -17,10 +17,10 @@ export const meetingNotesSlice = createSlice({
   name: 'meetingNotes',
   initialState,
   reducers: {
-    setMeetingNotesReadUrl: (state, action: PayloadAction<URL | null>) => {
+    setMeetingNotesReadUrl: (state, action: PayloadAction<string | null>) => {
       state.meetingNotesUrl = action.payload;
     },
-    setMeetingNotesWriteUrl: (state, action: PayloadAction<URL | null>) => {
+    setMeetingNotesWriteUrl: (state, action: PayloadAction<string | null>) => {
       state.meetingNotesUrl = action.payload;
     },
   },

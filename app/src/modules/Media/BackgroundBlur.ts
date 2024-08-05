@@ -46,7 +46,7 @@ export interface BackgroundConfig {
 }
 
 export class BackgroundBlur {
-  private interval?: NodeJS.Timer;
+  private interval?: NodeJS.Timeout;
   private tfLite: TFLite;
   private readonly outputMemoryOffset: number = 0;
   private readonly inputMemoryOffset: number = 0;

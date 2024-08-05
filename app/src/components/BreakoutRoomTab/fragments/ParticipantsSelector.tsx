@@ -52,7 +52,7 @@ const ParticipantsSelector = ({ name, formName, onSubmit }: IParticipantsSelecto
     field.value || []
   );
   const [expanded, setExpanded] = useState<false | string>(false);
-  const expandedRef = useRef<AccordionOptions>(get(values, 'expanded', undefined));
+  const expandedRef = useRef<AccordionOptions>(get(values, 'expanded', AccordionOptions.Rooms));
   const roomsRef = useRef<number>(get(values, getFormName('rooms'), 1));
   const participantsTotal = useRef<number>(participants.length);
   const { t } = useTranslation();
@@ -144,18 +144,17 @@ const ParticipantsSelector = ({ name, formName, onSubmit }: IParticipantsSelecto
   };
 
   const validateBreakoutRoomAssignment = (): { valid: boolean; error: string | null } => {
-    const expandedForm: AccordionOptions = get(values, 'expanded', undefined);
+    const expandedForm: AccordionOptions = get(values, 'expanded', AccordionOptions.Rooms);
 
-    switch (expandedForm) {
-      case AccordionOptions.Rooms:
-        return validateRoomsByRooms();
-      case AccordionOptions.Participants:
-        return validateRoomsByParticipants();
-      default:
-        return {
-          valid: true,
-          error: null,
-        };
+    if (expandedForm === AccordionOptions.Rooms) {
+      return validateRoomsByRooms();
+    } else if (expandedForm === AccordionOptions.Participants) {
+      return validateRoomsByParticipants();
+    } else {
+      return {
+        valid: true,
+        error: null,
+      };
     }
   };
 

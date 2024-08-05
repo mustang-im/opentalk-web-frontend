@@ -33,7 +33,7 @@ repos:
         name: Run Jest tests
         always_run: true
         stages: [push]
-        entry: yarn test --watchAll=false --ci
+        entry: pnpm test --watchAll=false --ci
         pass_filenames: false
         language: system
         types_or: [javascript, ts, tsx]
@@ -43,5 +43,5 @@ repos:
         files: \.[jt]sx?$
         types: [file]
         language: system
-        entry: yarn lint
+        entry: pnpm lint
         pass_filenames: false

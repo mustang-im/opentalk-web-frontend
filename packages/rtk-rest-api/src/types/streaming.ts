@@ -11,29 +11,31 @@ export enum PlatformKind {
   Custom = 'custom',
 }
 
-interface BasePlatform {
+type BasePlatform = {
   kind: PlatformKind;
-}
+};
 
-interface ExternalPlatformInfo {
+type ExternalPlatformInfo = {
   streamingKey: string;
   publicUrl: string;
-}
+};
 
-interface ProviderPlatform extends BasePlatform, ExternalPlatformInfo {
-  kind: PlatformKind.Provider;
-  provider: string;
-}
+type ProviderPlatform = BasePlatform &
+  ExternalPlatformInfo & {
+    kind: PlatformKind.Provider;
+    provider: string;
+  };
 
-interface CustomPlatform extends BasePlatform, ExternalPlatformInfo {
-  kind: PlatformKind.Custom;
-  name: string;
-  streamingEndpoint: string;
-}
+type CustomPlatform = BasePlatform &
+  ExternalPlatformInfo & {
+    kind: PlatformKind.Custom;
+    name: string;
+    streamingEndpoint: URL;
+  };
 
-interface BuiltInPlatform extends BasePlatform {
+type BuiltInPlatform = BasePlatform & {
   kind: PlatformKind.BuiltIn;
-}
+};
 
 export type StreamingPlatform = ProviderPlatform | CustomPlatform | BuiltInPlatform;
 

@@ -25,7 +25,6 @@ import { ISnackActionsProps, ISnackbarPersistentProps, ISnackbarActionButtonProp
 import NumberInput from './NumberInput';
 import ParticipantAvatar, { setLibravatarOptions } from './ParticipantAvatar';
 import ProgressBar from './ProgressBar';
-import RadioGroup from './RadioGroup';
 import Rating from './Rating';
 import SortPopoverMenu from './SortPopoverMenu';
 import SuspenseLoading from './SuspenseLoading';
@@ -42,7 +41,6 @@ export {
   NameTile,
   ErrorFormMessage,
   NumberInput,
-  RadioGroup,
   Rating,
   FormWrapper,
   SuspenseLoading,

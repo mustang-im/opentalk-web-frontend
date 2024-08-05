@@ -42,4 +42,4 @@ From there **run `./helpers/createIconComponents.sh`.**
 
 ## 3. Formatting
 
-As a good measure, **run `yarn fmt`** afterwards.
+As a good measure, **run `pnpm fmt`** afterwards.

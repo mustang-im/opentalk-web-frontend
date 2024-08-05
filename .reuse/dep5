@@ -10,8 +10,6 @@ Files:
  .prettierrc.js
  babel.config.js
  jest.config.js
- yarn.lock
- .yarnrc.yml
  README.md
  CHANGELOG.md
  package.json
@@ -29,6 +27,7 @@ Files:
  e2e/README.md
  e2e/.env-example
  packages/**/*.snap
+ pnpm-lock.yaml
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: EUPL-1.2
 
@@ -48,38 +47,6 @@ Files:
  e2e/tests/e2e/help-quick-guide.spec.ts-snapshots/*.png
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: CC-BY-NC-ND-4.0
-
-Files:
- .yarn/releases/yarn-3.3.1.cjs
-Copyright:
- 2015, Rebecca Turner
- Node.js contributors
- 2014-present Jon Schlinkert
-License: MIT
-Source: https://repo.yarnpkg.com/3.3.1/packages/yarnpkg-cli/bin/yarn.js
-
-Files:
- .yarn/plugins/@yarnpkg/plugin-typescript.cjs
-Copyright:
- 2016-present, Yarn Contributors
-License: LicenseRef-BSD2-yarnpkg
-Source: https://yarnpkg.com/package/@yarnpkg/plugin-typescript
-
-Files:
- .yarn/plugins/@yarnpkg/plugin-workspace-tools.cjs
-Copyright:
- 2014-present, Jon Schlinkert
- 2016-present, Yarn Contributors
-License: LicenseRef-BSD2-yarnpkg
-Source: https://yarnpkg.com/package/@yarnpkg/plugin-workspace-tools
-
-Files:
- .yarn/plugins/@yarnpkg/plugin-outdated.cjs
-Copyright:
- 2014-present Jon Schlinkert
- 2022 Mark Skelton
-License: LicenseRef-ISC-yarn-plugin-outdated
-Source: https://mskelton.dev/yarn-outdated/v2
 
 Files: packages/i18next-fluent/*
 Copyright:

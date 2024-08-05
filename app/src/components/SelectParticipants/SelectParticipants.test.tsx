@@ -32,6 +32,7 @@ jest.mock('../../api/rest', () => ({
       isLoading: false,
     },
   ],
+  useGetEventInvitesQuery: () => ({}),
 }));
 
 describe('SelectParticipants', () => {

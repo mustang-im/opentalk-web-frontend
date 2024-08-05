@@ -61,14 +61,36 @@ frontend                                                                        
 | DATA_PROTECTION_URL             | no      |                                                   | The URL to the data protection page |
 | ACCOUNT_MANAGEMENT_URL             | no      |                                                   | The account management url for use the dashboard menu, if provider.active is true |
 | DISALLOW_CUSTOM_DISPLAY_NAME  | no  | false                                             | Disable editing of display name in profile and lobby page |
-| SENTRY_DSN  | no  |                                              | Adding a valid sentry dsn will activate error logging |
-| WAITING_ROOM_DEFAULT_VALUE | yes | Frontend { waitingRoomDefaultValue: true } | to enable waiting room switch by default
+| SENTRY_DSN  | no  |                                              | Adding a valid sentry dsn will activate error logging | 
+| WAITING_ROOM_DEFAULT_VALUE | yes | Frontend { waitingRoomDefaultValue: true } | to enable waiting room switch by default                                          | Adding a valid sentry dsn will activate error logging |
 
-## Use yarn to build a local version
+## Local version
 
-You will need yarn and node installed on your system.
+### Local system setup
 
-Run `yarn && yarn build`
+You will need `node` and `pnpm` installed on your system.
+
+First install `node`. We recommend using a `node` version manager like [`nvm`](https://github.com/nvm-sh/nvm/blob/master/README.md) or [`n`](https://www.npmjs.com/package/n).
+You should install at least `node v18`
+
+Afterwards you need to enable `pnpm` via `corepack`.
+`corepack` is a built-in feature of `node`, which is used for managing package managers
+
+To enable `pnpm` run
+`corepack enable pnpm`
+
+IMPORTANT: If you installed Node.js using Homebrew, you'll need to install corepack separately:
+`brew install corepack`
+
+The `packageManager` field in the `package.json` will instruct `corepack` to always use a specific version on that project.
+
+## Build local version
+
+First setup your local system as described in the chapter `Local system setup`.
+
+After `pnpm` is installed you can build local version of the app
+
+Run `pnpm install && pnpm build`
 
 Place the following file with correct values into app/public/config.js, without the comments
 
@@ -163,15 +185,13 @@ After that you need a webserver to serve the files from the /app/dist directory.
 
 ## To install & run
 
-Instead of `npm` we use `yarn`.
+First setup your local system as described in the chapter `Local system setup`.
 
-To install all dependencies run: `yarn` in this project directory.
-Yarn should be included in all recent node versions.
-If you run ubuntu you might have a very old node version installed. Use node version manager (`nvm`) to install a more recent version (>v14.0.0)
+To install all dependencies run: `pnpm install` in this project directory.
 
-After that you can run `yarn start`, see further down.
+After that you can run `pnpm start`, see further down.
 
-You need to add the same config to app/public/config.js as in the Step `Use yarn to build a local version` (See futher up)
+You need to add the same config to app/public/config.js as in the chapter `Build local version`.
 
 ## Guidelines
 
@@ -189,9 +209,9 @@ For details, please refer to the `app/hotReload/Instructions.md` manual.
 
 In this directory, you can run:
 
-### `yarn start`
+### `pnpm start`
 
-Builds libraries and calls `yarn start` in `@opentalk/opentalk`
+Builds libraries and calls `pnpm start` in `@opentalk/opentalk`
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
@@ -199,19 +219,19 @@ The page will reload if you make edits in the app.\
 You will also see any lint errors in the console.
 If you plan to modify one of the libraries in this monorepo, execute a watcher inside of that library. See [Development](Development) for details information how to that.
 
-### `yarn start:hot`
+### `pnpm start:hot`
 
-Similar to `yarn start` with extended hot reload functionality for the `@opentalk` packages.
+Similar to `pnpm start` with extended hot reload functionality for the `@opentalk` packages.
 For details, please refer to the `app/hotReload/Instructions.md` manual.
 
-### `yarn test`
+### `pnpm test`
 
-Builds libraries and calls `yarn test` in `@opentalk/opentalk`
+Builds libraries and calls `pnpm test` in `@opentalk/opentalk`
 Launches the test runner in the interactive watch mode.\
 
-### `yarn build`
+### `pnpm build`
 
-Builds libraries and calls `yarn build` in `@opentalk/opentalk`
+Builds libraries and calls `pnpm build` in `@opentalk/opentalk`
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
@@ -220,10 +240,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn build:profiler`
+### `pnpm build:profiler`
 
-Builds libraries and calls `yarn build:profiler` in `@opentalk/opentalk`, this build
-can be used for profiling the application.
+Builds libraries and calls `pnpm build:profiler` in `@opentalk/opentalk`, this build 
+can be used for profiling the application. 
 
 ## Build the container image
 
@@ -261,10 +281,10 @@ This project can run several end2end tests against different instances with diff
 ### How to run local
 
 1. run ```npx playwright install```
-2. run ```yarn install```
+2. run ```pnpm install```
 3. create `.env` file in the `e2e` directory
 4. fill in your variables (look at `.env-example` or in the table)
-5. run ```yarn playwright test```
+5. run ```pnpm playwright test```
 
 Have a look in to the [Commands](#commands) section
 
@@ -290,35 +310,35 @@ Inside that directory, you can run several commands:
 
 Run the end-to-end test <br>
 ```
-yarn playwright test
+pnpm playwright test
 ```
 
 Starts the interactive UI mode. <br>
 ```
-yarn playwright test --ui
+pnpm playwright test --ui
 ```
 
 Runs the tests only on Desktop Chrome.<br>
 ```
-yarn playwright test --project=chromium
+pnpm playwright test --project=chromium
 ```
 
 Runs the tests in a specific file.<br>
 ```
-yarn playwright test example
+pnpm playwright test example
 ```
 
 Runs the tests in debug mode.
 ```
-yarn playwright test --debug
+pnpm playwright test --debug
 ```
 
 Auto generate tests with Codegen.<br>
 ```
-yarn playwright codegen
+pnpm playwright codegen
 ```
 
 We suggest that you begin by typing:
 ```
-yarn playwright test
+pnpm playwright test
 ```

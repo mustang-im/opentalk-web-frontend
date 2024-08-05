@@ -43,7 +43,7 @@ const MeetingTimer = () => {
   }, [getDuration, meetingTime]);
 
   let renderedTime = meetingTime;
-  if (isDevMode() && window.DEBUG) {
+  if (isDevMode()) {
     // #1702
     renderedTime = meetingTime.length <= MEETING_TIMER_UNDER_HOUR_FORMAT_LENGTH ? '00 : ' + meetingTime : meetingTime;
   }

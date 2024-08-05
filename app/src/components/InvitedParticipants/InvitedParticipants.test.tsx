@@ -6,7 +6,7 @@ import { UserRole } from '@opentalk/rest-api-rtk-query/src/types';
 import { EventInvite } from '@opentalk/rest-api-rtk-query/src/types/eventInvite';
 import { v4 as uuidv4 } from 'uuid';
 
-import { cleanup, configureStore, render, screen } from '../../utils/testUtils';
+import { configureStore, render, screen } from '../../utils/testUtils';
 import InvitedParticipants from './InvitedParticipants';
 
 const mockInvitees: Array<EventInvite> = [
@@ -56,22 +56,36 @@ jest.mock('../../api/rest', () => ({
   useGetEventInvitesQuery: () => ({
     data: mockInvitees,
   }),
+  useGetEventQuery: () => ({
+    isLoading: false,
+    data: {
+      createdBy: {
+        id: 'MOCK_USER_ID' as UserId,
+      },
+    },
+  }),
+  useGetMeQuery: () => ({
+    isLoading: false,
+    data: {
+      id: 'MOCK_USER_ID' as UserId,
+    },
+  }),
 }));
 
 describe('InvitedParticipants', () => {
   const { store } = configureStore();
 
-  beforeEach(async () => {
-    await render(<InvitedParticipants eventId={'SOME_EVENT_ID' as EventId} isUpdatable={true} />, store);
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  afterEach(() => cleanup());
-
   test('will render without errors', async () => {
+    await render(<InvitedParticipants eventId={'SOME_EVENT_ID' as EventId} isUpdatable={true} />, store);
     expect(screen.getByTestId('InvitedParticipants')).toBeInTheDocument();
   });
 
   test('render 3 ParticipantList components', async () => {
+    await render(<InvitedParticipants eventId={'SOME_EVENT_ID' as EventId} isUpdatable={true} />, store);
     expect(screen.getByTestId('InvitedParticipants').children).toHaveLength(3);
   });
 });

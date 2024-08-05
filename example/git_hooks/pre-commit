@@ -3,9 +3,9 @@
 # SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 #
 # SPDX-License-Identifier: EUPL-1.2
-yarn workspaces foreach -pA run fmt:ci &&\
-yarn lint --no-inline-config --max-warnings 0 && \
-CI=true  yarn test && \
+pnpm run -r fmt:ci &&\
+pnpm lint --no-inline-config --max-warnings 0 && \
+CI=true  pnpm test && \
 yamllint . && \
 licensee --production --errors-only && \
-yarn npm audit --environment production -RA
+pnpm audit --prod

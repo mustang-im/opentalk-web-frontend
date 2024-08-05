@@ -19,7 +19,6 @@ module.exports = {
     '!**/example/**',
     '!**/stories/**',
     '!**/hotReload/**',
-    '!**/.storybook/**',
     '!**/coverage/**',
     '!**/__tests__/**',
     '!**/craco.config.js',
@@ -47,10 +46,10 @@ module.exports = {
       moduleDirectories: ['node_modules', '../app/node_modules'],
       moduleNameMapper: {
         '\\.(png|jpg|webp|ttf|woff|woff2|mp4)$': '<rootDir>/mocks/fileMock.js',
-        '@mui/styled-engine': '<rootDir>/app/node_modules/@mui/styled-engine',
+        '@mui/styled-engine': '<rootDir>/node_modules/@mui/styled-engine',
       },
       modulePaths: [],
-      transformIgnorePatterns: ['<rootDir>/app/node_modules/@heinlein-video/rrule/'],
+      transformIgnorePatterns: ['/node_modules/(?!@heinlein-video/rrule*)'],
       resetMocks: true,
     },
     {
