@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- When creating an adhoc meeting, the invited users are only shown when invites exist. ([#1970](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1970))
 - Inlined meetings filters on mobile devices ([#2003](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2003))
 - Show meeting details now defaults to true for new events ([#1969](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1969))
 - Make waiting room configurable ([#1896](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1896))

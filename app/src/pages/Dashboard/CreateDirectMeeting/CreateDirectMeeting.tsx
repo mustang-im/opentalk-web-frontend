@@ -78,7 +78,7 @@ const CreateDirectMeeting = () => {
       <InviteToMeeting
         isUpdatable={true}
         existingEvent={updatedEvent ?? event}
-        directMeeting
+        adhocMeeting
         invitationsSent={() => getEvent({ eventId: event.id, inviteesMax: 10 })}
       />
     </Container>

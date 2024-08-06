@@ -22,7 +22,7 @@ import MeetingLinksAndPasswords from './fragments/MeetingLinksAndPasswords';
 interface InviteToMeetingProps {
   isUpdatable: boolean;
   existingEvent: Event;
-  directMeeting?: boolean;
+  adhocMeeting?: boolean;
   invitationsSent?: () => void;
   onBackButtonClick?: () => void;
   showOnlyLinkFields?: boolean;
@@ -32,7 +32,7 @@ const InviteToMeeting = ({
   isUpdatable,
   existingEvent,
   onBackButtonClick,
-  directMeeting,
+  adhocMeeting,
   invitationsSent,
   showOnlyLinkFields,
 }: InviteToMeetingProps) => {
@@ -73,7 +73,7 @@ const InviteToMeeting = ({
   }, [t, selectedUsers, existingEvent, creatEventInvitation, invitationsSent, isError]);
 
   const handleCancelMeetingPress = () => {
-    if (directMeeting && isEvent(existingEvent)) {
+    if (adhocMeeting && isEvent(existingEvent)) {
       deleteEvent(existingEvent.id);
     }
     navigate('/dashboard/');
@@ -118,6 +118,7 @@ const InviteToMeeting = ({
                 selectedUsers={selectedUsers}
                 isUpdatable={isUpdatable}
                 removeSelectedUser={removeSelectedUser}
+                adhocMeeting={adhocMeeting}
               />
             </Grid>
           </>
