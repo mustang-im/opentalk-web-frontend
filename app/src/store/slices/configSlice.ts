@@ -65,6 +65,9 @@ export interface Config {
     ndtUploadWorkerJs: string;
   };
   features: Features;
+  settings: {
+    waitingRoomDefaultValue: boolean;
+  };
   videoBackgrounds: VideoBackground[];
   maxVideoBandwidth: number;
   libravatarDefaultImage?: DefaultAvatarImage;
@@ -111,6 +114,9 @@ export interface ConfigState {
   provider: {
     active: boolean;
     accountManagementUrl?: string;
+  };
+  settings: {
+    waitingRoomDefaultValue: boolean;
   };
   readonly videoBackgrounds: readonly VideoBackground[];
   maxVideoBandwidth: number;
@@ -173,6 +179,9 @@ export const initialState: ConfigState = {
     resetHandraises: true,
     debriefing: true,
     addUser: false,
+  },
+  settings: {
+    waitingRoomDefaultValue: true,
   },
   provider: {
     active: false,
@@ -245,5 +254,6 @@ export const selectShowmprintContainer = (state: RootState) => {
   }
   return false;
 };
+export const selectWaitingRoomDefault = (state: RootState) => state.config.settings.waitingRoomDefaultValue;
 
 export default configSlice.reducer;
