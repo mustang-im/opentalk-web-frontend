@@ -13,7 +13,7 @@ const Container = styled(Box)(({ theme }) => ({
 
 const SuspenseLoading = () => (
   <Container>
-    <CircularProgress color={'primary'} />
+    <CircularProgress color="primary" />
   </Container>
 );
 

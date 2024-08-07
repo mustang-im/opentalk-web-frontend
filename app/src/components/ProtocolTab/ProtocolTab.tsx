@@ -196,7 +196,7 @@ const ProtocolTab = () => {
                 </Typography>
               }
             />
-            <DoneIcon color={'success'} />
+            <DoneIcon color="success" />
           </ListItem>
         ))}
     </SelectedParticipantsList>
@@ -255,7 +255,7 @@ const ProtocolTab = () => {
         <ParticipantSelectContainer disableGutters>
           <Stack spacing={2}>
             <CommonTextField
-              size={'small'}
+              size="small"
               onChange={(event) => handleSearch(event)}
               InputProps={{
                 startAdornment: (
@@ -267,8 +267,8 @@ const ProtocolTab = () => {
               }}
               fullWidth
             />
-            <Stack direction={'row'}>
-              <Button size={'small'} fullWidth onClick={checkAllHandler}>
+            <Stack direction="row">
+              <Button size="small" fullWidth onClick={checkAllHandler}>
                 {t('poll-participant-list-button-select-all')}
               </Button>
             </Stack>
@@ -290,14 +290,14 @@ const ProtocolTab = () => {
                           {participant.displayName}
                         </Typography>
                       }
-                      labelPlacement={'start'}
+                      labelPlacement="start"
                     />
                   </ListItem>
                 ))}
               </List>
             </ParticipantsListGrid>
             <Stack justifyContent="space-between" direction="row" spacing={2}>
-              <Button variant={'text'} onClick={closeParticipantsListPanel}>
+              <Button variant="text" onClick={closeParticipantsListPanel}>
                 {t('poll-participant-list-button-close')}
               </Button>
               <Button onClick={assignButtonHandler}>{t('poll-participant-list-button-select')}</Button>

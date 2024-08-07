@@ -4,7 +4,6 @@
 import { Typography, SvgIcon, Grid as MuiGrid, styled, Container } from '@mui/material';
 import * as openTalkIcons from '@opentalk/common/assets/icons';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
 
 const Grid = styled(MuiGrid)({
   overflow: 'auto',

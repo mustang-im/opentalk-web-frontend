@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Collapse, Typography, Button } from '@mui/material';
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useGetMeQuery } from '../../../api/rest';
@@ -20,7 +19,7 @@ const ProfileChip = ({ collapsed, withLabel }: ChipProps) => {
   return (
     <Button
       component={Link}
-      to={'settings/profile'}
+      to="settings/profile"
       variant="outlined"
       color="secondary"
       fullWidth

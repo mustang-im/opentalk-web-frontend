@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Typography as MuiTypography, TypographyProps } from '@mui/material';
-import React from 'react';
 
 const Wrapper = styled('div')({
   width: '100%',

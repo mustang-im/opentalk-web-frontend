@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { CameraOnIcon, ConnectionGoodIcon, MediaSessionType, MicOnIcon, VideoSetting } from '@opentalk/common';
-import React, { VideoHTMLAttributes } from 'react';
+import { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';

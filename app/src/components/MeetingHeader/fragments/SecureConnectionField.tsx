@@ -60,7 +60,7 @@ const SecureConnectionField = () => {
         // Modifies the background color according to requirements
         PaperProps={{ sx: { backgroundColor: 'rgb(56, 88, 101)' } }}
       >
-        <Stack direction="row" alignItems={'center'} maxWidth={'20em'}>
+        <Stack direction="row" alignItems="center" maxWidth="20em">
           <SecureIconBig />
           <Typography>{t('secure-connection-message')}</Typography>
         </Stack>

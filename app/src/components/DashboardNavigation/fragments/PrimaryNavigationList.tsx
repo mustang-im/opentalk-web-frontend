@@ -62,7 +62,7 @@ const PrimaryNavigationList = ({ collapsedBar, filter, submenu, routes, setActiv
         <NavLink
           onClick={(event) => handleNavigation(event, hasSubmenu, path)}
           to={path}
-          data-testid={`PrimaryNavItem`}
+          data-testid="PrimaryNavItem"
           className={path.includes(submenu) ? 'active-link' : ''}
         >
           {icon}

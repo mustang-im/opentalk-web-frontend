@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, BoxProps, Typography } from '@mui/material';
 import { DurationIcon } from '@opentalk/common';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface VoteCountdownProps extends BoxProps {
   duration: number;

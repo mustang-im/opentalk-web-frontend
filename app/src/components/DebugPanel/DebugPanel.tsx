@@ -5,7 +5,7 @@ import { AppBar, Stack, Typography } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
 import { EntityState } from '@reduxjs/toolkit';
 import i18next, { t } from 'i18next';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { StatsEvent } from '../../modules/WebRTC/Statistics/ConnectionStats';
@@ -146,22 +146,22 @@ const DebugPanel = () => {
 
   return (
     <AppBar position="relative">
-      <Stack sx={{ paddingLeft: '4em' }} spacing={3} p={1} direction={'row'}>
-        <Stack direction={'column'}>
+      <Stack sx={{ paddingLeft: '4em' }} spacing={3} p={1} direction="row">
+        <Stack direction="column">
           <Typography>{`${t('debug-panel-remote-count-label')} `}</Typography>
-          <Typography align={'center'}>{`${connectionSummary?.connectionCount}`}</Typography>
+          <Typography align="center">{`${connectionSummary?.connectionCount}`}</Typography>
         </Stack>
-        <Stack direction={'column'}>
+        <Stack direction="column">
           <Typography>{`${t('debug-panel-outbound-label')} `}</Typography>
-          <Typography align={'right'}>
+          <Typography align="right">
             {`${formatNumberRate(connectionSummary?.publishing.currentBitrate)},
             ${formatNumberRate(connectionSummary?.publishing.avgBitrate)},
             ${formatNumberRate(connectionSummary?.publishing.maxBitrate)}`}
           </Typography>
         </Stack>
-        <Stack direction={'column'}>
+        <Stack direction="column">
           <Typography>{`${t('debug-panel-inbound-label')} `}</Typography>
-          <Typography align={'right'}>
+          <Typography align="right">
             {`${formatNumberRate(connectionSummary?.subscribing.currentBitrate)},
              ${formatNumberRate(connectionSummary?.subscribing.avgBitrate)},
              ${formatNumberRate(connectionSummary?.subscribing.maxBitrate)}`}

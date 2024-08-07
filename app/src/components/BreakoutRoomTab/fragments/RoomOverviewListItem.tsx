@@ -75,7 +75,7 @@ const RoomOverviewListItem = ({ joinRoom, groupedParticipants, breakoutRoomId }:
   return (
     <Accordion defaultExpanded={true} elevation={0}>
       <AccordionSummary id={breakoutRoomId} expandIcon={<ArrowDownIcon />}>
-        <Typography variant={'caption'}>{breakoutRoom?.name}</Typography>
+        <Typography variant="caption">{breakoutRoom?.name}</Typography>
         {currentBreakoutRoomId !== breakoutRoomId && (
           <MuiButton variant="text" size="small" onClick={handleJoinRoom}>
             {t('moderator-join-breakout-room')}
@@ -86,7 +86,7 @@ const RoomOverviewListItem = ({ joinRoom, groupedParticipants, breakoutRoomId }:
         <List>
           {groupedParticipants.map((participant) => {
             return (
-              <Stack spacing={1} direction={'row'} alignItems={'center'} py={1} key={participant.id}>
+              <Stack spacing={1} direction="row" alignItems="center" py={1} key={participant.id}>
                 <Avatar
                   src={participant?.avatarUrl}
                   alt={participant?.displayName}
@@ -94,7 +94,7 @@ const RoomOverviewListItem = ({ joinRoom, groupedParticipants, breakoutRoomId }:
                 >
                   {participant?.displayName}
                 </Avatar>
-                <Typography variant={'body1'} noWrap translate="no">
+                <Typography variant="body1" noWrap translate="no">
                   {getParticipantLabel(participant)}
                 </Typography>
               </Stack>

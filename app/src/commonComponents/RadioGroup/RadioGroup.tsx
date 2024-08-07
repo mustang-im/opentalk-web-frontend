@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { RadioGroup as MuiRadioGroup, RadioGroupProps as MuiRadioGroupProps } from '@mui/material';
 import { FormWrapper, FormProps } from '@opentalk/common';
-import React from 'react';
 
 type RadioGroupProps = MuiRadioGroupProps &
   FormProps & {

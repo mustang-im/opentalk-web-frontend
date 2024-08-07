@@ -132,11 +132,11 @@ const GlitchtipErrorDialog = () => {
         <StacktracePaper elevation={7}>
           {event.exception?.values?.map(({ value, stacktrace }, index) => (
             <Stack spacing={1} key={index}>
-              <Typography color={'error'}>{value}</Typography>
+              <Typography color="error">{value}</Typography>
               {stacktrace?.frames?.map(({ filename, function: func, lineno, colno }, index) => (
                 <Typography
                   key={index}
-                  variant={'caption'}
+                  variant="caption"
                 >{`${filename} in ${func} at line ${lineno}:${colno}`}</Typography>
               ))}
             </Stack>
@@ -160,10 +160,10 @@ const GlitchtipErrorDialog = () => {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button variant={'outlined'} color={'secondary'} onClick={handleCloseDialog}>
+        <Button variant="outlined" color="secondary" onClick={handleCloseDialog}>
           {t('glitchtip-crash-report-labelAbort')}
         </Button>
-        <Button color={'primary'} type={'submit'}>
+        <Button color="primary" type="submit">
           {t('glitchtip-crash-report-labelSubmit')}
         </Button>
       </DialogActions>
@@ -180,7 +180,7 @@ const GlitchtipErrorDialog = () => {
       </Box>
       <DialogContent>{t('glitchtip-crash-report-successMessage')}</DialogContent>
       <DialogActions>
-        <Button color={'primary'} onClick={handleCloseDialog}>
+        <Button color="primary" onClick={handleCloseDialog}>
           {t('glitchtip-crash-report-labelClose')}
         </Button>
       </DialogActions>
@@ -206,7 +206,7 @@ const GlitchtipErrorDialog = () => {
           },
         }}
         fullWidth
-        maxWidth={'md'}
+        maxWidth="md"
       >
         {dataHasBeenSent ? renderDataHasSentContent() : renderFormContent()}
       </Dialog>

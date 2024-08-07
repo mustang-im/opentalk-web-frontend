@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Skeleton, Stack, styled, Typography } from '@mui/material';
 import { notifications } from '@opentalk/common';
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateEventMutation, useLazyGetEventQuery } from '../../../api/rest';
@@ -72,7 +72,7 @@ const CreateDirectMeeting = () => {
   return (
     <Container>
       <Stack>
-        <Typography variant={'h1'}>{t('dashboard-direct-meeting-title')}</Typography>
+        <Typography variant="h1">{t('dashboard-direct-meeting-title')}</Typography>
         <AttentionMessageTypography>{t('dashboard-adhoc-meeting-attention')}</AttentionMessageTypography>
       </Stack>
       <InviteToMeeting

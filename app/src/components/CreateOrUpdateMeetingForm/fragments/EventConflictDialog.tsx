@@ -5,7 +5,6 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconBut
 import { CloseIcon, formatDate } from '@opentalk/common';
 import { RecurringEvent, SingleEvent } from '@opentalk/rest-api-rtk-query';
 import { truncate } from 'lodash';
-import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 interface EventConflictDialogProps {
@@ -37,8 +36,8 @@ export const EventConflictDialog = ({ onConfirm, onCancel, event, isUpdate }: Ev
           i18nKey={`dashboard-${isUpdate ? 'update' : 'create'}-meeting-dialog-message`}
           values={{ eventTitle, eventTime }}
           components={{
-            eventTitle: <Typography variant={'h1'} mb={2} mt={2} />,
-            eventTime: <Typography component={'span'} variant={'h6'} />,
+            eventTitle: <Typography variant="h1" mb={2} mt={2} />,
+            eventTime: <Typography component="span" variant="h6" />,
           }}
         />
       </DialogContent>

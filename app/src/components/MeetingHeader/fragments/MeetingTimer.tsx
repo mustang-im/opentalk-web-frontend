@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack, Typography, styled } from '@mui/material';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectJoinedFirstTimestamp } from '../../../store/selectors';

@@ -36,7 +36,7 @@ const StorageFullMessage = ({ usedStorage, maxStorage }: StorageFullMessageProps
   const accountManagementUrl = useAppSelector(selectAccountManagementUrl);
   return (
     <Trans
-      i18nKey={'dashboard-settings-storage-usage-limited-full'}
+      i18nKey="dashboard-settings-storage-usage-limited-full"
       values={{ usedStorage, maxStorage }}
       components={{
         planUpgradeLink: accountManagementUrl ? (

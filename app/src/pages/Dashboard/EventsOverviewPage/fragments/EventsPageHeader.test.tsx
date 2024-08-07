@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { DateTime } from '@opentalk/rest-api-rtk-query';
-import React from 'react';
 
 import { TimePerspectiveFilter } from '../../../../utils/eventUtils';
 import { configureStore, render, screen, fireEvent } from '../../../../utils/testUtils';

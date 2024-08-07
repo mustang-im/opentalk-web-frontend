@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { render, screen, fireEvent, configureStore, waitFor } from '../../utils/testUtils';
 import MenuTabs from './MenuTabs';
 

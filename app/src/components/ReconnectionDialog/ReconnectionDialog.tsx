@@ -32,7 +32,7 @@ const ReconnectionDialog = () => {
   };
 
   return (
-    <Dialog open fullWidth maxWidth={'xs'}>
+    <Dialog open fullWidth maxWidth="xs">
       <DialogTitle>{t('reconnection-loop-dialogbox-title')}</DialogTitle>
       <DialogContent>
         <Box display="flex" alignItems="center" justifyContent="center">

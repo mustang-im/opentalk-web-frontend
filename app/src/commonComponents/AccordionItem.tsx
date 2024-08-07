@@ -102,7 +102,7 @@ function AccordionItem<T>({
     <Accordion square expanded={expanded} onChange={onChange}>
       <AccordionSummary aria-controls={`${option}-content`} id={`${option}-header`} expandIcon={<ArrowDownIcon />}>
         {summaryIcon && summaryIcon}
-        <SummaryText component={'div'} variant={'caption'}>
+        <SummaryText component="div" variant="caption">
           {summaryText}
         </SummaryText>
         <EditButtonContainer>{editComponent && editComponent}</EditButtonContainer>

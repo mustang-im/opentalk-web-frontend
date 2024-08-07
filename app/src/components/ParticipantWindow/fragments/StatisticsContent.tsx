@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Typography } from '@mui/material';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
@@ -62,46 +61,46 @@ export const StatisticsContent = ({ descriptor }: { descriptor: MediaDescriptor 
     <ContentContainer>
       {frameHeight && frameWidth && (
         <>
-          <Typography variant={'body2'}>{`${t('statistics-video')}: `}</Typography>
-          <Typography variant={'body2'} align={'right'}>
+          <Typography variant="body2">{`${t('statistics-video')}: `}</Typography>
+          <Typography variant="body2" align="right">
             {`${frameWidth}x${frameHeight}`}
           </Typography>
         </>
       )}
-      <Typography variant={'body2'}>{`${t('statistics-rate')}: `}</Typography>
-      <Typography variant={'body2'} align={'right'}>
+      <Typography variant="body2">{`${t('statistics-rate')}: `}</Typography>
+      <Typography variant="body2" align="right">
         {formatBitRate(bitRate)}
       </Typography>
-      <Typography variant={'body2'}>{`${t('statistics-fps')}: `}</Typography>
-      <Typography variant={'body2'} align={'right'}>
+      <Typography variant="body2">{`${t('statistics-fps')}: `}</Typography>
+      <Typography variant="body2" align="right">
         {frameRate ? `${Math.round(frameRate)} FPS` : '-'}
       </Typography>
-      <Typography variant={'body2'}>{`${t('statistics-jitter')}: `}</Typography>
-      <Typography variant={'body2'} align={'right'}>
+      <Typography variant="body2">{`${t('statistics-jitter')}: `}</Typography>
+      <Typography variant="body2" align="right">
         {validJitter ? `${validJitter} ms` : '-'}
       </Typography>
-      <Typography variant={'body2'}>{`${t('statistics-latency')}: `}</Typography>
-      <Typography variant={'body2'} align={'right'}>
+      <Typography variant="body2">{`${t('statistics-latency')}: `}</Typography>
+      <Typography variant="body2" align="right">
         {validLatency ? `${validLatency} ms` : '-'}
       </Typography>
-      <Typography variant={'body2'}>{`${t('statistics-packets-lost')}: `}</Typography>
-      <Typography variant={'body2'} align={'right'}>
+      <Typography variant="body2">{`${t('statistics-packets-lost')}: `}</Typography>
+      <Typography variant="body2" align="right">
         {validPacketLoss ? `${validPacketLoss} % ` : '-'}
       </Typography>
       {codingTime !== undefined && (
         <>
-          <Typography variant={'body2'}>{`${t('statistics-decode-time')}: `}</Typography>
-          <Typography variant={'body2'} align={'right'}>
+          <Typography variant="body2">{`${t('statistics-decode-time')}: `}</Typography>
+          <Typography variant="body2" align="right">
             {Math.round(codingTime * 1000)} ms
           </Typography>
         </>
       )}
-      <Typography variant={'body2'}>{`${t('statistics-local-network-endpoint')}: `}</Typography>
-      <Typography variant={'body2'} align={'left'}>
+      <Typography variant="body2">{`${t('statistics-local-network-endpoint')}: `}</Typography>
+      <Typography variant="body2" align="left">
         <EndpointInfo endpoint={connection.localEndpoint} />
       </Typography>
-      <Typography variant={'body2'}>{`${t('statistics-remote-network-endpoint')}: `}</Typography>
-      <Typography variant={'body2'} align={'left'}>
+      <Typography variant="body2">{`${t('statistics-remote-network-endpoint')}: `}</Typography>
+      <Typography variant="body2" align="left">
         <EndpointInfo endpoint={connection.remoteEndpoint} />
       </Typography>
     </ContentContainer>

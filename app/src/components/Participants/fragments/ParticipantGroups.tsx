@@ -54,7 +54,7 @@ const ParticipantGroups = (props: StackProps) => {
               marginRight: 1,
             }}
           />
-          <Typography variant={'caption'}>{groupId}</Typography>
+          <Typography variant="caption">{groupId}</Typography>
         </AccordionButton>
         <Box id={groupId} overflow="hidden" flex={isExpanded ? 1 : 0}>
           <ParticipantSimpleList participants={participants} />

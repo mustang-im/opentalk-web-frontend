@@ -160,6 +160,7 @@ const SelectParticipants = ({
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon aria-label={t('dashboard-select-participants-label-search')}>
+                  bla
                   <CopyIcon />
                 </SearchIcon>
               </InputAdornment>

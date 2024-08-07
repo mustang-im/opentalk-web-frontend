@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Divider, Grid, Typography } from '@mui/material';
 import { CommonTextField } from '@opentalk/common';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetMeQuery } from '../../../api/rest';
@@ -16,10 +15,10 @@ const SettingsAccountPage = () => {
   const changePassword = useAppSelector(selectChangePassword);
 
   return (
-    <Grid container spacing={5} direction={'column'}>
+    <Grid container spacing={5} direction="column">
       <Grid item container spacing={3}>
         <Grid xs={12} item>
-          <Typography variant={'h1'} component={'h2'}>
+          <Typography variant="h1" component="h2">
             {t('dashboard-settings-account-title')}
           </Typography>
         </Grid>
@@ -49,14 +48,14 @@ const SettingsAccountPage = () => {
           <Grid item>
             <Divider />
           </Grid>
-          <Grid item container spacing={3} direction={'column'}>
+          <Grid item container spacing={3} direction="column">
             <Grid item>
-              <Typography variant={'h1'} component={'h2'}>
+              <Typography variant="h1" component="h2">
                 {t('global-password')}
               </Typography>
             </Grid>
             <Grid item>
-              <Button color={'secondary'} href={changePassword.url}>
+              <Button color="secondary" href={changePassword.url}>
                 {t('dashboard-settings-account-change-password-button')}
               </Button>
             </Grid>

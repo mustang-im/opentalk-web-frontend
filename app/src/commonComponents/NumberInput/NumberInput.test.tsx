@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { render, screen, configureStore, fireEvent, cleanup } from '../../utils/testUtils';
 import NumberInput from './NumberInput';
 

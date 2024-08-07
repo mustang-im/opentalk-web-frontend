@@ -4,7 +4,6 @@
 import { DateTimeWithTimezone, SingleEvent } from '@opentalk/rest-api-rtk-query';
 import { fireEvent } from '@testing-library/react';
 import { formatRFC3339 } from 'date-fns';
-import React from 'react';
 
 import { configureStore, render, screen, cleanup, waitFor, eventMockedData } from '../../utils/testUtils';
 import CreateOrUpdateMeetingForm from './CreateOrUpdateMeetingForm';

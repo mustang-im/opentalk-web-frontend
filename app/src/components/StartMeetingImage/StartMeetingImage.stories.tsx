@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button } from '@mui/material';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import StartMeetingImage from '.';
 

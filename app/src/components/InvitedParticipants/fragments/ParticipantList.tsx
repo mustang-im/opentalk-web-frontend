@@ -41,9 +41,9 @@ const ParticipantList = ({ isUpdatable, status, invitees, removeSelectedUser, ev
     }
   };
   return (
-    <Grid item xs={12} sm={4} data-testid={'ParticipantList'}>
+    <Grid item xs={12} sm={4} data-testid="ParticipantList">
       <Typography mb={1}>{t(`dashboard-meeting-details-page-participant-${status}`)}</Typography>
-      <ParticipantListBox direction={isMobile ? 'row' : 'column'} data-testid={'ParticipantListBox'}>
+      <ParticipantListBox direction={isMobile ? 'row' : 'column'} data-testid="ParticipantListBox">
         {invitees.map((eventInvite) => (
           <UserRow
             key={eventInvite.profile.email}

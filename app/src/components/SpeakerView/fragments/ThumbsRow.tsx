@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Stack } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectAllOnlineParticipants } from '../../../store/slices/participantsSlice';

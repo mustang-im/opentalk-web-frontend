@@ -5,7 +5,7 @@ import { Button, Chip as MuiChip, Grid, styled } from '@mui/material';
 import { AddIcon, CommonTextField } from '@opentalk/common';
 import { FieldArray, Field, FieldProps, useFormikContext } from 'formik';
 import { get, isEmpty } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface IAnswersFormElementProps {
@@ -64,7 +64,7 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
                     <CommonTextField
                       inputRef={inputRef}
                       name={name}
-                      size={'small'}
+                      size="small"
                       fullWidth
                       defaultValue={value}
                       error={Array.isArray(answerErrors) && Boolean(answerErrors[index])}
@@ -102,9 +102,9 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
           {editMode === undefined && (
             <Grid item>
               <Button
-                size={'small'}
+                size="small"
                 type="button"
-                variant={'text'}
+                variant="text"
                 onClick={() => arrayHelpers.push('')}
                 startIcon={<Add />}
               >

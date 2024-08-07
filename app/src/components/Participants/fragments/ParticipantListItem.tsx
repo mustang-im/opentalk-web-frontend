@@ -332,7 +332,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const renderMenu = () => (
     <>
       <IconButton aria-label="open participant more menu" onClick={handleClick}>
-        <MoreIcon className={'more-icon'} />
+        <MoreIcon className="more-icon" />
       </IconButton>
       {open && (
         <MenuPopover
@@ -414,12 +414,12 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
         <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
         <ListItemText
           primary={
-            <Typography variant={'body1'} noWrap translate="no" mb={0.5}>
+            <Typography variant="body1" noWrap translate="no" mb={0.5}>
               {participant?.displayName}
             </Typography>
           }
           secondary={
-            <JoinedText variant={'caption'} translate="no">
+            <JoinedText variant="caption" translate="no">
               {getContextText()}
             </JoinedText>
           }

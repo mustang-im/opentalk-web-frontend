@@ -12,7 +12,7 @@ interface ContitionalToolTipProps {
 export const ContitionalToolTip: React.FC<ContitionalToolTipProps> = ({ showToolTip, title, children }) => {
   if (showToolTip && title) {
     return (
-      <Tooltip placement={'top'} title={title}>
+      <Tooltip placement="top" title={title}>
         {children}
       </Tooltip>
     );

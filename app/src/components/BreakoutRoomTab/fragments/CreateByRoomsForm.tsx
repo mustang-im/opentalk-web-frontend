@@ -12,7 +12,6 @@ import {
 } from '@opentalk/common';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
@@ -63,7 +62,7 @@ const CreateByRoomsForm = ({ handleNext, formName }: ICreateByRoomsFormProps) =>
       <CommonFormItem
         {...formikProps(getFormName('rooms'), formik)}
         label={t('breakout-room-form-field-rooms')}
-        control={<NumberInput type={'number'} inputProps={{ min: 2, max: maxRooms }} />}
+        control={<NumberInput type="number" inputProps={{ min: 2, max: maxRooms }} />}
       />
       <CommonFormItem
         {...formikSwitchProps(getFormName('distribution'), formik)}
@@ -75,12 +74,12 @@ const CreateByRoomsForm = ({ handleNext, formName }: ICreateByRoomsFormProps) =>
         control={<Switch color="primary" />}
         label={t('breakout-room-form-field-include-moderators')}
       />
-      <TextWithDivider variant={'caption'} id={ariaId}>
+      <TextWithDivider variant="caption" id={ariaId}>
         {t('breakout-room-assignable-participants-per-rooms', {
           participantsPerRoom: `${participantsPerRoom}-${participantsPerRoom + 1}`,
         })}
       </TextWithDivider>
-      <CreateButton size={'small'} onClick={handleNext} aria-describedby={ariaId}>
+      <CreateButton size="small" onClick={handleNext} aria-describedby={ariaId}>
         {t('breakout-room-create-button')}
       </CreateButton>
     </Stack>

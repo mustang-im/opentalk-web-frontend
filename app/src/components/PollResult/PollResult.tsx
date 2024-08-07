@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { ParticipantId, VoteOption } from '@opentalk/common';
-import React from 'react';
 
 import LinearProgressWithLabel from './LinearProgressWithLabel';
 

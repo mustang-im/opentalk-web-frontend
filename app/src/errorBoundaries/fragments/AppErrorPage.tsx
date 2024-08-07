@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React, { ErrorInfo, useEffect } from 'react';
+import { ErrorInfo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Error from '../../components/Error';

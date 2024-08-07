@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { generateInstanceId } from '../../utils/eventUtils';
 import { configureStore, render, screen, mockedSingleEvent, mockedRecurringEvent } from '../../utils/testUtils';
 import CloseMeetingDialog, { CloseMeetingDialogProps } from './CloseMeetingDialog';

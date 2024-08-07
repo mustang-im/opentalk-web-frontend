@@ -5,7 +5,6 @@ import { Box, styled, Tooltip, Link as MuiLink } from '@mui/material';
 import { FavoriteIcon as Favorite } from '@opentalk/common';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
 import _ from 'lodash';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -92,7 +91,7 @@ const FavoriteMeetingsCard = ({ meetings }: { meetings: Array<FavoriteMeetingPro
         <MuiLink
           component={Link}
           sx={{ textDecoration: 'none' }}
-          to={'/dashboard/meetings'}
+          to="/dashboard/meetings"
           state={{ ...getReferrerRouterState(window.location) }}
         >
           <EmptyEntry data-testid="empty-entry">{t('no-favorite-meetings')}</EmptyEntry>

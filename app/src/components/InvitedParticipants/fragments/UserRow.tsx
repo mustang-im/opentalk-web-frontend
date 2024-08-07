@@ -87,16 +87,16 @@ const UserRow = ({ isUpdatable, eventInvite, onRevokeUserInvite, onRemoveUser, e
     isCreator && isUpdatable ? (
       <>
         <IconButton
-          data-testid={'MoreIconButton'}
+          data-testid="MoreIconButton"
           aria-label={t('more-menu-moderator-aria-label')}
           aria-controls={id}
-          size={'small'}
+          size="small"
           onClick={handleMoreIconClick}
         >
           <MoreIcon />
         </IconButton>
         <Menu
-          data-testid={'MoreMenu'}
+          data-testid="MoreMenu"
           id={id}
           open={open}
           anchorEl={anchorEl}
@@ -130,22 +130,22 @@ const UserRow = ({ isUpdatable, eventInvite, onRevokeUserInvite, onRemoveUser, e
   const renderLabel = (eventInvite: EventInvite) => {
     if (isRegisteredUser(eventInvite.profile)) {
       return (
-        <Stack direction={'row'} spacing={1} alignItems={'center'}>
-          <Typography variant={'body2'} noWrap>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="body2" noWrap>
             {eventInvite.profile.firstname} {eventInvite.profile.lastname}
           </Typography>
           {isHovered && isUpdatable && isCreator && eventInvite.status !== InviteStatus.Added ? (
             renderMoreIcon(eventInvite.profile)
           ) : (
-            <IconButton size={'large'} sx={{ cursor: 'auto' }} disableFocusRipple disableRipple>
-              <ModeratorIcon color={'secondary'} visible={isModerator(eventInvite.profile)} />
+            <IconButton size="large" sx={{ cursor: 'auto' }} disableFocusRipple disableRipple>
+              <ModeratorIcon color="secondary" visible={isModerator(eventInvite.profile)} />
             </IconButton>
           )}
         </Stack>
       );
     }
     return (
-      <Typography variant={'body2'} noWrap>
+      <Typography variant="body2" noWrap>
         {eventInvite.profile.email}
       </Typography>
     );
@@ -164,13 +164,13 @@ const UserRow = ({ isUpdatable, eventInvite, onRevokeUserInvite, onRemoveUser, e
 
   return (
     <StyledChip
-      data-testid={'UserRow'}
+      data-testid="UserRow"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMoreMenuClose}
       key={eventInvite.profile.email}
       label={renderLabel(eventInvite)}
       avatar={renderAvatar(eventInvite)}
-      deleteIcon={<CloseIcon data-testid={'InvitedParticipants-deleteButton'} />}
+      deleteIcon={<CloseIcon data-testid="InvitedParticipants-deleteButton" />}
       onDelete={isHovered && isUpdatable ? onDelete : undefined}
     />
   );

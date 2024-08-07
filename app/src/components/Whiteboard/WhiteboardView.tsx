@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import React from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { selectWhiteboardUrl } from '../../store/slices/whiteboardSlice';

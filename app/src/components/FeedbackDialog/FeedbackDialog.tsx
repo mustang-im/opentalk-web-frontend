@@ -14,7 +14,7 @@ import {
 import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
 import i18n from 'i18next';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -113,7 +113,7 @@ const FeedbackDialog = (props: FeedbackDialogProps) => {
   }, [formik.values, feedbackSchema]);
 
   return (
-    <Dialog {...props} fullWidth maxWidth={'md'} aria-labelledby="feedback-dialog">
+    <Dialog {...props} fullWidth maxWidth="md" aria-labelledby="feedback-dialog">
       <DialogTitle>{t('feedback-dialog-title')}</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <DialogContent>
@@ -162,7 +162,7 @@ const FeedbackDialog = (props: FeedbackDialogProps) => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onClose} variant="text" color={'secondary'}>
+          <Button onClick={props.onClose} variant="text" color="secondary">
             {t('feedback-button-close')}
           </Button>
           <Button disabled={!sendButtonEnabled} type="submit">

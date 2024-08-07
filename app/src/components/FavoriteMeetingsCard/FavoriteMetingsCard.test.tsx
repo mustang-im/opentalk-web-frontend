@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { RoomId } from '@opentalk/rest-api-rtk-query';
-import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { screen, render, cleanup } from '../../utils/testUtils';

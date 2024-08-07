@@ -5,7 +5,6 @@ import { Button, Container, Divider } from '@mui/material';
 import { notifications, ISnackActionsProps, notificationAction, VariantType } from '@opentalk/common';
 import { SnackbarProvider } from '@opentalk/common';
 import { ComponentMeta } from '@storybook/react';
-import React from 'react';
 
 const variantOptions: Array<VariantType> = ['error', 'success', 'warning', 'info'];
 
@@ -37,7 +36,7 @@ export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActi
   <SnackbarProvider>
     <Container>
       <Button
-        variant={'contained'}
+        variant="contained"
         onClick={() => {
           notificationAction({
             msg: msg,
@@ -53,8 +52,8 @@ export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActi
       </Button>
       <Divider sx={{ borderColor: 'white', my: 2 }} />
       <Button
-        variant={'contained'}
-        color={'error'}
+        variant="contained"
+        color="error"
         onClick={() => {
           notifications.error(`Test error context: ${new Error('Test Error')}`);
         }}
@@ -63,8 +62,8 @@ export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActi
       </Button>
       <Divider sx={{ borderColor: 'white', my: 2 }} />
       <Button
-        variant={'contained'}
-        color={'warning'}
+        variant="contained"
+        color="warning"
         onClick={() => {
           notifications.warning(`Ooops...you just triggered a warning.`);
         }}
@@ -73,8 +72,8 @@ export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActi
       </Button>
       <Divider sx={{ borderColor: 'white', my: 2 }} />
       <Button
-        variant={'contained'}
-        color={'info'}
+        variant="contained"
+        color="info"
         onClick={() => {
           notifications.info(`This is an info message.`);
         }}
@@ -83,8 +82,8 @@ export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActi
       </Button>
       <Divider sx={{ borderColor: 'white', my: 2 }} />
       <Button
-        variant={'contained'}
-        color={'success'}
+        variant="contained"
+        color="success"
         onClick={() => {
           notifications.success(`You just triggered this notification. Success!`);
         }}
@@ -93,7 +92,7 @@ export const Basic = ({ msg, variant, actionBtnText, cancelBtnText }: ISnackActi
       </Button>
       <Divider sx={{ borderColor: 'white', my: 2 }} />
       <Button
-        variant={'contained'}
+        variant="contained"
         onClick={() => {
           notificationAction({
             msg: msg,

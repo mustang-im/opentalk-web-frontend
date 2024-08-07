@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { HomeIcon, MeetingsIcon, SettingsIcon } from '@opentalk/common';
-import React from 'react';
 import { setTimeout } from 'timers';
 
 import DashboardNavigation from '.';

@@ -26,7 +26,7 @@ import {
   VideoSetting,
   notifications,
 } from '@opentalk/common';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
@@ -264,7 +264,7 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
           <SettingsIcon />
           {t('videomenu-settings')}
         </MenuSectionTitle>
-        <Typography fontWeight={'normal'} id="quality-slider" sx={{ pt: 1, pb: 2, px: 2 }}>
+        <Typography fontWeight="normal" id="quality-slider" sx={{ pt: 1, pb: 2, px: 2 }}>
           {t('quality-cap-setting')}
         </Typography>
         <SliderContainer sx={{ px: 3 }}>
@@ -290,7 +290,7 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
               <FormControlLabel
                 control={<Switch onChange={(_, enabled) => setBlur(enabled)} value={isBlurred} checked={isBlurred} />}
                 label={
-                  <Typography fontWeight={'normal'}>
+                  <Typography fontWeight="normal">
                     {t(isBlurred ? 'videomenu-blur-on' : 'videomenu-blur-off')}
                   </Typography>
                 }
@@ -300,7 +300,7 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
             <FormControlLabel
               control={<Switch onChange={toggleMirroring} value={mirroringEnabled} checked={mirroringEnabled} />}
               label={
-                <Typography fontWeight={'normal'}>
+                <Typography fontWeight="normal">
                   {t(mirroringEnabled ? 'videomenu-mirroring-on' : 'videomenu-mirroring-off')}
                 </Typography>
               }
@@ -312,7 +312,7 @@ const VideoMenu = ({ anchorEl, onClose, open }: ToolbarMenuProps) => {
         {!isBrowserSafari && videoBackgrounds.length > 0 && (
           <>
             <Divider variant="middle" />
-            <Typography fontWeight={'normal'} id="background-images-title" sx={{ px: 2 }}>
+            <Typography fontWeight="normal" id="background-images-title" sx={{ px: 2 }}>
               {t('videomenu-background-images')}
             </Typography>
             <BackgroundImageList aria-labelledby="background-images-title" role="listbox">

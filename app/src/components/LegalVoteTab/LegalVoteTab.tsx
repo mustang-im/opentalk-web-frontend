@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack } from '@mui/material';
 import { RoomMode } from '@opentalk/common';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 

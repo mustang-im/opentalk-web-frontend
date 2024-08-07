@@ -26,7 +26,7 @@ const HomeIconComponent = () => {
   return (
     <>
       <HomeIcon />
-      {showUnreadBadge && <ChatBadge variant={'dot'} />}
+      {showUnreadBadge && <ChatBadge variant="dot" />}
     </>
   );
 };

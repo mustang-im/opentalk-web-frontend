@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { List, styled } from '@mui/material';
-import React from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { selectMyParticipantId, selectSpeakerId } from '../../store/slices/automodSlice';

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectCombinedSpeakerId } from '../../../store/selectors';
@@ -50,7 +50,7 @@ const SpeakerWindow = ({ speakerWindowWidth, speakerWindowHeight }: SpeakerViewP
   return (
     <Container width={width} height={height} data-testid="SpeakerWindow1">
       {currentSpeakerId && (
-        <ParticipantWindow participantId={currentSpeakerId} alwaysShowOverlay mediaRef={`speaker-main`} />
+        <ParticipantWindow participantId={currentSpeakerId} alwaysShowOverlay mediaRef="speaker-main" />
       )}
     </Container>
   );

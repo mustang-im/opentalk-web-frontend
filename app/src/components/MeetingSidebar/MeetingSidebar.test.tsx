@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
 
 // import { Role } from '../../api/types/incoming/control';
 // import { tabs } from '../../config/moderationTabs';

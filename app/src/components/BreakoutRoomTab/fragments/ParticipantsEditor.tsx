@@ -92,13 +92,13 @@ const ParticipantsEditor = ({
               participantsToAssign.findIndex((participantToAssign) => participantToAssign.id === participant.id) !== -1
             }
             id={participant.id}
-            color={'primary'}
+            color="primary"
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleOnChangeParticipant(event, participant)}
           />
         }
         translate="no"
         label={participant.displayName}
-        labelPlacement={'start'}
+        labelPlacement="start"
       />
     ));
 
@@ -106,7 +106,7 @@ const ParticipantsEditor = ({
 
   return (
     <div>
-      <Button size={'small'} variant={'text'} onClick={handlePopoverOpen}>
+      <Button size="small" variant="text" onClick={handlePopoverOpen}>
         {t('user-editor-button-edit')}
       </Button>
       <Popover
@@ -123,18 +123,18 @@ const ParticipantsEditor = ({
         }}
         keepMounted={false}
       >
-        <Title variant={'body2'}>{title}</Title>
+        <Title variant="body2">{title}</Title>
         <ParticipantContainer>
-          <Typography variant={'caption'}>{`${t('user-selection-not-assigned-users')}:`}</Typography>
+          <Typography variant="caption">{`${t('user-selection-not-assigned-users')}:`}</Typography>
           {renderParticipants(unAssignedParticipants)}
-          <Typography variant={'caption'}>{`${t('user-selection-assigned-users')}:`}</Typography>
+          <Typography variant="caption">{`${t('user-selection-assigned-users')}:`}</Typography>
           {renderParticipants(assignedParticipants)}
         </ParticipantContainer>
         <ButtonGroup>
-          <Button size={'small'} variant={'text'} onClick={handlePopoverClose}>
+          <Button size="small" variant="text" onClick={handlePopoverClose}>
             {t('user-selection-button-cancel')}
           </Button>
-          <Button size={'small'} onClick={handleSaveParticipants}>
+          <Button size="small" onClick={handleSaveParticipants}>
             {t('user-selection-button-save')}
           </Button>
         </ButtonGroup>

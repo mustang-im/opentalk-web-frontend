@@ -4,7 +4,7 @@
 import { Theme, useMediaQuery, Stack, styled } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import SpeakerWindow from './fragments/SpeakerWindow';
 import ThumbsRow from './fragments/ThumbsRow';

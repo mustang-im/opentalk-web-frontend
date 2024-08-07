@@ -87,7 +87,7 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
   const toggleFeedbackModal = () => setShowFeedbackModal((prevState) => !prevState);
 
   return (
-    <Container data-testid={'PrimaryNavigation'}>
+    <Container data-testid="PrimaryNavigation">
       {isDesktop && (
         <ChipContainer collapsed={collapsedBar}>
           <ProfileChip collapsed={collapsedBar} withLabel />
@@ -134,7 +134,7 @@ const PrimaryNavigation = ({ submenu, routes, setActiveNavbar }: NavigationProps
         )}
 
         <PrimaryNavigationEntry
-          href={''}
+          href=""
           onClick={() => auth?.signOut()}
           Icon={<SignOutIcon />}
           collapsedBar={collapsedBar}

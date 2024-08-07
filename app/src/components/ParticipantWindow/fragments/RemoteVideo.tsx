@@ -6,7 +6,7 @@
 import { CircularProgress, Grid, Stack, styled, Tooltip } from '@mui/material';
 import { VideoSetting, WarningIcon } from '@opentalk/common';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useRef, VideoHTMLAttributes } from 'react';
+import { useCallback, useEffect, useRef, VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';
@@ -121,9 +121,9 @@ const RemoteVideo = ({ descriptor, mediaRef }: IRemoteVideoProps) => {
     <Container
       ref={containerRef}
       container
-      flexDirection={'column'}
-      justifyContent={'center'}
-      alignItems={'center'}
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
       data-testid={`remoteVideo-${idFromDescriptor(descriptor)}`}
     >
       {stream ? <Video muted autoPlay ref={videoRef} /> : <Loader />}

@@ -16,7 +16,7 @@ import {
   Box,
 } from '@mui/material';
 import { CircularIconButton, CloseIcon, SpeedTestIcon } from '@opentalk/common';
-import React, { useCallback, useState, Fragment, useEffect } from 'react';
+import { useCallback, useState, Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';

@@ -10,7 +10,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
@@ -130,11 +129,7 @@ const SecondaryNavigation = ({ label, routes, submenu, setActiveNavbar }: Naviga
           .filter((route) => showSubmenuEntry(route.path))
           .map(({ path, name }) => (
             <ListItem key={path}>
-              <NavItem
-                to={`${submenu}/${path}`}
-                onClick={() => handleNavigation(path)}
-                data-testid={`SecondaryNavItem`}
-              >
+              <NavItem to={`${submenu}/${path}`} onClick={() => handleNavigation(path)} data-testid="SecondaryNavItem">
                 <ListItemText>{t(name)}</ListItemText>
               </NavItem>
             </ListItem>
@@ -143,9 +138,9 @@ const SecondaryNavigation = ({ label, routes, submenu, setActiveNavbar }: Naviga
   );
 
   return (
-    <Container data-testid={'SecondaryNavigation'}>
+    <Container data-testid="SecondaryNavigation">
       {isDesktop && (
-        <Typography variant={'h1'} variantMapping={{ h1: 'h2' }} color={'secondary'} ml={4} mr={4}>
+        <Typography variant="h1" variantMapping={{ h1: 'h2' }} color="secondary" ml={4} mr={4}>
           {t(label)}
         </Typography>
       )}

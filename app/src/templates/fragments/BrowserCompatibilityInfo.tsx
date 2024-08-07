@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { notificationAction } from '@opentalk/common';
 import { differenceInMonths } from 'date-fns';
-import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ConfirmBrowserDialog from '../../components/ConfirmBrowserDialog';

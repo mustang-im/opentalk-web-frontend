@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { configureStore, eventMockedData, render, screen } from '../../../../utils/testUtils';
 import { MeetingsProp } from '../types';
 import EventsOverview from './EventsOverview';
@@ -20,7 +18,7 @@ describe('EventsOverview', () => {
     await render(
       <EventsOverview
         entries={mockEvents as MeetingsProp[]}
-        expandAccordion={''}
+        expandAccordion=""
         isFetching={false}
         isLoading={false}
         setExpandAccordion={() => ''}
@@ -35,7 +33,7 @@ describe('EventsOverview', () => {
     await render(
       <EventsOverview
         entries={mockEvents as MeetingsProp[]}
-        expandAccordion={'false'}
+        expandAccordion="false"
         isFetching={false}
         isLoading={false}
         setExpandAccordion={() => ''}

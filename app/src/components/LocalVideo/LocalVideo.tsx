@@ -146,7 +146,7 @@ const LocalVideo = ({
   }, [outgoingVideoStream, outgoingScreenStream, screenShareEnabled, attachVideo, detachVideo, isVideoEnabled]);
 
   return (
-    <Container container justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
+    <Container container justifyContent="center" alignItems="center" flexDirection="column">
       {(isVideoEnabled || screenShareEnabled) && (
         <>
           {fullscreenMode && (

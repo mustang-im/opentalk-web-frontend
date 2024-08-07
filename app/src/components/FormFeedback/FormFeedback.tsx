@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 enum FormFeedbackType {
   Error,

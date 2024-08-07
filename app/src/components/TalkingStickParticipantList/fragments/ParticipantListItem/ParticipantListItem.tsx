@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, ListItem, ListItemAvatar, ListItemText, Typography, styled } from '@mui/material';
 import { MicOffIcon, MicOnIcon as MicOnDefaultIcon, ParticipantAvatar, useDateFormat } from '@opentalk/common';
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ListableParticipant } from '../../types/participant';
@@ -70,7 +70,7 @@ const ParticipantListItem = ({
               </Typography>
             }
             secondary={
-              <JoinedText variant={'caption'}>
+              <JoinedText variant="caption">
                 {t('participant-joined-text', {
                   joinedTime: formattedJoinedTime,
                 })}

@@ -4,7 +4,7 @@
 import { Grid, Typography, MenuItem, Button } from '@mui/material';
 import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 

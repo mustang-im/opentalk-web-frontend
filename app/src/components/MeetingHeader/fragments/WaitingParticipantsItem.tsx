@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { notifications, useDateFormat, Participant, WaitingState, ParticipantAvatar } from '@opentalk/common';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { acceptParticipantFromWaitingRoomToRoom } from '../../../api/types/outgoing/moderation';
@@ -95,12 +95,12 @@ const WaitingParticipantItem = ({ participant }: ParticipantRowProps) => {
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Typography variant={'body1'} translate="no">
+          <Typography variant="body1" translate="no">
             {participant.displayName}
           </Typography>
         }
         secondary={
-          <JoinedText variant={'caption'}>{t('participant-joined-text', { joinedTime: formattedTime })}</JoinedText>
+          <JoinedText variant="caption">{t('participant-joined-text', { joinedTime: formattedTime })}</JoinedText>
         }
       />
       {ParticipantWaitingState}

@@ -135,8 +135,8 @@ const CreateRoomsForm = () => {
             <Box display="flex" flexDirection="column" flex={1} height="100%" gap={1}>
               <Box>
                 <Button
-                  variant={'text'}
-                  size={'small'}
+                  variant="text"
+                  size="small"
                   startIcon={<BackIcon />}
                   onClick={() => handleStepBackOnParticipantSelector(formik)}
                 >

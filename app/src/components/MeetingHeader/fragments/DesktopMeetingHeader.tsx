@@ -204,7 +204,7 @@ const DesktopMeetingHeader = () => {
       <LogoContainer>
         <OpenTalkLogo onClick={showDebugDialog} aria-disabled />
       </LogoContainer>
-      <HeaderContainer justifyContentLgDown={'flex-start'} wrap flex={1}>
+      <HeaderContainer justifyContentLgDown="flex-start" wrap flex={1}>
         <RoomTitleContainer>
           <RoomTitle />
           <LayoutSelection />

@@ -4,7 +4,7 @@
 import { styled, Stack } from '@mui/material';
 import { TargetId, ChatScope } from '@opentalk/common';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { LastSeenTimestampAddedPayload, setLastSeenTimestamp } from '../../api/types/outgoing/chat';

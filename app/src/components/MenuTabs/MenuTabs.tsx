@@ -99,12 +99,12 @@ const MenuTabs = () => {
 
   return (
     <>
-      <VisuallyHiddenTitle component={'h2'} label={'menutabs-area-hidden-heading'} />
-      <Tabs value={currentTab} onChange={handleChange} variant={'fullWidth'}>
+      <VisuallyHiddenTitle component="h2" label="menutabs-area-hidden-heading" />
+      <Tabs value={currentTab} onChange={handleChange} variant="fullWidth">
         <Tab
           id={`tab-${MenuTab.Chat}`}
           label={t('menutabs-chat')}
-          icon={unreadGlobalMessageCount > 0 ? <ChatBadge variant={'dot'} /> : undefined}
+          icon={unreadGlobalMessageCount > 0 ? <ChatBadge variant="dot" /> : undefined}
           iconPosition="end"
           value={MenuTab.Chat}
           aria-controls={`tabpanel-${MenuTab.Chat}`}
@@ -120,7 +120,7 @@ const MenuTabs = () => {
         <Tab
           id={`tab-${MenuTab.Messages}`}
           label={t('menutabs-messages')}
-          icon={unreadPersonalMessageCount > 0 ? <MessagesBadge variant={'dot'} /> : undefined}
+          icon={unreadPersonalMessageCount > 0 ? <MessagesBadge variant="dot" /> : undefined}
           iconPosition="end"
           value={MenuTab.Messages}
           aria-controls={`tabpanel-${MenuTab.Messages}`}
@@ -128,11 +128,11 @@ const MenuTabs = () => {
       </Tabs>
 
       <TabPanel value={MenuTab.Chat} hidden={currentTab !== MenuTab.Chat}>
-        <VisuallyHiddenTitle component={'h3'} label={'chatroom-hidden-heading'} />
+        <VisuallyHiddenTitle component="h3" label="chatroom-hidden-heading" />
         <Chat scope={ChatScope.Global} />
       </TabPanel>
       <TabPanel value={MenuTab.People} hidden={currentTab !== MenuTab.People}>
-        <VisuallyHiddenTitle component={'h3'} label={'participant-list-hidden-heading'} />
+        <VisuallyHiddenTitle component="h3" label="participant-list-hidden-heading" />
         <Participants />
       </TabPanel>
       <TabPanel value={MenuTab.Messages} hidden={currentTab !== MenuTab.Messages}>

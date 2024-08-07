@@ -25,7 +25,7 @@ const TariffDowngradedBanner = () => {
       aria-hidden={tariffName === FALLBACK_TARIFF_NAME}
       action={
         <Button
-          size={'medium'}
+          size="medium"
           onClick={() => {
             window.open(accountManagementUrl, '_self');
           }}
@@ -35,7 +35,7 @@ const TariffDowngradedBanner = () => {
         </Button>
       }
     >
-      <Trans i18nKey={'dashboard-payment-status-downgraded'} values={{ tariffName }} />
+      <Trans i18nKey="dashboard-payment-status-downgraded" values={{ tariffName }} />
     </AlertBanner>
   );
 };

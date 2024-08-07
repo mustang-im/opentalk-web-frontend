@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, List, ListItem, styled, Typography, Stack } from '@mui/material';
 import { ParticipantId, TargetId, ChatScope, ChatMessage as ChatMessageType } from '@opentalk/common';
-import React, { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ViewportList, ViewportListRef } from 'react-viewport-list';
 
@@ -129,7 +129,7 @@ const ChatList = ({ scope, targetId, onReset }: ChatListProps) => {
 
   if (combinedMessageAndEvents.length > 0) {
     return (
-      <ChatOrderedList ref={viewportReference} data-testid={'combined-messages'} empty={searchedMessages.length === 0}>
+      <ChatOrderedList ref={viewportReference} data-testid="combined-messages" empty={searchedMessages.length === 0}>
         <ViewportList
           ref={virtualList}
           viewportRef={viewportReference}
@@ -152,11 +152,11 @@ const ChatList = ({ scope, targetId, onReset }: ChatListProps) => {
 
   return (
     <Stack flex={1} overflow="hidden" justifyContent="center">
-      <Stack data-testid={'no-messages'} alignItems="center" overflow="auto" spacing={2}>
+      <Stack data-testid="no-messages" alignItems="center" overflow="auto" spacing={2}>
         <Box>
-          <EncryptedMessagesImage width={'7em'} height={'7em'} />
+          <EncryptedMessagesImage width="7em" height="7em" />
         </Box>
-        <Typography align={'center'} variant={'body2'}>
+        <Typography align="center" variant="body2">
           {t('encrypted-messages')}
         </Typography>
       </Stack>

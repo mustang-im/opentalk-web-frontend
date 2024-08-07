@@ -6,7 +6,6 @@
 import { Stack, Typography } from '@mui/material';
 import { CommonTextField } from '@opentalk/common';
 import { FormikProps } from 'formik';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { formikProps } from '../../../utils/formikUtils';

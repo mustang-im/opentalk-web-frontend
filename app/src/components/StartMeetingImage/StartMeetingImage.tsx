@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { keyframes, styled } from '@mui/material';
 import { SvgIcon, SvgIconProps } from '@mui/material';
-import React from 'react';
 
 import { ReactComponent as Illustration } from '../../assets/images/start-meeting-illustration.svg';
 

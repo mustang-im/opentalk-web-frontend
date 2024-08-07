@@ -11,7 +11,7 @@ import {
   styled,
 } from '@mui/material';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetRoomEventInfoQuery } from '../../api/rest';

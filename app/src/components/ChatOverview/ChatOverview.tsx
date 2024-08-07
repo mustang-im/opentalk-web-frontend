@@ -60,9 +60,9 @@ const ChatOverview = () => {
         )}
       </List>
     ) : (
-      <Stack flex={1} justifyContent={'center'} alignItems={'center'} spacing={2}>
-        <NoNewMessageImage width={'7em'} height={'7em'} />
-        <Typography align={'center'} variant={'body2'}>
+      <Stack flex={1} justifyContent="center" alignItems="center" spacing={2}>
+        <NoNewMessageImage width="7em" height="7em" />
+        <Typography align="center" variant="body2">
           {t('empty-messages')}
         </Typography>
       </Stack>
@@ -71,13 +71,7 @@ const ChatOverview = () => {
   if (chatConversationState.scope !== undefined && chatConversationState.targetId !== undefined)
     return (
       <Stack flex={1} width="100%" alignItems="flex-start" spacing={1}>
-        <Button
-          size={'small'}
-          startIcon={<BackIcon />}
-          variant={'text'}
-          color={'secondary'}
-          onClick={resetSelectedChat}
-        >
+        <Button size="small" startIcon={<BackIcon />} variant="text" color="secondary" onClick={resetSelectedChat}>
           {t('button-back-messages')}
         </Button>
         <Chat
@@ -96,10 +90,10 @@ const ChatOverview = () => {
     <Stack flex={1} width="100%" spacing={1} overflow="hidden">
       <Box>
         <Button
-          size={'small'}
+          size="small"
           disabled={participants.length === 0}
           onClick={newMessageClickHandler}
-          variant={'text'}
+          variant="text"
           focusRipple={true}
           startIcon={<NewMessageIcon />}
         >

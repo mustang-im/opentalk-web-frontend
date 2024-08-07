@@ -4,7 +4,6 @@
 import { styled, Box, Button } from '@mui/material';
 import { CopyIcon, CommonTextField, useDateFormat } from '@opentalk/common';
 import { notifications } from '@opentalk/common';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface LegalVoteTokenClipboardProps {

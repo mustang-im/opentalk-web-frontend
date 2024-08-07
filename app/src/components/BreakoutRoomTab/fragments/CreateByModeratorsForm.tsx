@@ -5,7 +5,6 @@ import { Button, Grid, styled, Switch as MuiSwitch } from '@mui/material';
 import { formikDurationFieldProps, formikSwitchProps, DurationField } from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { FormikValues } from 'formik/dist/types';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CommonFormItem from '../../../commonComponents/CommonFormItem';
@@ -32,7 +31,7 @@ const CreateByModeratorsForm = ({ formik, handleNext, formName }: ICreateByModer
   const getFormName = (name: string) => (formName ? `${formName}.${name}` : name);
 
   return (
-    <Grid container direction={'column'} spacing={1}>
+    <Grid container direction="column" spacing={1}>
       <GridItem item xs>
         <DurationFieldWrapper>
           <DurationField {...formikDurationFieldProps(getFormName('duration'), formik, 0)} min={0} />
@@ -46,10 +45,10 @@ const CreateByModeratorsForm = ({ formik, handleNext, formName }: ICreateByModer
         />
       </GridItem>
       <GridItem item>
-        <TextWithDivider variant={'caption'}>Assign 10-12 participants per room</TextWithDivider>
+        <TextWithDivider variant="caption">Assign 10-12 participants per room</TextWithDivider>
       </GridItem>
       <Grid item>
-        <Button size={'small'} onClick={handleNext}>
+        <Button size="small" onClick={handleNext}>
           {t('breakout-room-create-button')}
         </Button>
       </Grid>
