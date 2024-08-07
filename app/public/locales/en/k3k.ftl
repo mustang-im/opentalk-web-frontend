@@ -285,6 +285,7 @@ moderationbar-button-waiting-room-tooltip = Participants in waiting room
 mute-participants-tab-title = Mute participants
 
 talking-stick-tab-title = Talking stick
+talking-stick-include-moderator-switch = Include moderator
 talking-stick-skip-speaker = Skip speaker
 talking-stick-participant-amount-notification = Note: We recommend to use the Talking Stick with minimum of 3 people.
 talking-stick-started-first-line = The Talking Stick is started.

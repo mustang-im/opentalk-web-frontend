@@ -285,6 +285,7 @@ moderationbar-button-waiting-room-tooltip = Teilnehmer im Warteraum
 mute-participants-tab-title = Teilnehmer stummschalten
 
 talking-stick-tab-title = Redestab
+talking-stick-include-moderator-switch = Moderator mit einbinden
 talking-stick-skip-speaker = Redner überspringen
 talking-stick-participant-amount-notification = Hinweis: Wir empfehlen den Redestab ab mind. 3 Personen zu benutzen.
 talking-stick-started-first-line = Der Redestab wurde gestartet.
