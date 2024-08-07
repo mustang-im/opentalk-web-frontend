@@ -82,6 +82,7 @@ describe('Dashboard CreateOrUpdateMeetingForm', () => {
         isAdhoc: mockEvent.isAdhoc,
         showMeetingDetails: mockEvent.showMeetingDetails,
         hasSharedFolder: false,
+        streamingTargets: [],
       });
     });
   });

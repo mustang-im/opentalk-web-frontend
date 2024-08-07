@@ -6,12 +6,7 @@ import { Event } from '@opentalk/rest-api-rtk-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  useCreateRoomInviteMutation,
-  useGetMeQuery,
-  useGetRoomInvitesQuery,
-  useGetStreamingTargetsQuery,
-} from '../../../api/rest';
+import { useCreateRoomInviteMutation, useGetMeQuery, useGetRoomInvitesQuery } from '../../../api/rest';
 import { useAppSelector } from '../../../hooks';
 import { selectBaseUrl, selectFeatures } from '../../../store/slices/configSlice';
 import { composeInviteUrl } from '../../../utils/apiUtils';
@@ -51,14 +46,13 @@ const MeetingLinksAndPasswords = ({ event }: MeetingLinksAndPasswordsProps) => {
   const roomPassword = event.room.password?.trim() || undefined;
   const features = useAppSelector(selectFeatures);
 
-  const { data: streamingTargets } = useGetStreamingTargetsQuery(event.room.id);
+  const streamingTargets = event.streamingTargets;
   const streamingTargetURL = useMemo(() => {
     if (!streamingTargets || !streamingTargets[0]) {
       return undefined;
     }
 
     const target = streamingTargets[0];
-
     switch (target.kind) {
       case PlatformKind.Custom:
       case PlatformKind.Provider:
