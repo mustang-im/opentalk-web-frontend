@@ -140,8 +140,8 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
       case 'chat_enabled':
       case 'chat_disabled':
         return (
-          <EventTypography variant={'body2'}>
-            <EventMessageTypography variant={'caption'}>
+          <EventTypography variant="body2">
+            <EventMessageTypography variant="caption">
               {t(`chat-${message.event === 'chat_enabled' ? 'enabled' : 'disabled'}-message`)}
             </EventMessageTypography>
           </EventTypography>
@@ -149,11 +149,11 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
       case 'left':
       case 'joined':
         return (
-          <EventTypography variant={'body2'} data-testid={'user-event-message'}>
-            <EventNameTypography variant={'caption'} translate="no">
+          <EventTypography variant="body2" data-testid="user-event-message">
+            <EventNameTypography variant="caption" translate="no">
               {sender?.displayName}
             </EventNameTypography>
-            <EventMessageTypography variant={'caption'}>
+            <EventMessageTypography variant="caption">
               {t(`participant-${message.event}-event`, { time: getTimeStringFromTimestamp(message) })}
             </EventMessageTypography>
           </EventTypography>
@@ -165,7 +165,7 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
   const displayName = ownMessage ? ownDisplayName : sender?.displayName;
   const isModerator = sender?.role === Role.Moderator;
   const renderNameAndTime = () => (
-    <Box display={'flex'} flexDirection={ownMessage ? 'row-reverse' : 'row'} alignItems={'center'} gap={1}>
+    <Box display="flex" flexDirection={ownMessage ? 'row-reverse' : 'row'} alignItems="center" gap={1}>
       <NameTypography
         noWrap
         isModerator={isModerator}
@@ -176,20 +176,16 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
         {displayName}
       </NameTypography>
       {isModerator && <ModeratorIcon color="primary" />}
-      <TimeTypography variant={'caption'}>{formattedTime}</TimeTypography>
+      <TimeTypography variant="caption">{formattedTime}</TimeTypography>
     </Box>
   );
 
   return (
-    <Box display={'flex'} flexDirection={ownMessage ? 'row-reverse' : 'row'} flex={1} gap={1} width="100%">
+    <Box display="flex" flexDirection={ownMessage ? 'row-reverse' : 'row'} flex={1} gap={1} width="100%">
       <Avatar src={ownMessage ? ownAvatarUrl : sender?.avatarUrl}>{displayName}</Avatar>
       <Stack gap={1} py={1} minWidth={0}>
         {renderNameAndTime()}
-        <ContentTypography
-          singleEmoji={isItSingleEmojiMessage()}
-          variant={'body2'}
-          align={ownMessage ? 'right' : 'left'}
-        >
+        <ContentTypography singleEmoji={isItSingleEmojiMessage()} variant="body2" align={ownMessage ? 'right' : 'left'}>
           <Linkify options={options}>{message.content}</Linkify>
         </ContentTypography>
       </Stack>

@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { useGetMeQuery } from '../../api/rest';
 import { MeetingCardProps } from './fragments/MeetingPopover';
 import OverviewCard from './fragments/OverviewCard';

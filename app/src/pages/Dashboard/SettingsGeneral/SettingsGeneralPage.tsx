@@ -2,12 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid } from '@mui/material';
-import React from 'react';
 
 import LanguageSelector from './fragments/LanguageSelector';
 
 const SettingsGeneralPage = () => (
-  <Grid container direction={'column'} data-testid="dashboardSettingsGeneral" spacing={5}>
+  <Grid container direction="column" data-testid="dashboardSettingsGeneral" spacing={5}>
     <Grid item>
       <LanguageSelector />
     </Grid>

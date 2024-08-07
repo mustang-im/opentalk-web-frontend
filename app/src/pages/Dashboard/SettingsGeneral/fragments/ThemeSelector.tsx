@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, Typography, FormControlLabel, Radio } from '@mui/material';
 import { useFormik } from 'formik';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -50,9 +49,9 @@ const ThemeSelector = () => {
   };
 
   return (
-    <Grid container item direction={'column'} spacing={3}>
+    <Grid container item direction="column" spacing={3}>
       <Grid item>
-        <Typography variant={'h1'} component={'h2'}>
+        <Typography variant="h1" component="h2">
           {t('dashboard-settings-general-appearance')}
         </Typography>
       </Grid>
@@ -63,7 +62,7 @@ const ThemeSelector = () => {
               <Grid item key={value}>
                 <FormControlLabel
                   control={
-                    <Grid item container alignItems={'center'} justifyContent={'flex-start'}>
+                    <Grid item container alignItems="center" justifyContent="flex-start">
                       <Radio
                         value={value}
                         size="medium"
@@ -75,7 +74,7 @@ const ThemeSelector = () => {
                     </Grid>
                   }
                   label={renderThemeIcon(value)}
-                  labelPlacement={'top'}
+                  labelPlacement="top"
                 />
               </Grid>
             ))}

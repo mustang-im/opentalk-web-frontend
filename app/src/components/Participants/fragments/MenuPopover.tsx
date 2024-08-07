@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { MenuItem as MuiMenuItem, Popover as MuiPopover, styled, Typography } from '@mui/material';
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export interface IMenuOptionItem {

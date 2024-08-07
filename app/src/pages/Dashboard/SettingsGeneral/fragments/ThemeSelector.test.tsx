@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { cleanup, waitFor } from '@testing-library/react';
-import React from 'react';
 
 import { render, screen, configureStore, fireEvent } from '../../../../utils/testUtils';
 import ThemeSelector from './ThemeSelector';

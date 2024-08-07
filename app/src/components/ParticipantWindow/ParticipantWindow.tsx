@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box as MuiBox } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
-import React from 'react';
 import { useMemo, useState } from 'react';
 
 import NameTile from '../../commonComponents/NameTile/NameTile';

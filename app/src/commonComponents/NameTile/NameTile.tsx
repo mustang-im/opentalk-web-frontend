@@ -89,7 +89,7 @@ const NameTile = ({ displayName, ...props }: NameTileProps) => {
     !(isAudioActive.current && isVideoActive.current) && (
       <IconBox
         data-testid="iconBox"
-        direction={'row'}
+        direction="row"
         spacing={0.5}
         aria-label={t('indicator-has-audio-off', {
           participantName: displayName,
@@ -105,7 +105,7 @@ const NameTile = ({ displayName, ...props }: NameTileProps) => {
   return (
     <NameBox data-testid="nameTile" {...boxProps}>
       {renderIconBox()}
-      <Typography variant={'body2'} noWrap py={0} translate="no">
+      <Typography variant="body2" noWrap py={0} translate="no">
         {displayName}
       </Typography>
     </NameBox>

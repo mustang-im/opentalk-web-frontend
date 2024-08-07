@@ -18,7 +18,6 @@ import {
 import { CloseIcon, notifications, formikDateTimePickerProps } from '@opentalk/common';
 import { DateTime, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useFormik } from 'formik';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -142,7 +141,7 @@ const InviteGuestDialog = (props: Omit<DialogProps, 'children'>) => {
             />
           </DialogContent>
           <DialogActions>
-            <Button type={'submit'} color="primary">
+            <Button type="submit" color="primary">
               {t('dialog-invite-guest-button-submit')}
             </Button>
           </DialogActions>

@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack } from '@mui/material';
-import React from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { selectTalkingStickParticipants } from '../../store/selectors';

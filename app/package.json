@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src/ --fix",
     "start": "yarn run create:dev && REACT_APP_VERSION='dev' craco start",
     "start:hot": "yarn run create:hot && REACT_APP_VERSION='dev' REACT_HOT_MODE='hot' craco start",
     "start-react-scripts": "REACT_APP_VERSION='dev' react-scripts start",

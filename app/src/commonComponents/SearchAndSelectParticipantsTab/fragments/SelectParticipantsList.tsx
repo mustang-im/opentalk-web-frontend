@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { List } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
-import React from 'react';
 
 import SelectParticipantsItem, { SelectableParticipant } from './SelectParticipantsItem';
 

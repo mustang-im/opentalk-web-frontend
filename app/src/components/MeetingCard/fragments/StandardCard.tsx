@@ -80,7 +80,7 @@ const StandardCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
       <Collapse in={isFavorite} data-testid={`favorite-icon${isFavorite ? '-visible' : ''}`}>
         <Favorite aria-label={t('global-favorite')} />
       </Collapse>
-      <Grid container alignItems={'flex-end'} justifyContent={'space-between'} spacing={2}>
+      <Grid container alignItems="flex-end" justifyContent="space-between" spacing={2}>
         <Grid item>
           <Stack spacing={2}>
             {renderTimeString()}

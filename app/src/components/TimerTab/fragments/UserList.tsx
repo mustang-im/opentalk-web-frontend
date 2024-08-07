@@ -4,7 +4,6 @@
 import styled from '@emotion/styled';
 import { List as MuiList, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
 import { DoneIcon, CloseIcon, ParticipantAvatar } from '@opentalk/common';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';

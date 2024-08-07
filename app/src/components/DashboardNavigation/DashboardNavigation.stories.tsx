@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { HomeIcon, MeetingsIcon, SettingsIcon } from '@opentalk/common';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 
 import DashboardNavigation from './DashboardNavigation';

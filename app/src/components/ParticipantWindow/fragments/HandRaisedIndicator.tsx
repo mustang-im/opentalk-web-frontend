@@ -4,7 +4,6 @@
 import { styled, keyframes } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
 import { RaiseHandOnIcon } from '@opentalk/common';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../hooks';

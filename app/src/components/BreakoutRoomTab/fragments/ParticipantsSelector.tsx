@@ -222,7 +222,7 @@ const ParticipantsSelector = ({ name, formName, onSubmit }: IParticipantsSelecto
       >
         <UserNameContainer>
           {assignments.map((assignment) => (
-            <Typography key={assignment.id} variant={'body1'} translate="no">
+            <Typography key={assignment.id} variant="body1" translate="no">
               {assignment.displayName}
             </Typography>
           ))}

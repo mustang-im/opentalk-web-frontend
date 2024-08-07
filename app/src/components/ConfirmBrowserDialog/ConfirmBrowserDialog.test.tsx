@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
-import React from 'react';
 
 import ConfirmBrowserDialog from './ConfirmBrowserDialog';
 

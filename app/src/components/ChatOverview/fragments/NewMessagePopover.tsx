@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { MenuItem as MuiMenuItem, Menu as MuiMenu, styled, ListItemText } from '@mui/material';
 import { TargetId, ChatScope } from '@opentalk/common';
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
@@ -61,7 +61,7 @@ function NewMessagePopover<T>({ setAnchorEl, anchorEl, open }: INewMessagePopove
   const renderGroupItems = () =>
     groups.length > 0
       ? [
-          <MenuItem disabled={true} key={'chat-group-scope'}>
+          <MenuItem disabled={true} key="chat-group-scope">
             <ListItemText>{t('chat-group-scope')}</ListItemText>
           </MenuItem>,
           groups.map((group) => (
@@ -75,7 +75,7 @@ function NewMessagePopover<T>({ setAnchorEl, anchorEl, open }: INewMessagePopove
   const renderParticipantItems = () =>
     participants.length > 0
       ? [
-          <MenuItem disabled={true} key={'chat-private-scope'}>
+          <MenuItem disabled={true} key="chat-private-scope">
             <ListItemText>{t('chat-private-scope')}</ListItemText>
           </MenuItem>,
           participants.map((participant) => (

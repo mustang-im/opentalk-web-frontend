@@ -4,7 +4,6 @@
 import { styled } from '@mui/material';
 import { Step, useFormikWizard } from 'formik-wizard-form';
 import { FormikHelpers, FormikValues } from 'formik/dist/types';
-import React from 'react';
 
 import Controls from './fragments/Controls';
 

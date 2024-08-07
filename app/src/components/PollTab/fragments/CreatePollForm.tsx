@@ -111,11 +111,11 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
         <Form onSubmit={formik.handleSubmit}>
           <Box display="flex" flexDirection="column">
             <Box marginBottom={1}>
-              <Button variant={'text'} onClick={onClose} startIcon={<BackIcon />}>
+              <Button variant="text" onClick={onClose} startIcon={<BackIcon />}>
                 {t('poll-button-back')}
               </Button>
             </Box>
-            <Typography variant={'h2'}>
+            <Typography variant="h2">
               {isEditing ? t('poll-header-title-update') : t('poll-header-title-create')}
             </Typography>
           </Box>
@@ -151,7 +151,7 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                 />
               </Box>
               <Box marginBottom={1}>
-                <AnswersFormElement name={'choices'} />
+                <AnswersFormElement name="choices" />
               </Box>
               <Box marginBottom={1}>
                 {/* General choices error message */}

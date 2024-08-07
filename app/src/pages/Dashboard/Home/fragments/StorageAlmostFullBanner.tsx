@@ -58,7 +58,7 @@ export const StorageAlmostFullBanner = () => {
   return (
     <AlertBanner icon={false} variant="filled" severity="error" action={<AlertActions />}>
       <Typography>
-        <Trans i18nKey={'dashboard-storage-almost-full-message'} />
+        <Trans i18nKey="dashboard-storage-almost-full-message" />
       </Typography>
     </AlertBanner>
   );

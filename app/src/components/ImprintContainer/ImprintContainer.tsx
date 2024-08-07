@@ -29,7 +29,7 @@ const ImprintContainer = () => {
 
   const { t } = useTranslation();
   return (
-    <Container data-testid={'ImprintContainer'} style={{}}>
+    <Container data-testid="ImprintContainer" style={{}}>
       {imprintUrl && (
         <StyledLink href={imprintUrl} target="_blank">
           {t('imprint-label')}

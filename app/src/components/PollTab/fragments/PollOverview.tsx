@@ -62,7 +62,7 @@ const PollOverview = ({ onClickItem }: IPollOverview) => {
         <Box marginBottom={2}>
           <NoPollsIcon />
         </Box>
-        <Typography align={'center'} variant={'body2'}>
+        <Typography align="center" variant="body2">
           {t('no-polls-in-conference')}
         </Typography>
       </EmptyPollContainer>

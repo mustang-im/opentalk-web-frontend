@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { useAppSelector } from '../../hooks';
 import { idFromDescriptor } from '../../modules/WebRTC';
 import { selectAllSubscribers } from '../../store/slices/mediaSubscriberSlice';

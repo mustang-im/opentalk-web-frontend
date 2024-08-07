@@ -35,10 +35,10 @@ export const AvatarContainer = ({ participantId }: AvatarContainerProps) => {
   return (
     <Container
       container
-      flexDirection={'column'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      flexWrap={'nowrap'}
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      flexWrap="nowrap"
       data-testid="avatarContainer"
     >
       <Avatar src={avatarUrl} isSipParticipant={participationKind === ParticipationKind.Sip}>

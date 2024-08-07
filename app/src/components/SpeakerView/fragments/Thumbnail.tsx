@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
 import { ParticipantId } from '@opentalk/common';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { pinnedParticipantIdSet, selectPinnedParticipantId } from '../../../store/slices/uiSlice';

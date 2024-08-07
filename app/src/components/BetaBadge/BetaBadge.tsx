@@ -56,10 +56,10 @@ const BetaBadge = () => {
           horizontal: 'left',
         }}
       >
-        <Container maxWidth={'xs'} sx={{ py: 2 }} onMouseLeave={handlePopoverClose}>
-          <Typography variant={'body2'}>
+        <Container maxWidth="xs" sx={{ py: 2 }} onMouseLeave={handlePopoverClose}>
+          <Typography variant="body2">
             <Trans
-              i18nKey={'beta-flag-tooltip-text'}
+              i18nKey="beta-flag-tooltip-text"
               values={{ reportEmail }}
               components={{
                 reportEmailLink: <Link href={`mailto:${reportEmail}`} />,

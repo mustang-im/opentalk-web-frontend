@@ -100,7 +100,7 @@ const ModerationSideToolbar = ({ onSelect, displayedTabs, activeTab }: Moderatio
           key={tab.key}
           icon={
             <Tooltip placement="right" title={renderTooltipTitle(tab)}>
-              <Box component={'span'}>{tab.icon}</Box>
+              <Box component="span">{tab.icon}</Box>
             </Tooltip>
           }
           component={Button}

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InviteCode } from '@opentalk/common';
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import { Role } from '../../api/types/incoming/control';
 import * as UseInviteCodeModule from '../../hooks/useInviteCode';

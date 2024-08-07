@@ -7,7 +7,7 @@ import { DateTimePicker as MuiDateTimePicker, PickersActionBarAction, PickersLoc
 import { ErrorFormMessage } from '@opentalk/common';
 import { isSameDay } from 'date-fns';
 import { isEmpty } from 'lodash';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import PickerLocalizationProvider from '../../provider/PickerLocalizationProvider';
 import { IFormikCustomFieldPropsReturnValue } from '../../utils/formikUtils';

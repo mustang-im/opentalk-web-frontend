@@ -57,14 +57,14 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   }, [chat, lastSeenTimestampCount]);
 
   const renderPrimaryText = () => (
-    <Grid container direction={'row'} spacing={1}>
+    <Grid container direction="row" spacing={1}>
       <Grid item zeroMinWidth xs>
-        <Typography fontWeight={fontWeight} variant={'body1'} noWrap translate="no">
+        <Typography fontWeight={fontWeight} variant="body1" noWrap translate="no">
           {getDisplayName()}
         </Typography>
       </Grid>
       <Grid item>
-        <TimeTypography variant={'caption'} fontWeight={fontWeight}>
+        <TimeTypography variant="caption" fontWeight={fontWeight}>
           {formattedTime}
         </TimeTypography>
       </Grid>
@@ -72,7 +72,7 @@ const ChatOverviewItem = ({ chat, onClick }: IScopedChatItemProps) => {
   );
 
   const renderSecondaryText = () => (
-    <Typography fontWeight={fontWeight} variant={'body1'} noWrap>
+    <Typography fontWeight={fontWeight} variant="body1" noWrap>
       {chat.lastMessage?.content || ''}
     </Typography>
   );

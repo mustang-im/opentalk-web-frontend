@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { notificationAction } from '@opentalk/common';
 import { render } from '@testing-library/react';
-import React from 'react';
 
 import browser from '../../modules/BrowserSupport';
 import { screen } from '../../utils/testUtils';

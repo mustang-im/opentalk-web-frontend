@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, LinearProgress, LinearProgressProps, Typography } from '@mui/material';
-import React from 'react';
 
 const LinearProgressWithLabel = (props: LinearProgressProps & { label: string; absolute: number; sum: number }) => {
   const value = (props.absolute * 100) / props.sum || 0;

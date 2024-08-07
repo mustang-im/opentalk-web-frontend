@@ -51,7 +51,7 @@ const RoomLoadingView = () => {
           <ReconnectionDialog />
         ) : (
           <>
-            <CircularProgress color={'primary'} size={'8rem'} />
+            <CircularProgress color="primary" size="8rem" />
             <Trans
               i18nKey={connectionStateKey}
               components={{

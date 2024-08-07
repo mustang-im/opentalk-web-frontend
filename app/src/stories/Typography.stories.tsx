@@ -4,7 +4,6 @@
 import { Container, Divider, Typography as MuiTypography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import React from 'react';
 
 const variantOptions: Array<Variant> = [
   'h1',

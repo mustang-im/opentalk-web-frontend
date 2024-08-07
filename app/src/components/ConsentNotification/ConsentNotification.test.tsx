@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 
 import { render, screen, waitFor } from '../../utils/testUtils';
 import { showConsentNotification } from './ConsentNotification';

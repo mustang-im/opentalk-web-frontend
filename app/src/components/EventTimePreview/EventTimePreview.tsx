@@ -19,7 +19,7 @@ const EventTimePreview = (props: EventTimePreviewProps) => {
   const isInTheSameDay = isSameDay(startDate, endDate);
 
   return (
-    <Typography variant={'body1'} fontWeight={400}>
+    <Typography variant="body1" fontWeight={400}>
       {isInTheSameDay ? formattedStartDate : null} {formattedStartTime}
       {' - '}
       {formattedEndTime}

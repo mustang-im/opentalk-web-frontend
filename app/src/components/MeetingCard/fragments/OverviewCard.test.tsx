@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Event, InviteStatus, UserId, TimelessEvent } from '@opentalk/rest-api-rtk-query';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 

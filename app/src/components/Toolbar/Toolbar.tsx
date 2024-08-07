@@ -43,7 +43,7 @@ const MainContainer = styled('aside')(({ theme }) => ({
 const Toolbar = ({ layout }: { layout?: LayoutTypes }) => {
   const { t } = useTranslation();
   return (
-    <MainContainer aria-label={t('landmark-complementary-toolbar')} className={layout} data-testid={'Toolbar'}>
+    <MainContainer aria-label={t('landmark-complementary-toolbar')} className={layout} data-testid="Toolbar">
       <HandraiseButton />
       <ShareScreenButton />
       <AudioButton />

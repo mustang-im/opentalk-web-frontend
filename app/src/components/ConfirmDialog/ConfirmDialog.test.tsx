@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import React from 'react';
-
 import { screen, render, fireEvent } from '../../utils/testUtils';
 import ConfirmDialog, { ConfirmDialogProps } from './ConfirmDialog';
 

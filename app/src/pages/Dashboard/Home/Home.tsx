@@ -84,11 +84,11 @@ const Home = () => {
   const renderStartDirectMeetingButton = () => (
     <Button
       component={Link}
-      to={'/dashboard/meetings/meet-now'}
+      to="/dashboard/meetings/meet-now"
       onMouseEnter={toggleAnimation}
       onMouseLeave={toggleAnimation}
       startIcon={<CameraOnIcon />}
-      size={'large'}
+      size="large"
       fullWidth={isDesktop}
       state={{
         ...getReferrerRouterState(window.location),
@@ -103,10 +103,10 @@ const Home = () => {
   const renderNewMeetingButton = () => (
     <Button
       component={Link}
-      to={'/dashboard/meetings/create'}
+      to="/dashboard/meetings/create"
       startIcon={<AddIcon />}
-      color={'secondary'}
-      size={'large'}
+      color="secondary"
+      size="large"
       state={{
         ...getReferrerRouterState(window.location),
       }}
@@ -116,7 +116,7 @@ const Home = () => {
   );
 
   const renderFavoriteEventsLoading = () => (
-    <Stack width={'100%'}>
+    <Stack width="100%">
       <Skeleton variant="text" />
       <Skeleton variant="rectangular" height={200} />
     </Stack>
@@ -135,7 +135,7 @@ const Home = () => {
       return renderFavoriteEventsLoading();
     }
     return (
-      <Stack spacing={2} flex={1} justifyContent={'flex-end'}>
+      <Stack spacing={2} flex={1} justifyContent="flex-end">
         <Typography>{t('dashboard-meeting-card-title-favorite-meetings')}</Typography>
         <FavoriteMeetingsCard meetings={getMappedFavoriteMeetings()} />
       </Stack>
@@ -173,14 +173,14 @@ const Home = () => {
         tiEvents = tiEvents.concat(expandedEvents.slice(0, maxEventsPerPage - tiEvents.length));
       }
       return (
-        <Stack spacing={2} height={'100%'} overflow={'auto'}>
+        <Stack spacing={2} height="100%" overflow="auto">
           {tiEvents.map((upcomingEvent) => renderEvent(upcomingEvent))}
         </Stack>
       );
     }
 
     return (
-      <Stack spacing={2} height={'100%'} overflow={'auto'}>
+      <Stack spacing={2} height="100%" overflow="auto">
         {upcomingEvents?.data.map((upcomingEvent) => renderEvent(upcomingEvent))}
       </Stack>
     );
@@ -205,8 +205,8 @@ const Home = () => {
   );
 
   const renderLogoAndFavoriteBar = () => (
-    <Stack flexDirection={'column'} flex={1} spacing={12.5} justifyContent="space-between">
-      <Stack justifyContent={'center'} alignItems={'center'} spacing={1}>
+    <Stack flexDirection="column" flex={1} spacing={12.5} justifyContent="space-between">
+      <Stack justifyContent="center" alignItems="center" spacing={1}>
         <StartMeetingImage animated={animated} width={146} height={140} />
         {renderStartDirectMeetingButton()}
         <JoinMeetingDialog />

@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, styled } from '@mui/material';
-import React from 'react';
 
 import { isFirstStep, isLastStep } from '../../../utils/formikWizardUtils';
 
@@ -21,24 +20,24 @@ const GridItem = styled(Grid)({
 
 const Controls = ({ currentStepIndex, stepCount, handleNext, handlePrev }: IControlProps) => {
   return (
-    <Grid container spacing={1} justifyContent={'space-between'}>
+    <Grid container spacing={1} justifyContent="space-between">
       {!isFirstStep(currentStepIndex) && (
         <Grid item>
-          <Button variant={'text'} size={'small'} onClick={handlePrev}>
+          <Button variant="text" size="small" onClick={handlePrev}>
             back
           </Button>
         </Grid>
       )}
       {!isLastStep(stepCount, currentStepIndex) && (
         <GridItem item>
-          <Button size={'small'} onClick={handleNext}>
+          <Button size="small" onClick={handleNext}>
             next
           </Button>
         </GridItem>
       )}
       {isLastStep(stepCount, currentStepIndex) && (
         <GridItem item>
-          <Button size={'small'} onClick={handleNext}>
+          <Button size="small" onClick={handleNext}>
             submit
           </Button>
         </GridItem>

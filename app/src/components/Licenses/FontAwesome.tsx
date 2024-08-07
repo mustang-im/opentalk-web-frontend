@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Dialog, styled, Typography, DialogTitle } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
-import React from 'react';
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -55,33 +54,33 @@ const FontAwesome = (props: IFontAwesomeProps) => {
       </CloseButtonContainer>
       <DialogTitle>Font Awesome License</DialogTitle>
 
-      <Typography variant={'body1'}>
+      <Typography variant="body1">
         License Font Awesome Free is free, open source, and GPL friendly. You can use it for commercial projects, open
         source projects, or really almost whatever you want.
       </Typography>
 
-      <Typography variant={'body1'}>Icons — CC BY 4.0 License In the Font Awesome Free</Typography>
-      <Typography variant={'body1'}>
+      <Typography variant="body1">Icons — CC BY 4.0 License In the Font Awesome Free</Typography>
+      <Typography variant="body1">
         - download, the CC BY 4.0 license applies to all icons packaged as .svg and .js files types.
       </Typography>
 
-      <Typography variant={'body1'}>Fonts — SIL OFL 1.1</Typography>
-      <Typography variant={'body1'}>
+      <Typography variant="body1">Fonts — SIL OFL 1.1</Typography>
+      <Typography variant="body1">
         - License In the Font Awesome Free download, the SIL OLF license applies to all icons packaged as web and
         desktop font files.
       </Typography>
-      <Typography variant={'body1'}>Code — MIT License</Typography>
-      <Typography variant={'body1'}>
+      <Typography variant="body1">Code — MIT License</Typography>
+      <Typography variant="body1">
         - In the Font Awesome Free download, the MIT license applies to all non-font and non-icon files.
       </Typography>
 
-      <Typography variant={'body1'}>
+      <Typography variant="body1">
         Attribution is required by MIT, SIL OLF, and CC BY licenses. Downloaded Font Awesome Free files already contain
         embedded comments with sufficient attribution, so you shouldn't need to do anything additional when using these
         files normally.
       </Typography>
 
-      <Typography variant={'body1'}>
+      <Typography variant="body1">
         We've kept attribution comments terse, so we ask that you do not actively work to remove them from files,
         especially code. They're a great way for folks to learn about Font Awesome.
       </Typography>

@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Container as MuiContainer, styled } from '@mui/material';
-import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 const Container = styled(MuiContainer)({

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box, IconButton as MuiIconButton, Slide } from '@mui/material';
 import { CloseIcon } from '@opentalk/common';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector, useAppDispatch } from '../../hooks';
@@ -77,7 +77,7 @@ const FullscreenView = () => {
     }
 
     return (
-      <ParticipantWindow activePresenter={isActive} participantId={selectedParticipant.id} mediaRef={`fullscreen`} />
+      <ParticipantWindow activePresenter={isActive} participantId={selectedParticipant.id} mediaRef="fullscreen" />
     );
   }, [selectedParticipant, isActive]);
 

@@ -300,7 +300,7 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
                 aria-label={t('chat-submit-button')}
                 type="submit"
                 edge="end"
-                data-testid={'send-message-button'}
+                data-testid="send-message-button"
                 disabled={!isChatEnabled}
                 parentHasFocus={hasFocus}
               >
@@ -336,7 +336,7 @@ const ChatForm = ({ scope, targetId, autoFocusMessageInput }: ChatFormProps) => 
   );
 
   if (!isChatEnabled) {
-    return <Tooltip title={t('chat-disabled-tooltip')} placement={'top'} children={renderForm} />;
+    return <Tooltip title={t('chat-disabled-tooltip')} placement="top" children={renderForm} />;
   }
 
   return renderForm;

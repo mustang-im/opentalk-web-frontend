@@ -59,7 +59,7 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
           gap={2}
           zeroMinWidth
         >
-          <Typography variant={'h1'} component={'h2'}>
+          <Typography variant="h1" component="h2">
             {t('dashboard-events-my-meetings')}
           </Typography>
           <EventPageFilters filters={filters} onFilterChange={onFilterChange} />
@@ -70,7 +70,7 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
         </Grid>
         {isContainingRecurringEvents && (
           <Grid item xs={12}>
-            <Typography variant="h2" component={'h2'} mt={2}>
+            <Typography variant="h2" component="h2" mt={2}>
               {t('dashboard-events-note-limited-view')}
             </Typography>
           </Grid>
@@ -99,11 +99,11 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant={'h1'} component={'h2'}>
+          <Typography variant="h1" component="h2">
             {t('dashboard-events-my-meetings')}
           </Typography>
           {isContainingRecurringEvents && (
-            <Typography variant="h2" component={'h2'} mt={2}>
+            <Typography variant="h2" component="h2" mt={2}>
               {t('dashboard-events-note-limited-view')}
             </Typography>
           )}
@@ -126,11 +126,11 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
         <CreateNewMeetingButton />
       </Grid>
       <Grid item xs={12}>
-        <Typography variant={'h1'} component={'h2'}>
+        <Typography variant="h1" component="h2">
           {t('dashboard-events-my-meetings')}
         </Typography>
         {isContainingRecurringEvents && (
-          <Typography variant="h2" component={'h2'} mt={2}>
+          <Typography variant="h2" component="h2" mt={2}>
             {t('dashboard-events-note-limited-view')}
           </Typography>
         )}

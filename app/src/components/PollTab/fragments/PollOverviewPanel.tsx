@@ -69,9 +69,9 @@ const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
 
   return (
     <MainContainer>
-      <Grid container spacing={1} justifyContent={'center'}>
+      <Grid container spacing={1} justifyContent="center">
         <Grid item xs>
-          <Grid container alignItems={'end'} spacing={1}>
+          <Grid container alignItems="end" spacing={1}>
             <Grid item>
               <VoteState state={poll.state}>{t(`poll-overview-panel-status-${poll.state}`)}</VoteState>
             </Grid>
@@ -81,7 +81,7 @@ const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
           </Grid>
         </Grid>
         <Grid item sx={{ display: 'flex' }}>
-          <Grid container alignItems={'flex-end'} spacing={1}>
+          <Grid container alignItems="flex-end" spacing={1}>
             <Grid item>
               <DurationIcon />
             </Grid>
@@ -103,7 +103,7 @@ const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
           <Divider />
         </Grid>
         <Grid item zeroMinWidth xs={12}>
-          <TopicTypography variant={'body2'} align={'center'}>
+          <TopicTypography variant="body2" align="center">
             {truncate(poll.topic, { length: 120 })}
           </TopicTypography>
         </Grid>
@@ -118,7 +118,7 @@ const PollOverviewPanel = ({ poll }: IPollOverviewPanelProps) => {
         </Grid>
         {poll.state === 'active' && (
           <Grid item sx={{ marginLeft: 'auto' }}>
-            <Button size={'small'} variant={'contained'} onClick={handleEnd}>
+            <Button size="small" variant="contained" onClick={handleEnd}>
               {t('poll-overview-panel-button-end')}
             </Button>
           </Grid>

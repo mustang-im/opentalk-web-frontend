@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { SortOption, sortParticipantsWithConfig } from '@opentalk/common';
-import React, { memo, useMemo, useState, useCallback } from 'react';
+import { memo, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { selectNext, talkingStickStart, stop as talkingStickStop } from '../../api/types/outgoing/automod';

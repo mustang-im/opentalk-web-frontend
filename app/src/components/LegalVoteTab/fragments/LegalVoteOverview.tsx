@@ -12,7 +12,7 @@ import {
   Stack,
 } from '@mui/material';
 import { AccordionItem, NoVotesIcon } from '@opentalk/common';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 

@@ -58,9 +58,9 @@ const MeetingUtilsSection = () => {
   };
 
   return (
-    <Container spacing={1} direction={'row'}>
+    <Container spacing={1} direction="row">
       {isModerator && <WaitingParticipantsPopover />}
-      <ContainerWithBackground spacing={1} direction={'row'}>
+      <ContainerWithBackground spacing={1} direction="row">
         <DurationIcon />
         <MeetingTimer aria-label="current time" />
         {showSecurityIcon && <SecureConnectionField />}

@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { RaiseHandOffIcon, RaiseHandOnIcon } from '@opentalk/common';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { lowerHand, raiseHand } from '../../../api/types/outgoing/control';

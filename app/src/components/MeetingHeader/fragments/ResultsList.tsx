@@ -17,7 +17,7 @@ const ResultsList = () => {
   return (
     <MenuList>
       <Stack p={2}>
-        <Typography variant={'h2'} align={'center'}>
+        <Typography variant="h2" align="center">
           {t('votes-poll-overview-title')}
         </Typography>
       </Stack>

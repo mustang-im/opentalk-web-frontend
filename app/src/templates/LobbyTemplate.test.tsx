@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { cleanup, render } from '@testing-library/react';
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import { screen } from '../utils/testUtils';
 import LobbyTemplate from './LobbyTemplate';
@@ -31,7 +31,7 @@ describe('LobbyTemplate', () => {
   test('template renders children', () => {
     render(
       <LobbyTemplate>
-        <div data-testid={'test-child'} />
+        <div data-testid="test-child" />
       </LobbyTemplate>
     );
     expect(screen.getByTestId('test-child')).toBeInTheDocument();

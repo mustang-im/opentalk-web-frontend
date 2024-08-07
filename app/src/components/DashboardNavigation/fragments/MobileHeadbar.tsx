@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, styled, Typography } from '@mui/material';
 import { CloseIcon, MoreIcon } from '@opentalk/common';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ProfileChip from './ProfileChip';
@@ -85,7 +84,7 @@ const MobileHeadbar = ({ activeNavbar, toggleNavbar, path }: HeadbarProps) => {
       <SideContainer>
         <ProfileChip collapsed={true} />
       </SideContainer>
-      <Typography variant={'h1'} textAlign={'center'} textTransform={'capitalize'}>
+      <Typography variant="h1" textAlign="center" textTransform="capitalize">
         {getTitle()}
       </Typography>
       <SideContainer>

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, Stack, styled, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { HelpIcon, CloseIcon, Logo, BackIcon, CircularIconButton } from '@opentalk/common';
-import React, { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import arrowImage from '../../assets/images/arrow-illustration.png';
@@ -126,7 +126,7 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
             {title && (
               <Typography
                 variant="h2"
-                textAlign={'center'}
+                textAlign="center"
                 color={theme.palette.common.white}
                 marginBottom={theme.spacing(5)}
                 component="h1"
@@ -136,16 +136,16 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
             )}
             <Typography
               variant="h1"
-              textAlign={'center'}
-              fontSize={'2.9rem'}
-              lineHeight={'2.9rem'}
+              textAlign="center"
+              fontSize="2.9rem"
+              lineHeight="2.9rem"
               mb={2}
               component="h2"
               color={theme.palette.common.white}
             >
               {t('selftest-header')}
             </Typography>
-            <Typography textAlign={'center'} fontSize={'1.37rem'}>
+            <Typography textAlign="center" fontSize="1.37rem">
               {joinWithoutMedia ? t('selftest-body-do-test') : t('selftest-body')}
             </Typography>
           </>
@@ -176,7 +176,7 @@ const SelfTest = ({ children, actionButton, title }: SelftestProps) => {
         open={isQuickStartPopoverOpen}
         anchorEl={anchorElement.current}
         onClose={() => setIsQuickStartPopoverOpen(false)}
-        variant={'lobby'}
+        variant="lobby"
       />
     </SelfTestContainer>
   );

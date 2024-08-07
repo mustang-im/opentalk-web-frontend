@@ -98,19 +98,19 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
     key: 'home',
     element: <LobbyTemplate />,
     children: [
-      { index: true, element: <Redirect to={'/dashboard'} /> },
+      { index: true, element: <Redirect to="/dashboard" /> },
       {
         path: '/lobby/:roomId',
         key: 'lobby',
-        element: <Redirect to={'/room'} />,
+        element: <Redirect to="/room" />,
       },
       {
         path: '/waiting/:roomId',
         key: 'waiting',
         element: <ProtectedRoute />,
         children: [
-          { index: true, element: <Redirect to={'/room'} /> },
-          { path: ':breakoutRoomId', element: <Redirect to={'/room'} />, key: 'breakoutRoom' },
+          { index: true, element: <Redirect to="/room" /> },
+          { path: ':breakoutRoomId', element: <Redirect to="/room" />, key: 'breakoutRoom' },
         ],
       },
       {

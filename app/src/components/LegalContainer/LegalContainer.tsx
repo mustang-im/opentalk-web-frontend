@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, List, ListItem, ListItemText } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FontAwesome from '../../components/Licenses/FontAwesome';
@@ -34,7 +34,7 @@ const LegalContainer = () => {
   ];
 
   return (
-    <Container data-testid={'LegalContainer'}>
+    <Container data-testid="LegalContainer">
       <FontAwesome isOpen={faLicence} toggleOpen={toggleOpen} />
       <List>
         {menuItems.map((item) => (

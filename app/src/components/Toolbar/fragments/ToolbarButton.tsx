@@ -145,7 +145,7 @@ const ToolbarButton = ({
     <Tooltip placement="top" title={tooltipTitle}>
       <ButtonContainer>
         <ToolbarIconButton
-          variant={'toolbar'}
+          variant="toolbar"
           isActive={active}
           disabled={disabled || undefined}
           aria-label={tooltipTitle}

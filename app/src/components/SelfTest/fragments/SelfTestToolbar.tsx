@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, styled } from '@mui/material';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import browser from '../../../modules/BrowserSupport';
 import AudioButton from '../../Toolbar/fragments/AudioButton';

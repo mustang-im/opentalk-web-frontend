@@ -225,7 +225,7 @@ const LobbyView: FC = () => {
       <Container>
         <SelfTest
           actionButton={
-            <ActionButton form={JOIN_FORM_ID} type={'submit'} disabled={disableSubmitButton}>
+            <ActionButton form={JOIN_FORM_ID} type="submit" disabled={disableSubmitButton}>
               {t('joinform-enter-now')}
             </ActionButton>
           }
@@ -251,7 +251,7 @@ const LobbyView: FC = () => {
                 children={
                   <CustomTextField
                     {...formikProps('name', formik)}
-                    color={'secondary'}
+                    color="secondary"
                     placeholder={t('global-name')}
                     autoComplete="username"
                     disabled={disableDisplayNameField}
@@ -263,7 +263,7 @@ const LobbyView: FC = () => {
               <Grid item sm={6} md="auto">
                 <CommonTextField
                   {...formikProps('password', formik)}
-                  color={'secondary'}
+                  color="secondary"
                   placeholder={t('global-password')}
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"

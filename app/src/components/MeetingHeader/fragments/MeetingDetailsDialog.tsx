@@ -106,7 +106,7 @@ ${
       <Typography variant="h2">{getLabelText(FieldKeys.LivestreamLink)}</Typography>
       {streamingLinks.map((streamingLink) => (
         <CopyTextField
-          key={'global-streaming-link'}
+          key="global-streaming-link"
           label={streamingLink.name}
           value={streamingLink.url}
           ariaLabel={getAriaLabelText(FieldKeys.LivestreamLink, streamingLink.name)}
@@ -118,7 +118,7 @@ ${
 
   const renderSubtitle = () => (
     <Trans
-      i18nKey={'meeting-details-dialog-subtitle'}
+      i18nKey="meeting-details-dialog-subtitle"
       values={{ roomOwner: getRoomOwnerNameString() }}
       components={{ subtitle: <SubTitle />, strong: <strong /> }}
     />

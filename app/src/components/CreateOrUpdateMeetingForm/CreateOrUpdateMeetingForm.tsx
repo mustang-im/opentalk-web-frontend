@@ -647,18 +647,18 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
 
           {!existingEvent && isStreamingEnabled && <StreamingOptions formik={formik} />}
         </Stack>
-        <Grid container item justifyContent={'space-between'} spacing={2}>
-          <Grid item xs={12} sm={'auto'}>
+        <Grid container item justifyContent="space-between" spacing={2}>
+          <Grid item xs={12} sm="auto">
             {existingEvent && (
-              <Button variant={'text'} color={'secondary'} endIcon={<ForwardIcon />} onClick={onForwardButtonClick}>
+              <Button variant="text" color="secondary" endIcon={<ForwardIcon />} onClick={onForwardButtonClick}>
                 {t('dashboard-meeting-to-step', { step: 2 })}
               </Button>
             )}
           </Grid>
-          <Grid container item xs={12} sm={'auto'} spacing={3} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
+          <Grid container item xs={12} sm="auto" spacing={3} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
             {!existingEvent && (
               <Grid item>
-                <Button component={Link} to={'/dashboard/'} variant={'outlined'} color={'secondary'} fullWidth>
+                <Button component={Link} to="/dashboard/" variant="outlined" color="secondary" fullWidth>
                   {t('dashboard-direct-meeting-button-cancel')}
                 </Button>
               </Grid>

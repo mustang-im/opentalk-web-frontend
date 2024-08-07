@@ -8,7 +8,7 @@ import { ReactNode } from 'react';
 export const FailureBadge = ({ title, children }: { title: string; children: ReactNode }) => (
   <Tooltip title={title}>
     <Zoom in={true} unmountOnExit style={{ transitionDelay: '3000ms' }}>
-      <Stack direction={'row'}>
+      <Stack direction="row">
         <WarningIcon color="error" fontSize="medium" />
         {children}
       </Stack>

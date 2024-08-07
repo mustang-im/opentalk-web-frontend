@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, Stack, Typography, styled } from '@mui/material';
 import { notificationAction, notifications, generateUniquedId } from '@opentalk/common';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface CreateTalkingStickNotificationProps {
@@ -96,10 +95,10 @@ const MutedNotificationMessage = (props: Pick<MuteUnmuteNotificationMessageProps
         {t('talking-stick-speaker-announcement')}
       </CustomTypography>
       <Box display="flex" gap={1}>
-        <Button onClick={props.onUnmute} variant={'contained'} color={'primary'} fullWidth>
+        <Button onClick={props.onUnmute} variant="contained" color="primary" fullWidth>
           {t('talking-stick-notification-unmute')}
         </Button>
-        <Button onClick={props.onNext} variant={'contained'} color={'secondary'} fullWidth>
+        <Button onClick={props.onNext} variant="contained" color="secondary" fullWidth>
           {t('talking-stick-notification-next-speaker')}
         </Button>
       </Box>
@@ -122,7 +121,7 @@ const UnmutedNotificationMessage = (
         )}
       </CustomTypography>
       <Box display="flex" justifyContent="flex-end">
-        <Button onClick={props.onNext} variant={'contained'} color={'primary'}>
+        <Button onClick={props.onNext} variant="contained" color="primary">
           {t('talking-stick-notification-next-speaker')}
         </Button>
       </Box>

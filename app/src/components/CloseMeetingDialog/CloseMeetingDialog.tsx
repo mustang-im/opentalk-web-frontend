@@ -111,7 +111,7 @@ export const CloseMeetingDialog = ({ open, onClose, eventData }: CloseMeetingDia
         <FormControlLabel
           control={<Checkbox checked={!disableLeaveAndDeleteButton} onChange={handleCheckbox} />}
           label={t('meeting-delete-metadata-dialog-checkbox')}
-          labelPlacement={'end'}
+          labelPlacement="end"
         />
       </Grid>
     </DialogContent>

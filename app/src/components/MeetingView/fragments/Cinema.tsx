@@ -44,7 +44,7 @@ const Cinema = () => {
 
   return (
     <Container ref={fullscreenHandle.node}>
-      <VisuallyHiddenTitle component={'h2'} label={'videoroom-hidden-heading'} />
+      <VisuallyHiddenTitle component="h2" label="videoroom-hidden-heading" />
       {renderView()}
     </Container>
   );

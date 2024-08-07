@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, useMediaQuery, useTheme } from '@mui/material';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ModerationTabKey } from '../../config/moderationTabs';

@@ -20,14 +20,14 @@ const DocumentationPage = () => {
 
   return (
     <>
-      <Typography variant={'h1'}>{t('dashboard-help-documentation')}</Typography>{' '}
+      <Typography variant="h1">{t('dashboard-help-documentation')}</Typography>{' '}
       <TableContainer component={Paper} sx={{ mt: 2, mb: 2, maxHeight: 250, maxWidth: 1000 }}>
         <Table padding="normal" stickyHeader>
           <TableBody>
             <TableRow>
               <TableCell>{t('dashboard-quick-start-title')}</TableCell>
               <TableCell>
-                <Button color={'secondary'} onClick={() => openQuickStart(dashboardQuickStartUrl)}>
+                <Button color="secondary" onClick={() => openQuickStart(dashboardQuickStartUrl)}>
                   {t('global-open')}
                 </Button>
               </TableCell>
@@ -35,7 +35,7 @@ const DocumentationPage = () => {
             <TableRow>
               <TableCell>{t('conference-quick-start-title')}</TableCell>
               <TableCell>
-                <Button color={'secondary'} onClick={() => openQuickStart(conferenceQuickStartUrl)}>
+                <Button color="secondary" onClick={() => openQuickStart(conferenceQuickStartUrl)}>
                   {t('global-open')}
                 </Button>
               </TableCell>

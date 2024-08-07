@@ -109,22 +109,22 @@ const EventDetailsPage = () => {
 
   return (
     <Stack
-      justifyContent={'space-between'}
-      height={'100%'}
+      justifyContent="space-between"
+      height="100%"
       overflow="auto"
       style={{ paddingRight: theme.spacing(5), marginRight: theme.spacing(-5) }}
     >
       <Stack>
         <Stack mb={4}>
-          <Typography variant={'h1'}>{event.title}</Typography>
+          <Typography variant="h1">{event.title}</Typography>
           <Typography mt={1}>{getTimeInformationString()}</Typography>
         </Stack>
 
         {event.description && event.description !== '' && (
           <Stack mb={4}>
             <Typography>{t('dashboard-meeting-details-page-description-title')}</Typography>
-            <Box maxHeight={50} overflow={'auto'} mt={1}>
-              <Typography variant={'body2'}>{event.description}</Typography>
+            <Box maxHeight={50} overflow="auto" mt={1}>
+              <Typography variant="body2">{event.description}</Typography>
             </Box>
           </Stack>
         )}

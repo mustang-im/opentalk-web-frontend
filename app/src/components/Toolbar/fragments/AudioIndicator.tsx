@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import React, { useRef, useEffect, useCallback, useState, useMemo } from 'react';
+import { useRef, useEffect, useCallback, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import BrowserSupport from '../../../modules/BrowserSupport';

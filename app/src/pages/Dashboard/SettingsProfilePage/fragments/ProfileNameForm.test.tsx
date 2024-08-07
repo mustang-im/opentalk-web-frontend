@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { waitFor } from '@testing-library/react';
-import React from 'react';
 
 import { configureStore, fireEvent, render, screen } from '../../../../utils/testUtils';
 import ProfileNameForm from './ProfileNameForm';

@@ -79,11 +79,9 @@ const timeIndependentMeeting = {
 
 export const Basic: ComponentStory<typeof OverviewCard> = () => (
   <BrowserRouter>
-    {
-      <Stack width={'100%'}>
-        <OverviewCard isMeetingCreator={false} event={timeIndependentMeeting as TimelessEvent} />
-        <OverviewCard isMeetingCreator={false} event={timeDependentMeeting as Event} />
-      </Stack>
-    }
+    <Stack width="100%">
+      <OverviewCard isMeetingCreator={false} event={timeIndependentMeeting as TimelessEvent} />
+      <OverviewCard isMeetingCreator={false} event={timeDependentMeeting as Event} />
+    </Stack>
   </BrowserRouter>
 );
