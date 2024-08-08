@@ -68,7 +68,7 @@ window.config = {
     dsn: "${SENTRY_DSN}",
   },
   settings: {
-	waitingRoomDefaultValue: ${WAITING_ROOM_DEFAULT_VALUE}
+	waitingRoomDefaultValue: ${WAITING_ROOM_DEFAULT_VALUE:-false}
   }
 }
 EOF
