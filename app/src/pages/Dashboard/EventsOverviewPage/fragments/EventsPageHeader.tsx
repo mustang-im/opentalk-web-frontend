@@ -32,6 +32,8 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
   const resetMarginTop = theme.spacing(2);
   const resetMarginLeft = theme.spacing(-2);
 
+  console.log(isTablet, isDesktop);
+
   const isContainingRecurringEvents = useMemo(() => {
     return entries.find((meetings) =>
       meetings?.events?.find((event) => !isTimelessEvent(event) && event.type === EventType.Recurring)
@@ -48,6 +50,7 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
         alignItems="center"
         columns={12}
         style={{ marginTop: resetMarginTop, marginLeft: resetMarginLeft }}
+        data-testid="events-page-header-desktop"
       >
         <Grid
           item
@@ -88,6 +91,7 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
         spacing={2}
         columns={12}
         style={{ marginTop: resetMarginTop, marginLeft: resetMarginLeft }}
+        data-testid="events-page-header-tablet"
       >
         <Grid item container columns={12} xs={12} rowSpacing={0} columnSpacing={1}>
           <Grid item xs="auto">
@@ -117,26 +121,22 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
       container
       component="header"
       alignItems="center"
-      spacing={2}
+      spacing={0}
       columns={12}
-      style={{ marginTop: resetMarginTop, marginLeft: resetMarginLeft }}
+      style={{ marginLeft: resetMarginLeft, paddingLeft: theme.spacing(2) }}
+      data-testid="events-page-header-mobile"
     >
-      <Grid item xs={12} display="flex" justifyContent="space-between">
+      <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center" pt={0}>
+        <EventPageFilters filters={filters} visuallyDivide onFilterChange={onFilterChange} />
         <EventFilterButtonBar filters={filters} onFilterChange={onFilterChange} />
         <CreateNewMeetingButton />
       </Grid>
       <Grid item xs={12}>
-        <Typography variant="h1" component="h2">
-          {t('dashboard-events-my-meetings')}
-        </Typography>
         {isContainingRecurringEvents && (
           <Typography variant="h2" component="h2" mt={2}>
             {t('dashboard-events-note-limited-view')}
           </Typography>
         )}
-      </Grid>
-      <Grid item xs={12}>
-        <EventPageFilters filters={filters} visuallyDivide onFilterChange={onFilterChange} />
       </Grid>
     </Grid>
   );

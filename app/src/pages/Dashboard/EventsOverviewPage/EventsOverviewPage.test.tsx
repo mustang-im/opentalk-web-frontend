@@ -34,11 +34,6 @@ jest.mock('../../../templates/DashboardTemplate', () => ({
 
 describe('Dashboard EventsPage', () => {
   afterEach(() => cleanup());
-  test('page will not crash', async () => {
-    const { store } = configureStore();
-    await render(<EventsPage />, store);
-    expect(screen.getByText('dashboard-events-my-meetings')).toBeInTheDocument();
-  });
 
   test('it will render 1 Accordion', async () => {
     const { store } = configureStore();
