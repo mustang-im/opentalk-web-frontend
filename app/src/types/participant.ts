@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { BreakoutRoomId } from './breakout';
 import { GroupId, ParticipantId, ParticipationKind, Role, WaitingState } from './common';
-import { ProtocolAccess } from './protocol';
+import { MeetingNotesAccess } from './meetingNotes';
 
 export interface Participant {
   id: ParticipantId;
@@ -19,7 +19,7 @@ export interface Participant {
   lastActive: string;
   role?: Role;
   waitingState: WaitingState;
-  protocolAccess: ProtocolAccess;
+  meetingNotesAccess: MeetingNotesAccess;
   isPresenter: boolean;
   isSpeaking: boolean;
   isRoomOwner: boolean;

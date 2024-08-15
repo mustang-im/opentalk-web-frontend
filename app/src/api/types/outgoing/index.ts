@@ -13,12 +13,12 @@ import * as legalVote from './legalVote';
 import LegalVoteMessage from './legalVote';
 import * as media from './media';
 import MediaMessage from './media';
+import * as meetingNotes from './meetingNotes';
+import MeetingNotesMessage from './meetingNotes';
 import * as moderation from './moderation';
 import ModerationMessage from './moderation';
 import * as poll from './poll';
 import PollMessage from './poll';
-import * as protocol from './protocol';
-import ProtocolMessage from './protocol';
 import * as recording from './streaming';
 import RecordingMessage from './streaming';
 import * as timer from './timer';
@@ -34,7 +34,7 @@ export * as moderation from './moderation';
 export * as chat from './chat';
 export * as poll from './poll';
 export * as media from './media';
-export * as protocol from './protocol';
+export * as meetingNotes from './meetingNotes';
 export * as timer from './timer';
 export * as whiteboard from './whiteboard';
 export * as recording from './streaming';
@@ -48,7 +48,7 @@ export type Action =
   | legalVote.Action
   | media.Action
   | poll.Action
-  | protocol.Action
+  | meetingNotes.Action
   | timer.Action
   | whiteboard.Action
   | recording.Action;
@@ -62,7 +62,7 @@ export type Message =
   | LegalVoteMessage
   | MediaMessage
   | PollMessage
-  | ProtocolMessage
+  | MeetingNotesMessage
   | TimerMessage
   | WhiteboardMessage
   | RecordingMessage;

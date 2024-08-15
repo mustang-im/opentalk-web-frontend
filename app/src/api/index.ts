@@ -64,6 +64,7 @@ import {
   mediaUpdated as subscriberMediaUpdated,
   updated as subscriberUpdate,
 } from '../store/slices/mediaSubscriberSlice';
+import { setMeetingNotesReadUrl, setMeetingNotesWriteUrl } from '../store/slices/meetingNotesSlice';
 import {
   forceLowerHand,
   disableRaisedHands,
@@ -85,7 +86,6 @@ import {
   updatedSpeaker,
 } from '../store/slices/participantsSlice';
 import * as pollStore from '../store/slices/pollSlice';
-import { setProtocolReadUrl, setProtocolWriteUrl } from '../store/slices/protocolSlice';
 import {
   enteredWaitingRoom,
   readyToEnter,
@@ -109,10 +109,10 @@ import {
   Timestamp,
   VideoSetting,
   matchBuilder,
-  ProtocolState,
+  MeetingNotesState,
   ChatMessage,
   Participant,
-  ProtocolAccess,
+  MeetingNotesAccess,
   WaitingState,
   ParticipantInOtherRoom,
   InitialChatHistory,
@@ -131,7 +131,7 @@ import {
   Message as IncomingMessage,
   moderation,
   poll,
-  protocol,
+  meetingNotes,
   whiteboard,
   chat,
   timer,
@@ -173,14 +173,14 @@ const transformChatHistory = (
   return { groupIds, messages };
 };
 
-const mapProtocolToProtocolAccess = (protocol?: ProtocolState) => {
-  if (!protocol) {
-    return ProtocolAccess.None;
+const mapMeetingNotesToMeetingNotesAccess = (meetingNotes?: MeetingNotesState) => {
+  if (!meetingNotes) {
+    return MeetingNotesAccess.None;
   }
-  if (protocol.readonly) {
-    return ProtocolAccess.Read;
+  if (meetingNotes.readonly) {
+    return MeetingNotesAccess.Read;
   }
-  return ProtocolAccess.Write;
+  return MeetingNotesAccess.Write;
 };
 
 const isParticipantSpeaking = (speakers: Speaker[], participantId: ParticipantId) => {
@@ -194,7 +194,7 @@ const isParticipantSpeaking = (speakers: Speaker[], participantId: ParticipantId
 
 const mapToUiParticipant = (
   state: RootState,
-  { id, control, media, protocol }: BackendParticipant,
+  { id, control, media, meetingNotes }: BackendParticipant,
   breakoutRoomId: BreakoutRoomId | null,
   waitingState: WaitingState,
   speakers?: Speaker[]
@@ -212,7 +212,7 @@ const mapToUiParticipant = (
   lastActive: control.joinedAt,
   role: control.role,
   waitingState,
-  protocolAccess: mapProtocolToProtocolAccess(protocol),
+  meetingNotesAccess: mapMeetingNotesToMeetingNotesAccess(meetingNotes),
   isPresenter: Boolean(media?.isPresenter),
   isSpeaking: speakers ? isParticipantSpeaking(speakers, id) : false,
   isRoomOwner: control.isRoomOwner,
@@ -235,7 +235,7 @@ const mapBreakoutToUiParticipant = (
   participationKind,
   lastActive: joinTime,
   waitingState: WaitingState.Joined,
-  protocolAccess: ProtocolAccess.None,
+  meetingNotesAccess: MeetingNotesAccess.None,
   isPresenter: false,
   isSpeaking: false,
   isRoomOwner: false,
@@ -487,7 +487,7 @@ const handleControlMessage = async (
             lastActive: timestamp,
             waitingState: WaitingState.Joined,
             isPresenter: Boolean(data.media?.isPresenter),
-            protocolAccess: mapProtocolToProtocolAccess(data.protocol),
+            meetingNotesAccess: mapMeetingNotesToMeetingNotesAccess(data.meetingNotes),
             ...data.control,
           })
         );
@@ -956,51 +956,59 @@ const handleModerationMessage = (dispatch: AppDispatch, data: moderation.Message
 };
 
 /**
- * Handles protocol messages
+ * Handles meetingNotes messages
  *
- * It takes a dispatch function and a protocol message, and dispatches an action based on the message
+ * It takes a dispatch function and a meetingNotes message, and dispatches an action based on the message
  * @param {AppDispatch} dispatch - this is the dispatch function from the redux store.
- * @param data - protocol.IncomingProtocol
+ * @param data - meetingNotes.IncomingMeetingNotes
  */
-const handleProtocolMessage = (dispatch: AppDispatch, data: protocol.IncomingProtocol, state: RootState) => {
+const handleMeetingNotesMessage = (
+  dispatch: AppDispatch,
+  data: meetingNotes.IncomingMeetingNotes,
+  state: RootState
+) => {
   switch (data.message) {
     case 'pdf_asset':
-      notifications.info(i18next.t('protocol-upload-pdf-message'));
+      notifications.info(i18next.t('meeting-notes-upload-pdf-message'));
       break;
     case 'write_url':
-      if (state.user.protocolAccess === ProtocolAccess.None) {
+      if (state.user.meetingNotesAccess === MeetingNotesAccess.None) {
         const message = i18next.t(
-          state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
+          state.user.role === Role.Moderator
+            ? 'meeting-notes-created-all-notification'
+            : 'meeting-notes-created-notification'
         );
         notificationAction({
           msg: message,
           variant: 'info',
-          actionBtnText: i18next.t('protocol-new-protocol-message-button'),
-          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
+          actionBtnText: i18next.t('meeting-notes-new-meeting-notes-message-button'),
+          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.MeetingNotes)),
         });
       }
-      dispatch(setProtocolWriteUrl(data.url));
+      dispatch(setMeetingNotesWriteUrl(data.url));
       break;
     case 'read_url':
-      if (state.user.protocolAccess === ProtocolAccess.None) {
+      if (state.user.meetingNotesAccess === MeetingNotesAccess.None) {
         const message = i18next.t(
-          state.user.role === Role.Moderator ? 'protocol-created-all-notification' : 'protocol-created-notification'
+          state.user.role === Role.Moderator
+            ? 'meeting-notes-created-all-notification'
+            : 'meeting-notes-created-notification'
         );
         notificationAction({
           msg: message,
           variant: 'info',
-          actionBtnText: i18next.t('protocol-new-protocol-message-button'),
-          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.Protocol)),
+          actionBtnText: i18next.t('meeting-notes-new-meeting-notes-message-button'),
+          onAction: () => dispatch(updatedCinemaLayout(LayoutOptions.MeetingNotes)),
         });
       }
-      dispatch(setProtocolReadUrl(data.url));
+      dispatch(setMeetingNotesReadUrl(data.url));
       break;
     case 'error':
       dispatchError(data.error.replace('_', '-'));
       break;
     default: {
       const dataString = JSON.stringify(data, null, 2);
-      console.error(`Unknown breakout message type: ${dataString}`);
+      console.error(`Unknown meeting notes message type: ${dataString}`);
       throw new Error(`Unknown message type: ${dataString}`);
     }
   }
@@ -1175,8 +1183,8 @@ const onMessage =
       case 'moderation':
         handleModerationMessage(dispatch, message.payload, getState());
         break;
-      case 'protocol':
-        handleProtocolMessage(dispatch, message.payload, getState());
+      case 'meeting_notes':
+        handleMeetingNotesMessage(dispatch, message.payload, getState());
         break;
       case 'polls':
         handlePollVoteMessage(dispatch, message.payload);
@@ -1278,7 +1286,7 @@ export const apiMiddleware: Middleware = ({
       .addModule((builder) => outgoing.legalVote.handler(builder, dispatch))
       .addModule((builder) => outgoing.poll.handler(builder, dispatch))
       .addModule((builder) => outgoing.media.handler(builder, dispatch))
-      .addModule((builder) => outgoing.protocol.handler(builder, dispatch))
+      .addModule((builder) => outgoing.meetingNotes.handler(builder, dispatch))
       .addModule((builder) => outgoing.moderation.handler(builder, dispatch))
       .addModule((builder) => outgoing.timer.handler(builder, dispatch))
       .addModule((builder) => outgoing.whiteboard.handler(builder, dispatch))

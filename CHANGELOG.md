@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### Internal
 
+- Rename protocol module to meeting notes ([#1973](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1973))
 - Setup ESLint react plugin for app module ([#2012](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2012))
 
 ## 1.19.0

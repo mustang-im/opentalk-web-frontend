@@ -23,7 +23,7 @@ export type Namespaces =
   | 'polls'
   | 'media'
   | 'moderation'
-  | 'protocol'
+  | 'meeting_notes'
   | 'timer'
   | 'recording'
   | 'whiteboard'

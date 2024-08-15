@@ -5,6 +5,6 @@ import { SvgIcon, SvgIconProps } from '@mui/material';
 
 import { ReactComponent as Protocol } from './source/protocol.svg';
 
-const ProtocolIcon = (props: SvgIconProps) => <SvgIcon {...props} component={Protocol} inheritViewBox />;
+const MeetingNotesIcon = (props: SvgIconProps) => <SvgIcon {...props} component={Protocol} inheritViewBox />;
 
-export default ProtocolIcon;
+export default MeetingNotesIcon;

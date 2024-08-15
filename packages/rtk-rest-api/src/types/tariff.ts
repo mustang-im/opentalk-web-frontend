@@ -14,7 +14,7 @@ export enum BackendModules {
   Media = 'media',
   Moderation = 'moderation',
   Polls = 'polls',
-  Protocol = 'protocol',
+  MeetingNotes = 'meeting_notes',
   Recording = 'recording',
   RecordingService = 'recording_service',
   Timer = 'timer',

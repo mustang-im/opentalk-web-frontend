@@ -13,7 +13,7 @@ import {
   ParticipantId,
   ParticipationKind,
   VideoSetting,
-  ProtocolAccess,
+  MeetingNotesAccess,
   WaitingState,
 } from '../types';
 import { getRandomNumber } from '../utils/numberUtils';
@@ -38,7 +38,7 @@ export const useMockUsers = (users: number) => {
                 breakoutRoomId: null,
                 participationKind: ParticipationKind.User,
                 lastActive: new Date().toISOString(),
-                protocolAccess: ProtocolAccess.None,
+                meetingNotesAccess: MeetingNotesAccess.None,
                 isPresenter: false,
                 waitingState: WaitingState.Joined,
                 isSpeaking: false,

@@ -51,7 +51,7 @@ import { AutomodState, SpeakerState } from '../store/slices/automodSlice';
 import { Poll } from '../store/slices/pollSlice';
 import {
   Participant,
-  ProtocolAccess,
+  MeetingNotesAccess,
   WaitingState,
   MediaSessionType,
   ParticipantId,
@@ -283,7 +283,7 @@ export const mockedParticipant = (index: number, kind: ParticipationKind = Parti
   participationKind: kind,
   lastActive: '2022-03-23T12:32:30Z',
   waitingState: WaitingState.Joined,
-  protocolAccess: ProtocolAccess.None,
+  meetingNotesAccess: MeetingNotesAccess.None,
   isPresenter: false,
   isSpeaking: false,
   isRoomOwner: false,

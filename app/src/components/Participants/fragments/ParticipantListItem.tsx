@@ -32,7 +32,7 @@ import {
   ModeratorIcon,
   MoreIcon,
   PhoneIcon,
-  ProtocolIcon,
+  MeetingNotesIcon,
   RaiseHandOnIcon,
   ShareScreenOnIcon,
   TelephoneStrokeIcon,
@@ -44,13 +44,13 @@ import { selectAudioEnabled, selectShareScreenEnabled } from '../../../store/sli
 import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
 import { selectHandUp } from '../../../store/slices/moderationSlice';
 import { chatConversationStateSet, selectParticipantsSortOption } from '../../../store/slices/uiSlice';
-import { selectIsModerator, selectOurUuid, selectUserProtocolAccess } from '../../../store/slices/userSlice';
+import { selectIsModerator, selectOurUuid, selectUserMeetingNotesAccess } from '../../../store/slices/userSlice';
 import {
   ChatScope,
   MediaSessionType,
   Participant,
   ParticipationKind,
-  ProtocolAccess,
+  MeetingNotesAccess,
   SortOption,
 } from '../../../types';
 import MenuPopover, { IMenuOptionItem } from './MenuPopover';
@@ -140,7 +140,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   const ownId = useAppSelector(selectOurUuid);
   const ownAudioEnabled = useAppSelector(selectAudioEnabled);
   const ownScreenShareEnabled = useAppSelector(selectShareScreenEnabled);
-  const userProtocolAccess = useAppSelector(selectUserProtocolAccess);
+  const userMeetingNotesAccess = useAppSelector(selectUserMeetingNotesAccess);
   const ownHandRaised = useAppSelector(selectHandUp);
   const [openRenameDialog, setOpenRenameDialog] = useState(false);
 
@@ -380,11 +380,11 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
     }
   };
 
-  const isProtocolEditor = (participant: Participant) => {
-    if (participant.id === ownId && userProtocolAccess === ProtocolAccess.Write) {
+  const isMeetinNotesEditor = (participant: Participant) => {
+    if (participant.id === ownId && userMeetingNotesAccess === MeetingNotesAccess.Write) {
       return true;
     }
-    if (participant.protocolAccess && participant.protocolAccess === ProtocolAccess.Write) {
+    if (participant.meetingNotesAccess && participant.meetingNotesAccess === MeetingNotesAccess.Write) {
       return true;
     }
     return false;
@@ -430,9 +430,9 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
         />
 
         {participant.id !== ownId && renderMenu()}
-        {isProtocolEditor(participant) && (
+        {isMeetinNotesEditor(participant) && (
           <IconsContainer>
-            <ProtocolIcon />
+            <MeetingNotesIcon />
           </IconsContainer>
         )}
         <IconsContainer>{renderIcon()}</IconsContainer>

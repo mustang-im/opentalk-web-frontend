@@ -4,7 +4,7 @@
 import { ErrorStruct, NamespacedIncoming } from '../../../types';
 import { isEnumErrorStruct } from '../../../utils/tsUtils';
 
-interface IncomingProtocolSuccess {
+interface IncomingMeetingNotesSuccess {
   message: 'write_url' | 'read_url';
   url: URL;
 }
@@ -15,15 +15,15 @@ interface IncomingPdfAsset {
   assetId: string;
 }
 
-export enum ProtocolError {
+export enum MeetingNotesError {
   InsufficientPermissions = 'insufficient_permissions',
   CurrentlyInitializing = 'currently_initializing',
   FailedInitialization = 'failed_initialization',
 }
 
-export const isError = isEnumErrorStruct(ProtocolError);
+export const isError = isEnumErrorStruct(MeetingNotesError);
 
-export type IncomingProtocol = IncomingProtocolSuccess | IncomingPdfAsset | ErrorStruct<ProtocolError>;
-export type Protocol = NamespacedIncoming<IncomingProtocol, 'protocol'>;
+export type IncomingMeetingNotes = IncomingMeetingNotesSuccess | IncomingPdfAsset | ErrorStruct<MeetingNotesError>;
+export type MeetingNotes = NamespacedIncoming<IncomingMeetingNotes, 'meeting_notes'>;
 
-export default Protocol;
+export default MeetingNotes;

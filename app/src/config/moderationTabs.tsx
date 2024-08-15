@@ -17,7 +17,7 @@ import {
   WoolBallIcon,
   WhiteboardIcon,
   RaiseHandOffIcon,
-  ProtocolIcon,
+  MeetingNotesIcon,
   CoffeeBreakIcon,
   DebriefingIcon,
   TalkingStickIcon,
@@ -38,7 +38,7 @@ const LegalVoteTab = React.lazy(() => import('../components/LegalVoteTab'));
 const TalkingStickTabPanel = React.lazy(() => import('../components/TalkingStickTabPanel/TalkingStickTabPanel'));
 const PollTab = React.lazy(() => import('../components/PollTab'));
 const MuteParticipantsTab = React.lazy(() => import('../components/MuteParticipantsTab'));
-const ProtocolTab = React.lazy(() => import('../components/ProtocolTab'));
+const MeetingNotesTab = React.lazy(() => import('../components/MeetingNotesTab'));
 const ResetHandraisesTab = React.lazy(() => import('../components/ResetHandraisesTab'));
 const TimerTab = React.lazy(() => import('../components/TimerTab'));
 const WhiteboardTab = React.lazy(() => import('../components/WhiteboardTab'));
@@ -53,7 +53,7 @@ export enum ModerationTabKey {
   LegalVote = 'tab-voting',
   Timer = 'tab-timer',
   CoffeeBreak = 'tab-coffee-break',
-  Protocol = 'tab-protocol',
+  MeetingNotes = 'tab-meeting-notes',
   AddUser = 'tab-add-user',
   TalkingStick = 'tab-talking-stick',
   Debriefing = 'tab-debriefing',
@@ -167,16 +167,16 @@ export const tabs: Array<Tab> = [
     titleKey: 'legal-vote-tab-title',
   },
   {
-    icon: <ProtocolIcon />,
+    icon: <MeetingNotesIcon />,
     component: (
       <Suspense fallback={<SuspenseLoading />}>
-        <ProtocolTab />
+        <MeetingNotesTab />
       </Suspense>
     ),
-    tooltipTranslationKey: 'moderationbar-button-protocol-tooltip',
-    moduleKey: BackendModules.Protocol,
-    key: ModerationTabKey.Protocol,
-    titleKey: 'protocol-tab-title',
+    tooltipTranslationKey: 'moderationbar-button-meeting-notes-tooltip',
+    moduleKey: BackendModules.MeetingNotes,
+    key: ModerationTabKey.MeetingNotes,
+    titleKey: 'meeting-notes-tab-title',
   },
   {
     icon: <WhiteboardIcon />,

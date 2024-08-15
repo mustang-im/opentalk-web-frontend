@@ -11,12 +11,12 @@ import {
   ParticipationKind,
   TargetId,
   Participant,
-  ProtocolAccess,
+  MeetingNotesAccess,
   SortOption,
   ChatMessage as ChatMessageType,
   ChatScope,
   FilterableParticipant,
-  ProtocolParticipant,
+  MeetingNotesParticipant,
   ForceMuteType,
 } from '../types';
 import { sortParticipantsWithConfig } from '../utils/sortParticipants';
@@ -108,20 +108,23 @@ export const selectCombinedParticipantsAndUserCount = createSelector(
   (users) => users.length
 );
 
-export const selectAllProtocolParticipants = createSelector(
+export const selectAllMeetingNotesParticipants = createSelector(
   selectCombinedParticipantsAndUser,
   selectUserAsParticipant,
   (participants, user) => {
     if (user) {
-      const allProtocolParticipants = participants.filter(
+      const allMeetingNotesParticipants = participants.filter(
         (participant) =>
           participant.participationKind !== ParticipationKind.Guest &&
           participant.participationKind !== ParticipationKind.Sip
       );
-      const hasSelectedParticipants = some(allProtocolParticipants, ['protocolAccess', ProtocolAccess.Write]);
-      const newParticipants = allProtocolParticipants.map((participant): ProtocolParticipant => {
+      const hasSelectedParticipants = some(allMeetingNotesParticipants, [
+        'meetingNotesAccess',
+        MeetingNotesAccess.Write,
+      ]);
+      const newParticipants = allMeetingNotesParticipants.map((participant): MeetingNotesParticipant => {
         const isSelected = hasSelectedParticipants
-          ? participant.protocolAccess === ProtocolAccess.Write
+          ? participant.meetingNotesAccess === MeetingNotesAccess.Write
           : participant.id === user.id;
         return {
           id: participant.id,

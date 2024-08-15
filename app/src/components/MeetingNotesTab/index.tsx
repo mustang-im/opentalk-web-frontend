@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import ProtocolTab from './ProtocolTab';
+import MeetingNotesTab from './MeetingNotesTab';
 
-export default ProtocolTab;
+export default MeetingNotesTab;

@@ -275,7 +275,7 @@ moderationbar-button-timer-tooltip = Stoppuhr
 moderationbar-button-coffee-break-tooltip = Kaffeepause
 moderationbar-button-speaker-queue-tooltip = Diese Funktion befindet sich noch in der Entwicklung - Große Gruppen und jeder soll systematisch einmal zu Wort kommen, OpenTalk behält auch bei vielen Teilnehmern den Überblick und ruft automatisch alle der Reihe nach auf. Noch während ein Teilnehmer spricht, wird dem nächsten Teilnehmer sein bevorstehender Aufruf angezeigt. Effiziente Meetings ohne Verwirrung, mit OpenTalk kein Problem.
 moderationbar-button-wheel-tooltip = Diese Funktion befindet sich noch in der Entwicklung - Wer beginnt oder ist als Nächstes dran? Unser "Wheel of Names", das gute klassische Glücksrad, lässt den Zufall entscheiden. Abwechslung, Spaß, Spannung -- eine Gamification, die nicht nur im Schulunterricht für Abwechslung und Kurzweiligkeit sorgt.
-moderationbar-button-protocol-tooltip = Protokoll
+moderationbar-button-meeting-notes-tooltip = Protokoll
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Handheben zurücksetzen
 moderationbar-button-debriefing = Nachbesprechung
@@ -941,21 +941,21 @@ feedback-dialog-form-validation = Pflichtfeld
 
 protocol-join-session = Nehmen Sie an der Protokollsitzung teil
 
-protocol-invite-button = Schreibrechte für Teilnehmer vergeben
-protocol-edit-invite-button = Schreibrechte verwalten
+meeting-notes-invite-button = Schreibrechte für Teilnehmer vergeben
+meeting-notes-edit-invite-button = Schreibrechte verwalten
 protocol-invite-reader-message = Es wurde eine Protokollierung gestartet
 protocol-invite-writer-message = Sie wurden ausgewählt diese Sitzung zu protokollieren
-protocol-invite-send-button = Protokoll für alle anzeigen
-protocol-update-invite-send-button = Änderungen übernehmen
-protocol-upload-pdf-button = Protokoll PDF erstellen
-protocol-upload-pdf-message = Protokoll PDF erstellt
-protocol-created-notification = Protokoll ist eingerichtet.
-protocol-created-all-notification = Protokoll für alle eingerichtet.
-protocol-new-protocol-message-button = Anzeigen
-protocol-hide = Protokoll schließen
-protocol-open = Protokoll öffnen
-protocol-tab-title = Protokoll erstellen
-protocol-button-show = Protokoll anzeigen
+meeting-notes-invite-send-button = Protokoll für alle anzeigen
+meeting-notes-update-invite-send-button = Änderungen übernehmen
+meeting-notes-upload-pdf-button = Protokoll PDF erstellen
+meeting-notes-upload-pdf-message = Protokoll PDF erstellt
+meeting-notes-created-notification = Protokoll ist eingerichtet.
+meeting-notes-created-all-notification = Protokoll für alle eingerichtet.
+meeting-notes-new-meeting-notes-message-button = Anzeigen
+meeting-notes-hide = Protokoll schließen
+meeting-notes-open = Protokoll öffnen
+meeting-notes-tab-title = Protokoll erstellen
+meeting-notes-button-show = Protokoll anzeigen
 
 beta-flag-tooltip-text = Sie nutzen die Beta-Version von OpenTalk. Wir entwickeln kontinuierlich neue Funktionen und stellen diese im Rahmen unserer <demoLink>Demo</demoLink> frühzeitig als Ausblick bereit. Bitte beachten Sie, dass es zu Einschränkungen bei der Nutzung kommen kann. Kritik, Ideen und Fehler können Sie uns gerne an <reportEmailLink>{$reportEmail}</reportEmailLink> senden.<br /><br />Viel Spaß beim ausprobieren von OpenTalk!
 

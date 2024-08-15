@@ -22,13 +22,13 @@ import { unionBy, intersectionBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { deselectWriter, selectWriter, uploadPdf } from '../../api/types/outgoing/protocol';
+import { deselectWriter, selectWriter, uploadPdf } from '../../api/types/outgoing/meetingNotes';
 import { DoneIcon, SearchIcon } from '../../assets/icons';
 import { ParticipantAvatar, CommonTextField } from '../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectAllProtocolParticipants } from '../../store/selectors';
-import { selectProtocolUrl } from '../../store/slices/protocolSlice';
-import { ProtocolParticipant } from '../../types';
+import { selectAllMeetingNotesParticipants } from '../../store/selectors';
+import { selectMeetingNotesUrl } from '../../store/slices/meetingNotesSlice';
+import { MeetingNotesParticipant } from '../../types';
 
 const ParticipantSelectContainer = styled(Container)(({ theme }) => ({
   width: '19rem',
@@ -56,28 +56,31 @@ const SelectedParticipantsList = styled(List)({
   flex: 1,
 });
 
-const ProtocolTab = () => {
-  const [participants, setParticipants] = useState<ProtocolParticipant[]>([]);
+const MeetingNotesTab = () => {
+  const [participants, setParticipants] = useState<MeetingNotesParticipant[]>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const protocolUrl = useAppSelector(selectProtocolUrl);
-  const [selectedParticipants, setSelectedParticipants] = useState<ProtocolParticipant[]>([]);
-  const allProtocolParticipants = useAppSelector(selectAllProtocolParticipants);
+  const meetingNotesUrl = useAppSelector(selectMeetingNotesUrl);
+  const [selectedParticipants, setSelectedParticipants] = useState<MeetingNotesParticipant[]>([]);
+  const allMeetingNotesParticipants = useAppSelector(selectAllMeetingNotesParticipants);
   const [searchMask, setSearchMask] = useState('');
   const salt = Date.now();
 
   useEffect(() => {
-    setParticipants((prevParticipants) => mergeParticipants(allProtocolParticipants, prevParticipants));
-    setSelectedParticipants((prevParticipants) => mergeParticipants(allProtocolParticipants, prevParticipants));
-  }, [allProtocolParticipants.length]);
+    setParticipants((prevParticipants) => mergeParticipants(allMeetingNotesParticipants, prevParticipants));
+    setSelectedParticipants((prevParticipants) => mergeParticipants(allMeetingNotesParticipants, prevParticipants));
+  }, [allMeetingNotesParticipants.length]);
 
-  // List of selected participants with permission writes is stored locally, untill moderator pressed `Show protocol to all`
+  // List of selected participants with permission writes is stored locally, untill moderator pressed `Show meeting notes to all`
   // button. Only then we send all selected participants to the controller.
-  // Therefore we need to preserve this state, if during the selection a `protocol` participant joins or leaves the conference.
-  const mergeParticipants = (newParticipants: ProtocolParticipant[], oldParticipants: ProtocolParticipant[]) => {
-    let mergedParticipants: ProtocolParticipant[] = [];
-    const idProperty: keyof ProtocolParticipant = 'id';
+  // Therefore we need to preserve this state, if during the selection a `meeting notes` participant joins or leaves the conference.
+  const mergeParticipants = (
+    newParticipants: MeetingNotesParticipant[],
+    oldParticipants: MeetingNotesParticipant[]
+  ) => {
+    let mergedParticipants: MeetingNotesParticipant[] = [];
+    const idProperty: keyof MeetingNotesParticipant = 'id';
 
     // Participants have joined the conference
     if (newParticipants.length > oldParticipants.length) {
@@ -130,11 +133,11 @@ const ProtocolTab = () => {
   );
 
   const sendInvitations = useCallback(() => {
-    const participantComparator = (participant: ProtocolParticipant) => {
+    const participantComparator = (participant: MeetingNotesParticipant) => {
       return `${participant.id}${participant.isSelected}`;
     };
-    const differentParticipants = protocolUrl
-      ? differenceBy(participants, allProtocolParticipants, participantComparator)
+    const differentParticipants = meetingNotesUrl
+      ? differenceBy(participants, allMeetingNotesParticipants, participantComparator)
       : participants;
 
     if (differentParticipants.length > 0) {
@@ -209,31 +212,40 @@ const ProtocolTab = () => {
   const hasSelectedParticipants = some(participants, 'isSelected');
 
   return (
-    <Stack data-testid="protocol-tab" spacing={2} direction="column" alignItems="center" flex={1} overflow="hidden">
+    <Stack
+      data-testid="meeting-notes-tab"
+      spacing={2}
+      direction="column"
+      alignItems="center"
+      flex={1}
+      overflow="hidden"
+    >
       <Stack spacing={2} flex={1} width="100%" overflow="hidden">
         <Button
           fullWidth
           onClick={openParticipantsListPanel}
-          aria-label={protocolUrl ? t('protocol-edit-invite-button') : t('protocol-invite-button')}
-          id={`protocol-popover-trigger-${salt}`}
+          aria-label={meetingNotesUrl ? t('meeting-notes-edit-invite-button') : t('meeting-notes-invite-button')}
+          id={`meeting-notes-popover-trigger-${salt}`}
         >
-          {protocolUrl ? t('protocol-edit-invite-button') : t('protocol-invite-button')}
+          {meetingNotesUrl ? t('meeting-notes-edit-invite-button') : t('meeting-notes-invite-button')}
         </Button>
         {renderSelectedParticipantListItems()}
       </Stack>
       <Stack direction="column" width="100%" spacing={1} alignItems="center">
-        {protocolUrl && (
-          <Button fullWidth onClick={uploadPdfAction} aria-label={t('protocol-upload-pdf-button')}>
-            {t('protocol-upload-pdf-button')}
+        {meetingNotesUrl && (
+          <Button fullWidth onClick={uploadPdfAction} aria-label={t('meeting-notes-upload-pdf-button')}>
+            {t('meeting-notes-upload-pdf-button')}
           </Button>
         )}
         <Button
           fullWidth
-          aria-label={protocolUrl ? t('protocol-update-invite-send-button') : t('protocol-invite-send-button')}
+          aria-label={
+            meetingNotesUrl ? t('meeting-notes-update-invite-send-button') : t('meeting-notes-invite-send-button')
+          }
           disabled={!hasSelectedParticipants}
           onClick={sendInvitations}
         >
-          {protocolUrl ? t('protocol-update-invite-send-button') : t('protocol-invite-send-button')}
+          {meetingNotesUrl ? t('meeting-notes-update-invite-send-button') : t('meeting-notes-invite-send-button')}
         </Button>
       </Stack>
       <Popover
@@ -251,7 +263,7 @@ const ProtocolTab = () => {
         slotProps={{
           paper: {
             role: 'dialog',
-            'aria-labelledby': `protocol-popover-trigger-${salt}`,
+            'aria-labelledby': `meeting-notes-popover-trigger-${salt}`,
           },
         }}
       >
@@ -312,4 +324,4 @@ const ProtocolTab = () => {
   );
 };
 
-export default ProtocolTab;
+export default MeetingNotesTab;
