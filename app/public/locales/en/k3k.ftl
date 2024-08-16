@@ -1072,6 +1072,9 @@ conference-view-trigger-button = Select view
 conference-view-speaker = Speaker-View
 conference-view-grid = Grid-View
 conference-view-fullscreen = Fullscreen
+conference-view-sorting = Sorting
+conference-view-grid-camera-first = Activated camera first
+conference-view-grid-moderators-first = Moderator(s) first
 shared-folder-open-label = Open shared folder
 shared-folder-password-label = Copy Folder-password
 

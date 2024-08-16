@@ -1072,6 +1072,9 @@ conference-view-trigger-button = Ansichtsauswahl
 conference-view-speaker = Sprecheransicht
 conference-view-grid = Kachelansicht
 conference-view-fullscreen = Vollbildansicht
+conference-view-sorting = Sortierungen
+conference-view-grid-camera-first = Aktivierte Kameras zuerst
+conference-view-grid-moderators-first = Moderator(en) zuerst
 shared-folder-open-label = Geteilten Ordner öffnen
 shared-folder-password-label = Ordner-Passwort kopieren
 

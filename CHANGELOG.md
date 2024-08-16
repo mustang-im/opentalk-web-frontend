@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Create new sorting mechanims in conference at grid view ([#1994](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1994))
 - Implement multiple choice polls ([#1795](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1795))
 - Implement legal vote issue reporting system ([#1903](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1903))
 

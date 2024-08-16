@@ -30,6 +30,11 @@ import { connectionClosed } from './roomSlice';
 import { timerStarted, timerStopped } from './timerSlice';
 import { setWhiteboardAvailable } from './whiteboardSlice';
 
+export enum GridViewOrder {
+  FirstJoined = 'firstJoined',
+  VideoFirst = 'videoFirst',
+  ModeratorsFirst = 'moderatorsFirst',
+}
 export interface IChatConversationState {
   scope?: ChatScope;
   targetId?: TargetId;
@@ -68,6 +73,7 @@ interface UIState {
   errorDialog: ErrorDialog;
   haveSeenMobilePollsAndVotes: boolean;
   isDrawerOpen: boolean;
+  gridViewOrder: GridViewOrder;
 }
 
 const initialState: UIState = {
@@ -104,6 +110,7 @@ const initialState: UIState = {
   },
   haveSeenMobilePollsAndVotes: false,
   isDrawerOpen: false,
+  gridViewOrder: GridViewOrder.FirstJoined,
 };
 
 export const uiSlice = createSlice({
@@ -121,6 +128,9 @@ export const uiSlice = createSlice({
     },
     chatConversationStateSet: (state, action: PayloadAction<IChatConversationState>) => {
       state.chatConversationState = action.payload;
+    },
+    updatedGridViewOrder: (state, action: PayloadAction<GridViewOrder>) => {
+      state.gridViewOrder = action.payload;
     },
     updatedCinemaLayout: (state, action: PayloadAction<LayoutOptions>) => {
       state.cinemaLayout = action.payload;
@@ -288,6 +298,7 @@ export const {
   setHotkeysEnabled,
   setShowErrorDialog,
   setIsDrawerOpen,
+  updatedGridViewOrder,
 } = uiSlice.actions;
 
 export const actions = uiSlice.actions;
@@ -328,5 +339,6 @@ export const selectShowErrorDialog = (state: RootState) => state.ui.errorDialog.
 export const selectErrorDialogEvent = (state: RootState) => state.ui.errorDialog.event;
 export const selectHaveSeenMobilePollsAndVotes = (state: RootState) => state.ui.haveSeenMobilePollsAndVotes;
 export const selectIsDrawerOpen = (state: RootState) => state.ui.isDrawerOpen;
+export const selectGridViewOrder = (state: RootState) => state.ui.gridViewOrder;
 
 export default uiSlice.reducer;

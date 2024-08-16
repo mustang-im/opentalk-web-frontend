@@ -29,8 +29,9 @@ import {
 import { joinSuccess } from '../commonActions';
 import { selectCurrentBreakoutRoomId } from './breakoutSlice';
 import { received } from './chatSlice';
+import { selectAllSubscribersWithVideoOn } from './mediaSubscriberSlice';
 import { connectionClosed } from './roomSlice';
-import { setFocusedSpeaker } from './uiSlice';
+import { GridViewOrder, setFocusedSpeaker } from './uiSlice';
 
 export const participantAdapter = createEntityAdapter<Participant>({
   sortComparer: (a, b) => a.displayName.localeCompare(b.displayName),
@@ -269,22 +270,38 @@ export const selectAllOnlineParticipants = createSelector(
     participants.filter((participant) => participant.breakoutRoomId === currentBreakoutRoomId)
 );
 
-export const selectAllOnlineParticipantsByJoinedTime = createSelector(
-  [selectAllOnlineParticipantsInConference, selectCurrentBreakoutRoomId],
-  (participants, currentBreakoutRoomId) =>
-    participants
-      .filter((participant) => participant.breakoutRoomId === currentBreakoutRoomId)
-      .sort((a, b) => a.joinedAt.localeCompare(b.joinedAt))
-);
+export const selectSortedParticipants = (gridViewOrder: GridViewOrder) => {
+  return createSelector(
+    [selectAllOnlineParticipantsInConference, selectCurrentBreakoutRoomId, selectAllSubscribersWithVideoOn],
+    (participants, currentBreakoutRoomId, videoSubscribers) => {
+      let filteredParticipants = participants
+        .filter((participant) => participant.breakoutRoomId === currentBreakoutRoomId)
+        .sort((a, b) => a.joinedAt.localeCompare(b.joinedAt)); // always sort by firstJoined;
 
-export const selectSlicedParticipants = (page: number, maxParticipants: number) =>
-  createSelector(selectAllOnlineParticipantsByJoinedTime, (participants) => {
+      if (gridViewOrder === GridViewOrder.ModeratorsFirst) {
+        filteredParticipants = filteredParticipants.sort((participant) =>
+          participant.role === Role.Moderator ? -1 : 1
+        );
+      }
+      if (gridViewOrder === GridViewOrder.VideoFirst) {
+        filteredParticipants = filteredParticipants.sort((participant) =>
+          videoSubscribers.find((subscriber) => participant.id === subscriber.participantId) ? -1 : 1
+        );
+      }
+      return filteredParticipants;
+    }
+  );
+};
+
+export const selectSlicedParticipants = (page: number, maxParticipants: number, gridViewOrder: GridViewOrder) => {
+  return createSelector(selectSortedParticipants(gridViewOrder), (participants) => {
     const maxPage = Math.ceil(participants.length / maxParticipants);
     if (maxPage === page) {
       return participants.slice(-maxParticipants);
     }
     return participants.slice((page - 1) * maxParticipants, maxParticipants * page);
   });
+};
 
 export const selectParticipantById = (id: EntityId) => (state: RootState) => participantSelectors.selectById(state, id);
 
