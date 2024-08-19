@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box as MuiBox } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 import { useMemo, useState } from 'react';
 
-import NameTile from '../../commonComponents/NameTile/NameTile';
+import { NameTile } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { selectParticipantName } from '../../store/slices/participantsSlice';
+import { ParticipantId } from '../../types';
 import HandRaisedIndicator from './fragments/HandRaisedIndicator';
 import ParticipantVideo from './fragments/ParticipantVideo';
 import VideoOverlay from './fragments/VideoOverlay';

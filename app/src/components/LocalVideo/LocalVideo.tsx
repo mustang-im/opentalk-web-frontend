@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Grid } from '@mui/material';
-import { PinIcon } from '@opentalk/common';
 import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import NameTile from '../../commonComponents/NameTile/NameTile';
+import { PinIcon } from '../../assets/icons';
+import { NameTile } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import {
   selectAudioEnabled,

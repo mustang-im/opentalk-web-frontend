@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material';
-import { HomeIcon, CameraOnIcon } from '@opentalk/common';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import { CameraOnIcon, HomeIcon } from '../assets/icons';
 
 export default {
   title: 'components/Button',

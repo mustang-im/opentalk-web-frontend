@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { isEmpty } from 'lodash';
+import { isEmpty, uniqueId } from 'lodash';
 
 /**
  * Return the initials split by whitespace or before any number
@@ -30,4 +30,8 @@ export const deriveErrorString = (error: string) => {
 export const getEnumKey = <T>(enumType: Record<string, T>, value: T) => {
   const index = Object.values(enumType).indexOf(value);
   return Object.keys(enumType)[index];
+};
+
+export const generateUniqueId = () => {
+  return uniqueId('ot-');
 };

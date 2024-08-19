@@ -2,10 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputAdornment, styled, useTheme } from '@mui/material';
-import { AdornmentIconButton, CloseIcon, SearchIcon, CommonTextField } from '@opentalk/common';
 import i18next from 'i18next';
 import { ChangeEvent, ForwardedRef, forwardRef, KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { CloseIcon, SearchIcon } from '../../../assets/icons';
+import { AdornmentIconButton, CommonTextField } from '../../../commonComponents';
 
 interface EndAdornmentProps {
   onClick(): void;

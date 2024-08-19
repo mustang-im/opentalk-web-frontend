@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MediaSessionType, VideoSetting } from '@opentalk/common';
-
+import { MediaSessionType, VideoSetting } from '../../types';
 import { BaseEventEmitter } from '../EventListener';
 import { ConferenceRoom } from '../WebRTC';
 import { PublisherConnection } from '../WebRTC/PublisherConnection';

@@ -54,13 +54,6 @@ module.exports = {
       resetMocks: true,
     },
     {
-      displayName: 'packages/common',
-      testEnvironment: 'jsdom',
-      setupFilesAfterEnv: ['./packages/common/setupTests.ts'],
-      testMatch: ['<rootDir>/packages/common/**/?(*.)+(spec|test).[jt]s?(x)'],
-      moduleDirectories: ['node_modules', '../app/node_modules'],
-    },
-    {
       displayName: 'packages/fluent_conv',
       testEnvironment: 'jsdom',
       testMatch: ['<rootDir>/packages/fluent_conv/**/?(*.)+(spec|test).[jt]s?(x)'],

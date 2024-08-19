@@ -2,10 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Collapse as MuiCollapse, MenuItem, Stack, styled } from '@mui/material';
-import { CommonTextField, formikMinimalProps, formikProps, PlatformKind } from '@opentalk/common';
+import { PlatformKind } from '@opentalk/rest-api-rtk-query';
 import { FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { CommonTextField } from '../../../commonComponents';
+import { formikMinimalProps, formikProps } from '../../../utils/formikUtils';
 import { CreateOrUpdateMeetingFormikValues } from './DashboardDateTimePicker';
 import MeetingFormSwitch from './MeetingFormSwitch';
 

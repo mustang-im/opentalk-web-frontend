@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MoreIcon } from '@opentalk/common';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { MoreIcon } from '../../../assets/icons';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { ToolbarButtonIds } from '../Toolbar';
 import MoreMenu from './MoreMenu';

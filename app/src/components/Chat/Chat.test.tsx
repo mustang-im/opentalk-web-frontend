@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, ParticipationKind, ProtocolAccess, WaitingState } from '@opentalk/common';
 import { Store } from '@reduxjs/toolkit';
 
 import { join, leave } from '../../store/slices/participantsSlice';
+import { ParticipantId, ParticipationKind, ProtocolAccess, WaitingState } from '../../types';
 import { screen, render, createStore, waitFor, fireEvent } from '../../utils/testUtils';
 import Chat from './Chat';
 

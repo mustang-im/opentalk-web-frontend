@@ -5,10 +5,10 @@ import { styled, Typography, Stack, IconButton, Box, useTheme, Skeleton } from '
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
-import { ArrowDownIcon } from '@opentalk/common';
 import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
+import { ArrowDownIcon } from '../../../../assets/icons';
 import MeetingCard from '../../../../components/MeetingCard';
 import { MeetingsProp } from '../types';
 

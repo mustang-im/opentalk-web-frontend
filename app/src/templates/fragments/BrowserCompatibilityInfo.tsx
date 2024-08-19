@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { notificationAction } from '@opentalk/common';
 import { differenceInMonths } from 'date-fns';
 import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { notificationAction } from '../../commonComponents';
 import ConfirmBrowserDialog from '../../components/ConfirmBrowserDialog';
 import { localStorageItems } from '../../config/storage';
 import browser from '../../modules/BrowserSupport';

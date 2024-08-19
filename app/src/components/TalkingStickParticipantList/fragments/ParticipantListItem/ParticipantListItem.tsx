@@ -2,10 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Grid, ListItem, ListItemAvatar, ListItemText, Typography, styled } from '@mui/material';
-import { MicOffIcon, MicOnIcon as MicOnDefaultIcon, ParticipantAvatar, useDateFormat } from '@opentalk/common';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { MicOffIcon, MicOnIcon as MicOnDefaultIcon } from '../../../../assets/icons';
+import { ParticipantAvatar } from '../../../../commonComponents';
+import { useDateFormat } from '../../../../hooks';
 import { ListableParticipant } from '../../types/participant';
 
 const StyledListItem = styled(ListItem, {

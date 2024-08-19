@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box, IconButton as MuiIconButton, Slide } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CloseIcon } from '../../assets/icons';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { selectCombinedSpeakerId } from '../../store/selectors';

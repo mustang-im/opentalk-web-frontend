@@ -4,16 +4,17 @@
 
 /*  Since we probably won't be able to provide a real time transcription for videos as of now, media-has-caption will be disabled for now.*/
 import { CircularProgress, Grid, Stack, styled, Tooltip } from '@mui/material';
-import { VideoSetting, WarningIcon } from '@opentalk/common';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { WarningIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { useRemoteMedia } from '../../../hooks/media';
 import { idFromDescriptor, MediaDescriptor, requestVideoQuality } from '../../../modules/WebRTC';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
 import { selectSubscriberStateById } from '../../../store/slices/mediaSubscriberSlice';
+import { VideoSetting } from '../../../types';
 
 const Container = styled(Grid)({
   width: '100%',

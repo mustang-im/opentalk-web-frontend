@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid, Typography } from '@mui/material';
-import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useGetMeQuery, useUpdateMeMutation } from '../../../../api/rest';
+import { notifications, CommonTextField } from '../../../../commonComponents';
 import { useAppSelector } from '../../../../hooks';
 import { selectDisallowCustomDisplayName } from '../../../../store/slices/configSlice';
 import { formikProps } from '../../../../utils/formikUtils';

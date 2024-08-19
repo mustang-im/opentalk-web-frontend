@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { CameraOffIcon, CameraOnIcon } from '@opentalk/common';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CameraOffIcon, CameraOnIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectMediaChangeInProgress, selectVideoEnabled } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';

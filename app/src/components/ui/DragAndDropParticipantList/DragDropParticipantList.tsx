@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, List } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 import React from 'react';
 import {
   Draggable,
@@ -13,6 +12,7 @@ import {
 } from 'react-beautiful-dnd';
 
 import { SortableParticipantEntry } from '.';
+import { ParticipantId } from '../../../types';
 
 const DropZone = styled('div')(({ ...props }: { isDraggingOver: boolean }) => ({
   /* stop the list collapsing when empty */

@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { NamespacedIncoming } from '@opentalk/common';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
 
 import { Message as IncomingMessage } from '../../api/types/incoming';
 import { Message as OutgoingMessage } from '../../api/types/outgoing';
+import { NamespacedIncoming } from '../../types';
 import { BaseEventEmitter } from '../EventListener';
 
 const uuidMatchingRegexp = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;

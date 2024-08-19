@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { notifications } from '@opentalk/common';
 import { AuthCallbackComponent, selectAuthIsPending } from '@opentalk/redux-oidc';
 import { useAuthContext, selectIsAuthenticated } from '@opentalk/redux-oidc';
 import i18next from 'i18next';
@@ -9,6 +8,7 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
 
+import { notifications } from '../commonComponents';
 import Error from '../components/Error';
 import { useAppSelector } from '../hooks';
 import { useInviteCode } from '../hooks/useInviteCode';

@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, VideoSetting } from '@opentalk/common';
 import { createSlice, PayloadAction, createListenerMiddleware, TypedStartListening } from '@reduxjs/toolkit';
 
 import { RootState, AppDispatch } from '../';
@@ -10,6 +9,7 @@ import { updateSpeakingState } from '../../api/types/outgoing/media';
 import { BackgroundConfig } from '../../modules/Media/BackgroundBlur';
 import { DeviceId } from '../../modules/Media/MediaUtils';
 import { getCurrentConferenceRoom } from '../../modules/WebRTC';
+import { ParticipantId, VideoSetting } from '../../types';
 
 export enum NotificationKind {
   ForceMute = 'forceMute',

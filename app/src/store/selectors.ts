@@ -1,28 +1,33 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { createSelector } from '@reduxjs/toolkit';
+import i18next, { t } from 'i18next';
+import _, { intersection } from 'lodash';
+import { some } from 'lodash';
+
 import {
   GroupId,
   ParticipationKind,
   TargetId,
   Participant,
   ProtocolAccess,
-  sortParticipantsWithConfig,
   SortOption,
   ChatMessage as ChatMessageType,
   ChatScope,
   FilterableParticipant,
   ProtocolParticipant,
   ForceMuteType,
-} from '@opentalk/common';
-import { createSelector } from '@reduxjs/toolkit';
-import i18next, { t } from 'i18next';
-import _, { intersection } from 'lodash';
-import { some } from 'lodash';
-
+} from '../types';
+import { sortParticipantsWithConfig } from '../utils/sortParticipants';
 import { selectAutomoderationParticipantIds } from './slices/automodSlice';
 import { selectCurrentBreakoutRoomId } from './slices/breakoutSlice';
-import { selectChatMessagesByScope } from './slices/chatSlice';
+import {
+  reduceMessagesToPersonalChats,
+  selectAllGroupChats,
+  selectAllPrivateChatMessages,
+  selectChatMessagesByScope,
+} from './slices/chatSlice';
 import { selectGlobalEvents, RoomEvent } from './slices/eventSlice';
 import { selectAllVotes } from './slices/legalVoteSlice';
 import { selectUnmutedSubscribers } from './slices/mediaSubscriberSlice';
@@ -265,3 +270,14 @@ export const selectActivePollsAndVotingsCount = createSelector(selectAllVotes, s
 export const selectIsUserMicDisabled = createSelector(selectForceMute, selectOurUuid, (forceMute, userId) => {
   return forceMute.type === ForceMuteType.Enabled && (userId === null || !forceMute.allowList.includes(userId));
 });
+
+const selectAllPrivateChats = createSelector([selectAllPrivateChatMessages, selectOurUuid], (chatMessages, userId) =>
+  reduceMessagesToPersonalChats(chatMessages).filter((value) => value.id !== userId)
+);
+export const selectAllPersonalChats = createSelector(
+  [selectAllGroupChats, selectAllPrivateChats],
+  (groupChats, privateChats) =>
+    groupChats
+      .concat(privateChats)
+      .sort((a, b) => Date.parse(b.lastMessage.timestamp) - Date.parse(a.lastMessage.timestamp))
+);

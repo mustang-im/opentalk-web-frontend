@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { List, ListProps, styled } from '@mui/material';
-import { Participant } from '@opentalk/common';
 import { FC } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList } from 'react-window';
 
+import { Participant } from '../../../types';
 import ParticipantListItem from './ParticipantListItem';
 
 const CustomList = styled(List)(({ theme }) => ({

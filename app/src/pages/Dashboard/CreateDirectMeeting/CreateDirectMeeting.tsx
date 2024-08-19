@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Skeleton, Stack, styled, Typography } from '@mui/material';
-import { notifications } from '@opentalk/common';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateEventMutation, useLazyGetEventQuery } from '../../../api/rest';
+import { notifications } from '../../../commonComponents';
 import InviteToMeeting from '../../../components/InviteToMeeting/InviteToMeeting';
 
 const Container = styled(Box)(({ theme }) => ({

@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId, TargetId, Timestamp, ChatScope, ChatMessage, joinSuccess } from '@opentalk/common';
 import {
   createEntityAdapter,
   createSelector,
@@ -15,11 +14,12 @@ import { last } from 'lodash';
 
 import { RootState } from '../';
 import { LastSeenTimestampAddedPayload } from '../../api/types/outgoing/chat';
-import { selectOurUuid } from './userSlice';
+import { ChatMessage, ChatScope, ParticipantId, TargetId, Timestamp } from '../../types';
+import { joinSuccess } from '../commonActions';
 
 const getTargetId = (chatMessage: ChatMessage) => chatMessage.group || chatMessage.target || chatMessage.source;
 
-const reduceMessagesToPersonalChats = (chatMessages: Array<ChatMessage>) =>
+export const reduceMessagesToPersonalChats = (chatMessages: Array<ChatMessage>) =>
   chatMessages.reduce<Array<ChatProps>>((acc, currentValue) => {
     const index = acc.findIndex((value) => value.id === getTargetId(currentValue));
     if (index !== -1) {
@@ -194,17 +194,6 @@ export const selectAllPrivateChatMessages = createSelector(selectAllChatMessages
 );
 export const selectAllGroupChats = createSelector(selectAllGroupChatMessages, (chatMessages) =>
   reduceMessagesToPersonalChats(chatMessages)
-);
-export const selectAllPrivateChats = createSelector(
-  [selectAllPrivateChatMessages, selectOurUuid],
-  (chatMessages, userId) => reduceMessagesToPersonalChats(chatMessages).filter((value) => value.id !== userId)
-);
-export const selectAllPersonalChats = createSelector(
-  [selectAllGroupChats, selectAllPrivateChats],
-  (groupChats, privateChats) =>
-    groupChats
-      .concat(privateChats)
-      .sort((a, b) => Date.parse(b.lastMessage.timestamp) - Date.parse(a.lastMessage.timestamp))
 );
 export const selectLastMessageForScope = (scope: ChatScope, target?: TargetId) =>
   createSelector(selectChatMessagesByScope(scope, target), (messages) => last(messages));

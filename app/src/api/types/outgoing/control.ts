@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { createModule, Namespaced, ParticipantId } from '@opentalk/common';
-
 import { sendMessage } from '../../';
 import { RootState } from '../../../store';
+import { createModule, Namespaced, ParticipantId } from '../../../types';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
 
 export type DisplayName = string;

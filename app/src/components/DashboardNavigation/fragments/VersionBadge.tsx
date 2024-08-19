@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Chip, Tooltip, styled } from '@mui/material';
-import { InfoIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
+
+import { InfoIcon } from '../../../assets/icons';
 
 const CustomChip = styled(Chip, {
   shouldForwardProp: (prop) => prop !== 'collapsed',

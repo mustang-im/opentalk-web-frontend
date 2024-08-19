@@ -1,25 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  ParticipantId,
-  Timestamp,
-  TimerKind,
-  TimerStopKind,
-  TimerStyle,
-  joinSuccess,
-  notifications,
-  timerStarted,
-  timerStopped,
-} from '@opentalk/common';
 import { createListenerMiddleware, createSlice, PayloadAction, TypedStartListening } from '@reduxjs/toolkit';
 import { intervalToDuration } from 'date-fns';
 import i18next from 'i18next';
 
 import { AppDispatch, RootState } from '../';
 import { ReadyToContinue } from '../../api/types/incoming/timer';
+import { notifications } from '../../commonComponents';
 import localMediaContext from '../../modules/Media/LocalMedia';
 import localScreenContext from '../../modules/Media/LocalScreen';
+import { ParticipantId, TimerKind, TimerStopKind, TimerStyle, Timestamp } from '../../types';
+import { joinSuccess } from '../commonActions';
 
 interface State {
   startedAt?: Timestamp;
@@ -63,6 +55,34 @@ export const timerSlice = createSlice({
         );
       }
     },
+    timerStarted: (state, { payload }) => {
+      state.timerId = payload.timerId;
+      state.startedAt = payload.startedAt;
+      state.endsAt = payload.endsAt;
+      state.readyCheckEnabled = payload.readyCheckEnabled;
+      state.title = payload.title;
+      state.kind = payload.kind;
+      state.style = payload.style;
+      if (payload.endsAt) {
+        state.totalDuration = intervalToDuration({
+          start: new Date(payload.startedAt),
+          end: new Date(payload.endsAt),
+        });
+      }
+      state.timerStopKind = undefined;
+    },
+    timerStopped: (state, { payload }) => {
+      state.timerId = undefined;
+      state.startedAt = undefined;
+      state.endsAt = undefined;
+      state.readyCheckEnabled = undefined;
+      state.title = undefined;
+      state.kind = undefined;
+      state.style = undefined;
+      state.totalDuration = undefined;
+      state.participantsReady = [];
+      state.timerStopKind = payload.kind;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(joinSuccess, (state, { payload: { participantId, participantsReady, timer } }) => {
@@ -86,38 +106,10 @@ export const timerSlice = createSlice({
         state.timerStopKind = undefined;
       }
     });
-    builder.addCase(timerStarted, (state, { payload }) => {
-      state.timerId = payload.timerId;
-      state.startedAt = payload.startedAt;
-      state.endsAt = payload.endsAt;
-      state.readyCheckEnabled = payload.readyCheckEnabled;
-      state.title = payload.title;
-      state.kind = payload.kind;
-      state.style = payload.style;
-      if (payload.endsAt) {
-        state.totalDuration = intervalToDuration({
-          start: new Date(payload.startedAt),
-          end: new Date(payload.endsAt),
-        });
-      }
-      state.timerStopKind = undefined;
-    });
-    builder.addCase(timerStopped, (state, { payload }) => {
-      state.timerId = undefined;
-      state.startedAt = undefined;
-      state.endsAt = undefined;
-      state.readyCheckEnabled = undefined;
-      state.title = undefined;
-      state.kind = undefined;
-      state.style = undefined;
-      state.totalDuration = undefined;
-      state.participantsReady = [];
-      state.timerStopKind = payload.kind;
-    });
   },
 });
 
-export const { updateParticipantsReady, resetTimerState } = timerSlice.actions;
+export const { updateParticipantsReady, resetTimerState, timerStarted, timerStopped } = timerSlice.actions;
 
 export const actions = timerSlice.actions;
 

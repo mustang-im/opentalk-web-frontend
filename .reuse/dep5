@@ -40,21 +40,14 @@ Files:
  app/src/assets/backgrounds/elevate_background.svg
  app/src/assets/images/*.svg
  app/src/assets/images/*.png
+ app/src/assets/icons/source/*.svg
  app/public/assets/background.svg
  app/public/assets/quick_start/de/*.svg
  app/public/assets/quick_start/en/*.svg
- packages/common/assets/icons/*.svg
+ app/src/assets/icons/*.svg
  e2e/tests/e2e/help-quick-guide.spec.ts-snapshots/*.png
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: CC-BY-NC-ND-4.0
-
-
-Files:
- packages/common/babel.config.cjs
- packages/common/.eslintrc.cjs
- packages/common/CHANGELOG.md
-Copyright: OpenTalk GmbH <mail@opentalk.eu>
-License: EUPL-1.2
 
 Files:
  .yarn/releases/yarn-3.3.1.cjs

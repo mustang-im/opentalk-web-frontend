@@ -17,14 +17,14 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material';
-import { CloseIcon } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
 import { Event, EventType, RoomId, EventStatus } from '@opentalk/rest-api-rtk-query';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useUpdateEventInstanceMutation, useDeleteRoomMutation, useDeleteEventMutation } from '../../api/rest';
+import { CloseIcon } from '../../assets/icons';
+import { notifications } from '../../commonComponents';
 import { useAppDispatch } from '../../hooks';
 import { useFullscreenContext } from '../../hooks/useFullscreenContext';
 import { hangUp } from '../../store/commonActions';

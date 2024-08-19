@@ -1,15 +1,16 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { FetchRequestError, InviteCode } from '@opentalk/common';
+import { InviteCode } from '@opentalk/rest-api-rtk-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import SuspenseLoading from '../../commonComponents/SuspenseLoading';
+import SuspenseLoading from '../../commonComponents/SuspenseLoading/SuspenseLoading';
 import Error from '../../components/Error';
 import { useAppDispatch } from '../../hooks';
 import { fetchRoomByInviteId, InviteRoomVerifyResponse } from '../../store/slices/roomSlice';
+import { FetchRequestError } from '../../types';
 import { composeRoomPath } from '../../utils/apiUtils';
 
 /**

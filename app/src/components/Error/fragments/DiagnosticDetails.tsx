@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Collapse, Stack, Typography, styled } from '@mui/material';
-import { ArrowDownIcon, ArrowUpIcon } from '@opentalk/common';
 import { ErrorInfo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ArrowDownIcon, ArrowUpIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectErrorReportEmail } from '../../../store/slices/configSlice';
 

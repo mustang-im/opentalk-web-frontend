@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { MediaStatusChange } from '../../api/types/incoming/media';
 import {
   MediaSessionState,
   MediaSessionType,
@@ -8,9 +9,7 @@ import {
   Timestamp,
   TrickleCandidate,
   VideoSetting,
-} from '@opentalk/common';
-
-import { MediaStatusChange } from '../../api/types/incoming/media';
+} from '../../types';
 import { formatBitRate } from '../../utils/numberUtils';
 import { BaseEventEmitter } from '../EventListener';
 import { BandwidthController } from './BandwidthController';

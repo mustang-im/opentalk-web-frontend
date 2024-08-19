@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Slide, styled } from '@mui/material';
-import { MediaSessionType, ParticipantId, VideoSetting } from '@opentalk/common';
 import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
 import { selectSubscriberHasVideoById } from '../../../store/slices/mediaSubscriberSlice';
+import { MediaSessionType, ParticipantId, VideoSetting } from '../../../types';
 import { AvatarContainer } from './AvatarContainer';
 import { PresenterVideoPosition } from './PresenterOverlay';
 import RemoteVideo from './RemoteVideo';

@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, styled } from '@mui/material';
-import { BackIcon, ForwardIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
+
+import { BackIcon, ForwardIcon } from '../../../assets/icons';
 
 const CustomButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'collapsed',

@@ -4,14 +4,6 @@
 import { RRule } from '@heinlein-video/rrule';
 import { Button, Collapse, Grid, MenuItem, SelectChangeEvent, Stack, styled } from '@mui/material';
 import {
-  formikProps,
-  ForwardIcon,
-  notificationAction,
-  notifications,
-  formikMinimalProps,
-  CommonTextField,
-} from '@opentalk/common';
-import {
   CreateEventPayload,
   DateTime,
   Event,
@@ -39,10 +31,13 @@ import {
   useDeleteEventSharedFolderMutation,
   useGetMeTariffQuery,
 } from '../../api/rest';
+import { ForwardIcon } from '../../assets/icons';
+import { CommonTextField, notificationAction, notifications } from '../../commonComponents';
 import { useAppSelector } from '../../hooks';
 import { isFeatureInModulesPredicate } from '../../hooks/enabledModules';
 import { selectFeatures, selectWaitingRoomDefault } from '../../store/slices/configSlice';
 import { appendRecurringEventInstances } from '../../utils/eventUtils';
+import { formikMinimalProps, formikProps } from '../../utils/formikUtils';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 import roundToUpper30 from '../../utils/roundToUpper30';
 import { CommonFrequencies, FrequencyOption, getRRuleText } from '../../utils/rruleUtils';

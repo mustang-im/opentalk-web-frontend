@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { VideoSetting } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 
 import { MediaSessionInfo, Action, ModeratorMute } from '../../api/types/outgoing/media';
+import { VideoSetting } from '../../types';
 import { SignalingSocket } from './SignalingSocket';
 import { MediaDescriptor } from './index';
 

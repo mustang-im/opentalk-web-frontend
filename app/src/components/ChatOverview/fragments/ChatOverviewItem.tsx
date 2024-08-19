@@ -9,13 +9,14 @@ import {
   Grid,
   styled,
 } from '@mui/material';
-import { useDateFormat, ChatScope, ParticipantAvatar } from '@opentalk/common';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
-import { useAppSelector } from '../../../hooks';
+import { ParticipantAvatar } from '../../../commonComponents';
+import { useAppSelector, useDateFormat } from '../../../hooks';
 import { ChatProps, selectUnreadPersonalMessageCountByTarget } from '../../../store/slices/chatSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
+import { ChatScope } from '../../../types';
 
 const CustomListItemButton = styled(ListItemButton)(({ theme }) => ({
   '&:hover': {

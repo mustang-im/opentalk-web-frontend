@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Menu, styled } from '@mui/material';
-import { PollIcon, generateUniquedId } from '@opentalk/common';
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PollIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectActivePollsAndVotingsCount, selectPollsAndVotingsCount } from '../../../store/selectors';
+import { generateUniqueId } from '../../../utils/stringUtils';
 import { MeetingHeaderButton } from './MeetingHeaderButton';
 import ResultsList from './ResultsList';
 
@@ -16,7 +17,7 @@ const CustomMenu = styled(Menu)({
 });
 
 const VotesAndPollsResultsPopover = () => {
-  const id = generateUniquedId();
+  const id = generateUniqueId();
   const anchorEl = useRef<HTMLButtonElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const votingsAndPollsCount = useAppSelector(selectPollsAndVotingsCount);

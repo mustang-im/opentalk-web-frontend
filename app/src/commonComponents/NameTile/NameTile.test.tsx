@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MediaSessionType, ParticipantId } from '@opentalk/common';
-
+import { MediaSessionType, ParticipantId } from '../../types';
 import { render, screen, configureStore, mockSubscriberState } from '../../utils/testUtils';
 import NameTile from './NameTile';
 

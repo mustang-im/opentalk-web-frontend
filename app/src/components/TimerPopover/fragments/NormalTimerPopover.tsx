@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, Typography } from '@mui/material';
-import { TimerStyle } from '@opentalk/common';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +14,7 @@ import {
   selectTimerTitle,
 } from '../../../store/slices/timerSlice';
 import { selectOurUuid } from '../../../store/slices/userSlice';
+import { TimerStyle } from '../../../types';
 import TimerDuration from '../../TimerTab/fragments/TimerDuration';
 import { Container } from './Container';
 

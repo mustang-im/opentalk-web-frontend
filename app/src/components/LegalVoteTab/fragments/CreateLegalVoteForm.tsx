@@ -2,15 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Switch, Button, Grid, Typography, Box, Tooltip, Stack, Select, MenuItem } from '@mui/material';
-import {
-  BackIcon,
-  CommonFormItem,
-  DurationField,
-  CommonTextField,
-  formikDurationFieldProps,
-  getCurrentTimezone,
-} from '@opentalk/common';
-import { notifications, formikProps, formikSwitchProps, LegalVoteFormValues } from '@opentalk/common';
 import { Form as FormikForm } from 'formik';
 import { Step, FormikWizard } from 'formik-wizard-form';
 import { FormikValues } from 'formik/dist/types';
@@ -21,7 +12,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 
 import { start } from '../../../api/types/outgoing/legalVote';
+import { BackIcon } from '../../../assets/icons';
+import { DurationField, CommonTextField, notifications } from '../../../commonComponents';
 import { saveLegalVoteFormValues, selectLegalVoteId } from '../../../store/slices/legalVoteSlice';
+import { LegalVoteFormValues } from '../../../types';
+import { formikDurationFieldProps, formikSwitchProps, formikProps } from '../../../utils/formikUtils';
+import { getCurrentTimezone } from '../../../utils/timeFormatUtils';
+import FormItem from './FormItem';
 import ParticipantSelector, { AllowedParticipant } from './ParticipantSelector';
 
 interface ICreateLegalVoteFormProps {
@@ -126,7 +123,7 @@ const CreateLegalVoteForm = ({
               </Stack>
             </Grid>
             <Grid item xs={12}>
-              <CommonFormItem
+              <FormItem
                 {...formikSwitchProps('enableAbstain', formik)}
                 control={<Switch color="primary" />}
                 label={t('legal-vote-form-allow-abstain')}
@@ -134,7 +131,7 @@ const CreateLegalVoteForm = ({
               />
             </Grid>
             <Grid item xs={12}>
-              <CommonFormItem
+              <FormItem
                 {...formikSwitchProps('autoClose', formik)}
                 control={
                   <Tooltip title={`${t('legal-vote-form-auto-stop-tooltip')}`}>

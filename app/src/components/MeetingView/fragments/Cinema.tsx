@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { VisuallyHiddenTitle } from '@opentalk/common';
 
+import { VisuallyHiddenTitle } from '../../../commonComponents';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';

@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack } from '@mui/material';
-import { RoomMode } from '@opentalk/common';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { selectSavedLegalVotePerId } from '../../store/slices/legalVoteSlice';
+import { RoomMode } from '../../types';
 import CreateLegalVoteForm from './fragments/CreateLegalVoteForm';
 import LegalVoteOverview from './fragments/LegalVoteOverview';
 

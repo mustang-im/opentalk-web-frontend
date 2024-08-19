@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
-
 import { selectParticipants } from '../store/slices/participantsSlice';
 import { selectDisplayName, selectOurUuid } from '../store/slices/userSlice';
+import { ParticipantId } from '../types';
 import { useAppSelector } from './';
 
 export const useDisplayName = () => {

@@ -4,7 +4,7 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import { createOpenTalkTheme } from '../../assets/themes/opentalk';
-import SuspenseLoading from '../../commonComponents/SuspenseLoading';
+import SuspenseLoading from '../../commonComponents/SuspenseLoading/SuspenseLoading';
 
 const SplashScreenPage = () => (
   <ThemeProvider theme={createOpenTalkTheme()}>

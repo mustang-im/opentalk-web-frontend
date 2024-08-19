@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { VideoSetting } from '@opentalk/common';
-
+import { VideoSetting } from '../../types';
 import { getEnumKey } from '../../utils/stringUtils';
 import { BaseEventEmitter } from '../EventListener';
 

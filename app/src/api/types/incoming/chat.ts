@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { NamespacedIncoming, ParticipantId, ChatBase } from '@opentalk/common';
+import { NamespacedIncoming, ParticipantId, ChatBase } from '../../../types';
 
 interface MessageSent extends ChatBase {
   message: 'message_sent';

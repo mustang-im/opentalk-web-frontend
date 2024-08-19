@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, styled, Typography } from '@mui/material';
-import { ErrorFormMessage, Participant } from '@opentalk/common';
 import { useField, useFormikContext } from 'formik';
 import i18n from 'i18next';
 import { get, includes, isEmpty, reduce, xorBy } from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AccordionItem from '../../../commonComponents/AccordionItem';
+import { AccordionItem, ErrorFormMessage } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectCombinedParticipantsAndUser } from '../../../store/selectors';
+import { Participant } from '../../../types';
 import ParticipantsEditor from './ParticipantsEditor';
 
 export enum AccordionOptions {

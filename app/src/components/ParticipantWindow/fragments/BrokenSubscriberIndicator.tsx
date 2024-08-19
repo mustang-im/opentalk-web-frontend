@@ -1,14 +1,15 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { CameraOnIcon, ConnectionGoodIcon, MediaSessionType, MicOnIcon, VideoSetting } from '@opentalk/common';
 import { VideoHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CameraOnIcon, ConnectionGoodIcon, MicOnIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { MediaDescriptor } from '../../../modules/WebRTC';
 import { selectQualityCap } from '../../../store/slices/mediaSlice';
 import { selectSubscriberById, selectSubscriberHasVideoById } from '../../../store/slices/mediaSubscriberSlice';
+import { MediaSessionType, VideoSetting } from '../../../types';
 import { FailureBadge } from './FailureBadge';
 
 type IRemoteVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {

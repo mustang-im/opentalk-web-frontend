@@ -1,17 +1,17 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  LegalVoteId,
-  VoteCancelReasonType,
-  LegalState,
-  LegalVoteFormValues,
-  LegalVoteType,
-  VoteOption,
-} from '@opentalk/common';
 import { createEntityAdapter, createSlice, EntityId, PayloadAction } from '@reduxjs/toolkit';
 
 import { VoteCanceled, VoteStarted, VoteStopped, VoteUpdated, VotedType } from '../../api/types/incoming/legalVote';
+import {
+  LegalState,
+  LegalVoteFormValues,
+  LegalVoteId,
+  LegalVoteType,
+  VoteCancelReasonType,
+  VoteOption,
+} from '../../types';
 
 const cancelReasonFromApiType = (cancel: VoteCanceled): readonly [VoteCancelReasonType, string?] | undefined => {
   if (cancel.reason === VoteCancelReasonType.Custom) {

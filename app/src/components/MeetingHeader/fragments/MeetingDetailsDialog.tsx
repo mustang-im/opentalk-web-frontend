@@ -13,15 +13,16 @@ import {
   Button,
   styled,
 } from '@mui/material';
-import { CloseIcon, IconButton, CopyTextField, notifications, RoomInfo } from '@opentalk/common';
-import { EventInfo } from '@opentalk/common';
 import { CallIn } from '@opentalk/rest-api-rtk-query';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { CloseIcon } from '../../../assets/icons';
+import { CopyTextField, IconButton, notifications } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectUserAsParticipant } from '../../../store/selectors';
 import { selectCurrentBreakoutRoomId } from '../../../store/slices/breakoutSlice';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
+import { EventInfo, RoomInfo } from '../../../types';
 import { composeInviteUrl } from '../../../utils/apiUtils';
 import { FieldKeys } from '../../InviteToMeeting/fragments/MeetingLinkField';
 

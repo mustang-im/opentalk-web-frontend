@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Typography, Stack, StackProps, Box, Button } from '@mui/material';
-import { ArrowDownIcon } from '@opentalk/common';
 import { Fragment, useState } from 'react';
 
+import { ArrowDownIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantGroupsSortedAndFiltered } from '../../../store/selectors';
 import ParticipantSimpleList from './ParticipantSimpleList';

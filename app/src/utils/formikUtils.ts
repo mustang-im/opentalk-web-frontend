@@ -33,13 +33,13 @@ export interface IFormikSwitchPropsReturnValue extends IFormikCommonPropsReturnV
   checked: boolean;
 }
 
-export interface IFormikCustomFieldPropsReturnValue extends IFormikCommonPropsReturnValue {
+export interface IFormikDateTimePickerPropsReturnValue extends IFormikCommonPropsReturnValue {
   value: string | number;
   setFieldValue: (field: string, value: Primitive, shouldValidate?: boolean) => void;
 }
 
 export interface IFormikCustomFieldPropsReturnDurationValue extends IFormikCommonPropsReturnValue {
-  value: string | undefined | number;
+  value: number | null;
   setFieldValue: (field: string, value: Primitive, shouldValidate?: boolean) => void;
 }
 
@@ -98,10 +98,10 @@ export function formikSwitchProps<Values>(
   };
 }
 
-export function formikCustomFieldProps<Values>(
+export function formikDateTimePickerProps<Values>(
   fieldName: string,
   formik: FormikProps<Values>
-): IFormikCustomFieldPropsReturnValue {
+): IFormikDateTimePickerPropsReturnValue {
   const { values, handleBlur, handleChange, errors, setFieldValue } = formik;
 
   const errorMessage = get(errors, fieldName);
@@ -160,4 +160,30 @@ export function formikRatingProps<Values>(
 export function formikGetValue<Values>(fieldName: string, formik: FormikProps<Values>, defaultValue?: Primitive) {
   const { values } = formik;
   return get(values, fieldName, defaultValue);
+}
+
+export function formikDurationFieldProps<Values>(
+  fieldName: string,
+  formik: FormikProps<Values>,
+  /**
+   * Duration value in minutes
+   *
+   * Default: 1
+   */
+  defaultValue?: number
+): IFormikCustomFieldPropsReturnDurationValue {
+  const { setFieldValue, values, handleBlur, handleChange, errors } = formik;
+
+  const errorMessage = get(errors, fieldName);
+  const hasError = Boolean(errorMessage);
+
+  return {
+    name: fieldName,
+    setFieldValue: setFieldValue,
+    onChange: handleChange,
+    onBlur: handleBlur,
+    error: hasError,
+    value: get(values, fieldName, defaultValue ?? 1) as number,
+    helperText: (hasError && (errorMessage as string)) || undefined,
+  };
 }

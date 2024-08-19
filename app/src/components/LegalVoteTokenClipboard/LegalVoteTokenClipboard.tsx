@@ -2,9 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Box, Button } from '@mui/material';
-import { CopyIcon, CommonTextField, useDateFormat } from '@opentalk/common';
-import { notifications } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
+
+import { CopyIcon } from '../../assets/icons';
+import { CommonTextField, notifications } from '../../commonComponents';
+import { useDateFormat } from '../../hooks';
 
 interface LegalVoteTokenClipboardProps {
   name: string;

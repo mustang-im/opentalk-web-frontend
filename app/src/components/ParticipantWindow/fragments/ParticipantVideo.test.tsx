@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { VideoSetting } from '@opentalk/common';
 import { cleanup } from '@testing-library/react';
 
 import { idFromDescriptor } from '../../../modules/WebRTC';
+import { VideoSetting } from '../../../types';
 import {
   render,
   screen,

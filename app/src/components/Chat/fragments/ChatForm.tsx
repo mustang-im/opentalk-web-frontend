@@ -2,17 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { InputAdornment, styled, Tooltip, Popover, useTheme } from '@mui/material';
-import {
-  GroupId,
-  ParticipantId,
-  TargetId,
-  ChatScope,
-  VisuallyHiddenTitle,
-  SendMessageIcon,
-  EmojiIcon,
-  AdornmentIconButton,
-  CommonTextField,
-} from '@opentalk/common';
 import Picker, {
   EmojiClickData,
   SkinTones,
@@ -27,9 +16,12 @@ import { useState, KeyboardEventHandler, useMemo, FocusEvent, useRef, useLayoutE
 import { useTranslation } from 'react-i18next';
 
 import { sendChatMessage } from '../../../api/types/outgoing/chat';
+import { EmojiIcon, SendMessageIcon } from '../../../assets/icons';
+import { AdornmentIconButton, VisuallyHiddenTitle, CommonTextField } from '../../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectChatEnabledState } from '../../../store/slices/chatSlice';
 import { saveDefaultChatMessage, selectDefaultChatMessage } from '../../../store/slices/uiSlice';
+import { GroupId, ParticipantId, TargetId, ChatScope } from '../../../types';
 import { formikGetValue, formikProps } from '../../../utils/formikUtils';
 import yup from '../../../utils/yupUtils';
 

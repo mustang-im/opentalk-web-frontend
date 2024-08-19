@@ -3,8 +3,9 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { ButtonUnstyled } from '@mui/base';
 import { Input, styled } from '@mui/material';
-import { AddIcon, RemoveIcon } from '@opentalk/common';
 import React, { useState } from 'react';
+
+import { AddIcon, RemoveIcon } from '../../assets/icons';
 
 const ChangeValueButton = styled(ButtonUnstyled)(({ theme }) => ({
   fontSize: '1rem',

@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Typography, styled, Tooltip, Stack, ThemeProvider } from '@mui/material';
-import { InfoButton } from '@opentalk/common';
 import { truncate } from 'lodash';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import { InfoButton } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectCurrentBreakoutRoom } from '../../../store/slices/breakoutSlice';
 import { selectEventInfo, selectRoomInfo } from '../../../store/slices/roomSlice';

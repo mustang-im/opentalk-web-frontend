@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Container, Typography, Button, Grid } from '@mui/material';
-import { DurationIcon, LegalBallotIcon, useDateFormat, ProgressBar } from '@opentalk/common';
 import { truncate } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { finish } from '../../../api/types/outgoing/poll';
-import { useAppDispatch } from '../../../hooks';
+import { DurationIcon, LegalBallotIcon } from '../../../assets/icons';
+import { ProgressBar } from '../../../commonComponents';
+import { useAppDispatch, useDateFormat } from '../../../hooks';
 import { Poll } from '../../../store/slices/pollSlice';
 
 const MainContainer = styled(Container)(({ theme }) => ({

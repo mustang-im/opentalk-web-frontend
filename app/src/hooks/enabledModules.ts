@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BackendFeatures, Modules } from '@opentalk/common';
+import { BackendFeatures, Modules } from '@opentalk/rest-api-rtk-query';
 import { useMemo } from 'react';
 
 import { useAppSelector } from '.';

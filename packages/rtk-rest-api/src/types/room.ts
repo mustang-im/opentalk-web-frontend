@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { InviteCode, RoomId } from '@opentalk/common';
 import { Opaque } from 'type-fest';
 
 import { CallIn, DateTime, BaseAsset } from './common';
 import { BaseUser } from './user';
 
-export type { RoomId };
+export type RoomId = Opaque<string, 'roomId'>;
+export type InviteCode = Opaque<string, 'inviteCode'>;
 export type SipId = Opaque<string, 'sipId'>;
 
 // RequestBodies

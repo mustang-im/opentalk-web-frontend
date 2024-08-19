@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { NamespacedIncoming, AssetId } from '@opentalk/common';
+import { AssetId } from '@opentalk/rest-api-rtk-query';
+
+import { NamespacedIncoming } from '../../../types';
 
 export interface SpaceUrl {
   message: 'space_url';

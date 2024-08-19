@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { List as MuiList, styled, useMediaQuery, useTheme } from '@mui/material';
-import { FeedbackIcon, SettingsIcon, SignOutIcon } from '@opentalk/common';
 import { selectAuthIsPending, useAuthContext } from '@opentalk/redux-oidc';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FeedbackIcon, SettingsIcon, SignOutIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import {
   selectAccountManagementUrl,

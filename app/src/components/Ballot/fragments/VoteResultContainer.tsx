@@ -2,30 +2,29 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Typography, IconButton, Grid, Stack, Tooltip, Box, Chip as MuiChip, Button } from '@mui/material';
-import {
-  ParticipantId,
-  PollId,
-  LegalVoteId,
-  CloseIcon,
-  useDateFormat,
-  Choice,
-  ChoiceResult,
-  getCurrentTimezone,
-  ChoiceId,
-  LegalVoteType,
-  VoteOption,
-} from '@opentalk/common';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { batch } from 'react-redux';
 
 import { vote as legalVote } from '../../../api/types/outgoing/legalVote';
 import { vote as pollVote } from '../../../api/types/outgoing/poll';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { CloseIcon } from '../../../assets/icons';
+import { useAppDispatch, useAppSelector, useDateFormat } from '../../../hooks';
 import { selectVoteById, saveSelectedOption } from '../../../store/slices/legalVoteSlice';
 import { selectPollById, voted } from '../../../store/slices/pollSlice';
 import { setVoteOrPollIdToShow } from '../../../store/slices/uiSlice';
 import { selectOurUuid } from '../../../store/slices/userSlice';
+import {
+  ParticipantId,
+  PollId,
+  LegalVoteId,
+  Choice,
+  ChoiceResult,
+  ChoiceId,
+  LegalVoteType,
+  VoteOption,
+} from '../../../types';
+import { getCurrentTimezone } from '../../../utils/timeFormatUtils';
 import LegalVoteCountdown from '../../LegalVoteCountdown';
 import { LegalVoteTokenClipboard } from '../../LegalVoteTokenClipboard';
 import VoteResult, { VoteType } from './VoteResult';

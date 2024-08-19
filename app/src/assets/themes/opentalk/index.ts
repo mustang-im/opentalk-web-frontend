@@ -4,9 +4,9 @@
 import { PaletteMode } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import closeSvg from '@opentalk/common/assets/icons/source/close.svg';
-import doneSvg from '@opentalk/common/assets/icons/source/done.svg';
 
+import closeSvg from '../../icons/source/close.svg';
+import doneSvg from '../../icons/source/done.svg';
 import { getPalette } from './palette';
 
 export function createOpenTalkTheme(mode: PaletteMode = 'light') {

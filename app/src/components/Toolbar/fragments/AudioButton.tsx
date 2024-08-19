@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled } from '@mui/material';
-import { MicOffIcon, MicOnIcon } from '@opentalk/common';
 import { useCallback, useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { MicOffIcon, MicOnIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectIsUserMicDisabled } from '../../../store/selectors';
 import { selectAudioEnabled, selectMediaChangeInProgress } from '../../../store/slices/mediaSlice';

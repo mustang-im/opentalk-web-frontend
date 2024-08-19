@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { PictureIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { PictureIcon } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectMediaChangeInProgress, selectVideoBackgroundEffects } from '../../../store/slices/mediaSlice';
 import { useMediaContext } from '../../MediaProvider';

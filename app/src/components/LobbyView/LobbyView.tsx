@@ -1,30 +1,22 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, Container, Grid, IconButton, InputAdornment, styled } from '@mui/material';
-import {
-  BreakoutRoomId,
-  HiddenIcon,
-  VisibleIcon,
-  RoomId,
-  FetchRequestError,
-  notifications,
-  closeSnackbar,
-  enqueueSnackbar,
-  SnackbarKey,
-  CommonTextField,
-} from '@opentalk/common';
+import { Button, Container, IconButton, InputAdornment, Grid, styled } from '@mui/material';
 import { selectIsAuthenticated } from '@opentalk/redux-oidc';
+import { RoomId } from '@opentalk/rest-api-rtk-query';
 import { useFormik } from 'formik';
 import i18next from 'i18next';
 import { uniqueId } from 'lodash';
+import { SnackbarKey } from 'notistack';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { ApiErrorWithBody, StartRoomError, useGetMeQuery, useGetRoomEventInfoQuery } from '../../api/rest';
-import SuspenseLoading from '../../commonComponents/SuspenseLoading';
+import { HiddenIcon, VisibleIcon } from '../../assets/icons';
+import { CommonTextField, notifications } from '../../commonComponents';
+import SuspenseLoading from '../../commonComponents/SuspenseLoading/SuspenseLoading';
 import Error from '../../components/Error';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useInviteCode } from '../../hooks/useInviteCode';
@@ -39,6 +31,7 @@ import {
   selectPasswordRequired,
   selectRoomConnectionState,
 } from '../../store/slices/roomSlice';
+import { BreakoutRoomId, FetchRequestError } from '../../types';
 import { composeRoomPath } from '../../utils/apiUtils';
 import { formikProps } from '../../utils/formikUtils';
 import { ContitionalToolTip } from '../ConditionalToolTip/ContitionalToolTip';
@@ -61,7 +54,7 @@ let wrongPasswordSnackBarKey: SnackbarKey | undefined = undefined;
 
 const showWrongPasswordNotification = () => {
   if (wrongPasswordSnackBarKey) return;
-  wrongPasswordSnackBarKey = enqueueSnackbar(`${i18next.t('joinform-wrong-room-password')}`, {
+  wrongPasswordSnackBarKey = notifications.toast(`${i18next.t('joinform-wrong-room-password')}`, {
     //Unique key is used to guarantee we will show a notification if user repeatedly inputs a wrong password
     key: uniqueId(),
     variant: 'error',
@@ -113,7 +106,7 @@ const LobbyView: FC = () => {
   useEffect(() => {
     return () => {
       if (wrongPasswordSnackBarKey) {
-        closeSnackbar(wrongPasswordSnackBarKey);
+        notifications.close(wrongPasswordSnackBarKey);
         wrongPasswordSnackBarKey = undefined;
       }
     };

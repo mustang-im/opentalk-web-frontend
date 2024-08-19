@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Stack } from '@mui/material';
-import { TargetId, ChatScope } from '@opentalk/common';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -11,6 +10,7 @@ import { LastSeenTimestampAddedPayload, setLastSeenTimestamp } from '../../api/t
 import { useAppSelector } from '../../hooks';
 import { lastSeenTimestampAdded, selectLastMessageForScope } from '../../store/slices/chatSlice';
 import { selectChatSearchValue, setChatSearchValue } from '../../store/slices/uiSlice';
+import { TargetId, ChatScope } from '../../types';
 import ChatForm from './fragments/ChatForm';
 import ChatList from './fragments/ChatList';
 import ChatSearch from './fragments/ChatSearch';

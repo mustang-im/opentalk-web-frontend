@@ -1,10 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { joinSuccess, SharedFolderData } from '@opentalk/common';
+import { SharedFolderData } from '@opentalk/rest-api-rtk-query';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '..';
+import { joinSuccess } from '../commonActions';
 
 interface SharedFolderState {
   opened: boolean;

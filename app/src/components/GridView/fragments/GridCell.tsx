@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Slide, keyframes } from '@mui/material';
-import { ParticipantId } from '@opentalk/common';
 
 import { useAppSelector } from '../../../hooks';
 import { selectIsParticipantSpeaking } from '../../../store/slices/participantsSlice';
+import { ParticipantId } from '../../../types';
 import ParticipantWindow from '../../ParticipantWindow';
 
 const breathe = keyframes`

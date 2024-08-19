@@ -2,9 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Stack, Tooltip } from '@mui/material';
-import { RecordingsIcon as DefaultRecordingsIcon, DurationIcon, LiveIcon as DefaultLiveIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import {
+  RecordingsIcon as DefaultRecordingsIcon,
+  DurationIcon,
+  LiveIcon as DefaultLiveIcon,
+} from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectIsRecordingActive, selectIsStreamActive } from '../../../store/slices/streamingSlice';
 import { selectIsModerator } from '../../../store/slices/userSlice';

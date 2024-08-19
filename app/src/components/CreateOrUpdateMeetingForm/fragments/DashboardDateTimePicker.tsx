@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Stack } from '@mui/material';
-import { StreamingPlatform, generateUniquedId } from '@opentalk/common';
-import { formikDateTimePickerProps } from '@opentalk/common';
-import { RecurrencePattern } from '@opentalk/rest-api-rtk-query';
+import { StreamingPlatform, RecurrencePattern } from '@opentalk/rest-api-rtk-query';
 import { FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { formikDateTimePickerProps } from '../../../utils/formikUtils';
+import { generateUniqueId } from '../../../utils/stringUtils';
 import DateTimePicker from '../../DateTimePicker';
 
 interface Streaming {
@@ -37,7 +37,7 @@ type DashboardDateTimePickerProps = {
 };
 
 export const DashboardDateTimePicker = (props: DashboardDateTimePickerProps) => {
-  const id = props.id || generateUniquedId();
+  const id = props.id || generateUniqueId();
   const { t } = useTranslation();
 
   return (

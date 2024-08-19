@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { styled, Typography, Stack } from '@mui/material';
-import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '@opentalk/common';
-import { TimerStyle } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '../../../assets/icons';
 import { useAppSelector } from '../../../hooks';
 import { selectTimerActive } from '../../../store/slices/timerSlice';
+import { TimerStyle } from '../../../types';
 import TimerDuration from '../../TimerTab/fragments/TimerDuration';
 import { Container } from './Container';
 

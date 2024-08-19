@@ -6,11 +6,11 @@ import { AuthProvider } from '@opentalk/redux-oidc';
 import React from 'react';
 
 import { createOpenTalkTheme } from './assets/themes/opentalk';
+import { SnackbarProvider } from './commonComponents';
 import { MediaProvider } from './components/MediaProvider';
 import { useAppSelector } from './hooks';
 import BreakoutRoomProvider from './provider/BreakoutRoomProvider';
 import FullscreenProvider from './provider/FullscreenProvider';
-import SnackbarProvider from './provider/SnackbarProvider';
 import { selectBaseUrl, selectControllerUrl, selectOidcConfig } from './store/slices/configSlice';
 import { ConnectionState, selectRoomConnectionState } from './store/slices/roomSlice';
 

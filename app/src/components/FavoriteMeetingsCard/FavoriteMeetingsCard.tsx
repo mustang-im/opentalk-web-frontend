@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, styled, Tooltip, Link as MuiLink } from '@mui/material';
-import { FavoriteIcon as Favorite } from '@opentalk/common';
 import { RoomId } from '@opentalk/rest-api-rtk-query';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { FavoriteIcon as Favorite } from '../../assets/icons';
 import getReferrerRouterState from '../../utils/getReferrerRouterState';
 
 const FavoritesWrapper = styled(Box)(({ theme }) => ({

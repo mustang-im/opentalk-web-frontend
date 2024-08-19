@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { CommonTextField } from '@opentalk/common';
-
+import { CommonTextField } from '../../commonComponents';
 import { render, screen, configureStore } from '../../utils/testUtils';
 import SelfTest from './SelfTest';
 

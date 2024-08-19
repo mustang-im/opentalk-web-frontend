@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ChatMessage } from '@opentalk/common';
 import { User } from '@opentalk/rest-api-rtk-query';
 import { RegisteredUser } from '@opentalk/rest-api-rtk-query';
 
 import { RoomEvent } from '../store/slices/eventSlice';
+import { ChatMessage } from '../types';
 
 export const isEventMessage = (message: ChatMessage | RoomEvent): message is RoomEvent => {
   return (message as RoomEvent).event !== undefined;

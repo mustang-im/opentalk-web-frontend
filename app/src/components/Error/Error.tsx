@@ -8,10 +8,10 @@ import {
   ThemeProvider,
   CssBaseline,
 } from '@mui/material';
-import { BackIcon, WarningIcon as DefaultWarningIcon } from '@opentalk/common';
 import { ErrorInfo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { BackIcon, WarningIcon as DefaultWarningIcon } from '../../assets/icons';
 import { createOpenTalkTheme } from '../../assets/themes/opentalk';
 import useNavigateToHome from '../../hooks/useNavigateToHome';
 import LobbyTemplate from '../../templates/LobbyTemplate';

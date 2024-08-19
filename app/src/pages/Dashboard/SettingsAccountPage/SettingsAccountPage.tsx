@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Divider, Grid, Typography } from '@mui/material';
-import { CommonTextField } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
 import { useGetMeQuery } from '../../../api/rest';
+import { CommonTextField } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectChangePassword } from '../../../store/slices/configSlice';
 

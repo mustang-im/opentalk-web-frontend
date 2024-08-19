@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { SortOption } from '@opentalk/common';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
+import { SortOption } from '../../types';
 import { render } from '../../utils/testUtils';
 import TalkingStickSortButton from './TalkingStickSortButton';
 

@@ -17,15 +17,18 @@ import {
   Stack,
   Grid,
 } from '@mui/material';
-import { DoneIcon, ParticipantAvatar, ProtocolParticipant, SearchIcon, CommonTextField } from '@opentalk/common';
-import { cloneDeep, isEmpty, some, differenceBy, unionBy, intersectionBy } from 'lodash';
+import { cloneDeep, isEmpty, some, differenceBy } from 'lodash';
+import { unionBy, intersectionBy } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { deselectWriter, selectWriter, uploadPdf } from '../../api/types/outgoing/protocol';
+import { DoneIcon, SearchIcon } from '../../assets/icons';
+import { ParticipantAvatar, CommonTextField } from '../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectAllProtocolParticipants } from '../../store/selectors';
 import { selectProtocolUrl } from '../../store/slices/protocolSlice';
+import { ProtocolParticipant } from '../../types';
 
 const ParticipantSelectContainer = styled(Container)(({ theme }) => ({
   width: '19rem',

@@ -1,15 +1,15 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { notificationAction } from '@opentalk/common';
 import { render } from '@testing-library/react';
 
+import { notificationAction } from '../../commonComponents';
 import browser from '../../modules/BrowserSupport';
 import { screen } from '../../utils/testUtils';
 import BrowserCompatibilityInfo from './BrowserCompatibilityInfo';
 
 jest.mock('../../modules/BrowserSupport');
-jest.mock('@opentalk/common');
+jest.mock('../../commonComponents');
 jest.mock('../../components/ConfirmBrowserDialog/ConfirmBrowserDialog', () => ({
   __esModule: true,
   default: () => {

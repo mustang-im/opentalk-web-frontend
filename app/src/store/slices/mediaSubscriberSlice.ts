@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MediaSessionType, VideoSetting } from '@opentalk/common';
 import {
   createEntityAdapter,
   createSlice,
@@ -21,6 +20,7 @@ import {
   SubscriberStateChanged,
 } from '../../modules/WebRTC';
 import { SubscriberState } from '../../modules/WebRTC/SubscriberConnection';
+import { MediaSessionType, VideoSetting } from '../../types';
 import { hangUp, startRoom } from '../commonActions';
 import { leave } from './participantsSlice';
 import { pinnedRemoteScreenshare } from './uiSlice';

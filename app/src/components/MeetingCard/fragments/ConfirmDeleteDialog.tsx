@@ -12,7 +12,6 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { CloseIcon, notificationAction, notifications } from '@opentalk/common';
 import {
   Event,
   EventException,
@@ -30,6 +29,8 @@ import {
   useDeleteEventSharedFolderMutation,
   useUpdateEventInstanceMutation,
 } from '../../../api/rest';
+import { CloseIcon } from '../../../assets/icons';
+import { notificationAction, notifications } from '../../../commonComponents';
 import { EventDeletionType, generateInstanceId } from '../../../utils/eventUtils';
 
 interface ConfirmDeleteDialogProps {

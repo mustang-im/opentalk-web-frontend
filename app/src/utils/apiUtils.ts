@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { BreakoutRoomId, InviteCode } from '@opentalk/common';
-import { RoomId } from '@opentalk/rest-api-rtk-query';
+import { RoomId, InviteCode } from '@opentalk/rest-api-rtk-query';
 
 import { ConfigState, DefaultAvatarImage } from '../store/slices/configSlice';
+import { BreakoutRoomId } from '../types';
 
 type Fetch = typeof window.fetch;
 

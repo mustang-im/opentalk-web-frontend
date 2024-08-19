@@ -4,7 +4,7 @@
 import { styled, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import SuspenseLoading from '../../../commonComponents/SuspenseLoading';
+import SuspenseLoading from '../../../commonComponents/SuspenseLoading/SuspenseLoading';
 import { useAppSelector } from '../../../hooks';
 import { MediaDescriptor } from '../../../modules/WebRTC';
 import { NetworkEndpoint } from '../../../modules/WebRTC/Statistics/CandidatePairState';

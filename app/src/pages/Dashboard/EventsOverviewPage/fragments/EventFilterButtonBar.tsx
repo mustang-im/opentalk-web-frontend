@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { IconButton, Stack, Tooltip, styled } from '@mui/material';
-import { FavoriteIcon } from '@opentalk/common';
-import { InviteIcon } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
 
+import { FavoriteIcon, InviteIcon } from '../../../../assets/icons';
 import { DashboardEventsFilters, FilterChangeCallbackType } from '../types';
 
 const IconButtonBig = styled(IconButton, { shouldForwardProp: (prop) => prop !== 'active' })<{ active?: boolean }>(

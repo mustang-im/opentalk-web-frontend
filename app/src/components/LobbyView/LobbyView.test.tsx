@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { InviteCode } from '@opentalk/common';
+import { InviteCode } from '@opentalk/rest-api-rtk-query';
 import { PropsWithChildren } from 'react';
 
 import { Role } from '../../api/types/incoming/control';

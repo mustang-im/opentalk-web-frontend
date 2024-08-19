@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { PlatformKind } from '@opentalk/common';
-import { Event } from '@opentalk/rest-api-rtk-query';
+import { Event, PlatformKind } from '@opentalk/rest-api-rtk-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

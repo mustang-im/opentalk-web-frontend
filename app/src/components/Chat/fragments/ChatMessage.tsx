@@ -2,18 +2,20 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Stack, styled, Typography, useTheme } from '@mui/material';
-import { ModeratorIcon, useDateFormat, ChatMessage as ChatMessageType, ParticipantAvatar } from '@opentalk/common';
 import { format } from 'date-fns';
 import Linkify from 'linkify-react';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Role } from '../../../api/types/incoming/control';
-import { useAppSelector } from '../../../hooks';
+import { ModeratorIcon } from '../../../assets/icons';
+import { ParticipantAvatar } from '../../../commonComponents';
+import { useAppSelector, useDateFormat } from '../../../hooks';
 import { RootState } from '../../../store';
 import { RoomEvent } from '../../../store/slices/eventSlice';
 import { selectParticipantById } from '../../../store/slices/participantsSlice';
 import { selectAvatarUrl, selectDisplayName, selectOurUuid } from '../../../store/slices/userSlice';
+import { ChatMessage as ChatMessageType } from '../../../types';
 import { isEventMessage } from '../../../utils/typeGuardUtils';
 import TextWithDivider from '../../TextWithDivider';
 

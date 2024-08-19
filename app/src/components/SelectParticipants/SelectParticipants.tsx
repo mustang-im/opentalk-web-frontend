@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Autocomplete, CircularProgress, InputAdornment, TextField, styled, UseAutocompleteProps } from '@mui/material';
-import { CopyIcon, SearchIcon } from '@opentalk/common';
 import { EventId, EventInvite } from '@opentalk/rest-api-rtk-query';
 import { differenceBy, debounce } from 'lodash';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetEventInvitesQuery, useGetMeQuery, useLazyFindUsersQuery } from '../../api/rest';
+import { CopyIcon, SearchIcon } from '../../assets/icons';
 import { useAppSelector } from '../../hooks';
 import { selectLibravatarDefaultImage } from '../../store/slices/configSlice';
 import { EmailStrategy } from './fragments/EmailStrategy';

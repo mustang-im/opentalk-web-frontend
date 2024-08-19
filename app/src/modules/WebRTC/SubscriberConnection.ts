@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { MediaSessionState, MediaSessionType, VideoSetting } from '@opentalk/common';
 import { debounce, isEqual, some } from 'lodash';
 
+import { MediaSessionState, MediaSessionType, VideoSetting } from '../../types';
 import { BandwidthController } from './BandwidthController';
 import { BaseWebRtcConnection } from './BaseWebRtcConnection';
 import { MediaSignaling } from './MediaSignaling';

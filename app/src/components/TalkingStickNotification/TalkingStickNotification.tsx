@@ -2,8 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Button, Stack, Typography, styled } from '@mui/material';
-import { notificationAction, notifications, generateUniquedId } from '@opentalk/common';
 import { useTranslation } from 'react-i18next';
+
+import { notificationAction, notifications } from '../../commonComponents';
+import { generateUniqueId } from '../../utils/stringUtils';
 
 interface CreateTalkingStickNotificationProps {
   localMediaContext: {
@@ -38,7 +40,7 @@ export const createTalkingStickNotification = ({
   isUnmuted,
   id: propId,
 }: CreateTalkingStickNotificationProps) => {
-  const id = propId || generateUniquedId();
+  const id = propId || generateUniqueId();
 
   if (isUnmuted) {
     return (

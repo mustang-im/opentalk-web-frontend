@@ -11,7 +11,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { notifications, CommonTextField } from '@opentalk/common';
 import { useFormik } from 'formik';
 import i18n from 'i18next';
 import { useMemo } from 'react';
@@ -19,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { sendFeedback } from '../../api/rest';
-import { Rating } from '../../commonComponents';
+import { Rating, CommonTextField, notifications } from '../../commonComponents';
 import { useAppDispatch } from '../../hooks';
 import browser from '../../modules/BrowserSupport';
 import { formikProps, formikRatingProps } from '../../utils/formikUtils';

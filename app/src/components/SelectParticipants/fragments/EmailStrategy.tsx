@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Box, Stack, Typography } from '@mui/material';
-import { ParticipantAvatar } from '@opentalk/common';
 import * as Yup from 'yup';
 
+import { ParticipantAvatar } from '../../../commonComponents';
 import { ParticipantOption } from './ParticipantOption';
 
 const schema = Yup.string().email();

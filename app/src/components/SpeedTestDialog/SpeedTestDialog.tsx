@@ -15,10 +15,11 @@ import {
   DialogProps,
   Box,
 } from '@mui/material';
-import { CircularIconButton, CloseIcon, SpeedTestIcon } from '@opentalk/common';
 import { useCallback, useState, Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CloseIcon, SpeedTestIcon } from '../../assets/icons';
+import { CircularIconButton } from '../../commonComponents';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectSpeedTestConfig } from '../../store/slices/configSlice';
 import {

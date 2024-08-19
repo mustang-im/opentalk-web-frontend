@@ -11,10 +11,10 @@ import {
   Popover,
   PopoverProps,
 } from '@mui/material';
-import { CloseIcon, WarningIcon } from '@opentalk/common';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { CloseIcon, WarningIcon } from '../../assets/icons';
 import { useQuickStartUrl } from '../../hooks/useQuickStartUrl';
 
 const MIDDLE_SCREEN_HEIGHT_RATIO = 0.92;

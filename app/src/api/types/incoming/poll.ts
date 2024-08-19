@@ -1,15 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  CommonPoll,
-  ErrorStruct,
-  isEnumErrorStruct,
-  NamespacedIncoming,
-  PollId,
-  Choice,
-  ChoiceResult,
-} from '@opentalk/common';
+import { CommonPoll, ErrorStruct, NamespacedIncoming, PollId, Choice, ChoiceResult } from '../../../types';
+import { isEnumErrorStruct } from '../../../utils/tsUtils';
 
 export interface Started extends CommonPoll {
   message: 'started';

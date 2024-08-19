@@ -2,21 +2,16 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Stack, styled, Switch } from '@mui/material';
-import {
-  formikDurationFieldProps,
-  formikProps,
-  formikSwitchProps,
-  DurationField,
-  generateUniquedId,
-  CommonTextField,
-} from '@opentalk/common';
 import { useFormikContext } from 'formik';
 import { get } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import CommonFormItem from '../../../commonComponents/CommonFormItem';
+import { CommonFormItem, DurationField } from '../../../commonComponents';
+import { CommonTextField } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectParticipantsTotal } from '../../../store/slices/participantsSlice';
+import { formikDurationFieldProps, formikProps, formikSwitchProps } from '../../../utils/formikUtils';
+import { generateUniqueId } from '../../../utils/stringUtils';
 import { DurationFieldWrapper } from '../../DurationFieldWrapper';
 import TextWithDivider from '../../TextWithDivider';
 
@@ -46,7 +41,7 @@ const CreateByRoomsForm = ({ handleNext, formName }: ICreateByRoomsFormProps) =>
   const rooms = get(formik.values, getFormName('rooms'));
   const participantsPerRoom = Math.max(2, Math.floor(participantsTotal / rooms + 0.5));
   const maxRooms = Math.max(2, Math.floor(participantsTotal / 2));
-  const ariaId = generateUniquedId();
+  const ariaId = generateUniqueId();
 
   return (
     <Stack spacing={2} direction="column" justifyContent="flex-start">

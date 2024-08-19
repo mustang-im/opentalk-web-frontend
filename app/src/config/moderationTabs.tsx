@@ -2,6 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Typography } from '@mui/material';
+import { BackendModules } from '@opentalk/rest-api-rtk-query';
+import React, { Suspense } from 'react';
+
 import {
   AddUserIcon,
   BreakroomsIcon,
@@ -18,20 +21,16 @@ import {
   CoffeeBreakIcon,
   DebriefingIcon,
   TalkingStickIcon,
-  BackendModules,
-  RoomMode,
-  TimerStyle,
-} from '@opentalk/common';
-import React, { Suspense } from 'react';
-
-import SuspenseLoading from '../commonComponents/SuspenseLoading';
+} from '../assets/icons';
+import SuspenseLoading from '../commonComponents/SuspenseLoading/SuspenseLoading';
 import DebriefingTab from '../components/DebriefingTab';
 import HomeIconComponent from '../components/HomeIconComponent';
 import ResultsList from '../components/MeetingHeader/fragments/ResultsList';
-import WaitingParticipantsList from '../components/MeetingHeader/fragments/WaitingParticipantsList';
+import WaitingParticipantsList from '../components/WaitingParticipantsList';
 import { useAppSelector } from '../hooks';
 import { FeaturesKeys } from '../store/slices/configSlice';
 import { selectCurrentRoomMode } from '../store/slices/roomSlice';
+import { RoomMode, TimerStyle } from '../types';
 
 const MenuTabs = React.lazy(() => import('../components/MenuTabs'));
 const BreakoutRoomTab = React.lazy(() => import('../components/BreakoutRoomTab'));

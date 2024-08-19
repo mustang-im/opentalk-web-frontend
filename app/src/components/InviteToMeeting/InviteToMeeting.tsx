@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Grid } from '@mui/material';
-import { BackIcon, notifications } from '@opentalk/common';
 import { Event, EventInvite, isEvent, UserRole } from '@opentalk/rest-api-rtk-query';
 import { QueryStatus } from '@reduxjs/toolkit/dist/query';
 import { merge } from 'lodash';
@@ -11,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useCreateEventInviteMutation, useDeleteEventMutation, useGetMeTariffQuery } from '../../api/rest';
+import { BackIcon } from '../../assets/icons';
+import { notifications } from '../../commonComponents';
 import SelectParticipants from '../../components/SelectParticipants';
 import { useAppSelector } from '../../hooks';
 import { selectFeatures } from '../../store/slices/configSlice';

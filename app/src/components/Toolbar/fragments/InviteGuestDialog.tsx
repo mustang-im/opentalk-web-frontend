@@ -15,19 +15,21 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import { CloseIcon, notifications, formikDateTimePickerProps } from '@opentalk/common';
 import { DateTime, RoomId } from '@opentalk/rest-api-rtk-query';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useCreateRoomInviteMutation } from '../../../api/rest';
+import { CloseIcon } from '../../../assets/icons';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
+import { notifications } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
 import { selectCurrentBreakoutRoomId } from '../../../store/slices/breakoutSlice';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
 import { selectRoomId } from '../../../store/slices/roomSlice';
 import { composeInviteUrl } from '../../../utils/apiUtils';
+import { formikDateTimePickerProps } from '../../../utils/formikUtils';
 import DateTimePicker from '../../DateTimePicker';
 
 const theme = createOpenTalkTheme();

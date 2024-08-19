@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { ParticipantId } from '@opentalk/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../';
+import { ParticipantId } from '../../types';
 
 export interface MachineState {
   showMachine: boolean;

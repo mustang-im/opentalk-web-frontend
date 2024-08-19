@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Collapse as MuiCollapse, Grid, Stack, styled, Tooltip, Typography } from '@mui/material';
-import { FavoriteIcon } from '@opentalk/common';
 import { isTimelessEvent } from '@opentalk/rest-api-rtk-query';
 import { useTranslation } from 'react-i18next';
 
+import { FavoriteIcon } from '../../../assets/icons';
 import EventTimePreview from '../../EventTimePreview';
 import MeetingPopover, { MeetingCardFragmentProps } from './MeetingPopover';
 

@@ -1,13 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import {
-  ErrorStruct,
-  isEnumErrorStruct,
-  NamespacedIncoming,
-  ParticipantId,
-  AutomodStartConfig,
-} from '@opentalk/common';
+import { ErrorStruct, NamespacedIncoming, ParticipantId, AutomodStartConfig } from '../../../types';
+import { isEnumErrorStruct } from '../../../utils/tsUtils';
 
 export interface AutomodStartedEvent extends AutomodStartConfig {
   message: 'started';

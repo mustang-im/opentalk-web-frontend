@@ -4,11 +4,11 @@
 import { Button, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '@opentalk/common';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { readyToContinue } from '../../api/types/outgoing/timer';
+import { CoffeeBreakIcon as CoffeeBreakIconDefault } from '../../assets/icons';
 import { ReactComponent as LogoIconDefault } from '../../assets/images/logo.svg';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCoffeeBreakTimerId, selectTimerActive } from '../../store/slices/timerSlice';

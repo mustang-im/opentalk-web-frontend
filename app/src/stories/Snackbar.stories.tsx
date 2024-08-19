@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Button, Container, Divider } from '@mui/material';
-import { notifications, ISnackActionsProps, notificationAction, VariantType } from '@opentalk/common';
-import { SnackbarProvider } from '@opentalk/common';
 import { ComponentMeta } from '@storybook/react';
+import { VariantType } from 'notistack';
+
+import { notifications, ISnackActionsProps, notificationAction, SnackbarProvider } from '../commonComponents';
 
 const variantOptions: Array<VariantType> = ['error', 'success', 'warning', 'info'];
 

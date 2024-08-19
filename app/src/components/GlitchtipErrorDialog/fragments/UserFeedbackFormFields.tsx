@@ -4,10 +4,10 @@
 
 /* eslint-disable jsx-a11y/no-autofocus */
 import { Stack, Typography } from '@mui/material';
-import { CommonTextField } from '@opentalk/common';
 import { FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { CommonTextField } from '../../../commonComponents';
 import { formikProps } from '../../../utils/formikUtils';
 
 interface UserFeedbackFormFieldsProps<Values> {

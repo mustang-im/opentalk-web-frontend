@@ -1,6 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+import { AnyAction } from '@reduxjs/toolkit';
+import { RootStateOrAny } from 'react-redux';
+
 import {
   VoteOption,
   LegalVoteId,
@@ -9,10 +12,7 @@ import {
   ParticipantId,
   createModule,
   createSignalingApiCall,
-} from '@opentalk/common';
-import { AnyAction } from '@reduxjs/toolkit';
-import { RootStateOrAny } from 'react-redux';
-
+} from '../../../types';
 import { sendMessage } from '../../index';
 
 export enum LegalVoteKind {
