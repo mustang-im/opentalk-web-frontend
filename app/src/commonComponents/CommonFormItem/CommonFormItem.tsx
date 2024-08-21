@@ -42,11 +42,20 @@ const CommonFormItem = ({
 }: CommonFormItemProps) => {
   const isChecked = checked === undefined ? undefined : checked;
   const id = props.id || generateUniqueId();
+  const controlInputProps = control.props?.inputProps || {};
+
   return (
     <Stack>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <label htmlFor={id}>{label}</label>
-        {React.cloneElement(control, { onChange, onBlur, name, checked: isChecked, inputProps: { id }, value })}
+        {React.cloneElement(control, {
+          onChange,
+          onBlur,
+          name,
+          checked: isChecked,
+          inputProps: { ...controlInputProps, id },
+          value,
+        })}
       </Box>
       {error && <ErrorFormMessage helperText={helperText} />}
     </Stack>

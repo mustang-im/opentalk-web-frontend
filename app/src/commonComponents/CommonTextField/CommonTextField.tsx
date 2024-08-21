@@ -119,7 +119,7 @@ const CommonTextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProp
         prefix = t('global-error') + ': ';
       }
 
-      // if helper text is specified by the parent component it will overwrite the remaining charachters text
+      // if helper text is specified by the parent component it will overwrite the remaining characters text
       if (helperText) {
         return prefix + helperText;
       }
@@ -152,10 +152,11 @@ const CommonTextField = React.forwardRef<HTMLInputElement, ComposedTextFieldProp
         error={error}
         id={id}
         inputProps={{
+          ...props.inputProps,
           maxLength: maxCharacters,
           onKeyDown: handlePropagation,
           onKeyUp: handlePropagation,
-          // we need explicitly set the accesible name of the text field if we hide the label,
+          // we need explicitly set the accessible name of the text field if we hide the label,
           // otherwise browser will use placeholder as the accessible name
           // strangely, we don't need to do it for the combobox
           'aria-label': hideLabel && !props.select ? props.label : undefined,
