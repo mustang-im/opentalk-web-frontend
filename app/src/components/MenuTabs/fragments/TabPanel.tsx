@@ -1,8 +1,10 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
+
+import { useIsMobile } from '../../../hooks/useIsMobile';
 
 export enum MenuTab {
   Chat = 'chat',
@@ -17,8 +19,7 @@ interface TabPanelProps {
 }
 
 const TabPanel = ({ children, value, hidden }: TabPanelProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useIsMobile();
 
   return (
     <Box
