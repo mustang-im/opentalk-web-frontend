@@ -11,10 +11,14 @@ export interface Start extends CommonPoll {
   choices: Array<string>;
 }
 
-export interface Vote {
+export interface UserChoice {
+  choiceId?: ChoiceId;
+  choiceIds?: Array<ChoiceId>;
+}
+
+export interface Vote extends UserChoice {
   action: 'vote';
   pollId: PollId;
-  choiceId: ChoiceId;
 }
 
 export interface Finish {

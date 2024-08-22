@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { styled, Radio, InputLabel } from '@mui/material';
+import { styled, Radio, InputLabel, Checkbox as MuiCheckbox } from '@mui/material';
 import { useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
@@ -13,11 +13,11 @@ export enum VoteType {
   Poll = 'Poll',
   LegalVote = 'LegalVote',
 }
-interface IVoteData {
+export interface IVoteData {
   numberOfVotes: number;
   votePercentage: number;
   isVotable: boolean;
-  legalVoteId: LegalVoteId | PollId;
+  voteId: LegalVoteId | PollId;
   currentVotes: number;
 }
 
@@ -29,6 +29,7 @@ export interface IVoteResult {
   showResult?: boolean;
   isChecked?: boolean;
   voteType: VoteType;
+  multipleChoice?: boolean;
 }
 
 const ProgressContainer = styled('div')(({ theme }) => ({
@@ -66,6 +67,15 @@ const ProgressContainer = styled('div')(({ theme }) => ({
   },
 }));
 
+const Checkbox = styled(MuiCheckbox)(({ theme }) => ({
+  '&.MuiButtonBase-root.MuiCheckbox-root.Mui-disabled': {
+    color: theme.palette.text.disabled,
+  },
+  '&.MuiButtonBase-root.MuiCheckbox-root': {
+    color: theme.palette.text.secondary,
+  },
+}));
+
 const ProgressLabel = styled('span')(({ theme }) => ({
   position: 'absolute',
   color: theme.palette.secondary.contrastText,
@@ -76,12 +86,21 @@ const ProgressLabel = styled('span')(({ theme }) => ({
   gap: '1em',
 }));
 
-const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, voteType, optionIndex }: IVoteResult) => {
+const VoteResult = ({
+  title,
+  voteData,
+  onVote,
+  showResult = true,
+  isChecked,
+  voteType,
+  optionIndex,
+  multipleChoice,
+}: IVoteResult) => {
   const didVote =
     voteType === VoteType.LegalVote
       ? Boolean(useAppSelector(selectCurrentShownVote)?.votedAt)
       : Boolean(useAppSelector(selectPollToShow)?.voted);
-  const id = voteData.legalVoteId + '-' + optionIndex;
+  const id = voteData.voteId + '-' + optionIndex;
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 
   return (
@@ -89,13 +108,17 @@ const VoteResult = ({ title, voteData, onVote, showResult = true, isChecked, vot
       onMouseEnter={() => setShowAdditionalInfo(true)}
       onMouseLeave={() => setShowAdditionalInfo(false)}
     >
-      <Radio
-        id={id}
-        disabled={didVote || !voteData.isVotable}
-        checked={isChecked}
-        name={voteData.legalVoteId}
-        onChange={onVote}
-      />
+      {multipleChoice ? (
+        <Checkbox id={id} disabled={didVote || !voteData.isVotable} checked={isChecked} onChange={onVote} />
+      ) : (
+        <Radio
+          id={id}
+          disabled={didVote || !voteData.isVotable}
+          checked={isChecked}
+          name={voteData.voteId}
+          onChange={onVote}
+        />
+      )}
       <InputLabel htmlFor={id}>{title}</InputLabel>
       {showResult && (
         <ProgressLabel>

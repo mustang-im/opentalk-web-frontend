@@ -6,11 +6,11 @@ import { FC, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { batch } from 'react-redux';
 
-import { vote as sendPollChoiceToAPI } from '../../../api/types/outgoing/poll';
+import { vote as sendPollChoiceToAPI, UserChoice } from '../../../api/types/outgoing/poll';
 import { CloseIcon } from '../../../assets/icons';
 import { useAppDispatch } from '../../../hooks';
 import { Poll, voted } from '../../../store/slices/pollSlice';
-import { ChoiceId, PollId } from '../../../types';
+import { ChoiceId } from '../../../types';
 import { ActiveStateChip } from './ActiveStateChip';
 import { Fieldset } from './Fieldset';
 import { LiveIndicator } from './LiveIndicator';
@@ -21,31 +21,61 @@ type PollContainerProps = {
   onClose(): void;
 };
 
+const isChoiceIncludedPredicate = (choiceId: ChoiceId, userSelection?: UserChoice) => {
+  const choice = userSelection && (userSelection.choiceId === choiceId || userSelection.choiceIds?.includes(choiceId));
+  return Boolean(choice);
+};
+
 export const PollContainer: FC<PollContainerProps> = ({ poll, onClose }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [selectedPollOption, setSelectedPollOption] = useState<{
-    pollId?: PollId;
-    choiceId?: ChoiceId;
-  }>({});
+  const [userSelection, setUserSelection] = useState<UserChoice>();
+
   const isPollActive = poll.state === 'active';
+
   const submittedPollOption = poll.voted;
-  const isSubmitButtonDisabled = submittedPollOption || selectedPollOption.choiceId === undefined;
+  const isSubmitButtonDisabled = submittedPollOption || userSelection === undefined;
+
   const initialSum = 0;
   const numberOfVotes = poll.results?.reduce((sum, result) => sum + result.count, initialSum) || initialSum;
 
   useEffect(() => {
-    setSelectedPollOption({});
+    //For the case of live poll and user whose choice is not submit yet
+    if (isPollActive && !submittedPollOption) {
+      return;
+    }
+    setUserSelection(undefined);
   }, [poll]);
 
-  const submitPollOption = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    batch(() => {
-      if (selectedPollOption.pollId && selectedPollOption.choiceId !== undefined) {
-        const { pollId, choiceId } = selectedPollOption;
-        dispatch(voted({ pollId, choiceId }));
-        dispatch(sendPollChoiceToAPI.action({ pollId, choiceId }));
+    if (userSelection) {
+      batch(() => {
+        const pollId = poll.id;
+        dispatch(sendPollChoiceToAPI.action({ pollId, ...userSelection }));
+        dispatch(voted({ pollId, choice: userSelection }));
+      });
+    }
+  };
+
+  const handleSingleChoiceSelect = (choiceId: ChoiceId) => {
+    setUserSelection({ choiceId });
+  };
+
+  const handleMultipleChoiceSelect = (choiceId: ChoiceId) => {
+    setUserSelection((state) => {
+      const choiceIds = state?.choiceIds || [];
+
+      if (choiceIds.includes(choiceId)) {
+        const newChoiceList = choiceIds.filter((id) => id !== choiceId);
+        //If list is empty we reset selection to undefined
+        if (newChoiceList.length === 0) {
+          return undefined;
+        }
+        return { choiceIds: newChoiceList };
       }
+
+      return { choiceIds: [...choiceIds, choiceId] };
     });
   };
 
@@ -70,7 +100,7 @@ export const PollContainer: FC<PollContainerProps> = ({ poll, onClose }) => {
           </IconButton>
         </Box>
       </Grid>
-      <Grid component="form" container item xs={12} onSubmit={submitPollOption}>
+      <Grid component="form" container item xs={12} onSubmit={handleSubmit}>
         <Grid item xs={12}>
           <Fieldset>
             <legend id="poll-result-legend">
@@ -81,6 +111,10 @@ export const PollContainer: FC<PollContainerProps> = ({ poll, onClose }) => {
             <LiveIndicator isLive={poll.live} />
             {poll.choices.map((choice, index) => {
               const result = poll.results.find((result) => result.id === choice.id);
+
+              const temporaryUserSelection = isChoiceIncludedPredicate(choice.id, userSelection);
+              const voteInFinishedPoll = isChoiceIncludedPredicate(choice.id, poll.selectedChoice);
+              const isSelected = voteInFinishedPoll || temporaryUserSelection;
 
               return (
                 <VoteResult
@@ -93,14 +127,12 @@ export const PollContainer: FC<PollContainerProps> = ({ poll, onClose }) => {
                     numberOfVotes,
                     currentVotes: result !== undefined ? result.count : 0,
                     isVotable: isPollActive,
-                    legalVoteId: poll.id,
+                    voteId: poll.id,
                   }}
-                  isChecked={selectedPollOption.choiceId === choice.id || poll.selectedChoiceId === choice.id}
+                  isChecked={isSelected}
+                  multipleChoice={poll.multipleChoice}
                   onVote={() => {
-                    setSelectedPollOption({
-                      pollId: poll.id,
-                      choiceId: choice.id,
-                    });
+                    poll.multipleChoice ? handleMultipleChoiceSelect(choice.id) : handleSingleChoiceSelect(choice.id);
                   }}
                   showResult={poll.live || poll.state === 'finished'}
                 />
