@@ -782,7 +782,7 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
  * @param dispatch AppDispatch function
  * @param data mediaMsgs Message content
  */
-const handleLegalVoteMessage = (dispatch: AppDispatch, data: LegalVoteMessageType) => {
+const handleLegalVoteMessage = (dispatch: AppDispatch, data: LegalVoteMessageType, state: RootState) => {
   switch (data.message) {
     case 'pdf_asset':
       //TODO implement pdf asset handling
@@ -808,6 +808,28 @@ const handleLegalVoteMessage = (dispatch: AppDispatch, data: LegalVoteMessageTyp
         notifications.error(i18next.t('legal-vote-error'));
       }
       break;
+    case 'reported_issue': {
+      // report came from others and not us, our id is not part of participants but user slice.
+      if (data.participantId !== state.user.uuid) {
+        const displayName = state.participants.entities[data.participantId]?.displayName || i18n.t('global-someone');
+        if (data.kind) {
+          notifications.warning(
+            i18n.t('legal-vote-report-issue-kind-notification', {
+              displayName: displayName,
+              kind: data.kind,
+            })
+          );
+        } else {
+          notifications.warning(
+            i18n.t('legal-vote-report-issue-description-notification', {
+              displayName: displayName,
+              description: data.description,
+            })
+          );
+        }
+      }
+      break;
+    }
     case 'error':
       dispatchError(data.error.replace('_', '-'));
       break;
@@ -1148,7 +1170,7 @@ const onMessage =
         handleAutomodMessage(dispatch, message.payload, getState());
         break;
       case 'legal_vote':
-        handleLegalVoteMessage(dispatch, message.payload);
+        handleLegalVoteMessage(dispatch, message.payload, getState());
         break;
       case 'moderation':
         handleModerationMessage(dispatch, message.payload, getState());

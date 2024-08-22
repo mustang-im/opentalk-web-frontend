@@ -136,8 +136,9 @@ export const legalVoteSlice = createSlice({
       }
     },
     // tmp action until UX design is done
-    closeResultWindow: (state) => {
+    closedResultWindow: (state) => {
       state.showResultWindow = false;
+      state.currentShownVote = undefined;
     },
     saveLegalVoteFormValues: (state, { payload }: PayloadAction<LegalVoteFormValues>) => {
       const index = state.savedLegalVotes.findIndex((savedLegalVote) => savedLegalVote.id === payload.id);
@@ -174,7 +175,7 @@ export const {
   voted,
   canceled,
   closed,
-  closeResultWindow,
+  closedResultWindow,
   saveLegalVoteFormValues,
   saveSelectedOption,
 } = actions;

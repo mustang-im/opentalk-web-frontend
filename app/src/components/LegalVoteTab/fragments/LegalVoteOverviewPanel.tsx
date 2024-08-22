@@ -92,7 +92,7 @@ const LegalVoteOverviewPanel = ({ vote }: IProps) => {
     <MainContainer spacing={2}>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box display="flex" alignItems="center">
-          <VoteState state={vote?.state}>{t(`legal-vote-overview-panel-status-${vote?.state}`)}</VoteState>
+          <VoteState state={vote?.state}>{t(`ballot-overview-panel-status-${vote?.state}`)}</VoteState>
           <Typography ml={1}>{`${formattedStartTime}`}</Typography>
         </Box>
         {vote && (

@@ -48,6 +48,7 @@ import { idFromDescriptor, MediaId, SubscriberStateChanged, SubscriberConfig } f
 import FullscreenProvider from '../provider/FullscreenProvider';
 import { appReducers } from '../store';
 import { AutomodState, SpeakerState } from '../store/slices/automodSlice';
+import { Poll } from '../store/slices/pollSlice';
 import {
   Participant,
   ProtocolAccess,
@@ -57,6 +58,9 @@ import {
   ParticipationKind,
   VideoSetting,
   AutomodSelectionStrategy,
+  PollId,
+  LegalVoteType,
+  LegalVoteId,
 } from '../types';
 
 const automodState: AutomodState = {
@@ -512,3 +516,36 @@ export const mockSubscriberState = ({ descriptor, participantId, videoOn, audioO
     },
   },
 });
+
+export const mockPoll: Poll = {
+  id: 'fake-poll-id' as PollId,
+  choices: [],
+  duration: 60,
+  live: false,
+  results: [],
+  startTime: new Date().toString(),
+  state: 'active',
+  topic: 'Fake poll',
+  voted: false,
+};
+
+export const mockLegalVote: LegalVoteType = {
+  id: 'fake-poll-id' as LegalVoteId,
+  duration: 60,
+  startTime: new Date().toString(),
+  state: 'active',
+  topic: 'This is a legal vote fake description',
+  votes: {
+    yes: 0,
+    no: 0,
+    abstain: 0,
+  },
+  allowedParticipants: ['8342a2bf-b63e-422f-9fb8-7409ef997606' as ParticipantId],
+  autoClose: false,
+  createPdf: false,
+  enableAbstain: true,
+  kind: 'roll_call',
+  votedAt: null,
+  name: 'Fake legal vote',
+  localStartTime: new Date().toString(),
+};

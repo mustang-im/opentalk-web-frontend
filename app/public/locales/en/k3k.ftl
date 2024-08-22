@@ -369,9 +369,9 @@ legal-vote-form-button-continue = Continue
 
 legal-vote-overview-panel-button-cancel = Abort
 legal-vote-overview-panel-button-end = Close
-legal-vote-overview-panel-status-active = Active
-legal-vote-overview-panel-status-finished = Finished
-legal-vote-overview-panel-status-canceled = Canceled
+ballot-overview-panel-status-active = Active
+ballot-overview-panel-status-finished = Finished
+ballot-overview-panel-status-canceled = Canceled
 legal-vote-select-participants-title = Select participants
 
 legal-vote-form-duration = duration
@@ -643,7 +643,8 @@ global-streaming-link = { $count ->
     [one] Livestream-Link
     *[other] Livestream-Links
 }
-
+global-other = Other
+global-someone = Someone
 
 dashboard-home = Home
 dashboard-meetings = Meetings
@@ -994,8 +995,8 @@ votes-poll-overview-live-label = live
 votes-poll-overview-not-live-label = not live
 votes-poll-button-show = Show polls and votings list
 
-votes-result-not-live-tooltip = This poll is not live, the results will be announced when the poll end.
-votes-result-live-tooltip = This poll is live, the results will be announced continuously.
+live-indicator-not-live-tooltip = This poll is not live, the results will be announced when the poll end.
+live-indicator-live-tooltip = This poll is live, the results will be announced continuously.
 
 debug-panel-inbound-label = Inbound (current, avr, max):
 debug-panel-outbound-label = Outbound (current, avr, max):
@@ -1085,3 +1086,13 @@ my-meeting-menu-glitchtip-trigger = Report a bug
 
 control-participant-presenter-role-revoked = Your presenter role has been revoked
 control-participant-presenter-role-granted = You got the presenter role
+
+legal-vote-report-issue-title = Report a technical problem
+legal-vote-report-issue-kind-audio = No audio
+legal-vote-report-issue-kind-video = No video
+legal-vote-report-issue-kind-screenshare = No screenshare
+legal-vote-report-issue-inform-moderator = Inform moderator
+legal-vote-report-issue-kind-notification = {displayName} reports {kind} problem
+legal-vote-report-issue-description-notification = {displayName} reports a problem: "{description}"
+legal-vote-report-issue-inform-moderator-success = The technical problem is reported to moderator
+legal-vote-report-issue-description-placeholder = Describe the problem...

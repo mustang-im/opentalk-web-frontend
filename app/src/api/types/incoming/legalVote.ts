@@ -140,6 +140,13 @@ export interface IncomingPdfAsset {
   assetId: string;
 }
 
+export interface VoteReportedIssue {
+  message: 'reported_issue';
+  participantId: ParticipantId;
+  kind?: 'video' | 'audio' | 'screenshare';
+  description?: string;
+}
+
 export type LegalVoteMessageType =
   | VoteStarted
   | VoteStopped
@@ -147,6 +154,7 @@ export type LegalVoteMessageType =
   | VoteUpdated
   | VoteCanceled
   | IncomingPdfAsset
+  | VoteReportedIssue
   | ErrorStruct<LegalVoteError>;
 type LegalVoteMessage = NamespacedIncoming<LegalVoteMessageType, 'legal_vote'>;
 

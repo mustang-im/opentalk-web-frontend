@@ -2,21 +2,25 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { Dialog, styled, Paper } from '@mui/material';
+import { EntityId } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import {
-  closeResultWindow,
+  closedResultWindow as closedLegalVoteResultWindow,
   selectCurrentShownVoteId,
-  selectShowLegalVoteWindow,
+  selectVoteById,
 } from '../../store/slices/legalVoteSlice';
 import {
   selectPollIdToShow,
-  selectShowResult as selectShowPollResult,
-  closedResult as closedPollResult,
+  closedResultWindow as closedPollResultWindow,
+  selectPollById,
 } from '../../store/slices/pollSlice';
 import { selectVoteOrPollIdToShow, setVoteOrPollIdToShow } from '../../store/slices/uiSlice';
-import VoteResultContainer from './fragments/VoteResultContainer';
+import { selectOurUuid } from '../../store/slices/userSlice';
+import { LegalVoteContainer } from './fragments/LegalVoteContainer';
+import { PollContainer } from './fragments/PollContainer';
+import { ReportSection } from './fragments/ReportSection';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: '1rem',
@@ -26,40 +30,64 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 export default function Ballot() {
   const dispatch = useAppDispatch();
-  const showVoteResult = useAppSelector(selectShowLegalVoteWindow);
   const voteIdToShow = useAppSelector(selectCurrentShownVoteId);
-  const showPollResult = useAppSelector(selectShowPollResult);
   const pollIdToShow = useAppSelector(selectPollIdToShow);
-  const voteOrPollIdToShow = useAppSelector(selectVoteOrPollIdToShow);
+  const voteOrPollIdToShow = useAppSelector(selectVoteOrPollIdToShow); // when user selects a vote to preview from the dropdown menu
 
-  const getVoteOrPollIdToShow = () => {
-    if (voteOrPollIdToShow) {
-      return voteOrPollIdToShow;
-    } else if (voteIdToShow !== undefined && showVoteResult) {
-      return voteIdToShow;
-    } else if (pollIdToShow !== undefined && showPollResult) {
-      return pollIdToShow;
-    } else {
-      return undefined;
-    }
-  };
+  const pollToShow = useAppSelector(
+    selectPollById((voteOrPollIdToShow ? voteOrPollIdToShow : pollIdToShow) as EntityId)
+  );
+  const legalVoteToShow = useAppSelector(
+    selectVoteById((voteOrPollIdToShow ? voteOrPollIdToShow : voteIdToShow) as EntityId)
+  );
+
+  const ourUuid = useAppSelector(selectOurUuid);
+  const isAllowedToVote =
+    ourUuid && legalVoteToShow ? Boolean(legalVoteToShow.allowedParticipants?.includes(ourUuid)) : false;
 
   const handleClose = () => {
     batch(() => {
       dispatch(setVoteOrPollIdToShow(undefined));
-      dispatch(closeResultWindow());
-      dispatch(closedPollResult());
+      dispatch(closedLegalVoteResultWindow());
+      dispatch(closedPollResultWindow());
     });
   };
 
-  const voteOrPollId = getVoteOrPollIdToShow();
-  if (voteOrPollId) {
+  if (pollToShow) {
     return (
-      <Dialog PaperComponent={StyledPaper} onClose={handleClose} open={true} maxWidth="sm" fullWidth>
-        <VoteResultContainer voteOrPollId={voteOrPollId} onClose={handleClose} />
+      <Dialog
+        PaperComponent={StyledPaper}
+        onClose={handleClose}
+        open={true}
+        maxWidth="sm"
+        fullWidth
+        onKeyDown={(e) => e.stopPropagation()}
+        onKeyUp={(e) => e.stopPropagation()}
+      >
+        <PollContainer onClose={handleClose} poll={pollToShow} />
       </Dialog>
     );
-  } else {
-    return null;
   }
+
+  if (legalVoteToShow) {
+    return (
+      <Dialog
+        PaperComponent={StyledPaper}
+        onClose={handleClose}
+        open={true}
+        maxWidth={false}
+        fullWidth
+        onKeyDown={(e) => e.stopPropagation()}
+        onKeyUp={(e) => e.stopPropagation()}
+        PaperProps={{
+          sx: { maxWidth: 700 },
+        }}
+      >
+        <LegalVoteContainer onClose={handleClose} legalVote={legalVoteToShow} isAllowedToVote={isAllowedToVote} />
+        {isAllowedToVote && <ReportSection legalVoteId={legalVoteToShow.id} />}
+      </Dialog>
+    );
+  }
+
+  return null;
 }

@@ -97,13 +97,14 @@ export const pollSlice = createSlice({
         ...payload,
       });
     },
-    closedResult: (state) => {
+    closedResultWindow: (state) => {
+      state.pollIdToShow = undefined;
       state.showResult = false;
     },
-    voted: (state, { payload }: PayloadAction<{ id: PollId; selectedChoiceId: Choice['id'] }>) => {
+    voted: (state, { payload }: PayloadAction<{ pollId: PollId; choiceId: Choice['id'] }>) => {
       pollAdapter.updateOne(state.polls, {
-        id: payload.id,
-        changes: { voted: true, selectedChoiceId: payload.selectedChoiceId },
+        id: payload.pollId,
+        changes: { voted: true, selectedChoiceId: payload.choiceId },
       });
     },
   },
@@ -125,7 +126,7 @@ export const pollSlice = createSlice({
   },
 });
 
-export const { started, liveUpdated, done, savePollFormValues, closedResult, voted } = pollSlice.actions;
+export const { started, liveUpdated, done, savePollFormValues, closedResultWindow, voted } = pollSlice.actions;
 export const actions = pollSlice.actions;
 
 const pollSelectors = pollAdapter.getSelectors<RootState>((state) => state.poll.polls);
