@@ -257,6 +257,13 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
     return values.streaming.enabled ? [values.streaming.platform] : [];
   };
 
+  const getShowMeetingDetailsInitialValue = () => {
+    if (!existingEvent) {
+      return true;
+    }
+    return Boolean(existingEvent?.showMeetingDetails);
+  };
+
   const formik = useFormik<CreateOrUpdateMeetingFormikValues>({
     initialValues: {
       title: existingEvent?.title,
@@ -273,7 +280,7 @@ const CreateOrUpdateMeetingForm = ({ existingEvent, onForwardButtonClick }: Crea
       recurrencePattern: memoizedRecurrencePattern || CommonFrequencies.NONE,
       isAdhoc: existingEvent && Boolean(existingEvent.isAdhoc),
       sharedFolder: (existingEvent?.sharedFolder && Boolean(existingEvent.sharedFolder)) || false,
-      showMeetingDetails: existingEvent?.showMeetingDetails || false,
+      showMeetingDetails: getShowMeetingDetailsInitialValue(),
       streaming: getStreamingInitialValue(),
     },
     validationSchema,

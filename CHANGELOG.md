@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Show meeting details now defaults to true for new events ([#1969](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1969))
 - Make waiting room configurable ([#1896](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1896))
 - Removed nested roles from the notifications. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
 - Apply autofocus on the breakout room notification. ([#1751](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1751))
