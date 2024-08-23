@@ -15,6 +15,7 @@ type InvitedParticipantsProps = {
   selectedUsers?: Array<ParticipantOption>;
   removeSelectedUser?: (invitee: EventInvite) => void;
   eventId: EventId;
+  adhocMeeting?: boolean;
 };
 
 // //Defines statuses that will be displayed
@@ -32,6 +33,7 @@ const InvitedParticipants = ({
   removeSelectedUser,
   selectedUsers = [],
   eventId,
+  adhocMeeting = false,
 }: InvitedParticipantsProps) => {
   const { data: invitees = [] } = useGetEventInvitesQuery({ eventId }, { refetchOnMountOrArgChange: true });
 
@@ -77,23 +79,35 @@ const InvitedParticipants = ({
     inviteeSorter,
   ]);
 
+  const showColumn = (inviteStatus: DisplayedInviteStatuses) => {
+    if (adhocMeeting) {
+      return inviteStatus === InviteStatus.Pending && mergedEventInvites.length > 0;
+    }
+
+    return true;
+  };
+
   return (
     <Grid container spacing={2} data-testid="InvitedParticipants">
       {/* Type assertion, since Object.keys assumes that key is of type string */}
-      {(Object.keys(inviteeMap) as Array<keyof typeof inviteeMap>).map((inviteStatus) => (
-        <ParticipantList
-          key={`${inviteStatus}-invitees`}
-          eventId={eventId}
-          isUpdatable={isUpdatable}
-          status={inviteStatus}
-          removeSelectedUser={inviteStatus !== InviteStatus.Declined ? removeSelectedUser : undefined}
-          invitees={
-            inviteStatus === InviteStatus.Pending
-              ? mergedEventInvites
-              : sortBy(inviteeMap[inviteStatus], [inviteeSorter])
-          }
-        />
-      ))}
+      {(Object.keys(inviteeMap) as Array<keyof typeof inviteeMap>).map((inviteStatus) => {
+        if (showColumn(inviteStatus)) {
+          return (
+            <ParticipantList
+              key={`${inviteStatus}-invitees`}
+              eventId={eventId}
+              isUpdatable={isUpdatable}
+              status={inviteStatus}
+              removeSelectedUser={inviteStatus !== InviteStatus.Declined ? removeSelectedUser : undefined}
+              invitees={
+                inviteStatus === InviteStatus.Pending
+                  ? mergedEventInvites
+                  : sortBy(inviteeMap[inviteStatus], [inviteeSorter])
+              }
+            />
+          );
+        }
+      })}
     </Grid>
   );
 };
