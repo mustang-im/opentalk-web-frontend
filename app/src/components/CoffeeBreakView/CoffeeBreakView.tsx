@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
+
+/* eslint-disable jsx-a11y/no-autofocus */
 import { Button, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -78,7 +80,7 @@ export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => 
   };
 
   return (
-    <BackgroundCover>
+    <BackgroundCover role="alertdialog" aria-label={t('coffee-break-layer-aria-title')}>
       <InnerContainer roundBorders={roundBorders}>
         <LogoIcon />
 
@@ -91,7 +93,9 @@ export const CoffeeBreakView = memo(({ roundBorders }: CoffeeBreakViewProps) => 
 
           <CoffeeBreakTimer />
 
-          <Button onClick={handleClose}>{t('coffee-break-layer-button')}</Button>
+          <Button autoFocus={true} onClick={handleClose}>
+            {t('coffee-break-layer-button')}
+          </Button>
         </Content>
       </InnerContainer>
     </BackgroundCover>

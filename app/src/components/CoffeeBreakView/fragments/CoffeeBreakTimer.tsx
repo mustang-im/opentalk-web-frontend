@@ -4,7 +4,9 @@
 import { styled, Typography } from '@mui/material';
 import { isNumber } from 'lodash';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import AccessibleTimer from '../../../commonComponents/AccessibleTimer';
 import { useAppSelector, useRemainingDurationOfTimer } from '../../../hooks';
 import { selectTotalDuration } from '../../../store/slices/timerSlice';
 
@@ -20,6 +22,7 @@ const TimerTypography = styled(Typography, {
 }));
 
 const CoffeeBreakTimer = () => {
+  const { t } = useTranslation();
   const remainingTime = useRemainingDurationOfTimer();
   const totalDuration = useAppSelector(selectTotalDuration);
   const [isTimerRed, setIsTimerRed] = useState(false);
@@ -54,9 +57,14 @@ const CoffeeBreakTimer = () => {
   }, [totalDuration, remainingTime]);
 
   return (
-    <TimerTypography isRed={isTimerRed ? 'active' : ''} component="div">
-      {remainingTime?.durationString}
-    </TimerTypography>
+    <>
+      <TimerTypography isRed={isTimerRed ? 'active' : ''} component="div" aria-hidden={true}>
+        {remainingTime?.durationString}
+      </TimerTypography>
+      {remainingTime && (
+        <AccessibleTimer remainingTime={remainingTime.duration} feature={t('coffee-break-tab-title')} />
+      )}
+    </>
   );
 };
 

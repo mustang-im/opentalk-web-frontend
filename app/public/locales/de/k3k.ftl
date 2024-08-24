@@ -523,6 +523,11 @@ timer-popover-button-done = Als fertig markieren
 timer-popover-button-not-done = Als nicht fertig markieren
 timer-title-placeholder = Neuer Timer
 
+timer-update-message = Noch {$number} {$unit}.
+timer-more-than-message = Noch mehr als {$number} {$unit}.
+timer-less-than-message = Noch weniger als {$number} {$unit}.
+timer-last-seconds-message = Noch weniger als {$number} Sekunden.
+
 coffee-break-title-counter = Dauer
 coffee-break-tab-title = Kaffeepause
 coffee-break-form-button-submit = Pause starten
@@ -533,6 +538,7 @@ coffee-break-layer-button = Zurück in die Konferenz
 coffee-break-notification = Die Kaffeepause ist beendet.
 coffee-break-stopped-title = Kaffeepause beendet.
 coffee-break-overview-button-stop = Kaffeepause beenden
+coffee-break-layer-aria-title = Kaffeepause läuft
 
 speed-meter-init-message = Initalisiere...
 speed-meter-started-message = Bitte warten.\nDer Test dauert ungefähr 20 Sekunden.
@@ -598,6 +604,10 @@ global-invite = Einladung
 global-month = Monat
 global-day = Tag
 global-week = Woche
+global-minute = { $count ->
+    [one] Minute
+    *[other] Minuten
+}
 global-participants = Teilnehmer
 global-meeting = Meeting
 global-save = Speichern
