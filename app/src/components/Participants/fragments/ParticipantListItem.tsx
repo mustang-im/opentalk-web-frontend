@@ -66,14 +66,14 @@ const ListItemAvatar = styled(MuiListItemAvatar)({
   minWidth: 'initial',
 });
 
-const ListItem = styled(MuiListItem)(({ theme }) => ({
+const ListItem = styled(MuiListItem, {
+  shouldForwardProp: (prop) => prop !== 'isMoreMenuOpen',
+})<{ isMoreMenuOpen?: boolean }>(({ theme, isMoreMenuOpen }) => ({
   padding: theme.spacing(1, 1, 1, 0),
-  cursor: 'pointer',
   '& .more-icon': {
-    color: 'transparent',
+    color: isMoreMenuOpen ? theme.palette.primary.contrastText : 'transparent',
   },
   ':hover': {
-    opacity: 0.8,
     '& .more-icon': {
       color: theme.palette.primary.contrastText,
     },
@@ -413,7 +413,7 @@ const ParticipantListItem = ({ data, index, style }: ParticipantRowProps) => {
   }, [participant.role]);
 
   return (
-    <ListItem style={style}>
+    <ListItem style={style} isMoreMenuOpen={open}>
       <Box display="flex" flexWrap="nowrap" alignItems="center" width="100%">
         <ListItemAvatar>{renderAvatar()}</ListItemAvatar>
         <ListItemText
