@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### New Features
 
+- Implement multiple choice polls ([#1795](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1795))
 - Implement legal vote issue reporting system ([#1903](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1903))
 - Include / exclude option for creator in talking stick ([#1953](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1953))
 - Enable editing streaming data for existing events([#1946](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1946))
