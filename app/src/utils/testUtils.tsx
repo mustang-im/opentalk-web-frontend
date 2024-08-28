@@ -522,6 +522,7 @@ export const mockPoll: Poll = {
   choices: [],
   duration: 60,
   live: false,
+  multipleChoice: false,
   results: [],
   startTime: new Date().toString(),
   state: 'active',

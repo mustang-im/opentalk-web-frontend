@@ -18,18 +18,16 @@ export interface ChoiceResult extends ChoiceCommon {
   count: number;
 }
 
-export interface InitialPoll {
-  id: PollId;
-  duration: number;
-  live: boolean;
-  started: string;
-  topic: string;
-  choices: Array<Choice>;
-  results?: Array<ChoiceResult>;
-}
-
 export interface CommonPoll {
   topic: string;
   live: boolean;
+  multipleChoice: boolean;
   duration: Seconds;
+}
+
+export interface InitialPoll extends CommonPoll {
+  id: PollId;
+  started: string;
+  choices: Array<Choice>;
+  results?: Array<ChoiceResult>;
 }

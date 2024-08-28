@@ -154,7 +154,7 @@ export const LegalVoteContainer: FC<LegalVoteContainerProps> = ({ legalVote, onC
                         numberOfVotes,
                         currentVotes: legalVote.votes ? legalVote.votes[voteKey as VoteOption] : 0,
                         isVotable: !isOptionDisabled,
-                        legalVoteId: legalVote.id,
+                        voteId: legalVote.id,
                       }}
                       isChecked={voteKey === selectedLegalVoteOption}
                       onVote={() => {

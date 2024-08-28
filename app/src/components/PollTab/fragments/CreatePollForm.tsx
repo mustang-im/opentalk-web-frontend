@@ -33,6 +33,7 @@ const defaultInitialValues: PollFormValues = {
   topic: '',
   duration: 1,
   live: false,
+  multipleChoice: false,
 };
 
 const Form = styled('form')(({ theme }) => ({
@@ -56,6 +57,8 @@ const validationSchema = yup.object({
     .of(yup.string().trim().required(i18next.t('poll-form-input-error-choice')))
     .min(2, i18next.t('poll-form-input-error-choices'))
     .required(i18next.t('poll-form-input-error-choices')),
+  live: yup.boolean().optional(),
+  multipleChoice: yup.boolean().optional(),
 });
 
 const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICreatePollForm) => {
@@ -87,6 +90,7 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
         topic: values.topic,
         duration: (values.duration * 60) as Seconds,
         live: values.live,
+        multipleChoice: values.multipleChoice,
         choices: values.choices,
       })
     );
@@ -130,6 +134,17 @@ const CreatePollForm = ({ initialValues = defaultInitialValues, onClose }: ICrea
                     </Tooltip>
                   }
                   label={t('poll-form-switch-live')}
+                />
+              </Box>
+              <Box marginBottom={1}>
+                <CommonFormItem
+                  {...formikSwitchProps('multipleChoice', formik)}
+                  control={
+                    <Tooltip title={`${t('poll-form-switch-multiple-choice-tooltip')}`}>
+                      <Switch color="primary" />
+                    </Tooltip>
+                  }
+                  label={t('poll-form-switch-multiple-choice')}
                 />
               </Box>
               <Box marginBottom={1}>

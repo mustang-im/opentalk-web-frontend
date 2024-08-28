@@ -5,6 +5,7 @@ import { createEntityAdapter, createSlice, EntityId, EntityState, PayloadAction 
 
 import { RootState } from '../';
 import { Started, LiveUpdate, Done } from '../../api/types/incoming/poll';
+import { UserChoice } from '../../api/types/outgoing/poll';
 import { Choice, ChoiceResult, PollId } from '../../types';
 import { joinSuccess } from '../commonActions';
 
@@ -18,8 +19,9 @@ export interface Poll {
   stopTime?: string;
   state: 'active' | 'finished';
   live: boolean;
+  multipleChoice: boolean;
   voted: boolean;
-  selectedChoiceId?: Choice['id'];
+  selectedChoice?: UserChoice;
 }
 
 export interface PollFormValues {
@@ -27,6 +29,7 @@ export interface PollFormValues {
   topic: string;
   duration: number | string;
   live: boolean;
+  multipleChoice: boolean;
   choices: Array<string>;
 }
 
@@ -101,10 +104,10 @@ export const pollSlice = createSlice({
       state.pollIdToShow = undefined;
       state.showResult = false;
     },
-    voted: (state, { payload }: PayloadAction<{ pollId: PollId; choiceId: Choice['id'] }>) => {
+    voted: (state, { payload }: PayloadAction<{ pollId: PollId; choice: UserChoice }>) => {
       pollAdapter.updateOne(state.polls, {
         id: payload.pollId,
-        changes: { voted: true, selectedChoiceId: payload.choiceId },
+        changes: { voted: true, selectedChoice: payload.choice },
       });
     },
   },

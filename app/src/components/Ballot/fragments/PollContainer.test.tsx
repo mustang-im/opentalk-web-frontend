@@ -47,6 +47,7 @@ describe('PollContainer', () => {
       },
     ],
     live: false,
+    multipleChoice: false,
     topic: 'Test Poll',
     duration: 60,
     startTime: new Date().toISOString(),
