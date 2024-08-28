@@ -19,6 +19,7 @@ import {
 import { selectVoteOrPollIdToShow, setVoteOrPollIdToShow } from '../../store/slices/uiSlice';
 import { selectOurUuid } from '../../store/slices/userSlice';
 import { LegalVoteContainer } from './fragments/LegalVoteContainer';
+import { LEGEND_TITLE_ID } from './fragments/LegendTitle';
 import { PollContainer } from './fragments/PollContainer';
 import { ReportSection } from './fragments/ReportSection';
 
@@ -58,11 +59,16 @@ export default function Ballot() {
       <Dialog
         PaperComponent={StyledPaper}
         onClose={handleClose}
-        open={true}
+        open
         maxWidth="sm"
         fullWidth
+        disableAutoFocus
         onKeyDown={(e) => e.stopPropagation()}
         onKeyUp={(e) => e.stopPropagation()}
+        PaperProps={{
+          'aria-modal': true,
+          'aria-labelledby': LEGEND_TITLE_ID,
+        }}
       >
         <PollContainer onClose={handleClose} poll={pollToShow} />
       </Dialog>
@@ -74,13 +80,16 @@ export default function Ballot() {
       <Dialog
         PaperComponent={StyledPaper}
         onClose={handleClose}
-        open={true}
+        open
         maxWidth={false}
         fullWidth
+        disableAutoFocus
         onKeyDown={(e) => e.stopPropagation()}
         onKeyUp={(e) => e.stopPropagation()}
         PaperProps={{
           sx: { maxWidth: 700 },
+          'aria-modal': true,
+          'aria-labelledby': LEGEND_TITLE_ID,
         }}
       >
         <LegalVoteContainer onClose={handleClose} legalVote={legalVoteToShow} isAllowedToVote={isAllowedToVote} />

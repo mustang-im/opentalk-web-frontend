@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Fix: missing aria labels on poll and legal vote dialogs ([#1998](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1998))
 - Fix: Chat not being visible on certain mobile resolutions ([#1995](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1995))
 - Fix: Screen share is still active during/after coffe break ([#1803](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1803))
 

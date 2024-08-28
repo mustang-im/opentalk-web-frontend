@@ -16,6 +16,7 @@ import LegalVoteCountdown from '../../LegalVoteCountdown';
 import { LegalVoteTokenClipboard } from '../../LegalVoteTokenClipboard';
 import { ActiveStateChip } from './ActiveStateChip';
 import { Fieldset } from './Fieldset';
+import { LegendTitle } from './LegendTitle';
 import VoteResult, { VoteType } from './VoteResult';
 import VoteResultDate from './VoteResultDate';
 import VoteResultTable from './VoteResultTable';
@@ -125,10 +126,10 @@ export const LegalVoteContainer: FC<LegalVoteContainerProps> = ({ legalVote, onC
       <Grid component="form" container item xs={12} onSubmit={submitLegalVoteOption}>
         <Grid item xs={12}>
           <Fieldset>
-            <legend id="vote-result-legend">
-              <Typography variant="h2" component="h3">
+            <legend>
+              <LegendTitle variant="h2" component="h3">
                 {legalVote.name}
-              </Typography>
+              </LegendTitle>
               {legalVote.subtitle && (
                 <Typography variant="body1" component="h4">
                   {legalVote.subtitle}

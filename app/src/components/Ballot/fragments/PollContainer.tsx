@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
+import { Box, Button, Grid, IconButton } from '@mui/material';
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { batch } from 'react-redux';
@@ -13,6 +13,7 @@ import { Poll, voted } from '../../../store/slices/pollSlice';
 import { ChoiceId } from '../../../types';
 import { ActiveStateChip } from './ActiveStateChip';
 import { Fieldset } from './Fieldset';
+import { LegendTitle } from './LegendTitle';
 import { LiveIndicator } from './LiveIndicator';
 import VoteResult, { VoteType } from './VoteResult';
 
@@ -103,10 +104,10 @@ export const PollContainer: FC<PollContainerProps> = ({ poll, onClose }) => {
       <Grid component="form" container item xs={12} onSubmit={handleSubmit}>
         <Grid item xs={12}>
           <Fieldset>
-            <legend id="poll-result-legend">
-              <Typography variant="body1" component="h4">
+            <legend>
+              <LegendTitle variant="body1" component="h4">
                 {poll.topic}
-              </Typography>
+              </LegendTitle>
             </legend>
             <LiveIndicator isLive={poll.live} />
             {poll.choices.map((choice, index) => {
