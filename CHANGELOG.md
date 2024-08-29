@@ -8,10 +8,6 @@ All notable changes to this project will be documented in this file.
 
 - Implement multiple choice polls ([#1795](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1795))
 - Implement legal vote issue reporting system ([#1903](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1903))
-- Include / exclude option for creator in talking stick ([#1953](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1953))
-- Enable editing streaming data for existing events([#1946](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1946))
-- Add automatic join from waiting room ([#1467](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1467))
-- Re-design text fields ([#1772](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1772))
 
 ### Improvements to the user experience
 
@@ -20,21 +16,35 @@ All notable changes to this project will be documented in this file.
 - When creating an adhoc meeting, the invited users are only shown when invites exist. ([#1970](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1970))
 - Inlined meetings filters on mobile devices ([#2003](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2003))
 - Show meeting details now defaults to true for new events ([#1969](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1969))
-- Make waiting room configurable ([#1896](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1896))
-- Removed nested roles from the notifications. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
-- Apply autofocus on the breakout room notification. ([#1751](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1751))
-- Add tooltip for recorder ([#1971](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1971))
-- Increment and decrement buttons respect the specified bounds (e.g. inside the breakout room form) ([#1974](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1974))
 
 ### Bug Fixes
 
 - Fix: missing aria labels on poll and legal vote dialogs ([#1998](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1998))
 - Fix: Chat not being visible on certain mobile resolutions ([#1995](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1995))
-- Fix: Screen share is still active during/after coffe break ([#1803](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1803))
 
 ### Internal
 
 - Setup ESLint react plugin for app module ([#2012](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2012))
+
+## 1.19.0
+
+### New Features
+
+- Include / exclude option for creator in talking stick ([#1953](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1953))
+- Enable editing streaming data for existing events([#1946](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1946))
+- Add automatic join from waiting room ([#1467](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1467))
+- Re-design text fields ([#1772](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1772))
+
+### Improvements to the user experience
+
+- Make waiting room configurable ([#1896](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1896))
+- Removed nested roles from the notifications. ([#1710](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1710))
+- Apply autofocus on the breakout room notification. ([#1751](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1751))
+- Add tooltip for recorder ([#1971](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1971))
+
+### Bug Fixes
+
+- Fix: Screen share is still active during/after coffe break ([#1803](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1803))
 
 ## 1.18.0
 
