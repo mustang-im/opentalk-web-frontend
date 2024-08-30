@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- All users get muted upon talking stick completion ([#1954](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1954))
 - Improve german translations for streaming platform([#1357](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/1357))
 - Improve A11Y of the coffee break timer announcement ([#1997](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1997))
 - When creating an adhoc meeting, the invited users are only shown when invites exist. ([#1970](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1970))

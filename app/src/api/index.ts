@@ -719,6 +719,9 @@ const handleAutomodMessage = (dispatch: AppDispatch, data: AutomodEventType, sta
         msg: i18next.t('talking-stick-finished'),
         variant: 'info',
       });
+      localMediaContext.reconfigure({ audio: false }).catch((error) => {
+        console.error('Failed to mute on talking stick stop:', error);
+      });
       break;
     // case 'start_animation':
     //   dispatch(slotStore.initLottery({ winner: data.result, pool: data.pool }));
