@@ -11,8 +11,11 @@ const IconButtonBig = styled(IconButton, { shouldForwardProp: (prop) => prop !==
   ({ theme, active }) => ({
     color: active ? theme.palette.text.secondary : '',
     backgroundColor: active ? theme.palette.secondary.main : '',
+    borderRadius: theme.borderRadius.circle,
+    width: '3rem',
+    height: '3rem',
     '.MuiSvgIcon-root': {
-      fontSize: theme.typography.pxToRem(23),
+      fontSize: '1.25rem',
     },
   })
 );
@@ -26,14 +29,13 @@ export const EventFilterButtonBar = ({ filters, onFilterChange }: EventFilterBut
   const { t } = useTranslation();
 
   return (
-    <Stack direction="row" alignItems="center" spacing={1}>
+    <Stack direction="row" spacing={1}>
       <Tooltip placement="top" title={t('dashboard-events-filter-by-invites')}>
         <IconButtonBig
           data-testid="filter-by-invites"
           color="secondary"
           active={filters.openInvitedMeeting}
           aria-pressed={filters.openInvitedMeeting}
-          size="large"
           onClick={() => onFilterChange('openInvitedMeeting', !filters.openInvitedMeeting)}
         >
           <InviteIcon />
@@ -45,7 +47,6 @@ export const EventFilterButtonBar = ({ filters, onFilterChange }: EventFilterBut
           active={filters.favoriteMeetings}
           aria-pressed={filters.favoriteMeetings}
           color="secondary"
-          size="large"
           onClick={() => onFilterChange('favoriteMeetings', !filters.favoriteMeetings)}
         >
           <FavoriteIcon />

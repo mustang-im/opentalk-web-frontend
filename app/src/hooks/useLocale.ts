@@ -11,22 +11,36 @@ export default function useLocale() {
   const language = i18n.language.split('-')[0] as string;
   const [locale, setLocale] = useState<Locale | undefined>(undefined);
 
-  const loadLocale = useCallback(async () => {
-    if (language === 'en') {
-      // Prevent the case of loading known unsuported locale from date-fns.
-      return en;
-    }
+  const loadLocale = useCallback(
+    async (abortController: AbortController) => {
+      if (language === 'en') {
+        // Prevent the case of loading known unsuported locale from date-fns.
+        return en;
+      }
 
-    try {
-      const locale = await import(`date-fns/locale/${language}/index.js`).then((module) => module.default);
-      return locale;
-    } catch {
-      return en;
-    }
-  }, [language]);
+      try {
+        abortController.signal.throwIfAborted();
+        const locale = await import(`date-fns/locale/${language}/index.js`).then((module) => module.default);
+        abortController.signal.throwIfAborted();
+        return locale;
+      } catch {
+        return en;
+      }
+    },
+    [language]
+  );
 
   useEffect(() => {
-    loadLocale().then((locale) => setLocale(locale));
+    const abortController = new AbortController();
+    loadLocale(abortController).then((locale) => {
+      if (!abortController.signal.aborted) {
+        setLocale(locale);
+      }
+    });
+
+    return function cleanup() {
+      abortController.abort();
+    };
   }, [loadLocale]);
 
   return locale;

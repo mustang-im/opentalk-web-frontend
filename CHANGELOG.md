@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Improve mobile header layout on the meetings overview page ([#2039](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2039))
 - Add multiple new video background images ([#2052](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2052))
 - Remove hover effect and more menu icon disappearing([#2056](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/2056))
 - Add new poll answer button is permanently present on screen while creating ([#1980](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1980))
