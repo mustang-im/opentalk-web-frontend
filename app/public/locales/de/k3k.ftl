@@ -661,6 +661,7 @@ global-someone = Jemand
 dashboard-home = Startseite
 dashboard-meetings = Meetings
 dashboard-meetings-create = Meeting erstellen
+dashboard-meetings-create-title = Mein Meeting
 dashboard-meetings-update = Meeting aktualisieren
 dashboard-settings = Einstellungen
 dashboard-my-profile = Mein Profil
@@ -668,6 +669,12 @@ dashboard-settings-general = Allgemein
 dashboard-settings-account = Benutzerkonto
 dashboard-settings-profile = Mein Profil
 dashboard-settings-storage = Speicher
+
+dashboard-settings-general-title = Allgemeine Einstellungen
+dashboard-settings-account-title = Benutzerkonto Einstellungen
+dashboard-settings-profile-title = Mein Profil Einstellungen
+dashboard-settings-storage-title = Speichereinstellungen
+
 dashboard-logout = Abmelden
 dashboard-account-management = Accountverwaltung
 dashboard-legal = Rechtliches
@@ -732,7 +739,7 @@ dashboard-join-meeting-dialog-invalid-url = Bitte gültige URL einfügen
 dashboard-join-meeting-dialog-join-button = Beitreten
 dashboard-join-meeting-dialog-close-button = Dialog schließen
 
-dashboard-settings-account-title = Allgemeine Informationen
+dashboard-settings-account-section-title = Allgemeine Informationen
 dashboard-settings-account-email-label = E-Mail-Adresse
 dashboard-settings-account-firstname-label = Vorname
 dashboard-settings-account-familyname-label = Name

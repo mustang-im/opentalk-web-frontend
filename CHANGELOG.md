@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 - Rename protocol module to meeting notes ([#1973](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1973))
 - Migrate from yarn to pnpm ([#1955](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1955))
 
+### Improvements to the user experience
+
+- Add missing h1 tag to all dashboard related pages ([#2002](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2002))
+
 ## 1.20.0
 
 ### New Features

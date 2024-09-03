@@ -65,6 +65,11 @@ const MaxWidthTypography = styled(Typography)<{ maxWidth: Property.MaxWidth }>((
   maxWidth,
 }));
 
+const TitleTypography = styled(MaxWidthTypography)({
+  fontSize: '1rem',
+  margin: 0,
+});
+
 const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragmentProps) => {
   const { createdBy, isFavorite, title } = event;
   const eventId = event.id as EventId;
@@ -207,9 +212,9 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
       </Grid>
       <Grid item margin="auto" xs={16} sm={3}>
         <Tooltip translate="no" title={title || ''} describeChild placement="bottom-start">
-          <MaxWidthTypography maxWidth="50ch" variant="body1" noWrap>
+          <TitleTypography maxWidth="50ch" variant="body1" noWrap as="h2">
             {title}
-          </MaxWidthTypography>
+          </TitleTypography>
         </Tooltip>
       </Grid>
       <Hidden xsDown>

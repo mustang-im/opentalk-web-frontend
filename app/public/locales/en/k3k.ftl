@@ -662,12 +662,19 @@ dashboard-home = Home
 dashboard-meetings = Meetings
 dashboard-meetings-create = Create meeting
 dashboard-meetings-update = Update meeting
+dashboard-meetings-create-title = My Meeting
 dashboard-settings = Settings
 dashboard-my-profile = My Profile
 dashboard-settings-general = General
 dashboard-settings-account = Account
 dashboard-settings-profile = Profile
 dashboard-settings-storage = Storage
+
+dashboard-settings-general-title = General settings
+dashboard-settings-account-title = Account settings
+dashboard-settings-profile-title = Profile settings
+dashboard-settings-storage-title = Storage settings
+
 dashboard-logout = Logout
 dashboard-account-management = Account management
 dashboard-legal = Legal
@@ -732,7 +739,7 @@ dashboard-join-meeting-dialog-invalid-url = Please insert valid URL
 dashboard-join-meeting-dialog-join-button = Join
 dashboard-join-meeting-dialog-close-button = Close dialog
 
-dashboard-settings-account-title = General Information
+dashboard-settings-account-section-title = General Information
 dashboard-settings-account-email-label = E-Mail Address
 dashboard-settings-account-firstname-label = First Name
 dashboard-settings-account-familyname-label = Family Name

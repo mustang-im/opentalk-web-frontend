@@ -62,7 +62,7 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
           gap={2}
           zeroMinWidth
         >
-          <Typography variant="h1" component="h2">
+          <Typography variant="h1" component="h1">
             {t('dashboard-events-my-meetings')}
           </Typography>
           <EventPageFilters filters={filters} onFilterChange={onFilterChange} />
@@ -103,7 +103,7 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h1" component="h2">
+          <Typography variant="h1" component="h1">
             {t('dashboard-events-my-meetings')}
           </Typography>
           {isContainingRecurringEvents && (
