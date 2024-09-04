@@ -198,17 +198,18 @@ export const mockStore = (
   options?: {
     video?: boolean;
     screen?: boolean;
-    sip?: boolean;
     raiseHands?: number;
     automodActive?: boolean;
     audio?: number;
+    participantKinds?: ParticipationKind[];
   }
 ) => {
   const participantsIds = range(participantCount);
   const participants = participantsIds.map((index) => {
     const handIsUp = index < (options?.raiseHands || 0);
+    const kind = options?.participantKinds && options.participantKinds[index];
     const participant = {
-      ...mockedParticipant(index, options?.sip ? ParticipationKind.Sip : undefined),
+      ...mockedParticipant(index, kind),
       handIsUp,
     };
     return participant;

@@ -474,6 +474,11 @@ moderator-join-breakout-room = Join room
 fallback-room-title = Meeting room
 
 secure-connection-message = This connection is encrypted and safe.
+secure-connection-registered-only = Only registered participants
+secure-connection-no-sip = No call-in participants
+secure-connection-guests = Please note that guests are also present.
+secure-connection-contaminated = Please note that guests, including call-in participants, are present.
+secure-connection-sip = Please note that call-in participants are also present.
 
 participant-joined-text = Joined {$joinedTime}
 participant-hand-raise-text = Hand raised {$handUpdated}

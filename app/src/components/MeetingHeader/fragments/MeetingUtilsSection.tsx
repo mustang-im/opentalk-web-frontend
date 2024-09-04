@@ -12,8 +12,8 @@ import {
 import { useAppSelector } from '../../../hooks';
 import { selectIsRecordingActive, selectIsStreamActive } from '../../../store/slices/streamingSlice';
 import { selectIsModerator } from '../../../store/slices/userSlice';
+import SecurityBadge from '../../SecurityBadge/SecurityBadge';
 import MeetingTimer from './MeetingTimer';
-import SecureConnectionField from './SecureConnectionField';
 import WaitingParticipantsPopover from './WaitingParticipantsPopover';
 
 const ContainerWithBackground = styled(Stack)(({ theme }) => ({
@@ -47,9 +47,8 @@ const MeetingUtilsSection = () => {
   const isModerator = useAppSelector(selectIsModerator);
   const isRecordingActive = useAppSelector(selectIsRecordingActive);
   const isStreamingActive = useAppSelector(selectIsStreamActive);
+  const showSecurityBadge = window.location.protocol === 'https:';
   const { t } = useTranslation();
-
-  const showSecurityIcon = window.location.protocol === 'https:';
 
   const renderRecordingIcon = () => {
     return (
@@ -67,7 +66,7 @@ const MeetingUtilsSection = () => {
       <ContainerWithBackground spacing={1} direction="row">
         <DurationIcon />
         <MeetingTimer aria-label="current time" />
-        {showSecurityIcon && <SecureConnectionField />}
+        {showSecurityBadge && <SecurityBadge />}
       </ContainerWithBackground>
       {isRecordingActive && renderRecordingIcon()}
       {isStreamingActive && <LiveIcon aria-label={t('livestream-active-label')} />}
