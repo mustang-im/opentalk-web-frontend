@@ -24,6 +24,8 @@ export type {
   TimedEvent,
   RecurrencePattern,
   SharedFolderData,
+  EventInfo,
+  StreamingLink,
 } from './event';
 export type {
   RoomId,

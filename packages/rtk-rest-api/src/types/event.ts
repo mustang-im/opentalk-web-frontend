@@ -5,7 +5,7 @@ import { Opaque } from 'type-fest';
 
 import { CallIn, DateTimeWithTimezone, EntityBase, InviteStatus } from './common';
 import { EventInvite } from './eventInvite';
-import { RoomId } from './room';
+import { InviteCode, RoomId } from './room';
 import { StreamingPlatform } from './streaming';
 
 export type EventId = Opaque<string, 'eventId'>;
@@ -309,6 +309,25 @@ export interface EventException extends BaseEvent, EventOccurrence {
   status?: EventStatus;
   startsAt?: DateTimeWithTimezone;
   endsAt?: DateTimeWithTimezone;
+}
+
+export interface StreamingLink {
+  name: string;
+  url: string;
+}
+
+export interface MeetingDetails {
+  inviteCodeId: InviteCode;
+  callIn?: CallIn;
+  streamingLinks: StreamingLink[];
+}
+
+export interface EventInfo {
+  title: string;
+  id: EventId;
+  isAdhoc: boolean;
+  meetingDetails?: MeetingDetails;
+  roomId: RoomId;
 }
 
 /**

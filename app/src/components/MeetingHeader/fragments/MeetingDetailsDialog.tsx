@@ -3,17 +3,18 @@
 // SPDX-License-Identifier: EUPL-1.2
 import {
   Box,
+  Button,
   Dialog,
-  DialogTitle,
-  Typography,
+  DialogActions,
   DialogContent,
+  DialogTitle,
   Paper,
   Stack,
-  DialogActions,
-  Button,
+  Typography,
   styled,
 } from '@mui/material';
-import { CallIn } from '@opentalk/rest-api-rtk-query';
+import { CallIn, EventInfo } from '@opentalk/rest-api-rtk-query';
+import { StreamingLink } from '@opentalk/rest-api-rtk-query/src/types';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { CloseIcon } from '../../../assets/icons';
@@ -22,7 +23,7 @@ import { useAppSelector } from '../../../hooks';
 import { selectUserAsParticipant } from '../../../store/selectors';
 import { selectCurrentBreakoutRoomId } from '../../../store/slices/breakoutSlice';
 import { selectBaseUrl } from '../../../store/slices/configSlice';
-import { EventInfo, RoomInfo } from '../../../types';
+import { RoomInfo } from '../../../types';
 import { composeInviteUrl } from '../../../utils/apiUtils';
 import { FieldKeys } from '../../InviteToMeeting/fragments/MeetingLinkField';
 
@@ -51,14 +52,16 @@ const DialogActionsLeftAligned = styled(DialogActions)({ justifyContent: 'start'
 
 const MeetingDetailsDialog = ({ open, onClose, eventInfo, roomInfo }: MeetingDetailsDialogProps) => {
   const { t } = useTranslation();
-  const { callIn, inviteCodeId, streamingLinks } = eventInfo.meetingDetails;
+  const meetingDetails = eventInfo.meetingDetails;
   const { title, roomId } = eventInfo;
   const { createdBy: roomOwner, password: roomPassword } = roomInfo;
   const baseUrl = useAppSelector(selectBaseUrl);
   const currentUser = useAppSelector(selectUserAsParticipant);
   const currentBreakoutRoomId = useAppSelector(selectCurrentBreakoutRoomId);
-  const inviteUrl = roomId ? composeInviteUrl(baseUrl, roomId, inviteCodeId, currentBreakoutRoomId) : null;
-  const streamingLinksExist = () => streamingLinks.length > 0;
+  const inviteUrl = roomId
+    ? composeInviteUrl(baseUrl, roomId, meetingDetails?.inviteCodeId, currentBreakoutRoomId)
+    : null;
+  const streamingLinksExist = meetingDetails !== undefined && meetingDetails.streamingLinks.length > 0;
 
   const handleClipboardClick = () => {
     navigator.clipboard.writeText(createClipboardString()).then(() => {
@@ -68,7 +71,7 @@ const MeetingDetailsDialog = ({ open, onClose, eventInfo, roomInfo }: MeetingDet
 
   const handleMailToClick = () => window.open(createMailToLinkString());
 
-  const createStreamingLinkString = () =>
+  const createStreamingLinkString = (streamingLinks: StreamingLink[]) =>
     streamingLinks.map((streamingLink) => `${streamingLink.name}: ${streamingLink.url}`).join('\n');
 
   const createCallInString = (callIn: CallIn) => `${t('global-call-in')}
@@ -77,7 +80,7 @@ ${t('global-call-in-id')}: ${callIn.id}
 ${t('global-call-in-pin')}: ${callIn.password}
   `;
 
-  const getRoomOwnerNameString = () => roomOwner.firstname + ' ' + roomOwner.lastname;
+  const getRoomOwnerNameString = () => `${roomOwner.firstname} ${roomOwner.lastname}`;
 
   const createClipboardString = () => {
     return `${t('meeting-details-dialog-invite-line', { name: currentUser?.displayName })}.
@@ -87,11 +90,11 @@ ${t('global-title')}: ${title}
 ${t('meeting-details-dialog-join-line')}:
 
 ${t('global-meeting-link')}: ${inviteUrl}
-${roomPassword ? t('global-password') + ': ' + roomPassword : ''}
-${callIn ? createCallInString(callIn) : ''}
+${roomPassword ? `${t('global-password')}: ${roomPassword}` : ''}
+${meetingDetails?.callIn ? createCallInString(meetingDetails.callIn) : ''}
 ${
-  streamingLinksExist()
-    ? t('global-streaming-link', { count: streamingLinks.length }) + '\n' + createStreamingLinkString()
+  streamingLinksExist
+    ? `${t('global-streaming-link', { count: meetingDetails.streamingLinks.length })}\n${createStreamingLinkString(meetingDetails.streamingLinks)}`
     : ''
 }`;
   };
@@ -102,7 +105,7 @@ ${
     return encodeURI(`mailto:?${subject}&${body}`);
   };
 
-  const renderStreamingLinks = () => (
+  const renderStreamingLinks = (streamingLinks: StreamingLink[]) => (
     <>
       <Typography variant="h2">{getLabelText(FieldKeys.LivestreamLink)}</Typography>
       {streamingLinks.map((streamingLink) => (
@@ -124,7 +127,9 @@ ${
       components={{ subtitle: <SubTitle />, strong: <strong /> }}
     />
   );
-  const sipLink = callIn ? `${callIn.tel},,${callIn.id},,${callIn.password}` : undefined;
+  const sipLink = meetingDetails?.callIn
+    ? `${meetingDetails.callIn.tel},,${meetingDetails.callIn.id},,${meetingDetails.callIn.password}`
+    : undefined;
   const getNotificationText = (fieldKey: FieldKeys) => t(`meeting-details-dialog-copy-${fieldKey}-success`);
   const getLabelText = (fieldKey: FieldKeys) => t(`meeting-details-dialog-label-${fieldKey}`);
   const getAriaLabelText = (fieldKey: FieldKeys, name?: string) =>
@@ -170,7 +175,7 @@ ${
               notificationText={getNotificationText(FieldKeys.RoomPassword)}
             />
           )}
-          {streamingLinksExist() && renderStreamingLinks()}
+          {streamingLinksExist && renderStreamingLinks(meetingDetails.streamingLinks)}
         </Stack>
       </DialogContent>
 

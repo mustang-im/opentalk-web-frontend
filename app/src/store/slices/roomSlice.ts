@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { AuthTypeError, authError } from '@opentalk/redux-oidc';
-import { InviteCode, RoomId } from '@opentalk/rest-api-rtk-query';
+import { EventInfo, InviteCode, RoomId } from '@opentalk/rest-api-rtk-query';
 import {
-  createAsyncThunk,
-  createSlice,
-  PayloadAction,
-  createListenerMiddleware,
   AnyAction,
   ListenerEffectAPI,
+  PayloadAction,
+  createAsyncThunk,
+  createListenerMiddleware,
+  createSlice,
 } from '@reduxjs/toolkit';
 import convertToCamelCase from 'camelcase-keys';
 import convertToSnakeCase from 'snakecase-keys';
@@ -19,7 +19,6 @@ import { StartRoomError } from '../../api/rest';
 import { notifications } from '../../commonComponents';
 import {
   AutomodSelectionStrategy,
-  EventInfo,
   FetchRequestError,
   FetchRequestState,
   RoomInfo,
