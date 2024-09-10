@@ -28,15 +28,25 @@ module.exports = ({ env }) => {
             plugins: {
                 add: isProductionBuild ? [new BundleAnalyzerPlugin({ analyzerMode })] : []
             },
-			configure: webpackConfig => {
-				const scopePluginIndex = webpackConfig.resolve.plugins.findIndex(
-				({ constructor }) => constructor && constructor.name === "ModuleScopePlugin",
-				);
-
-				webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
-				return webpackConfig;
-			},
+            configure: webpackConfig => {
+                const scopePluginIndex = webpackConfig.resolve.plugins.findIndex(
+                  ({ constructor }) => constructor && constructor.name === "ModuleScopePlugin",
+                );
+                webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
+                return webpackConfig;
+            },
         },
+        devServer: {
+          client: {
+            overlay: {
+              errors: true,
+              warnings: true,
+              // runtime errors are caught by the Glitchtip in the app
+              // and shouldn't be additionally displayed
+              runtimeErrors: false,
+            },
+          },
+        },         
     };
 
 };

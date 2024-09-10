@@ -39,8 +39,8 @@ export class SignalingSocket extends BaseEventEmitter<SignalingConnectionEvent> 
 
   private _debugReconnect = false;
 
-  private heartbeatIntervalId?: NodeJS.Timer;
-  private closeSignalingTimeoutId?: NodeJS.Timer;
+  private heartbeatIntervalId?: NodeJS.Timeout;
+  private closeSignalingTimeoutId?: NodeJS.Timeout;
 
   constructor(url: URL, ticket: string) {
     super();

@@ -1,8 +1,9 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Action, isPlainObject, ThunkDispatch } from '@reduxjs/toolkit';
-import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+import { isPlainObject } from '@reduxjs/toolkit';
+import type { ResponseHandler } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, BaseQueryApi } from '@reduxjs/toolkit/query';
 import snakecaseKeys from 'snakecase-keys';
 
 import { camelcaseKeysDeep } from './types/utils';
@@ -41,25 +42,6 @@ function stripUndefinedRecordValues(obj: Record<string, string | undefined>): Re
   }
   return copy as Record<string, string>;
 }
-
-export interface BaseQueryApi {
-  signal: AbortSignal;
-  dispatch: ThunkDispatch<unknown, unknown, Action<unknown>>;
-  getState: () => unknown;
-  extra: unknown;
-  endpoint: string;
-  type: 'query' | 'mutation';
-  /**
-   * Only available for queries: indicates if a query has been forced,
-   * i.e. it would have been fetched even if there would already be a cache entry
-   * (this does not mean that there is already a cache entry though!)
-   *
-   * This can be used to for example add a `Cache-Control: no-cache` header for
-   * invalidated queries.
-   */
-  forced?: boolean;
-}
-
 export type FetchBaseQueryArgs = {
   baseUrl?:
     | string
@@ -75,8 +57,6 @@ export type FetchBaseQueryArgs = {
 
   paramsSerializer?: (params: Record<string, unknown>) => string;
 } & RequestInit;
-
-type ResponseHandler = 'json' | 'text' | ((response: Response) => Promise<unknown>);
 
 /**
  * This is a modified version of the fetchBaseQuery of rtk-query, with the following changes:

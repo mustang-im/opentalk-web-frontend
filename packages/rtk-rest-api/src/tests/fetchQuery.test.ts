@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { createSlice } from '@reduxjs/toolkit';
-import { createApi } from '@reduxjs/toolkit/query';
+import { createApi, BaseQueryApi } from '@reduxjs/toolkit/query';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
-import fetchQuery, { BaseQueryApi, stripUndefinedHeaderValues } from '../fetchQuery';
+import fetchQuery, { stripUndefinedHeaderValues } from '../fetchQuery';
 import { setupApiStore } from './helpers';
 import { baseQueryHandlers } from './mocks/server';
 
@@ -80,6 +80,7 @@ beforeEach(() => {
     extra: undefined,
     type: 'query',
     endpoint: 'doesntmatterhere',
+    abort: jest.fn(),
   };
 });
 

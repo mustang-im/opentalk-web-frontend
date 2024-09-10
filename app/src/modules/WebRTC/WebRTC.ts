@@ -83,7 +83,7 @@ export class WebRtc extends BaseEventEmitter<WebRtcContextEvent> {
   > = new Map();
 
   private publishers: Map<MediaId, PublisherConnection> = new Map();
-  private statsTimer?: NodeJS.Timer;
+  private statsTimer?: NodeJS.Timeout;
 
   private publisherController = new BandwidthController(
     VideoSetting.Low,

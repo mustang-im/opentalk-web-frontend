@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 ### Internal
 
 - Rename protocol module to meeting notes ([#1973](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1973))
+- Migrate from yarn to pnpm ([#1955](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1955))
 - Setup ESLint react plugin for app module ([#2012](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2012))
 
 ## 1.19.0
@@ -46,6 +47,10 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - Fix: Screen share is still active during/after coffe break ([#1803](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1803))
+
+### Internal
+
+- Setup ESLint react plugin for app module ([#2012](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2012))
 
 ## 1.18.0
 

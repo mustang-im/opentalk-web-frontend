@@ -141,7 +141,7 @@ export interface ConfigState {
  * This invalid URLs are valid, as we check for the loaded property before loading any app related component.
  *
  * These initial state is merged with the content from config.js, thus some defaults are reasonable.
- * DEPLOYMENT should be set to your deployed app. When using yarn start, this is http://localhost:3000/
+ * DEPLOYMENT should be set to your deployed app. When using `pnpm start`, this is http://localhost:3000/
  * CONTROLLER and WS_CONTROLLER MUST be set.
  * OP is your OpenIDConnect Provider
  */

@@ -4,7 +4,7 @@
 import { rest } from 'msw';
 import { v5 as uuidv5 } from 'uuid';
 
-import { CallIn } from '../../types';
+import { CallIn, SipId } from '../../types';
 
 type User = {
   id: string;
@@ -85,7 +85,7 @@ export const generateMockEvent = (
     id: 'string',
     password: 'string',
     call_in: {
-      id: 'string',
+      id: 'string' as SipId,
       password: 'string',
       tel: 'string',
     },

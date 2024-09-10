@@ -6,11 +6,11 @@
   "author": "Daniél Kerkmann",
   "scripts": {
     "build": "shx rm -rf ./dist && rollup -c",
-    "build-ts": "rm -rf /lib && yarn build:esm && yarn build:cjs",
+    "build-ts": "rm -rf /lib && pnpm build:esm && pnpm build:cjs",
     "hot-reload:remove-build": "node -e \"if (require('fs').readFileSync('../../app/hotReload/packages.tsconfig.json', {encoding: 'utf8'}).includes('@opentalk/redux-oidc')){process.exit(1)}\" || shx rm -rf ./dist",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "lint": "eslint . --ext .tsx --ext .ts --ext .js"
+    "lint": "eslint src/ test/ --ext .ts,.tsx"
   },
   "types": "dist/index.d.ts",
   "declaration": true,
@@ -43,8 +43,5 @@
   },
   "dependencies": {
     "jwt-decode": "^4.0.0"
-  },
-  "resolutions": {
-    "ws": "^8.17.1"
   }
 }

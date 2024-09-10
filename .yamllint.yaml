@@ -13,6 +13,7 @@ yaml-files:
 
 ignore: |
    node_modules
+   pnpm-lock.yaml
 
 rules:
   braces: enable

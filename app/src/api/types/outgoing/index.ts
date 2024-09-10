@@ -53,16 +53,56 @@ export type Action =
   | whiteboard.Action
   | recording.Action;
 
+// we need to use type mapping, to convert `Namespaced` interface into types
+// otherwise we will have problems with `convertToCamelCase` function
+// https://github.com/sindresorhus/camelcase-keys/issues/114#issuecomment-1803661357
+type AutomodMessageMappedType = {
+  [P in keyof AutomodMessage]: AutomodMessage[P];
+};
+type BreakoutMessageMappedType = {
+  [P in keyof BreakoutMessage]: BreakoutMessage[P];
+};
+type ChatMessageMappedType = {
+  [P in keyof ChatMessage]: ChatMessage[P];
+};
+type ControlMessageMappedType = {
+  [P in keyof ControlMessage]: ControlMessage[P];
+};
+type ModerationMessageMappedType = {
+  [P in keyof ModerationMessage]: ModerationMessage[P];
+};
+type LegalVoteMessageMappedType = {
+  [P in keyof LegalVoteMessage]: LegalVoteMessage[P];
+};
+type MediaMessageMappedType = {
+  [P in keyof MediaMessage]: MediaMessage[P];
+};
+type PollMessageMappedType = {
+  [P in keyof PollMessage]: PollMessage[P];
+};
+type MeetingNotesMessageMappedType = {
+  [P in keyof MeetingNotesMessage]: MeetingNotesMessage[P];
+};
+type TimerMessageMappedType = {
+  [P in keyof TimerMessage]: TimerMessage[P];
+};
+type WhiteboardMessageMappedType = {
+  [P in keyof WhiteboardMessage]: WhiteboardMessage[P];
+};
+type RecordingMessageMappedType = {
+  [P in keyof RecordingMessage]: RecordingMessage[P];
+};
+
 export type Message =
-  | AutomodMessage
-  | BreakoutMessage
-  | ChatMessage
-  | ControlMessage
-  | ModerationMessage
-  | LegalVoteMessage
-  | MediaMessage
-  | PollMessage
-  | MeetingNotesMessage
-  | TimerMessage
-  | WhiteboardMessage
-  | RecordingMessage;
+  | AutomodMessageMappedType
+  | BreakoutMessageMappedType
+  | ChatMessageMappedType
+  | ControlMessageMappedType
+  | ModerationMessageMappedType
+  | LegalVoteMessageMappedType
+  | MediaMessageMappedType
+  | PollMessageMappedType
+  | MeetingNotesMessageMappedType
+  | TimerMessageMappedType
+  | WhiteboardMessageMappedType
+  | RecordingMessageMappedType;
