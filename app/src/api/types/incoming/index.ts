@@ -7,9 +7,9 @@ import ChatMessage from './chat';
 import ControlMessage from './control';
 import LegalVoteMessage from './legalVote';
 import MediaMessage from './media';
+import MeetingNotesMessage from './meetingNotes';
 import ModerationMessage from './moderation';
 import PollMessage from './poll';
-import ProtocolMessage from './protocol';
 import SharedFolderMessage from './sharedFolder';
 import StreamingMessage from './streaming';
 import TimerMessage from './timer';
@@ -20,7 +20,7 @@ export * as control from './control';
 export * as chat from './chat';
 export * as moderation from './moderation';
 export * as poll from './poll';
-export * as protocol from './protocol';
+export * as meetingNotes from './meetingNotes';
 export * as timer from './timer';
 export * as whiteboard from './whiteboard';
 export * as media from './media';
@@ -38,7 +38,7 @@ export type Message =
   | MediaMessage
   | PollMessage
   | ModerationMessage
-  | ProtocolMessage
+  | MeetingNotesMessage
   | TimerMessage
   | WhiteboardMessage
   | StreamingMessage

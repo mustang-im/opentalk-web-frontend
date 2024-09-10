@@ -4,7 +4,7 @@
 import { Store } from '@reduxjs/toolkit';
 
 import { join, leave } from '../../store/slices/participantsSlice';
-import { ParticipantId, ParticipationKind, ProtocolAccess, WaitingState } from '../../types';
+import { ParticipantId, ParticipationKind, MeetingNotesAccess, WaitingState } from '../../types';
 import { screen, render, createStore, waitFor, fireEvent } from '../../utils/testUtils';
 import Chat from './Chat';
 
@@ -64,7 +64,7 @@ describe('Chat component', () => {
           participationKind: ParticipationKind.User,
           lastActive: '',
           waitingState: WaitingState.Joined,
-          protocolAccess: ProtocolAccess.None,
+          meetingNotesAccess: MeetingNotesAccess.None,
           isPresenter: false,
           isSpeaking: false,
           isRoomOwner: false,

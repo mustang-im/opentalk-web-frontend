@@ -5,13 +5,13 @@ import { styled, Pagination } from '@mui/material';
 import React, { useMemo, useEffect, useCallback, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { WhiteboardIcon, ProtocolIcon } from '../../../assets/icons';
+import { WhiteboardIcon, MeetingNotesIcon } from '../../../assets/icons';
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectPollsAndVotingsCount } from '../../../store/selectors';
+import { selectMeetingNotesUrl } from '../../../store/slices/meetingNotesSlice';
 import { selectAllOnlineParticipants } from '../../../store/slices/participantsSlice';
-import { selectProtocolUrl } from '../../../store/slices/protocolSlice';
 import { selectIsSharedFolderAvailable } from '../../../store/slices/sharedFolderSlice';
 import {
   updatedCinemaLayout,
@@ -19,7 +19,7 @@ import {
   setPaginationPage,
   toggleDebugMode,
   selectPaginationPageState,
-  selectIsCurrentProtocolHighlighted,
+  selectIsCurrentMeetingNotesHighlighted,
 } from '../../../store/slices/uiSlice';
 import { selectIsCurrentWhiteboardHighlighted } from '../../../store/slices/uiSlice';
 import { selectIsWhiteboardAvailable } from '../../../store/slices/whiteboardSlice';
@@ -108,16 +108,16 @@ const DesktopMeetingHeader = () => {
   const selectedLayout = useAppSelector(selectCinemaLayout);
   const participants = useAppSelector(selectAllOnlineParticipants);
   const selectedPage = useAppSelector(selectPaginationPageState);
-  const protocolUrl = useAppSelector(selectProtocolUrl);
+  const meetingNotesUrl = useAppSelector(selectMeetingNotesUrl);
   const isWhiteboardAvailable = useAppSelector(selectIsWhiteboardAvailable);
   const isCurrentWhiteboardHighlighted = useAppSelector(selectIsCurrentWhiteboardHighlighted);
-  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
+  const isCurrentMeetingNotesHighlighted = useAppSelector(selectIsCurrentMeetingNotesHighlighted);
   const showWhiteboardIcon = isWhiteboardAvailable && selectedLayout !== LayoutOptions.Whiteboard;
   const votingsAndPollsCount = useAppSelector(selectPollsAndVotingsCount);
   const showVotesAndPolls = votingsAndPollsCount > 0;
   const isSharedFolderAvailable = useAppSelector(selectIsSharedFolderAvailable);
   const { t } = useTranslation();
-  const isProtocolActive = selectedLayout === LayoutOptions.Protocol;
+  const isMeetingNotesActive = selectedLayout === LayoutOptions.MeetingNotes;
   const isWhiteboardActive = selectedLayout === LayoutOptions.Whiteboard;
   const [clickCount, setClickCount] = useState(0);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
@@ -159,25 +159,27 @@ const DesktopMeetingHeader = () => {
     dispatch(updatedCinemaLayout(layout));
   };
 
-  const handleProtocolClick = useCallback(() => {
-    if (selectedLayout !== LayoutOptions.Protocol) {
-      handleSelectedView(LayoutOptions.Protocol);
+  const handleMeetingNotesClick = useCallback(() => {
+    if (selectedLayout !== LayoutOptions.MeetingNotes) {
+      handleSelectedView(LayoutOptions.MeetingNotes);
     }
   }, [selectedLayout, handleSelectedView]);
 
-  const isAnyFeatureActive = Boolean(showWhiteboardIcon || protocolUrl || showVotesAndPolls || isSharedFolderAvailable);
+  const isAnyFeatureActive = Boolean(
+    showWhiteboardIcon || meetingNotesUrl || showVotesAndPolls || isSharedFolderAvailable
+  );
 
   const isPaginationVisible = pageCount > 1;
 
-  const renderProtocolButton = () => {
+  const renderMeetingNotesButton = () => {
     return (
       <MeetingHeaderButton
-        active={isCurrentProtocolHighlighted}
-        onClick={handleProtocolClick}
-        aria-label={t('protocol-button-show')}
-        aria-pressed={isProtocolActive}
+        active={isCurrentMeetingNotesHighlighted}
+        onClick={handleMeetingNotesClick}
+        aria-label={t('meeting-notes-button-show')}
+        aria-pressed={isMeetingNotesActive}
       >
-        <ProtocolIcon />
+        <MeetingNotesIcon />
       </MeetingHeaderButton>
     );
   };
@@ -228,7 +230,7 @@ const DesktopMeetingHeader = () => {
         {isAnyFeatureActive && (
           <>
             {showWhiteboardIcon && renderWhiteboardButton()}
-            {protocolUrl && selectedLayout !== LayoutOptions.Protocol && renderProtocolButton()}
+            {meetingNotesUrl && selectedLayout !== LayoutOptions.MeetingNotes && renderMeetingNotesButton()}
             {isSharedFolderAvailable && <SharedFolderPopover />}
             {showVotesAndPolls && <VotesAndPollsResultsPopover />}
           </>

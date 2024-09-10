@@ -6,7 +6,7 @@ import { createModule, Namespaced, ParticipantId } from '../../../types';
 import { createSignalingApiCall } from '../../createSignalingApiCall';
 import { sendMessage } from '../../index';
 
-export interface SelectProtocolAccess {
+export interface SelectMeetingNotesAccess {
   action: 'select_writer' | 'deselect_writer';
   participantIds: Array<ParticipantId>;
 }
@@ -15,12 +15,12 @@ export interface GeneratePdf {
   action: 'generate_pdf';
 }
 
-export type Action = SelectProtocolAccess | GeneratePdf;
-export type Protocol = Namespaced<Action, 'protocol'>;
+export type Action = SelectMeetingNotesAccess | GeneratePdf;
+export type MeetingNotes = Namespaced<Action, 'meeting_notes'>;
 
-export const selectWriter = createSignalingApiCall<SelectProtocolAccess>('protocol', 'select_writer');
-export const deselectWriter = createSignalingApiCall<SelectProtocolAccess>('protocol', 'deselect_writer');
-export const uploadPdf = createSignalingApiCall<GeneratePdf>('protocol', 'generate_pdf');
+export const selectWriter = createSignalingApiCall<SelectMeetingNotesAccess>('meeting_notes', 'select_writer');
+export const deselectWriter = createSignalingApiCall<SelectMeetingNotesAccess>('meeting_notes', 'deselect_writer');
+export const uploadPdf = createSignalingApiCall<GeneratePdf>('meeting_notes', 'generate_pdf');
 
 export const handler = createModule<RootState>((builder) => {
   builder.addCase(selectWriter.action, (_state, action) => {
@@ -34,4 +34,4 @@ export const handler = createModule<RootState>((builder) => {
   });
 });
 
-export default Protocol;
+export default MeetingNotes;

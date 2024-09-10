@@ -6,7 +6,7 @@ enum LayoutOptions {
   Grid = 'grid',
   Speaker = 'speaker',
   Whiteboard = 'whiteboard',
-  Protocol = 'protocol',
+  MeetingNotes = 'meeting-notes',
 }
 
 export default LayoutOptions;

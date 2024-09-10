@@ -15,7 +15,7 @@ import {
 import { useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BurgermenuIcon, HelpIcon, ProtocolIcon, HelpSquareIcon, BugIcon } from '../../../assets/icons';
+import { BurgermenuIcon, HelpIcon, MeetingNotesIcon, HelpSquareIcon, BugIcon } from '../../../assets/icons';
 import { createOpenTalkTheme } from '../../../assets/themes/opentalk';
 import { IconButton } from '../../../commonComponents';
 import { useAppSelector } from '../../../hooks';
@@ -194,7 +194,7 @@ const MyMeetingMenu = () => {
             {isMobile && (
               <MenuItem>
                 <ListItemIcon aria-hidden={true}>
-                  <ProtocolIcon />
+                  <MeetingNotesIcon />
                 </ListItemIcon>
               </MenuItem>
             )}

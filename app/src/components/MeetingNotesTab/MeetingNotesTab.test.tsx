@@ -3,14 +3,14 @@
 // SPDX-License-Identifier: EUPL-1.2
 import React from 'react';
 
-import { ParticipantId, ProtocolParticipant } from '../../types';
+import { ParticipantId, MeetingNotesParticipant } from '../../types';
 import { render, configureStore, screen, fireEvent, cleanup, act } from '../../utils/testUtils';
-import ProtocolTab from './ProtocolTab';
+import MeetingNotesTab from './MeetingNotesTab';
 
-describe.skip('ProtocolTab component tests', () => {
+describe.skip('MeetingNotesTab component tests', () => {
   const { store } = configureStore();
 
-  const initialUserValue: ProtocolParticipant[] = [
+  const initialUserValue: MeetingNotesParticipant[] = [
     {
       id: '12345' as ParticipantId,
       displayName: 'test name',
@@ -20,9 +20,9 @@ describe.skip('ProtocolTab component tests', () => {
 
   afterAll(() => cleanup());
 
-  test('ProtocolTab component should be rendered without breaking', async () => {
-    await render(<ProtocolTab />, store);
-    const nextButton = screen.getByRole('button', { name: /protocol-invite-send-button/i });
+  test('MeetingNotesTab component should be rendered without breaking', async () => {
+    await render(<MeetingNotesTab />, store);
+    const nextButton = screen.getByRole('button', { name: /meeting-notes-invite-send-button/i });
     expect(nextButton).toBeInTheDocument();
     expect(nextButton).toBeDisabled();
   });
@@ -31,9 +31,9 @@ describe.skip('ProtocolTab component tests', () => {
     const setState = jest.fn();
     jest.spyOn(React, 'useState').mockImplementationOnce(() => [initialUserValue, setState]);
 
-    await render(<ProtocolTab />, store);
+    await render(<MeetingNotesTab />, store);
 
-    const sendInvitationButton = screen.getByLabelText(/protocol-invite-send-button/i);
+    const sendInvitationButton = screen.getByLabelText(/meeting-notes-invite-send-button/i);
     expect(sendInvitationButton).toBeInTheDocument();
     expect(sendInvitationButton).toBeEnabled();
   });
@@ -43,9 +43,9 @@ describe.skip('ProtocolTab component tests', () => {
     // const realUseState = React.useState;
     // jest.spyOn(React, 'useState').mockImplementationOnce(() => realUseState(initialUserValue));
 
-    await render(<ProtocolTab />, store);
+    await render(<MeetingNotesTab />, store);
 
-    const sendInvitationButton = screen.getByLabelText(/protocol-invite-send-button/i);
+    const sendInvitationButton = screen.getByLabelText(/meeting-notes-invite-send-button/i);
     sendInvitationButton.onclick = sendInvitations;
     expect(sendInvitationButton).toBeInTheDocument();
     expect(sendInvitationButton).toBeEnabled();

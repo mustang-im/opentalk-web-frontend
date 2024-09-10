@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { Namespaces } from '@opentalk/rest-api-rtk-query';
 
-import { ProtocolState } from './protocol';
+import { MeetingNotesState } from './meetingNotes';
 import { TimerState } from './timer';
 
 export type ParticipantId = string & { readonly __tag: unique symbol };
@@ -106,7 +106,7 @@ export interface BackendParticipant {
   id: ParticipantId;
   // Core fields are present in any case
   control: IParticipantControl;
-  protocol?: ProtocolState;
+  meetingNotes?: MeetingNotesState;
   media: ParticipantMediaState;
   timer?: TimerIsReady;
 }

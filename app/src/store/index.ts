@@ -18,10 +18,10 @@ import eventReducer from './slices/eventSlice';
 import legalVoteReducer from './slices/legalVoteSlice';
 import mediaReducer, { mediaMiddleware } from './slices/mediaSlice';
 import subscribersReducer, { mediaSubscriberMiddleware } from './slices/mediaSubscriberSlice';
+import meetingNotesReducer from './slices/meetingNotesSlice';
 import moderationReducer from './slices/moderationSlice';
 import participantsReducer, { participantsMiddleware } from './slices/participantsSlice';
 import pollReducer from './slices/pollSlice';
-import protocolReducer from './slices/protocolSlice';
 import roomReducer, { roomMiddleware } from './slices/roomSlice';
 import sharedFolderReducer from './slices/sharedFolderSlice';
 import slotReducer from './slices/slotSlice';
@@ -89,7 +89,7 @@ export const appReducers = {
   stats: connectionStatsReducer,
   [restApi.reducerPath]: restApi.reducer,
   events: eventReducer,
-  protocol: protocolReducer,
+  meetingNotes: meetingNotesReducer,
   timer: timerReducer,
   whiteboard: whiteboardReducer,
   streaming: streamingReducer,

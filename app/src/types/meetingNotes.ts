@@ -3,19 +3,19 @@
 // SPDX-License-Identifier: EUPL-1.2
 import { ParticipantId } from './common';
 
-export interface ProtocolParticipant {
+export interface MeetingNotesParticipant {
   id: ParticipantId;
   displayName: string;
   avatarUrl?: string;
   isSelected: boolean;
 }
 
-export enum ProtocolAccess {
+export enum MeetingNotesAccess {
   Read = 'read',
   Write = 'write',
   None = 'none',
 }
 
-export interface ProtocolState {
+export interface MeetingNotesState {
   readonly: boolean;
 }

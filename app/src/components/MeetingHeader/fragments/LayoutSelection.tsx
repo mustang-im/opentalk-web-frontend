@@ -15,15 +15,15 @@ import {
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FullscreenViewIcon, GridViewIcon, ProtocolIcon, SpeakerViewIcon } from '../../../assets/icons';
+import { FullscreenViewIcon, GridViewIcon, MeetingNotesIcon, SpeakerViewIcon } from '../../../assets/icons';
 import { IconButton } from '../../../commonComponents';
 import LayoutOptions from '../../../enums/LayoutOptions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
-import { selectIsProtocolAvailable } from '../../../store/slices/protocolSlice';
+import { selectIsMeetingNotesAvailable } from '../../../store/slices/meetingNotesSlice';
 import {
   selectCinemaLayout,
-  selectIsCurrentProtocolHighlighted,
+  selectIsCurrentMeetingNotesHighlighted,
   toggledFullScreenMode,
   updatedCinemaLayout,
 } from '../../../store/slices/uiSlice';
@@ -85,14 +85,14 @@ const LayoutSelection = () => {
   const { t } = useTranslation();
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const isViewPopoverOpen = Boolean(anchorElement);
-  const isProtocolAvailable = useAppSelector(selectIsProtocolAvailable);
-  const isCurrentProtocolHighlighted = useAppSelector(selectIsCurrentProtocolHighlighted);
-  const isProtocolActive = selectedLayout === LayoutOptions.Protocol;
+  const isMeetingNotesAvailable = useAppSelector(selectIsMeetingNotesAvailable);
+  const isCurrentMeetingNotesHighlighted = useAppSelector(selectIsCurrentMeetingNotesHighlighted);
+  const isMeetingNotesActive = selectedLayout === LayoutOptions.MeetingNotes;
 
   /**
    * Placeholder condition for all features that has to show indicator.
    */
-  const showButtonIndicator = isCurrentProtocolHighlighted;
+  const showButtonIndicator = isCurrentMeetingNotesHighlighted;
 
   const openFullscreenView = useCallback(() => {
     setAnchorElement(null);
@@ -112,8 +112,8 @@ const LayoutSelection = () => {
     switch (selectedLayout) {
       case LayoutOptions.Grid:
         return <GridViewIcon />;
-      case LayoutOptions.Protocol:
-        return isMobile ? <ProtocolIcon /> : <Typography noWrap>{t('protocol-hide')}</Typography>;
+      case LayoutOptions.MeetingNotes:
+        return isMobile ? <MeetingNotesIcon /> : <Typography noWrap>{t('meeting-notes-hide')}</Typography>;
       case LayoutOptions.Whiteboard:
         return <Typography noWrap>{t('whiteboard-hide')}</Typography>;
       case LayoutOptions.Speaker:
@@ -171,19 +171,19 @@ const LayoutSelection = () => {
             </ListItemIcon>
             {t('conference-view-fullscreen')}
           </MenuItem>
-          {isMobile && isProtocolAvailable && (
+          {isMobile && isMeetingNotesAvailable && (
             <MenuItem
               onClick={() => {
                 handleSelectedView(
-                  selectedLayout === LayoutOptions.Protocol ? LayoutOptions.Grid : LayoutOptions.Protocol
+                  selectedLayout === LayoutOptions.MeetingNotes ? LayoutOptions.Grid : LayoutOptions.MeetingNotes
                 );
               }}
-              hasIndicator={isCurrentProtocolHighlighted}
+              hasIndicator={isCurrentMeetingNotesHighlighted}
             >
               <ListItemIcon aria-hidden={true}>
-                <ProtocolIcon />
+                <MeetingNotesIcon />
               </ListItemIcon>
-              {t(isProtocolActive ? 'protocol-hide' : 'protocol-open')}
+              {t(isMeetingNotesActive ? 'meeting-notes-hide' : 'meeting-notes-open')}
             </MenuItem>
           )}
         </PopoverContainer>

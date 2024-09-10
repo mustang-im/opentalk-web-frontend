@@ -8,11 +8,11 @@ import { RootState } from '../';
 import { Role } from '../../api/types/incoming/control';
 import { sendChatMessage } from '../../api/types/outgoing/chat';
 import { lowerHand, raiseHand } from '../../api/types/outgoing/control';
-import { GroupId, Participant, ParticipantId, ParticipationKind, ProtocolAccess, WaitingState } from '../../types';
+import { GroupId, Participant, ParticipantId, ParticipationKind, MeetingNotesAccess, WaitingState } from '../../types';
 import { initSentryReportWithUser } from '../../utils/glitchtipUtils';
 import { joinSuccess, login, startRoom } from '../commonActions';
 import { setAudioEnable, setScreenShare, setVideoEnable, setSpeakerActivity } from './mediaSlice';
-import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
+import { setMeetingNotesReadUrl, setMeetingNotesWriteUrl } from './meetingNotesSlice';
 import { connectionClosed, fetchRoomByInviteId } from './roomSlice';
 
 interface UserState {
@@ -25,7 +25,7 @@ interface UserState {
   lastActive?: string;
   joinedAt?: string;
   isPresenter: boolean;
-  protocolAccess: ProtocolAccess;
+  meetingNotesAccess: MeetingNotesAccess;
   isRoomOwner: boolean;
 }
 
@@ -35,7 +35,7 @@ const initialState: UserState = {
   displayName: '',
   role: Role.User,
   isPresenter: false,
-  protocolAccess: 'none' as ProtocolAccess.None, // this will be fixed with the next version of the ts-jest
+  meetingNotesAccess: 'none' as MeetingNotesAccess.None, // this will be fixed with the next version of the ts-jest
   isRoomOwner: false,
 };
 
@@ -121,11 +121,11 @@ export const userSlice = createSlice({
     builder.addCase(sendChatMessage.action, (state) => {
       state.lastActive = new Date().toISOString();
     });
-    builder.addCase(setProtocolReadUrl, (state) => {
-      state.protocolAccess = ProtocolAccess.Read;
+    builder.addCase(setMeetingNotesReadUrl, (state) => {
+      state.meetingNotesAccess = MeetingNotesAccess.Read;
     });
-    builder.addCase(setProtocolWriteUrl, (state) => {
-      state.protocolAccess = ProtocolAccess.Write;
+    builder.addCase(setMeetingNotesWriteUrl, (state) => {
+      state.meetingNotesAccess = MeetingNotesAccess.Write;
     });
   },
 });
@@ -140,7 +140,7 @@ export const selectGroups = createSelector(userState, (state) => state.groups);
 export const selectDisplayName = createSelector(userState, (state) => state.displayName);
 export const selectAvatarUrl = createSelector(userState, (state) => state.avatarUrl);
 export const selectIsPresenter = createSelector(userState, (state) => state.isPresenter);
-export const selectUserProtocolAccess = createSelector(userState, (state) => state.protocolAccess);
+export const selectUserMeetingNotesAccess = createSelector(userState, (state) => state.meetingNotesAccess);
 export const selectIsModerator = createSelector(userState, (state) => state.role === Role.Moderator);
 export const selectIsGuest = createSelector(userState, (state) => state.role === Role.Guest);
 export const selectRole = createSelector(userState, (state) => state.role);
@@ -167,7 +167,7 @@ export const selectUserAsPartialParticipant = createSelector(
       leftAt: null,
       participationKind,
       waitingState: WaitingState.Joined,
-      protocolAccess: state.protocolAccess,
+      meetingNotesAccess: state.meetingNotesAccess,
       isPresenter: state.isPresenter,
       isSpeaking: false,
       isRoomOwner,

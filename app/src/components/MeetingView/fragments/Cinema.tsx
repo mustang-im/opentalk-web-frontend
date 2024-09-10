@@ -10,7 +10,7 @@ import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectCinemaLayout } from '../../../store/slices/uiSlice';
 import FullscreenView from '../../FullscreenView';
 import GridView from '../../GridView';
-import ProtocolView from '../../ProtocolView';
+import MeetingNotesView from '../../MeetingNotesView';
 import SpeakerView from '../../SpeakerView';
 import WhiteboardView from '../../Whiteboard';
 
@@ -33,8 +33,8 @@ const Cinema = () => {
           return <SpeakerView />;
         case LayoutOptions.Whiteboard:
           return <WhiteboardView />;
-        case LayoutOptions.Protocol:
-          return <ProtocolView />;
+        case LayoutOptions.MeetingNotes:
+          return <MeetingNotesView />;
         case LayoutOptions.Grid:
         default:
           return <GridView />;

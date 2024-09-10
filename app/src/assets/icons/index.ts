@@ -50,6 +50,7 @@ import LiveIcon from './LiveIcon';
 import LockedIcon from './LockedIcon';
 import Logo from './Logo';
 import LogoSmallIcon from './LogoSmallIcon';
+import MeetingNotesIcon from './MeetingNotesIcon';
 import MeetingsIcon from './MeetingsIcon';
 import MicOffIcon from './MicOffIcon';
 import MicOnIcon from './MicOnIcon';
@@ -65,7 +66,6 @@ import PhoneIcon from './PhoneIcon';
 import PictureIcon from './PictureIcon';
 import PinIcon from './PinIcon';
 import PollIcon from './PollIcon';
-import ProtocolIcon from './ProtocolIcon';
 import RaiseHandOffIcon from './RaiseHandOffIcon';
 import RaiseHandOnIcon from './RaiseHandOnIcon';
 import RecordingsIcon from './RecordingsIcon';
@@ -155,7 +155,7 @@ export {
   PictureIcon,
   PinIcon,
   PollIcon,
-  ProtocolIcon,
+  MeetingNotesIcon,
   RaiseHandOffIcon,
   RaiseHandOnIcon,
   RecordingsIcon,

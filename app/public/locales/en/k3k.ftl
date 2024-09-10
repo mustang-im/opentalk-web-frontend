@@ -275,7 +275,7 @@ moderationbar-button-timer-tooltip = Timer
 moderationbar-button-coffee-break-tooltip = Coffee break
 moderationbar-button-speaker-queue-tooltip = This feature is under development - OpenTalk can keep track of speaking times, even if there are many participants in a session, and automatically call everyone in turn to contribute. While one participant is still speaking, the next speaker will receive a visual indication that they are up next. Helping you to conduct meetings efficiently without confusion - that's OpenTalk.
 moderationbar-button-wheel-tooltip = This feature is under development - Who is up next? With our "Wheel of names", you can leave it to chance to decide. A fun feature that can introduce excitement and entertainment in the classroom. But the wheel of names can do more: If the objective is that no one is to be left out of the conversation, the wheel can ensure that those who have already spoken will not be called up again.
-moderationbar-button-protocol-tooltip = Meeting notes
+moderationbar-button-meeting-notes-tooltip = Meeting notes
 moderationbar-button-whiteboard-tooltip = Whiteboard
 moderationbar-button-reset-handraises-tooltip = Reset raised hands
 moderationbar-button-debriefing = Debriefing
@@ -941,21 +941,21 @@ feedback-dialog-form-validation = required
 
 protocol-join-session = Join meeting notes session
 
-protocol-invite-button = Assign write permissions to participants
-protocol-edit-invite-button = Manage write permissions
+meeting-notes-invite-button = Assign write permissions to participants
+meeting-notes-edit-invite-button = Manage write permissions
 protocol-invite-reader-message = Meeting note session has been started
 protocol-invite-writer-message = Your where chosen to write a meeting note for this session
-protocol-invite-send-button = Show meeting notes to all
-protocol-update-invite-send-button = Save changes
-protocol-upload-pdf-button = Create meeting notes PDF
-protocol-upload-pdf-message = Meeting notes PDF created
-protocol-created-notification = Meeting notes are created.
-protocol-created-all-notification = Meeting notes were set up for all.
-protocol-new-protocol-message-button = Open
-protocol-hide = Hide meeting notes
-protocol-open = Open meeting notes
-protocol-tab-title = Create meeting notes
-protocol-button-show = Show meeting notes
+meeting-notes-invite-send-button = Show meeting notes to all
+meeting-notes-update-invite-send-button = Save changes
+meeting-notes-upload-pdf-button = Create meeting notes PDF
+meeting-notes-upload-pdf-message = Meeting notes PDF created
+meeting-notes-created-notification = Meeting notes are created.
+meeting-notes-created-all-notification = Meeting notes were set up for all.
+meeting-notes-new-meeting-notes-message-button = Open
+meeting-notes-hide = Hide meeting notes
+meeting-notes-open = Open meeting notes
+meeting-notes-tab-title = Create meeting notes
+meeting-notes-button-show = Show meeting notes
 
 beta-flag-tooltip-text = You are using the <demoLink>beta version</demoLink> of OpenTalk. We are continuously developing new features and provide them as an early preview in our demo environment. Please note that there may be restrictions in using this version. Please feel free to send us any criticism, ideas or bugs to <reportEmailLink>{$reportEmail}</reportEmailLink>.<br /><br />Say Hello to OpenTalk!
 

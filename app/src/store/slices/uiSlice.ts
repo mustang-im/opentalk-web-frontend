@@ -23,9 +23,9 @@ import {
 import { hangUp, joinSuccess } from '../commonActions';
 import { started as legalVoteStarted } from './legalVoteSlice';
 import { removed } from './mediaSubscriberSlice';
+import { setMeetingNotesReadUrl, setMeetingNotesWriteUrl } from './meetingNotesSlice';
 import { leave, breakoutLeft } from './participantsSlice';
 import { started as PollStarted } from './pollSlice';
-import { setProtocolReadUrl, setProtocolWriteUrl } from './protocolSlice';
 import { connectionClosed } from './roomSlice';
 import { timerStarted, timerStopped } from './timerSlice';
 import { setWhiteboardAvailable } from './whiteboardSlice';
@@ -54,7 +54,7 @@ interface UIState {
   debugMode: boolean;
   chatSearchValue: string;
   isCurrentWhiteboardHighlighted?: boolean;
-  isCurrentProtocolHighlighted?: boolean;
+  isCurrentMeetingNotesHighlighted?: boolean;
   showCoffeeBreakCurtain: boolean;
   activeTab: ModerationTabKey;
   isFullscreenMode: boolean;
@@ -87,7 +87,7 @@ const initialState: UIState = {
   debugMode: false,
   chatSearchValue: '',
   isCurrentWhiteboardHighlighted: undefined,
-  isCurrentProtocolHighlighted: undefined,
+  isCurrentMeetingNotesHighlighted: undefined,
   showCoffeeBreakCurtain: false,
   activeTab: ModerationTabKey.Home,
   isFullscreenMode: false,
@@ -127,8 +127,8 @@ export const uiSlice = createSlice({
       if (action.payload === LayoutOptions.Whiteboard && state.isCurrentWhiteboardHighlighted) {
         state.isCurrentWhiteboardHighlighted = false;
       }
-      if (action.payload === LayoutOptions.Protocol && state.isCurrentProtocolHighlighted) {
-        state.isCurrentProtocolHighlighted = false;
+      if (action.payload === LayoutOptions.MeetingNotes && state.isCurrentMeetingNotesHighlighted) {
+        state.isCurrentMeetingNotesHighlighted = false;
       }
     },
     setPaginationPage: (state, action: PayloadAction<number>) => {
@@ -152,8 +152,8 @@ export const uiSlice = createSlice({
     setChatSearchValue(state, { payload: nextSearchValue }: PayloadAction<string>) {
       state.chatSearchValue = nextSearchValue;
     },
-    setProtocolHighlight(state, { payload: highlight }: PayloadAction<boolean>) {
-      state.isCurrentProtocolHighlighted = highlight;
+    setMeetingNotesHighlight(state, { payload: highlight }: PayloadAction<boolean>) {
+      state.isCurrentMeetingNotesHighlighted = highlight;
     },
     setCoffeeBreakCurtainOpenFlag(state, { payload: isOpenFlag }: PayloadAction<boolean>) {
       state.showCoffeeBreakCurtain = isOpenFlag;
@@ -227,11 +227,11 @@ export const uiSlice = createSlice({
       state.isCurrentWhiteboardHighlighted = true;
       state.cinemaLayout = LayoutOptions.Whiteboard;
     });
-    builder.addCase(setProtocolReadUrl, (state) => {
-      state.isCurrentProtocolHighlighted = true;
+    builder.addCase(setMeetingNotesReadUrl, (state) => {
+      state.isCurrentMeetingNotesHighlighted = true;
     });
-    builder.addCase(setProtocolWriteUrl, (state) => {
-      state.isCurrentProtocolHighlighted = true;
+    builder.addCase(setMeetingNotesWriteUrl, (state) => {
+      state.isCurrentMeetingNotesHighlighted = true;
     });
     builder.addCase(legalVoteStarted, (state, { payload: vote }: PayloadAction<VoteStarted>) => {
       state.voteOrPollIdToShow = vote.legalVoteId;
@@ -278,7 +278,7 @@ export const {
   setVoteOrPollIdToShow,
   toggleDebugMode,
   setChatSearchValue,
-  setProtocolHighlight,
+  setMeetingNotesHighlight,
   setCoffeeBreakCurtainOpenFlag,
   setActiveTab,
   toggledFullScreenMode,
@@ -305,7 +305,7 @@ export const selectVoteOrPollIdToShow = (state: RootState) => state.ui.voteOrPol
 export const selectDebugMode = (state: RootState) => state.ui.debugMode;
 export const selectChatSearchValue = (state: RootState) => state.ui.chatSearchValue;
 export const selectIsCurrentWhiteboardHighlighted = (state: RootState) => state.ui.isCurrentWhiteboardHighlighted;
-export const selectIsCurrentProtocolHighlighted = (state: RootState) => state.ui.isCurrentProtocolHighlighted;
+export const selectIsCurrentMeetingNotesHighlighted = (state: RootState) => state.ui.isCurrentMeetingNotesHighlighted;
 export const selectShowCoffeeBreakCurtain = (state: RootState) => state.ui.showCoffeeBreakCurtain;
 export const selectActiveTab = (state: RootState) => state.ui.activeTab;
 export const selectIsFullscreenMode = (state: RootState) => state.ui.isFullscreenMode;
