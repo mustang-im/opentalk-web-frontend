@@ -272,9 +272,10 @@ deploy:review-app:
       --set ot_backend_url=controller.review-latest.kube.opentalk.run
       --set ot_feature_shared_folder="true"
       --set ot_sentry_dsn=$SENTRY_DSN_TESTING
-      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-type=basic'
-      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-secret=web-frontend-basic-auth'
-      --set-string 'ingress.annotations.nginx\.ingress\.kubernetes\.io/auth-realm=Authentication Required'
+      --set-string 'ingress.annotations.cert-manager\.io/cluster-issuer=letsencrypt-prod'
+      --set-string 'ingress.annotations.kubernetes\.io/ingress\.class=traefik'
+      --set-string
+      'ingress.annotations.traefik\.ingress\.kubernetes\.io/router\.middlewares=review-latest-auth@kubernetescrd'
       -n review-latest --create-namespace --wait
     - echo "https://${BASIC_AUTH_USER}:${BASIC_AUTH_PASS}@www.${CI_MERGE_REQUEST_IID}.review-latest.kube.opentalk.run"
 
