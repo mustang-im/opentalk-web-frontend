@@ -222,7 +222,9 @@ const Home = () => {
   return (
     <Container>
       <HeaderContainer>
-        <Typography>{t('dashboard-meeting-card-title-next-meetings')}</Typography>
+        <Typography component="h1" variant="body1">
+          {t('dashboard-meeting-card-title-next-meetings')}
+        </Typography>
         {!isDesktop ? (
           <HeaderButtonsContainer container>
             {renderStartDirectMeetingButton()}

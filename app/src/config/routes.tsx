@@ -8,7 +8,7 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { To, RouteObject, useNavigate, Outlet, useParams } from 'react-router-dom';
 
-import { notifications } from '../commonComponents';
+import { notifications, VisuallyHiddenTitle } from '../commonComponents';
 import Error from '../components/Error';
 import { useAppSelector } from '../hooks';
 import { useInviteCode } from '../hooks/useInviteCode';
@@ -163,10 +163,20 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
       },
       {
         path: 'legal',
-        element: <></>,
+        element: (
+          <>
+            <Outlet />
+          </>
+        ),
         children: [
-          { path: 'imprint', element: <></> },
-          { path: 'data-protection', element: <></> },
+          {
+            path: 'imprint',
+            element: <VisuallyHiddenTitle component="h1" label={i18next.t('dashboard-legal-imprint')} />,
+          },
+          {
+            path: 'data-protection',
+            element: <VisuallyHiddenTitle component="h1" label={i18next.t('dashboard-legal-data-protection')} />,
+          },
         ],
       },
       {
@@ -183,7 +193,14 @@ const routes: CreateRoutes = (redirectUri: string, popUpRedirect: string) => [
         path: 'help',
         children: [
           { path: 'documentation', element: <DocumentationPage /> },
-          { path: 'support', element: <></> },
+          {
+            path: 'support',
+            element: (
+              <>
+                <VisuallyHiddenTitle component="h1" label={i18next.t('dashboard-help-support')} />
+              </>
+            ),
+          },
         ],
       },
     ],

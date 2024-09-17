@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Box, Skeleton, Stack, Step, StepButton as MuiStepButton, Stepper, styled } from '@mui/material';
+import { Box, Skeleton, Stack, Step, StepButton as MuiStepButton, Stepper, styled, Typography } from '@mui/material';
 import { EventId } from '@opentalk/rest-api-rtk-query';
 import { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ const StepButton = styled(MuiStepButton)({
 const Container = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr',
-  gridTemplateRows: 'auto 1fr',
+  gridTemplateRows: 'auto auto 1fr',
   height: '100%',
   overflow: 'hidden auto',
   gap: theme.spacing(2),
@@ -103,6 +103,7 @@ const EditEventsPage = () => {
 
   return (
     <Container>
+      <Typography component="h1">{t('dashboard-meetings-create-title')}</Typography>
       <StepperHeader />
       {activeStep === 0 && (
         <CreateOrUpdateMeetingForm existingEvent={event} onForwardButtonClick={() => setActiveStep(1)} />
