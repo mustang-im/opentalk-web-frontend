@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Add new poll answer button is permanently present on screen while creating ([#1980](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1980))
 - Add missing h1 tag to all dashboard related pages ([#2002](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2002))
 
 ## 1.20.0

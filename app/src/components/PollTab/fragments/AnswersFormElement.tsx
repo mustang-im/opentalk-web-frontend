@@ -36,7 +36,7 @@ const Add = styled(AddIcon)({
 });
 
 const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
-  const [editMode, setEditMode] = useState<number>();
+  const [editingIndex, setEditingIndex] = useState<number>();
   const inputRef = useRef<HTMLInputElement>(null);
   const { values, errors } = useFormikContext();
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
   useEffect(() => {
     choices.forEach((item: string, index: number) => {
       if (isEmpty(item)) {
-        setEditMode(index);
+        setEditingIndex(index);
       }
     });
   }, [name, choices]);
@@ -59,7 +59,7 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
         <Grid container spacing={1}>
           {choices.map((answer: string, index: number) => (
             <Grid item xs={12} key={index}>
-              {editMode === index ? (
+              {editingIndex === index ? (
                 <Field
                   name={`${name}.${index}`}
                   component={({ field: { value, onBlur, onChange, name } }: FieldProps) => (
@@ -73,21 +73,27 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
                       helperText={Array.isArray(answerErrors) && answerErrors[index]}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          setEditMode(undefined);
+                          setEditingIndex(undefined);
                           onBlur && onBlur(e);
                           onChange && onChange(e);
                           if (isEmpty(inputRef.current?.value)) {
                             arrayHelpers.remove(index);
                           }
                         }
+                        if (e.key === 'Escape') {
+                          (e.target as HTMLInputElement)?.blur();
+                        }
                       }}
                       onBlur={(e) => {
-                        setEditMode(undefined);
+                        setEditingIndex(undefined);
                         onBlur && onBlur(e);
                         onChange && onChange(e);
                         if (isEmpty(e.target.value)) {
                           arrayHelpers.remove(index);
                         }
+                      }}
+                      inputProps={{
+                        autoFocus: true,
                       }}
                     />
                   )}
@@ -95,25 +101,24 @@ const AnswersFormElement = ({ name }: IAnswersFormElementProps) => {
               ) : (
                 <Chip
                   label={choices[index]}
-                  onClick={() => setEditMode(index)}
+                  onClick={() => setEditingIndex(index)}
                   onDelete={() => arrayHelpers.remove(index)}
                 />
               )}
             </Grid>
           ))}
-          {editMode === undefined && (
-            <Grid item>
-              <Button
-                size="small"
-                type="button"
-                variant="text"
-                onClick={() => arrayHelpers.push('')}
-                startIcon={<Add />}
-              >
-                {t('poll-input-choices')}
-              </Button>
-            </Grid>
-          )}
+          <Grid item>
+            <Button
+              size="small"
+              type="button"
+              variant="text"
+              onClick={() => arrayHelpers.push('')}
+              startIcon={<Add />}
+              disabled={editingIndex !== undefined}
+            >
+              {t('poll-input-choices')}
+            </Button>
+          </Grid>
         </Grid>
       )}
     />
