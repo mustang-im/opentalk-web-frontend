@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { SharedFolderData, StreamingState, Tariff } from '@opentalk/rest-api-rtk-query';
+import { EventInfo, SharedFolderData, StreamingState, Tariff } from '@opentalk/rest-api-rtk-query';
 
 import { InitialAutomod } from '../automod';
 import { InitialBreakout } from '../breakout';
@@ -15,7 +15,7 @@ import {
   Role,
   Timestamp,
 } from '../common';
-import { EventInfo, RoomInfo } from '../event';
+import { RoomInfo } from '../event';
 import { Participant } from '../participant';
 import { InitialPoll } from '../poll';
 import { TimerState } from '../timer';

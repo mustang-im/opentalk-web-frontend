@@ -6,16 +6,16 @@ import { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/q
 import { BaseQueryFn, FetchArgs } from '@reduxjs/toolkit/query';
 import snakecaseKeys from 'snakecase-keys';
 
-import { PublicRoom, PrivateRoom, UpdateRoomPayload, CreateRoomPayload, Tags, Tag, Event, AssetId } from '../types';
+import { AssetId, CreateRoomPayload, EventInfo, PrivateRoom, PublicRoom, Tag, Tags, UpdateRoomPayload } from '../types';
 import {
-  RoomAssets,
-  RoomSipConfigResponse,
-  UpdateRoomSipConfigPayload,
   CreateRoomInvitePayload,
+  RoomAssets,
+  RoomEventInfo,
+  RoomId,
   RoomInvite,
   RoomInvites,
-  RoomId,
-  RoomEventInfo,
+  RoomSipConfigResponse,
+  UpdateRoomSipConfigPayload,
 } from '../types/room';
 import { StreamingPlatform, StreamingTargetId, StreamingTargetInfo } from '../types/streaming';
 import { Tariff } from '../types/tariff';
@@ -45,7 +45,7 @@ export const addRoomEndpoints = <
     query: (id) => `rooms/${id}/tariff`,
     providesTags: (result) => (result ? [{ type: Tag.Tariff, id: result.id }] : []),
   }),
-  getRoomEventInfo: builder.query<Event, RoomEventInfo>({
+  getRoomEventInfo: builder.query<EventInfo, RoomEventInfo>({
     query: ({ id, inviteCode }) => {
       const queryPayload: FetchArgs = {
         url: `rooms/${id}/event`,
