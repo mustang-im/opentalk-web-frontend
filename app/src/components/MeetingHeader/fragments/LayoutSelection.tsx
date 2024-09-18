@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { batch } from 'react-redux';
 
 import { FullscreenViewIcon, GridViewIcon, MeetingNotesIcon, SpeakerViewIcon } from '../../../assets/icons';
 import { IconButton } from '../../../commonComponents';
@@ -22,11 +23,14 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useFullscreenContext } from '../../../hooks/useFullscreenContext';
 import { selectIsMeetingNotesAvailable } from '../../../store/slices/meetingNotesSlice';
 import {
+  GridViewOrder,
   selectCinemaLayout,
   selectIsCurrentMeetingNotesHighlighted,
   toggledFullScreenMode,
   updatedCinemaLayout,
+  updatedGridViewOrder,
 } from '../../../store/slices/uiSlice';
+import TextWithDivider from '../../TextWithDivider';
 import { Indicator } from './Indicator';
 
 const ViewPopperContainer = styled(Stack)(({ theme }) => ({
@@ -100,9 +104,12 @@ const LayoutSelection = () => {
     dispatch(toggledFullScreenMode());
   }, [fullscreenHandle]);
 
-  const handleSelectedView = (layout: LayoutOptions) => {
+  const handleSelectedView = (layout: LayoutOptions, order: GridViewOrder = GridViewOrder.FirstJoined) => {
     setAnchorElement(null);
-    dispatch(updatedCinemaLayout(layout));
+    batch(() => {
+      dispatch(updatedCinemaLayout(layout));
+      dispatch(updatedGridViewOrder(order));
+    });
   };
 
   const theme = useTheme();
@@ -170,6 +177,19 @@ const LayoutSelection = () => {
               <FullscreenViewIcon />
             </ListItemIcon>
             {t('conference-view-fullscreen')}
+          </MenuItem>
+          <TextWithDivider variant="caption">{t('conference-view-sorting')}</TextWithDivider>
+          <MenuItem onClick={() => handleSelectedView(LayoutOptions.Grid, GridViewOrder.VideoFirst)}>
+            <ListItemIcon aria-hidden={true}>
+              <GridViewIcon />
+            </ListItemIcon>
+            {t('conference-view-grid-camera-first')}
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectedView(LayoutOptions.Grid, GridViewOrder.ModeratorsFirst)}>
+            <ListItemIcon aria-hidden={true}>
+              <GridViewIcon />
+            </ListItemIcon>
+            {t('conference-view-grid-moderators-first')}
           </MenuItem>
           {isMobile && isMeetingNotesAvailable && (
             <MenuItem

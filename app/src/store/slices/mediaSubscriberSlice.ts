@@ -167,6 +167,10 @@ export const selectIsSubscriberOnlineByDescriptor = (descriptor: MediaDescriptor
   });
 };
 
+export const selectAllSubscribersWithVideoOn = createSelector(selectAllSubscribers, (subscribers) =>
+  subscribers.filter(({ video, mediaType }) => video && mediaType === MediaSessionType.Video)
+);
+
 export const actions = mediaSubscriberSlice.actions;
 
 // By design `updated` signal can be fired not only on starting screenshare or video, but also on change of media quality.

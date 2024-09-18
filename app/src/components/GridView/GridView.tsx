@@ -6,7 +6,7 @@ import { useRef } from 'react';
 
 import { useAppSelector } from '../../hooks';
 import { selectSlicedParticipants } from '../../store/slices/participantsSlice';
-import { selectPaginationPageState } from '../../store/slices/uiSlice';
+import { selectGridViewOrder, selectPaginationPageState } from '../../store/slices/uiSlice';
 import GridCell from './fragments/GridCell';
 
 const GridContainer = styled('div', {
@@ -29,7 +29,8 @@ export const MAX_GRID_TILES = 9;
 
 const GridView = () => {
   const selectedPage = useAppSelector(selectPaginationPageState);
-  const slicedParticipants = useAppSelector(selectSlicedParticipants(selectedPage, MAX_GRID_TILES));
+  const gridViewOrder = useAppSelector(selectGridViewOrder);
+  const slicedParticipants = useAppSelector(selectSlicedParticipants(selectedPage, MAX_GRID_TILES, gridViewOrder));
   const lastPage = useRef<number>(0);
 
   const videoWidth = slicedParticipants.length <= 4 ? 50 : 33.3;
