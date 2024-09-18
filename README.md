@@ -51,7 +51,7 @@ The frontend will then be available via http://localhost:8090
 | FEATURE_RESET_HANDRAISES | no       | { resetHandraises: true}                          | to enable moderator option to reset users' raised hands |
 | FEATURE_ADD_USER         | no       | { addUser: false}                                 | under construction |
 | JOIN_WITHOUT_MEDIA       | no       | { joinWithoutMedia: false}                        | if is set to true, it will prevent user to join conference with audio/video on |
-| VIDEO_BACKGROUNDS        | no       | []                                                | An array with a configuration of the background (Example: `[{ altText: 'OpenTalk', url: '/assets/videoBackgrounds/elevate-bg.png', thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',}]`) |
+| VIDEO_BACKGROUNDS        | no       | [see here](#default-video-backgrounds)                                                | An array with a configuration of the background (Example: `[{ altText: 'OpenTalk', url: '/assets/videoBackgrounds/elevate-bg.png', thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',}]`) |
 | SIGN_OUT_REDIRECT_URI    | no       | /dashboard                             | Uri to redirect the client after signing out
 frontend                                                                                                                                                                        |
 | CHANGE_PASSWORD_ACTIVE           | no       | false                              | enable the reset password button in the dashboard profile settings |
@@ -61,10 +61,69 @@ frontend                                                                        
 | DATA_PROTECTION_URL             | no      |                                                   | The URL to the data protection page |
 | ACCOUNT_MANAGEMENT_URL             | no      |                                                   | The account management url for use the dashboard menu, if provider.active is true |
 | DISALLOW_CUSTOM_DISPLAY_NAME  | no  | false                                             | Disable editing of display name in profile and lobby page |
-| SENTRY_DSN  | no  |                                              | Adding a valid sentry dsn will activate error logging | 
+| SENTRY_DSN  | no  |                                              | Adding a valid sentry dsn will activate error logging |
 | WAITING_ROOM_DEFAULT_VALUE | yes | Frontend { waitingRoomDefaultValue: true } | to enable waiting room switch by default                                          | Adding a valid sentry dsn will activate error logging |
 
-## Local version
+### Adding new Video Background Images
+
+Copy the images to the `/assets/videoBackgrounds` folder and the thumbnails to the `/thumbs` subfolder. The images have to have a resolution of **1280x720** and the thumbs **128x72**
+
+#### Developers
+
+For developers this folder is in the `public` folder of the repository. Add the image to the `entrypoint.sh` file to the `DEFAULT_VIDEO_BACKGROUNDS` variable to add it to the deployment or the videoBackgrounds property of the `config.js` if you run it locally.
+
+#### DevOps
+
+For devops it's in the `/usr/share/nginx/html/` folder of the webapp container. You then have to set the environment variable VIDEO_BACKGROUNDS as described below. If you don't set the variable, the following default will be used
+
+#### Default Video Backgrounds
+
+```json
+[
+  {
+    altText: 'Elevate',
+    url: '/assets/videoBackgrounds/elevate-bg.png',
+    thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',
+  },
+  {
+    altText: 'Living room',
+    url: '/assets/videoBackgrounds/ot1.png',
+    thumb: '/assets/videoBackgrounds/thumbs/ot1-thumb.png',
+  },
+  {
+    altText: 'Conference room',
+    url: '/assets/videoBackgrounds/ot2.png',
+    thumb: '/assets/videoBackgrounds/thumbs/ot2-thumb.png',
+  },
+  {
+    altText: 'Beach at sunset',
+    url: '/assets/videoBackgrounds/ot3.png',
+    thumb: '/assets/videoBackgrounds/thumbs/ot3-thumb.png',
+  },
+  {
+    altText: 'Boat on shore',
+    url: '/assets/videoBackgrounds/ot4.png',
+    thumb: '/assets/videoBackgrounds/thumbs/ot4-thumb.png',
+  },
+  {
+    altText: 'Pink living room',
+    url: '/assets/videoBackgrounds/ot5.png',
+    thumb: '/assets/videoBackgrounds/thumbs/ot5-thumb.png',
+  },
+  {
+    altText: 'Bookshelf',
+    url: '/assets/videoBackgrounds/ot6.png',
+    thumb: '/assets/videoBackgrounds/thumbs/ot6-thumb.png',
+  },
+  {
+    altText: 'Bookshelves surround an open door',
+    url: '/assets/videoBackgrounds/ot7.png',
+    thumb: '/assets/videoBackgrounds/thumbs/ot7-thumb.png',
+  }
+]
+```
+
+## Use yarn to build a local version
 
 ### Local system setup
 
@@ -151,10 +210,45 @@ window.config = {
     "userSurveyApiKey: 'api_key',
     "videoBackgrounds": [
       {
-        altText: 'OpenTalk',
+        altText: 'Elevate',
         url: '/assets/videoBackgrounds/elevate-bg.png',
         thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',
       },
+      {
+        altText: 'Living room',
+        url: '/assets/videoBackgrounds/ot1.png',
+        thumb: '/assets/videoBackgrounds/thumbs/ot1-thumb.png',
+      },
+      {
+        altText: 'Conference room',
+        url: '/assets/videoBackgrounds/ot2.png',
+        thumb: '/assets/videoBackgrounds/thumbs/ot2-thumb.png',
+      },
+      {
+        altText: 'Beach at sunset',
+        url: '/assets/videoBackgrounds/ot3.png',
+        thumb: '/assets/videoBackgrounds/thumbs/ot3-thumb.png',
+      },
+      {
+        altText: 'Boat on shore',
+        url: '/assets/videoBackgrounds/ot4.png',
+        thumb: '/assets/videoBackgrounds/thumbs/ot4-thumb.png',
+      },
+      {
+        altText: 'Pink living room',
+        url: '/assets/videoBackgrounds/ot5.png',
+        thumb: '/assets/videoBackgrounds/thumbs/ot5-thumb.png',
+      },
+      {
+        altText: 'Bookshelf',
+        url: '/assets/videoBackgrounds/ot6.png',
+        thumb: '/assets/videoBackgrounds/thumbs/ot6-thumb.png',
+      },
+      {
+        altText: 'Bookshelves surround an open door',
+        url: '/assets/videoBackgrounds/ot7.png',
+        thumb: '/assets/videoBackgrounds/thumbs/ot7-thumb.png',
+      }
     ],
     // Configure the maximum video bandwidth.
     "maxVideoBandwidth":600000,
@@ -242,8 +336,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `pnpm build:profiler`
 
-Builds libraries and calls `pnpm build:profiler` in `@opentalk/opentalk`, this build 
-can be used for profiling the application. 
+Builds libraries and calls `pnpm build:profiler` in `@opentalk/opentalk`, this build
+can be used for profiling the application.
 
 ## Build the container image
 

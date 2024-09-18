@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Improvements to the user experience
 
+- Add multiple new video background images ([#2052](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2052))
 - Remove hover effect and more menu icon disappearing([#2056](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/merge_requests/2056))
 - Add new poll answer button is permanently present on screen while creating ([#1980](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/1980))
 - Add missing h1 tag to all dashboard related pages ([#2002](https://git.opentalk.dev/opentalk/frontend/web/web-app/-/issues/2002))

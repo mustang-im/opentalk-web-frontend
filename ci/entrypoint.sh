@@ -12,7 +12,48 @@ ACTIVE_FEATURES="{
     sharedFolder: ${FEATURE_SHARED_FOLDER:-false},
 }"
 
-DEFAULT_VIDEO_BACKGROUNDS='[]'
+DEFAULT_VIDEO_BACKGROUNDS="[
+    {
+      altText: 'Elevate',
+      url: '/assets/videoBackgrounds/elevate-bg.png',
+      thumb: '/assets/videoBackgrounds/thumbs/elevate-bg-thumb.png',
+    },
+    {
+      altText: 'Living room',
+      url: '/assets/videoBackgrounds/ot1.png',
+      thumb: '/assets/videoBackgrounds/thumbs/ot1-thumb.png',
+    },
+    {
+      altText: 'Conference room',
+      url: '/assets/videoBackgrounds/ot2.png',
+      thumb: '/assets/videoBackgrounds/thumbs/ot2-thumb.png',
+    },
+    {
+      altText: 'Beach at sunset',
+      url: '/assets/videoBackgrounds/ot3.png',
+      thumb: '/assets/videoBackgrounds/thumbs/ot3-thumb.png',
+    },
+    {
+      altText: 'Boat on shore',
+      url: '/assets/videoBackgrounds/ot4.png',
+      thumb: '/assets/videoBackgrounds/thumbs/ot4-thumb.png',
+    },
+    {
+      altText: 'Pink living room',
+      url: '/assets/videoBackgrounds/ot5.png',
+      thumb: '/assets/videoBackgrounds/thumbs/ot5-thumb.png',
+    },
+    {
+      altText: 'Bookshelf',
+      url: '/assets/videoBackgrounds/ot6.png',
+      thumb: '/assets/videoBackgrounds/thumbs/ot6-thumb.png',
+    },
+    {
+      altText: 'Bookshelves surround an open door',
+      url: '/assets/videoBackgrounds/ot7.png',
+      thumb: '/assets/videoBackgrounds/thumbs/ot7-thumb.png',
+    }
+  ]"
 
 # Deprecated fallback for $KEYCLOAK_AUTHORITY
 if [[ x"${KEYCLOAK_AUTHORITY}" != "x" ]]; then
