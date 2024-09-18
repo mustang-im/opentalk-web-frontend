@@ -6,6 +6,7 @@ import { EventType, isTimelessEvent } from '@opentalk/rest-api-rtk-query';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { TimePerspectiveFilter } from '../../../../utils/eventUtils';
 import { DashboardEventsFilters, FilterChangeCallbackType, MeetingsProp, TimeFilter } from '../types';
 import { CreateNewMeetingButton } from './CreateNewMeetingButton';
 import { EventFilterButtonBar } from './EventFilterButtonBar';
@@ -32,13 +33,15 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
   const resetMarginTop = theme.spacing(2);
   const resetMarginLeft = theme.spacing(-2);
 
-  console.log(isTablet, isDesktop);
-
   const isContainingRecurringEvents = useMemo(() => {
     return entries.find((meetings) =>
       meetings?.events?.find((event) => !isTimelessEvent(event) && event.type === EventType.Recurring)
     );
   }, [entries]);
+
+  const showTimePerspectiveFilter = [TimePerspectiveFilter.Future, TimePerspectiveFilter.Past].includes(
+    filters.timePerspective
+  );
 
   if (isDesktop) {
     return (
@@ -65,7 +68,11 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
           <Typography variant="h1" component="h1">
             {t('dashboard-events-my-meetings')}
           </Typography>
-          <EventPageFilters filters={filters} onFilterChange={onFilterChange} />
+          <EventPageFilters
+            filters={filters}
+            onFilterChange={onFilterChange}
+            showTimePerspectiveFilter={showTimePerspectiveFilter}
+          />
         </Grid>
         <Grid item display="flex" justifyContent="space-between" flex={1} zeroMinWidth>
           <EventFilterButtonBar filters={filters} onFilterChange={onFilterChange} />
@@ -93,9 +100,13 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
         style={{ marginTop: resetMarginTop, marginLeft: resetMarginLeft }}
         data-testid="events-page-header-tablet"
       >
-        <Grid item container columns={12} xs={12} rowSpacing={0} columnSpacing={1}>
+        <Grid item container columns={12} xs={12} rowSpacing={0} columnSpacing={1} alignItems="center">
           <Grid item xs="auto">
-            <EventPageFilters filters={filters} onFilterChange={onFilterChange} />
+            <EventPageFilters
+              filters={filters}
+              onFilterChange={onFilterChange}
+              showTimePerspectiveFilter={showTimePerspectiveFilter}
+            />
           </Grid>
           <Grid item display="flex" justifyContent="space-between" flex={1}>
             <EventFilterButtonBar filters={filters} onFilterChange={onFilterChange} />
@@ -123,14 +134,30 @@ const EventsPageHeader = ({ onFilterChange, filters, entries }: EventsPageHeader
       alignItems="center"
       spacing={0}
       columns={12}
-      style={{ marginLeft: resetMarginLeft, paddingLeft: theme.spacing(2) }}
+      style={{ marginLeft: resetMarginLeft, paddingLeft: theme.spacing(2), width: `calc(100% + ${theme.spacing(2)})` }}
       data-testid="events-page-header-mobile"
     >
       <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center" pt={0}>
-        <EventPageFilters filters={filters} visuallyDivide onFilterChange={onFilterChange} />
-        <EventFilterButtonBar filters={filters} onFilterChange={onFilterChange} />
-        <CreateNewMeetingButton />
+        <EventPageFilters
+          filters={filters}
+          visuallyDivide
+          onFilterChange={onFilterChange}
+          isMobile
+          showTimePerspectiveFilter={showTimePerspectiveFilter}
+        />
+        {!showTimePerspectiveFilter && (
+          <>
+            <EventFilterButtonBar filters={filters} onFilterChange={onFilterChange} />
+            <CreateNewMeetingButton />
+          </>
+        )}
       </Grid>
+      {showTimePerspectiveFilter && (
+        <Grid item xs={12} mt={1} display="flex" justifyContent="center" alignItems="center">
+          <EventFilterButtonBar filters={filters} onFilterChange={onFilterChange} />
+          <CreateNewMeetingButton />
+        </Grid>
+      )}
       <Grid item xs={12}>
         {isContainingRecurringEvents && (
           <Typography variant="h2" component="h2" mt={2}>

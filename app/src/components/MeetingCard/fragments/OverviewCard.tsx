@@ -218,7 +218,7 @@ const OverviewCard = ({ event, isMeetingCreator, highlighted }: MeetingCardFragm
         </Tooltip>
       </Grid>
       <Hidden xsDown>
-        <Grid item margin="auto" xs={3}>
+        <Grid item margin="auto" xs={16} sm={3}>
           <MaxWidthTypography maxWidth="50ch" variant="body1" fontWeight={400} noWrap translate="no">
             {t('dashboard-home-created-by', { author: createdBy.displayName })}
           </MaxWidthTypography>

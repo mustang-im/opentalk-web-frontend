@@ -28,6 +28,7 @@ declare module '@mui/system' {
       small: number | string;
       medium: number | string;
       large: number | string;
+      circle: string;
     };
   }
 
@@ -36,6 +37,7 @@ declare module '@mui/system' {
       small: number | string;
       medium: number | string;
       large: number | string;
+      circle: string;
     };
   }
 }

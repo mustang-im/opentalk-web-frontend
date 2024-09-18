@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 import { MenuItem, Select, Stack, styled } from '@mui/material';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TimePerspectiveFilter } from '../../../../utils/eventUtils';
@@ -12,6 +11,8 @@ type EventPageFiltersProps = {
   filters: DashboardEventsFilters;
   visuallyDivide?: boolean;
   onFilterChange: FilterChangeCallbackType;
+  isMobile?: boolean;
+  showTimePerspectiveFilter: boolean;
 };
 
 const timePerspectiveFilterOptions: Array<TimePerspectiveFilter> = [
@@ -22,18 +23,25 @@ const timePerspectiveFilterOptions: Array<TimePerspectiveFilter> = [
 
 const timeFilterOptions: Array<TimeFilter> = [TimeFilter.Month, TimeFilter.Week, TimeFilter.Day];
 
-const CustomSelect = styled(Select)({
-  '& .MuiSelect-icon': {
-    padding: 0,
-  },
-});
+const CustomSelect = styled(Select, {
+  shouldForwardProp: (prop) => !(['isMobile', 'showTimePerspectiveFilter'] as PropertyKey[]).includes(prop),
+})<Pick<EventPageFiltersProps, 'isMobile' | 'showTimePerspectiveFilter'>>(
+  ({ isMobile, showTimePerspectiveFilter }) => ({
+    '& .MuiSelect-icon': {
+      padding: 0,
+    },
+    ...(isMobile && showTimePerspectiveFilter && { flex: 1 }),
+  })
+);
 
-export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: EventPageFiltersProps) => {
+export const EventPageFilters = ({
+  filters,
+  onFilterChange,
+  visuallyDivide,
+  isMobile,
+  showTimePerspectiveFilter,
+}: EventPageFiltersProps) => {
   const { t } = useTranslation();
-
-  const showTimePerspectiveFilter = useMemo(() => {
-    return [TimePerspectiveFilter.Future, TimePerspectiveFilter.Past].includes(filters.timePerspective);
-  }, [filters.timePerspective]);
 
   return (
     <Stack
@@ -41,10 +49,13 @@ export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: Ev
       alignItems="center"
       spacing={1}
       justifyContent={visuallyDivide ? 'space-between' : undefined}
+      flex={isMobile ? 1 : undefined}
     >
       <CustomSelect
         value={filters.timePerspective}
         onChange={(e) => onFilterChange('timePerspective', e.target.value as TimePerspectiveFilter)}
+        showTimePerspectiveFilter={showTimePerspectiveFilter}
+        isMobile={isMobile}
       >
         {timePerspectiveFilterOptions.map((option) => {
           return (
@@ -58,6 +69,8 @@ export const EventPageFilters = ({ filters, onFilterChange, visuallyDivide }: Ev
         <CustomSelect
           value={filters.timePeriod}
           onChange={(e) => onFilterChange('timePeriod', e.target.value as TimeFilter)}
+          showTimePerspectiveFilter={showTimePerspectiveFilter}
+          isMobile={isMobile}
         >
           {timeFilterOptions.map((option) => {
             return (

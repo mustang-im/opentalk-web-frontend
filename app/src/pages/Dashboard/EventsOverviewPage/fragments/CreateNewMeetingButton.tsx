@@ -1,20 +1,34 @@
 // SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
 //
 // SPDX-License-Identifier: EUPL-1.2
-import { Button, useMediaQuery, useTheme } from '@mui/material';
+import { Button, IconButton, styled } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { AddIcon } from '../../../../assets/icons';
+import { useIsMobile } from '../../../../hooks/useIsMobile';
 import getReferrerRouterState from '../../../../utils/getReferrerRouterState';
+
+const CustomIconButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: theme.palette.text.primary,
+  color: theme.palette.common.white,
+  borderRadius: theme.borderRadius.circle,
+  width: '3rem',
+  height: '3rem',
+  marginLeft: theme.spacing(1),
+  '& > .MuiSvgIcon-root': {
+    fontSize: '1.25rem',
+  },
+}));
+
+const CustomButton = styled(Button)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  height: '3rem',
+}));
 
 export const CreateNewMeetingButton = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const isLarge = useMediaQuery(theme.breakpoints.up('lg'));
-  const isSmall = useMediaQuery(theme.breakpoints.down('md'));
-  const isReallySmall = useMediaQuery('(max-width: 430px)');
-  const showFullSizeButton = (isLarge || isSmall) && !isReallySmall;
+  const isMobile = useIsMobile();
 
   const commonProps = {
     color: 'secondary',
@@ -23,17 +37,17 @@ export const CreateNewMeetingButton = () => {
     component: Link,
   } as const;
 
-  if (!showFullSizeButton) {
+  if (isMobile) {
     return (
-      <Button {...commonProps} aria-label={t('dashboard-plan-new-meeting')}>
+      <CustomIconButton {...commonProps} aria-label={t('dashboard-plan-new-meeting')}>
         <AddIcon />
-      </Button>
+      </CustomIconButton>
     );
   }
 
   return (
-    <Button {...commonProps} size="large" startIcon={<AddIcon />}>
+    <CustomButton {...commonProps} size="large" startIcon={<AddIcon />}>
       {t('dashboard-plan-new-meeting')}
-    </Button>
+    </CustomButton>
   );
 };

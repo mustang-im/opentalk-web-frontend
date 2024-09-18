@@ -19,6 +19,7 @@ export function createOpenTalkTheme(mode: PaletteMode = 'light') {
       small: 2,
       medium: 8,
       large: 40,
+      circle: '50%',
     },
     palette: {
       ...palette,
